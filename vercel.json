@@ -1,5 +1,5 @@
 {
-  "buildCommand": "npm run build",
+  "buildCommand": "mkdir -p dist/products && cp member.html dist/index.html && if [ -d public/products ]; then cp -r public/products/. dist/products/; fi",
   "outputDirectory": "dist",
   "rewrites": [
     { "source": "/health", "destination": "/api?path=health" },

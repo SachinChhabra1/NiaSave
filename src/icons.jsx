@@ -4,8 +4,10 @@ const paths = {
   bag: <><path d="M5 8h14l-1 12H6L5 8Z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></>,
   work: <><rect x="3" y="7" width="18" height="12" rx="2"/><path d="M9 7V4h6v3M3 12h18M10 12v2h4v-2"/></>,
   nest: <><path d="M3 11 12 3l9 8"/><path d="M5 10v10h14V10M8 20v-6h8v6"/><path d="M9 11h6"/></>,
+  live: <><path d="m3 10 9-7 9 7"/><path d="M5 9v11h14V9"/><path d="M8 18v-5h3v3h7v2H8ZM18 16v-1.5A1.5 1.5 0 0 0 16.5 13H11M8 18v2M18 18v2"/></>,
   save: <><path d="M5 10c1-3 4-5 8-5 5 0 8 3 8 7 0 3-2 5-5 6l-1 3h-3l-1-2H8l-1 2H4l1-4c-1-1-2-2-2-4H1v-3h4Z"/><path d="M15 8h.01M9 5 8 2c3 0 5 1 6 3"/></>,
   home: <><path d="m3 11 9-8 9 8"/><path d="M5 10v10h14V10M9 20v-6h6v6"/></>,
+  send: <><rect x="3" y="6" width="14" height="12" rx="2"/><path d="M7 10h5M7 12h5M8.5 10c1.8 0 3 .7 3 1.8s-1.2 1.8-3 1.8H7l4 2.4M15 3h6v6M21 3l-7 7"/></>,
   location: <><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></>,
   studio: <><path d="M4 8h16v12H4zM3 8l2-4h14l2 4"/><path d="M9 13h6M12 11v4"/></>,
   shield: <><path d="M12 22s8-3 8-10V5l-8-3-8 3v7c0 7 8 10 8 10Z"/><path d="M12 8v8M8 12h8"/></>,
@@ -34,7 +36,7 @@ const paths = {
   clock: <><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></>
 };
 
-export function Icon({ name, size = 24, className = "" }) {
+export function Icon({ name, size = 24, className = "", strokeWidth = 1.8 }) {
   return (
     <svg
       aria-hidden="true"
@@ -44,7 +46,7 @@ export function Icon({ name, size = 24, className = "" }) {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="1.8"
+      strokeWidth={strokeWidth}
       strokeLinecap="round"
       strokeLinejoin="round"
     >

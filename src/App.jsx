@@ -11,10 +11,10 @@ import {
 import { Icon } from "./icons";
 
 const tabs = [
-  ["work", "Work"],
-  ["nest", "Nest"],
-  ["save", "Save"],
-  ["home", "Home"]
+  ["work", "Earn", "work"],
+  ["nest", "Live", "live"],
+  ["save", "Save", "save"],
+  ["home", "Send", "send"]
 ];
 
 function Header({ title, bagCount, onBag, onBack }) {
@@ -37,9 +37,9 @@ function Header({ title, bagCount, onBag, onBack }) {
 function BottomNav({ active, onChange }) {
   return (
     <nav className="nia-save__nav" aria-label="Member sections">
-      {tabs.map(([id, label]) => (
+      {tabs.map(([id, label, icon]) => (
         <button key={id} className={active === id ? "is-active" : ""} onClick={() => onChange(id)}>
-          <Icon name={id} size={24} />
+          <Icon name={icon} size={25} strokeWidth={2.2} />
           <span>{label}</span>
         </button>
       ))}

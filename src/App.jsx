@@ -80,6 +80,7 @@ function ProductCard({ product, onOpen, onAdd, t }) {
         </span>
         <span className="nia-save__product-name">{product.name}</span>
         <span className="nia-save__product-meta">{product.hindi} · {product.size}</span>
+        {product.id === "soap" ? <span className="nia-save__product-tagline">{t.soapWeek}</span> : null}
       </button>
       <div className="nia-save__product-price">
         <span><strong>{formatRupees(product.price)}</strong><s>{formatRupees(product.mrp)}</s></span>
@@ -154,6 +155,7 @@ function ProductDetail({ product, bagCount, onBag, onBack, onAdd, t }) {
         <div className="nia-save__detail-plate"><span>{t.checked}</span><img src={product.image} alt={product.name} /></div>
         <h1>{product.name}</h1>
         <p className="nia-save__detail-meta">{product.hindi} · {product.size}</p>
+        {product.id === "soap" ? <p className="nia-save__detail-tagline">{t.soapWeek}</p> : null}
         <div className="nia-save__detail-price"><strong>{formatRupees(product.price)}</strong><s>{formatRupees(product.mrp)} {t.atKirana}</s><span>{t.saveWord} {formatRupees(saving)}</span></div>
         <section className="nia-save__detail-proof"><Icon name="shield" size={23} /><div><strong>{t.priced}</strong><p>{t.proofA} {formatRupees(saving)} {t.proofB}</p></div></section>
         <button className="nia-save__primary" onClick={() => onAdd(product.id)}>{t.addToBag}</button>

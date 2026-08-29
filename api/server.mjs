@@ -28,7 +28,7 @@ const catalog = [
   { id: "salt", name: "Tata Salt", hindi: "namak", size: "1 kg", price: 28, mrp: 34, keep: 6, image: "/products/salt.jpg", searchTerms: ["salt", "namak"], outOfStock: false },
   { id: "sunlite", name: "Fortune Sunlite", hindi: "tel", size: "1 L", price: 145, mrp: 160, keep: 15, image: "/products/oil.jpg", searchTerms: ["oil", "tel"], outOfStock: false },
   { id: "maggi", name: "Maggi 2-Minute", hindi: "maggi", size: "70 g", price: 14, mrp: 17, keep: 3, image: "/products/maggi.jpg", searchTerms: ["maggi", "noodles"], outOfStock: false },
-  { id: "rice", name: "India Gate", hindi: "chawal", size: "5 kg", price: 389, mrp: 409, keep: 20, image: "/products/rice.jpg", searchTerms: ["rice", "chawal"], outOfStock: false }
+  { id: "soap", name: "Nia Soap", hindi: "sabun", size: "30 gms", price: 10, mrp: 12, keep: 2, image: "/products/nia-soap.png", searchTerms: ["soap", "sabun", "bath"], outOfStock: false }
 ];
 
 const state = {

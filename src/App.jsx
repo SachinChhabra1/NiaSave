@@ -48,21 +48,23 @@ function BottomNav({ active, onChange }) {
 }
 
 function ProductCard({ product, onOpen, onAdd }) {
+  const saving = Math.max(0, product.mrp - product.price);
   return (
     <article className="nia-save__product-card">
       <button className="nia-save__product-open" onClick={() => onOpen(product.id)} aria-label={`View ${product.name}`}>
-        <span className="nia-save__pack-plate"><img src={product.image} alt={product.name} /></span>
+        <span className="nia-save__pack-plate">
+          <span className="nia-save__price-proof">Kirana price checked</span>
+          <img src={product.image} alt={product.name} />
+        </span>
         <span className="nia-save__product-name">{product.name}</span>
-        <span className="nia-save__product-hindi">{product.hindi}</span>
-        <span className="nia-save__product-size">{product.size}</span>
+        <span className="nia-save__product-meta">{product.hindi} · {product.size}</span>
       </button>
       <div className="nia-save__product-price">
-        <strong>{formatRupees(product.price)}</strong>
-        <s>{formatRupees(product.mrp)}</s>
+        <span><strong>{formatRupees(product.price)}</strong><s>{formatRupees(product.mrp)}</s></span>
+        <small>Save {formatRupees(saving)}</small>
       </div>
       <button className="nia-save__add" onClick={() => onAdd(product.id)} disabled={product.outOfStock}>
         {product.outOfStock ? "Out" : "Add"}
-        {!product.outOfStock ? <Icon name="plus" size={18} /> : null}
       </button>
     </article>
   );
@@ -70,29 +72,57 @@ function ProductCard({ product, onOpen, onAdd }) {
 
 function SaveShop({ catalog, bagCount, onBag, onAdd, onOpenProduct, onOpenSavings }) {
   const [query, setQuery] = useState("");
+  const [category, setCategory] = useState("all");
+  const categories = [
+    ["all", "All", "All"],
+    ["staples", "S", "Staples"],
+    ["oils", "O", "Oils"],
+    ["meals", "M", "Meals"],
+    ["rice", "R", "Rice"]
+  ];
+  const productCategory = (product) => {
+    if (product.id === "sunlite") return "oils";
+    if (product.id === "maggi") return "meals";
+    if (product.id === "rice") return "rice";
+    return "staples";
+  };
   const products = catalog.products.filter((product) => {
     const haystack = [product.name, product.hindi, product.size, ...(product.searchTerms || [])].join(" ").toLowerCase();
-    return haystack.includes(query.trim().toLowerCase());
+    const matchesSearch = haystack.includes(query.trim().toLowerCase());
+    return matchesSearch && (category === "all" || productCategory(product) === category);
   });
 
   return (
-    <div className="nia-save__screen">
-      <Header title="NiaSave" bagCount={bagCount} onBag={onBag} />
+    <div className="nia-save__screen nia-save__save-screen">
       <main className="nia-save__content nia-save__shop">
-        <div className="nia-save__where">
-          <p><Icon name="location" size={20} /><span>{catalog.studioName} · {catalog.deliveryTime}</span></p>
-          <p><Icon name="studio" size={20} /><span>Delivered to your Studio</span></p>
-        </div>
-        <button className="nia-save__saving-line" onClick={onOpenSavings}>
-          <Icon name="save" size={28} />
-          <span><strong>{formatRupees(catalog.weeklySavings)}</strong> kept this week</span>
-          <Icon name="chevron" size={18} />
-        </button>
-        <p className="nia-save__fever"><Icon name="shield" size={22} />{catalog.feverPerk}</p>
+        <header className="nia-save__shop-head">
+          <div><h1>Delivered at {catalog.deliveryTime}</h1><p>{catalog.studioName} · Your Studio</p></div>
+          <button className="nia-save__shop-bag" onClick={onBag} aria-label={`Open bag, ${bagCount} items`}>
+            <Icon name="bag" size={22} />
+            {bagCount > 0 ? <span>{bagCount}</span> : null}
+          </button>
+        </header>
         <label className="nia-save__search">
           <Icon name="search" size={22} />
-          <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Salt, oil, Maggi" aria-label="Search products" />
+          <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search salt, oil, Maggi · खोजें" aria-label="Search products" />
         </label>
+        <nav className="nia-save__categories" aria-label="Product categories">
+          {categories.map(([id, mark, label]) => (
+            <button key={id} className={category === id ? "is-active" : ""} onClick={() => setCategory(id)}>
+              <span>{mark}</span><small>{label}</small>
+            </button>
+          ))}
+        </nav>
+        <section className="nia-save__save-hero">
+          <span>THIS MONTH</span>
+          <h2>Fever day, covered.</h2>
+          <p>{catalog.feverPerk}</p>
+        </section>
+        <button className="nia-save__saving-line" onClick={onOpenSavings}>
+          <span><strong>You kept {formatRupees(catalog.weeklySavings)} this week</strong><small>vs the local kirana · बाजार से कम</small></span>
+          <Icon name="chevron" size={18} />
+        </button>
+        <div className="nia-save__section-title"><h2>Daily essentials</h2><button onClick={() => { setCategory("all"); setQuery(""); }}>See all</button></div>
         <section className="nia-save__product-grid" aria-label="Essentials">
           {products.map((product) => (
             <ProductCard key={product.id} product={product} onOpen={onOpenProduct} onAdd={onAdd} />
@@ -105,15 +135,19 @@ function SaveShop({ catalog, bagCount, onBag, onAdd, onOpenProduct, onOpenSaving
 }
 
 function ProductDetail({ product, bagCount, onBag, onBack, onAdd }) {
+  const saving = Math.max(0, product.mrp - product.price);
   return (
-    <div className="nia-save__screen">
-      <Header title={product.name} bagCount={bagCount} onBag={onBag} onBack={onBack} />
+    <div className="nia-save__screen nia-save__save-screen">
       <main className="nia-save__content nia-save__detail">
-        <div className="nia-save__detail-plate"><img src={product.image} alt={product.name} /></div>
-        <p className="nia-save__detail-hindi">{product.hindi}</p>
-        <p className="nia-save__detail-size">{product.size}</p>
-        <div className="nia-save__detail-price"><strong>{formatRupees(product.price)}</strong><s>{formatRupees(product.mrp)}</s></div>
-        <p className="nia-save__keep">You keep {formatRupees(product.mrp - product.price)} on this pack.</p>
+        <header className="nia-save__detail-tools">
+          <button className="nia-save__round-control" onClick={onBack} aria-label="Go back"><Icon name="back" size={21} /></button>
+          <button className="nia-save__detail-bag" onClick={onBag} aria-label={`Open bag, ${bagCount} items`}><Icon name="bag" size={19} /><span>{bagCount || "Bag"}</span></button>
+        </header>
+        <div className="nia-save__detail-plate"><span>Kirana price checked</span><img src={product.image} alt={product.name} /></div>
+        <h1>{product.name}</h1>
+        <p className="nia-save__detail-meta">{product.hindi} · {product.size}</p>
+        <div className="nia-save__detail-price"><strong>{formatRupees(product.price)}</strong><s>{formatRupees(product.mrp)} at kirana</s><span>Save {formatRupees(saving)}</span></div>
+        <section className="nia-save__detail-proof"><Icon name="shield" size={23} /><div><strong>Priced for your week</strong><p>Checked against the local kirana price. You keep {formatRupees(saving)} on this pack.</p></div></section>
         <button className="nia-save__primary" onClick={() => onAdd(product.id)}>Add to bag</button>
       </main>
     </div>
@@ -212,7 +246,7 @@ function Bag({ cart, products, bagCount, onBag, onBack, onAdjust, onCheckout, ch
   const lines = products.filter((product) => cart[product.id]);
   const total = lines.reduce((sum, product) => sum + product.price * cart[product.id], 0);
   return (
-    <div className="nia-save__screen">
+    <div className="nia-save__screen nia-save__save-screen">
       <Header title="Your bag" bagCount={bagCount} onBag={onBag} onBack={onBack} />
       <main className="nia-save__content nia-save__bag-view">
         {lines.length === 0 ? (

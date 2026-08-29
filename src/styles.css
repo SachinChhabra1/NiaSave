@@ -205,6 +205,7 @@ body {
 }
 
 .nia-save__brand-bar {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -212,6 +213,82 @@ body {
   margin: 0 -20px;
   padding: 0 20px 18px;
   border-bottom: 1px solid #e1e3e5;
+}
+
+.nia-save__brand-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.nia-save__language {
+  position: relative;
+  z-index: 8;
+}
+
+.nia-save__language-trigger {
+  min-width: 49px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 0 8px 0 10px;
+  border: 1px solid #d5d8da;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--navy);
+  font-size: 12px;
+  font-weight: 780;
+  letter-spacing: 0.3px;
+}
+
+.nia-save__language-trigger svg {
+  transform: rotate(90deg);
+}
+
+.nia-save__language-menu {
+  position: absolute;
+  top: 45px;
+  right: 0;
+  width: 188px;
+  overflow: hidden;
+  padding: 6px;
+  border: 1px solid #dfe2e5;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 15px 40px rgba(15, 36, 52, 0.16);
+}
+
+.nia-save__language-menu button {
+  width: 100%;
+  min-height: 44px;
+  display: grid;
+  grid-template-columns: 1fr auto 20px;
+  align-items: center;
+  gap: 8px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 11px;
+  background: transparent;
+  color: #25282b;
+  text-align: left;
+}
+
+.nia-save__language-menu button.is-active {
+  background: #f0f4f7;
+  color: var(--navy);
+}
+
+.nia-save__language-menu button span {
+  font-size: 14px;
+  font-weight: 680;
+}
+
+.nia-save__language-menu button small {
+  color: #767d83;
+  font-size: 10px;
+  font-weight: 760;
 }
 
 .nia-save__brand-bar h1 {
@@ -363,6 +440,10 @@ body {
   line-height: 1.35;
   letter-spacing: -0.15px;
   white-space: nowrap;
+}
+
+html:not([lang="en"]) .nia-save__fever-promise strong {
+  white-space: normal;
 }
 
 @media (max-width: 350px) {

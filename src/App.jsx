@@ -12,8 +12,8 @@ import { Icon } from "./icons";
 import { getCopy, languageOptions } from "./i18n";
 
 const tabs = [
-  ["work", "work"],
   ["nest", "live"],
+  ["work", "work"],
   ["save", "save"],
   ["home", "send"]
 ];

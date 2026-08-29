@@ -28,7 +28,7 @@ const shared = {
     sendTitle: "Send", canReach: "can reach Maa.", noFee: "No fee.", sendHome: "Send home", railMissing: "Send-home rail is not configured yet.", sendError: "Could not start send home. Try again.", roof: "Roof", recharge: "Recharge", familySafety: "Family safety", familyContact: "Maa is your family contact."
   },
   hi: {
-    nav: { work: "कमाई", nest: "रहना", save: "बचत", home: "भेजें" },
+    nav: { work: "Earn", nest: "Live", save: "Save", home: "Send" },
     deliveredTo: "आपके स्टूडियो में डिलीवरी", weeklySavings: "साप्ताहिक बचत", savedOf: "में से बचाए",
     fever: "इस महीने ₹500 का बैग → बुखार वाला दिन मुफ़्त।", search: "नमक, तेल, पारले-जी खोजें",
     categories: ["सभी", "राशन", "तेल", "झटपट", "चावल"], daily: "रोज़मर्रा की ज़रूरतें", seeAll: "सभी देखें",
@@ -49,7 +49,7 @@ const shared = {
     sendTitle: "भेजें", canReach: "माँ तक पहुँच सकते हैं।", noFee: "कोई शुल्क नहीं।", sendHome: "घर भेजें", railMissing: "घर भेजने की सुविधा अभी तैयार नहीं है।", sendError: "घर भेजना शुरू नहीं हुआ। फिर कोशिश करें।", roof: "छत", recharge: "रीचार्ज", familySafety: "परिवार की सुरक्षा", familyContact: "माँ आपका पारिवारिक संपर्क हैं।"
   },
   kn: {
-    nav: { work: "ಗಳಿಕೆ", nest: "ವಾಸ", save: "ಉಳಿತಾಯ", home: "ಕಳುಹಿಸಿ" },
+    nav: { work: "Earn", nest: "Live", save: "Save", home: "Send" },
     deliveredTo: "ನಿಮ್ಮ ಸ್ಟುಡಿಯೋಗೆ ವಿತರಣೆ", weeklySavings: "ವಾರದ ಉಳಿತಾಯ", savedOf: "ರಲ್ಲಿ ಉಳಿಸಲಾಗಿದೆ",
     fever: "ಈ ತಿಂಗಳು ₹500 ಬ್ಯಾಗ್ → ಜ್ವರದ ದಿನ ಉಚಿತ.", search: "ಉಪ್ಪು, ಎಣ್ಣೆ, ಪಾರ್ಲೆ-ಜಿ ಹುಡುಕಿ",
     categories: ["ಎಲ್ಲ", "ದಿನಸಿ", "ಎಣ್ಣೆ", "ತ್ವರಿತ", "ಅಕ್ಕಿ"], daily: "ದಿನಬಳಕೆಯ ಅಗತ್ಯಗಳು", seeAll: "ಎಲ್ಲವನ್ನೂ ನೋಡಿ",
@@ -70,7 +70,7 @@ const shared = {
     sendTitle: "ಕಳುಹಿಸಿ", canReach: "ಅಮ್ಮನಿಗೆ ತಲುಪಬಹುದು.", noFee: "ಶುಲ್ಕ ಇಲ್ಲ.", sendHome: "ಮನೆಗೆ ಕಳುಹಿಸಿ", railMissing: "ಮನೆಗೆ ಕಳುಹಿಸುವ ವ್ಯವಸ್ಥೆ ಇನ್ನೂ ಸಿದ್ಧವಾಗಿಲ್ಲ.", sendError: "ಮನೆಗೆ ಕಳುಹಿಸಲು ಆಗಲಿಲ್ಲ. ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.", roof: "ಛಾವಣಿ", recharge: "ರೀಚಾರ್ಜ್", familySafety: "ಕುಟುಂಬ ಸುರಕ್ಷತೆ", familyContact: "ಅಮ್ಮ ನಿಮ್ಮ ಕುಟುಂಬ ಸಂಪರ್ಕವಾಗಿದ್ದಾರೆ."
   },
   ta: {
-    nav: { work: "சம்பாதி", nest: "வசிப்பு", save: "சேமி", home: "அனுப்பு" },
+    nav: { work: "Earn", nest: "Live", save: "Save", home: "Send" },
     deliveredTo: "உங்கள் ஸ்டுடியோவிற்கு விநியோகம்", weeklySavings: "வார சேமிப்பு", savedOf: "இல் சேமித்தது",
     fever: "இந்த மாதம் ₹500 பை → காய்ச்சல் நாளில் இலவசம்.", search: "உப்பு, எண்ணெய், பார்லே-ஜி தேடுங்கள்",
     categories: ["அனைத்தும்", "மளிகை", "எண்ணெய்", "உடனடி", "அரிசி"], daily: "தினசரி தேவைகள்", seeAll: "அனைத்தையும் காண்க",

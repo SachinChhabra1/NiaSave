@@ -1705,18 +1705,18 @@ button.nia-save__row {
   }
 
   .nia-save__shop {
-    max-width: 1440px;
+    max-width: 1320px;
     display: grid;
-    grid-template-columns: minmax(280px, 340px) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr);
     grid-template-areas:
-      "brand brand"
-      "promise search"
-      "promise title"
-      "promise products"
-      "promise empty";
+      "brand"
+      "promise"
+      "search"
+      "title"
+      "products"
+      "empty";
     align-content: start;
-    align-items: start;
-    gap: 16px 28px;
+    gap: 16px;
   }
 
   .nia-save__brand-bar {
@@ -1727,10 +1727,31 @@ button.nia-save__row {
 
   .nia-save__promise {
     grid-area: promise;
-    position: sticky;
-    top: 24px;
-    align-content: start;
-    padding: 0;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: center;
+    gap: 14px 18px;
+    padding: 18px;
+    border: 1px solid #e1e4e7;
+    border-radius: 16px;
+    background: #fff;
+  }
+
+  .nia-save__promise > p:not(.nia-save__fever-promise) {
+    min-height: 30px;
+    padding: 0 4px;
+  }
+
+  .nia-save__promise .nia-save__weekly-progress,
+  .nia-save__promise .nia-save__fever-promise {
+    min-height: 106px;
+  }
+
+  .nia-save__promise .nia-save__fever-promise {
+    margin: 0;
+  }
+
+  .nia-save__fever-promise strong {
+    white-space: normal;
   }
 
   .nia-save__search {
@@ -1748,7 +1769,7 @@ button.nia-save__row {
 
   .nia-save__product-grid {
     grid-area: products;
-    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 16px;
   }
 

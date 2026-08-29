@@ -2,12 +2,12 @@ import React from "react";
 
 const paths = {
   bag: <><path d="M5 8h14l-1 12H6L5 8Z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></>,
-  work: <><rect x="3" y="7" width="18" height="12" rx="2"/><path d="M9 7V4h6v3M3 12h18M10 12v2h4v-2"/></>,
+  work: <><path d="M12 12h.01"/><path d="M16 6V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><path d="M22 13a18.15 18.15 0 0 1-20 0"/><rect x="2" y="6" width="20" height="14" rx="2"/></>,
   nest: <><path d="M3 11 12 3l9 8"/><path d="M5 10v10h14V10M8 20v-6h8v6"/><path d="M9 11h6"/></>,
-  live: <><path d="m3 10 9-7 9 7"/><path d="M5 9v11h14V9"/><path d="M8 18v-5h3v3h7v2H8ZM18 16v-1.5A1.5 1.5 0 0 0 16.5 13H11M8 18v2M18 18v2"/></>,
-  save: <><path d="M5 10c1-3 4-5 8-5 5 0 8 3 8 7 0 3-2 5-5 6l-1 3h-3l-1-2H8l-1 2H4l1-4c-1-1-2-2-2-4H1v-3h4Z"/><path d="M15 8h.01M9 5 8 2c3 0 5 1 6 3"/></>,
+  live: <><path d="M3 10a2 2 0 0 1 .71-1.53l7-6a2 2 0 0 1 2.58 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><path d="M7 18v-4h10v4M7 16h10M9 14v-2h3a2 2 0 0 1 2 2"/></>,
+  save: <><path d="M11 17h3v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-3a3.16 3.16 0 0 0 2-2h1a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1h-1a5 5 0 0 0-2-4V3a4 4 0 0 0-3.2 1.6l-.3.4H11a6 6 0 0 0-6 6v1a5 5 0 0 0 2 4v3a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1Z"/><path d="M16 10h.01M2 8v1a2 2 0 0 0 2 2h1"/></>,
   home: <><path d="m3 11 9-8 9 8"/><path d="M5 10v10h14V10M9 20v-6h6v6"/></>,
-  send: <><rect x="3" y="6" width="14" height="12" rx="2"/><path d="M7 10h5M7 12h5M8.5 10c1.8 0 3 .7 3 1.8s-1.2 1.8-3 1.8H7l4 2.4M15 3h6v6M21 3l-7 7"/></>,
+  send: <><path d="M12 18H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5"/><path d="M18 12h.01M6 12h.01"/><circle cx="12" cy="12" r="2"/><path d="M19 22v-6m3 3-3-3-3 3"/></>,
   location: <><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></>,
   studio: <><path d="M4 8h16v12H4zM3 8l2-4h14l2 4"/><path d="M9 13h6M12 11v4"/></>,
   shield: <><path d="M12 22s8-3 8-10V5l-8-3-8 3v7c0 7 8 10 8 10Z"/><path d="M12 8v8M8 12h8"/></>,
@@ -36,7 +36,7 @@ const paths = {
   clock: <><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></>
 };
 
-export function Icon({ name, size = 24, className = "", strokeWidth = 1.8 }) {
+export function Icon({ name, size = 24, className = "", strokeWidth = 1.5 }) {
   return (
     <svg
       aria-hidden="true"

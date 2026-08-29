@@ -35,15 +35,21 @@ function Header({ title, bagCount, onBag, onBack }) {
   );
 }
 
-function BottomNav({ active, onChange, t }) {
+function BottomNav({ active, onChange, t, desktopOnly = false }) {
   return (
-    <nav className="nia-save__nav" aria-label="Member sections">
+    <nav className={`nia-save__nav${desktopOnly ? " nia-save__nav--desktop-only" : ""}`} aria-label="Member sections">
+      <div className="nia-save__desktop-brand" aria-hidden="true">
+        <span>N</span>
+        <div><strong>NiaSave</strong><small>Member essentials</small></div>
+      </div>
+      <p className="nia-save__desktop-nav-label">LESS</p>
       {tabs.map(([id, icon]) => (
         <button key={id} className={active === id ? "is-active" : ""} onClick={() => onChange(id)}>
-          <Icon name={icon} size={25} strokeWidth={2.2} />
+          <Icon name={icon} size={24} strokeWidth={1.6} />
           <span>{t.nav[id]}</span>
         </button>
       ))}
+      <p className="nia-save__desktop-nav-note">Live · Earn · Save · Send</p>
     </nav>
   );
 }
@@ -462,7 +468,7 @@ export function App() {
     <div className="nia-save">
       <div className="nia-save__app">
         {screen}
-        {showNav ? <BottomNav active={activeTab} onChange={changeTab} t={t} /> : null}
+        <BottomNav active={activeTab} onChange={changeTab} t={t} desktopOnly={!showNav} />
       </div>
     </div>
   );

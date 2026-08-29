@@ -661,6 +661,14 @@ html:not([lang="en"]) .nia-save__fever-promise strong {
   object-fit: cover;
 }
 
+.nia-save__pack-plate--contain img {
+  position: absolute;
+  inset: 8px;
+  width: calc(100% - 16px);
+  height: calc(100% - 16px);
+  object-fit: contain;
+}
+
 .nia-save__product-name,
 .nia-save__product-meta {
   padding: 0 14px;
@@ -774,6 +782,14 @@ html:not([lang="en"]) .nia-save__fever-promise strong {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.nia-save__detail-plate--contain img {
+  position: absolute;
+  inset: 12px;
+  width: calc(100% - 24px);
+  height: calc(100% - 24px);
+  object-fit: contain;
 }
 
 .nia-save__detail {

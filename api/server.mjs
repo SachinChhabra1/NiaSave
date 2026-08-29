@@ -25,10 +25,11 @@ const member = {
 };
 
 const catalog = [
-  { id: "salt", name: "Tata Salt", hindi: "namak", size: "1 kg", price: 28, mrp: 34, keep: 6, image: "/products/salt.jpg", searchTerms: ["salt", "namak"], outOfStock: false },
-  { id: "sunlite", name: "Fortune Sunlite", hindi: "tel", size: "1 L", price: 145, mrp: 160, keep: 15, image: "/products/oil.jpg", searchTerms: ["oil", "tel"], outOfStock: false },
-  { id: "maggi", name: "Maggi 2-Minute", hindi: "maggi", size: "70 g", price: 14, mrp: 17, keep: 3, image: "/products/maggi.jpg", searchTerms: ["maggi", "noodles"], outOfStock: false },
-  { id: "soap", name: "Nia Soap", hindi: "sabun", size: "30 gms", price: 10, mrp: 12, keep: 2, image: "/products/nia-soap.png", searchTerms: ["soap", "sabun", "bath"], outOfStock: false }
+  { id: "salt", name: "Tata Salt", hindi: "namak", size: "1 kg", price: 28, mrp: 32, keep: 4, image: "/products/salt.jpg", searchTerms: ["salt", "namak"], outOfStock: false },
+  { id: "sunlite", name: "Fortune Sunlite", hindi: "tel", size: "800 g", price: 177, mrp: 225, keep: 48, image: "/products/oil.jpg", searchTerms: ["oil", "tel"], outOfStock: false },
+  { id: "parle", name: "Parle-G", hindi: "biscuit", size: "250 g", price: 27, mrp: 30, keep: 3, image: "/products/parle-g.jpg", searchTerms: ["parle", "parle-g", "biscuit", "glucose"], outOfStock: false },
+  { id: "soap", name: "Nia Soap", hindi: "sabun", size: "30 gms", price: 10, mrp: 12, keep: 2, image: "/products/nia-soap.png", searchTerms: ["soap", "sabun", "bath"], outOfStock: false },
+  { id: "navratna", name: "Navratna Cool Oil", hindi: "thanda tel", size: "100 ml", price: 70, mrp: 82, keep: 12, image: "/products/navratna-oil.png", searchTerms: ["navratna", "hair oil", "cool oil", "tel", "thanda tel"], outOfStock: false }
 ];
 
 const state = {

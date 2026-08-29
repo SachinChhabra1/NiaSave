@@ -4,10 +4,11 @@ export const fallbackCatalog = {
   weeklySavings: 126,
   feverPerk: "Bag ₹500 this month → fever day free.",
   products: [
-    { id: "salt", name: "Tata Salt", hindi: "नमक", size: "1 kg", price: 28, mrp: 34, image: "/products/tata-salt.png", searchTerms: ["salt", "namak"] },
-    { id: "sunlite", name: "Fortune Sunlite", hindi: "तेल", size: "1 L", price: 145, mrp: 160, image: "/products/fortune-oil.png", searchTerms: ["oil", "tel"] },
-    { id: "maggi", name: "Maggi 2-Minute", hindi: "मैगी", size: "70 g", price: 14, mrp: 17, image: "/products/maggi.png", searchTerms: ["maggi", "noodles"] },
-    { id: "soap", name: "Nia Soap", hindi: "साबुन", size: "30 gms", price: 10, mrp: 12, image: "/products/nia-soap.png", searchTerms: ["soap", "sabun", "bath"] }
+    { id: "salt", name: "Tata Salt", hindi: "नमक", size: "1 kg", price: 28, mrp: 32, image: "/products/tata-salt.png", searchTerms: ["salt", "namak"] },
+    { id: "sunlite", name: "Fortune Sunlite", hindi: "तेल", size: "800 g", price: 177, mrp: 225, image: "/products/fortune-oil.png", searchTerms: ["oil", "tel"] },
+    { id: "parle", name: "Parle-G", hindi: "बिस्कुट", size: "250 g", price: 27, mrp: 30, image: "/products/parle-g.jpg", searchTerms: ["parle", "parle-g", "biscuit", "glucose"] },
+    { id: "soap", name: "Nia Soap", hindi: "साबुन", size: "30 gms", price: 10, mrp: 12, image: "/products/nia-soap.png", searchTerms: ["soap", "sabun", "bath"] },
+    { id: "navratna", name: "Navratna Cool Oil", hindi: "ठंडा तेल", size: "100 ml", price: 70, mrp: 82, image: "/products/navratna-oil.png", searchTerms: ["navratna", "hair oil", "cool oil", "tel", "thanda tel"] }
   ]
 };
 
@@ -39,12 +40,13 @@ export const fallbackHome = {
   transferRail: "not_configured"
 };
 
-const hindi = { salt: "नमक", sunlite: "तेल", maggi: "मैगी", soap: "साबुन" };
+const hindi = { salt: "नमक", sunlite: "तेल", parle: "बिस्कुट", soap: "साबुन", navratna: "ठंडा तेल" };
 const images = {
   salt: "/products/tata-salt.png",
   sunlite: "/products/fortune-oil.png",
-  maggi: "/products/maggi.png",
-  soap: "/products/nia-soap.png"
+  parle: "/products/parle-g.jpg",
+  soap: "/products/nia-soap.png",
+  navratna: "/products/navratna-oil.png"
 };
 
 export function normalizeCatalog(payload) {

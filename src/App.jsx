@@ -74,7 +74,7 @@ function ProductCard({ product, onOpen, onAdd, t }) {
   return (
     <article className="nia-save__product-card">
       <button className="nia-save__product-open" onClick={() => onOpen(product.id)} aria-label={`View ${product.name}`}>
-        <span className="nia-save__pack-plate">
+        <span className={`nia-save__pack-plate${product.id === "navratna" ? " nia-save__pack-plate--contain" : ""}`}>
           <span className="nia-save__price-proof">{t.checked}</span>
           <img src={product.image} alt={product.name} />
         </span>
@@ -152,7 +152,7 @@ function ProductDetail({ product, bagCount, onBag, onBack, onAdd, t }) {
           <button className="nia-save__round-control" onClick={onBack} aria-label="Go back"><Icon name="back" size={21} /></button>
           <button className="nia-save__detail-bag" onClick={onBag} aria-label={`${t.bag}, ${bagCount}`}><Icon name="bag" size={19} /><span>{bagCount || t.bag}</span></button>
         </header>
-        <div className="nia-save__detail-plate"><span>{t.checked}</span><img src={product.image} alt={product.name} /></div>
+        <div className={`nia-save__detail-plate${product.id === "navratna" ? " nia-save__detail-plate--contain" : ""}`}><span>{t.checked}</span><img src={product.image} alt={product.name} /></div>
         <h1>{product.name}</h1>
         <p className="nia-save__detail-meta">{product.hindi} · {product.size}</p>
         {product.id === "soap" ? <p className="nia-save__detail-tagline">{t.soapWeek}</p> : null}

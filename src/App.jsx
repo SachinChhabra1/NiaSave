@@ -73,6 +73,8 @@ function ProductCard({ product, onOpen, onAdd }) {
 function SaveShop({ catalog, bagCount, onBag, onAdd, onOpenProduct, onOpenSavings }) {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("all");
+  const savingsGoal = 700;
+  const savingsProgress = Math.min(100, Math.round((catalog.weeklySavings / savingsGoal) * 100));
   const categories = [
     ["all", "All", "All"],
     ["staples", "S", "Staples"],
@@ -95,13 +97,25 @@ function SaveShop({ catalog, bagCount, onBag, onAdd, onOpenProduct, onOpenSaving
   return (
     <div className="nia-save__screen nia-save__save-screen">
       <main className="nia-save__content nia-save__shop">
-        <header className="nia-save__shop-head">
-          <div><h1>Delivered at {catalog.deliveryTime}</h1><p>{catalog.studioName} · Your Studio</p></div>
+        <header className="nia-save__brand-bar">
+          <h1>NiaSave</h1>
           <button className="nia-save__shop-bag" onClick={onBag} aria-label={`Open bag, ${bagCount} items`}>
-            <Icon name="bag" size={22} />
+            <Icon name="bag" size={29} />
             {bagCount > 0 ? <span>{bagCount}</span> : null}
           </button>
         </header>
+        <section className="nia-save__promise" aria-label="Your NiaSave promise">
+          <p><Icon name="location" size={22} /><span>{catalog.studioName} · {catalog.deliveryTime}</span></p>
+          <p><Icon name="studio" size={22} /><span>Delivered to your Studio</span></p>
+          <button className="nia-save__weekly-progress" onClick={onOpenSavings}>
+            <Icon name="save" size={32} />
+            <span className="nia-save__weekly-progress-copy">
+              <span><strong>Weekly Savings</strong><b>{formatRupees(catalog.weeklySavings)} saved of {formatRupees(savingsGoal)}</b></span>
+              <span className="nia-save__progress-row"><i><b style={{ width: `${savingsProgress}%` }} /></i><em>{savingsProgress}%</em></span>
+            </span>
+          </button>
+          <p className="nia-save__fever-promise"><Icon name="shield" size={28} /><strong>{catalog.feverPerk}</strong></p>
+        </section>
         <label className="nia-save__search">
           <Icon name="search" size={22} />
           <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search salt, oil, Maggi · खोजें" aria-label="Search products" />
@@ -113,15 +127,6 @@ function SaveShop({ catalog, bagCount, onBag, onAdd, onOpenProduct, onOpenSaving
             </button>
           ))}
         </nav>
-        <section className="nia-save__save-hero">
-          <span>THIS MONTH</span>
-          <h2>Fever day, covered.</h2>
-          <p>{catalog.feverPerk}</p>
-        </section>
-        <button className="nia-save__saving-line" onClick={onOpenSavings}>
-          <span><strong>You kept {formatRupees(catalog.weeklySavings)} this week</strong><small>vs the local kirana · बाजार से कम</small></span>
-          <Icon name="chevron" size={18} />
-        </button>
         <div className="nia-save__section-title"><h2>Daily essentials</h2><button onClick={() => { setCategory("all"); setQuery(""); }}>See all</button></div>
         <section className="nia-save__product-grid" aria-label="Essentials">
           {products.map((product) => (

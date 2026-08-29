@@ -204,28 +204,27 @@ body {
   padding: max(22px, env(safe-area-inset-top)) 20px 30px;
 }
 
-.nia-save__shop-head {
+.nia-save__brand-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 18px;
-  margin-bottom: 22px;
+  margin: 0 -20px;
+  padding: 0 20px 18px;
+  border-bottom: 1px solid #e1e3e5;
 }
 
-.nia-save__shop-head h1 {
+.nia-save__brand-bar h1 {
   margin: 0;
-  color: #151719;
-  font-size: 24px;
-  font-weight: 770;
+  color: var(--navy);
+  font-size: 39px;
+  font-weight: 790;
   line-height: 1.1;
-  letter-spacing: -0.55px;
+  letter-spacing: -1.4px;
 }
 
-.nia-save__shop-head p {
-  margin: 6px 0 0;
-  color: #656b70;
-  font-size: 15px;
-  line-height: 1.25;
+.nia-save__brand-bar .nia-save__shop-bag {
+  border-color: transparent;
 }
 
 .nia-save__shop-bag,
@@ -258,6 +257,118 @@ body {
   color: white;
   font-size: 10px;
   font-weight: 760;
+}
+
+.nia-save__promise {
+  display: grid;
+  gap: 14px;
+  padding: 20px 0 22px;
+}
+
+.nia-save__promise > p {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  color: #202326;
+  font-size: 16px;
+  line-height: 1.3;
+}
+
+.nia-save__promise > p svg {
+  flex: none;
+  color: var(--navy);
+}
+
+.nia-save__weekly-progress {
+  width: 100%;
+  min-height: 106px;
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid #dfe2e5;
+  border-radius: 14px;
+  background: #fff;
+  color: var(--navy);
+  text-align: left;
+}
+
+.nia-save__weekly-progress > svg {
+  justify-self: center;
+}
+
+.nia-save__weekly-progress-copy {
+  min-width: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.nia-save__weekly-progress-copy > span:first-child {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.nia-save__weekly-progress-copy strong,
+.nia-save__weekly-progress-copy b {
+  font-size: 13px;
+  line-height: 1.25;
+}
+
+.nia-save__weekly-progress-copy b {
+  white-space: nowrap;
+}
+
+.nia-save__progress-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 10px;
+}
+
+.nia-save__progress-row i {
+  height: 9px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #ebedf0;
+}
+
+.nia-save__progress-row i b {
+  height: 100%;
+  display: block;
+  border-radius: inherit;
+  background: var(--navy);
+}
+
+.nia-save__progress-row em {
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 720;
+}
+
+.nia-save__promise .nia-save__fever-promise {
+  min-height: 70px;
+  gap: 14px;
+  padding: 14px 16px;
+  border: 1.5px solid var(--navy);
+  border-radius: 13px;
+  color: var(--navy);
+}
+
+.nia-save__fever-promise strong {
+  font-size: 14px;
+  line-height: 1.35;
+  letter-spacing: -0.15px;
+  white-space: nowrap;
+}
+
+@media (max-width: 350px) {
+  .nia-save__fever-promise strong {
+    white-space: normal;
+  }
 }
 
 .nia-save__where p {
@@ -435,7 +546,7 @@ body {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin-bottom: 14px;
+  margin: 28px 0 14px;
 }
 
 .nia-save__section-title h2 {

@@ -5,6 +5,7 @@
  */
 import http from "node:http";
 import { randomUUID } from "node:crypto";
+import { pathToFileURL } from "node:url";
 
 const PORT = Number(process.env.PORT || 8787);
 const DEMO = process.env.DEMO !== "0";
@@ -110,10 +111,11 @@ function digits(phone) {
   return String(phone || "").replace(/\D/g, "").slice(-10);
 }
 
-const server = http.createServer(async (req, res) => {
+export async function handler(req, res) {
   if (req.method === "OPTIONS") return json(res, 204, {});
   const url = new URL(req.url, "http://localhost");
-  const path = url.pathname;
+  const rewrittenPath = url.searchParams.get("path");
+  const path = rewrittenPath ? `/${rewrittenPath.replace(/^\/+/, "")}` : url.pathname;
   const key = req.headers["idempotency-key"];
   try {
     if (req.method === "GET" && path === "/health") {
@@ -197,8 +199,12 @@ const server = http.createServer(async (req, res) => {
     if (err.message === "invalid_json") return json(res, 400, { error: "invalid_json" });
     return json(res, 500, { error: "server_error" });
   }
-});
+}
 
-server.listen(PORT, () => {
-  process.stdout.write("niasave api on :" + PORT + " demo=" + DEMO + "\n");
-});
+export default handler;
+
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  http.createServer(handler).listen(PORT, "127.0.0.1", () => {
+    process.stdout.write("niasave api on :" + PORT + " demo=" + DEMO + "\n");
+  });
+}

@@ -581,47 +581,6 @@ html:not([lang="en"]) .nia-save__fever-promise strong {
   color: #73787d;
 }
 
-.nia-save__categories {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 6px;
-}
-
-.nia-save__categories button {
-  min-width: 0;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  gap: 8px;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: #1d2022;
-}
-
-.nia-save__categories button > span {
-  width: 56px;
-  height: 56px;
-  display: grid;
-  place-items: center;
-  border-radius: 17px;
-  background: #f7f7f9;
-  font-size: 13px;
-  font-weight: 760;
-}
-
-.nia-save__categories button > small {
-  overflow: hidden;
-  font-size: 11px;
-  font-weight: 650;
-  text-overflow: ellipsis;
-}
-
-.nia-save__categories button.is-active > span {
-  background: #2f638a;
-  color: #fff;
-}
-
 .nia-save__section-title {
   display: flex;
   align-items: center;

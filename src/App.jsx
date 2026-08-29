@@ -94,26 +94,11 @@ function ProductCard({ product, onOpen, onAdd, t }) {
 
 function SaveShop({ catalog, bagCount, onBag, onAdd, onOpenProduct, onOpenSavings, language, onLanguage, t }) {
   const [query, setQuery] = useState("");
-  const [category, setCategory] = useState("all");
   const savingsGoal = 700;
   const savingsProgress = Math.min(100, Math.round((catalog.weeklySavings / savingsGoal) * 100));
-  const categories = [
-    ["all", "All", t.categories[0]],
-    ["staples", "S", t.categories[1]],
-    ["oils", "O", t.categories[2]],
-    ["meals", "M", t.categories[3]],
-    ["rice", "R", t.categories[4]]
-  ];
-  const productCategory = (product) => {
-    if (product.id === "sunlite") return "oils";
-    if (product.id === "maggi") return "meals";
-    if (product.id === "rice") return "rice";
-    return "staples";
-  };
   const products = catalog.products.filter((product) => {
     const haystack = [product.name, product.hindi, product.size, ...(product.searchTerms || [])].join(" ").toLowerCase();
-    const matchesSearch = haystack.includes(query.trim().toLowerCase());
-    return matchesSearch && (category === "all" || productCategory(product) === category);
+    return haystack.includes(query.trim().toLowerCase());
   });
 
   return (
@@ -145,14 +130,7 @@ function SaveShop({ catalog, bagCount, onBag, onAdd, onOpenProduct, onOpenSaving
           <Icon name="search" size={22} />
           <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t.search} aria-label={t.search} />
         </label>
-        <nav className="nia-save__categories" aria-label="Product categories">
-          {categories.map(([id, mark, label]) => (
-            <button key={id} className={category === id ? "is-active" : ""} onClick={() => setCategory(id)}>
-              <span>{mark}</span><small>{label}</small>
-            </button>
-          ))}
-        </nav>
-        <div className="nia-save__section-title"><h2>{t.daily}</h2><button onClick={() => { setCategory("all"); setQuery(""); }}>{t.seeAll}</button></div>
+        <div className="nia-save__section-title"><h2>{t.daily}</h2><button onClick={() => setQuery("")}>{t.seeAll}</button></div>
         <section className="nia-save__product-grid" aria-label="Essentials">
           {products.map((product) => (
             <ProductCard key={product.id} product={product} onOpen={onOpenProduct} onAdd={onAdd} t={t} />

@@ -254,9 +254,11 @@ for (const file of staffPages) {
   ok(file + " has no Rabbit", !/Rabbit|RABBIT/.test(html));
   ok(file + " has no Jabali", !/Jabali|Jamali|JABALI|JAMALI/.test(html));
   ok(file + " has no Dummy", !/Dummy/.test(html));
+  ok(file + " has no polo-icon", !/polo-icon/.test(html));
 }
 const opsHtml = readFileSync(new URL("../ops.html", import.meta.url), "utf8");
-ok("ops nia then polo svg", /class="nia-logo"[\s\S]{0,500}class="polo-icon"/.test(opsHtml));
+ok("ops nia then Operation Polo", /class="nia-logo"[\s\S]{0,200}Operation Polo/.test(opsHtml));
+ok("ops has no polo-icon", !/polo-icon/.test(opsHtml));
 ok("ops job icons in source", /id="i-biker"/.test(opsHtml) && /id="i-po"/.test(opsHtml) && /id="i-dispatch"/.test(opsHtml));
 ok("biker desk exists", /Book biker/.test(readFileSync(new URL("../biker.html", import.meta.url), "utf8")));
 

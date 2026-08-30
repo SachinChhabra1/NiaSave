@@ -72,8 +72,7 @@ a:hover{text-decoration:underline}
 .top a{color:var(--accent)}
 .mark{display:flex;flex-direction:column;align-items:flex-start}
 .nia-logo{width:40px;height:40px;object-fit:contain;display:block}
-.polo-icon{width:36px;height:36px;min-width:36px;min-height:36px;display:block;margin:8px 0 6px;color:var(--fg)}
-.brand{font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:var(--fg-muted);font-family:var(--mono)}
+.brand{font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:var(--fg-muted);font-family:var(--mono);margin-top:8px}
 .desk-head{display:flex;flex-direction:column;align-items:flex-start;margin-top:8px}
 .desk-icon,.job-icon,.card-icon{
   width:40px;height:40px;min-width:40px;min-height:40px;

@@ -75,7 +75,17 @@
       <div class="pane">
         <div class="wrap pane-ops">
           <p class="sub">Production. Skip on. One theatre. 40 stops. 3000 members. Stock is not today's flow. Inventory is movements. Settlement on collected. No live UPI.</p>
-          <div class="realities" id="realities"></div>
+          <div class="realities" id="realities">
+            <span class="reality"><b>1</b> Ordered</span>
+            <span class="reality-arrow" aria-hidden="true">→</span>
+            <span class="reality"><b>2</b> Paid</span>
+            <span class="reality-arrow" aria-hidden="true">→</span>
+            <span class="reality"><b>3</b> Hub loaded</span>
+            <span class="reality-arrow" aria-hidden="true">→</span>
+            <span class="reality"><b>4</b> Collected or returned</span>
+            <span class="reality-arrow" aria-hidden="true">→</span>
+            <span class="reality"><b>5</b> Settled</span>
+          </div>
           <div class="jobs" id="jobs"></div>
           <div class="open" id="open"></div>
           <section class="connectors-panel" id="connectors">
@@ -277,7 +287,10 @@ function face(){
   var procure=srcOf(conn,'procure');
   document.getElementById('realities').innerHTML=[
     'Ordered','Paid','Hub loaded','Collected or returned','Settled'
-  ].map(function(x){ return '<span class="reality">'+x+'</span>'; }).join('');
+  ].map(function(x,i){
+    return (i?'<span class="reality-arrow" aria-hidden="true">→</span>':'')
+      + '<span class="reality"><b>'+(i+1)+'</b> '+x+'</span>';
+  }).join('');
   var ops=t.ops||{};
   document.getElementById('jobs').innerHTML=[
     jobBtn('po','Buy','Purchase order','Create a PO from procure plus tomorrow load. Mark sent. Mark received.',

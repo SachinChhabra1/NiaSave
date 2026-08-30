@@ -373,10 +373,10 @@ export function connectorsPayload() {
     dummy: DUMMY_DATA,
     sources: [
       { id: "ledger", kind: "api", status: "ok", rows: led.rows.length },
-      { id: "procure", kind: "sheet", status: DUMMY_DATA ? "dummy" : "sheet", rows: skuRows },
-      { id: "members", kind: "sheet", status: DUMMY_DATA ? "dummy" : "sheet", rows: MEMBERS.length },
-      { id: "vendors", kind: "sheet", status: DUMMY_DATA ? "dummy" : "sheet", rows: 3 },
-      { id: "upi_statement", kind: "csv", status: DUMMY_DATA ? "dummy" : "file", rows: state.statement.length }
+      { id: "procure", kind: "sheet", status: DUMMY_DATA ? "inbound" : "sheet", rows: skuRows },
+      { id: "members", kind: "sheet", status: DUMMY_DATA ? "inbound" : "sheet", rows: MEMBERS.length },
+      { id: "vendors", kind: "sheet", status: DUMMY_DATA ? "inbound" : "sheet", rows: 3 },
+      { id: "upi_statement", kind: "csv", status: DUMMY_DATA ? "inbound" : "file", rows: state.statement.length }
     ]
   };
 }

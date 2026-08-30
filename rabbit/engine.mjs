@@ -335,7 +335,8 @@ function createState() {
     exceptions: seedExceptions(orders),
     statement,
     cash: {},
-    studios: STUDIOS.map(s => ({ ...s }))
+    studios: STUDIOS.map(s => ({ ...s })),
+    uploads: { upi_statement: null, procure: null, vendors: null }
   };
 }
 
@@ -549,9 +550,55 @@ function predictFromLedger(led) {
   return { miss_rate: rate, load };
 }
 
+function parseCsv(text) {
+  const lines = String(text || "").replace(/^\uFEFF/, "").split(/\r?\n/).filter(l => l.trim());
+  if (!lines.length) return { headers: [], rows: [] };
+  const split = (line) => {
+    const out = [];
+    let cur = "";
+    let q = false;
+    for (let i = 0; i < line.length; i++) {
+      const ch = line[i];
+      if (ch === "\"") {
+        if (q && line[i + 1] === "\"") {
+          cur += "\"";
+          i += 1;
+          continue;
+        }
+        q = !q;
+        continue;
+      }
+      if (ch === "," && !q) {
+        out.push(cur.trim());
+        cur = "";
+        continue;
+      }
+      cur += ch;
+    }
+    out.push(cur.trim());
+    return out;
+  };
+  const headers = split(lines[0]).map(h => h.toLowerCase().replace(/\s+/g, "_"));
+  const rows = lines.slice(1).map(line => {
+    const cols = split(line);
+    const obj = {};
+    headers.forEach((h, i) => { obj[h] = cols[i] || ""; });
+    return obj;
+  });
+  return { headers, rows };
+}
+
+function uploadMeta(id) {
+  const u = state.uploads && state.uploads[id];
+  if (!u) return { status: "empty", rows: 0, filename: "", uploadedAt: null };
+  return { status: "ok", rows: u.rowCount, filename: u.filename, uploadedAt: u.at };
+}
+
 export function connectorsPayload() {
   const led = ledgerOf();
-  const skuRows = SKUS.length;
+  const procure = uploadMeta("procure");
+  const vendors = uploadMeta("vendors");
+  const upi = uploadMeta("upi_statement");
   return {
     product: "rabbit",
     skip: DUMMY_DATA,
@@ -560,29 +607,77 @@ export function connectorsPayload() {
     memberCount: MEMBER_COUNT,
     sources: [
       { id: "ledger", kind: "api", status: "ok", rows: led.rows.length },
-      { id: "procure", kind: "sheet", status: DUMMY_DATA ? "inbound" : "sheet", rows: skuRows },
-      { id: "members", kind: "sheet", status: DUMMY_DATA ? "inbound" : "sheet", rows: MEMBER_COUNT },
-      { id: "vendors", kind: "sheet", status: DUMMY_DATA ? "inbound" : "sheet", rows: 3 },
-      { id: "upi_statement", kind: "csv", status: DUMMY_DATA ? "inbound" : "file", rows: state.statement.length }
+      { id: "procure", kind: "csv", status: procure.status, rows: procure.rows, filename: procure.filename, uploadedAt: procure.uploadedAt },
+      { id: "members", kind: "sheet", status: "ok", rows: MEMBER_COUNT },
+      { id: "vendors", kind: "csv", status: vendors.status, rows: vendors.rows, filename: vendors.filename, uploadedAt: vendors.uploadedAt },
+      { id: "upi_statement", kind: "csv", status: upi.status, rows: upi.rows, filename: upi.filename, uploadedAt: upi.uploadedAt }
     ]
   };
 }
 
-export function sourcePayload() {
+export function uploadConnector({ kind, csv, filename }) {
+  const k = String(kind || "");
+  if (!["upi_statement", "procure", "vendors"].includes(k)) {
+    return { error: "bad_kind", status: 400 };
+  }
+  const raw = String(csv == null ? "" : csv);
+  if (!raw.trim()) return { error: "empty_csv", status: 400 };
+  const parsed = parseCsv(raw);
+  const at = now();
+  const name = String(filename || "upload.csv");
+  if (!state.uploads) state.uploads = { upi_statement: null, procure: null, vendors: null };
+  state.uploads[k] = { kind: k, filename: name, at, rows: parsed.rows, rowCount: parsed.rows.length };
+  if (k === "upi_statement") {
+    state.statement = parsed.rows.map((r, i) => ({
+      id: "stmt-up-" + (i + 1),
+      date: r.date || r.beat || WEEK_BEAT,
+      utr: r.utr || r.ref || r.utr_no || "",
+      amount: Number(r.amount || r.rs || r.inr) || 0,
+      note: r.note || r.narration || r.remark || "",
+      matched: false,
+      settlementId: null
+    }));
+    matchStatement(state.settlements, state.statement);
+  }
   return {
-    from: "From sheet",
-    sheetFrom: { procure: "From sheet" },
+    ok: true,
+    kind: k,
+    filename: name,
+    rows: parsed.rows.length,
+    uploadedAt: at,
+    persist: state.persist,
+    connectors: connectorsPayload()
+  };
+}
+
+export function sourcePayload() {
+  const u = state.uploads && state.uploads.procure;
+  const vendors = state.uploads && state.uploads.vendors;
+  if (!u) {
+    return {
+      from: "No file yet",
+      sheetFrom: { procure: "No file yet", vendors: vendors ? vendors.filename : "No file yet" },
+      theatre: THEATRE.name,
+      sources: []
+    };
+  }
+  return {
+    from: u.filename,
+    sheetFrom: { procure: u.filename, vendors: vendors ? vendors.filename : "No file yet" },
     theatre: THEATRE.name,
-    sources: SKUS.map(s => ({
-      sku: s.id,
-      vendor: s.vendor,
-      source: s.vendor,
-      niaCost: s.nia,
-      kirana: s.kirana,
-      keep: s.keep,
-      lead_days: s.lead_days,
-      last_buy: s.last_buy,
-      status: "active"
+    uploadedAt: u.at,
+    rows: u.rowCount,
+    sources: u.rows.map(r => ({
+      sku: r.sku || "",
+      name: r.name || "",
+      vendor: r.vendor || "",
+      source: r.vendor || "",
+      niaCost: Number(r.buy_inr) || 0,
+      kirana: r.kirana === "" || r.kirana == null ? null : Number(r.kirana),
+      keep: Number(r.keep_qty) || 0,
+      lead_days: r.lead_days === "" || r.lead_days == null ? null : Number(r.lead_days) || null,
+      last_buy: r.last_buy || "",
+      status: r.status || ""
     }))
   };
 }
@@ -811,14 +906,15 @@ export function predictPayload() {
     if (!bagByMember.has(m.memberId) && !m.hasMira) quietCount += 1;
     if (m.friday_send === "pending") sendCount += 1;
   }
-  const source = pred.load
-    .filter(r => r.tomorrow_qty > (led.leftover[r.sku] || 0))
-    .map(r => ({
-      sku: r.sku,
-      source: skuOf(r.sku).vendor,
+  const procureRows = (state.uploads && state.uploads.procure && state.uploads.procure.rows) || [];
+  const source = procureRows.length
+    ? procureRows.map(r => ({
+      sku: r.sku || "",
+      source: r.vendor || "",
       leftover: led.leftover[r.sku] || 0,
-      why: "left " + (led.leftover[r.sku] || 0) + " · load " + r.tomorrow_qty
-    }));
+      why: (r.status || "on file") + " · buy " + (r.buy_inr || "-") + " · keep " + (r.keep_qty || "-")
+    }))
+    : [];
   const dueAll = state.settlements.filter(s => s.beatDate === led.beatDate && !s.matched);
   const settlementsDue = dueAll.slice(0, SAMPLE).map(s => ({
     pickupCode: s.pickupCode,
@@ -848,7 +944,7 @@ export function predictPayload() {
     settlementsDue,
     settlementsDueCount: dueAll.length,
     sheetFrom: {
-      procure: "From sheet",
+      procure: (state.uploads && state.uploads.procure) ? state.uploads.procure.filename : "No file yet",
       members: "From sheet"
     },
     note: "Samples only. Full 3000 stay on the member book."
@@ -1110,7 +1206,7 @@ export function staffPath(pathname, rewrittenPath) {
 
 export function isStaffPath(p) {
   return [
-    "/connectors", "/predict", "/ledger", "/stock", "/orders", "/beat",
+    "/connectors", "/connectors/upload", "/predict", "/ledger", "/stock", "/orders", "/beat",
     "/beat/open", "/beat/close", "/scan", "/recon", "/next", "/source",
     "/cash", "/settlements", "/tower", "/stops"
   ].includes(p);
@@ -1122,6 +1218,7 @@ export async function handleStaff(req, res, path, body, url) {
 
   const done = (result, fallback = 200) => ({ status: result.status || fallback, body: result });
   if (method === "GET" && path === "/connectors") return { status: 200, body: connectorsPayload() };
+  if (method === "POST" && path === "/connectors/upload") return done(uploadConnector(body || {}));
   if (method === "GET" && path === "/predict") return { status: 200, body: predictPayload() };
   if (method === "GET" && path === "/ledger") return { status: 200, body: ledgerOf(q.beat) };
   if (method === "GET" && path === "/stock") return { status: 200, body: stockPayload() };

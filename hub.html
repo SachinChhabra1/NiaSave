@@ -49,7 +49,7 @@ function load(){
     var d=all[0], n=all[1];
     beatDate=d.beatDate||'';
     opening=Object.assign({}, d.opening||{});
-    document.getElementById('beat').textContent='Beat '+beatDate+' · opening on file · owner hub';
+    document.getElementById('beat').textContent=(d.theatre||'Rajputana Theatre')+' · Beat '+beatDate+' · '+(d.stopCount||40)+' stops · opening on file';
     var skus=Object.keys(opening).sort();
     var rows=skus.map(function(sku){
       return '<tr><td>'+sku+'</td><td><input data-sku="'+sku+'" value="'+(opening[sku]||0)+'"></td><td>'+(d.stock&&d.stock[sku]!=null?d.stock[sku]:'-')+'</td></tr>';

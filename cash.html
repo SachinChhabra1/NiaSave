@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>NiaSave · Money in</title>
+<link rel="icon" href="/assets/nia-logo.png" type="image/png">
+<link rel="apple-touch-icon" href="/assets/nia-logo.png">
 <link rel="stylesheet" href="/staff.css">
 </head>
 <body>
@@ -23,24 +25,47 @@
       <div class="meta"><a href="/ops.html">Ops</a></div>
     </header>
     <div class="wrap">
-      <p class="sub">Finance · staff sample only · no live UPI · no Razorpay</p>
+      <p class="sub">Finance · staff sample only · no live UPI · no Razorpay · one stop at a time</p>
       <p class="sub" id="beat">Beat …</p>
-      <button type="button" onclick="load()">Refresh</button>
+      <button type="button" onclick="loadStops()">Refresh stops</button>
       <div class="msg" id="msg"></div>
-      <div id="list" class="empty">Loading…</div>
+      <div id="stops" class="stops"></div>
+      <div id="list" class="empty">Tap a stop.</div>
     </div>
   </div>
 <script>
+var STOP='';
 function lineText(lines){
   return (lines||[]).map(function(l){ return (l.id||'?')+' × '+(l.qty||1); }).join(' · ');
 }
-function load(){
+function stopBtn(s, on){
+  return '<button type="button" class="stop'+(on?' on':'')+'" data-stop="'+s.stopId+'">'
+    + '<div class="stop-id">'+s.stopId+'</div>'
+    + '<strong>'+(s.name||s.stopId)+'</strong>'
+    + '<div class="stop-num">'+s.collected+' collected · '+s.open+' open</div>'
+    + '</button>';
+}
+function faceStops(d){
+  var stops=d.stops||[];
+  document.getElementById('stops').innerHTML=stops.map(function(s){
+    return stopBtn(s, s.stopId===STOP);
+  }).join('');
+  document.querySelectorAll('button.stop').forEach(function(el){
+    el.addEventListener('click', function(){ pickStop(el.getAttribute('data-stop')); });
+  });
+}
+function pickStop(id){
+  if(STOP===id){ STOP=''; document.getElementById('list').innerHTML='<div class="empty">Tap a stop.</div>'; faceStops(window.__cash||{}); return; }
+  STOP=id;
+  faceStops(window.__cash||{});
+  loadStop(id);
+}
+function loadStop(stop){
   var el=document.getElementById('list');
-  el.textContent='Loading…';
-  fetch('/api/cash?beat=today').then(function(r){ return r.json(); }).then(function(d){
-    document.getElementById('beat').textContent='Beat '+(d.beatDate||'-');
+  el.textContent='Loading '+stop+'…';
+  fetch('/api/cash?beat=today&stop='+encodeURIComponent(stop)).then(function(r){ return r.json(); }).then(function(d){
     var orders=d.orders||[];
-    if(!orders.length){ el.innerHTML='<div class="empty">No reserved or collected bags this beat.</div>'; return; }
+    if(!orders.length){ el.innerHTML='<div class="empty">No reserved or collected bags at this stop.</div>'; return; }
     el.innerHTML=orders.map(function(o,i){
       var method=o.method||'cash';
       return '<div class="row" data-i="'+i+'">'
@@ -55,7 +80,15 @@ function load(){
         + '</div></div>';
     }).join('');
     window.__cashOrders=orders;
-  }).catch(function(){ el.innerHTML='<div class="empty">Could not load cash board.</div>'; });
+  }).catch(function(){ el.innerHTML='<div class="empty">Could not load this stop.</div>'; });
+}
+function loadStops(){
+  fetch('/api/cash?beat=today').then(function(r){ return r.json(); }).then(function(d){
+    window.__cash=d;
+    document.getElementById('beat').textContent=(d.theatre||'Rajputana Theatre')+' · Beat '+(d.beatDate||'-')+' · collected '+(d.collectedCount||0)+' · due Rs '+(d.dueToday||0);
+    faceStops(d);
+    if(STOP) loadStop(STOP);
+  }).catch(function(){ document.getElementById('list').innerHTML='<div class="empty">Could not load cash board.</div>'; });
 }
 function saveRow(i){
   var o=(window.__cashOrders||[])[i];
@@ -70,10 +103,10 @@ function saveRow(i){
   }).then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); })
     .then(function(res){
       document.getElementById('msg').textContent=res.ok?'Saved · '+(res.j.cash&&res.j.cash.method):((res.j&&res.j.error)||'Save failed');
-      if(res.ok) load();
+      if(res.ok) loadStop(STOP);
     });
 }
-load();
+loadStops();
 </script>
 </body>
 </html>

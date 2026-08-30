@@ -58,7 +58,7 @@ function section(title, html){ return '<h2>'+title+'</h2>'+html; }
 function load(){
   document.getElementById('root').textContent='Loading…';
   fetch('/api/predict').then(function(r){ return r.json(); }).then(function(d){
-    document.getElementById('beat').textContent='Beat '+(d.beatDate||'-')+' · owner '+(d.owner||'hub')+' · slot '+(d.slot||'17:00')+' · miss_rate '+(d.miss_rate!=null?d.miss_rate+'%':'-');
+    document.getElementById('beat').textContent=(d.theatre||'Rajputana Theatre')+' · '+(d.stopCount||40)+' stops · '+(d.memberCount||3000)+' members · Beat '+(d.beatDate||'-')+' · miss_rate '+(d.miss_rate!=null?d.miss_rate+'%':'-');
     document.getElementById('from').textContent=fromLabel(d);
     var html='';
     html+=section('Tomorrow load', table(
@@ -66,25 +66,25 @@ function load(){
       (d.load||[]).map(function(r){ return { sku:r.sku, collected:r.collected, reserved:r.reserved, miss_rate:r.miss_rate, tomorrow_qty:r.tomorrow_qty, why:'<span class="why">'+r.why+'</span>' }; }),
       'Nothing to load.'
     ));
-    html+=section('Members this beat', table(
+    html+=section('Members sample · '+(d.memberCount||3000)+' on the book', table(
       [{label:'Member',key:'memberId'},{label:'Nest',key:'nest'},{label:'Hub',key:'hub'},{label:'Bag',key:'hasBag'},{label:'Mira',key:'hasMira'},{label:'Send',key:'friday_send'}],
       (d.members||[]).map(function(r){ return { memberId:r.memberId, nest:r.nest||'-', hub:r.hub||'-', hasBag:r.hasBag?'yes':'no', hasMira:r.hasMira?'yes':'no', friday_send:r.friday_send||'-' }; }),
-      'No members.'
+      'No member sample.'
     ));
-    html+=section('Chase', table(
+    html+=section('Chase sample · '+(d.chaseCount||0)+' still on the beat', table(
       [{label:'Code',key:'code'},{label:'Status',key:'status'},{label:'Why',key:'why',raw:true}],
       (d.chase||[]).map(function(r){ return { code:'<code>'+(r.pickupCode||'-')+'</code>', status:r.status, why:'<span class="why">'+r.why+'</span>' }; }),
       'No chase rows.'
     ));
-    html+=section('Quiet members', table(
+    html+=section('Quiet sample · '+(d.quietCount||0)+' quiet', table(
       [{label:'Member',key:'memberId'},{label:'Why',key:'why',raw:true}],
       (d.quietMembers||[]).map(function(r){ return { memberId:r.memberId, why:'<span class="why">'+r.why+'</span>' }; }),
-      'No quiet members.'
+      'No quiet sample.'
     ));
-    html+=section('Friday send', table(
+    html+=section('Friday send sample · '+(d.sendCount||0)+' pending', table(
       [{label:'Member',key:'memberId'},{label:'Why',key:'why',raw:true}],
       (d.sendPending||[]).map(function(r){ return { memberId:r.memberId, why:'<span class="why">'+r.why+'</span>' }; }),
-      'No send pending.'
+      'No send sample.'
     ));
     html+=section('Source rec', table(
       [{label:'SKU',key:'sku'},{label:'Source',key:'source'},{label:'Left',key:'left',num:true},{label:'Why',key:'why',raw:true}],

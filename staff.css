@@ -128,9 +128,23 @@ button.job .job-num{font-size:13px;color:var(--navy);font-weight:650;font-varian
 .check .l{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--mute)}
 .check .n{font-size:20px;font-weight:650;letter-spacing:-.03em;margin-top:2px;font-variant-numeric:tabular-nums}
 .open a.desk-link{display:inline-block;margin-top:4px;font-weight:650}
+.stops{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:8px 0 16px}
+button.stop{
+  display:block;width:100%;text-align:left;
+  background:var(--paper);color:var(--ink);
+  border:1px solid var(--line);border-radius:14px;
+  padding:14px 14px 12px;cursor:pointer;font-weight:inherit;
+}
+button.stop:hover{border-color:#C9C1B4}
+button.stop.on{border-color:var(--navy);box-shadow:0 0 0 2px rgba(28,63,92,.18)}
+button.stop .stop-id{font-family:var(--mono);font-size:13px;letter-spacing:.08em;color:var(--navy);font-weight:700}
+button.stop strong{display:block;font-size:14px;margin:4px 0 6px;letter-spacing:-.02em}
+button.stop .stop-num{font-size:12px;color:var(--mute);font-variant-numeric:tabular-nums}
+.back{margin:0 0 12px}
 @media (min-width:900px) and (max-width:1100px){
   .kpis{grid-template-columns:repeat(3,minmax(0,1fr))}
   .desks{grid-template-columns:repeat(2,minmax(0,1fr))}
   .jobs{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .stops{grid-template-columns:repeat(3,minmax(0,1fr))}
   .grid{grid-template-columns:1fr}
 }

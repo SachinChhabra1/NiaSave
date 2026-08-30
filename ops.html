@@ -23,10 +23,10 @@
         <div class="brand">Rabbit · Jabali Officer</div>
         <h1>Beat board</h1>
       </div>
-      <div class="meta" id="topmeta">Beat …<br>No live UPI</div>
+      <div class="meta" id="topmeta">Rajputana Theatre · 40 stops<br>No live UPI</div>
     </header>
     <div class="wrap">
-      <p class="sub">Tap a card. One job. Then run the numbers. Wide laptop only. Studio cart after 17:00.</p>
+      <p class="sub">One theatre. 40 stops. 3000 members. Tap a card. One job. Wide laptop only. Studio cart after 17:00.</p>
       <div class="jobs" id="jobs"></div>
       <div class="open" id="open"></div>
     </div>
@@ -64,7 +64,7 @@ function face(){
     jobBtn('source','Inbound','Source','Buy only where Nia cost is under kirana.',
       src.length+' SKUs on the procure sheet', open==='source'),
     jobBtn('predict','Ledger','Predict','Order recs and miss risk from the ledger. Not a guess.',
-      'miss '+(k.miss_rate!=null?k.miss_rate+'%':'0%')+' · '+(pred.chase||[]).length+' to chase', open==='predict'),
+      'miss '+(k.miss_rate!=null?k.miss_rate+'%':'0%')+' · '+num(pred.chaseCount||k.chase)+' to chase', open==='predict'),
     jobBtn('close','Night','Beat close','Opening minus collected must still be on the cart.',
       'open '+num(k.opening)+' · collected '+num(k.collected)+' · miss '+num(k.missed), open==='close'),
     jobBtn('next','Next day','Tomorrow load','Load from collected plus what is still holding.',
@@ -101,7 +101,7 @@ function pick(id){
       +'<a class="desk-link" href="/source.html">Open source desk</a>';
   } else if(id==='predict'){
     html='<h2>Predict</h2><p class="do">Use opening, collected, and miss. Do not invent a load. Chase bags still on the beat.</p>'
-      +checks([['Miss rate',(k.miss_rate!=null?k.miss_rate+'%':'0%')],['Chase',(pred.chase||[]).length],['Quiet',(pred.quietMembers||[]).length],['Send hold',(pred.sendPending||[]).length]])
+      +checks([['Miss rate',(k.miss_rate!=null?k.miss_rate+'%':'0%')],['Chase',num(pred.chaseCount||k.chase)],['Members',num(k.members||t.memberCount)],['Stops',num(k.stops||t.stopCount)]])
       +'<a class="desk-link" href="/predict.html">Open predict desk</a>';
   } else if(id==='close'){
     html='<h2>Beat close</h2><p class="do">One beat. Opening minus collected must equal what is still here. Wrong close is rejected.</p>'
@@ -125,7 +125,7 @@ function load(){
   ]).then(function(all){
     DATA={ tower:all[0], set:all[1], source:all[2], openJob:'' };
     var t=all[0]||{};
-    document.getElementById('topmeta').innerHTML='Beat '+(t.beatDate||'-')+' · owner '+(t.owner||'hub')+' · slot '+(t.slot||'17:00')+'<br>No live UPI · no OTP · no WhatsApp product';
+    document.getElementById('topmeta').innerHTML=(t.theatre||'Rajputana Theatre')+' · '+(t.stopCount||40)+' stops · '+(t.memberCount||3000)+' members<br>Beat '+(t.beatDate||'-')+' · '+(t.bagsTonight||0)+' bags tonight · no live UPI';
     face();
   }).catch(function(){
     document.getElementById('jobs').innerHTML='<div class="empty">Could not load the beat board.</div>';

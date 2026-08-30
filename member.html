@@ -738,6 +738,53 @@
   .proof-stepper button{width:40px;height:40px;padding:0;border:0;background:transparent;color:var(--navy);font-family:var(--font);font-size:24px;font-weight:500;line-height:1;cursor:pointer}
   .proof-stepper button:disabled{color:#B9BABD;cursor:default}
   .proof-qty{text-align:center;color:var(--ink);font-size:14px;font-weight:700;line-height:1}
+  /* Live home: Studio is the relationship hero. Everything else is a compact two-up service tile. */
+  .live-card-layout{display:block;margin:12px 0 4px}
+  .live-studio-hero{
+    position:relative;display:block;width:100%;min-height:244px;margin:0 0 14px;padding:0;overflow:hidden;
+    border:0;border-radius:20px;background-color:#31373B;background-size:cover;background-position:center;
+    color:#fff;font-family:var(--font);text-align:left;cursor:pointer;appearance:none;
+  }
+  .live-studio-hero:before{content:"";position:absolute;inset:0;background:rgba(7,13,18,.48);pointer-events:none}
+  .live-studio-content{position:relative;z-index:1;display:flex;min-height:244px;padding:18px;flex-direction:column}
+  .live-studio-name{display:block;font-size:25px;font-weight:750;line-height:1.05;letter-spacing:-.04em;color:#fff}
+  .live-studio-desc{display:block;margin-top:4px;font-size:13px;font-weight:500;line-height:1.3;color:rgba(255,255,255,.88)}
+  .live-studio-hero .studio-amenities{margin-top:14px}
+  .live-studio-hero .studio-amenities-title{margin-bottom:8px;color:#fff;font-size:10.5px;font-weight:700}
+  .live-studio-hero .studio-amenities-items{grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+  .live-studio-hero .studio-amenity{color:rgba(255,255,255,.88)}
+  .live-studio-hero .studio-amenity svg{width:16px;height:16px;color:#fff}
+  .live-studio-hero .studio-amenity span{font-size:8px;color:rgba(255,255,255,.9)}
+  .live-studio-foot{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-top:auto;padding-top:14px;padding-right:118px}
+  .live-studio-save,.live-studio-price{display:flex;min-width:0;flex-direction:column}
+  .live-studio-save small,.live-studio-price small{font-size:9px;font-weight:650;line-height:1.15;color:rgba(255,255,255,.72)}
+  .live-studio-save strong{font-size:24px;font-weight:750;line-height:1.05;letter-spacing:-.04em;color:#fff}
+  .live-studio-price strong{font-size:15px;font-weight:700;line-height:1.15;color:#fff}
+  .live-service-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:stretch}
+  .live-service-tile{
+    display:flex;min-width:0;overflow:hidden;flex-direction:column;border:1px solid var(--hair2);border-radius:16px;
+    background:#fff;color:var(--ink);font-family:var(--font);text-align:left;cursor:pointer;appearance:none;
+  }
+  .live-service-tile:active,.live-studio-hero:active{transform:scale(.994)}
+  .live-tile-photo{position:relative;display:block;width:100%;aspect-ratio:1.18/1;min-height:126px;background-color:#E9E6E1;background-size:cover}
+  .live-tile-copy{display:flex;min-height:132px;padding:12px;flex:1 1 auto;flex-direction:column}
+  .live-tile-name{display:block;font-size:16px;font-weight:700;line-height:1.16;letter-spacing:-.025em;color:var(--ink)}
+  .live-tile-desc{display:block;min-height:32px;margin-top:3px;font-size:11.5px;font-weight:450;line-height:1.35;color:var(--mute)}
+  .live-tile-values{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px;margin-top:auto;padding-top:10px;border-top:1px solid var(--hair)}
+  .live-tile-save,.live-tile-price{display:flex;min-width:0;flex-direction:column}
+  .live-tile-price{align-items:flex-end;text-align:right}
+  .live-tile-values small{font-size:9px;font-weight:650;line-height:1.15;color:var(--mute)}
+  .live-tile-save strong{font-size:16px;font-weight:750;line-height:1.1;letter-spacing:-.025em;color:var(--navy)}
+  .live-tile-price strong{font-size:14px;font-weight:700;line-height:1.15;color:#4C4D50}
+  .live-card-stepper{
+    position:absolute;left:8px;right:8px;bottom:8px;z-index:3;display:grid;height:36px;
+    grid-template-columns:36px 1fr 36px;align-items:center;overflow:hidden;border-radius:999px;
+    background:rgba(255,255,255,.95);box-shadow:0 3px 12px rgba(0,0,0,.14);
+  }
+  .live-studio-hero>.live-card-stepper{left:auto;right:14px;bottom:14px;width:108px;height:40px;grid-template-columns:40px 1fr 40px}
+  .live-card-stepper button{width:100%;height:100%;padding:0;border:0;background:transparent;color:var(--navy);font:500 22px/1 var(--font);cursor:pointer}
+  .live-card-stepper button:disabled{color:#B9BABD;cursor:default}
+  .live-card-stepper .proof-qty{font-size:13px}
   .earn-proof-card{grid-template-rows:auto;border:0!important;background:transparent}
   .pad .proof-cards .earn-proof-card .proof-photo{grid-row:1;border:0!important}
   .earn-proof-card .proof-copy{grid-row:1;min-height:126px;justify-content:center}
@@ -2657,7 +2704,7 @@ function screenLive(){
   if(liveView==='aisle' && liveCard) return liveAisle();
   var head = '<div class="h1">'+t('live_t')+'</div>'
     + '<div class="sub">'+t('live_s')+'</div>';
-  var body = '<div class="story-cards category-cards proof-cards">'+liveCards()+'</div>';
+  var body = '<div class="live-card-layout">'+liveCards()+'</div>';
   return '<div class="pad fadein">'+head+homeMonthBanner()+body+'</div>';
 }
 function screenEarn(){
@@ -3298,13 +3345,41 @@ function sendAisle(){
   return '<div class="pad fadein">'+storyAisleHead(t('send_card_sent_n'),'','send')+body+'</div>';
 }
 function liveCards(){
-  /* Each Live service shows a transparent monthly member-value estimate. */
-  var ids=['studio','wash','hubfood','cooler','cycle','raincape','dontmiss','akka','group','dropin','recreation','thrift','grievance'];
+  var ids=['wash','hubfood','cooler','cycle','raincape','dontmiss','akka','group','dropin','recreation','thrift','grievance'];
   var photos={studio:'story-studio',wash:'story-wash',hubfood:'story-eat',cooler:'story-cooler',cycle:'story-cycle',raincape:'story-rain',dontmiss:'story-day',akka:'story-akka',group:'story-group',dropin:'story-dropin',recreation:'story-recreation',thrift:'story-thrift',grievance:'story-grievance'};
-  return ids.map(function(id){
+  var studio=liveSavingEstimate('studio');
+  var hero=liveStudioHero(studio,photos.studio);
+  var tiles=ids.map(function(id){
     var saving=liveSavingEstimate(id);
-    return proofCard(id,liveTabCopy(id,'n'),photos[id],"openStoryCard('live','"+id+"')",saving);
+    return liveServiceTile(id,liveTabCopy(id,'n'),photos[id],saving);
   }).join('');
+  return hero+'<div class="live-service-grid">'+tiles+'</div>';
+}
+function liveCardStepper(id,name,hero){
+  var inCart=!!bag['live_'+id];
+  return '<span class="live-card-stepper'+(hero?' live-hero-stepper':'')+'" role="group" aria-label="Quantity">'
+    + '<button type="button" class="proof-minus" onclick="event.stopPropagation();setLiveCart(\''+id+'\',0,this)" aria-label="Remove '+name+'"'+(inCart?'':' disabled')+'>&minus;</button>'
+    + '<span class="proof-qty" aria-live="polite">'+(inCart?'1':'0')+'</span>'
+    + '<button type="button" class="proof-plus" onclick="event.stopPropagation();setLiveCart(\''+id+'\',1,this)" aria-label="Add '+name+'"'+(inCart?' disabled':'')+'>+</button></span>';
+}
+function liveStudioHero(model,photoClass){
+  var id='studio', name=liveTabCopy(id,'n');
+  var aria=name+'. Saved '+money(model.amount)+' every month. With Nia '+money(model.nia)+'.';
+  return '<article class="live-studio-hero story-photo '+photoClass+'" role="button" tabindex="0" onclick="openStoryCard(\'live\',\'studio\')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openStoryCard(\'live\',\'studio\');}" aria-label="'+aria+'">'
+    + '<span class="live-studio-content"><span class="live-studio-name">'+name+'</span><span class="live-studio-desc">'+model.desc+'</span>'
+    + complimentaryStrip()
+    + '<span class="live-studio-foot"><span class="live-studio-save"><small>Save every month</small><strong>'+money(model.amount)+'</strong></span>'
+    + '<span class="live-studio-price"><small>Price</small><strong>'+money(model.nia)+'/mo</strong></span></span></span>'
+    + liveCardStepper(id,name,true)+'</article>';
+}
+function liveServiceTile(id,name,photoClass,model){
+  var niaText=(model.nia!==null && model.nia!=='' && isFinite(Number(model.nia)))?money(Number(model.nia))+'/mo':'To confirm';
+  var aria=name+'. Saved '+money(model.amount)+' every month. Price '+niaText+'.';
+  return '<article class="live-service-tile" role="button" tabindex="0" onclick="openStoryCard(\'live\',\''+id+'\')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openStoryCard(\'live\',\''+id+'\');}" aria-label="'+aria+'">'
+    + '<span class="live-tile-photo story-photo '+photoClass+'">'+liveCardStepper(id,name,false)+'</span>'
+    + '<span class="live-tile-copy"><span class="live-tile-name">'+name+'</span><span class="live-tile-desc">'+model.desc+'</span>'
+    + '<span class="live-tile-values"><span class="live-tile-save"><small>Save</small><strong>'+money(model.amount)+'</strong></span>'
+    + '<span class="live-tile-price"><small>Price</small><strong>'+niaText+'</strong></span></span></span></article>';
 }
 function earnCards(){
   var cards=earnPhotoCard('ot',t('earn_card_ot_n'),t('earn_card_ot_m'),'story-friday');
@@ -3694,7 +3769,7 @@ function setLiveCart(id,value,button){
     delete bag[cartId];
   }
   updBagDot();
-  var step=button&&button.closest?button.closest('.proof-stepper'):null;
+  var step=button&&button.closest?button.closest('.proof-stepper,.live-card-stepper'):null;
   if(step){
     var minus=step.querySelector('.proof-minus');
     var plus=step.querySelector('.proof-plus');

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#F6F8FB">
-<title>NiaSave · Ops</title>
+<title>Operation Polo</title>
 <link rel="icon" href="/assets/nia-logo.png" type="image/png">
 <link rel="apple-touch-icon" href="/assets/nia-logo.png">
 <link rel="stylesheet" href="/staff.css">
@@ -40,8 +40,7 @@
     <header class="top">
       <div class="mark">
         <img class="nia-logo" src="/assets/nia-logo.png" alt="Nia">
-        <div class="brand">Operation Polo</div>
-        <h1>Beat board</h1>
+        <h1>Operation Polo</h1>
       </div>
       <div class="meta" id="topmeta">Rajputana Theatre · 40 stops<br>No live UPI</div>
     </header>
@@ -76,15 +75,15 @@
         <div class="wrap pane-ops">
           <p class="sub">Production. Skip on. One theatre. 40 stops. 3000 members. Stock is not today's flow. Inventory is movements. Settlement on collected. No live UPI.</p>
           <div class="realities" id="realities">
-            <span class="reality"><b>1</b> Ordered</span>
+            <span class="reality"><b>1</b> Member ordered</span>
             <span class="reality-arrow" aria-hidden="true">→</span>
             <span class="reality"><b>2</b> Hub loaded</span>
             <span class="reality-arrow" aria-hidden="true">→</span>
-            <span class="reality"><b>3</b> Collected or returned</span>
+            <span class="reality"><b>3</b> Member collected or returned</span>
             <span class="reality-arrow" aria-hidden="true">→</span>
-            <span class="reality"><b>4</b> Settled</span>
+            <span class="reality"><b>4</b> Hub settled with officer</span>
             <span class="reality-arrow" aria-hidden="true">→</span>
-            <span class="reality"><b>5</b> Paid</span>
+            <span class="reality"><b>5</b> Nia paid vendor</span>
           </div>
           <div class="jobs" id="jobs"></div>
           <div class="open" id="open"></div>
@@ -286,7 +285,7 @@ function face(){
   var upi=srcOf(conn,'upi_statement');
   var procure=srcOf(conn,'procure');
   document.getElementById('realities').innerHTML=[
-    'Ordered','Hub loaded','Collected or returned','Settled','Paid'
+    'Member ordered','Hub loaded','Member collected or returned','Hub settled with officer','Nia paid vendor'
   ].map(function(x,i){
     return (i?'<span class="reality-arrow" aria-hidden="true">→</span>':'')
       + '<span class="reality"><b>'+(i+1)+'</b> '+x+'</span>';
@@ -467,7 +466,7 @@ function load(){
       return '<div class="check"><div class="l">'+labels[key]+'</div><div class="n">'+(row.num!=null?row.num:'-')+' / '+(row.den!=null?row.den:'-')+'</div><div class="l">'+(row.label||'')+'</div></div>';
     }).join('');
   }).catch(function(){
-    document.getElementById('jobs').innerHTML='<div class="empty">Could not load the beat board.</div>';
+    document.getElementById('jobs').innerHTML='<div class="empty">Could not load Operation Polo.</div>';
   });
 }
 bindUploads();

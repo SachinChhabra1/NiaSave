@@ -255,6 +255,7 @@ for (const file of staffPages) {
   ok(file + " has no Jabali", !/Jabali|Jamali|JABALI|JAMALI/.test(html));
   ok(file + " has no Dummy", !/Dummy/.test(html));
   ok(file + " has no polo-icon", !/polo-icon/.test(html));
+  ok(file + " has no Beat board", !/Beat board|beat board/.test(html));
 }
 const opsHtml = readFileSync(new URL("../ops.html", import.meta.url), "utf8");
 const staffCss = readFileSync(new URL("../staff.css", import.meta.url), "utf8");
@@ -265,8 +266,11 @@ ok("ops nia then Operation Polo", /class="nia-logo"[\s\S]{0,200}Operation Polo/.
 ok("ops has no polo-icon", !/polo-icon/.test(opsHtml));
 ok("ops job icons in source", /id="i-biker"/.test(opsHtml) && /id="i-po"/.test(opsHtml) && /id="i-dispatch"/.test(opsHtml));
 const rail = (opsHtml.split('class="rail"')[1] || "").split('class="pane"')[0];
-ok("ops sequence 1 to 5", /1<\/b> Ordered[\s\S]*→[\s\S]*2<\/b> Hub loaded[\s\S]*→[\s\S]*3<\/b> Collected or returned[\s\S]*→[\s\S]*4<\/b> Settled[\s\S]*→[\s\S]*5<\/b> Paid/.test(opsHtml));
-ok("ops Paid is last", opsHtml.indexOf("5</b> Paid") > opsHtml.indexOf("4</b> Settled") && opsHtml.indexOf("5</b> Paid") > opsHtml.indexOf("2</b> Hub loaded"));
+ok("ops sequence 1 to 5", /1<\/b> Member ordered[\s\S]*→[\s\S]*2<\/b> Hub loaded[\s\S]*→[\s\S]*3<\/b> Member collected or returned[\s\S]*→[\s\S]*4<\/b> Hub settled with officer[\s\S]*→[\s\S]*5<\/b> Nia paid vendor/.test(opsHtml));
+ok("ops vendor pay is last", opsHtml.indexOf("5</b> Nia paid vendor") > opsHtml.indexOf("4</b> Hub settled with officer") && opsHtml.indexOf("5</b> Nia paid vendor") > opsHtml.indexOf("2</b> Hub loaded"));
+ok("ops no bare Settled or Paid labels", !/<b>\d<\/b> Settled/.test(opsHtml) && !/<b>\d<\/b> Paid/.test(opsHtml) && !/'Settled'/.test(opsHtml) && !/'Paid'/.test(opsHtml));
+ok("ops h1 is Operation Polo once", (opsHtml.match(/<h1>Operation Polo<\/h1>/g) || []).length === 1);
+ok("ops header has no brand kicker", !/<div class="brand">/.test(opsHtml));
 ok("ops rail Reports and Ops", /<h2 class="rail-h"[^>]*>Reports<\/h2>/.test(rail) && /<h2 class="rail-h"[^>]*>Ops<\/h2>/.test(rail));
 ok("inventory under Reports", rail.indexOf("Reports") < rail.indexOf(">Inventory<") && rail.indexOf(">Inventory<") < rail.indexOf(">Ops<"));
 ok("biker po dispatch under Ops", rail.indexOf(">Ops<") < rail.indexOf(">Biker<") && rail.indexOf(">Ops<") < rail.indexOf(">Purchase order<") && rail.indexOf(">Ops<") < rail.indexOf(">Dispatch<"));

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#F6F8FB">
+<title>NiaSave · Shop run</title>
+<link rel="icon" href="/assets/nia-logo.png" type="image/png">
+<link rel="apple-touch-icon" href="/assets/nia-logo.png">
+<link rel="stylesheet" href="/staff.css">
+</head>
+<body>
+  <div class="narrow">
+    <div class="narrow-card">
+      <div class="kicker">Operation Polo</div>
+      <h1>Open on a laptop</h1>
+      <p>Shop run is a wide staff desk. It is not the member app.</p>
+    </div>
+  </div>
+  <div class="tower">
+    <header class="top">
+      <div class="mark">
+        <img class="nia-logo" src="/assets/nia-logo.png" alt="Nia">
+        <svg class="polo-icon" viewBox="0 0 40 40" width="36" height="36" aria-hidden="true"><circle cx="9" cy="31" r="3.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M11.4 28.8L30 8" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M26.5 4.8l9.2 2.4-2.6 6.6-9.2-2.4z" fill="currentColor"/></svg>
+        <div class="brand">Operation Polo</div>
+        <div class="desk-head">
+          <svg class="desk-icon" viewBox="0 0 40 40" width="40" height="40" aria-hidden="true"><circle cx="11" cy="29" r="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="29" cy="29" r="5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M11 29h8l4-8h6" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M16 21l4 8M19 21h5" stroke="currentColor" stroke-width="2"/><path d="M26 8c3 0 6 2.4 6 6 0 5-6 10-6 10s-6-5-6-10c0-3.6 3-6 6-6z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="26" cy="14" r="1.6" fill="currentColor"/></svg>
+          <h1>Shop run</h1>
+        </div>
+      </div>
+      <div class="meta"><a href="/ops.html">Ops</a> · <a href="/dispatch.html">Dispatch</a> · <a href="/hub.html">Hub</a></div>
+    </header>
+    <div class="wrap">
+      <p class="sub">One bike. One evening beat. Hub to 30 shop pins. Member collects at the shop. No home door. No live GPS. Skip on. No live UPI.</p>
+      <p class="sub" id="beat">Beat …</p>
+      <div class="pills" id="pills"></div>
+      <div class="msg" id="msg"></div>
+      <div class="actions">
+        <button type="button" onclick="bookRun()">Book biker</button>
+        <button type="button" onclick="loadBike()">Load at hub</button>
+        <button type="button" onclick="returnHub()">Return to hub</button>
+        <button type="button" class="ghost" onclick="load()">Refresh</button>
+      </div>
+      <div class="h2-row">
+        <svg class="desk-icon" viewBox="0 0 40 40" width="40" height="40" aria-hidden="true"><circle cx="11" cy="29" r="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="29" cy="29" r="5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M11 29h8l4-8h6" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M16 21l4 8M19 21h5" stroke="currentColor" stroke-width="2"/><path d="M26 8c3 0 6 2.4 6 6 0 5-6 10-6 10s-6-5-6-10c0-3.6 3-6 6-6z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="26" cy="14" r="1.6" fill="currentColor"/></svg>
+        <h2>30 shop pins</h2>
+      </div>
+      <p class="sub">Tap a pin or a shop row to drop. Sequence 1 to 30 as in the file. S31 to S40 stay off this run.</p>
+      <div id="map"></div>
+      <div id="shops" class="shop-list"></div>
+      <h2>Runs</h2>
+      <div id="runs"></div>
+    </div>
+  </div>
+<script>
+var DATA=null;
+var STOP='';
+function num(n){ return n==null?0:n; }
+function post(action, extra){
+  var body={ action:action };
+  if(DATA && DATA.run && DATA.run.runId) body.runId=DATA.run.runId;
+  if(extra) Object.keys(extra).forEach(function(k){ body[k]=extra[k]; });
+  return fetch('/api/biker',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(body)
+  }).then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); });
+}
+function droppedStops(){
+  var run=DATA && DATA.run;
+  var set={};
+  ((run && run.drops) || []).forEach(function(d){ set[d.stopId]=true; });
+  return set;
+}
+function pinMap(hub, shops){
+  if(!hub || !shops || !shops.length) return '<div class="empty">No shop pins.</div>';
+  var lats=shops.map(function(s){ return s.lat; }).concat([hub.lat]);
+  var lngs=shops.map(function(s){ return s.lng; }).concat([hub.lng]);
+  var minLat=Math.min.apply(null,lats), maxLat=Math.max.apply(null,lats);
+  var minLng=Math.min.apply(null,lngs), maxLng=Math.max.apply(null,lngs);
+  var pad=28, w=720, h=440;
+  function xy(lat,lng){
+    var x=pad+(lng-minLng)/((maxLng-minLng)||1)*(w-pad*2);
+    var y=pad+(maxLat-lat)/((maxLat-minLat)||1)*(h-pad*2);
+    return [x,y];
+  }
+  var done=droppedStops();
+  var hubXY=xy(hub.lat, hub.lng);
+  var dots=shops.map(function(s){
+    var p=xy(s.lat,s.lng);
+    var cls='shop'+(s.stopId===STOP?' on':'')+(done[s.stopId]?' dropped':'');
+    return '<circle class="'+cls+'" data-stop="'+s.stopId+'" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="7"></circle>'
+      + '<text x="'+(p[0]+8).toFixed(1)+'" y="'+(p[1]+4).toFixed(1)+'">'+s.seq+'</text>';
+  }).join('');
+  return '<svg class="pin-map" viewBox="0 0 '+w+' '+h+'" role="img" aria-label="Hub and 30 shop pins">'
+    + '<rect x="0" y="0" width="'+w+'" height="'+h+'" fill="#F6F8FB"></rect>'
+    + '<rect class="hub" x="'+(hubXY[0]-7)+'" y="'+(hubXY[1]-7)+'" width="14" height="14"></rect>'
+    + '<text x="'+(hubXY[0]+12)+'" y="'+(hubXY[1]+4)+'">Hub</text>'
+    + dots
+    + '</svg>';
+}
+function face(){
+  var d=DATA||{};
+  var hub=d.hub||{};
+  var shops=d.shops||[];
+  var run=d.run;
+  document.getElementById('beat').textContent=(d.theatre||'Rajputana Theatre')
+    +' · Beat '+(d.beatDate||'-')+' · slot '+(d.slot||'17:00')
+    +' · '+(hub.name||'Rajputana Hub')+' · '+(hub.label||'this phone, not surveyed');
+  document.getElementById('pills').innerHTML=[
+    ['Bike','BIKE-01'],
+    ['Rider','this phone'],
+    ['Run', run ? run.runId+' · '+run.status : 'none'],
+    ['Packed', num(d.packed)],
+    ['On bike', num(d.loaded)],
+    ['Unpacked', num(d.unpacked)]
+  ].map(function(r){ return '<span class="pill">'+r[0]+' · '+r[1]+'</span>'; }).join('');
+  document.getElementById('map').innerHTML=pinMap(hub, shops);
+  document.getElementById('shops').innerHTML=shops.map(function(s){
+    return '<button type="button" class="stop'+(s.stopId===STOP?' on':'')+'" data-stop="'+s.stopId+'">'
+      + '<div class="stop-id">'+s.stopId+' · seq '+s.seq+'</div>'
+      + '<strong>'+(s.name||s.stopId)+'</strong>'
+      + '<div class="stop-num">'+s.lat+', '+s.lng+' · packed '+num(s.packed)+' · loaded '+num(s.loaded)+'</div></button>';
+  }).join('');
+  document.querySelectorAll('#shops button.stop, #map circle.shop').forEach(function(el){
+    el.addEventListener('click', function(){
+      var id=el.getAttribute('data-stop');
+      STOP = STOP===id ? '' : id;
+      if(STOP) dropShop(STOP);
+      else face();
+    });
+  });
+  var runs=d.runs||[];
+  document.getElementById('runs').innerHTML=runs.length
+    ? '<table><thead><tr><th>Run</th><th>Status</th><th>Drops</th><th>Leftover back</th></tr></thead><tbody>'
+      +runs.map(function(r){
+        return '<tr><td>'+r.runId+'</td><td>'+r.status+'</td><td class="num">'+num((r.drops||[]).length)+'</td><td class="num">'+num(r.leftoverReturned)+'</td></tr>';
+      }).join('')
+      +'</tbody></table>'
+    : '<div class="empty">No run yet. Book biker.</div>';
+}
+function load(){
+  fetch('/api/biker').then(function(r){ return r.json(); }).then(function(d){
+    DATA=d;
+    face();
+  }).catch(function(){ document.getElementById('msg').textContent='Could not load the shop run.'; });
+}
+function bookRun(){
+  post('book').then(function(res){
+    if(!res.ok){ document.getElementById('msg').textContent=(res.j&&res.j.error)||'Book failed'; return; }
+    DATA=res.j.desk||DATA;
+    document.getElementById('msg').textContent='Booked '+res.j.runId+' · BIKE-01 · this phone';
+    face();
+  });
+}
+function loadBike(){
+  post('load').then(function(res){
+    if(!res.ok && res.j && res.j.error==='unpacked_remain'){
+      document.getElementById('msg').textContent='Unpacked cannot go on the bike. Pack remaining first. '+num(res.j.unpacked)+' unpacked.';
+      return;
+    }
+    if(!res.ok){ document.getElementById('msg').textContent=(res.j&&res.j.error)||'Load failed'; return; }
+    DATA=res.j.desk||DATA;
+    document.getElementById('msg').textContent='Loaded '+num(res.j.loaded)+' bag(s) at hub';
+    face();
+  });
+}
+function dropShop(stop){
+  post('drop',{ stopId:stop }).then(function(res){
+    if(!res.ok){ document.getElementById('msg').textContent=(res.j&&res.j.error)||'Drop failed'; face(); return; }
+    DATA=res.j.desk||DATA;
+    document.getElementById('msg').textContent='Dropped '+stop+' · seq '+num(res.j.seq)+' · arrived '+num(res.j.arrived);
+    face();
+  });
+}
+function returnHub(){
+  post('return').then(function(res){
+    if(!res.ok && res.j && res.j.error==='leftover_on_bike'){
+      document.getElementById('msg').textContent='Run closes only when leftover bags are back. '+num(res.j.leftover)+' still on the bike.';
+      return;
+    }
+    if(!res.ok){ document.getElementById('msg').textContent=(res.j&&res.j.error)||'Return failed'; return; }
+    DATA=res.j.desk||DATA;
+    document.getElementById('msg').textContent='Returned to hub · leftover bags '+num(res.j.leftoverReturned);
+    face();
+  });
+}
+load();
+</script>
+</body>
+</html>

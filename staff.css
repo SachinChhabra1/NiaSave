@@ -70,7 +70,18 @@ a:hover{text-decoration:underline}
   border-bottom:1px solid var(--border);
 }
 .top a{color:var(--accent)}
+.mark{display:flex;flex-direction:column;align-items:flex-start}
+.nia-logo{width:40px;height:40px;object-fit:contain;display:block}
+.polo-icon{width:36px;height:36px;min-width:36px;min-height:36px;display:block;margin:8px 0 6px;color:var(--fg)}
 .brand{font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:var(--fg-muted);font-family:var(--mono)}
+.desk-head{display:flex;flex-direction:column;align-items:flex-start;margin-top:8px}
+.desk-icon,.job-icon,.card-icon{
+  width:40px;height:40px;min-width:40px;min-height:40px;
+  display:block;color:var(--accent);margin:0 0 10px;
+}
+.h2-row{display:flex;align-items:center;gap:14px;margin:0 0 12px}
+.h2-row .desk-icon,.h2-row .job-icon{margin:0}
+.h2-row h2{margin:0}
 .top h1{margin:8px 0 0;font-size:36px;letter-spacing:-.03em;font-weight:600}
 .top .meta{font-size:16px;color:var(--fg-muted);text-align:right;line-height:1.5;font-family:var(--mono)}
 .wrap{padding:36px 40px 64px;max-width:1280px}
@@ -174,6 +185,7 @@ button.job{
   padding:24px;cursor:pointer;font-weight:inherit;
   min-height:88px;
 }
+button.job .job-icon{margin-bottom:12px}
 button.job:hover{border-color:rgba(10,132,255,.45)}
 button.job.on{border-color:var(--accent);box-shadow:0 0 0 2px rgba(10,132,255,.28)}
 button.job .job-kicker{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--fg-muted);margin-bottom:8px;font-family:var(--mono)}
@@ -283,6 +295,13 @@ button.stop .stop-num{font-size:15px;color:var(--fg-muted);font-variant-numeric:
 .funnel-board .col:nth-child(3) b{background:var(--ok)}
 .funnel-board .col:nth-child(4) b{background:var(--warn)}
 .funnel-board .col span{font-size:13px;color:var(--fg-muted);font-family:var(--mono);text-align:center;margin-top:8px}
+.pin-map{width:100%;max-width:720px;height:auto;display:block;background:var(--bg);border:1px solid var(--border);border-radius:16px;margin:0 0 24px}
+.pin-map .shop{cursor:pointer;fill:var(--accent)}
+.pin-map .shop.on{fill:var(--ok)}
+.pin-map .shop.dropped{fill:var(--warn)}
+.pin-map .hub{fill:var(--fg)}
+.pin-map text{font-family:var(--mono);font-size:10px;fill:var(--fg)}
+.shop-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:12px 0 24px}
 .connectors-panel{
   display:block;
   background:var(--surface);
@@ -300,6 +319,7 @@ button.stop .stop-num{font-size:15px;color:var(--fg-muted);font-variant-numeric:
   .jobs{grid-template-columns:1fr}
   .uploads{grid-template-columns:1fr}
   .stops{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .shop-list{grid-template-columns:1fr}
   .grid{grid-template-columns:1fr}
   .picture{grid-template-columns:1fr}
 }

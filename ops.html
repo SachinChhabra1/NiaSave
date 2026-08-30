@@ -10,9 +10,27 @@
 <link rel="stylesheet" href="/staff.css">
 </head>
 <body>
+<svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
+  <symbol id="i-po" viewBox="0 0 40 40"><rect x="10" y="6" width="20" height="28" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="15" y="4" width="10" height="5" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M15 16h10M15 21h10M15 26h7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-order" viewBox="0 0 40 40"><rect x="10" y="6" width="20" height="28" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="15" y="4" width="10" height="5" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 22l3 3 6-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-dispatch" viewBox="0 0 40 40"><path d="M5 24V14h18v10H5z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M23 18h7l5 6v4h-12" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="29" r="3" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="28" cy="29" r="3" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-biker" viewBox="0 0 40 40"><circle cx="11" cy="29" r="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="29" cy="29" r="5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M11 29h8l4-8h6" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M16 21l4 8M19 21h5" stroke="currentColor" stroke-width="2"/><path d="M26 8c3 0 6 2.4 6 6 0 5-6 10-6 10s-6-5-6-10c0-3.6 3-6 6-6z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="26" cy="14" r="1.6" fill="currentColor"/></symbol>
+  <symbol id="i-invoice" viewBox="0 0 40 40"><path d="M12 6h16v28l-3-2-3 2-3-2-3 2-4-2V6z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M17 15h3.5a2.5 2.5 0 010 5H17v5M16 15h8M16 25h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-pickup" viewBox="0 0 40 40"><path d="M10 16h20l-1.5 16H11.5L10 16z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M15 16V12a5 5 0 0110 0v4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 24l3 3 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-inventory" viewBox="0 0 40 40"><rect x="8" y="18" width="16" height="14" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 22h16M16 18v14" stroke="currentColor" stroke-width="2"/><rect x="16" y="8" width="16" height="14" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 12h16M24 8v14" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-ageing" viewBox="0 0 40 40"><rect x="6" y="16" width="18" height="16" fill="none" stroke="currentColor" stroke-width="2"/><path d="M6 20h18M15 16v16" stroke="currentColor" stroke-width="2"/><circle cx="28" cy="14" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M28 10v5l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-recon" viewBox="0 0 40 40"><path d="M20 6v6M10 14h20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M8 20h8l-2 12H10L8 20zM24 20h8l-2 12h-4l-2-12z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 20V16h16v4" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-match" viewBox="0 0 40 40"><rect x="5" y="8" width="13" height="24" fill="none" stroke="currentColor" stroke-width="2"/><rect x="22" y="8" width="13" height="24" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 14h7M8 19h7M25 14h7M25 19h7" stroke="currentColor" stroke-width="2"/><path d="M25 26l3 3 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-source" viewBox="0 0 40 40"><path d="M8 16h24l-2 16H10L8 16z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M8 20h24M14 16V12h12v4" stroke="currentColor" stroke-width="2"/><path d="M20 24v8M16 28l4 4 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-predict" viewBox="0 0 40 40"><path d="M8 32V20h6v12H8zM17 32V12h6v20h-6zM26 32V16h6v16h-6z" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-next" viewBox="0 0 40 40"><path d="M6 20L20 8l14 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M10 18v14h20V18" fill="none" stroke="currentColor" stroke-width="2"/><path d="M14 26h8M18 22v8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-hub" viewBox="0 0 40 40"><path d="M6 20L20 8l14 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M10 18v14h20V18" fill="none" stroke="currentColor" stroke-width="2"/><path d="M17 32V22h6v10" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-close" viewBox="0 0 40 40"><rect x="7" y="10" width="20" height="24" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M11 16h12M11 21h12M11 26h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><rect x="22" y="20" width="12" height="10" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M25 20v-3a3 3 0 016 0v3" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-connectors" viewBox="0 0 40 40"><path d="M16 12c2-4 8-4 10 0 1.4 2.8 0 6-3 8l-5 5c-2 2-6 1.2-7-2-1-2.6.6-5 3-6l2-1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M24 28c-2 4-8 4-10 0-1.4-2.8 0-6 3-8l5-5c2-2 6-1.2 7 2 1 2.6-.6 5-3 6l-2 1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+</svg>
   <div class="narrow">
     <div class="narrow-card">
-      <div class="kicker">Rabbit · Jabali Officer</div>
+      <div class="kicker">Operation Polo</div>
       <h1>Open on a laptop</h1>
       <p>This board is a wide staff desk. It is not the member app.</p>
     </div>
@@ -20,23 +38,27 @@
 
   <div class="tower">
     <header class="top">
-      <div>
-        <div class="brand">Rabbit · Jabali Officer</div>
+      <div class="mark">
+        <img class="nia-logo" src="/assets/nia-logo.png" alt="Nia">
+        <svg class="polo-icon" viewBox="0 0 40 40" width="36" height="36" aria-hidden="true"><circle cx="9" cy="31" r="3.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M11.4 28.8L30 8" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M26.5 4.8l9.2 2.4-2.6 6.6-9.2-2.4z" fill="currentColor"/></svg>
+        <div class="brand">Operation Polo</div>
         <h1>Beat board</h1>
       </div>
       <div class="meta" id="topmeta">Rajputana Theatre · 40 stops<br>No live UPI</div>
     </header>
     <div class="wrap">
-      <p class="sub">Production. Skip on. One theatre. 40 stops. 3000 members. Jabali Officer is the Studio Champion. Stock is not today's flow. Inventory is movements. Settlement on collected. No live UPI.</p>
+      <p class="sub">Production. Skip on. One theatre. 40 stops. 3000 members. Stock is not today's flow. Inventory is movements. Settlement on collected. No live UPI.</p>
       <div class="kpis" id="kpis"></div>
       <div class="picture">
         <div class="card">
+          <svg class="card-icon" viewBox="0 0 40 40" width="40" height="40" aria-hidden="true"><use href="#i-inventory"/></svg>
           <h3>Inventory</h3>
           <p class="sub">On-hand vs opening by SKU. Stock is not today's flow. Hub owns the lot.</p>
           <div id="invchart"></div>
           <a class="desk-link" href="/inventory.html">Open inventory desk</a>
         </div>
         <div class="card">
+          <svg class="card-icon" viewBox="0 0 40 40" width="40" height="40" aria-hidden="true"><use href="#i-ageing"/></svg>
           <h3>Ageing</h3>
           <p class="sub">Days sitting / 90. Leftover age and miss that did not move. Thresholds proposed.</p>
           <div id="agechart"></div>
@@ -49,7 +71,10 @@
         <div class="funnel-board" id="funnel"></div>
       </div>
       <section class="connectors-panel" id="connectors-desk">
-        <h2>Connectors</h2>
+        <div class="h2-row">
+          <svg class="desk-icon" viewBox="0 0 40 40" width="40" height="40" aria-hidden="true"><use href="#i-connectors"/></svg>
+          <h2>Connectors</h2>
+        </div>
         <p class="do">Staff inbound files. Always on this board. Recon unmatched uses the UPI statement. Source and predict use the procure sheet. No live UPI. No Razorpay. No Google sign-in.</p>
         <div class="pills" id="connectors"></div>
         <div class="uploads">
@@ -121,13 +146,20 @@ function connectorsPills(c){
     +pill('upi_statement','UPI statement')
     +pill('vendors','vendors');
 }
+function icon(name){
+  return '<svg class="job-icon" viewBox="0 0 40 40" width="40" height="40" aria-hidden="true"><use href="#i-'+name+'"/></svg>';
+}
 function jobBtn(id, kicker, title, action, nums, on){
   return '<button type="button" class="job'+(on?' on':'')+'" data-job="'+id+'">'
+    + icon(id)
     + '<div class="job-kicker">'+kicker+'</div>'
     + '<strong>'+title+'</strong>'
     + '<div class="job-do">'+action+'</div>'
     + '<div class="job-num">'+nums+'</div>'
     + '</button>';
+}
+function titleRow(id, text){
+  return '<div class="h2-row">'+icon(id)+'<h2>'+text+'</h2></div>';
 }
 function checks(rows){
   return '<div class="checks">'+rows.map(function(r){
@@ -221,6 +253,8 @@ function face(){
       num(ops.poOpen)+' open · '+num(ops.poSent)+' sent', open==='order'),
     jobBtn('dispatch','Hub','Dispatch','Pack remaining. Load. Dispatch to the studio stop at 17:00. Unpacked cannot go loaded.',
       num(ops.dispatchNotes)+' notes · '+num(f.packed)+' packed · '+num(f.loaded)+' loaded', open==='dispatch'),
+    jobBtn('biker','Hub','Shop run','One bike. Hub to 30 shop pins. Member collects at the shop. No home door.',
+      num(ops.bikerRuns)+' runs · S01 to S30', open==='biker'),
     jobBtn('invoice','Night','Invoice','Member receipt on collected. Vendor bill versus PO. GSTIN this phone if missing.',
       num(ops.invoices)+' issued · trigger collected', open==='invoice'),
     jobBtn('pickup','After 5','Pickup','Tap the stop. Tap the bag. Collect by code or mark miss.',
@@ -271,59 +305,63 @@ function pick(id){
   var pred=t.predict||{};
   var html='';
   if(id==='po' || id==='order'){
-    html='<h2>'+(id==='order'?'Order':'Purchase order')+'</h2><p class="do">Create a PO from procure plus tomorrow load. Officer marks sent, then received. Received posts inbound. Not an editable quantity.</p>'
+    html=titleRow(id, id==='order'?'Order':'Purchase order')+'<p class="do">Create a PO from procure plus tomorrow load. Officer marks sent, then received. Received posts inbound. Not an editable quantity.</p>'
       +checks([['Open',num((t.ops||{}).poOpen)],['Sent',num((t.ops||{}).poSent)],['Received',num((t.ops||{}).poReceived)]])
       +'<a class="desk-link" href="/po.html'+(id==='order'?'#orders':'')+'">Open '+(id==='order'?'order':'PO')+' desk</a>';
   } else if(id==='dispatch'){
-    html='<h2>Dispatch</h2><p class="do">Packed list before the cart leaves. Unpacked cannot go loaded. Dispatch to a studio stop at 17:00. No door. No address.</p>'
+    html=titleRow('dispatch','Dispatch')+'<p class="do">Packed list before the cart leaves. Unpacked cannot go loaded. Dispatch to a studio stop at 17:00. Biker to shop pin. Member collects at shop. No home door.</p>'
       +checks([['Notes',num((t.ops||{}).dispatchNotes)],['Packed',num(f.packed)],['Loaded',num(f.loaded)]])
       +'<a class="desk-link" href="/dispatch.html">Open dispatch desk</a>';
+  } else if(id==='biker'){
+    html=titleRow('biker','Shop run')+'<p class="do">One bike. One evening beat. Hub to 30 shop pins. Member collects at the shop. No home door. No live GPS.</p>'
+      +checks([['Runs',num((t.ops||{}).bikerRuns)],['Pins','30'],['Slot','17:00']])
+      +'<a class="desk-link" href="/biker.html">Open biker desk</a>';
   } else if(id==='invoice'){
-    html='<h2>Invoice</h2><p class="do">Member receipt on collected. Vendor bill versus PO. GSTIN this phone if missing. No live UPI.</p>'
+    html=titleRow('invoice','Invoice')+'<p class="do">Member receipt on collected. Vendor bill versus PO. GSTIN this phone if missing. No live UPI.</p>'
       +checks([['Issued',num((t.ops||{}).invoices)],['Trigger','collected']])
       +'<a class="desk-link" href="/invoice.html">Open invoice desk</a>';
   } else if(id==='pickup'){
-    html='<h2>Pickup</h2><p class="do">Three taps after the member is identified: tap the stop, tap the bag, collect by code. Miss if they do not come. Pack, load, and arrived stay on hub.</p>'
+    html=titleRow('pickup','Pickup')+'<p class="do">Three taps after the member is identified: tap the stop, tap the bag, collect by code. Miss if they do not come. Pack, load, and arrived stay on hub.</p>'
       +checks([['Reserved',num(f.reserved)],['Collected',num(f.collected)],['Miss',num(f.missed)]])
       +'<a class="desk-link" href="/pickup.html">Open pickup desk</a>';
   } else if(id==='inventory'){
-    html='<h2>Inventory</h2><p class="do">Lots and movements. On-hand is leftover. Owner is hub. Not an editable quantity field. A new studio is a row.</p>'
+    html=titleRow('inventory','Inventory')+'<p class="do">Lots and movements. On-hand is leftover. Owner is hub. Not an editable quantity field. A new studio is a row.</p>'
       +checks([['On-hand',num(k.onHand!=null?k.onHand:k.leftover)],['Opening',num(k.opening)],['Collected',num(k.collected)],['Leftover',num(k.leftover)]])
       +'<a class="desk-link" href="/inventory.html">Open inventory desk</a>';
   } else if(id==='ageing'){
     var ag=t.ageing||{};
-    html='<h2>Ageing</h2><p class="do">Days sitting per SKU. Leftover age. Miss that did not move. Thresholds stay proposed as numerator and denominator.</p>'
+    html=titleRow('ageing','Ageing')+'<p class="do">Days sitting per SKU. Leftover age. Miss that did not move. Thresholds stay proposed as numerator and denominator.</p>'
       +checks([['Sitting 7+',(ag.sitting?ag.sitting.num+' / '+ag.sitting.den:'-')],['Leftover age',(ag.leftoverAge?ag.leftoverAge.num+' / '+ag.leftoverAge.den:'-')],['Miss stuck',(ag.missStuck?ag.missStuck.num+' / '+ag.missStuck.den:'-')]])
       +'<a class="desk-link" href="/ageing.html">Open ageing desk</a>';
   } else if(id==='recon'){
-    html='<h2>Recon</h2><p class="do">Night count. Opening minus collected minus leftover = 0. If it does not, the beat does not close.</p>'
+    html=titleRow('recon','Recon')+'<p class="do">Night count. Opening minus collected minus leftover = 0. If it does not, the beat does not close.</p>'
       +checks([['Opening',num(k.opening)],['Collected',num(k.collected)],['Leftover',num(k.leftover)],['Balanced',k.balanced?'yes':'no']])
       +'<a class="desk-link" href="/recon.html">Open recon desk</a>';
   } else if(id==='match'){
-    html='<h2>Statement match</h2><p class="do">Settlement starts on collected scan. Not pack. Not pay. Not a UPI screenshot. Staff bank CSV only. No live member UPI.</p>'
+    html=titleRow('match','Statement match')+'<p class="do">Settlement starts on collected scan. Not pack. Not pay. Not a UPI screenshot. Staff bank CSV only. No live member UPI.</p>'
       +checks([['Settlements',s.count||0],['Matched',s.matched||0],['Statement open',s.unmatchedStatement||0],['Unmatched take',s.unmatchedSettlements||0]])
       +'<a class="desk-link" href="/recon.html">Open statement match</a>';
   } else if(id==='source'){
     var n=((DATA.source&&DATA.source.sources)||[]).length;
-    html='<h2>Source</h2><p class="do">Read the procure and vendor sheets. Keep a SKU only when Nia cost is under kirana.</p>'
+    html=titleRow('source','Source')+'<p class="do">Read the procure and vendor sheets. Keep a SKU only when Nia cost is under kirana.</p>'
       +checks([['SKUs',n],['From', n ? 'inbound file' : 'No file yet']])
       +'<a class="desk-link" href="/source.html">Open source desk</a>';
   } else if(id==='predict'){
-    html='<h2>Predict</h2><p class="do">Use opening, collected, and miss. Do not invent a load. Chase bags still on the beat.</p>'
+    html=titleRow('predict','Predict')+'<p class="do">Use opening, collected, and miss. Do not invent a load. Chase bags still on the beat.</p>'
       +checks([['Miss rate',(k.miss_rate!=null?k.miss_rate+'%':'0%')],['Chase',num(pred.chaseCount||k.chase)],['Members',num(k.members||t.memberCount)],['Stops',num(k.stops||t.stopCount)]])
       +'<a class="desk-link" href="/predict.html">Open predict desk</a>';
   } else if(id==='close'){
-    html='<h2>Beat close</h2><p class="do">Night close never plugs a gap. Opening minus collected minus leftover must be 0 or the beat stays open.</p>'
+    html=titleRow('close','Beat close')+'<p class="do">Night close never plugs a gap. Opening minus collected minus leftover must be 0 or the beat stays open.</p>'
       +checks([['Opening',num(k.opening)],['Collected',num(k.collected)],['Miss',num(k.missed)],['Balanced',k.balanced?'yes':'no']])
       +'<a class="desk-link" href="/recon.html">Open beat close</a>';
   } else if(id==='next'){
     var rec=((pred.load)||[]).filter(function(r){ return r.tomorrow_qty>0; });
     var qty=rec.reduce(function(a,r){ return a+num(r.tomorrow_qty); },0);
-    html='<h2>Tomorrow load</h2><p class="do">Hub load from the ledger. Collected plus what is still holding, cut by miss rate. Not discretion.</p>'
+    html=titleRow('next','Tomorrow load')+'<p class="do">Hub load from the ledger. Collected plus what is still holding, cut by miss rate. Not discretion.</p>'
       +checks([['SKUs to load',rec.length],['Units',qty],['Miss rate',(k.miss_rate!=null?k.miss_rate+'%':'0%')]])
       +'<a class="desk-link" href="/hub.html">Open hub load</a>';
   } else if(id==='hub'){
-    html='<h2>Hub load</h2><p class="do">Inventory is movements. Sign opening posts inbound. A new studio is a row. Do not rewrite the beat.</p>'
+    html=titleRow('hub','Hub load')+'<p class="do">Inventory is movements. Sign opening posts inbound. A new studio is a row. Do not rewrite the beat.</p>'
       +checks([['Loaded',num(f.loaded)],['Stops',num(t.stopCount||40)],['Members',num(t.memberCount||3000)]])
       +'<a class="desk-link" href="/hub.html">Open hub desk</a>';
   }

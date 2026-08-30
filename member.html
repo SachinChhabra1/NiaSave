@@ -11,12 +11,12 @@
 <link rel="icon" href="/assets/nia-logo.png" type="image/png">
 <link rel="shortcut icon" href="/assets/nia-logo.png" type="image/png">
 <link rel="apple-touch-icon" href="/assets/nia-logo.png">
-<title>NiaSave | Helping members save more and remit more</title>
-<meta name="description" content="Help members save more and remit more. Go-live: 1 theatre, 40 studios, 3,000 members. This phone is one member month: browse, bag, pickup. Paid monthly.">
+<title>Nia | Live, Earn, Save and Send</title>
+<meta name="description" content="One Nia app for members to Live, Earn, Save and Send.">
 <link rel="canonical" href="https://www.niasave.com/">
 <meta property="og:type" content="website">
-<meta property="og:title" content="NiaSave | Helping members save more and remit more">
-<meta property="og:description" content="Help members save more and remit more. Go-live: 1 theatre, 40 studios, 3,000 members. This phone is one member month: browse, bag, pickup. Paid monthly.">
+<meta property="og:title" content="Nia | Live, Earn, Save and Send">
+<meta property="og:description" content="One Nia app for members to Live, Earn, Save and Send.">
 <meta property="og:url" content="https://www.niasave.com/">
 <script type="application/ld+json">
 {
@@ -113,51 +113,50 @@
     }
   }
   @media (min-width:900px){
-    body{background:#E8E2D8}
+    body{background:#0A0A0A}
     .site{
       position:relative;
       min-height:100vh;
-      overflow-x:hidden;
+      overflow:hidden;
     }
     .site-hero{
       position:relative;
+      height:100vh;
       min-height:100vh;
       width:100%;
       margin:0;
-      display:grid;
-      grid-template-columns:minmax(0,40rem) 390px;
+      display:flex;
       justify-content:center;
-      column-gap:clamp(32px,4vw,48px);
-      align-items:start;
-      padding:28px 32px;
+      align-items:center;
+      padding:24px;
       box-sizing:border-box;
-      overflow:visible;
-      background:transparent;
+      overflow:hidden;
+      background-image:linear-gradient(rgba(0,0,0,.14),rgba(0,0,0,.14)),url("./assets/train-station-night-bw.jpg");
+      background-size:cover;
+      background-position:center center;
+      background-repeat:no-repeat;
     }
     .stage{
-      grid-column:2;
-      grid-row:1;
-      z-index:1;
+      position:relative;
+      z-index:2;
       flex-direction:column;
       align-items:stretch;
-      justify-content:flex-start;
+      justify-content:center;
       padding:0;
       margin:0;
       min-height:0;
       width:390px;
       max-width:390px;
-      height:calc(100vh - 56px);
-      max-height:calc(100vh - 56px);
-      justify-self:end;
-      align-self:start;
-      pointer-events:none;
+      height:calc(100vh - 48px);
+      max-height:calc(100vh - 48px);
+      pointer-events:auto;
       overflow:visible;
     }
     .phone-blur-wrap{
-      filter:blur(7px);
+      filter:none;
       transform:none;
       transition:filter .45s ease;
-      pointer-events:none;
+      pointer-events:auto;
       width:390px;
       max-width:390px;
       height:100%;
@@ -170,10 +169,7 @@
       pointer-events:auto;
     }
     .site.site-open .phone{pointer-events:auto}
-    /* Look at the month only unblurs phone; overlay messages stay visible */
-    .site.site-open .quit-overlay{
-      display:flex; opacity:1; visibility:visible; pointer-events:auto;
-    }
+    .site.site-open .quit-overlay{display:none!important}
     .phone{
       margin:0;
       width:390px;
@@ -182,30 +178,9 @@
       min-height:0;
       max-height:none;
       border-radius:28px;
-      box-shadow:0 24px 60px -18px rgba(19,40,58,.26),0 0 0 1px rgba(28,63,92,.08);
+      box-shadow:0 30px 80px -18px rgba(0,0,0,.72),0 0 0 1px rgba(255,255,255,.22);
     }
-    .quit-overlay{
-      display:flex;
-      grid-column:1;
-      grid-row:1;
-      z-index:2;
-      flex-direction:column;
-      justify-content:flex-start;
-      justify-self:stretch;
-      align-self:start;
-      min-height:0;
-      max-width:40rem;
-      width:100%;
-      padding:0;
-      margin:0;
-      background:transparent;
-      border-radius:0;
-      pointer-events:auto;
-      box-sizing:border-box;
-      /* Look at the month only unblurs the phone. overlay copy stays visible */
-      opacity:1;
-      visibility:visible;
-    }
+    .quit-overlay{display:none!important}
     .quit-h{
       font-size:clamp(32px,3vw,44px);font-weight:700;letter-spacing:-.035em;line-height:1.08;
       color:var(--ink);margin:0 0 28px;max-width:16ch;
@@ -273,12 +248,19 @@
   }
   .mark{flex:0 0 auto;height:24px;width:auto;min-width:0;border-radius:0;background:transparent;display:flex;align-items:center;justify-content:flex-start;overflow:visible;margin-top:2px}
   .mark img{display:block;height:24px;width:auto;max-width:56px;object-fit:contain;filter:none;-webkit-filter:none;transform:none}
-  .who{display:flex;flex-direction:column;line-height:1.15;min-width:0;flex:1 1 auto;overflow:hidden}
-  .who .n{font-size:14px;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .who{display:flex;align-items:center;line-height:1;min-width:0;flex:1 1 auto;overflow:hidden;height:28px}
+  .who .n{font-size:12.5px;font-weight:650;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .who .id-line{font-size:10px;font-weight:500;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
   .who .s{display:none!important}
   .top .sp{display:none}
+  .voice-btn{
+    flex:0 0 auto;width:44px;height:44px;margin-left:auto;padding:0;border:0;border-radius:12px;
+    display:flex;align-items:center;justify-content:center;background:#007AFF;color:#fff;cursor:pointer;
+  }
+  .voice-btn svg{display:block;width:20px;height:20px}
+  .voice-btn:active{opacity:.72}
   .burger-wrap{position:relative;flex:0 0 auto;margin-left:auto;z-index:81}
+  .top .voice-btn + .burger-wrap{margin-left:0}
   .burger{
     width:44px;height:44px;border-radius:12px;border:0;background:transparent;color:var(--navy);
     display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;position:relative;z-index:82;
@@ -311,15 +293,42 @@
   }
   .bagdot{display:none}
   .niaone,.talk-chrome,.talkbtn,.langwrap,.ibtn,.niabtn,.install-btn{display:none!important}
-  .talk-answer{min-height:44px;font-size:15px;font-weight:500;color:var(--ink);line-height:1.45;margin:0 0 14px;padding:12px 14px;background:#F7F3EC;border-radius:14px;border:1px solid var(--hair2)}
+  .talk-answer{min-height:44px;font-size:15px;font-weight:500;color:var(--ink);line-height:1.45;margin:0;padding:12px 14px;background:#F2F2F7;border-radius:14px;border:1px solid #E5E5EA}
   .talk-answer:empty{display:none}
   .talk-sheet-note{font-size:13px;color:var(--mute);margin:0 0 12px;line-height:1.45}
+  .rafiki-hero{margin:2px 0 14px;padding:16px;border-radius:22px;background:#1C1C1E;color:#fff}
+  .rafiki-head{display:flex;align-items:center;gap:12px}
+  .rafiki-mark{display:flex;width:44px;height:44px;align-items:center;justify-content:center;border-radius:12px;background:rgba(255,255,255,.12)}
+  .rafiki-mark svg{width:22px;height:22px}
+  .rafiki-name{display:block;font-size:20px;font-weight:700;line-height:1.1;letter-spacing:-.025em}
+  .rafiki-role{display:block;margin-top:3px;font-size:12px;line-height:1.3;color:rgba(255,255,255,.65)}
+  .rafiki-languages{margin:10px 0 0;font-size:12px;line-height:1.35;color:rgba(255,255,255,.82)}
+  .rafiki-levers{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:14px}
+  .rafiki-lever{padding:8px 3px;border-radius:9px;color:#fff;font-size:10px;font-weight:700;text-align:center}
+  .rafiki-lever.earn{background:#007AFF}.rafiki-lever.spend{background:#34C759}.rafiki-lever.save{background:#AF52DE}.rafiki-lever.remit{background:#FF9500}
+  .rafiki-status{display:flex;align-items:center;gap:10px;margin:2px 0 14px;color:var(--ink);font-size:14px;font-weight:650}
+  .rafiki-pulse{width:12px;height:12px;border-radius:50%;background:#007AFF;box-shadow:0 0 0 0 rgba(0,122,255,.3);animation:rafikiPulse 1.25s infinite}
+  @keyframes rafikiPulse{70%{box-shadow:0 0 0 9px rgba(0,122,255,0)}100%{box-shadow:0 0 0 0 rgba(0,122,255,0)}}
+  .rafiki-prompts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 14px}
+  .rafiki-prompt{min-height:44px;padding:10px;border:1px solid #E5E5EA;border-radius:12px;background:#fff;color:var(--ink);font:650 13px var(--font);cursor:pointer;text-align:left}
+  .rafiki-prompt b{display:inline-block;width:8px;height:8px;margin-right:7px;border-radius:50%}
+  .rafiki-prompt.live b{background:#1C3F5C}.rafiki-prompt.earn b{background:#007AFF}.rafiki-prompt.save b{background:#AF52DE}.rafiki-prompt.remit b{background:#FF9500}
+  .rafiki-transcript{margin:0 0 8px;font-size:12px;line-height:1.4;color:var(--mute)}
+  .rafiki-action{width:100%;min-height:44px;margin-top:10px;border:0;border-radius:12px;background:#007AFF;color:#fff;font:650 15px var(--font);cursor:pointer}
+  .rafiki-input-row{display:grid;grid-template-columns:minmax(0,1fr) 52px;gap:8px;margin-top:12px}
+  .rafiki-input-row .field{margin:0;min-width:0}
+  .rafiki-send{min-height:44px;border:0;border-radius:12px;background:#1C1C1E;color:#fff;font:650 12px var(--font);cursor:pointer}
+  .rafiki-mic-again{display:flex;width:48px;height:48px;margin:12px auto 0;align-items:center;justify-content:center;border:0;border-radius:50%;background:#007AFF;color:#fff;cursor:pointer}
+  .rafiki-mic-again svg{width:21px;height:21px}
+  .eleven-voice-wrap{min-height:360px;margin-top:10px;border:1px solid #E5E5EA;border-radius:16px;overflow:hidden;background:#fff}
+  .eleven-voice-wrap elevenlabs-convai{position:relative!important;inset:auto!important;display:block;width:100%;height:360px!important;min-height:360px;z-index:auto!important;pointer-events:auto!important}
+  .eleven-voice-note{margin:10px 2px 0;color:var(--mute);font-size:11px;line-height:1.35;text-align:center}
   /* scroll body */
   .screen{flex:1 1 auto;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;background:var(--paper)}
   .screen::-webkit-scrollbar{width:0}
   .pad{width:100%;padding:6px 22px 30px}
-  .h1{font-size:30px;font-weight:700;letter-spacing:-.035em;line-height:1.06;margin:8px 0 2px;min-height:calc(30px * 1.06 * 2);box-sizing:content-box}
-  .sub{font-size:12.5px;color:var(--mute);margin-bottom:16px;min-height:calc(12.5px * 1.4 * 2);line-height:1.4}
+  .h1{font-size:30px;font-weight:700;letter-spacing:-.035em;line-height:1.06;margin:8px 0 4px;min-height:0;box-sizing:content-box}
+  .sub{font-size:12.5px;color:var(--mute);margin-bottom:16px;min-height:0;line-height:1.4}
   .kick{font-size:10.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--soft);margin:0 0 10px}
   .quiet{color:var(--mute)}
   .studio-pin{margin:0 0 8px}
@@ -434,14 +443,17 @@
   .incl span{display:inline-flex;align-items:center;gap:7px;font-size:13.5px;color:var(--ink);background:#F6F2EB;border:1px solid var(--hair2);border-radius:11px;padding:9px 12px}
   .incl span svg{color:var(--navy)}
   /* tabbar */
-  .tabbar{flex:0 0 auto;display:flex!important;background:var(--paper);border-top:1px solid var(--hair);padding:9px 8px calc(10px + env(safe-area-inset-bottom));position:relative;z-index:70;pointer-events:auto!important}
+  .tabbar{flex:0 0 auto;display:flex!important;background:rgba(255,255,255,.98);border-top:1px solid var(--hair);padding:8px 8px calc(9px + env(safe-area-inset-bottom));position:relative;z-index:70;pointer-events:auto!important}
   .tabbar .tab{pointer-events:auto!important;position:relative;z-index:1}
   /* Never hide tab bar on card-open; next tab must receive the tap */
-  .tab{flex:1;border:0;background:transparent;display:flex;flex-direction:column;align-items:center;gap:4px;padding:5px 0;cursor:pointer;color:var(--mute2);font-family:var(--font)}
-  .tab .lab{font-size:10.5px;font-weight:600;letter-spacing:.01em}
+  .tab{flex:1;border:0;background:transparent;display:flex;flex-direction:column;align-items:center;gap:3px;padding:3px 0 2px;cursor:pointer;color:#99968F;font-family:var(--font)}
+  .tab-ico{width:38px;height:29px;border-radius:999px;display:flex;align-items:center;justify-content:center;transition:background .18s ease,color .18s ease,transform .16s ease}
+  .tab-ico svg{width:23px;height:23px;display:block;overflow:visible}
+  .tab:active .tab-ico{transform:scale(.94)}
+  .tab .lab{font-size:10.5px;font-weight:600;letter-spacing:.005em;line-height:1.15}
   .tab.on{color:var(--navy)}
-  .tab .mk{height:2px;width:16px;border-radius:2px;background:transparent;margin-top:1px}
-  .tab.on .mk{background:var(--navy)}
+  .tab.on .tab-ico{background:#EAF0F4;color:var(--navy)}
+  .tab .mk{display:none}
   /* intro curtain */
   .curtain{position:absolute;inset:0;background:var(--navy-deep);color:#fff;z-index:60;display:flex;flex-direction:column;justify-content:center;padding:44px 34px;transition:opacity .7s ease}
   .curtain.gone{display:none!important;pointer-events:none!important;visibility:hidden!important}
@@ -536,8 +548,8 @@
   .commerce-sub-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px}
   .commerce-sub-row .commerce-sub{margin-top:0;flex:1;min-width:0}
   .commerce-eyebrow{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--shop-blue);margin-bottom:8px}
-  .commerce-title{font-size:clamp(30px,4vw,52px);font-weight:750;letter-spacing:-.045em;line-height:1.02;margin:0;min-height:calc(1.02em * 2);box-sizing:content-box}
-  .commerce-sub{font-size:15px;color:#6E6E72;margin-top:7px;min-height:calc(15px * 1.4 * 2);line-height:1.4}
+  .commerce-title{font-size:clamp(30px,4vw,52px);font-weight:750;letter-spacing:-.045em;line-height:1.02;margin:0;min-height:0;box-sizing:content-box}
+  .commerce-sub{font-size:15px;color:#6E6E72;margin-top:7px;min-height:0;line-height:1.4}
   button.commerce-sub{border:0;background:transparent;padding:0;font-family:var(--font);text-align:left;cursor:pointer;width:100%;line-height:1.45}
   button.commerce-sub:hover,button.commerce-sub:focus-visible{color:var(--shop-blue);outline:none}
   .fulfill-toggle{display:flex;gap:8px;margin-top:12px;margin-bottom:0;width:100%}
@@ -552,8 +564,7 @@
     height:32px;padding:0 12px;font:600 12px var(--font);color:var(--navy);cursor:pointer;white-space:nowrap;
   }
   .install-btn.show{display:inline-flex;align-items:center}
-  .saved-pill,.cert-pill{flex:0 0 auto;border:1px solid #DADADD;background:#fff;border-radius:999px;height:46px;padding:0 17px;display:inline-flex;align-items:center;gap:7px;color:var(--shop-ink);font-size:15px;font-weight:700;cursor:pointer}
-  .cert-pill{font-size:12px;letter-spacing:.04em;color:var(--shop-blue);height:40px;text-transform:uppercase}
+  .cert-pill{flex:0 0 auto;border:1px solid #DADADD;background:#fff;border-radius:999px;height:40px;padding:0 17px;display:inline-flex;align-items:center;gap:7px;color:var(--shop-blue);font-size:12px;font-weight:700;letter-spacing:.04em;cursor:pointer;text-transform:uppercase}
   .commerce-search{height:58px;background:var(--shop-soft);border:0;border-radius:20px;display:flex;align-items:center;gap:11px;padding:0 19px;color:#747478;font-size:16px;margin-bottom:22px}
   .commerce-search input{border:0;outline:0;background:transparent;width:100%;font-size:16px;color:var(--shop-ink)}
   .category-strip{display:flex;gap:12px;margin:0 0 30px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
@@ -569,53 +580,200 @@
   .category-card-copy{padding:17px 18px 19px;display:flex;align-items:flex-end;gap:12px}
   .category-card-copy>span:first-child{display:flex;flex-direction:column;min-width:0;flex:1}
   .category-card-name{font-size:19px;font-weight:750;letter-spacing:-.025em;color:var(--shop-ink)}
-  .category-card-meta{font-size:12.5px;color:#747478;margin-top:4px}
+  .category-card-meta{font-size:12.5px;color:#747478;margin-top:2px}
   .category-card-meta:empty{display:none}
+  .category-card-discount{font-size:12.5px;font-weight:750;color:var(--navy);margin-top:7px}
   .category-card-meta.live-save-meta{font-weight:700;color:var(--ink);font-size:13px;line-height:1.35}
-  .card-pig-row{display:flex;align-items:flex-start;gap:6px;margin-top:6px;min-width:0;width:100%}
-  .card-pig-ico{flex:0 0 auto;display:flex;line-height:0;color:var(--navy);margin-top:1px}
-  .card-pig-ico svg,.card-pig-svg{width:18px;height:18px;display:block;flex:0 0 auto}
-  .card-pig-amt{flex:0 0 auto;font-size:13px;font-weight:700;color:var(--ink);letter-spacing:-.02em;line-height:1.35;white-space:nowrap}
-  .card-pig-how{flex:1 1 auto;min-width:0;font-size:12.5px;font-weight:700;color:var(--ink);line-height:1.35}
+  .card-value-row{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;width:100%;margin-top:10px;min-width:0}
+  .card-saving{
+    display:flex;flex-direction:column;align-items:flex-start;gap:1px;min-width:0;margin:0;
+    color:var(--navy);font-size:12.5px;font-weight:750;line-height:1.2;white-space:nowrap;
+  }
+  .card-saving.pending{color:var(--mute);font-weight:600}
+  .card-value-label{display:flex;align-items:center;gap:4px;font-size:9.5px;font-weight:700;letter-spacing:.02em;line-height:1.2}
+  .card-price{display:flex;flex-direction:column;align-items:flex-end;gap:1px;min-width:0;margin:0;font-size:12.5px;font-weight:700;color:#4C4D50;line-height:1.2;white-space:nowrap;text-align:right}
+  .card-price .card-value-label{color:#626368}
+  .card-how{display:block;margin-top:auto;padding-top:9px;font-size:11.75px;font-weight:500;color:#515155;line-height:1.38}
+  .card-how:before{content:''}
   .live-save{font-weight:700;font-size:17px;letter-spacing:-.02em;line-height:1.25;color:var(--ink);margin:8px 0 0}
   .live-how{margin:10px 0 16px;font-size:13px;line-height:1.5;color:var(--mute)}
   .piggy{
     display:flex;align-items:center;gap:14px;width:100%;margin:10px 0 16px;padding:12px 14px;
     background:#F7F3EC;border:1px solid var(--hair2);border-radius:16px;box-sizing:border-box;
   }
-  .piggy-left{flex:0 0 auto;display:flex;align-items:center;gap:10px;min-width:0}
-  .piggy-left svg{width:28px;height:28px;display:block;color:var(--navy);flex:0 0 auto}
+  .piggy-left{flex:0 0 auto;display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-width:72px}
+  .piggy-k{font-size:10px;font-weight:700;letter-spacing:.04em;color:var(--navy);line-height:1.15}
   .piggy-amt{font-size:22px;font-weight:700;letter-spacing:-.03em;color:var(--ink);line-height:1.1;white-space:nowrap}
   .piggy-amt.empty{font-size:15px;font-weight:600;color:var(--mute)}
   .piggy-right{flex:1 1 auto;min-width:0;font-size:13.5px;line-height:1.4;color:var(--ink);font-weight:500}
   .piggy-right .quiet{color:var(--mute);font-weight:500;margin-top:2px}
+  .studio-amenities{display:block;margin-top:10px}
+  .studio-amenities-title{display:block;margin-bottom:7px;font-size:10px;font-weight:650;line-height:1.2;color:var(--ink)}
+  .studio-amenities-items{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px 5px}
+  .studio-amenity{display:flex;min-width:0;flex-direction:column;align-items:center;gap:4px;color:#747478;text-align:center}
+  .studio-amenity svg{display:block;width:15px;height:15px;color:var(--navy)}
+  .studio-amenity span{font-size:8.5px;font-weight:550;line-height:1.08;letter-spacing:0}
 
   .category-card-arrow{width:38px;height:38px;border-radius:999px;background:#fff;color:var(--shop-blue);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
   .pad .category-card-name{color:var(--ink)}
   .pad .category-card-meta{color:var(--mute)}
   .pad .category-card-arrow{color:var(--navy)}
-  .pad .story-cards{margin:12px 0 4px}
-  .story-photo{background-color:#E9E6E1;background-image:url('assets/story-editorial-sheet.png');background-repeat:no-repeat;background-size:400% 400%}
-  .story-photo.story-studio{background-image:url('assets/studio-bunk-lockers.png');background-size:cover;background-position:center}
-  .story-photo.story-wash{background-image:url('assets/wash-folded-clothes.png');background-size:cover;background-position:center}
-  .story-photo.story-eat{background-position:66.666% 0%}
-  .story-photo.story-cooler{background-position:100% 0%}
-  .story-photo.story-cycle{background-position:0% 33.333%}
-  .story-photo.story-rain{background-position:33.333% 33.333%}
-  .story-photo.story-day{background-position:66.666% 33.333%}
-  .story-photo.story-friday{background-position:100% 33.333%}
-  .story-photo.story-nearby{background-position:0% 66.666%}
-  .story-photo.story-slip{background-position:33.333% 66.666%}
-  .story-photo.story-goal{background-position:66.666% 66.666%}
-  .story-photo.story-sent{background-position:100% 66.666%}
-  .story-photo.story-village{background-position:0% 100%}
-  .story-photo.story-plant{background-position:33.333% 100%}
-  .story-photo.story-akka{background-image:url('assets/tribe-akka-tea.png');background-size:cover;background-position:center}
-  .story-photo.story-group{background-image:url('assets/tribe-group-cups.png');background-size:cover;background-position:center}
-  .story-photo.story-dropin{background-image:url('assets/tribe-clinic-kit.png');background-size:cover;background-position:center}
-  .story-photo.story-recreation{background-image:url('assets/tribe-recreation.png');background-size:cover;background-position:center}
-  .story-photo.story-thrift{background-image:url('assets/tribe-save-box.png');background-size:cover;background-position:center}
-  .story-photo.story-grievance{background-image:url('assets/tribe-akka-tea.png');background-size:cover;background-position:center}
+  .pad .story-cards{
+    margin:12px 0 4px;
+    grid-auto-rows:294px;
+    align-items:stretch;
+  }
+  .pad .story-cards .story-card{
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    background:#fff;
+    border:1px solid var(--hair2);
+    border-radius:22px;
+    box-shadow:none;
+  }
+  .pad .story-cards .story-card:hover{border-color:var(--soft)}
+  .pad .story-cards .story-photo{
+    flex:0 0 142px;
+    width:100%;
+    height:142px;
+    min-height:142px;
+    aspect-ratio:auto;
+    border-bottom:1px solid var(--hair2);
+  }
+  .pad .story-cards .category-card-copy{
+    flex:1 1 auto;
+    min-height:0;
+    padding:15px 14px 16px;
+    display:flex;
+  }
+  .pad .story-cards .category-card-copy>span:first-child{
+    display:flex;
+    flex-direction:column;
+    width:100%;
+    min-height:0;
+  }
+  .pad .story-cards .category-card-name{
+    display:block;
+    font-size:16px;
+    line-height:1.22;
+    letter-spacing:-.025em;
+  }
+  .pad .story-cards .category-card-arrow{
+    display:none;
+  }
+  .insurance-section{margin:28px 0 4px;padding-top:20px;border-top:1px solid var(--hair)}
+  .insurance-head h2{margin:0;font-size:22px;font-weight:750;letter-spacing:-.035em;color:var(--ink)}
+  .insurance-intro{margin:4px 0 0;font-size:13px;line-height:1.4;color:var(--mute)}
+  .insurance-cards{display:grid;grid-template-columns:1fr;gap:10px;margin:14px 0 4px}
+  .insurance-card{
+    width:100%;min-height:96px;padding:10px;display:grid;grid-template-columns:74px minmax(0,1fr) auto;
+    align-items:center;gap:13px;border:1px solid var(--hair);border-radius:12px;background:#fff;
+    color:var(--ink);font-family:var(--font);text-align:left;cursor:pointer;appearance:none;
+  }
+  .insurance-card:active{opacity:.72}
+  .insurance-card-photo{display:block;width:74px;height:74px;border-radius:12px;overflow:hidden}
+  .insurance-card-copy{display:flex;min-width:0;flex-direction:column;justify-content:center}
+  .insurance-card-name{font-size:16px;font-weight:700;line-height:1.18;letter-spacing:-.025em;color:var(--ink)}
+  .insurance-card-cover{margin-top:4px;font-size:12.5px;font-weight:450;line-height:1.3;color:var(--mute)}
+  .insurance-card-price{display:flex;flex-direction:column;align-items:flex-end;justify-content:center;white-space:nowrap;color:var(--navy)}
+  .insurance-card-price strong{font-size:19px;font-weight:750;line-height:1;letter-spacing:-.035em}
+  .insurance-card-price span{margin-top:4px;font-size:10.5px;font-weight:600;line-height:1;color:var(--mute)}
+  .send-purpose{display:block;width:100%;aspect-ratio:1/1;margin:14px 0 20px;border-radius:16px;object-fit:cover;filter:grayscale(1);-webkit-filter:grayscale(1)}
+  .insurance-disclaimer{margin:14px 0 0;padding-top:12px;border-top:1px solid var(--hair);font-size:11px;line-height:1.45;color:#77777B}
+  .insurance-detail-disclaimer{margin-top:14px}
+  .insurance-facts{margin:0 0 14px;border-top:1px solid var(--hair)}
+  .insurance-fact{display:flex;align-items:baseline;justify-content:space-between;gap:14px;padding:10px 0;border-bottom:1px solid var(--hair);font-size:13px;line-height:1.35}
+  .insurance-fact span{color:var(--mute)}
+  .insurance-fact strong{color:var(--ink);font-size:13px;font-weight:700;text-align:right}
+  .insurance-source{display:inline-flex;margin:1px 0 13px;color:var(--navy);font-size:12px;font-weight:700;text-underline-offset:3px}
+  .insurance-product-note{margin:0 0 13px;font-size:11px;line-height:1.45;color:#77777B}
+  .send-planner{margin:4px 0 26px;padding:18px;background:#F7F3EC;border-radius:20px;color:var(--ink)}
+  .send-planner-k{font-size:10px;font-weight:750;letter-spacing:.08em;text-transform:uppercase;color:var(--navy)}
+  .send-planner h2{margin:7px 0 14px;font-size:22px;font-weight:750;letter-spacing:-.035em;line-height:1.16}
+  .send-plan-select{display:block;width:100%;height:48px;padding:0 40px 0 14px;border:1px solid var(--hair2);border-radius:12px;background:#fff;color:var(--ink);font:700 16px var(--font);appearance:auto}
+  .send-plan-caption{margin:13px 0 0;font-size:12px;line-height:1.4;color:var(--mute)}
+  .send-plan-ledger{margin-top:16px;border-top:1px solid var(--hair2)}
+  .send-plan-row{display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:10px 0;border-bottom:1px solid var(--hair2);font-size:13px}
+  .send-plan-row span{color:#68686D}
+  .send-plan-row strong{font-size:14px;font-weight:700;color:var(--ink);white-space:nowrap}
+  .send-plan-row.income span,.send-plan-row.income strong{color:var(--navy)}
+  .send-plan-row.home{padding:13px 0;border-bottom:0}
+  .send-plan-row.home span{font-weight:700;color:var(--navy)}
+  .send-plan-row.home strong{font-size:23px;letter-spacing:-.035em;color:var(--navy)}
+  .send-plan-action{display:inline-flex;margin-top:6px;padding:4px 0;border:0;background:transparent;color:var(--navy);font:700 12px var(--font);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+  .proof-cards{display:grid!important;grid-template-columns:1fr!important;grid-auto-rows:auto!important;gap:16px!important;align-items:start!important}
+  .proof-card{
+    width:100%;padding:0;display:grid;grid-template-columns:112px minmax(0,1fr);grid-template-rows:auto auto;
+    border:0;border-radius:12px;background:#fff;overflow:visible;box-shadow:none;
+    color:var(--ink);font-family:var(--font);text-align:left;cursor:pointer;appearance:none;
+  }
+  .proof-card *{font-family:var(--font)}
+  .proof-card:hover{border-color:var(--soft)}
+  .proof-card:active{transform:scale(.994)}
+  .proof-main{display:contents}
+  .pad .proof-cards .proof-photo{
+    grid-column:1;grid-row:1 / 3;align-self:stretch;display:block;position:relative;width:100%;height:100%;min-height:100%;
+    border:0;border-radius:12px;background-color:#E9E6E1;overflow:hidden;
+  }
+  .proof-copy{grid-column:2;grid-row:1;display:flex;flex-direction:column;min-width:0;min-height:126px;padding:16px 14px 14px}
+  .proof-name{display:block;font-size:17px;font-weight:700;letter-spacing:-.025em;line-height:1.18;color:var(--ink)}
+  .proof-desc{display:block;margin-top:2px;font-size:12.75px;font-weight:450;line-height:1.42;color:#747478}
+  .proof-saving{display:grid;grid-template-columns:auto minmax(0,1fr) 20px;align-items:end;gap:6px;margin-top:auto;padding-top:10px;color:var(--navy)}
+  .proof-saving strong{font-size:25px;font-weight:750;letter-spacing:-.04em;line-height:1}
+  .proof-saving em{font-size:11.75px;font-style:normal;font-weight:650;line-height:1.2}
+  .proof-piggy{display:flex;width:20px;height:20px;align-items:center;justify-content:flex-end;color:#929297;justify-self:end;align-self:end}
+  .proof-piggy svg{display:block;width:20px;height:20px}
+  .proof-bars{grid-column:2;grid-row:2;display:block;padding:11px 14px 13px;background:#fff;border-top:1px solid #D0D0D0}
+  .proof-bar-row{display:grid;grid-template-columns:58px minmax(32px,1fr) 88px;gap:7px;align-items:center;min-height:23px}
+  .proof-bar-row+.proof-bar-row{margin-top:6px}
+  .proof-bar-label{font-family:var(--font);font-size:10px;font-weight:600;letter-spacing:0;text-transform:none;color:#85858A;white-space:nowrap}
+  .proof-bar-row.nia .proof-bar-label{color:var(--navy)}
+  .proof-track{display:block;height:8px;border-radius:2px;background:#DDDEE1;overflow:hidden}
+  .proof-track i{display:block;height:100%;border-radius:2px;background:#C8C9CD}
+  .proof-bar-row.nia .proof-track i{background:var(--blue)}
+  .proof-bar-value{font-family:var(--font);font-size:11.5px;font-weight:600;letter-spacing:0;color:#77777B;text-align:right;white-space:nowrap}
+  .proof-bar-row.nia .proof-bar-value{font-weight:750;color:var(--ink)}
+  .proof-stepper{position:absolute;left:7px;right:7px;bottom:7px;z-index:2;height:40px;display:grid;grid-template-columns:40px 1fr 40px;align-items:center;border-radius:999px;background:rgba(255,255,255,.94);box-shadow:0 3px 12px rgba(0,0,0,.16);overflow:hidden}
+  .proof-stepper button{width:40px;height:40px;padding:0;border:0;background:transparent;color:var(--navy);font-family:var(--font);font-size:24px;font-weight:500;line-height:1;cursor:pointer}
+  .proof-stepper button:disabled{color:#B9BABD;cursor:default}
+  .proof-qty{text-align:center;color:var(--ink);font-size:14px;font-weight:700;line-height:1}
+  .earn-proof-card{grid-template-rows:auto;border:0!important;background:transparent}
+  .pad .proof-cards .earn-proof-card .proof-photo{grid-row:1;border:0!important}
+  .earn-proof-card .proof-copy{grid-row:1;min-height:126px;justify-content:center}
+  .earn-income-range{display:block;margin-top:8px;font-size:14px;font-weight:750;line-height:1.25;color:var(--navy)}
+  .earn-wage-note{margin:10px 0 14px;padding:10px 12px;border-top:1px solid #E2E2E2;border-bottom:1px solid #E2E2E2;font-size:11.5px;line-height:1.4;color:var(--mute)}
+  .earn-wage-note a{color:var(--navy);font-weight:650;text-decoration:none}
+  .salary-history-card{display:flex;width:100%;min-height:64px;align-items:center;gap:12px;margin:14px 0 4px;padding:13px 14px;border:1px solid #D0D0D0;border-radius:12px;background:#fff;color:var(--ink);font-family:var(--font);text-align:left;cursor:pointer}
+  .salary-history-card svg{display:block;width:20px;height:20px;color:var(--navy);flex:0 0 auto}
+  .salary-history-copy{display:flex;flex:1;min-width:0;flex-direction:column;gap:2px}
+  .salary-history-copy strong{font-size:15px;font-weight:650;line-height:1.2}
+  .salary-history-copy span{font-size:11.5px;font-weight:450;color:var(--mute);line-height:1.3}
+  .salary-history-arrow{color:var(--mute2);font-size:18px;line-height:1}
+  .story-photo{background-color:#E9E6E1;background-image:url('assets/story-editorial-sheet.jpg');background-repeat:no-repeat;background-size:auto 400%}
+  .story-photo.story-studio{background-image:url('assets/studio-bunk-lockers.jpg');background-size:cover;background-position:center}
+  .story-photo.story-wash{background-image:url('assets/wash-folded-clothes.jpg');background-size:cover;background-position:center}
+  .story-photo.story-eat{background-position:64.36% 0%}
+  .story-photo.story-cooler{background-image:url('assets/air-cooler-shared.jpg');background-size:cover;background-position:center}
+  .story-photo.story-cycle{background-position:6.91% 33.333%}
+  .story-photo.story-rain{background-position:35.64% 33.333%}
+  .story-photo.story-day{background-position:64.36% 33.333%}
+  .story-photo.story-friday{background-image:url('assets/earn-extra-hours-v2.jpg');background-size:cover;background-position:center}
+  .story-photo.story-friday-extra{background-image:url('assets/earn-friday-extra-v3.jpg');background-size:cover;background-position:center}
+  .story-photo.story-nearby{background-image:url('assets/earn-nearby-work-v2.jpg');background-size:cover;background-position:center}
+  .story-photo.story-slip{background-image:url('assets/earn-wallet-v1.png');background-size:cover;background-position:center}
+  .story-photo.story-goal{background-position:64.36% 66.666%}
+  .story-photo.story-sent{background-position:93.09% 66.666%}
+  .story-photo.story-accident{background-image:url('assets/insurance-accident-v2.jpg');background-size:cover;background-position:center}
+  .story-photo.story-life{background-image:url('assets/insurance-life-v2.jpg');background-size:cover;background-position:center}
+  .story-photo.story-village{background-image:url('assets/earn-village-referral-v3.jpg');background-size:cover;background-position:center}
+  .story-photo.story-plant{background-image:url('assets/earn-plant-work-v3.jpg');background-size:cover;background-position:center}
+  .story-photo.story-akka{background-image:url('assets/tribe-akka-tea.jpg');background-size:cover;background-position:center}
+  .story-photo.story-group{background-image:url('assets/tribe-group-cups.jpg');background-size:cover;background-position:center}
+  .story-photo.story-dropin{background-image:url('assets/tribe-clinic-kit.jpg');background-size:cover;background-position:center}
+  .story-photo.story-recreation{background-image:url('assets/tribe-recreation.jpg');background-size:cover;background-position:center}
+  .story-photo.story-thrift{background-image:url('assets/tribe-save-box.jpg');background-size:cover;background-position:center}
+  .story-photo.story-grievance{background-image:url('assets/tribe-akka-tea.jpg');background-size:cover;background-position:center}
   .flow-sheet{position:absolute;inset:0;z-index:20;display:flex;align-items:flex-start;justify-content:center;padding:72px 22px 22px;background:rgba(243,238,231,.92);overflow-y:auto;pointer-events:auto}
   .flow-sheet[hidden],.flow-sheet.is-gone{display:none!important;pointer-events:none!important;visibility:hidden!important}
   .flow-sheet .send-banner,.flow-sheet .earn-banner{background:transparent;padding-top:0}
@@ -628,10 +786,6 @@
   .story-pick .nm{font-size:15px;font-weight:600;color:var(--ink)}
   .story-pick .mt{font-size:12.5px;color:var(--mute);margin-top:3px}
   .story-pick .go{color:var(--soft);flex:0 0 auto}
-  .send-progress{margin:20px 0 8px;padding:16px 0;border-top:1px solid var(--hair)}
-  .send-progress .lbl{font-size:12px;color:var(--mute);margin-bottom:6px}
-  .send-progress .pct{font-size:22px;font-weight:700;letter-spacing:-.03em;color:var(--ink);margin-bottom:10px}
-  .send-progress .pct.empty{font-size:15px;font-weight:500;color:var(--mute)}
   .commerce-homegrid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(320px,.65fr);gap:22px;align-items:stretch}
   .commerce-hero{border:0;border-radius:30px;background:var(--shop-blue);color:#fff;padding:34px;min-height:296px;text-align:left;display:flex;flex-direction:column;justify-content:flex-end;cursor:pointer;overflow:hidden;position:relative}
   .commerce-hero:after{content:"";position:absolute;width:260px;height:260px;border:1px solid rgba(255,255,255,.13);border-radius:999px;right:-74px;top:-94px;box-shadow:0 0 0 44px rgba(255,255,255,.035),0 0 0 88px rgba(255,255,255,.025)}
@@ -649,23 +803,31 @@
   .commerce-sectionhead{display:flex;align-items:baseline;justify-content:space-between;gap:18px;margin-bottom:18px}
   .commerce-sectionhead h2{font-size:25px;letter-spacing:-.035em;margin:0}
   .text-link{border:0;background:transparent;color:var(--shop-blue);font-size:14px;font-weight:700;cursor:pointer;padding:4px}
-  .shop-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-  .shop-card{border:1px solid var(--shop-line);border-radius:26px;overflow:hidden;background:#fff;min-width:0;display:flex;flex-direction:column;transition:transform .2s,box-shadow .2s}
+  .shop-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:stretch}
+  .shop-card{border:1px solid var(--shop-line);border-radius:26px;overflow:hidden;background:#fff;min-width:0;height:100%;box-sizing:border-box;display:flex;flex-direction:column;transition:transform .2s,box-shadow .2s}
   .shop-card:hover{transform:translateY(-3px);box-shadow:0 18px 38px -26px rgba(0,0,0,.35)}
     /* sheet sprites lazy-loaded on Save */
-  .oil-photo,.sub-photo,.sub-thumb{background-color:#E9E6E1;background-repeat:no-repeat}
-  .cat-homecare,.cat-personal,.cat-oils,.cat-essentials{background-color:#EAE7E2;background-repeat:no-repeat}
+  .oil-photo,.sub-photo,.sub-thumb,.direct-photo{background-color:#E9E6E1;background-repeat:no-repeat}
+  .cat-homecare,.cat-personal,.cat-oils,.cat-essentials,.cat-snacks,.cat-tea,.cat-tshirts,.cat-innerwear{background-color:#EAE7E2;background-repeat:no-repeat}
+  .direct-photo{background-size:cover;background-position:center}
+  .direct-photo.biscuits,.cat-snacks{background-image:url('assets/save-biscuits.jpg');background-size:cover;background-position:center}
+  .direct-photo.namkeen{background-image:url('assets/save-namkeen.jpg')}
+  .direct-photo.tea,.cat-tea{background-image:url('assets/save-tea-v3.png');background-size:cover;background-position:center}
+  .direct-photo.sugar{background-image:url('assets/save-sugar-v3.png');background-size:cover;background-position:center}
+  .direct-photo.tshirt,.cat-tshirts{background-image:url('assets/save-tshirt.jpg');background-size:cover;background-position:center}
+  .direct-photo.vests,.cat-innerwear{background-image:url('assets/save-vests-v2.jpg');background-size:cover;background-position:center}
+  .direct-photo.trunks{background-image:url('assets/save-trunks-v2.jpg')}
   .oil-thumb{display:block;width:100%;height:100%;background-color:#E9E6E1}
-.shop-photo{width:100%;aspect-ratio:1.06/1;min-height:168px;height:auto;position:relative;cursor:pointer;background-color:#F3F1ED;overflow:hidden;background-repeat:no-repeat}
+.shop-photo{width:100%;aspect-ratio:1/1;min-height:0;height:auto;flex:0 0 auto;position:relative;cursor:pointer;border:0;border-radius:0;background-color:#F3F1ED;overflow:hidden;background-repeat:no-repeat}
   .cert-badge{position:absolute;top:14px;left:14px;display:flex;align-items:center;gap:6px;color:#fff;background:rgba(30,30,30,.25);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:7px 10px;font-size:11px;font-weight:700}
   .shop-copy{padding:17px 18px 18px;display:flex;flex-direction:column;flex:1}
   .shop-name{border:0;background:transparent;text-align:left;padding:0;color:var(--shop-ink);font-size:18px;font-weight:750;letter-spacing:-.025em;line-height:1.18;cursor:pointer}
-  .shop-meta{font-size:13px;color:#717176;margin-top:7px}
-  .shop-price{display:flex;align-items:baseline;gap:8px;margin-top:14px}
-  .shop-now{font-size:19px;font-weight:750}.shop-mrp{font-size:13px;color:#8A8A8E;text-decoration:line-through}
-  .shop-action{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px}
-  .shop-save{font-size:12px;color:var(--shop-blue);font-weight:650}
-  .shop-add{border:0;border-radius:999px;background:var(--shop-blue);color:#fff;min-width:74px;height:42px;padding:0 18px;font-size:14px;font-weight:750;cursor:pointer}
+  .shop-meta{font-size:13px;color:#717176;margin-top:2px}
+  .shop-price{display:flex;flex-direction:column;align-items:flex-start;gap:4px;margin-top:14px}
+  .shop-mrp{font-size:13px;color:#77777B;white-space:nowrap}.shop-discount{font-size:12px;color:var(--shop-blue);font-weight:750;white-space:nowrap}.shop-now{font-size:19px;font-weight:750;color:var(--shop-ink);white-space:nowrap}
+  .shop-action{display:flex;align-items:center;justify-content:stretch;width:100%;margin-top:auto;padding-top:16px}
+  .pricing-audit{font-size:12px;color:#7A7A7F;margin-top:6px;line-height:1.4}
+  .shop-add{border:0;border-radius:999px;background:var(--shop-blue);color:#fff;width:100%;min-width:0;height:42px;padding:0 18px;font-size:14px;font-weight:750;cursor:pointer}
   .shop-add.in{background:#19191B}
   .swap-hint{display:inline-flex;align-items:center;gap:6px;color:var(--shop-blue);font-size:12px;font-weight:750;margin-top:9px}
   .swap-hint:before{content:"";width:6px;height:6px;border-radius:999px;background:var(--shop-blue)}
@@ -686,7 +848,7 @@
   .detail-copy{padding-top:16px}
   .detail-copy h1{font-size:clamp(34px,4.4vw,54px);letter-spacing:-.05em;line-height:1.04;margin:0}
   .detail-hi{font-size:17px;color:#75757A;margin-top:11px}
-  .detail-price{display:flex;align-items:baseline;gap:12px;margin-top:28px;flex-wrap:wrap}.detail-price strong{font-size:31px;letter-spacing:-.035em}.detail-price del{font-size:14px;color:#77777B}.detail-price span{font-size:13px;color:var(--shop-blue);font-weight:700}
+  .detail-price{display:flex;align-items:baseline;gap:12px;margin-top:28px;flex-wrap:wrap}.detail-price strong{font-size:31px;letter-spacing:-.035em;flex-basis:100%}.detail-price .detail-mrp{font-size:14px;color:#77777B}.detail-price .detail-discount{font-size:13px;color:var(--shop-blue);font-weight:750}
   .size-row{display:flex;gap:10px;margin-top:25px}.size-pill{height:54px;min-width:80px;border-radius:18px;border:1px solid #D6D6D9;background:#fff;font-size:15px;font-weight:750;cursor:pointer}.size-pill.on{border:2px solid var(--shop-blue);color:var(--shop-blue)}
   .proof-panel{background:#FAFAFB;border-radius:24px;padding:23px;margin-top:25px;border:1px solid #F0F0F1}.proof-title{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:750}.proof-copy{font-size:14px;color:#65656A;line-height:1.55;margin-top:12px}
   .swap-block{margin-top:24px;border:1px solid #DDE5EB;background:#F5F8FA;border-radius:26px;padding:20px}
@@ -706,7 +868,7 @@
   .pad{width:100%;padding:6px 22px 30px}
   .grid{grid-template-columns:1fr 1fr;gap:14px}
   .authshell{margin:26px auto 40px;padding:0}
-  .commerce-title{font-size:28px}.commerce-sub{font-size:13px}.saved-pill{height:42px;padding:0 14px}
+  .commerce-title{font-size:28px}.commerce-sub{font-size:13px}
   .commerce-search{height:56px;border-radius:18px;margin-bottom:18px}
   .category-strip{gap:7px;margin-bottom:24px}.category-btn{min-width:65px}.category-icon{width:58px;height:58px;border-radius:19px}.category-label{font-size:12px}
   .category-card{border-radius:22px}.category-card-copy{padding:14px}.category-card-name{font-size:16px}.category-card-meta{font-size:11.5px}.category-card-arrow{width:34px;height:34px}
@@ -717,9 +879,9 @@
   .detail-grid{grid-template-columns:1fr;gap:18px}.detail-top{margin-bottom:18px}.detail-top .cert-pill{font-size:10px;padding:0 12px;height:38px}.detail-photo{border-radius:28px}.detail-copy{padding-top:2px}.detail-copy h1{font-size:32px}.detail-price{margin-top:22px}.proof-panel{margin-top:22px}
   .swap-block{padding:17px;border-radius:22px}.swap-row{grid-template-columns:92px minmax(0,1fr);gap:14px}.swap-photo{width:92px;border-radius:16px}
 
-  .shop-step{display:inline-flex;align-items:center;background:var(--shop-blue);color:#fff;border-radius:999px;height:42px;overflow:hidden;border:0;min-width:110px}
-  .shop-step button{width:36px;height:42px;border:0;background:transparent;color:#fff;font-size:18px;font-weight:700;cursor:pointer}
-  .shop-step span{min-width:28px;text-align:center;font-size:15px;font-weight:750;color:#fff}
+  .shop-step{display:flex;align-items:center;justify-content:space-between;width:100%;background:var(--shop-blue);color:#fff;border-radius:999px;height:42px;overflow:hidden;border:0;min-width:0}
+  .shop-step button{flex:1;height:42px;border:0;background:transparent;color:#fff;font-size:18px;font-weight:700;cursor:pointer}
+  .shop-step span{min-width:36px;text-align:center;font-size:15px;font-weight:750;color:#fff}
   .detail-step{display:flex;align-items:center;justify-content:center;margin-top:22px;width:100%;height:58px;border-radius:18px;background:var(--shop-blue);color:#fff;border:0}
   .detail-step button{flex:1;height:58px;border:0;background:transparent;color:#fff;font-size:22px;font-weight:700;cursor:pointer}
   .detail-step span{min-width:48px;text-align:center;font-size:18px;font-weight:750;color:#fff}
@@ -797,7 +959,7 @@
 <style id="story-sheets"></style>
 </head>
 <body>
-<div class="site" id="site">
+<div class="site site-open" id="site">
   <div class="site-hero">
   <div class="stage">
   <div class="phone-blur-wrap" id="phoneBlurWrap">
@@ -815,17 +977,17 @@
     <div class="top">
       <div class="mark"><img src="assets/nia-logo-transparent.png" alt="Nia"></div>
       <div class="who">
-        <div class="n" id="topname">Ravi</div>
-        <div class="id-line" id="topstudio">Studio</div>
-        <div class="id-line" id="toptheatre">Theatre North</div>
-        <div class="id-line" id="topjabali">Jabali Officer</div>
+        <div class="n" id="topname">Ravi Singh, Studio 1, Rajputana.</div>
       </div>
+      <button type="button" class="voice-btn" id="voiceBtn" aria-label="Ask Nia">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3M9 21h6"/></svg>
+      </button>
       <div class="burger-wrap">
         <button type="button" class="burger" id="burgerBtn" aria-label="Menu" aria-expanded="false" aria-controls="burgermenu">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M5 7h14M5 12h14M5 17h14"/></svg>
         </button>
         <div class="burgermenu" id="burgermenu" role="menu">
-          <button type="button" id="menuTalk" role="menuitem">Nia</button>
+          <button type="button" id="menuTalk" role="menuitem">Ask Nia</button>
           <div class="lang-block" id="langmenu">
             <button type="button" data-lang="en" class="sel">English <span class="en">EN</span></button>
             <button type="button" data-lang="hi">हिन्दी <span class="en">Hindi</span></button>
@@ -834,6 +996,7 @@
             <button type="button" data-lang="kn">ಕನ್ನಡ <span class="en">Kannada</span></button>
           </div>
           <button type="button" id="menuBag" role="menuitem">Bag</button>
+          <button type="button" id="menuPay" role="menuitem">Add pay</button>
           <button type="button" id="menuInstall" role="menuitem" hidden>Add to Home Screen</button>
           <a class="about-last" href="https://www.nia.one" role="menuitem">About Nia</a>
         </div>
@@ -847,19 +1010,19 @@
     <!-- tabbar -->
     <div class="tabbar" id="tabbar">
       <button type="button" class="tab" data-tab="live" onclick="go('live')">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5 12 5l8 6.5"/><path d="M6 10.5V19h12v-8.5"/></svg>
+        <span class="tab-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round"><path d="M3.75 10.2 12 3.8l8.25 6.4"/><path d="M5.75 8.9v9.35c0 1.05.7 1.75 1.75 1.75h9c1.05 0 1.75-.7 1.75-1.75V8.9"/><path d="M9.25 20v-5.45c0-.85.55-1.4 1.4-1.4h2.7c.85 0 1.4.55 1.4 1.4V20"/></svg></span>
         <span class="lab">Live</span><span class="mk"></span>
       </button>
       <button type="button" class="tab" data-tab="earn" onclick="go('earn')">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16v11H4z"/><path d="M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7"/></svg>
+        <span class="tab-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round"><path d="M5.25 6.25h12.5A2.25 2.25 0 0 1 20 8.5v9.25A2.25 2.25 0 0 1 17.75 20H5.5A2.5 2.5 0 0 1 3 17.5v-11A2.5 2.5 0 0 1 5.5 4h10"/><path d="M15.25 10.25H21v5.5h-5.75a2.75 2.75 0 0 1 0-5.5Z"/><circle cx="15.5" cy="13" r=".7" fill="currentColor" stroke="none"/></svg></span>
         <span class="lab">Earn</span><span class="mk"></span>
       </button>
       <button type="button" class="tab" data-tab="save" onclick="go('save')">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5c0-3 2.7-5 6-5 2.2 0 3.3-.9 4-2 .5 2 .3 3 0 3.6 1.3.8 2 2 2 3.4 0 3-2.7 5-6 5s-6-2-6-5Z"/><circle cx="15.5" cy="11" r=".6" fill="currentColor"/></svg>
+        <span class="tab-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round"><path d="M5.2 11.2A6.9 6.9 0 0 1 11.7 7h1.2l2.2-2.05c.55-.5 1.25-.15 1.2.55l-.1 2.25a6.45 6.45 0 0 1 2.15 2.3H21v4.4l-2.2.7a6.8 6.8 0 0 1-2.15 2.35V20h-3v-1.35c-.65.15-1.35.25-2.05.25-.8 0-1.55-.1-2.25-.3V20h-3v-3.25a6.1 6.1 0 0 1-1.8-3.25"/><path d="M5.1 11.3c-1.4 0-2.1-.7-2.1-1.7"/><path d="M9.25 5.7h4"/><circle cx="16.6" cy="10.5" r=".65" fill="currentColor" stroke="none"/></svg></span>
         <span class="lab">Save</span><span class="mk"></span>
       </button>
       <button type="button" class="tab" data-tab="send" onclick="go('send')">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 20 5l-6.5 15-2.5-6z"/><path d="M11 13.5 20 5"/></svg>
+        <span class="tab-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round"><path d="M3.75 11.25 20.1 4.1c.85-.35 1.65.45 1.3 1.3l-7.15 16.35-3.1-7.05-7.4-3.45Z"/><path d="m11.15 14.7 5.2-5.2"/></svg></span>
         <span class="lab">Send</span><span class="mk"></span>
       </button>
     </div>
@@ -885,7 +1048,7 @@
     <p class="quit-close">Go-live load: 1 theatre · 40 studios · 3,000 members. This phone is one member month: browse, bag, pickup. Paid monthly.</p>
     <ul class="quit-rows">
       <li><button type="button" class="quit-row" data-tab="live"><span class="num">1</span><span class="tx"><span class="t">Studio near work</span><span class="d">Walk. Rupees stay for home.</span></span><span class="tab">Live</span></button></li>
-      <li><button type="button" class="quit-row" data-tab="earn"><span class="num">2</span><span class="tx"><span class="t">Friday extra hours</span><span class="d">Extra hours toward home.</span></span><span class="tab">Earn</span></button></li>
+      <li><button type="button" class="quit-row" data-tab="earn"><span class="num">2</span><span class="tx"><span class="t">TGIF</span><span class="d">Friday pays more.</span></span><span class="tab">Earn</span></button></li>
       <li><button type="button" class="quit-row" data-tab="save"><span class="num">3</span><span class="tx"><span class="t">Lower cost than kirana</span><span class="d">Pickup after 5.</span></span><span class="tab">Save</span></button></li>
       <li><button type="button" class="quit-row" data-tab="send"><span class="num">4</span><span class="tx"><span class="t">Remit more</span><span class="d">How much reaches home?</span></span><span class="tab">Send</span></button></li>
     </ul>
@@ -924,15 +1087,23 @@ var WEEK_HOME = {
   rideCost: 60,       // this month demo only; do not print as his auto fare
   mealOut: 120,       // this month demo only; do not print as his meal
   nearby: [
-    { id:'laundry', title:'near_laundry', when:'near_sat', hours:0, pay:500, dist:'near_walk' },
-    { id:'kitchen', title:'near_kitchen', when:'near_sun', hours:0, pay:520, dist:'near_1km' },
-    { id:'loading', title:'near_loading', when:'near_sat_pm', hours:0, pay:480, dist:'near_15km' }
+    { id:'laundry', title:'near_laundry', when:'near_sat', hours:0, pay:560, dist:'near_walk' },
+    { id:'kitchen', title:'near_kitchen', when:'near_sun', hours:0, pay:650, dist:'near_1km' },
+    { id:'loading', title:'near_loading', when:'near_sat_pm', hours:0, pay:600, dist:'near_15km' }
   ]
+};
+var EARN_INCOME_RANGE = {
+  ot:'₹560–₹1,650 a month',
+  gig:'₹560–₹830 a shift',
+  friday:'₹1,100–₹1,650 a month',
+  village:'₹500 items free',
+  plant:'₹14,500–₹21,500 a month',
+  slip:'Your monthly pay'
 };
 var weekPath = null;   // 'friday' | 'weekend' | null. one path on the phone
 var takenJobs = {};    // nearby work id → true after dummy confirm
 var DUMMY_PLANTS=[
-  {id:'plant_b', name:'Another plant · if listed', when:'Day shift · if listed', pay:0}
+  {id:'plant_b', name:'Talk to your JCO', when:'Need a new job?', pay:0}
 ];
 var pickedPlant=null;
 var contractorPay = null; // null | true | false. dummy: pay a contractor monthly?
@@ -992,19 +1163,19 @@ var seasonPot = false;
 var products = [
   {id:'salt',brand:'Salt', hi:{en:'Salt · 1 kg',hi:'नमक · 1 kg',bn:'নুন · ১ kg',ta:'உப்பு · 1 kg',kn:'ಉಪ್ಪು · 1 kg'}, price:28, mrp:32},
   {id:'oil',brand:'Sunflower oil', hi:{en:'Oil · 800 g',hi:'तेल · 800 g',bn:'তেল · ৮০০ g',ta:'எண்ணெய் · 800 g',kn:'ಎಣ್ಣೆ · 800 g'}, price:177, mrp:225},
-  {id:'biscuit', brand:'Glucose biscuits', hi:{en:'Biscuits · 250 g',hi:'बिस्कुट · 250 g',bn:'বিস্কুট · ২৫০ g',ta:'பிஸ்கட் · 250 g',kn:'ಬಿಸ್ಕತ್ · 250 g'}, price:27, mrp:30, glyph:'biscuit'},
-  {id:'soap_nia', brand:'Nia Soap', hi:{en:'Soap · 30 g',hi:'साबुन · 30 g',bn:'সাবান · ৩০ g',ta:'சோப்பு · 30 g',kn:'ಸೋಪು · 30 g'}, price:10, mrp:12, glyph:'soap', line:'Soap for the week'},
+  {id:'biscuit', brand:'Parle-G biscuits', hi:{en:'56 g pack',hi:'56 g पैक',bn:'৫৬ g প্যাক',ta:'56 g பாக்கெட்',kn:'56 g ಪ್ಯಾಕ್'}, price:9, mrp:10, glyph:'biscuit'},
+  {id:'soap_nia', brand:'Nia Soap', hi:{en:'Soap · 30 g',hi:'साबुन · 30 g',bn:'সাবান · ৩০ g',ta:'சோப்பு · 30 g',kn:'ಸೋಪು · 30 g'}, price:10, mrp:12, glyph:'soap', line:'Small soap pack'},
   {id:'coololi', brand:'Cooling oil', hi:{en:'Cooling oil · 100 ml',hi:'ठंडा तेल · 100 ml',bn:'ঠান্ডা তেল · ১০০ ml',ta:'குளிர் எண்ணெய் · 100 ml',kn:'ತಂಪು ಎಣ್ಣೆ · 100 ml'}, price:70, mrp:82, glyph:'bottle'},
   {id:'atta', brand:'Atta', hi:{en:'Wheat flour · 5 kg',hi:'आटा · 5 kg',bn:'আটা · ৫ kg',ta:'கோதுமை மாவு · 5 kg',kn:'ಗೋಧಿ ಹಿಟ್ಟು · 5 kg'}, price:255, mrp:270, glyph:'sack'},
   {id:'rice', brand:'Rice', hi:{en:'Rice · 5 kg',hi:'चावल · 5 kg',bn:'চাল · ৫ kg',ta:'அரிசி · 5 kg',kn:'ಅಕ್ಕಿ · 5 kg'}, price:270, mrp:300, glyph:'rice'},
   {id:'mustard', brand:'Mustard oil', hi:{en:'Sarson oil · 1 L',hi:'सरसों तेल · 1 L',bn:'সরষের তেল · ১ L',ta:'கடுகு எண்ணெய் · 1 L',kn:'ಸಾಸಿವೆ ಎಣ್ಣೆ · 1 L'}, price:165, mrp:185, glyph:'bottle'},
   {id:'dal', brand:'Toor dal', hi:{en:'Dal · 1 kg',hi:'दाल · 1 kg',bn:'ডাল · ১ kg',ta:'பருப்பு · 1 kg',kn:'ಬೇಳೆ · 1 kg'}, price:130, mrp:150, glyph:'dal'},
-  {id:'sugar', brand:'Sugar', hi:{en:'Cheeni · 1 kg',hi:'चीनी · 1 kg',bn:'চিনি · ১ kg',ta:'சர்க்கரை · 1 kg',kn:'ಸಕ್ಕರೆ · 1 kg'}, price:42, mrp:48, glyph:'sugar'},
-  {id:'tea', brand:'Tea', hi:{en:'Chai · 250 g',hi:'चाय · 250 g',bn:'চা · ২৫০ g',ta:'தேயிலை · 250 g',kn:'ಚಹಾ · 250 g'}, price:130, mrp:145, glyph:'tea'},
+  {id:'sugar', brand:'Sugar', hi:{en:'1 kg pack',hi:'1 kg पैक',bn:'১ kg প্যাক',ta:'1 kg பாக்கெட்',kn:'1 kg ಪ್ಯಾಕ್'}, price:64, mrp:72, glyph:'sugar'},
+  {id:'tea', brand:'Red Label tea', hi:{en:'60 g pack',hi:'60 g पैक',bn:'৬০ g প্যাক',ta:'60 g பாக்கெட்',kn:'60 g ಪ್ಯಾಕ್'}, price:9, mrp:10, glyph:'tea'},
   {id:'noodles', brand:'Noodles', hi:{en:'Noodles · 8 pack',hi:'नूडल्स · 8 पैक',bn:'নুডলস · ৮ প্যাক',ta:'நூடுல்ஸ் · 8 பேக்',kn:'ನೂಡಲ್ಸ್ · 8 ಪ್ಯಾಕ್'}, price:96, mrp:108, glyph:'noodle'},
-  {id:'detergent', brand:'Detergent powder', hi:{en:'Washing powder · 1 kg',hi:'कपड़े धोने का पाउडर · 1 kg',bn:'কাপড় ধোয়ার গুঁড়ো · ১ kg',ta:'சலவை தூள் · 1 kg',kn:'ಬಟ್ಟೆ ಪುಡಿ · 1 kg'}, price:110, mrp:125, glyph:'detergent'},
-  {id:'bathsoap', brand:'Bathing soap', hi:{en:'Bathing soap · 3',hi:'नहाने का साबुन · 3',bn:'স্নানের সাবান · ৩',ta:'குளியல் சோப்பு · 3',kn:'ಸ್ನಾನದ ಸೋಪು · 3'}, price:84, mrp:96, glyph:'soap'},
-  {id:'paste', brand:'Toothpaste', hi:{en:'Toothpaste · 100 g',hi:'टूथपेस्ट · 100 g',bn:'টুথপেস্ট · ১০০ g',ta:'பற்பசை · 100 g',kn:'ಟೂತ್‌ಪೇಸ್ಟ್ · 100 g'}, price:55, mrp:62, glyph:'tube'},
+  {id:'detergent', brand:'Wheel detergent', hi:{en:'1 kg pack',hi:'1 kg पैक',bn:'১ kg প্যাক',ta:'1 kg பாக்கெட்',kn:'1 kg ಪ್ಯಾಕ್'}, price:84, mrp:87, glyph:'detergent'},
+  {id:'bathsoap', brand:'Small bathing soaps', hi:{en:'3 × 42 g bars',hi:'3 × 42 g साबुन',bn:'৩ × ৪২ g সাবান',ta:'3 × 42 g சோப்பு',kn:'3 × 42 g ಸೋಪು'}, price:26, mrp:30, glyph:'soap'},
+  {id:'paste', brand:'Colgate toothpaste', hi:{en:'17 g small pack',hi:'17 g छोटा पैक',bn:'১৭ g ছোট প্যাক',ta:'17 g சிறிய பாக்கெட்',kn:'17 g ಸಣ್ಣ ಪ್ಯಾಕ್'}, price:9, mrp:10, glyph:'tube'},
   {id:'chilli', brand:'Chilli powder', hi:{en:'Chilli powder · 200 g',hi:'मिर्च पाउडर · 200 g',bn:'লঙ্কা গুঁড়ো · ২০০ g',ta:'மிளகாய் தூள் · 200 g',kn:'ಮೆಣಸಿನ ಪುಡಿ · 200 g'}, price:60, mrp:70, glyph:'jar'},
   {id:'haldi', brand:'Turmeric', hi:{en:'Turmeric · 200 g',hi:'हल्दी · 200 g',bn:'হলুদ · ২০০ g',ta:'மஞ்சள் · 200 g',kn:'ಅರಿಶಿನ · 200 g'}, price:45, mrp:52, glyph:'jar'},
   {id:'poha', brand:'Poha', hi:{en:'Poha · 1 kg',hi:'पोहा · 1 kg',bn:'চিঁড়ে · ১ kg',ta:'அவல் · 1 kg',kn:'ಅವಲಕ್ಕಿ · 1 kg'}, price:55, mrp:62, glyph:'rice'},
@@ -1012,20 +1183,42 @@ var products = [
   {id:'rusk', brand:'Rusk', hi:{en:'Rusk · 300 g',hi:'टोस्ट · 300 g',bn:'টোস্ট · ৩০০ g',ta:'ரஸ்க் · 300 g',kn:'ರಸ್ಕ್ · 300 g'}, price:40, mrp:45, glyph:'biscuit'}
 ];
 var commerceProducts = [
-  {id:'groundnut_oil',brand:'Groundnut oil',hi:{en:'1 L · cold-pressed',hi:'मूंगफली का तेल · 1 L',bn:'চিনাবাদাম তেল · ১ L',ta:'கடலை எண்ணெய் · 1 L',kn:'ಕಡಲೆಕಾಯಿ ಎಣ್ಣೆ · 1 L'},price:210,mrp:260,photoClass:'groundnut',photoSheet:'oil',category:'food'},
-  {id:'mustard_oil',brand:'Mustard oil',hi:{en:'1 L · kachi ghani',hi:'सरसों तेल · 1 L',bn:'সরষের তেল · ১ L',ta:'கடுகு எண்ணெய் · 1 L',kn:'ಸಾಸಿವೆ ಎಣ್ಣೆ · 1 L'},price:180,mrp:225,photoClass:'mustard',photoSheet:'oil',category:'food'},
-  {id:'sunflower_oil',brand:'Sunflower oil',hi:{en:'1 L · refined',hi:'सूरजमुखी तेल · 1 L',bn:'সূর্যমুখী তেল · ১ L',ta:'சூரியகாந்தி எண்ணெய் · 1 L',kn:'ಸೂರ್ಯಕಾಂತಿ ಎಣ್ಣೆ · 1 L'},price:145,mrp:178,photoClass:'sunflower',photoSheet:'oil',category:'food'},
-  {id:'coconut_oil',brand:'Coconut oil',hi:{en:'1 L · cold-pressed',hi:'नारियल तेल · 1 L',bn:'নারকেল তেল · ১ L',ta:'தேங்காய் எண்ணெய் · 1 L',kn:'ತೆಂಗಿನ ಎಣ್ಣೆ · 1 L'},price:235,mrp:285,photoClass:'coconut',photoSheet:'oil',category:'food'}
+  {id:'groundnut_oil',brand:'Filtered groundnut oil',hi:{en:'1 L pack'},price:182,mrp:218,photoClass:'groundnut',photoSheet:'oil',category:'food'},
+  {id:'mustard_oil',brand:'Mustard cooking oil',hi:{en:'1 L pack'},price:192,mrp:225,photoClass:'mustard',photoSheet:'oil',category:'food'},
+  {id:'sunflower_oil',brand:'Refined sunflower oil',hi:{en:'1 L pack'},price:177,mrp:225,photoClass:'sunflower',photoSheet:'oil',category:'food'},
+  {id:'coconut_oil',brand:'Coconut cooking oil',hi:{en:'1 L pack'},price:235,mrp:285,photoClass:'soyabean',photoSheet:'oil',category:'food'},
+  {id:'snack_biscuits',brand:'Parle-G biscuits',hi:{en:'56 g pack'},price:9,mrp:10,photoClass:'biscuits',photoSheet:'direct',category:'food'},
+  {id:'snack_namkeen',brand:'Haldiram bhujia',hi:{en:'35 g pack'},price:9,mrp:10,photoClass:'namkeen',photoSheet:'direct',category:'food'},
+  {id:'daily_tea',brand:'Red Label tea',hi:{en:'60 g pack'},price:9,mrp:10,photoClass:'tea',photoSheet:'direct',category:'food'},
+  {id:'daily_sugar',brand:'Sugar',hi:{en:'1 kg pack'},price:64,mrp:72,photoClass:'sugar',photoSheet:'direct',category:'food'},
+  {id:'basic_tshirt',brand:'Cotton T-shirt',hi:{en:'1 piece · S to 2XL'},price:199,mrp:399,photoClass:'tshirt',photoSheet:'direct',category:'clothing'},
+  {id:'inner_vests',brand:'Cotton vests',hi:{en:'3 pieces · sizes 80 to 95'},price:381,mrp:423,photoClass:'vests',photoSheet:'direct',category:'clothing'},
+  {id:'inner_trunks',brand:'Cotton trunks',hi:{en:'2 pieces · M to XXL'},price:297,mrp:330,photoClass:'trunks',photoSheet:'direct',category:'clothing'}
 ];
 var substitutionProducts = [
-  {id:'detergent_pick',brand:'Detergent powder',hi:{en:'Washing powder · 1 kg',hi:'कपड़े धोने का पाउडर · 1 kg',bn:'কাপড় ধোয়ার গুঁড়ো · ১ kg',ta:'சலவை தூள் · 1 kg',kn:'ಬಟ್ಟೆ ಪುಡಿ · 1 kg'},price:110,mrp:125,photoClass:'detergent',photoSheet:'sub',category:'household',substituteId:'nia_detergent',qualityVerified:true},
-  {id:'nia_detergent',brand:'Nia Detergent',hi:{en:'Washing powder · 1 kg',hi:'कपड़े धोने का पाउडर · 1 kg',bn:'কাপড় ধোয়ার গুঁড়ো · ১ kg',ta:'சலவை தூள் · 1 kg',kn:'ಬಟ್ಟೆ ಪುಡಿ · 1 kg'},price:92,mrp:110,photoClass:'nia-detergent',photoSheet:'sub',category:'own_label',qualityVerified:true},
-  {id:'bathsoap_pick',brand:'Bathing soap',hi:{en:'Bathing soap · 3 bars',hi:'नहाने का साबुन · 3',bn:'স্নানের সাবান · ৩',ta:'குளியல் சோப்பு · 3',kn:'ಸ್ನಾನದ ಸೋಪು · 3'},price:84,mrp:96,photoClass:'bathsoap',photoSheet:'sub',category:'personal_care',substituteId:'nia_bathsoap',qualityVerified:true},
-  {id:'nia_bathsoap',brand:'Nia Bathing Soap',hi:{en:'Bathing soap · 3 bars',hi:'नहाने का साबुन · 3',bn:'স্নানের সাবান · ৩',ta:'குளியல் சோப்பு · 3',kn:'ಸ್ನಾನದ ಸೋಪು · 3'},price:66,mrp:84,photoClass:'nia-bathsoap',photoSheet:'sub',category:'own_label',qualityVerified:true},
-  {id:'toothpaste_pick',brand:'Toothpaste',hi:{en:'Toothpaste · 100 g',hi:'टूथपेस्ट · 100 g',bn:'টুথপেস্ট · ১০০ g',ta:'பற்பசை · 100 g',kn:'ಟೂತ್‌ಪೇಸ್ಟ್ · 100 g'},price:55,mrp:62,photoClass:'toothpaste',photoSheet:'sub',category:'regulated'},
+  {id:'detergent_pick',brand:'Wheel detergent',hi:{en:'1 kg pack',hi:'1 kg पैक',bn:'১ kg প্যাক',ta:'1 kg பாக்கெட்',kn:'1 kg ಪ್ಯಾಕ್'},price:84,mrp:87,photoClass:'detergent',photoSheet:'sub',category:'household',substituteId:'nia_detergent',qualityVerified:true},
+  {id:'nia_detergent',brand:'Nia Detergent',hi:{en:'1 kg pack',hi:'1 kg पैक',bn:'১ kg প্যাক',ta:'1 kg பாக்கெட்',kn:'1 kg ಪ್ಯಾಕ್'},price:75,mrp:87,photoClass:'nia-detergent',photoSheet:'sub',category:'own_label',qualityVerified:true},
+  {id:'bathsoap_pick',brand:'Small bathing soaps',hi:{en:'3 × 42 g bars',hi:'3 × 42 g साबुन',bn:'৩ × ৪২ g সাবান',ta:'3 × 42 g சோப்பு',kn:'3 × 42 g ಸೋಪು'},price:26,mrp:30,photoClass:'bathsoap',photoSheet:'sub',category:'personal_care',substituteId:'nia_bathsoap',qualityVerified:true},
+  {id:'nia_bathsoap',brand:'Nia Bathing Soap',hi:{en:'3 × 42 g bars',hi:'3 × 42 g साबुन',bn:'৩ × ৪২ g সাবান',ta:'3 × 42 g சோப்பு',kn:'3 × 42 g ಸೋಪು'},price:24,mrp:30,photoClass:'nia-bathsoap',photoSheet:'sub',category:'own_label',qualityVerified:true},
+  {id:'toothpaste_pick',brand:'Colgate toothpaste',hi:{en:'17 g small pack',hi:'17 g छोटा पैक',bn:'১৭ g ছোট প্যাক',ta:'17 g சிறிய பாக்கெட்',kn:'17 g ಸಣ್ಣ ಪ್ಯಾಕ್'},price:9,mrp:10,photoClass:'toothpaste',photoSheet:'sub',category:'regulated'},
   {id:'essentials_pick',brand:'Everyday essentials',hi:{en:'Rice, atta and salt',hi:'चावल, आटा और नमक',bn:'চাল, আটা ও নুন',ta:'அரிசி, மாவு மற்றும் உப்பு',kn:'ಅಕ್ಕಿ, ಹಿಟ್ಟು ಮತ್ತು ಉಪ್ಪು'},price:355,mrp:390,photoClass:'essentials',photoSheet:'sub',category:'food'}
 ];
-var allProducts = products.concat(commerceProducts,substitutionProducts);
+var liveServiceProducts = [
+  {id:'live_studio',brand:'Studio near work',price:2200,mrp:3000,img:'assets/studio-bunk-lockers.jpg',category:'live'},
+  {id:'live_wash',brand:'Washing service',price:220,mrp:780,img:'assets/wash-folded-clothes.jpg',category:'live'},
+  {id:'live_hubfood',brand:'Hub meals',price:2300,mrp:2800,img:'assets/nia-logo-transparent.png',category:'live'},
+  {id:'live_cooler',brand:'Shared air cooler',price:400,mrp:600,img:'assets/air-cooler-shared.jpg',category:'live'},
+  {id:'live_cycle',brand:'Shared cycle',price:200,mrp:800,img:'assets/nia-logo-transparent.png',category:'live'},
+  {id:'live_raincape',brand:'Rain cape',price:150,mrp:700,img:'assets/nia-logo-transparent.png',category:'live'},
+  {id:'live_dontmiss',brand:'Attendance help',price:50,mrp:400,img:'assets/nia-logo-transparent.png',category:'live'},
+  {id:'live_akka',brand:'Tell Akka',price:50,mrp:400,img:'assets/tribe-akka-tea.jpg',category:'live'},
+  {id:'live_group',brand:'Sunday chai with group',price:50,mrp:400,img:'assets/tribe-group-cups.jpg',category:'live'},
+  {id:'live_dropin',brand:'Clinic',price:150,mrp:500,img:'assets/tribe-clinic-kit.jpg',category:'live'},
+  {id:'live_recreation',brand:'Recreation',price:100,mrp:700,img:'assets/tribe-recreation.jpg',category:'live'},
+  {id:'live_thrift',brand:'Village savings',price:50,mrp:500,img:'assets/tribe-save-box.jpg',category:'live'},
+  {id:'live_grievance',brand:'Wage help',price:50,mrp:400,img:'assets/nia-logo-transparent.png',category:'live'}
+];
+var allProducts = products.concat(commerceProducts,substitutionProducts,liveServiceProducts);
 var bag = {};   // id -> qty
 
 /* ---------- i18n (first-pass; for native review) ---------- */
@@ -1039,8 +1232,8 @@ var T = {
     auth_title:'Continue with your phone', auth_copy:'10-digit Indian mobile number.', auth_phone_label:'Phone number', auth_phone_placeholder:'10-digit mobile number', auth_send:'Send OTP', auth_phone_error:'Enter your 10-digit mobile number.', auth_otp_title:'Enter the OTP', auth_otp_copy:'Enter the 6-digit OTP sent to', auth_otp_label:'6-digit OTP', auth_verify:'Verify & continue', auth_otp_error:'Enter the 6-digit OTP.', auth_change:'Change phone number', auth_back:'Back to Save', auth_private:'Live, Earn and Send need your phone.',
     tab_live:'Live', tab_earn:'Earn', tab_save:'Save', tab_send:'Send', daily:'Daily', seeall:'See all', payslip_k:'Your pay, from the slip', payslip_t:"This month's slip", payslip_d:'You type pay, OT, and cut.', payslip_add:'Save', payslip_done:'Slip saved', payslip_read:'', goal_k:'Your roof, sooner', goal_t:'The roof at home', goal_by:'Roof home by', goal_perweek:'OT shifts a week', goal_hours:'hours', goal_sooner:'months sooner', goal_none:'at this pace', goal_frompay:'From your slip', goal_addpay:'Add your slip numbers',
     /* send */
-    send_t:'Remit more',
-    send_s:'How much reaches home?',
+    send_t:'Send',
+    send_s:'Send money home.',
     connect_ask:'How much for home this month?',
     studio_pin_ask:'Pin where you want a studio.',
     studio_pin_go:'Look up',
@@ -1053,7 +1246,11 @@ var T = {
     wash_book:'Machine wash · back by 6',
     send_card_goal_n:'How much this month', send_card_goal_m:'Write the rupees for home.',
     send_card_sent_n:'How much did you send?', send_card_sent_m:'Write what went home.',
-    send_prog_goal:'of month goal met', send_prog_month:'of month gone', send_prog_empty:'Write what you sent first.',
+    send_ins_title:'Insurance', send_ins_intro:'Simple cover. Buy from your bank. Need help? Book time with your JCO.',
+    send_ins_acc_n:'Accident insurance', send_ins_acc_m:'₹2 lakh accident cover.',
+    send_ins_life_n:'Life insurance', send_ins_life_m:'₹2 lakh life cover.',
+    send_ins_ask:'How to buy',
+    send_ins_disclaimer:'Nia only lists insurance information. Nia does not recommend, issue or underwrite policies, collect premiums or decide claims. Buy through a participating bank, IRDAI-registered insurer or authorised intermediary. Read the policy terms, eligibility, exclusions and claim rules before buying.',
     earn_slip_ask:"So we can see if this month's pay can do that.",
     reach:'can reach Maa this month', nofee:'No fee.', sendhome:'Send home',
     feeds:'What filled this envelope',
@@ -1062,27 +1259,27 @@ var T = {
     from_save:'Save', from_save_d:'kept vs the bazaar this month',
     roof:'Roof at home', recharge:"Recharge Maa's phone", ledger:'Sent 12 Aug', family:'If something happens',
     /* live */
-    live_h1:'Lower cost this month',
+    live_h1:'Live',
     live_t:'Live',
-    live_s:'Walk. Rupees stay for home.',
+    live_s:'Daily life made easier.',
     live_keep_banner:'This month you keep {n}',
     live_keep_empty:'This month. Rupees stay for home.',
-    live_card1_n:'Studio near work', live_card1_m:'Walk. Not the bus.',
-    live_card2_n:'Wash', live_card2_m:'Pay ₹50 a week.',
-    live_card2_s:'You pay ₹50 a week. Hours back can go to OT. Type your slip for those rupees.',
-    live_card3_n:'Hub house food', live_card3_m:'Eat at the hub. Not outside.',
-    live_card4_n:'Fan for heat', live_card4_m:'Sleep through the heat. Take the next shift.',
-    live_card5_n:'Cycle', live_card5_m:'Cycle. Skip the auto.',
-    live_card6_n:'Rain cape', live_card6_m:'Rain. Still get to work.',
-    live_card7_n:"Don't miss a day", live_card7_m:"Don't miss the day. No work, no pay.",
-    live_card8_n:'Tell Akka', live_card8_m:'She listens. Not the factory.',
-    live_card9_n:'Your group', live_card9_m:'Stay with your group.',
-    live_card10_n:'Drop-in this month', live_card10_m:'Clinic this month. Stay well.',
-    live_card11_n:'Recreation', live_card11_m:'Rest after shift.',
-    live_card12_n:'Someone from your village', live_card12_m:'Someone from your village.',
-    live_card13_n:'Tell Akka', live_card13_m:'She listens. Not the factory.',
+    live_card1_n:'Studio near work', live_card1_m:'Walk to work.',
+    live_card2_n:'Washing service', live_card2_m:'Get clothes washed.',
+    live_card2_s:'You pay ₹220 a month. Hours back can go to OT. Type your slip for those rupees.',
+    live_card3_n:'Hub meals', live_card3_m:'Two daily meals.',
+    live_card4_n:'Shared air cooler', live_card4_m:'One per room.',
+    live_card5_n:'Shared cycle', live_card5_m:'Travel to work.',
+    live_card6_n:'Rain cape', live_card6_m:'Travel in rain.',
+    live_card7_n:'Attendance help', live_card7_m:'Protect your pay.',
+    live_card8_n:'Tell Akka', live_card8_m:'Resolve any issue.',
+    live_card9_n:'Sunday chai with group', live_card9_m:'Tea every Sunday.',
+    live_card10_n:'Clinic', live_card10_m:'Nearby health support.',
+    live_card11_n:'Recreation', live_card11_m:'Play and exercise.',
+    live_card12_n:'Village savings', live_card12_m:'Save with friends.',
+    live_card13_n:'Wage help', live_card13_m:'Report wage problems.',
     piggy_how_oil:'Oil. 260 at the kirana. 210 here. You keep 50.',
-    piggy_how_wash_charge:'You pay ₹50 a week. Hours back can go to OT. Type your slip for those rupees.',
+    piggy_how_wash_charge:'You pay ₹220 a month. Hours back can go to OT. Type your slip for those rupees.',
     piggy_how_wash_ot:'Hours back can go to OT. Type your slip for those rupees.',
     piggy_how_earn:'Extra hours. Type your slip.',
     piggy_how_save:'This shop keeps ₹50 for home.',
@@ -1090,15 +1287,15 @@ var T = {
     piggy_how_empty:'Until a pick.',
     live_how_studio:'Rupees stay because you walk. Pin a studio below.',
     live_how_hubfood:'Hub house food. Rupees stay for home.',
-    live_how_cooler:'Sleep through the heat. Take the next shift.',
+    live_how_cooler:'One per room.',
     live_how_cycle:'Skip the auto. Rupees stay for home.',
     live_how_rain:"Still reach work. That day's wage stays.",
     live_how_dontmiss:"Mark each work day. That day's wage stays.",
     live_how_akka:'One tap to tell Akka. She listens. Not the factory.',
-    live_how_group:'Small peer group. Pick language or evening talk. Not two plants the same day.',
+    live_how_group:'Tea every Sunday.',
     live_how_dropin:'This month slots. Not shared with the factory.',
     live_how_recreation:'Facilities as listed. Group opens after you pick.',
-    live_how_village:'Someone from your village.',
+    live_how_village:'Bring a friend.',
     live_how_grievance:'She listens. Not the factory.',
     tribe_akka_walk:'Walk to work', tribe_akka_walk_m:'Shorter walk, more sleep.',
     tribe_akka_pay:'Pay this month', tribe_akka_pay_m:'What stays after food and rent.',
@@ -1113,7 +1310,7 @@ var T = {
     tribe_dropin_health:'Health clinic', tribe_dropin_health_m:'Sat 10 AM · this month · not shared with the factory',
     tribe_rec_facilities:'Hall · outdoor court · TV room',
     tribe_rec_group:"Join this month's group", tribe_rec_group_m:'Group after you pick.',
-    tribe_village_add:'Someone from your village', tribe_village_add_m:'Someone from your village.',
+    tribe_village_add:'Bring a friend', tribe_village_add_m:'Bring a friend.',
     your_nest:'Your Nest', permo:'a month', nest_near: "Near work. No bus.",
     nest_home: "No bus. That time goes home.",
     included:'Comes with your Nest',
@@ -1123,21 +1320,21 @@ var T = {
     wrong:'Something wrong?', wrong_d:'Satish is on it · done by 9 PM',
     bada:'Sunday 7 PM · Bada Khaana', bada_d:'Dinner and music, together', coming:"I'm coming",
     /* earn */
-    earn_t:'Extra hours',
-    earn_s:'',
+    earn_t:'Earn',
+    earn_s:'Earn more money.',
     earn_trends_say:'Your pay each month.',
     earn_week_this:'this month',
     earn_week_last:'last week',
     earn_week_2:'2 weeks ago',
     earn_week_3:'3 weeks ago',
     earn_add_slip:"Add this month's slip.",
-    earn_card_ot_n:'OT this month', earn_card_ot_m:'Extra shifts toward home.',
-    earn_card_gig_n:'Shift if listed', earn_card_gig_m:'If a nearby shift is listed.',
-    earn_card_fri_n:'Friday extra hours', earn_card_fri_m:'Extra hours.',
-    earn_card_slip_n:"This month's slip", earn_card_slip_m:'Pay, OT, cut.',
-    earn_card_village_n:'Someone from your village', earn_card_village_m:'Someone from your village.',
-    earn_card_plant_n:'Not only this factory', earn_card_plant_m:'Another plant if listed.',
-    village_toast:'Someone from your village noted.', recommend_btn:'Recommend', bag_credit:'Off the bag',
+    earn_card_ot_n:'OT this month', earn_card_ot_m:'Add extra shifts.',
+    earn_card_gig_n:'Nearby Gig Shift', earn_card_gig_m:'Take a nearby shift.',
+    earn_card_fri_n:'TGIF', earn_card_fri_m:'Friday pays more.',
+    earn_card_slip_n:"This month's slip", earn_card_slip_m:'See pay, OT and cuts.',
+    earn_card_village_n:'Recommend someone', earn_card_village_m:'Get ₹500 items free.',
+    earn_card_plant_n:'Need a new job?', earn_card_plant_m:'Talk to your JCO.',
+    village_toast:'Friend added.', recommend_btn:'Recommend', bag_credit:'Off the bag',
     studio_mess1_n:'Bhimba bhai mess, Ved Road',
     studio_mess1_m:'Ved Road · food and stay. · ₹3,300/month',
     studio_mess2_n:'Trinath Sahu Kaka mess, Ved Road',
@@ -1147,12 +1344,12 @@ var T = {
     extra_k:'One extra shift', extra_t:'Tonight 6-8 PM · at the Studio', extra_d:'Extra hours toward home.',
     take:'Take it', no:'Not today',
     buyback_k:'Buy back your evenings', buyback_t:'Let us do the washing',
-    buyback_d:'Two hours back each week. That is one OT shift.',
-    c_time:'Time back', c_time_v:'Hours back', c_ot:'As OT', c_ot_v:'After you type', c_pay:'You pay us', c_pay_v:'₹50 / week', c_net:'For home', c_net_v:'Type your slip',
+    buyback_d:'8.66 hours back this month for OT.',
+    c_time:'Time back', c_time_v:'Hours back', c_ot:'As OT', c_ot_v:'After you type', c_pay:'You pay us', c_pay_v:'₹220 / month', c_net:'For home', c_net_v:'Type your slip',
     startlaundry:'Free up my evenings',
     grow_k:'Growing', grow_t:'3 more days as picker+', grow_d:'+₹1,500 a month',
     /* save */
-    save_t:'Shop', save_s:'Lower cost than the kirana',
+    save_t:'Save', save_s:'Daily needs for less.',
     save_payslip_line:'Lower cost here. More can go home.',
     kept_lbl:'Kirana subtraction this month', kept_home:'Kirana subtraction this month on this phone.',
     search:'Salt, oil, noodles', keep:'keep', youpay:'', add:'Add', added:'Added', out:'Out',
@@ -1170,7 +1367,7 @@ var T = {
     week_pick:'Pick one path. You do not have time for both.',
     week_do: "How this money is made",
     week_dont: "Don't spend it on this",
-    path_fri_t:'Extra hours Friday', path_fri_d:'At this job.',
+    path_fri_t:'TGIF', path_fri_d:'Friday pays more.',
     path_week_t:'Nearby shifts if listed', path_week_d:'If a nearby shift is listed.',
     path_pick:'Pick this path', path_yours:'Your path this month', path_change:'Change path',
     dont_miss_t: "Don't miss a work day",
@@ -1179,7 +1376,7 @@ var T = {
     dont_ride_d: "Walk. Skip the paid ride.",
     dont_meal_t: "Don't eat outside Nest",
     dont_meal_d: "Eat at Nest. Keep ₹120.",
-    fri_extra_t: "Friday extra hours",
+    fri_extra_t: "TGIF",
     fri_extra_d: "At this job. Extra hours toward home.",
     fri_extra_take: "I will do Friday hours", fri_extra_skip:'Not this path',
     near_k: "Work nearby", near_covers:'toward home',
@@ -1207,7 +1404,7 @@ var T = {
     stay_owe_d: "Mark today. Don't walk off.",
     stay_shut_t:'If the site is closed tomorrow',
     stay_shut_d:'Those same nearby jobs are still there.',
-    stay_fri_t:'Friday extra hours',
+    stay_fri_t:'TGIF',
     stay_fri_d:"So you do not need a new thekedar on Monday.",
     stay_mark:'Mark today',
     city_k:'So the city costs less than going home empty',
@@ -1328,7 +1525,7 @@ var T = {
     season_tog_d:'Optional. Off by default.',
     shop_vs_t: "This shop vs kirana",
     shop_vs_d: "Lower cost this month.",
-    talk_note:'Ask about walk, pay, shop, home, wash, bag, Friday, Maa, or days.',
+    talk_note:'Speak or type.',
     talk_listen:'Listening…',
     talk_done:'Done',
     talk_send:'Send',
@@ -1343,16 +1540,20 @@ var T = {
     topsub:'राजपुताना · माँ को भेज रहे हैं', public_sub:'ज़रूरी सामान खरीदें। घर के लिए ज़्यादा बचाएँ।',
     auth_title:'अपने फ़ोन से आगे बढ़ें', auth_copy:'10 अंकों का भारतीय मोबाइल नंबर।', auth_phone_label:'फ़ोन नंबर', auth_phone_placeholder:'10 अंकों का मोबाइल नंबर', auth_send:'OTP भेजें', auth_phone_error:'10 अंकों का मोबाइल नंबर डालें।', auth_otp_title:'OTP डालें', auth_otp_copy:'इस नंबर पर भेजा 6 अंकों का OTP डालें', auth_otp_label:'6 अंकों का OTP', auth_verify:'सत्यापित करें और आगे बढ़ें', auth_otp_error:'6 अंकों का OTP डालें।', auth_change:'फ़ोन नंबर बदलें', auth_back:'बचत पर वापस जाएँ', auth_private:'रहना, कमाई और भेजें के लिए फ़ोन चाहिए।',
     tab_live:'रहना', tab_earn:'कमाई', tab_save:'बचत', tab_send:'भेजें', daily:'रोज़ का सामान', seeall:'सब देखो', payslip_k:'तुम्हारी तनख़्वाह, पढ़ी हुई', payslip_t:'अपनी पर्ची डालो', payslip_d:'हम पढ़ लेते हैं। फ़ोन में ही रहती है।', payslip_add:'डालो', payslip_done:'पर्ची पढ़ ली', payslip_read:'स्लिप के बाद OT।', goal_k:'तुम्हारी छत, जल्दी', goal_t:'घर की छत', goal_by:'छत घर तक', goal_perweek:'OT शिफ़्ट हफ़्ते में', goal_hours:'घंटे', goal_sooner:'महीने पहले', goal_none:'इसी रफ़्तार पर', goal_frompay:'तुम्हारी पर्ची से पढ़ा', goal_addpay:'पर्ची डालो, और सटीक होगा',
-    send_t:'भेजें', send_s:'माँ · भोजपुर',
+    send_t:'भेजें', send_s:'घर पैसे भेजें।',
+    send_ins_title:'बीमा', send_ins_intro:'साफ कवर। अपने बैंक से खरीदें। मदद चाहिए? अपने JCO से समय लें।',
+    send_ins_acc_n:'दुर्घटना बीमा', send_ins_acc_m:'₹2 लाख दुर्घटना कवर।',
+    send_ins_life_n:'जीवन बीमा', send_ins_life_m:'₹2 लाख जीवन कवर।', send_ins_ask:'कैसे खरीदें',
+    send_ins_disclaimer:'Nia केवल बीमा विकल्प दिखाता है। IRDAI-पंजीकृत बीमा कंपनी, अधिकृत मध्यस्थ या सहभागी बैंक से खरीदें। बीमा कंपनी पॉलिसी जारी करती है और दावे संभालती है। सभी शर्तें पढ़ें। Nia बीमा कंपनी नहीं है।',
     reach:'इस महीने माँ तक पहुँच सकते हैं', nofee:'कोई शुल्क नहीं।', sendhome:'घर भेजें',
     feeds:'यह लिफ़ाफ़ा किससे भरा',
     from_live:'रहना', from_live_d:'काम के पास, शहर का किराया नहीं',
     from_earn:'कमाई', from_earn_d:'बिना कटौती की तनख़्वाह, एक extra शिफ़्ट',
     from_save:'बचत', from_save_d:'इस महीने बाज़ार से जो बचा',
     roof:'घर की छत', recharge:'माँ का फ़ोन रिचार्ज', ledger:'12 अगस्त को भेजा', family:'कुछ हो जाए तो',
-    live_t:'रहना', live_s:'राजपुताना · नेस्ट 12',
+    live_t:'रहना', live_s:'रोज़ की ज़िंदगी आसान।',
     live_card1_n:'काम के पास Studio', live_card1_m:'पैदल। बस नहीं।',
-    live_card2_n:'धुलाई', live_card2_m:'हफ़्ते ₹50 दो।',
+    live_card2_n:'धुलाई', live_card2_m:'महीने ₹220 दो।',
     live_card3_n:'हब का खाना', live_card3_m:'हब पर खाओ। बाहर नहीं।',
     live_card4_n:'गर्मी के लिए पंखा', live_card4_m:'गर्मी में सो पाओ। अगली शिफ़्ट लो।',
     live_card5_n:'साइकिल', live_card5_m:'साइकिल। ऑटो छोड़ो।',
@@ -1372,17 +1573,17 @@ var T = {
     laundry:'धुलाई', laundry_d:'6 बजे तक वापस', trim:'बाल कटाई', trim_d:'यहीं, बाज़ार का चक्कर नहीं',
     wrong:'कुछ ख़राब है?', wrong_d:'सतीश देख रहा है · 9 बजे तक ठीक',
     bada:'रविवार 7 बजे · बड़ा खाना', bada_d:'खाना और गाना, साथ में', coming:'मैं आऊँगा',
-    earn_t:'कमाई', earn_s:'वेयरहाउस पिकर',
+    earn_t:'कमाई', earn_s:'ज़्यादा कमाएँ।',
     thisweek:'इस हफ़्ते', friday:'शुक्रवार · कोई कटौती नहीं',
     today:'आज', shift:'8:00-5:00 · Ved Road', bus:'स्टूडियो के पास बस', helper:'रमेश · मदद के लिए बुलाओ',
     extra_k:'एक extra शिफ़्ट', extra_t:'आज रात 6-8 बजे · Studio पर', extra_d:'Extra hours toward home.',
     take:'ले लो', no:'आज नहीं',
     buyback_k:'अपनी शामें वापस लो', buyback_t:'धुलाई हम कर देते हैं',
-    buyback_d:'हफ़्ते के दो घंटे वापस। वह एक OT शिफ़्ट है।',
-    c_time:'समय वापस', c_time_v:'घंटे वापस', c_ot:'OT में', c_ot_v:'स्लिप के बाद', c_pay:'तुम हमें दो', c_pay_v:'₹50 / हफ़्ता', c_net:'घर के लिए', c_net_v:'स्लिप लिखो',
+    buyback_d:'इस महीने OT के लिए 8.66 घंटे वापस।',
+    c_time:'समय वापस', c_time_v:'घंटे वापस', c_ot:'OT में', c_ot_v:'स्लिप के बाद', c_pay:'तुम हमें दो', c_pay_v:'₹220 / महीना', c_net:'घर के लिए', c_net_v:'स्लिप लिखो',
     startlaundry:'मेरी शामें ख़ाली करो',
     grow_k:'आगे', grow_t:'3 और दिन picker+ के', grow_d:'+₹1,500 महीना',
-    save_t:'बचत', save_s:'5:15 बजे तक तुम्हारे Studio पर',
+    save_t:'बचत', save_s:'रोज़ का सामान, कम दाम।',
     kept_lbl:'इस हफ़्ते किराना घटौती', kept_home:'इस हफ़्ते इस फ़ोन पर किराना घटौती।',
     search:'नमक, तेल, नूडल्स', keep:'बचत', youpay:'', add:'डालो', added:'डाला', out:'ख़त्म',
     every:'यहाँ बचा हर रुपया घर पहुँचता है।',
@@ -1395,13 +1596,13 @@ var T = {
     week_lbl:'इस हफ़्ते', week_reach:'और घर पहुँच सकते हैं',
     week_pick:'एक रास्ता चुनो। दोनों के लिए समय नहीं।',
     week_do:'क्या करना है', week_dont:'इस हफ़्ते ये मत करो',
-    path_fri_t:'शुक्रवार extra घंटे', path_fri_d:"इसी नौकरी पर। लगभग ₹720।",
+    path_fri_t:'TGIF', path_fri_d:"इसी नौकरी पर। लगभग ₹720।",
     path_week_t:'Listed shifts only', path_week_d:"Listed shifts only. No two plants same day.",
     path_pick:'यही रास्ता लो', path_yours:'इस हफ़्ते तुम्हारा रास्ता', path_change:'रास्ता बदलो',
     dont_miss_t:'पूरा दिन काम मत छोड़ो', dont_miss_d:'दिन छोड़ो। उस दिन की मज़दूरी जाती है (इस हफ़्ते)।',
     dont_ride_t:'पैसे वाली सवारी मत लो', dont_ride_d:'चलो। पैसे वाली सवारी मत लो।',
     dont_meal_t:'नेस्ट के बाहर खाना मत खाओ', dont_meal_d:'नेस्ट में खाओ। ₹120 घर के लिए रखो।',
-    fri_extra_t:'शुक्रवार extra घंटे', fri_extra_d:'तुम्हारी नौकरी पर। लगभग ₹720 घर की ओर।',
+    fri_extra_t:'TGIF', fri_extra_d:'तुम्हारी नौकरी पर। लगभग ₹720 घर की ओर।',
     fri_extra_take:'शुक्रवार के घंटे करूँगा', fri_extra_skip:'यह रास्ता नहीं',
     near_k:'पास का extra काम', near_covers:'₹1,000 की ओर',
     near_laundry:'धुलाई', near_kitchen:'रसोई पैकिंग', near_loading:'लोडिंग मदद',
@@ -1428,7 +1629,7 @@ var T = {
     stay_owe_d:'आज निशान लगाओ। छोड़कर मत जाओ।',
     stay_shut_t:'कल साइट बंद हो तो',
     stay_shut_d:'वही पास के काम फिर भी हैं।',
-    stay_fri_t:'शुक्रवार के अतिरिक्त घंटे',
+    stay_fri_t:'TGIF',
     stay_fri_d:"सोमवार को नया ठेकेदार न चाहिए।",
     stay_mark:'आज निशान लगाओ',
     city_k:'ताकि शहर खाली घर जाने से कम ख़र्च रहे',
@@ -1526,7 +1727,7 @@ var T = {
     season_tog_d:'वैकल्पिक। डिफ़ॉल्ट बंद।',
     shop_vs_t:'यह दुकान vs पिछली किराना',
     shop_vs_d:'इस हफ़्ते कम कीमत की दुकान',
-    talk_note:'पैदल, तनख़्वाह, दुकान, घर, धुलाई, थैला, शुक्रवार, माँ, या दिन. पूछो।',
+    talk_note:'बोलें या लिखें।',
     talk_listen:'सुन रही हूँ…',
     talk_done:'ठीक है',
     talk_send:'भेजो',
@@ -1541,16 +1742,20 @@ var T = {
     topsub:'রাজপুতানা · মায়ের কাছে পাঠাচ্ছে', public_sub:'প্রয়োজনীয় জিনিস কিনুন। বাড়ির জন্য বেশি বাঁচান।',
     auth_title:'ফোন দিয়ে এগিয়ে যান', auth_copy:'১০ সংখ্যার ভারতীয় মোবাইল নম্বর।', auth_phone_label:'ফোন নম্বর', auth_phone_placeholder:'১০ সংখ্যার মোবাইল নম্বর', auth_send:'OTP পাঠান', auth_phone_error:'১০ সংখ্যার মোবাইল নম্বর দিন।', auth_otp_title:'OTP দিন', auth_otp_copy:'এই নম্বরে পাঠানো ৬ সংখ্যার OTP দিন', auth_otp_label:'৬ সংখ্যার OTP', auth_verify:'যাচাই করে এগিয়ে যান', auth_otp_error:'৬ সংখ্যার OTP দিন।', auth_change:'ফোন নম্বর বদলান', auth_back:'সঞ্চয়ে ফিরে যান', auth_private:'থাকা, রোজগার ও পাঠাতে ফোন লাগবে।',
     tab_live:'থাকা', tab_earn:'রোজগার', tab_save:'সঞ্চয়', tab_send:'পাঠাও', daily:'রোজকার জিনিস', seeall:'সব দেখুন', payslip_k:'তোমার বেতন, পড়ে দেওয়া', payslip_t:'তোমার পে-স্লিপ দাও', payslip_d:'আমরা পড়ি। ফোনেই থাকে।', payslip_add:'দাও', payslip_done:'স্লিপ পড়া হয়েছে', payslip_read:'স্লিপের পর OT।', goal_k:'তোমার ছাদ, তাড়াতাড়ি', goal_t:'বাড়ির ছাদ', goal_by:'ছাদ বাড়ি', goal_perweek:'OT শিফট সপ্তাহে', goal_hours:'ঘণ্টা', goal_sooner:'মাস আগে', goal_none:'এই গতিতে', goal_frompay:'তোমার স্লিপ থেকে পড়া', goal_addpay:'স্লিপ দাও, আরও নিখুঁত হবে',
-    send_t:'পাঠাও', send_s:'মা · ভোজপুর',
+    send_t:'পাঠাও', send_s:'বাড়িতে টাকা পাঠান।',
+    send_ins_title:'বিমা', send_ins_intro:'সহজ কভার। আপনার ব্যাঙ্ক থেকে কিনুন। সাহায্য চান? আপনার JCO-র সঙ্গে সময় নিন।',
+    send_ins_acc_n:'দুর্ঘটনা বিমা', send_ins_acc_m:'₹২ লাখ দুর্ঘটনা কভার।',
+    send_ins_life_n:'জীবন বিমা', send_ins_life_m:'₹২ লাখ জীবন কভার।', send_ins_ask:'কীভাবে কিনবেন',
+    send_ins_disclaimer:'Nia শুধু বিমার বিকল্প দেখায়। IRDAI-নিবন্ধিত বিমা সংস্থা, অনুমোদিত মধ্যস্থ বা অংশগ্রহণকারী ব্যাঙ্কের মাধ্যমে কিনুন। বিমা সংস্থাই পলিসি দেয় ও দাবি সামলায়। সব শর্ত পড়ুন। Nia বিমা সংস্থা নয়।',
     reach:'এই মাসে মায়ের কাছে পৌঁছাতে পারে', nofee:'কোনো ফি নেই।', sendhome:'বাড়িতে পাঠাও',
     feeds:'এই খাম কী দিয়ে ভরল',
     from_live:'থাকা', from_live_d:'কাজের কাছে, শহরের ভাড়া নয়',
     from_earn:'রোজগার', from_earn_d:'কাটা ছাড়া মজুরি, একটা বাড়তি শিফট',
     from_save:'সঞ্চয়', from_save_d:'এই মাসে বাজারের চেয়ে যা বাঁচল',
     roof:'বাড়ির ছাদ', recharge:'মায়ের ফোন রিচার্জ', ledger:'১২ অগস্ট পাঠানো', family:'কিছু হলে',
-    live_t:'থাকা', live_s:'রাজপুতানা · নেস্ট ১২',
+    live_t:'থাকা', live_s:'রোজকার জীবন সহজ।',
     live_card1_n:'কাজের কাছে Studio', live_card1_m:'হাঁটা। বাস নয়।',
-    live_card2_n:'ধোয়া', live_card2_m:'সপ্তাহে ₹50 দাও।',
+    live_card2_n:'ধোয়া', live_card2_m:'মাসে ₹220 দাও।',
     live_card3_n:'হাবের খাবার', live_card3_m:'হাবে খাও। বাইরে নয়।',
     live_card4_n:'গরমের পাখা', live_card4_m:'গরমে ঘুমাও। পরের শিফট নাও।',
     live_card5_n:'সাইকেল', live_card5_m:'সাইকেল। অটো ছেড়ে দাও।',
@@ -1570,17 +1775,17 @@ var T = {
     laundry:'কাপড় ধোয়া', laundry_d:'৬টার মধ্যে ফেরত', trim:'চুল কাটা', trim_d:'এখানেই, বাজারে যাওয়া নয়',
     wrong:'কিছু খারাপ?', wrong_d:'সতীশ দেখছে · ৯টার মধ্যে ঠিক',
     bada:'রবিবার ৭টা · বড়া খানা', bada_d:'খাওয়া আর গান, একসঙ্গে', coming:'আমি আসছি',
-    earn_t:'রোজগার', earn_s:'ওয়্যারহাউস পিকার',
+    earn_t:'রোজগার', earn_s:'আরও আয় করুন।',
     thisweek:'এই সপ্তাহ', friday:'শুক্রবার · কোনো কাটা নেই',
     today:'আজ', shift:'৮:০০-৫:০০ · Ved Road', bus:'স্টুডিওর কাছে বাস', helper:'রমেশ · সাহায্যের জন্য ডাকো',
     extra_k:'একটা বাড়তি শিফট', extra_t:'আজ রাত ৬-৮টা · Studio-তে', extra_d:'Extra hours toward home.',
     take:'নিচ্ছি', no:'আজ নয়',
     buyback_k:'তোমার সন্ধ্যা ফিরিয়ে নাও', buyback_t:'কাপড় আমরা ধুয়ে দিই',
-    buyback_d:'সপ্তাহে দুই ঘণ্টা ফেরে। সেটা একটা OT শিফট।',
-    c_time:'সময় ফেরত', c_time_v:'ঘণ্টা ফেরত', c_ot:'OT', c_ot_v:'স্লিপের পর', c_pay:'তুমি দাও', c_pay_v:'₹50 / সপ্তাহ', c_net:'বাড়ির জন্য', c_net_v:'স্লিপ লিখো',
+    buyback_d:'এই মাসে OT-র জন্য 8.66 ঘণ্টা ফেরে।',
+    c_time:'সময় ফেরত', c_time_v:'ঘণ্টা ফেরত', c_ot:'OT', c_ot_v:'স্লিপের পর', c_pay:'তুমি দাও', c_pay_v:'₹220 / মাস', c_net:'বাড়ির জন্য', c_net_v:'স্লিপ লিখো',
     startlaundry:'আমার সন্ধ্যা খালি করো',
     grow_k:'এগিয়ে', grow_t:'আরও ৩ দিন picker+', grow_d:'+₹1,500 মাসে',
-    save_t:'সঞ্চয়', save_s:'৫:১৫টার মধ্যে তোমার Studio-তে',
+    save_t:'সঞ্চয়', save_s:'রোজকার জিনিস, কম দাম।',
     kept_lbl:'এই সপ্তাহে কিরাণা বিয়োগ', kept_home:'এই সপ্তাহে এই ফোনে কিরাণা বিয়োগ।',
     search:'নুন, তেল, নুডলস', keep:'বাঁচে', youpay:'', add:'যোগ করো', added:'যোগ হল', out:'শেষ',
     every:'এখানে বাঁচানো প্রতি টাকা বাড়ি পৌঁছায়।',
@@ -1593,13 +1798,13 @@ var T = {
     week_lbl:'এই সপ্তাহ', week_reach:'আর বাড়িতে পৌঁছাতে পারে',
     week_pick:'একটা রাস্তা বেছে নাও। দুটোর সময় নেই।',
     week_do:'কী করতে হবে', week_dont:'এই সপ্তাহে এগুলো করো না',
-    path_fri_t:'শুক্রবার বাড়তি ঘণ্টা', path_fri_d:"এই চাকরিতে। প্রায় ₹720।",
+    path_fri_t:'TGIF', path_fri_d:"এই চাকরিতে। প্রায় ₹720।",
     path_week_t:'কাছের দুটো 4 ঘণ্টার কাজ', path_week_d:"শনি কাপড়, রবি রান্নাঘর। প্রায় ₹1,020।",
     path_pick:'এই রাস্তা নাও', path_yours:'এই সপ্তাহে তোমার রাস্তা', path_change:'রাস্তা বদলাও',
     dont_miss_t:'পুরো দিন কাজ ছাড়ো না', dont_miss_d:'দিন ছাড়ো। সেই দিনের মজুরি যায় (এই সপ্তাহ)।',
     dont_ride_t:'টাকার গাড়ি নিও না', dont_ride_d:'হাঁটো। টাকার গাড়ি নিও না।',
     dont_meal_t:'নেস্টের বাইরে খেয়ো না', dont_meal_d:'নেস্টে খাও। ₹120 বাড়ির জন্য রাখো।',
-    fri_extra_t:'শুক্রবার বাড়তি ঘণ্টা', fri_extra_d:'তোমার চাকরিতে। প্রায় ₹720 বাড়ির দিকে।',
+    fri_extra_t:'TGIF', fri_extra_d:'তোমার চাকরিতে। প্রায় ₹720 বাড়ির দিকে।',
     fri_extra_take:'শুক্রবারের ঘণ্টা করব', fri_extra_skip:'এই রাস্তা নয়',
     near_k:'কাছের বাড়তি কাজ', near_covers:'₹1,000-এর দিকে',
     near_laundry:'কাপড় ধোয়া', near_kitchen:'রান্নাঘর প্যাকিং', near_loading:'লোডিং সাহায্য',
@@ -1626,7 +1831,7 @@ var T = {
     stay_owe_d:'আজ চিহ্ন দাও। ছেড়ে যেও না।',
     stay_shut_t:'কাল সাইট বন্ধ হলে',
     stay_shut_d:'সেই কাছের কাজগুলোই আছে।',
-    stay_fri_t:'শুক্রবারের বাড়তি ঘণ্টা',
+    stay_fri_t:'TGIF',
     stay_fri_d:"সোমবার নতুন ঠিকাদার লাগবে না।",
     stay_mark:'আজ চিহ্ন দাও',
     city_k:'যাতে শহর খালি বাড়ি যাওয়ার চেয়ে সস্তা থাকে',
@@ -1678,16 +1883,20 @@ var T = {
     topsub:'ராஜபுதானா · அம்மாவுக்கு அனுப்புகிறார்', public_sub:'அத்தியாவசிய பொருட்களை வாங்குங்கள். வீட்டிற்காக அதிகம் சேமியுங்கள்.',
     auth_title:'உங்கள் ஃபோனுடன் தொடருங்கள்', auth_copy:'10 இலக்க இந்திய மொபைல் எண்.', auth_phone_label:'ஃபோன் எண்', auth_phone_placeholder:'10 இலக்க மொபைல் எண்', auth_send:'OTP அனுப்பு', auth_phone_error:'10 இலக்க மொபைல் எண்ணை உள்ளிடுங்கள்.', auth_otp_title:'OTP உள்ளிடுங்கள்', auth_otp_copy:'இந்த எண்ணுக்கு அனுப்பிய 6 இலக்க OTP-ஐ உள்ளிடுங்கள்', auth_otp_label:'6 இலக்க OTP', auth_verify:'சரிபார்த்து தொடருங்கள்', auth_otp_error:'6 இலக்க OTP-ஐ உள்ளிடுங்கள்.', auth_change:'ஃபோன் எண்ணை மாற்று', auth_back:'சேமிப்பிற்கு திரும்பு', auth_private:'தங்கல், வருமானம், அனுப்பு. ஃபோன் தேவை.',
     tab_live:'தங்கல்', tab_earn:'வருமானம்', tab_save:'சேமிப்பு', tab_send:'அனுப்பு', daily:'தினசரி பொருட்கள்', seeall:'எல்லாம்', payslip_k:'உன் சம்பளம், படித்து', payslip_t:'உன் பே-ஸ்லிப் போடு', payslip_d:'நாங்கள் படிக்கிறோம். ஃபோனிலேயே இருக்கும்.', payslip_add:'போடு', payslip_done:'ஸ்லிப் படித்தாச்சு', payslip_read:'ஸ்லிப்புக்குப் பிறகு OT.', goal_k:'உன் கூரை, விரைவில்', goal_t:'ஊர்ல் கூரை', goal_by:'கூரை ஊருக்கு', goal_perweek:'OT ஷிப்ட் வாரம்', goal_hours:'மணி', goal_sooner:'மாதம் முன்பே', goal_none:'இதே வேகத்தில்', goal_frompay:'உன் ஸ்லிப்பில் இருந்து', goal_addpay:'ஸ்லிப் போட்டால் இன்னும் சரியாக',
-    send_t:'அனுப்பு', send_s:'அம்மா · போஜ்பூர்',
+    send_t:'அனுப்பு', send_s:'வீட்டுக்கு பணம் அனுப்பவும்.',
+    send_ins_title:'காப்பீடு', send_ins_intro:'எளிய காப்பீடு. உங்கள் வங்கியில் வாங்குங்கள். உதவி வேண்டுமா? உங்கள் JCO உடன் நேரம் முன்பதிவு செய்யுங்கள்.',
+    send_ins_acc_n:'விபத்து காப்பீடு', send_ins_acc_m:'₹2 லட்சம் விபத்து காப்பீடு.',
+    send_ins_life_n:'ஆயுள் காப்பீடு', send_ins_life_m:'₹2 லட்சம் ஆயுள் காப்பீடு.', send_ins_ask:'எப்படி வாங்குவது',
+    send_ins_disclaimer:'Nia காப்பீட்டு விருப்பங்களை மட்டும் பட்டியலிடுகிறது. IRDAI பதிவு பெற்ற காப்பீட்டு நிறுவனம், அங்கீகரிக்கப்பட்ட இடைத்தரகர் அல்லது பங்கேற்கும் வங்கி மூலம் வாங்குங்கள். காப்பீட்டு நிறுவனமே பாலிசி வழங்கி கோரிக்கைகளை கையாளும். அனைத்து விதிகளையும் படிக்கவும். Nia காப்பீட்டு நிறுவனம் அல்ல.',
     reach:'இந்த மாதம் அம்மாவை சேரும்', nofee:'கட்டணம் இல்லை.', sendhome:'ஊருக்கு அனுப்பு',
     feeds:'இந்த உறையை நிரப்பியது',
     from_live:'தங்கல்', from_live_d:'வேலைக்கு அருகில், நகர வாடகை இல்லை',
     from_earn:'வருமானம்', from_earn_d:'பிடித்தம் இல்லாத ஊதியம், ஒரு கூடுதல் ஷிப்ட்',
     from_save:'சேமிப்பு', from_save_d:'இந்த மாதம் சந்தையை விட மிச்சம்',
     roof:'ஊர்ல் கூரை', recharge:'அம்மா ஃபோன் ரீசார்ஜ்', ledger:'12 ஆக அனுப்பியது', family:'ஏதாவது நடந்தால்',
-    live_t:'தங்கல்', live_s:'ராஜபுதானா · நெஸ்ட் 12',
+    live_t:'தங்கல்', live_s:'தினசரி வாழ்க்கை எளிது.',
     live_card1_n:'வேலை அருகில் Studio', live_card1_m:'நடந்து. பஸ் இல்லை.',
-    live_card2_n:'துவைப்பு', live_card2_m:'வாரத்திற்கு ₹50 கொடு.',
+    live_card2_n:'துவைப்பு', live_card2_m:'மாதத்திற்கு ₹220 கொடு.',
     live_card3_n:'ஹப் உணவு', live_card3_m:'ஹப்பில் சாப்பிடு. வெளியே அல்ல.',
     live_card4_n:'வெப்பத்துக்கு விசிறி', live_card4_m:'வெப்பத்தில் தூங்கு. அடுத்த ஷிப்ட் எடு.',
     live_card5_n:'சைக்கிள்', live_card5_m:'சைக்கிள். ஆட்டோவை விட்டுவிடு.',
@@ -1707,17 +1916,17 @@ var T = {
     laundry:'துணி துவைப்பு', laundry_d:'6 மணிக்கு திரும்ப', trim:'முடி வெட்டு', trim_d:'இங்கேயே, சந்தைக்கு போக வேண்டாம்',
     wrong:'ஏதாவது கோளாறா?', wrong_d:'சதீஷ் பார்க்கிறார் · 9 மணிக்குள் சரி',
     bada:'ஞாயிறு 7 மணி · பெரிய விருந்து', bada_d:'உணவும் இசையும், ஒன்றாக', coming:'நான் வருகிறேன்',
-    earn_t:'வருமானம்', earn_s:'கிடங்கு பிக்கர்',
+    earn_t:'வருமானம்', earn_s:'மேலும் சம்பாதிக்கவும்.',
     thisweek:'இந்த வாரம்', friday:'வெள்ளி · பிடித்தம் இல்லை',
     today:'இன்று', shift:'8:00-5:00 · Ved Road', bus:'ஸ்டுடியோ அருகில் பஸ்', helper:'ரமேஷ் · உதவிக்கு அழை',
     extra_k:'ஒரு கூடுதல் ஷிப்ட்', extra_t:'இன்றிரவு 6-8 · Studio-வில்', extra_d:'Extra hours toward home.',
     take:'எடுத்துக்கொள்', no:'இன்று வேண்டாம்',
     buyback_k:'உன் மாலைகளை மீட்டெடு', buyback_t:'துணியை நாங்கள் துவைக்கிறோம்',
-    buyback_d:'வாரம் இரண்டு மணி திரும்பும். அது ஒரு OT ஷிப்ட்.',
-    c_time:'திரும்பும் நேரம்', c_time_v:'மணி நேரம்', c_ot:'OT', c_ot_v:'ஸ்லிப்புக்குப் பிறகு', c_pay:'நீ தருவது', c_pay_v:'₹50 / வாரம்', c_net:'ஊருக்கு', c_net_v:'ஸ்லிப் எழுது',
+    buyback_d:'இந்த மாதம் OT-க்கு 8.66 மணி திரும்பும்.',
+    c_time:'திரும்பும் நேரம்', c_time_v:'மணி நேரம்', c_ot:'OT', c_ot_v:'ஸ்லிப்புக்குப் பிறகு', c_pay:'நீ தருவது', c_pay_v:'₹220 / மாதம்', c_net:'ஊருக்கு', c_net_v:'ஸ்லிப் எழுது',
     startlaundry:'என் மாலைகளை காலி செய்',
     grow_k:'மேலே', grow_t:'இன்னும் 3 நாள் picker+', grow_d:'+₹1,500 மாதம்',
-    save_t:'சேமிப்பு', save_s:'5:15 மணிக்குள் உன் Studio-க்கு',
+    save_t:'சேமிப்பு', save_s:'தினசரி பொருட்கள், குறைந்த விலை.',
     kept_lbl:'இந்த வாரம் கிரானா கழிவு', kept_home:'இந்த வாரம் இந்த போனில் கிரானா கழிவு.',
     search:'உப்பு, எண்ணெய், நூடுல்ஸ்', keep:'மிச்சம்', youpay:'', add:'சேர்', added:'சேர்த்தாச்சு', out:'இல்லை',
     every:'இங்கே மிச்சமாகும் ஒவ்வொரு ரூபாயும் ஊருக்கு சேரும்.',
@@ -1730,13 +1939,13 @@ var T = {
     week_lbl:'இந்த வாரம்', week_reach:'மேலும் ஊருக்கு சேரலாம்',
     week_pick:'ஒரு வழியை தேர்ந்தெடு. இரண்டிற்கும் நேரம் இல்லை.',
     week_do:'என்ன செய்ய வேண்டும்', week_dont:'இந்த வாரம் இதை செய்யாதே',
-    path_fri_t:'வெள்ளி கூடுதல் மணி', path_fri_d:"இந்த வேலையில். சுமார் ₹720.",
+    path_fri_t:'TGIF', path_fri_d:"இந்த வேலையில். சுமார் ₹720.",
     path_week_t:'அருகில் இரண்டு 4 மணி வேலை', path_week_d:"சனி துவைப்பு, ஞாயிறு சமையல். சுமார் ₹1,020.",
     path_pick:'இந்த வழியை எடு', path_yours:'இந்த வாரம் உன் வழி', path_change:'வழியை மாற்று',
     dont_miss_t:'முழு நாளும் வேலை விடாதே', dont_miss_d:'நாள் விட்டால் அந்த நாள் கூலி போகும் (இந்த வாரம்).',
     dont_ride_t:'கட்டண சவாரி எடுக்காதே', dont_ride_d:'நடந்து போ. கட்டண சவாரி வேண்டாம்.',
     dont_meal_t:'நெஸ்ட்டுக்கு வெளியே சாப்பிடாதே', dont_meal_d:'நெஸ்ட்டில் சாப்பிடு. ₹120 ஊருக்கு வை.',
-    fri_extra_t:'வெள்ளி கூடுதல் மணி', fri_extra_d:'உன் வேலையில். சுமார் ₹720 ஊருக்கு.',
+    fri_extra_t:'TGIF', fri_extra_d:'உன் வேலையில். சுமார் ₹720 ஊருக்கு.',
     fri_extra_take:'வெள்ளி மணி செய்வேன்', fri_extra_skip:'இந்த வழி வேண்டாம்',
     near_k:'அருகில் கூடுதல் வேலை', near_covers:'₹1,000 பக்கம்',
     near_laundry:'துவைப்பு', near_kitchen:'சமையலறை பேக்கிங்', near_loading:'லோடிங் உதவி',
@@ -1763,7 +1972,7 @@ var T = {
     stay_owe_d:'இன்று குறியுங்கள். விட்டுவிட்டு போகாதீர்கள்.',
     stay_shut_t:'நாளை தளம் மூடினால்',
     stay_shut_d:'அதே அருகின் வேலைகள் இருக்கும்.',
-    stay_fri_t:'வெள்ளி கூடுதல் நேரம்',
+    stay_fri_t:'TGIF',
     stay_fri_d:"திங்கள்கிழமை புதிய ஒப்பந்தக்காரர் வேண்டாம்.",
     stay_mark:'இன்று குறி',
     city_k:'நகரம் காலியாக ஊர் போவதை விட மலிவாக இருக்க',
@@ -1815,16 +2024,20 @@ var T = {
     topsub:'ರಾಜಪುತಾನ · ಅಮ್ಮನಿಗೆ ಕಳುಹಿಸುತ್ತಿದ್ದಾರೆ', public_sub:'ಅಗತ್ಯ ವಸ್ತುಗಳನ್ನು ಖರೀದಿಸಿ. ಊರಿಗಾಗಿ ಹೆಚ್ಚು ಉಳಿಸಿ.',
     auth_title:'ನಿಮ್ಮ ಫೋನ್‌ನೊಂದಿಗೆ ಮುಂದುವರಿಯಿರಿ', auth_copy:'10 ಅಂಕಿಯ ಭಾರತೀಯ ಮೊಬೈಲ್ ಸಂಖ್ಯೆ.', auth_phone_label:'ಫೋನ್ ಸಂಖ್ಯೆ', auth_phone_placeholder:'10 ಅಂಕಿಯ ಮೊಬೈಲ್ ಸಂಖ್ಯೆ', auth_send:'OTP ಕಳುಹಿಸಿ', auth_phone_error:'10 ಅಂಕಿಯ ಮೊಬೈಲ್ ಸಂಖ್ಯೆಯನ್ನು ನಮೂದಿಸಿ.', auth_otp_title:'OTP ನಮೂದಿಸಿ', auth_otp_copy:'ಈ ಸಂಖ್ಯೆಗೆ ಕಳುಹಿಸಿದ 6 ಅಂಕಿಯ OTP ನಮೂದಿಸಿ', auth_otp_label:'6 ಅಂಕಿಯ OTP', auth_verify:'ಪರಿಶೀಲಿಸಿ ಮುಂದುವರಿಯಿರಿ', auth_otp_error:'6 ಅಂಕಿಯ OTP ನಮೂದಿಸಿ.', auth_change:'ಫೋನ್ ಸಂಖ್ಯೆ ಬದಲಿಸಿ', auth_back:'ಉಳಿತಾಯಕ್ಕೆ ಹಿಂತಿರುಗಿ', auth_private:'ವಾಸ, ಸಂಪಾದನೆ, ಕಳುಹಿಸಿ. ಫೋನ್ ಬೇಕು.',
     tab_live:'ವಾಸ', tab_earn:'ಸಂಪಾದನೆ', tab_save:'ಉಳಿತಾಯ', tab_send:'ಕಳುಹಿಸಿ', daily:'ದಿನದ ಸಾಮಗ್ರಿ', seeall:'ಎಲ್ಲಾ ನೋಡಿ', payslip_k:'ನಿನ್ನ ಸಂಬಳ, ಓದಿ', payslip_t:'ನಿನ್ನ ಪೇ-ಸ್ಲಿಪ್ ಹಾಕು', payslip_d:'ನಾವು ಓದುತ್ತೇವೆ. ಫೋನಿನಲ್ಲೇ ಇರುತ್ತದೆ.', payslip_add:'ಹಾಕು', payslip_done:'ಸ್ಲಿಪ್ ಓದಲಾಗಿದೆ', payslip_read:'ಸ್ಲಿಪ್ ನಂತರ OT.', goal_k:'ನಿನ್ನ ಸೂರು, ಬೇಗ', goal_t:'ಊರಲ್ಲಿ ಸೂರು', goal_by:'ಸೂರು ಊರಿಗೆ', goal_perweek:'OT ಶಿಫ್ಟ್ ವಾರಕ್ಕೆ', goal_hours:'ಗಂಟೆ', goal_sooner:'ತಿಂಗಳ ಮೊದಲೇ', goal_none:'ಇದೇ ವೇಗದಲ್ಲಿ', goal_frompay:'ನಿನ್ನ ಸ್ಲಿಪ್‌ನಿಂದ ಓದಲಾಗಿದೆ', goal_addpay:'ಸ್ಲಿಪ್ ಹಾಕಿದರೆ ಇನ್ನಷ್ಟು ನಿಖರ',
-    send_t:'ಕಳುಹಿಸಿ', send_s:'ಅಮ್ಮ · ಭೋಜಪುರ',
+    send_t:'ಕಳುಹಿಸಿ', send_s:'ಮನೆಗೆ ಹಣ ಕಳುಹಿಸಿ.',
+    send_ins_title:'ವಿಮೆ', send_ins_intro:'ಸರಳ ರಕ್ಷಣೆ. ನಿಮ್ಮ ಬ್ಯಾಂಕಿನಿಂದ ಖರೀದಿಸಿ. ಸಹಾಯ ಬೇಕೇ? ನಿಮ್ಮ JCO ಜೊತೆ ಸಮಯ ನಿಗದಿಪಡಿಸಿ.',
+    send_ins_acc_n:'ಅಪಘಾತ ವಿಮೆ', send_ins_acc_m:'₹2 ಲಕ್ಷ ಅಪಘಾತ ರಕ್ಷಣೆ.',
+    send_ins_life_n:'ಜೀವ ವಿಮೆ', send_ins_life_m:'₹2 ಲಕ್ಷ ಜೀವ ರಕ್ಷಣೆ.', send_ins_ask:'ಹೇಗೆ ಖರೀದಿಸುವುದು',
+    send_ins_disclaimer:'Nia ವಿಮೆ ಆಯ್ಕೆಗಳನ್ನು ಮಾತ್ರ ಪಟ್ಟಿ ಮಾಡುತ್ತದೆ. IRDAI-ನೋಂದಾಯಿತ ವಿಮಾ ಕಂಪನಿ, ಅಧಿಕೃತ ಮಧ್ಯವರ್ತಿ ಅಥವಾ ಭಾಗವಹಿಸುವ ಬ್ಯಾಂಕ್ ಮೂಲಕ ಖರೀದಿಸಿ. ವಿಮಾ ಕಂಪನಿಯೇ ಪಾಲಿಸಿ ನೀಡುತ್ತದೆ ಮತ್ತು ಕ್ಲೈಮ್‌ಗಳನ್ನು ನಿರ್ವಹಿಸುತ್ತದೆ. ಎಲ್ಲಾ ಷರತ್ತುಗಳನ್ನು ಓದಿ. Nia ವಿಮಾ ಕಂಪನಿ ಅಲ್ಲ.',
     reach:'ಈ ತಿಂಗಳು ಅಮ್ಮನಿಗೆ ತಲುಪಬಹುದು', nofee:'ಶುಲ್ಕವಿಲ್ಲ.', sendhome:'ಊರಿಗೆ ಕಳುಹಿಸಿ',
     feeds:'ಈ ಲಕೋಟೆ ಯಾವುದರಿಂದ ತುಂಬಿತು',
     from_live:'ವಾಸ', from_live_d:'ಕೆಲಸದ ಹತ್ತಿರ, ನಗರದ ಬಾಡಿಗೆ ಅಲ್ಲ',
     from_earn:'ಸಂಪಾದನೆ', from_earn_d:'ಕಡಿತವಿಲ್ಲದ ಸಂಬಳ, ಒಂದು ಹೆಚ್ಚುವರಿ ಶಿಫ್ಟ್',
     from_save:'ಉಳಿತಾಯ', from_save_d:'ಈ ತಿಂಗಳು ಸಂತೆಗಿಂತ ಉಳಿದದ್ದು',
     roof:'ಊರಲ್ಲಿ ಸೂರು', recharge:'ಅಮ್ಮನ ಫೋನ್ ರೀಚಾರ್ಜ್', ledger:'12 ಆಗ ಕಳುಹಿಸಿದ್ದು', family:'ಏನಾದರೂ ಆದರೆ',
-    live_t:'ವಾಸ', live_s:'ರಾಜಪುತಾನ · ನೆಸ್ಟ್ 12',
+    live_t:'ವಾಸ', live_s:'ದಿನನಿತ್ಯದ ಜೀವನ ಸುಲಭ.',
     live_card1_n:'ಕೆಲಸದ ಹತ್ತಿರ Studio', live_card1_m:'ನಡೆ. ಬಸ್ ಬೇಡ.',
-    live_card2_n:'ಒಗೆತ', live_card2_m:'ವಾರಕ್ಕೆ ₹50 ಕೊಡು.',
+    live_card2_n:'ಒಗೆತ', live_card2_m:'ತಿಂಗಳಿಗೆ ₹220 ಕೊಡು.',
     live_card3_n:'ಹಬ್ ಊಟ', live_card3_m:'ಹಬ್‌ನಲ್ಲಿ ಊಟ. ಹೊರಗೆ ಬೇಡ.',
     live_card4_n:'ಬಿಸಿಲಿಗೆ ಫ್ಯಾನ್', live_card4_m:'ಬಿಸಿಲಲ್ಲಿ ನಿದ್ರೆ. ಮುಂದಿನ ಶಿಫ್ಟ್ ತೆಗೆ.',
     live_card5_n:'ಸೈಕಲ್', live_card5_m:'ಸೈಕಲ್. ಆಟೋ ಬಿಡು.',
@@ -1844,17 +2057,17 @@ var T = {
     laundry:'ಬಟ್ಟೆ ಒಗೆತ', laundry_d:'6 ಗಂಟೆಗೆ ವಾಪಸ್', trim:'ಕೂದಲು ಕತ್ತರಿಸು', trim_d:'ಇಲ್ಲೇ, ಸಂತೆಗೆ ಹೋಗುವುದಿಲ್ಲ',
     wrong:'ಏನಾದರೂ ತಪ್ಪಾಗಿದೆಯೆ?', wrong_d:'ಸತೀಶ್ ನೋಡುತ್ತಿದ್ದಾನೆ · 9 ಗಂಟೆಗೆ ಸರಿ',
     bada:'ಭಾನುವಾರ 7 ಗಂಟೆ · ಬಡಾ ಖಾನಾ', bada_d:'ಊಟ ಮತ್ತು ಸಂಗೀತ, ಒಟ್ಟಿಗೆ', coming:'ನಾನು ಬರುತ್ತೇನೆ',
-    earn_t:'ಸಂಪಾದನೆ', earn_s:'ವೇರ್‌ಹೌಸ್ ಪಿಕರ್',
+    earn_t:'ಸಂಪಾದನೆ', earn_s:'ಹೆಚ್ಚು ಸಂಪಾದಿಸಿ.',
     thisweek:'ಈ ವಾರ', friday:'ಶುಕ್ರವಾರ · ಕಡಿತವಿಲ್ಲ',
     today:'ಇಂದು', shift:'8:00-5:00 · Ved Road', bus:'ಸ್ಟುಡಿಯೋ ಹತ್ತಿರ ಬಸ್', helper:'ರಮೇಶ್ · ಸಹಾಯಕ್ಕೆ ಕರೆ',
     extra_k:'ಒಂದು ಹೆಚ್ಚುವರಿ ಶಿಫ್ಟ್', extra_t:'ಇಂದು ರಾತ್ರಿ 6-8 · Studio-ದಲ್ಲಿ', extra_d:'Extra hours toward home.',
     take:'ತೆಗೆದುಕೋ', no:'ಇಂದು ಬೇಡ',
     buyback_k:'ನಿನ್ನ ಸಂಜೆಗಳನ್ನು ಮರಳಿ ಪಡೆ', buyback_t:'ಬಟ್ಟೆ ನಾವು ಒಗೆಯುತ್ತೇವೆ',
-    buyback_d:'ವಾರಕ್ಕೆ ಎರಡು ಗಂಟೆ ಮರಳುತ್ತದೆ. ಅದು ಒಂದು OT ಶಿಫ್ಟ್.',
-    c_time:'ಸಮಯ ವಾಪಸ್', c_time_v:'ಗಂಟೆ ವಾಪಸ್', c_ot:'OT', c_ot_v:'ಸ್ಲಿಪ್ ನಂತರ', c_pay:'ನೀನು ಕೊಡುವುದು', c_pay_v:'₹50 / ವಾರ', c_net:'ಊರಿಗೆ', c_net_v:'ಸ್ಲಿಪ್ ಬರೆ',
+    buyback_d:'ಈ ತಿಂಗಳು OTಗೆ 8.66 ಗಂಟೆ ಮರಳುತ್ತದೆ.',
+    c_time:'ಸಮಯ ವಾಪಸ್', c_time_v:'ಗಂಟೆ ವಾಪಸ್', c_ot:'OT', c_ot_v:'ಸ್ಲಿಪ್ ನಂತರ', c_pay:'ನೀನು ಕೊಡುವುದು', c_pay_v:'₹220 / ತಿಂಗಳು', c_net:'ಊರಿಗೆ', c_net_v:'ಸ್ಲಿಪ್ ಬರೆ',
     startlaundry:'ನನ್ನ ಸಂಜೆ ಖಾಲಿ ಮಾಡು',
     grow_k:'ಮುಂದೆ', grow_t:'ಇನ್ನೂ 3 ದಿನ picker+', grow_d:'+₹1,500 ತಿಂಗಳು',
-    save_t:'ಉಳಿತಾಯ', save_s:'5:15ಕ್ಕೆ ನಿನ್ನ Studio-ಗೆ',
+    save_t:'ಉಳಿತಾಯ', save_s:'ದಿನಸಿ ಸಾಮಾನು, ಕಡಿಮೆ ಬೆಲೆ.',
     kept_lbl:'ಈ ವಾರ ಕಿರಾಣಿ ಕಳೆಯುವಿಕೆ', kept_home:'ಈ ವಾರ ಈ ಫೋನ್‌ನಲ್ಲಿ ಕಿರಾಣಿ ಕಳೆಯುವಿಕೆ.',
     search:'ಉಪ್ಪು, ಎಣ್ಣೆ, ನೂಡಲ್ಸ್', keep:'ಉಳಿತಾಯ', youpay:'', add:'ಸೇರಿಸು', added:'ಸೇರಿಸಿತು', out:'ಇಲ್ಲ',
     every:'ಇಲ್ಲಿ ಉಳಿಸಿದ ಪ್ರತಿ ರೂಪಾಯಿ ಊರಿಗೆ ತಲುಪುತ್ತದೆ.',
@@ -1867,13 +2080,13 @@ var T = {
     week_lbl:'ಈ ವಾರ', week_reach:'ಹೆಚ್ಚು ಊರಿಗೆ ತಲುಪಬಹುದು',
     week_pick:'ಒಂದು ದಾರಿ ಆಯ್ಕೆ ಮಾಡು. ಎರಡಕ್ಕೂ ಸಮಯ ಇಲ್ಲ.',
     week_do:'ಏನು ಮಾಡಬೇಕು', week_dont:'ಈ ವಾರ ಇದನ್ನು ಮಾಡಬೇಡ',
-    path_fri_t:'ಶುಕ್ರವಾರ ಹೆಚ್ಚುವರಿ ಗಂಟೆ', path_fri_d:"ಈ ಕೆಲಸದಲ್ಲಿ. ಸುಮಾರು ₹720.",
+    path_fri_t:'TGIF', path_fri_d:"ಈ ಕೆಲಸದಲ್ಲಿ. ಸುಮಾರು ₹720.",
     path_week_t:'ಹತ್ತಿರದ ಎರಡು 4 ಗಂಟೆ ಕೆಲಸ', path_week_d:"ಶನಿ ಒಗೆತ, ಭಾನು ಅಡುಗೆ. ಸುಮಾರು ₹1,020.",
     path_pick:'ಈ ದಾರಿ ತೆಗೆದುಕೋ', path_yours:'ಈ ವಾರ ನಿನ್ನ ದಾರಿ', path_change:'ದಾರಿ ಬದಲಿಸು',
     dont_miss_t:'ಪೂರ್ಣ ದಿನ ಕೆಲಸ ಬಿಡಬೇಡ', dont_miss_d:'ದಿನ ಬಿಟ್ಟರೆ ಆ ದಿನದ ಕೂಲಿ ಹೋಗುತ್ತದೆ (ಈ ವಾರ).',
     dont_ride_t:'ಹಣದ ಸವಾರಿ ತೆಗೆದುಕೊಳ್ಳಬೇಡ', dont_ride_d:'ನಡೆ. ಹಣದ ಸವಾರಿ ಬೇಡ.',
     dont_meal_t:'ನೆಸ್ಟ್ ಹೊರಗೆ ಊಟ ಮಾಡಬೇಡ', dont_meal_d:'ನೆಸ್ಟ್‌ನಲ್ಲಿ ತಿನ್ನು. ₹120 ಊರಿಗೆ ಇಟ್ಟುಕೋ.',
-    fri_extra_t:'ಶುಕ್ರವಾರ ಹೆಚ್ಚುವರಿ ಗಂಟೆ', fri_extra_d:'ನಿನ್ನ ಕೆಲಸದಲ್ಲಿ. ಸುಮಾರು ₹720 ಊರಿಗೆ.',
+    fri_extra_t:'TGIF', fri_extra_d:'ನಿನ್ನ ಕೆಲಸದಲ್ಲಿ. ಸುಮಾರು ₹720 ಊರಿಗೆ.',
     fri_extra_take:'ಶುಕ್ರವಾರ ಗಂಟೆ ಮಾಡುತ್ತೇನೆ', fri_extra_skip:'ಈ ದಾರಿ ಬೇಡ',
     near_k:'ಹತ್ತಿರದ ಹೆಚ್ಚುವರಿ ಕೆಲಸ', near_covers:'₹1,000 ಕಡೆಗೆ',
     near_laundry:'ಬಟ್ಟೆ ಒಗೆತ', near_kitchen:'ಅಡುಗೆಮನೆ ಪ್ಯಾಕಿಂಗ್', near_loading:'ಲೋಡಿಂಗ್ ಸಹಾಯ',
@@ -1900,7 +2113,7 @@ var T = {
     stay_owe_d:'ಇಂದು ಗುರುತು ಹಾಕಿ. ಬಿಟ್ಟು ಹೋಗಬೇಡಿ.',
     stay_shut_t:'ನಾಳೆ ಸೈಟ್ ಮುಚ್ಚಿದರೆ',
     stay_shut_d:'ಅದೇ ಹತ್ತಿರದ ಕೆಲಸಗಳು ಇರುತ್ತವೆ.',
-    stay_fri_t:'ಶುಕ್ರವಾರ ಹೆಚ್ಚುವರಿ ಗಂಟೆಗಳು',
+    stay_fri_t:'TGIF',
     stay_fri_d:"ಸೋಮವಾರ ಹೊಸ ಗುತ್ತಿಗೆದಾರ ಬೇಡ.",
     stay_mark:'ಇಂದು ಗುರುತು',
     city_k:'ನಗರ ಖಾಲಿ ಊರಿಗೆ ಹೋಗುವುದಕ್ಕಿಂತ ಅಗ್ಗವಾಗಿರಲು',
@@ -1951,14 +2164,43 @@ var commerceView='home', selectedProduct='groundnut_oil', selectedCategory='oils
 var liveView='home', liveCard=null, earnView='home', earnCard=null, sendView='home', sendCard=null;
 var pickedLive={};
 var studioPinLookup='';
-var WASH_WEEK_CHARGE=50; // this month charge on this phone
-var WASH_HOURS=2; // this month hours back
+var WASH_MONTH_CHARGE=220;
+var WASH_MONTH_HOURS=8.66;
 var WASH_OT_DEFAULT=90; // this month default OT rate until he types his
 function washOtRate(){
   if(payslipRead && payslipOt!=null && payslipOt>=0) return payslipOt;
   return WASH_OT_DEFAULT;
 }
-function washOtEarn(){ return WASH_HOURS * washOtRate(); }
+function washOtEarn(){ return WASH_MONTH_HOURS * washOtRate(); }
+/*
+  Monthly member-value estimates for the Live cards.
+  Research-backed prototype prices as of 2026-08-30. Time uses the member's
+  OT rate. Support services use a conservative one-workday-protected scenario.
+  Audit service COGS and observed member use before production launch.
+*/
+function liveSavingEstimate(id){
+  var travelDay=40, travelDays=20;
+  var model={
+    studio:{amount:travelDay*travelDays, price:'₹2,200/month', outside:3000, nia:2200, outsideLabel:'Outside', desc:'Walk to work.'},
+    hubfood:{amount:500, price:'₹2,300/month', outside:2800, nia:2300, outsideLabel:'Outside', desc:'Two daily meals.'},
+    cooler:{amount:200, price:'₹400/month', outside:600, nia:400, outsideLabel:'Other places', desc:'One per room.'},
+    cycle:{amount:600, price:'₹200/month', outside:800, nia:200, outsideLabel:'Travel', desc:'Travel to work.'},
+    raincape:{amount:550, price:'₹150/month', outside:700, nia:150, outsideLabel:'Other places', desc:'Travel in rain.'},
+    dontmiss:{amount:350, price:'₹50/month', outside:400, nia:50, outsideLabel:'Lost wage', desc:'Protect your pay.'},
+    akka:{amount:350, price:'₹50/month', outside:400, nia:50, outsideLabel:'Unresolved', desc:'Resolve any issue.'},
+    group:{amount:350, price:'₹50/month', outside:400, nia:50, outsideLabel:'Lost wage', desc:'Tea every Sunday.'},
+    dropin:{amount:350, price:'₹150/month', outside:500, nia:150, outsideLabel:'Private visit', desc:'Nearby health support.'},
+    recreation:{amount:600, price:'₹100/month', outside:700, nia:100, outsideLabel:'Other places', desc:'Play and exercise.'},
+    thrift:{amount:450, price:'₹50/month', outside:500, nia:50, outsideLabel:'Spent', desc:'Save with friends.'},
+    grievance:{amount:350, price:'₹50/month', outside:400, nia:50, outsideLabel:'Unresolved', desc:'Report wage problems.'}
+  };
+  if(id==='wash'){
+    var monthlyNet=(WASH_MONTH_HOURS*washOtRate())-WASH_MONTH_CHARGE;
+    var timeValue=Math.round((WASH_MONTH_HOURS*washOtRate())/10)*10;
+    return {amount:Math.round(monthlyNet/10)*10, price:'₹220/month', outside:timeValue, nia:WASH_MONTH_CHARGE, outsideLabel:'Your time', desc:'Get clothes washed.'};
+  }
+  return model[id]||{amount:0,price:'₹0/month',outside:0,nia:0,outsideLabel:'Outside',desc:'Monthly details.'};
+}
 function lookupStudioPin(){
   var el=document.getElementById('studioPinIn');
   var pin=String(el&&el.value||'').replace(/\D/g,'').slice(0,6);
@@ -2023,6 +2265,12 @@ function payTrendsBlock(){
   return '<div class="pay-trends" aria-label="'+t('earn_trends_say')+'">'
     + '<p class="pay-trends-say">'+t('earn_trends_say')+'</p>'
     + bars + hint + '</div>';
+}
+function salaryHistoryCard(){
+  return '<button type="button" class="salary-history-card" onclick="openStoryCard(\'earn\',\'history\')">'
+    + IC.receipt
+    + '<span class="salary-history-copy"><strong>See salary history</strong><span>Pay by month · Check cooperative scheme eligibility</span></span>'
+    + '<span class="salary-history-arrow">›</span></button>';
 }
 function payslipCutLabel(){
   if(payslipCut==null||payslipCut==='') return '';
@@ -2193,8 +2441,6 @@ var IC={
   arrow:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>',
   home:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5 12 5l8 6.5"/><path d="M6 10.5V19h12v-8.5"/></svg>',
   brief:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16v11H4z"/><path d="M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7"/></svg>',
-  pig:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5c0-3 2.7-5 6-5 2.2 0 3.3-.9 4-2 .5 2 .3 3 0 3.6 1.3.8 2 2 2 3.4 0 3-2.7 5-6 5s-6-2-6-5Z"/></svg>',
-  piggy:'<svg class="piggy-svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12.5c0-3 2.7-5 6-5 2.2 0 3.3-.9 4-2 .5 2 .3 3 0 3.6 1.3.8 2 2 2 3.4 0 3-2.7 5-6 5s-6-2-6-5Z"/><circle cx="15.5" cy="11" r=".6" fill="currentColor"/></svg>',
   phone:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="3" width="10" height="18" rx="2.4"/><path d="M11 18h2"/></svg>',
   receipt:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-2-1.4L14 21l-2-1.4L10 21l-2-1.4L6 21z"/><path d="M9 8h6M9 12h6"/></svg>',
   shield:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.2-2.9 8-7 9-4.1-1-7-4.8-7-9V6z"/></svg>',
@@ -2216,7 +2462,8 @@ var IC={
   hot:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 13h11v3a5 5 0 0 1-10 0z"/><path d="M17 13h2a2.5 2.5 0 0 1 0 5h-1.6"/><path d="M9.5 8c0-1.6 1.5-1.6 1.5-3M13 8c0-1.6 1.5-1.6 1.5-3"/></svg>',
   portrait:'<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="3.4"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/></svg>',
   tick:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-11"/></svg>',
-  search:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>'
+  search:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>',
+  piggy:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5.2 11.2A6.9 6.9 0 0 1 11.7 7h1.2l2.2-2.05c.55-.5 1.25-.15 1.2.55l-.1 2.25a6.45 6.45 0 0 1 2.15 2.3H21v4.4l-2.2.7a6.8 6.8 0 0 1-2.15 2.35V20h-3v-1.35c-.65.15-1.35.25-2.05.25-.8 0-1.55-.1-2.25-.3V20h-3v-3.25a6.1 6.1 0 0 1-1.8-3.25"/><path d="M5.1 11.3c-1.4 0-2.1-.7-2.1-1.7"/><path d="M9.25 5.7h4"/><circle cx="16.6" cy="10.5" r=".65" fill="currentColor" stroke="none"/></svg>'
 };
 var GLYPH={
   sack:'<path d="M17 17h14l2 20a4 4 0 0 1-4 4H19a4 4 0 0 1-4-4z"/><path d="M17 17c0-3 3-5 7-5s7 2 7 5"/><path d="M21 12.5 19 9M27 12.5 29 9"/>',
@@ -2285,16 +2532,31 @@ function oilKeepAmount(){
   if(g && g.mrp>g.price) return g.mrp-g.price;
   return WEEK_HOME.shopKeep;
 }
-function piggyBlock(amt, howHtml){
+function piggyBlock(amt, howHtml, label, suffix){
   var has=amt!=null && amt!=='' && Number(amt)>0;
-  return '<div class="piggy" role="group" aria-label="Keep">'
-    + '<div class="piggy-left">'+IC.piggy
-    + '<div class="piggy-amt'+(has?'':' empty')+'">'+(has?money(Number(amt)):'')+'</div></div>'
+  var k=label||'Amount';
+  return '<div class="piggy" role="group" aria-label="'+k+'">'
+    + '<div class="piggy-left"><div class="piggy-k">'+k+'</div>'
+    + '<div class="piggy-amt'+(has?'':' empty')+'">'+(has?(money(Number(amt))+(suffix||'')):'')+'</div></div>'
     + '<div class="piggy-right">'+howHtml+'</div></div>';
+}
+function complimentaryStrip(){
+  var items=[
+    [IC.power,'Electricity'],
+    [IC.water,'Water'],
+    [IC.wifi,'Internet'],
+    [IC.hot,'Hot water'],
+    [IC.clean,'Housekeeping']
+  ];
+  return '<span class="studio-amenities" aria-label="Complimentary with every Studio">'
+    + '<span class="studio-amenities-title">Complimentary with every Studio</span>'
+    + '<span class="studio-amenities-items">'+items.map(function(item){
+      return '<span class="studio-amenity">'+item[0]+'<span>'+item[1]+'</span></span>';
+    }).join('')+'</span></span>';
 }
 function storyHowLine(howHtml){
   if(!howHtml) return '';
-  return '<span class="story-how">'+IC.piggy+'<span class="story-how-txt">'+howHtml+'</span></span>';
+  return '<span class="story-how"><span class="story-how-txt">'+howHtml+'</span></span>';
 }
 function studioBarName(){
   var p=pickedLive && pickedLive.studio;
@@ -2329,38 +2591,83 @@ function clearBlockingOverlays(){
     }
   }catch(e){}
 }
+function sendPlanTarget(){
+  return maaMonthTarget>0?maaMonthTarget:10000;
+}
+function setSendPlanTarget(value){
+  var n=Math.max(0,parseInt(value,10)||0);
+  if(!(n>0)) return;
+  maaMonthTarget=n;
+  try{ localStorage.setItem('niasave_maa_month',String(n)); }catch(_e){}
+  render();
+}
+function openPlanSalary(){
+  if(!(maaMonthTarget>0)) setSendPlanTarget(sendPlanTarget());
+  tab='earn';
+  earnCard='slip';
+  earnView='aisle';
+  render();
+}
+function sendPlanModel(){
+  var target=sendPlanTarget();
+  var pay=payslipRead&&payslipPay>0?payslipPay:18000;
+  var studio=2200, food=2300, travel=200, wash=220, needs=1000;
+  var core=studio+food+travel+wash+needs;
+  var extra=Math.max(0,target+core-pay);
+  var buffer=Math.max(0,pay+extra-target-core);
+  return {target:target,pay:pay,studio:studio,food:food,travel:travel,wash:wash,needs:needs,extra:extra,buffer:buffer,estimated:!(payslipRead&&payslipPay>0)};
+}
+function sendPlanner(){
+  var p=sendPlanModel();
+  var choices=[8000,10000,12000,15000];
+  if(choices.indexOf(p.target)<0) choices.push(p.target);
+  choices.sort(function(a,b){return a-b;});
+  var opts=choices.map(function(n){return '<option value="'+n+'"'+(n===p.target?' selected':'')+'>'+money(n)+' a month</option>';}).join('');
+  var extra=p.extra>0?('<div class="send-plan-row income"><span>Extra work</span><strong>'+money(p.extra)+'</strong></div>'):'';
+  var buffer=p.buffer>0?('<div class="send-plan-row"><span>Buffer</span><strong>'+money(p.buffer)+'</strong></div>'):'';
+  return '<section class="send-planner" aria-label="Plan money for home">'
+    +'<div class="send-planner-k">Ask Nia</div>'
+    +'<h2>How can I send '+money(p.target)+' home?</h2>'
+    +'<select class="send-plan-select" aria-label="Amount to send home" onchange="setSendPlanTarget(this.value)">'+opts+'</select>'
+    +'<p class="send-plan-caption">'+(p.estimated?'Example using ₹18,000 pay. Add salary to make it yours.':'Built from your saved salary.')+'</p>'
+    +'<div class="send-plan-ledger">'
+    +'<div class="send-plan-row income"><span>'+(p.estimated?'Example pay':'This month’s pay')+'</span><strong>'+money(p.pay)+'</strong></div>'
+    +extra
+    +'<div class="send-plan-row"><span>Studio</span><strong>'+money(p.studio)+'</strong></div>'
+    +'<div class="send-plan-row"><span>Food · 2 meals daily</span><strong>'+money(p.food)+'</strong></div>'
+    +'<div class="send-plan-row"><span>Travel</span><strong>'+money(p.travel)+'</strong></div>'
+    +'<div class="send-plan-row"><span>Washing</span><strong>'+money(p.wash)+'</strong></div>'
+    +'<div class="send-plan-row"><span>Phone + needs</span><strong>'+money(p.needs)+'</strong></div>'
+    +buffer
+    +'<div class="send-plan-row home"><span>Send home</span><strong>'+money(p.target)+'</strong></div>'
+    +'</div><button type="button" class="send-plan-action" onclick="openPlanSalary()">'+(p.estimated?'Add salary':'Update salary')+'</button>'
+    +'</section>';
+}
 function screenSend(){
   if(sendView==='aisle' && sendCard) return sendAisle();
   var head = '<div class="h1">'+t('send_t')+'</div>'
     + '<div class="sub">'+(maaMonthTarget>0?(money(maaMonthTarget)+' for home'):t('send_s'))+'</div>';
-  var pig = piggyBlock(sendAmount>0?sendAmount:0, maaMonthTarget>0?t('piggy_how_send'):t('piggy_how_empty'));
-  if(!(sendAmount>0)) pig = piggyBlock(0, t('piggy_how_empty'));
-  var body = pig + '<div class="story-cards category-cards">'+sendCards()+'</div>'
-    + sendProgressBlock()
-    + '<div class="mwrap" style="margin-top:18px"><div class="mframe" style="cursor:default">'
-    + '<img src="assets/maa-mono.png" alt="Family">'
-    + '</div></div>';
-  return '<div class="pad fadein">'+head+homeMonthBanner()+body+'</div>';
+  var purpose = '<img class="send-purpose" src="assets/send-purpose-family.jpg" alt="Mother with her two sons">';
+  var body = purpose+sendPlanner()
+    + '<section class="insurance-section"><div class="insurance-head"><h2>'+t('send_ins_title')+'</h2><p class="insurance-intro">'+t('send_ins_intro')+'</p></div>'
+    + '<div class="insurance-cards">'+insuranceCards()+'</div>'+insuranceDisclaimer()+'</section>';
+  return '<div class="pad fadein">'+head+body+'</div>';
 }
 function screenLive(){
   if(liveView==='aisle' && liveCard) return liveAisle();
-  var head = '<div class="h1">'+t('live_h1')+'</div>'
+  var head = '<div class="h1">'+t('live_t')+'</div>'
     + '<div class="sub">'+t('live_s')+'</div>';
-  var keep=oilKeepAmount();
-  var pig = piggyBlock(keep, t('piggy_how_oil'));
-  var body = pig + '<div class="story-cards category-cards">'+liveCards()+'</div>';
+  var body = '<div class="story-cards category-cards proof-cards">'+liveCards()+'</div>';
   return '<div class="pad fadein">'+head+homeMonthBanner()+body+'</div>';
 }
 function screenEarn(){
   if(earnView==='aisle' && earnCard) return earnAisle();
   var head = '<div class="h1">'+t('earn_t')+'</div>'
     + '<div class="sub">'+(t('earn_s')||'')+'</div>';
-  var slip = shouldShowSlipAsk() ? payslipDetailsBanner() : '';
-  var earnAmt = (payslipRead && payslipOt!=null && payslipOt>0) ? payslipOt : 0;
-  var pig = piggyBlock(earnAmt, earnAmt>0?t('piggy_how_earn'):t('piggy_how_empty'));
-  var trends = payTrendsBlock();
-  var cards = '<div class="story-cards category-cards">'+earnCards()+'</div>';
-  return '<div class="pad fadein">'+head+homeMonthBanner()+slip+pig+trends+cards+'</div>';
+  var trends = salaryHistoryCard();
+  var cards = '<div class="story-cards category-cards proof-cards earn-proof-cards">'+earnCards()+'</div>';
+  var wageNote = '<div class="earn-wage-note"><strong>Income guide.</strong> Uses the official ₹556–₹827 daily wage bands. Exact pay depends on work and location. <a href="https://clc.gov.in/clc/sites/default/files/mygov_17748804861.pdf" target="_blank" rel="noopener">Source</a></div>';
+  return '<div class="pad fadein">'+head+homeMonthBanner()+trends+wageNote+cards+'</div>';
 }
 function nearbyCard(job){
   var taken=!!takenJobs[job.id];
@@ -2589,7 +2896,7 @@ function contractorPanel(){
 }
 
 var SWAP_COPY={
-  en:{hero_k:'This month',hero_t:'This shop keeps more for home.',hero_d:'',hero_cta:'Use the lower-cost oil →',shopcat:'What do you need?',homecare:'Cleaning',homecare_m:'Detergent, dishwash and floor cleaner',personal:'Soap & shampoo',personal_m:'Bathing and everyday care',oils:'Cooking oil',oils_m:'Mustard, groundnut and other oils',essentials:'Ration',essentials_m:'Atta, rice, dal and salt',all:'All',cleaning:'Cleaning',ownlabel:'Nia own label',bath:'Bath & body',checked:'Price checked',save_more:'Save more',save:'Save',add:'Add',added:'Added',swap_k:'A lower-price match',more_home:'more to home',switch:'Switch and save',switched:'Switched',keep_original:'Keep my original choice',food_t:'Food stays the brand you trust',food_d:'We do not substitute food. Taste, safety and trust come first.',reg_t:'A regulated item. we keep the brand',reg_d:'Recognised personal-care brands stay unchanged.',own_t:'Already the lowest price',own_d:'This is our label, so there is no lower-price swap to show.',proof_t:'Priced for your week',proof_d:'Same pack. Nia price vs kirana.',add_choice:'Add my choice',keep_week:'Kirana subtraction this month: {n}.',aisle_keep_oil:'Oil kirana subtraction this month: {n}',aisle_keep:'Kirana subtraction this month: {n}',kirana_at:'at kirana',also_take:'People also take',in_stock:'In stock',search_hits:'Matches',bag_pickup:'Pre-order · Studio cart after 5',bag_vs:'Kirana subtraction'},
+  en:{hero_k:'This month',hero_t:'This shop keeps more for home.',hero_d:'',hero_cta:'Use the lower-cost oil →',shopcat:'What do you need?',homecare:'Cleaning',homecare_m:'Detergent, dishwash and floor cleaner',personal:'Soap & shampoo',personal_m:'Bathing and everyday care',oils:'Cooking oil',oils_m:'Regular oils. 1 L packs',essentials:'Ration',essentials_m:'Atta, rice, dal and salt',snacks:'Biscuits & snacks',snacks_m:'Biscuits and namkeen',tea_sugar:'Tea & sugar',tea_sugar_m:'Chai and sugar',tshirts:'T-shirts',tshirts_m:'Basic cotton T-shirts',innerwear:'Innerwear',innerwear_m:'Vests and trunks',all:'All',cleaning:'Cleaning',ownlabel:'Nia own label',bath:'Bath & body',checked:'Price checked',save_more:'Save more',save:'Save',add:'Add',added:'Added',swap_k:'A lower-price match',more_home:'more to home',switch:'Switch and save',switched:'Switched',keep_original:'Keep my original choice',food_t:'Food stays the brand you trust',food_d:'We do not substitute food. Taste, safety and trust come first.',reg_t:'A regulated item. we keep the brand',reg_d:'Recognised personal-care brands stay unchanged.',own_t:'Already the lowest price',own_d:'This is our label, so there is no lower-price swap to show.',proof_t:'Price check',proof_d:'Nia vs kirana.',add_choice:'Add my choice',keep_week:'Save {n} this month.',aisle_keep_oil:'Save {n} this month',aisle_keep:'Save {n} this month',kirana_at:'at kirana',also_take:'People also take',in_stock:'In stock',search_hits:'Matches',bag_pickup:'Pre-order · Studio cart after 5',bag_vs:'Save'},
   hi:{hero_k:'इस हफ़्ते',hero_t:'यह दुकान घर के लिए और रखती है।',hero_d:'',hero_cta:'कम कीमत का तेल लें →',shopcat:'क्या चाहिए?',homecare:'सफाई का सामान',homecare_m:'सर्फ, बर्तन और फर्श की सफाई',personal:'साबुन/शैम्पू',personal_m:'नहाने और रोज़ की देखभाल का सामान',oils:'खाना पकाने का तेल',oils_m:'सरसों, मूंगफली और दूसरे तेल',essentials:'राशन',essentials_m:'आटा, चावल, दाल और नमक',all:'सभी',cleaning:'सफ़ाई',ownlabel:'Nia का अपना',bath:'नहाना और शरीर',checked:'कीमत जाँची',save_more:'और बचाएँ',save:'बचत',add:'जोड़ें',added:'जुड़ गया',swap_k:'कम कीमत का समान विकल्प',more_home:'और घर',switch:'बदलें और बचाएँ',switched:'बदल दिया',keep_original:'अपनी पहली पसंद रखें',food_t:'खाने में भरोसे का ब्रांड रहता है',food_d:'हम खाने का सामान नहीं बदलते। स्वाद, सुरक्षा और भरोसा पहले आते हैं।',reg_t:'नियमित वस्तु. ब्रांड वही रहता है',reg_d:'पहचाना हुआ निजी-देखभाल ब्रांड नहीं बदला जाता।',own_t:'पहले से सबसे कम कीमत',own_d:'यह हमारा अपना लेबल है, इसलिए इससे कम कीमत का विकल्प नहीं है।',proof_t:'आपके हफ़्ते की कीमत',proof_d:'वही पैक। Nia कीमत vs किराना।',add_choice:'अपनी पसंद जोड़ें',keep_week:'इस हफ़्ते किराना घटौती: {n}।',aisle_keep_oil:'इस हफ़्ते तेल किराना घटौती: {n}',aisle_keep:'इस हफ़्ते किराना घटौती: {n}',kirana_at:'किराना पर',also_take:'और लोग ये लेते हैं',in_stock:'स्टॉक में',search_hits:'मिलान',bag_pickup:'शाम 5 बजे के बाद उठाएँ',bag_vs:'किराना घटौती'},
   bn:{hero_k:'এই সপ্তাহে',hero_t:'এই দোকান বাড়ির জন্য আরও রাখে।',hero_d:'',hero_cta:'সস্তা তেল নিন →',shopcat:'কী দরকার?',homecare:'পরিষ্কারের জিনিস',homecare_m:'কাপড়, বাসন আর মেঝে পরিষ্কার',personal:'সাবান/শ্যাম্পু',personal_m:'স্নান আর রোজকার যত্ন',oils:'রান্নার তেল',oils_m:'সর্ষে, বাদাম আর অন্য তেল',essentials:'রেশন',essentials_m:'চাল, আটা, ডাল আর নুন',save:'বাঁচাও',add:'যোগ',proof_t:'দাম',proof_d:'একই প্যাক। Nia দাম vs কিরাণা।',add_choice:'আমার পছন্দ যোগ',keep_week:'এই সপ্তাহে কিরাণা বিয়োগ: {n}।',aisle_keep_oil:'এই সপ্তাহে তেল কিরাণা বিয়োগ: {n}',aisle_keep:'এই সপ্তাহে কিরাণা বিয়োগ: {n}',kirana_at:'কিরাণায়'},
   ta:{hero_k:'இந்த வாரம்',hero_t:'இந்த கடை வீட்டிற்கு மேலும் வைக்கும்.',hero_d:'',hero_cta:'மலிவு எண்ணெய் எடு →',shopcat:'என்ன வேண்டும்?',homecare:'சுத்தம் செய்யும் பொருட்கள்',homecare_m:'டிடர்ஜெண்ட், பாத்திரம் மற்றும் தரை சுத்தம்',personal:'சோப்பு/ஷாம்பு',personal_m:'குளியல் மற்றும் தினசரி பயன்பாடு',oils:'சமையல் எண்ணெய்',oils_m:'கடுகு, நிலக்கடலை மற்றும் பிற எண்ணெய்கள்',essentials:'மளிகை',essentials_m:'அரிசி, மாவு, பருப்பு மற்றும் உப்பு',all:'அனைத்தும்',cleaning:'சுத்தம்',ownlabel:'Nia சொந்த லேபல்',bath:'குளியல் மற்றும் உடல்',checked:'விலை சரிபார்க்கப்பட்டது',save_more:'மேலும் சேமிக்கவும்',save:'சேமிப்பு',add:'சேர்',added:'சேர்க்கப்பட்டது',swap_k:'குறைந்த விலை பொருத்தம்',more_home:'மேலும் வீட்டிற்கு',switch:'மாற்றி சேமிக்கவும்',switched:'மாற்றப்பட்டது',keep_original:'முதல் தேர்வை வைத்திரு',food_t:'உணவில் நம்பகமான பிராண்டே இருக்கும்',food_d:'உணவுப் பொருளை மாற்றமாட்டோம். சுவை, பாதுகாப்பு, நம்பிக்கை முதலில்.',reg_t:'ஒழுங்குபடுத்தப்பட்ட பொருள். பிராண்டை வைத்திருப்போம்',reg_d:'அறிமுகமான தனிப்பட்ட பராமரிப்பு பிராண்டு மாறாது.',own_t:'ஏற்கனவே குறைந்த விலை',own_d:'இது எங்கள் சொந்த லேபல்; இன்னொரு குறைந்த விலை மாற்று இல்லை.',proof_t:'உங்கள் வாரத்திற்கான விலை',proof_d:'அதே பேக். Nia விலை vs கிரானா.',add_choice:'என் தேர்வை சேர்',keep_week:'இந்த வாரம் கிரானா கழிவு: {n}.',aisle_keep_oil:'இந்த வாரம் எண்ணெய் கிரானா கழிவு: {n}',aisle_keep:'இந்த வாரம் கிரானா கழிவு: {n}',kirana_at:'கிரானாவில்'},
@@ -2611,6 +2918,10 @@ function searchHitProducts(){
   // Studio cart hero SKUs only (not legacy warehouse list)
   var cart=commerceProducts.concat(substitutionProducts);
   return cart.filter(function(p){ return productMatchesQuery(p, q); }).slice(0,8);
+}
+function nonOilListingProducts(){
+  var direct=commerceProducts.filter(function(p){return p.photoSheet!=='oil';});
+  return substitutionProducts.concat(direct);
 }
 function onShopSearch(el){
   shopQuery = el && el.value ? el.value : '';
@@ -2657,7 +2968,11 @@ function aisleKeepLine(){
   return sw(key).replace('{n}', money(n));
 }
 function productById(id){ return allProducts.find(function(x){return x.id===id;}); }
-function productPhotoClass(p){ return (p.photoSheet==='sub'?'sub-photo ':'oil-photo ')+p.photoClass; }
+function productPhotoClass(p){
+  if(p.photoSheet==='sub') return 'sub-photo '+p.photoClass;
+  if(p.photoSheet==='direct') return 'direct-photo '+p.photoClass;
+  return 'oil-photo '+p.photoClass;
+}
 function substituteFor(p){ var s=p&&p.substituteId?productById(p.substituteId):null; return s&&p.qualityVerified&&!s.outOfStock?s:null; }
 function stockQty(id){
   if(shopStock && typeof shopStock[id]==='number') return shopStock[id];
@@ -2679,54 +2994,95 @@ function refreshStock(){
   }).catch(function(){ return null; });
 }
 function commerceCard(p){
-  var keep=p.mrp-p.price, meta=(p.hi[lang]||p.hi.en), swap=substituteFor(p);
+  var meta=(p.hi[lang]||p.hi.en), swap=substituteFor(p), saving=productSaving(p);
   return '<article class="shop-card">'
     + '<div class="shop-photo '+productPhotoClass(p)+'" onclick="openProduct(&quot;'+p.id+'&quot;)" role="button" tabindex="0" aria-label="Open '+p.brand+'"><span class="cert-badge">'+IC.shield+' '+(p.category==='own_label'?sw('ownlabel'):sw('checked'))+'</span></div>'
     + '<div class="shop-copy"><button class="shop-name" onclick="openProduct(&quot;'+p.id+'&quot;)">'+p.brand+'</button><div class="shop-meta">'+meta+'</div>'
     + '<div class="in-stock">'+stockLabel(p.id)+'</div>'
     + (swap?'<div class="swap-hint">'+sw('save_more')+'</div>':'')
-    + '<div class="shop-price"><span class="shop-now">'+money(p.price)+'</span><span class="shop-mrp">'+money(p.mrp)+'</span></div>'
-    + '<div class="shop-action"><span class="shop-save">'+sw('save')+' '+money(keep)+'</span>'+qtyControl(p.id,'card')+'</div></div></article>';
+    + '<div class="shop-price"><span class="shop-mrp">MRP '+money(p.mrp)+'</span><span class="shop-discount">'+money(saving)+' off</span><span class="shop-now">Buy for '+money(p.price)+'</span></div>'
+    + '<div class="shop-action">'+qtyControl(p.id,'card')+'</div></div></article>';
 }
 
-function categoryCard(id,photo,name,meta){
-  return '<button class="category-card" onclick="openCategory(\''+id+'\')"><span class="category-card-photo '+photo+'"></span><span class="category-card-copy"><span><span class="category-card-name">'+name+'</span><span class="category-card-meta">'+meta+'</span></span><span class="category-card-arrow">'+IC.chev+'</span></span></button>';
+function categoryProductIds(id){
+  if(id==='homecare') return ['detergent_pick','nia_detergent'];
+  if(id==='personal') return ['bathsoap_pick','toothpaste_pick','nia_bathsoap'];
+  if(id==='essentials') return ['essentials_pick'];
+  if(id==='snacks') return ['snack_biscuits','snack_namkeen'];
+  if(id==='tea_sugar') return ['daily_tea','daily_sugar'];
+  if(id==='tshirts') return ['basic_tshirt'];
+  if(id==='innerwear') return ['inner_vests','inner_trunks'];
+  return commerceProducts.filter(function(p){return p.photoSheet==='oil';}).map(function(p){return p.id;});
 }
-function piggyMarkSvg(){
-  /* Exact same thin-stroke SVG as the Save tab icon. Never a photo. Never <img>. */
-  return String(IC.pig).replace('<svg ', '<svg class="card-pig-svg" ');
+function categoryDiscountLabel(id){
+  var best=0;
+  categoryProductIds(id).forEach(function(pid){
+    var p=productById(pid);
+    if(p) best=Math.max(best,productSaving(p));
+  });
+  return best>0?'Up to '+money(best)+' off':'';
+}
+function productSaving(p){
+  return p && p.mrp>0 && p.price<p.mrp ? p.mrp-p.price : 0;
+}
+function categoryCard(id,photo,name,meta){
+  var discount=categoryDiscountLabel(id);
+  return '<button class="category-card" onclick="openCategory(\''+id+'\')"><span class="category-card-photo '+photo+'"></span><span class="category-card-copy"><span><span class="category-card-name">'+name+'</span><span class="category-card-meta">'+meta+'</span><span class="category-card-discount">'+discount+'</span></span><span class="category-card-arrow">'+IC.chev+'</span></span></button>';
 }
 function liveTabCopy(id, part){
   var ids=['studio','wash','hubfood','cooler','cycle','raincape','dontmiss','akka','group','dropin','recreation','thrift','grievance'];
   var n=ids.indexOf(id)+1;
   return t('live_card'+n+'_'+part);
 }
-function storyCard(name,meta,photoClass,onclick,metaClass,piggyAmt){
+function storyCard(name,meta,photoClass,onclick,metaClass,piggyAmt,priceLabel){
   var click=onclick?' onclick="'+onclick+'"':'';
   var sid='';
   if(onclick){
     var m=String(onclick).match(/openStoryCard\('([^']+)','([^']+)'\)/);
     if(m) sid=' data-story="'+m[1]+'-'+m[2]+'"';
   }
-  var below='';
-  if(piggyAmt !== undefined){
-    var amtHtml='';
-    if(piggyAmt!=null && Number(piggyAmt)>0){
-      amtHtml='<span class="card-pig-amt">'+money(Number(piggyAmt))+'</span>';
-    }
-    var how=(meta && String(meta)!=='')?String(meta):'';
-    below='<span class="card-pig-row" data-piggy="1">'
-      + '<span class="card-pig-ico" aria-hidden="true">'+piggyMarkSvg()+'</span>'
-      + amtHtml
-      + (how?('<span class="card-pig-how">'+how+'</span>'):'')
-      + '</span>';
-  } else if(meta && String(meta)!==''){
-    below='<span class="category-card-meta'+(metaClass?(' '+metaClass):'')+'">'+meta+'</span>';
-  }
+  var hasAmt=piggyAmt!=null && Number(piggyAmt)>0;
+  var how=(meta && String(meta)!=='')?String(meta):'Saving not measured yet.';
+  var hasSaving=piggyAmt!=null;
+  var saving=hasAmt?(money(Number(piggyAmt))+'/mo'):'After choice';
+  var saveTag=hasSaving?('<span class="card-saving'+(hasAmt?'':' pending')+'" data-piggy="1">'
+    + '<span class="card-value-label">Save</span><strong>'+saving+'</strong></span>'):'';
+  var compactPrice=priceLabel?String(priceLabel).replace('/month','/mo'):'';
+  var paid=priceLabel?'<span class="card-price"><span class="card-value-label">Price</span><strong>'+compactPrice+'</strong></span>':'';
+  var values=(saveTag||paid)?'<span class="card-value-row">'+saveTag+paid+'</span>':'';
   return '<button type="button" class="category-card story-card"'+sid+click+'>'
     + '<span class="category-card-photo story-photo '+photoClass+'"></span>'
-    + '<span class="category-card-copy"><span><span class="category-card-name">'+name+'</span>'+below+'</span>'
-    + '<span class="category-card-arrow">'+IC.chev+'</span></span></button>';
+    + '<span class="category-card-copy"><span><span class="category-card-name">'+name+'</span>'+values+'<span class="card-how">'+how+'</span></span></span></button>';
+}
+function proofCard(id,name,photoClass,onclick,model){
+  var outside=Math.max(0,Number(model.outside)||0);
+  var niaKnown=model.nia!==null && model.nia!=='' && isFinite(Number(model.nia));
+  var nia=niaKnown?Math.max(0,Number(model.nia)||0):0;
+  var top=Math.max(outside,nia,1);
+  var outsidePct=Math.round((outside/top)*100);
+  var niaPct=niaKnown?Math.round((nia/top)*100):0;
+  var niaText=niaKnown?money(nia):'Price to confirm';
+  var aria=name+'. Saved '+money(model.amount)+' every month. '+(model.outsideLabel||'Outside')+' '+money(outside)+'. With Nia '+niaText+'.';
+  var inCart=!!bag['live_'+id];
+  var amenities=id==='studio'?complimentaryStrip():'';
+  var stepper='<span class="proof-stepper" role="group" aria-label="Quantity">'
+    + '<button type="button" class="proof-minus" onclick="event.stopPropagation();setLiveCart(\''+id+'\',0,this)" aria-label="Remove '+name+'"'+(inCart?'':' disabled')+'>&minus;</button>'
+    + '<span class="proof-qty" aria-live="polite">'+(inCart?'1':'0')+'</span>'
+    + '<button type="button" class="proof-plus" onclick="event.stopPropagation();setLiveCart(\''+id+'\',1,this)" aria-label="Add '+name+'"'+(inCart?' disabled':'')+'>+</button></span>';
+  return '<article class="proof-card" data-story="live-'+id+'" role="button" tabindex="0" onclick="'+onclick+'" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();'+onclick+';}" aria-label="'+aria+'">'
+    + '<span class="proof-main"><span class="proof-photo story-photo '+photoClass+'">'+stepper+'</span>'
+    + '<span class="proof-copy"><span class="proof-name">'+name+'</span><span class="proof-desc">'+model.desc+'</span>'+amenities
+    + '<span class="proof-saving"><strong>'+money(model.amount)+'</strong><em>saved every month</em><span class="proof-piggy" aria-hidden="true">'+IC.piggy+'</span></span></span></span>'
+    + '<span class="proof-bars">'
+    + '<span class="proof-bar-row"><span class="proof-bar-label">'+(model.outsideLabel||'Outside')+'</span><span class="proof-track"><i style="width:'+outsidePct+'%"></i></span><span class="proof-bar-value">'+money(outside)+'</span></span>'
+    + '<span class="proof-bar-row nia"><span class="proof-bar-label">With Nia</span><span class="proof-track"><i style="width:'+niaPct+'%"></i></span><span class="proof-bar-value">'+niaText+'</span></span>'
+    + '</span></article>';
+}
+function earnPhotoCard(id,name,desc,photoClass){
+  var income=EARN_INCOME_RANGE[id]||'';
+  return '<button type="button" class="proof-card earn-proof-card" data-story="earn-'+id+'" onclick="openStoryCard(\'earn\',\''+id+'\')" aria-label="'+name+'. '+desc+(income?' '+income:'')+'">'
+    + '<span class="proof-main"><span class="proof-photo story-photo '+photoClass+'"></span>'
+    + '<span class="proof-copy"><span class="proof-name">'+name+'</span><span class="proof-desc">'+desc+'</span>'+(income?'<span class="earn-income-range">'+income+'</span>':'')+'</span></span></button>';
 }
 function openStoryCard(which,id){
   clearBlockingOverlays();
@@ -2770,10 +3126,10 @@ function liveCardTitle(id){
 }
 function liveAisleHow(id){
   if(id==='wash'){
-    /* Piggy: weekly charge ₹50, or empty until OT typed. Never put wash OT rupees in the piggy. */
-    var washPigAmt = (payslipRead && payslipOt!=null && payslipOt>=0) ? 0 : WASH_WEEK_CHARGE;
+    /* Monthly wash charge, or empty until OT is typed. Never put wash OT rupees in the piggy. */
+    var washPigAmt = (payslipRead && payslipOt!=null && payslipOt>=0) ? 0 : WASH_MONTH_CHARGE;
     var washHow = t('piggy_how_wash_charge');
-    return piggyBlock(washPigAmt, washHow);
+    return piggyBlock(washPigAmt, washHow, 'Price', '/month');
   }
   if(id==='studio') return '<p class="quiet live-how">'+t('live_how_studio')+'</p>';
   if(id==='hubfood') return '<p class="quiet live-how">'+t('live_how_hubfood')+'</p>';
@@ -2814,14 +3170,14 @@ function liveAisle(){
       }
     }
   } else if(id==='wash'){
-    rows=storyPickRow(t('wash_book'),'',"pickLive('wash','clothes','Clothes laundry')");
+    rows=storyPickRow(t('wash_book'),'',"pickLive('wash','clothes','Washing service')");
   } else if(id==='hubfood'){
     rows=storyPickRow('Amma tiffin','Hub tiffin',"pickLive('hubfood','amma','Amma tiffin')")
       +storyPickRow('Debraj mess','₹2,300 two meals',"pickLive('hubfood','debraj','Debraj mess')")
       +storyPickRow('Hub rice meal','Hub meal',"pickLive('hubfood','rice','Hub meal')");
   } else if(id==='cooler'){
-    rows=storyPickRow('Share a fan','Sleep cooler',"pickLive('cooler','share','Shared fan')")
-      +storyPickRow('Ask at hub','For the heat',"pickLive('cooler','hub','Hub fan')");
+    rows=storyPickRow('Shared air cooler','One per room.',"pickLive('cooler','share','Shared air cooler')")
+      +storyPickRow('Ask at hub','For a shared air cooler',"pickLive('cooler','hub','Hub air cooler')");
   } else if(id==='cycle'){
     rows=storyPickRow('Hub cycle pool','Skip the auto',"pickLive('cycle','pool','Hub cycle')")
       +storyPickRow('Used cycle','One time',"pickLive('cycle','buy','Used cycle')");
@@ -2836,8 +3192,7 @@ function liveAisle(){
       +storyPickRow(t('tribe_akka_home'),t('tribe_akka_home_m'),"pickLive('akka','home','Akka · home')")
       +storyPickRow(t('tribe_akka_safe'),t('tribe_akka_safe_m'),"pickLive('akka','safe','Akka · safe')");
   } else if(id==='group'){
-    rows=storyPickRow(t('tribe_group_lang'),t('tribe_group_lang_m'),"pickLive('group','lang','Language circle')")
-      +storyPickRow(t('tribe_group_talk'),t('tribe_group_talk_m'),"pickLive('group','talk','Evening talk')");
+    rows=storyPickRow('Sunday chai with group','Tea every Sunday.',"pickLive('group','chai','Sunday chai with group')");
   } else if(id==='dropin'){
     rows=storyPickRow(t('tribe_dropin_self'),t('tribe_dropin_self_m'),"pickLive('dropin','self','Self-care clinic')")
       +storyPickRow(t('tribe_dropin_counsel'),t('tribe_dropin_counsel_m'),"pickLive('dropin','counsel','Counsellor')")
@@ -2855,7 +3210,9 @@ function liveAisle(){
 }
 function earnAisle(){
   var id=earnCard, rows='';
-  if(id==='ot'){
+  if(id==='history'){
+    return '<div class="pad fadein">'+storyAisleHead('Salary history','','earn')+payTrendsBlock()+'</div>';
+  } else if(id==='ot'){
     rows=storyPickRow('2 OT shifts this month',t('earn_card_ot_m'),"toast('OT noted')")
       +storyPickRow('4 OT shifts this month',t('earn_card_ot_m'),"toast('OT noted')");
   } else if(id==='gig'){
@@ -2865,7 +3222,7 @@ function earnAisle(){
     });
   } else if(id==='friday'){
     var friTaken=weekPath==='friday';
-    rows=storyPickRow('Friday 6-8 PM extra',earnFriMeta(),(friTaken?'toast()':'takeFridayHours()'));
+    rows=storyPickRow('Friday 6–8 PM',earnFriMeta(),(friTaken?'toast()':'takeFridayHours()'));
   } else if(id==='village'){
     rows='<p class="quiet" style="margin:0 0 14px">'+t('earn_card_village_m')+'</p>'
       +'<div class="village-form">'
@@ -2893,22 +3250,40 @@ function earnAisle(){
     id==='ot'?t('earn_card_ot_m'):id==='gig'?t('earn_card_gig_m'):earnFriMeta(),
     'earn')+rows+'</div>';
 }
-function monthProgressPct(){
-  var d=new Date(), total=new Date(d.getFullYear(),d.getMonth()+1,0).getDate();
-  return Math.round(d.getDate()/total*100);
+function askInsurance(){
+  toast('Use your bank or post office.');
 }
-function sendProgressBlock(){
-  var monthPct=monthProgressPct();
-  var goalPct=(maaMonthTarget>0&&sendAmount>0)?Math.min(100,Math.round(sendAmount/maaMonthTarget*100)):null;
-  var goalHtml=goalPct!=null
-    ? ('<div class="pct">'+goalPct+'%</div><div class="lbl">'+t('send_prog_goal')+'</div><div class="prog"><div class="prog-bar"><div class="prog-fill" style="width:'+goalPct+'%"></div></div></div>')
-    : ('<div class="pct empty">'+t('send_prog_empty')+'</div>');
-  return '<div class="send-progress">'+goalHtml
-    + '<div class="pct" style="margin-top:18px">'+monthPct+'%</div><div class="lbl">'+t('send_prog_month')+'</div>'
-    + '<div class="prog"><div class="prog-bar"><div class="prog-fill" style="width:'+monthPct+'%"></div></div></div></div>';
+function insuranceDisclaimer(extraClass){
+  return '<p class="insurance-disclaimer'+(extraClass?' '+extraClass:'')+'">'+t('send_ins_disclaimer')+'</p>';
 }
 function sendAisle(){
   var id=sendCard, body='';
+  if(id==='accident'){
+    body='<div class="panel" style="margin-bottom:14px"><div style="font-size:24px;font-weight:700;color:var(--navy)">₹20 a year</div>'
+      +'<div style="font-size:17px;font-weight:650;margin-top:8px">PMSBY accident cover</div></div>'
+      +'<div class="insurance-facts" aria-label="PMSBY facts">'
+      +'<div class="insurance-fact"><span>Age</span><strong>18–70</strong></div>'
+      +'<div class="insurance-fact"><span>Buy through</span><strong>Bank or post office</strong></div>'
+      +'<div class="insurance-fact"><span>Payment</span><strong>Yearly auto-debit</strong></div>'
+      +'<div class="insurance-fact"><span>Death or total disability</span><strong>₹2 lakh</strong></div>'
+      +'<div class="insurance-fact"><span>Partial disability</span><strong>₹1 lakh</strong></div>'
+      +'<div class="insurance-fact"><span>Hospital bills</span><strong>Not covered</strong></div>'
+      +'</div>'
+      +'<a class="insurance-source" href="https://www.financialservices.gov.in/pmsby" target="_blank" rel="noopener">Official PMSBY terms</a>'
+      +'<p class="insurance-product-note">Eligibility and claims are decided by the participating insurer. Premium and terms may change. Nia does not issue this cover.</p>'
+      +'<button type="button" class="cta" onclick="askInsurance()">'+t('send_ins_ask')+'</button>'+insuranceDisclaimer('insurance-detail-disclaimer');
+    return '<div class="pad fadein">'+storyAisleHead(t('send_ins_acc_n'),'','send')+body+'</div>';
+  }
+  if(id==='life'){
+    body='<div class="panel" style="margin-bottom:14px"><div style="font-size:24px;font-weight:700;color:var(--navy)">₹436 a year</div>'
+      +'<div style="font-size:17px;font-weight:650;margin-top:10px">₹2 lakh life cover</div>'
+      +'<p class="quiet" style="margin:6px 0 0">Death from any cause.</p>'
+      +'<p class="quiet" style="margin:6px 0 0">Ages 18–50.</p>'
+      +'<p class="quiet" style="margin:6px 0 0">Buy at your bank.</p></div>'
+      +'<div class="pricing-audit" style="margin-bottom:12px">PMJJBY · 30-day wait for non-accidental death on first enrolment.</div>'
+      +'<button type="button" class="cta" onclick="askInsurance()">'+t('send_ins_ask')+'</button>'+insuranceDisclaimer('insurance-detail-disclaimer');
+    return '<div class="pad fadein">'+storyAisleHead(t('send_ins_life_n'),'','send')+body+'</div>';
+  }
   if(id==='goal'){
     body='<p class="quiet" style="margin:0 0 14px">'+t('send_card_goal_m')+'</p>'
       +'<div class="send-amount-row" style="display:flex;align-items:center;gap:8px;margin-bottom:16px"><span style="font-size:20px;font-weight:600">₹</span>'
@@ -2923,28 +3298,28 @@ function sendAisle(){
   return '<div class="pad fadein">'+storyAisleHead(t('send_card_sent_n'),'','send')+body+'</div>';
 }
 function liveCards(){
-  /* Live list: photo + name + piggyMarkSvg on all 13. Wash keep ₹50. Other cards how-only. */
+  /* Each Live service shows a transparent monthly member-value estimate. */
   var ids=['studio','wash','hubfood','cooler','cycle','raincape','dontmiss','akka','group','dropin','recreation','thrift','grievance'];
   var photos={studio:'story-studio',wash:'story-wash',hubfood:'story-eat',cooler:'story-cooler',cycle:'story-cycle',raincape:'story-rain',dontmiss:'story-day',akka:'story-akka',group:'story-group',dropin:'story-dropin',recreation:'story-recreation',thrift:'story-thrift',grievance:'story-grievance'};
   return ids.map(function(id){
-    var amt=(id==='wash')?WASH_WEEK_CHARGE:null;
-    return storyCard(liveTabCopy(id,'n'), liveTabCopy(id,'m'), photos[id], "openStoryCard('live','"+id+"')", undefined, amt);
+    var saving=liveSavingEstimate(id);
+    return proofCard(id,liveTabCopy(id,'n'),photos[id],"openStoryCard('live','"+id+"')",saving);
   }).join('');
 }
 function earnCards(){
-  var cards=storyCard(t('earn_card_ot_n'), t('earn_card_ot_m'), 'story-friday', "openStoryCard('earn','ot')");
+  var cards=earnPhotoCard('ot',t('earn_card_ot_n'),t('earn_card_ot_m'),'story-friday');
   if(WEEK_HOME.nearby && WEEK_HOME.nearby.length){
-    cards+=storyCard(t('earn_card_gig_n'), t('earn_card_gig_m'), 'story-nearby', "openStoryCard('earn','gig')");
+    cards+=earnPhotoCard('gig',t('earn_card_gig_n'),t('earn_card_gig_m'),'story-nearby');
   }
-  cards+=storyCard(t('earn_card_fri_n'), earnFriMeta(), 'story-friday', "openStoryCard('earn','friday')")
-    + storyCard(t('earn_card_village_n'), t('earn_card_village_m'), 'story-village', "openStoryCard('earn','village')")
-    + storyCard(t('earn_card_plant_n'), t('earn_card_plant_m'), 'story-plant', "openStoryCard('earn','plant')");
+  cards+=earnPhotoCard('friday',t('earn_card_fri_n'),earnFriMeta(),'story-friday-extra')
+    + earnPhotoCard('village',t('earn_card_village_n'),t('earn_card_village_m'),'story-village')
+    + earnPhotoCard('plant',t('earn_card_plant_n'),t('earn_card_plant_m'),'story-plant');
   if(maaMonthTarget>0){
-    cards+=storyCard(t('earn_card_slip_n'), t('earn_card_slip_m'), 'story-slip', "openStoryCard('earn','slip')");
+    cards+=earnPhotoCard('slip',t('earn_card_slip_n'),t('earn_card_slip_m'),'story-slip');
   }
   return cards;
 }
-function sendCards(){
+function sendMoneyCards(){
   var goalMeta=maaMonthTarget>0?money(maaMonthTarget)+' for home':t('send_card_goal_m');
   var cards=storyCard(t('send_card_goal_n'), goalMeta, 'story-goal', "openStoryCard('send','goal')");
   if(maaMonthTarget>0){
@@ -2953,46 +3328,67 @@ function sendCards(){
   }
   return cards;
 }
+function insuranceCards(){
+  return insuranceCard(t('send_ins_acc_n'),t('send_ins_acc_m'),'story-accident','₹20',"openStoryCard('send','accident')")
+    + insuranceCard(t('send_ins_life_n'),t('send_ins_life_m'),'story-life','₹436',"openStoryCard('send','life')");
+}
+function insuranceCard(name,cover,photo,price,action){
+  return '<button type="button" class="insurance-card" onclick="'+action+'">'
+    + '<span class="insurance-card-photo story-photo '+photo+'" aria-hidden="true"></span>'
+    + '<span class="insurance-card-copy"><strong class="insurance-card-name">'+name+'</strong><span class="insurance-card-cover">'+cover+'</span></span>'
+    + '<span class="insurance-card-price"><strong>'+price+'</strong><span>a year</span></span>'
+    + '</button>';
+}
 function commerceHome(){
-  var cats=categoryCard('homecare','cat-homecare',sw('homecare'),sw('homecare_m'))+categoryCard('personal','cat-personal',sw('personal'),sw('personal_m'))+categoryCard('oils','cat-oils',sw('oils'),sw('oils_m'))+categoryCard('essentials','cat-essentials',sw('essentials'),sw('essentials_m'));
-  var kept=bagKeptVsKirana(); if(!(kept>0)){ var oilsKeep=0; (commerceProducts||[]).forEach(function(p){ if(p&&p.mrp>p.price) oilsKeep+=(p.mrp-p.price); }); kept=oilsKeep||WEEK_HOME.shopKeep; }
+  var cats=categoryCard('homecare','cat-homecare',sw('homecare'),sw('homecare_m'))
+    +categoryCard('personal','cat-personal',sw('personal'),sw('personal_m'))
+    +categoryCard('oils','cat-oils',sw('oils'),sw('oils_m'))
+    +categoryCard('essentials','cat-essentials',sw('essentials'),sw('essentials_m'))
+    +categoryCard('snacks','cat-snacks',sw('snacks'),sw('snacks_m'))
+    +categoryCard('tea_sugar','cat-tea',sw('tea_sugar'),sw('tea_sugar_m'))
+    +categoryCard('tshirts','cat-tshirts',sw('tshirts'),sw('tshirts_m'))
+    +categoryCard('innerwear','cat-innerwear',sw('innerwear'),sw('innerwear_m'));
   var hubOn=saveFulfillment==='hub_collect';
-  var savePig = piggyBlock(oilKeepAmount(), t('piggy_how_save'));
   return '<div class="commerce fadein">'
     + '<header class="commerce-head">'
     + '<h1 class="commerce-title">'+t('save_t')+'</h1>'
     + '<div class="commerce-sub">'+t('save_s')+'</div>'
-    + savePig
     + '<div class="fulfill-toggle" role="tablist" aria-label="Pickup or delivery">'
     + '<button type="button" class="fulfill-seg'+(hubOn?' on':'')+'" role="tab" aria-selected="'+(hubOn?'true':'false')+'" onclick="setSaveFulfillment(&quot;hub_collect&quot;)">Hub pick up</button>'
     + '<button type="button" class="fulfill-seg'+(!hubOn?' on':'')+'" role="tab" aria-selected="'+(!hubOn?'true':'false')+'" onclick="setSaveFulfillment(&quot;studio_stop&quot;)">Studio Delivery</button>'
     + '</div>'
     + '<div class="commerce-sub-row">'
     + '<div class="commerce-sub">'+fulfillmentSub()+'</div>'
-    + '<button type="button" class="saved-pill" onclick="openBag()" aria-label="'+money(kept)+' kirana subtraction this month. Open bag.">'+money(kept)+' kept</button>'
     + '</div>'
     + '</header>'
-    + '<label class="commerce-search">'+IC.search+'<input id="shopSearch" aria-label="Search products" placeholder="Search oils, dal, atta" value="'+String(shopQuery||'').replace(/"/g,'&quot;')+'" oninput="onShopSearch(this)"></label>'
+    + '<label class="commerce-search">'+IC.search+'<input id="shopSearch" aria-label="Search products" placeholder="Search biscuits, tea, T-shirts" value="'+String(shopQuery||'').replace(/"/g,'&quot;')+'" oninput="onShopSearch(this)"></label>'
     + (function(){
         var hits=searchHitProducts();
         if(!hits.length) return '';
         return '<div class="search-hits"><div class="kick">'+sw('search_hits')+'</div><div class="shop-grid">'+hits.map(commerceCard).join('')+'</div></div>';
       })()
     + '<section class="commerce-section"><div class="commerce-sectionhead"><h2>'+sw('shopcat')+'</h2></div><div class="category-cards">'+cats+'</div></section>'
+    + '<section class="commerce-section"><div class="commerce-sectionhead"><div><h2>Everyday products</h2><div class="pricing-audit">Provisional prices. Confirm supplier MRP.</div></div></div><div class="shop-grid">'+nonOilListingProducts().map(commerceCard).join('')+'</div></section>'
     + '</div>';
 }
 function categoryConfig(){
   if(selectedCategory==='homecare') return {title:sw('homecare'),sub:'Cleaning · 2 items',filters:[sw('all'),sw('cleaning'),sw('ownlabel')],note:'Same clean. Lower price. More home.',products:['detergent_pick','nia_detergent']};
   if(selectedCategory==='personal') return {title:sw('personal'),sub:'Personal care · 3 items',filters:[sw('all'),sw('bath'),sw('checked')],note:'We suggest a swap only when quality is verified.',products:['bathsoap_pick','toothpaste_pick','nia_bathsoap']};
   if(selectedCategory==='essentials') return {title:sw('essentials'),sub:'Daily needs · 1 item',filters:[sw('all'),'Staples'],note:'Food stays the brand you trust.',products:['essentials_pick']};
-  return {title:sw('oils'),sub:sw('oils')+' · 4 items',filters:[sw('all'),'Cold-pressed','Refined','1 L'],note:'Every item Nia-Certified',products:commerceProducts.map(function(p){return p.id;})};
+  if(selectedCategory==='snacks') return {title:sw('snacks'),sub:'2 items',filters:[sw('all'),'Biscuits','Namkeen'],note:'Small packs. Lower spend.',products:['snack_biscuits','snack_namkeen']};
+  if(selectedCategory==='tea_sugar') return {title:sw('tea_sugar'),sub:'2 items',filters:[sw('all'),'Tea','Sugar'],note:'Daily basics. Price checked.',products:['daily_tea','daily_sugar']};
+  if(selectedCategory==='tshirts') return {title:sw('tshirts'),sub:'1 item',filters:[sw('all'),'Cotton'],note:'Simple sizes. Easy exchange.',products:['basic_tshirt']};
+  if(selectedCategory==='innerwear') return {title:sw('innerwear'),sub:'2 items',filters:[sw('all'),'Vests','Trunks'],note:'Cotton basics. Sealed packs.',products:['inner_vests','inner_trunks']};
+  return {title:sw('oils'),sub:sw('oils')+' · 4 items',filters:[sw('all'),'1 L pack','Refined','Filtered'],note:'Regular oils. Price checked.',products:commerceProducts.filter(function(p){return p.photoSheet==='oil';}).map(function(p){return p.id;})};
 }
 function commerceAisle(){
   var c=categoryConfig(), ps=c.products.map(productById).filter(Boolean);
+  var categoryDiscount=categoryDiscountLabel(selectedCategory);
+  if(categoryDiscount) c.sub+=' · '+categoryDiscount;
   if(shopQuery) ps=ps.filter(function(p){ return productMatchesQuery(p, (shopQuery||'').trim().toLowerCase()); });
   return '<div class="commerce fadein"><div class="aisle-top"><button type="button" class="round-back" onclick="setCommerceView(&quot;home&quot;)" aria-label="Back">‹</button><div class="commerce-headcopy"><h1 class="commerce-title">'+c.title+'</h1><div class="commerce-sub">'+c.sub+'</div><div class="aisle-keep">'+aisleKeepLine()+'</div></div><button class="aisle-search" aria-label="Search">'+IC.search+'</button></div>'
     + '<div class="filter-row">'+c.filters.map(function(f,i){return '<button class="filter-chip'+(i===0?' on':'')+'">'+f+'</button>';}).join('')+'</div>'
-    + '<div class="aisle-note"><span>'+c.note+'</span><button class="aisle-sort">Sort⌄</button></div>'
+    + '<div class="aisle-note"><span>'+c.note+'<small class="pricing-audit" style="display:block">Provisional prices. Confirm supplier MRP.</small></span><button class="aisle-sort">Sort⌄</button></div>'
     + '<div class="shop-grid">'+ps.map(commerceCard).join('')+'</div></div>';
 }
 
@@ -3015,9 +3411,9 @@ function commerceDetail(){
     + '<div class="detail-grid"><div><div class="detail-photo '+productPhotoClass(p)+'" role="img" aria-label="'+p.brand+'"></div><div class="detail-dots"><i></i><i></i><i></i></div></div>'
     + '<div class="detail-copy">'
     + '<div class="keep-loud">'+keepWeekLine(keep)+'</div>'
-    + '<h1>'+(p.id==='groundnut_oil'?'Cold-pressed groundnut oil':p.brand)+'</h1><div class="detail-hi">'+(p.hi[lang]||p.hi.en)+'</div>'
+    + '<h1>'+p.brand+'</h1><div class="detail-hi">'+(p.hi[lang]||p.hi.en)+'</div>'
     + '<div class="in-stock">'+stockLabel(p.id)+'</div>'
-    + '<div class="detail-price"><strong>'+money(p.price)+'</strong><del>'+money(p.mrp)+' '+sw('kirana_at')+'</del></div>'
+    + '<div class="detail-price"><span class="detail-mrp">MRP '+money(p.mrp)+'</span><span class="detail-discount">'+money(keep)+' off</span><strong>Buy for '+money(p.price)+'</strong></div>'
     + swapBlock(p)
     + '<div class="proof-panel"><div class="proof-title">'+IC.shield+' '+sw('proof_t')+'</div><div class="proof-copy">'+sw('proof_d')+'</div></div>'
     + qtyControl(p.id,'detail')
@@ -3077,7 +3473,7 @@ function projector(){
 }
 /* ---------- render ---------- */
 var saveSheetsReady=false;
-var SAVE_SHEET_CSS=".oil-photo{background-image:url('assets/oils-editorial-sheet.png');background-repeat:no-repeat;background-size:200% 200%;background-color:#E9E6E1}\n  .oil-photo.groundnut{background-position:0 0}.oil-photo.mustard{background-position:100% 0}.oil-photo.sunflower{background-position:0 100%}.oil-photo.coconut{background-position:100% 100%}\n  .sub-photo,.sub-thumb{background-image:url('assets/substitution-editorial-sheet.png');background-repeat:no-repeat;background-size:300% 200%;background-color:#E9E6E1}\n  .sub-photo.detergent,.sub-thumb.detergent{background-position:0 0}.sub-photo.nia-detergent,.sub-thumb.nia-detergent{background-position:50% 0}.sub-photo.bathsoap,.sub-thumb.bathsoap{background-position:100% 0}.sub-photo.nia-bathsoap,.sub-thumb.nia-bathsoap{background-position:0 100%}.sub-photo.toothpaste,.sub-thumb.toothpaste{background-position:50% 100%}.sub-photo.essentials,.sub-thumb.essentials{background-position:100% 100%}\n  .cat-homecare{background-image:url('assets/substitution-editorial-sheet.png');background-size:300% 200%;background-position:0 0}.cat-personal{background-image:url('assets/substitution-editorial-sheet.png');background-size:300% 200%;background-position:100% 0}.cat-oils{background-image:url('assets/oils-editorial-sheet.png');background-size:200% 200%;background-position:0 0}.cat-essentials{background-image:url('assets/substitution-editorial-sheet.png');background-size:300% 200%;background-position:100% 100%}\n.oil-thumb{display:block;width:100%;height:100%;background-image:url('assets/oils-editorial-sheet.png');background-repeat:no-repeat;background-size:200% 200%}.oil-thumb.groundnut{background-position:0 0}.oil-thumb.mustard{background-position:100% 0}.oil-thumb.sunflower{background-position:0 100%}.oil-thumb.coconut{background-position:100% 100%}\n/* P0: editorial sprites must paint on aisle + detail (never background shorthand) */\n  .shop-photo.oil-photo,.detail-photo.oil-photo{\n    background-color:#F3F1ED;\n    background-image:url('assets/oils-editorial-sheet.png');\n    background-repeat:no-repeat;\n    background-size:200% 200%;\n  }\n  .shop-photo.sub-photo,.detail-photo.sub-photo{\n    background-color:#F3F1ED;\n    background-image:url('assets/substitution-editorial-sheet.png');\n    background-repeat:no-repeat;\n    background-size:300% 200%;\n  }\n  .shop-photo.oil-photo.groundnut,.detail-photo.oil-photo.groundnut{background-position:0 0}\n  .shop-photo.oil-photo.mustard,.detail-photo.oil-photo.mustard{background-position:100% 0}\n  .shop-photo.oil-photo.sunflower,.detail-photo.oil-photo.sunflower{background-position:0 100%}\n  .shop-photo.oil-photo.coconut,.detail-photo.oil-photo.coconut{background-position:100% 100%}\n  .shop-photo.sub-photo.detergent,.detail-photo.sub-photo.detergent{background-position:0 0}\n  .shop-photo.sub-photo.nia-detergent,.detail-photo.sub-photo.nia-detergent{background-position:50% 0}\n  .shop-photo.sub-photo.bathsoap,.detail-photo.sub-photo.bathsoap{background-position:100% 0}\n  .shop-photo.sub-photo.nia-bathsoap,.detail-photo.sub-photo.nia-bathsoap{background-position:0 100%}\n  .shop-photo.sub-photo.toothpaste,.detail-photo.sub-photo.toothpaste{background-position:50% 100%}\n  .shop-photo.sub-photo.essentials,.detail-photo.sub-photo.essentials{background-position:100% 100%}\n";
+var SAVE_SHEET_CSS=".oil-photo{background-image:url('assets/oils-mass-market-sheet.jpg');background-repeat:no-repeat;background-size:200% 200%;background-color:#E9E6E1}\n  .oil-photo.groundnut{background-position:0 0}.oil-photo.mustard{background-position:100% 0}.oil-photo.sunflower{background-position:0 100%}.oil-photo.soyabean{background-position:100% 100%}\n  .sub-photo,.sub-thumb{background-image:url('assets/substitution-editorial-sheet.jpg');background-repeat:no-repeat;background-size:300% 200%;background-color:#E9E6E1}\n  .sub-photo.detergent,.sub-thumb.detergent{background-position:0 0}.sub-photo.nia-detergent,.sub-thumb.nia-detergent{background-position:50% 0}.sub-photo.bathsoap,.sub-thumb.bathsoap{background-position:100% 0}.sub-photo.nia-bathsoap,.sub-thumb.nia-bathsoap{background-position:0 100%}.sub-photo.toothpaste,.sub-thumb.toothpaste{background-position:50% 100%}.sub-photo.essentials,.sub-thumb.essentials{background-position:100% 100%}\n  .cat-homecare{background-image:url('assets/substitution-editorial-sheet.jpg');background-size:300% 200%;background-position:0 0}.cat-personal{background-image:url('assets/substitution-editorial-sheet.jpg');background-size:300% 200%;background-position:100% 0}.cat-oils{background-image:url('assets/oils-mass-market-sheet.jpg');background-size:200% 200%;background-position:0 0}.cat-essentials{background-image:url('assets/substitution-editorial-sheet.jpg');background-size:300% 200%;background-position:100% 100%}\n.oil-thumb{display:block;width:100%;height:100%;background-image:url('assets/oils-mass-market-sheet.jpg');background-repeat:no-repeat;background-size:200% 200%}.oil-thumb.groundnut{background-position:0 0}.oil-thumb.mustard{background-position:100% 0}.oil-thumb.sunflower{background-position:0 100%}.oil-thumb.soyabean{background-position:100% 100%}\n/* P0: editorial sprites must paint on aisle + detail (never background shorthand) */\n  .shop-photo.oil-photo,.detail-photo.oil-photo{\n    background-color:#F3F1ED;\n    background-image:url('assets/oils-mass-market-sheet.jpg');\n    background-repeat:no-repeat;\n    background-size:200% 200%;\n  }\n  .shop-photo.sub-photo,.detail-photo.sub-photo{\n    background-color:#F3F1ED;\n    background-image:url('assets/substitution-editorial-sheet.jpg');\n    background-repeat:no-repeat;\n    background-size:300% 200%;\n  }\n  .shop-photo.oil-photo.groundnut,.detail-photo.oil-photo.groundnut{background-position:0 0}\n  .shop-photo.oil-photo.mustard,.detail-photo.oil-photo.mustard{background-position:100% 0}\n  .shop-photo.oil-photo.sunflower,.detail-photo.oil-photo.sunflower{background-position:0 100%}\n  .shop-photo.oil-photo.soyabean,.detail-photo.oil-photo.soyabean{background-position:100% 100%}\n  .shop-photo.sub-photo.detergent,.detail-photo.sub-photo.detergent{background-position:0 0}\n  .shop-photo.sub-photo.nia-detergent,.detail-photo.sub-photo.nia-detergent{background-position:50% 0}\n  .shop-photo.sub-photo.bathsoap,.detail-photo.sub-photo.bathsoap{background-position:100% 0}\n  .shop-photo.sub-photo.nia-bathsoap,.detail-photo.sub-photo.nia-bathsoap{background-position:0 100%}\n  .shop-photo.sub-photo.toothpaste,.detail-photo.sub-photo.toothpaste{background-position:50% 100%}\n  .shop-photo.sub-photo.essentials,.detail-photo.sub-photo.essentials{background-position:100% 100%}\n";
 function ensureSaveSheets(){
   if(saveSheetsReady) return;
   var el=document.getElementById('save-sheets');
@@ -3111,7 +3507,7 @@ function pickPlant(id){
   render();
 }
 var storySheetsReady=false;
-var STORY_SHEET_CSS=".story-photo{background-color:#E9E6E1;background-image:url('assets/story-editorial-sheet.png');background-repeat:no-repeat;background-size:400% 400%}\n.story-photo.story-studio{background-image:url('assets/studio-bunk-lockers.png');background-size:cover;background-position:center}.story-photo.story-wash{background-image:url('assets/wash-folded-clothes.png');background-size:cover;background-position:center}.story-photo.story-eat{background-position:66.666% 0%}.story-photo.story-cooler{background-position:100% 0%}\n.story-photo.story-cycle{background-position:0% 33.333%}.story-photo.story-rain{background-position:33.333% 33.333%}.story-photo.story-day{background-position:66.666% 33.333%}.story-photo.story-friday{background-position:100% 33.333%}\n.story-photo.story-nearby{background-position:0% 66.666%}.story-photo.story-slip{background-position:33.333% 66.666%}.story-photo.story-goal{background-position:66.666% 66.666%}.story-photo.story-sent{background-position:100% 66.666%}\n.story-photo.story-village{background-position:0% 100%}.story-photo.story-plant{background-position:33.333% 100%}\n.story-photo.story-akka{background-image:url('assets/tribe-akka-tea.png');background-size:cover;background-position:center}.story-photo.story-group{background-image:url('assets/tribe-group-cups.png');background-size:cover;background-position:center}.story-photo.story-dropin{background-image:url('assets/tribe-clinic-kit.png');background-size:cover;background-position:center}.story-photo.story-recreation{background-image:url('assets/tribe-recreation.png');background-size:cover;background-position:center}.story-photo.story-thrift{background-image:url('assets/tribe-save-box.png');background-size:cover;background-position:center}.story-photo.story-grievance{background-image:url('assets/tribe-akka-tea.png');background-size:cover;background-position:center}\n";
+var STORY_SHEET_CSS=".story-photo{background-color:#E9E6E1;background-image:url('assets/story-editorial-sheet.jpg');background-repeat:no-repeat;background-size:auto 400%}\n.story-photo.story-studio{background-image:url('assets/studio-bunk-lockers.jpg');background-size:cover;background-position:center}.story-photo.story-wash{background-image:url('assets/wash-folded-clothes.jpg');background-size:cover;background-position:center}.story-photo.story-eat{background-position:64.36% 0%}.story-photo.story-cooler{background-image:url('assets/air-cooler-shared.jpg');background-size:cover;background-position:center}\n.story-photo.story-cycle{background-position:6.91% 33.333%}.story-photo.story-rain{background-position:35.64% 33.333%}.story-photo.story-day{background-position:64.36% 33.333%}.story-photo.story-friday{background-image:url('assets/earn-extra-hours-v2.jpg');background-size:cover;background-position:center}.story-photo.story-friday-extra{background-image:url('assets/earn-friday-extra-v3.jpg');background-size:cover;background-position:center}\n.story-photo.story-nearby{background-image:url('assets/earn-nearby-work-v2.jpg');background-size:cover;background-position:center}.story-photo.story-slip{background-image:url('assets/earn-wallet-v1.png');background-size:cover;background-position:center}.story-photo.story-goal{background-position:64.36% 66.666%}.story-photo.story-sent{background-position:93.09% 66.666%}.story-photo.story-accident{background-image:url('assets/insurance-accident-v2.jpg');background-size:cover;background-position:center}.story-photo.story-life{background-image:url('assets/insurance-life-v2.jpg');background-size:cover;background-position:center}\n.story-photo.story-village{background-image:url('assets/earn-village-referral-v3.jpg');background-size:cover;background-position:center}.story-photo.story-plant{background-image:url('assets/earn-plant-work-v3.jpg');background-size:cover;background-position:center}\n.story-photo.story-akka{background-image:url('assets/tribe-akka-tea.jpg');background-size:cover;background-position:center}.story-photo.story-group{background-image:url('assets/tribe-group-cups.jpg');background-size:cover;background-position:center}.story-photo.story-dropin{background-image:url('assets/tribe-clinic-kit.jpg');background-size:cover;background-position:center}.story-photo.story-recreation{background-image:url('assets/tribe-recreation.jpg');background-size:cover;background-position:center}.story-photo.story-thrift{background-image:url('assets/tribe-save-box.jpg');background-size:cover;background-position:center}.story-photo.story-grievance{background-image:url('assets/tribe-akka-tea.jpg');background-size:cover;background-position:center}\n";
 function ensureStorySheets(){
   if(storySheetsReady) return;
   var el=document.getElementById('story-sheets');
@@ -3185,14 +3581,8 @@ function go(x){
 }
 function updateTopbar(){
   var n=document.getElementById('topname');
-  var studio=document.getElementById('topstudio');
-  var theatre=document.getElementById('toptheatre');
-  var jabali=document.getElementById('topjabali');
   if(!n) return;
-  n.textContent=(DUMMY_DATA && memberPhone==='ravi')?'Ravi':(memberPhone||'NiaSave');
-  if(studio) studio.textContent=studioBarName();
-  if(theatre) theatre.textContent=theatreName||'Theatre North';
-  if(jabali) jabali.textContent=jabaliOfficer||'Jabali Officer';
+  n.textContent='Ravi Singh, Studio 1, Rajputana.';
   /* Home ₹ stays on Send. never print month target on the bar. */
   var s=document.getElementById('topsub');
   if(s){ s.textContent=''; s.hidden=true; }
@@ -3295,6 +3685,24 @@ function addBag(id){
   if(q===0){ toast(t('out')); return; }
   if(q!=null && (bag[id]||0)>=q){ toast(t('out')); return; }
   bag[id]=(bag[id]||0)+1; updBagDot(); render();
+}
+function setLiveCart(id,value,button){
+  var cartId='live_'+id;
+  if(value){
+    bag[cartId]=1;
+  }else{
+    delete bag[cartId];
+  }
+  updBagDot();
+  var step=button&&button.closest?button.closest('.proof-stepper'):null;
+  if(step){
+    var minus=step.querySelector('.proof-minus');
+    var plus=step.querySelector('.proof-plus');
+    var qty=step.querySelector('.proof-qty');
+    if(minus) minus.disabled=!value;
+    if(plus) plus.disabled=!!value;
+    if(qty) qty.textContent=value?'1':'0';
+  }
 }
 function qtyControl(id, kind){
   var q=bag[id]||0;
@@ -3479,7 +3887,7 @@ var TALK_REPLY={
     home:'How much should reach home this month? You write the number.',
     wash:'Save 2 hours this month for OT.',
     bag:'Your bag is pickup after 5.',
-    friday:'Friday extra hours toward home.',
+    friday:'TGIF. Friday pays more.',
     maa:'Write how much should reach Maa this month.',
     days:"Don't miss a day. That day's wage.",
     fallback:'Ask about walk, pay, shop, or home.'
@@ -3489,7 +3897,7 @@ var TALK_REPLY={
     pay:'इस हफ़्ते ज़्यादा कमाई। पर्ची तैयार हो तो डालो।',
     shop:'किराना से कम कीमत। 5 बजे के बाद उठाओ।',
     home:'इस महीने घर को कितना पहुँचे? तुम लिखो।',
-    wash:'इस हफ़्ते OT के लिए 2 घंटे बचाओ।',
+    wash:'इस महीने OT के लिए 8.66 घंटे बचाओ।',
     bag:'थैला 5 बजे के बाद।',
     friday:'शुक्रवार extra घंटे घर की ओर।',
     maa:'इस महीने माँ को कितना पहुँचे? तुम लिखो।',
@@ -3501,7 +3909,7 @@ var TALK_REPLY={
     pay:'এই সপ্তাহে বেশি আয়। স্লিপ প্রস্তুত হলে দাও।',
     shop:'কিরাণার চেয়ে কম দাম। 5টার পরে তুলে নাও।',
     home:'এই মাসে বাড়িতে কত পৌঁছুক? তুমি লেখো।',
-    wash:'এই সপ্তাহে OT-র জন্য 2 ঘণ্টা বাঁচাও।',
+    wash:'এই মাসে OT-র জন্য 8.66 ঘণ্টা বাঁচাও।',
     bag:'ব্যাগ 5টার পরে।',
     friday:'শুক্রবার extra ঘণ্টা বাড়ির দিকে।',
     maa:'এই মাসে মায়ের কাছে কত পাঠাবে? তুমি লেখো।',
@@ -3513,7 +3921,7 @@ var TALK_REPLY={
     pay:'இந்த வாரம் அதிக சம்பளம். சீட்டு தயாரானால் சேர்.',
     shop:'கிரானாவை விட குறைந்த விலை. 5 மணிக்கு பிறகு எடு.',
     home:'இந்த மாதம் வீட்டுக்கு எவ்வளவு? நீ எழுது.',
-    wash:'இந்த வாரம் OT-க்கு 2 மணி நேரம் சேமி.',
+    wash:'இந்த மாதம் OT-க்கு 8.66 மணி நேரம் சேமி.',
     bag:'பை 5 மணிக்கு பிறகு.',
     friday:'வெள்ளி extra மணி வீட்டுக்கு.',
     maa:'இந்த மாதம் அம்மாவுக்கு எவ்வளவு? நீ எழுது.',
@@ -3525,7 +3933,7 @@ var TALK_REPLY={
     pay:'ಈ ವಾರ ಹೆಚ್ಚು ಸಂಬಳ. ಸ್ಲಿಪ್ ಸಿದ್ಧವಾದರೆ ಸೇರಿಸಿ.',
     shop:'ಕಿರಾಣಿಗಿಂತ ಕಡಿಮೆ ಬೆಲೆ. 5 ನಂತರ ತೆಗೆದುಕೊ.',
     home:'ಈ ತಿಂಗಳು ಮನೆಗೆ ಎಷ್ಟು? ನೀನು ಬರೆ.',
-    wash:'ಈ ವಾರ OT-ಗೆ 2 ಗಂಟೆ ಉಳಿಸಿ.',
+    wash:'ಈ ತಿಂಗಳು OTಗೆ 8.66 ಗಂಟೆ ಉಳಿಸಿ.',
     bag:'ಚೀಲ 5 ನಂತರ.',
     friday:'ಶುಕ್ರವಾರ extra ಗಂಟೆ ಮನೆಗೆ.',
     maa:'ಈ ತಿಂಗಳು ಅಮ್ಮನಿಗೆ ಎಷ್ಟು? ನೀನು ಬರೆ.',
@@ -3534,85 +3942,199 @@ var TALK_REPLY={
   }
 };
 function talkPack(){ return TALK_REPLY[lang]||TALK_REPLY.en; }
-function talkReply(text){
-  var q=(text||'').toLowerCase();
-  var r=talkPack();
-  if(/whatsapp|upi|wire|transfer|remit|send money|money send/.test(q)) return r.fallback;
-  if(/walk|ride|bus|nest|live|studio|mess|ved|studio/.test(q)) return r.walk;
-  if(/ot|extra|earn|pay|slip|shift|factory|plant/.test(q)) return r.pay;
-  if(/shop|oil|kirana|pickup|hub|save|lower|cheap|cost/.test(q)) return r.shop;
-  if(/home|goal|month|target|rupee|reach/.test(q)) return r.home;
-  if(/wash|laundry|dhul|soap/.test(q)) return r.wash;
-  if(/bag|thaila|thail|pickup code/.test(q)) return r.bag;
-  if(/friday|fri|shukr|veLLi|শুক্র/.test(q)) return r.friday;
-  if(/maa|ma\b|mother|am+ma|amma|মা|माँ|मां/.test(q)) return r.maa;
-  if(/day|days|miss|attend|present|absent|din|dina/.test(q)) return r.days;
-  return r.fallback;
+function escapeHtml(value){
+  return String(value||'').replace(/[&<>"']/g,function(ch){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch];
+  });
 }
+/* 12-filter gate — Rafiki voice action layer:
+   1 PASS free; 2 PASS voice+text; 3 PASS daily utility; 4 PASS Nia/JCO trust;
+   5 PASS economic outcomes; 6 PASS four-lever bundle; 7 PASS lower friction;
+   8 PASS one-tap action; 9 PASS no credit; 10 PASS digital at density;
+   11 PASS more kept; 12 PASS four clear defaults. Verdict: SHIP prototype. */
+var talkLastPlan=null;
+var talkRecognition=null;
+function talkPlan(text){
+  var q=(text||'').toLowerCase().trim();
+  var r=talkPack();
+  if(/jco|officer|help me|problem|issue|complaint/.test(q)) return {intent:'jco',reply:'I can ask your JCO to help.',action:'jco'};
+  if(/insurance|accident|life cover|policy|bima|बीमा|বিমা|காப்பீடு|ವಿಮೆ/.test(q)) return {intent:'insurance',reply:'Open Send. Choose the cover. Buy through your bank. Your JCO can help.',action:'remit'};
+  if(/bag|thaila|thail|pickup code/.test(q)) return {intent:'bag',reply:r.bag,action:'bag'};
+  if(/salary|pay slip|payslip|slip|cut|wage/.test(q)) return {intent:'pay',reply:r.pay,action:'pay'};
+  if(/friday|fri|shukr|velli|শুক্র/.test(q)) return {intent:'earn',reply:r.friday,action:'earn'};
+  if(/ot|extra|earn|job|shift|factory|plant|work/.test(q)) return {intent:'earn',reply:r.pay,action:'earn'};
+  if(/spend|shop|oil|kirana|pickup|lower|cheap|cost|price/.test(q)) return {intent:'spend',reply:r.shop,action:'spend'};
+  if(/save|saving|keep|bach|বাঁচ|சேமி|ಉಳಿಸಿ/.test(q)) return {intent:'save',reply:r.shop,action:'save'};
+  if(/home|goal|target|remit|send money|money send|transfer|maa|ma\b|mother|am+ma|amma|মা|माँ|मां/.test(q)) return {intent:'remit',reply:/maa|ma\b|mother|am+ma|amma|মা|माँ|मां/.test(q)?r.maa:r.home,action:'remit'};
+  if(/wash|laundry|walk|ride|bus|nest|live|studio|mess|travel|room/.test(q)) return {intent:'live',reply:/wash|laundry/.test(q)?r.wash:r.walk,action:'live'};
+  if(/day|days|miss|attend|present|absent|din|dina/.test(q)) return {intent:'live',reply:r.days,action:'live'};
+  return {intent:'fallback',reply:r.fallback,action:null};
+}
+function talkReply(text){ return talkPlan(text).reply; }
 function talkSpeechLang(){ return TALK_LANG[lang]||TALK_LANG.en; }
+var talkVoices=[];
+var TALK_FEMALE_VOICES={
+  en:['veena','neerja','heera','swara','lekha','kalpana'],
+  hi:['swara','lekha','kalpana','heera','veena','neerja'],
+  bn:['tanishaa','sangeeta','swara','lekha'],
+  ta:['pallavi','vani','swara','veena'],
+  kn:['sapna','swara','veena','lekha']
+};
+function refreshTalkVoices(){
+  talkVoices=window.speechSynthesis?window.speechSynthesis.getVoices():[];
+}
+function talkFemaleVoice(){
+  refreshTalkVoices();
+  var code=(lang||'en').toLowerCase();
+  var names=TALK_FEMALE_VOICES[code]||TALK_FEMALE_VOICES.en;
+  var allNames=names.concat(['veena','neerja','heera','swara','lekha','kalpana','tanishaa','sangeeta','pallavi','vani','sapna']);
+  var indian=talkVoices.filter(function(v){ return /-in$/i.test(v.lang||'') || /india|indian/i.test(v.name||''); });
+  return indian.find(function(v){
+    var n=(v.name||'').toLowerCase();
+    return names.some(function(name){ return n.indexOf(name)>-1; }) || /female|woman/.test(n);
+  }) || talkVoices.find(function(v){
+    var n=(v.name||'').toLowerCase();
+    return allNames.some(function(name){ return n.indexOf(name)>-1; });
+  }) || null;
+}
+if(window.speechSynthesis){
+  refreshTalkVoices();
+  window.speechSynthesis.addEventListener('voiceschanged',refreshTalkVoices);
+}
 function talkSpeak(msg){
   if(!window.speechSynthesis || !msg) return;
   window.speechSynthesis.cancel();
   var u=new SpeechSynthesisUtterance(msg);
-  u.lang=talkSpeechLang();
+  var female=talkFemaleVoice();
+  if(!female){ toast('Indian female voice unavailable.'); return; }
+  u.voice=female;
+  u.lang=female.lang||talkSpeechLang();
+  u.pitch=1;
   u.rate=0.92;
   window.speechSynthesis.speak(u);
 }
-function talkShowAnswer(ans){
-  var wrap=document.getElementById('talkPanel');
-  if(!wrap) return;
-  wrap.innerHTML='<div class="grab"></div>'
-    + '<div id="talkAnswer" class="talk-answer" aria-live="polite">'+ans+'</div>'
-    + '<button type="button" class="cta" onclick="closeTalk()">'+t('talk_done')+'</button>';
+function rafikiMicIcon(){
+  return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3M9 21h6"/></svg>';
 }
-function talkSubmit(text){
-  var ans=talkReply(text);
-  talkShowAnswer(ans);
-  talkSpeak(ans);
+function rafikiHero(){
+  return '<div class="grab"></div><section class="rafiki-hero" aria-label="Nia voice agent">'
+    +'<div class="rafiki-head"><span class="rafiki-mark">'+rafikiMicIcon()+'</span><span><strong class="rafiki-name">Nia</strong><span class="rafiki-role">Indian female voice</span></span></div>'
+    +'<p class="rafiki-languages">English · हिन्दी · தமிழ் · choose once per call</p>'
+    +'<div class="rafiki-levers" aria-label="Nia products"><span class="rafiki-lever earn">Live</span><span class="rafiki-lever spend">Earn</span><span class="rafiki-lever save">Save</span><span class="rafiki-lever remit">Send</span></div>'
+    +'</section>';
 }
-function renderTalkTypeSheet(){
-  var wrap=document.getElementById('talkPanel');
-  if(!wrap) return;
-  wrap.innerHTML='<div class="grab"></div>'
-    + '<p class="talk-sheet-note">'+t('talk_note')+'</p>'
-    + '<div id="talkAnswer" class="talk-answer" aria-live="polite"></div>'
-    + '<input type="text" id="talkInput" class="field" placeholder="'+t('talk_placeholder')+'" autocomplete="off" enterkeyhint="send">'
-    + '<button type="button" class="cta" id="talkSend">'+t('talk_send')+'</button>';
+function talkActionLabel(action){
+  if(action==='earn') return 'Open '+t('tab_earn');
+  if(action==='spend'||action==='save') return 'Open '+t('tab_save');
+  if(action==='remit') return 'Open '+t('tab_send');
+  if(action==='live') return 'Open '+t('tab_live');
+  if(action==='pay') return 'Add pay';
+  if(action==='bag') return 'Open Bag';
+  if(action==='jco') return 'Ask JCO';
+  return '';
+}
+function talkPromptButtons(){
+  return '<div class="rafiki-prompts" aria-label="Try saying">'
+    +'<button type="button" class="rafiki-prompt live" onclick="talkSubmit(\'live better\')"><b></b>Live better</button>'
+    +'<button type="button" class="rafiki-prompt earn" onclick="talkSubmit(\'earn more\')"><b></b>Earn more</button>'
+    +'<button type="button" class="rafiki-prompt save" onclick="talkSubmit(\'save more\')"><b></b>Save more</button>'
+    +'<button type="button" class="rafiki-prompt remit" onclick="talkSubmit(\'send home\')"><b></b>Send home</button>'
+    +'</div>';
+}
+function talkInputRow(){
+  return '<div class="rafiki-input-row"><input type="text" id="talkInput" class="field" placeholder="'+t('talk_placeholder')+'" autocomplete="off" enterkeyhint="send"><button type="button" class="rafiki-send" id="talkSend">'+t('talk_send')+'</button></div>';
+}
+function wireTalkInput(){
   var sendBtn=document.getElementById('talkSend');
   var input=document.getElementById('talkInput');
-  if(sendBtn && input){
-    sendBtn.addEventListener('click', function(){ talkSubmit(input.value); });
-    input.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); talkSubmit(input.value); } });
-    setTimeout(function(){ input.focus(); }, 280);
+  if(sendBtn&&input){
+    sendBtn.addEventListener('click',function(){ talkSubmit(input.value); });
+    input.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); talkSubmit(input.value); } });
   }
+}
+function talkShowAnswer(ans,text,action){
+  var wrap=document.getElementById('talkPanel');
+  if(!wrap) return;
+  var actionHtml=action?('<button type="button" class="rafiki-action" onclick="talkRunAction(\''+action+'\')">'+talkActionLabel(action)+'</button>'):'';
+  wrap.innerHTML=rafikiHero()
+    +'<p class="rafiki-transcript">You said: '+escapeHtml(text||'')+'</p>'
+    +'<div id="talkAnswer" class="talk-answer" aria-live="polite">'+ans+'</div>'
+    +actionHtml+talkInputRow()
+    +'<button type="button" class="rafiki-mic-again" onclick="talkListenOnce()" aria-label="Speak again">'+rafikiMicIcon()+'</button>';
+  wireTalkInput();
+}
+function talkSubmit(text){
+  var clean=String(text||'').trim();
+  if(!clean) return;
+  if(talkRecognition){ var active=talkRecognition; talkRecognition=null; try{ active.abort(); }catch(e){} }
+  talkLastPlan=talkPlan(clean);
+  talkShowAnswer(talkLastPlan.reply,clean,talkLastPlan.action);
+  talkSpeak(talkLastPlan.reply);
+}
+function renderTalkTypeSheet(message){
+  var wrap=document.getElementById('talkPanel');
+  if(!wrap) return;
+  wrap.innerHTML=rafikiHero()
+    +(message?('<div class="talk-answer" aria-live="polite">'+message+'</div>'):'')
+    +'<p class="talk-sheet-note">'+t('talk_note')+'</p>'
+    +talkPromptButtons()+talkInputRow()
+    +'<button type="button" class="rafiki-mic-again" onclick="talkListenOnce()" aria-label="Speak">'+rafikiMicIcon()+'</button>';
+  wireTalkInput();
 }
 function talkListenOnce(){
   var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
   if(!SR) return false;
+  if(talkRecognition){ var active=talkRecognition; talkRecognition=null; try{ active.abort(); }catch(e){} }
   var wrap=document.getElementById('talkPanel');
-  if(wrap) wrap.innerHTML='<div class="grab"></div><p class="talk-sheet-note">'+t('talk_listen')+'</p><div id="talkAnswer" class="talk-answer" aria-live="polite"></div>';
+  if(wrap) wrap.innerHTML=rafikiHero()+'<div class="rafiki-status"><span class="rafiki-pulse"></span>'+t('talk_listen')+'</div>'+talkPromptButtons();
   var tsListen=document.getElementById('talkSheet');
   if(tsListen){ tsListen.classList.add('on'); tsListen.removeAttribute('aria-hidden'); try{ tsListen.inert=false; }catch(e){} tsListen.style.pointerEvents='auto'; }
   var rec=new SR();
+  talkRecognition=rec;
   rec.lang=talkSpeechLang();
   rec.interimResults=false;
   rec.maxAlternatives=1;
   rec.onresult=function(e){
     var tx=e.results[0]&&e.results[0][0]&&e.results[0][0].transcript;
+    if(talkRecognition===rec) talkRecognition=null;
     talkSubmit(tx||'');
   };
-  rec.onerror=function(){ renderTalkTypeSheet(); };
-  try{ rec.start(); }catch(err){ renderTalkTypeSheet(); return false; }
+  rec.onerror=function(){
+    if(talkRecognition!==rec) return;
+    talkRecognition=null;
+    renderTalkTypeSheet('Type instead.');
+  };
+  rec.onend=function(){ if(talkRecognition===rec) talkRecognition=null; };
+  try{ rec.start(); }catch(err){ talkRecognition=null; renderTalkTypeSheet(); return false; }
   return true;
+}
+function talkRunAction(action){
+  closeTalk();
+  if(action==='earn'){ go('earn'); return; }
+  if(action==='spend'||action==='save'){ go('save'); return; }
+  if(action==='remit'){ go('send'); return; }
+  if(action==='live'){ go('live'); return; }
+  if(action==='pay'){ openPlanSalary(); return; }
+  if(action==='bag'){ openBag(); return; }
+  if(action==='jco'){ toast('Talk to your JCO.'); return; }
+}
+var ELEVENLABS_AGENT_ID='agent_0901m19b8eh1fgj8sk4pwygrryar';
+function renderElevenLabsTalk(){
+  var wrap=document.getElementById('talkPanel');
+  if(!wrap||wrap.querySelector('elevenlabs-convai')) return;
+  wrap.innerHTML=rafikiHero()
+    +'<div class="eleven-voice-wrap"><elevenlabs-convai agent-id="'+ELEVENLABS_AGENT_ID+'" variant="full" dismissible="false" show-resize-button="false" action-text="Talk to Nia" start-call-text="Start" end-call-text="End" listening-text="Listening" speaking-text="Nia is speaking"></elevenlabs-convai></div>'
+    +'<p class="eleven-voice-note">Voice conversations may be recorded. Never share an OTP, PIN or password.</p>';
 }
 function openTalk(){
   closeBurger();
   closeBag();
-  if(talkListenOnce()) return;
-  renderTalkTypeSheet();
-  var ts=document.getElementById('talkSheet'); if(ts){ ts.classList.add('on'); ts.removeAttribute('aria-hidden'); try{ ts.inert=false; }catch(e){} ts.style.pointerEvents='auto'; }
+  var ts=document.getElementById('talkSheet');
+  if(ts){ ts.classList.add('on'); ts.removeAttribute('aria-hidden'); try{ ts.inert=false; }catch(e){} ts.style.pointerEvents='auto'; }
+  renderElevenLabsTalk();
 }
 function closeTalk(){
+  if(talkRecognition){ var active=talkRecognition; talkRecognition=null; try{ active.abort(); }catch(e){} }
   var s=document.getElementById('talkSheet');
   if(s){ s.classList.remove('on'); s.setAttribute('aria-hidden','true'); try{ s.inert=true; }catch(e){} s.style.pointerEvents='none'; }
   closeBurger();
@@ -3650,8 +4172,12 @@ document.getElementById('talkScrim').addEventListener('click', closeTalk);
   if(scrim) scrim.addEventListener('click', function(){ closeBurger(); });
   var talk=document.getElementById('menuTalk');
   if(talk) talk.addEventListener('click', function(){ closeBurger(); openTalk(); });
+  var voice=document.getElementById('voiceBtn');
+  if(voice) voice.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); openTalk(); });
   var bag=document.getElementById('menuBag');
   if(bag) bag.addEventListener('click', function(){ closeBurger(); openBag(); });
+  var pay=document.getElementById('menuPay');
+  if(pay) pay.addEventListener('click', function(){ closeBurger(); openPlanSalary(); });
   if(menu){
     menu.addEventListener('click', function(e){ e.stopPropagation(); });
     var about=menu.querySelector('a.about-last');
@@ -3774,5 +4300,6 @@ applyLang();
 refreshStock().then(function(){ if(tab==='save' && (commerceView==='aisle'||commerceView==='detail'||shopQuery)) render(); });
 refreshSession().then(function(){ render(); });
 </script>
-</body>
+<script src="https://unpkg.com/@elevenlabs/convai-widget-embed@0.15.1" async type="text/javascript"></script>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3348bf9587120eb',t:'MTc4ODEwMDc4Ng=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>

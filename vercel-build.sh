@@ -13,5 +13,4 @@ if [ -f manifest.webmanifest ]; then cp -f manifest.webmanifest dist/; fi
 if [ -f research/why-blue-collar-workers-quit.html ]; then
   mkdir -p dist/research
   cp -f research/why-blue-collar-workers-quit.html dist/research/why-blue-collar-workers-quit.html
-  cp -f research/why-blue-collar-workers-quit.html dist/research/why-blue-collar-workers-quit
 fi

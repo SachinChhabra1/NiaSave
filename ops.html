@@ -36,7 +36,7 @@
     </div>
   </div>
 
-  <div class="tower">
+  <div class="tower" data-pane="ops">
     <header class="top">
       <div class="mark">
         <img class="nia-logo" src="/assets/nia-logo.png" alt="Nia">
@@ -45,78 +45,112 @@
       </div>
       <div class="meta" id="topmeta">Rajputana Theatre · 40 stops<br>No live UPI</div>
     </header>
-    <div class="wrap">
-      <p class="sub">Production. Skip on. One theatre. 40 stops. 3000 members. Stock is not today's flow. Inventory is movements. Settlement on collected. No live UPI.</p>
-      <div class="kpis" id="kpis"></div>
-      <div class="picture">
-        <div class="card">
-          <svg class="card-icon" viewBox="0 0 40 40" width="40" height="40" aria-hidden="true"><use href="#i-inventory"/></svg>
-          <h3>Inventory</h3>
-          <p class="sub">On-hand vs opening by SKU. Stock is not today's flow. Hub owns the lot.</p>
-          <div id="invchart"></div>
-          <a class="desk-link" href="/inventory.html">Open inventory desk</a>
+    <div class="shell">
+      <aside class="rail">
+        <div class="rail-block">
+          <h2 class="rail-h" data-pane="reports">Reports</h2>
+          <a class="rail-link" data-nav="inventory" href="/inventory.html">Inventory</a>
+          <a class="rail-link" data-nav="ageing" href="/ageing.html">Ageing</a>
+          <a class="rail-link" data-nav="funnel" data-pane="reports" href="#funnel">Funnel</a>
+          <a class="rail-link" data-nav="gates" data-pane="reports" href="#gates">Gates (proposed)</a>
+          <a class="rail-link" data-nav="predict" href="/predict.html">Predict</a>
+          <a class="rail-link" data-nav="studios" data-pane="reports" href="#studios">Studios</a>
         </div>
-        <div class="card">
-          <svg class="card-icon" viewBox="0 0 40 40" width="40" height="40" aria-hidden="true"><use href="#i-ageing"/></svg>
-          <h3>Ageing</h3>
-          <p class="sub">Days sitting / 90. Leftover age and miss that did not move. Thresholds proposed.</p>
-          <div id="agechart"></div>
-          <a class="desk-link" href="/ageing.html">Open ageing desk</a>
+        <div class="rail-block">
+          <h2 class="rail-h" data-pane="ops">Ops</h2>
+          <a class="rail-link" data-nav="po" href="/po.html">Purchase order</a>
+          <a class="rail-link" data-nav="order" href="/po.html#orders">Order</a>
+          <a class="rail-link" data-nav="dispatch" href="/dispatch.html">Dispatch</a>
+          <a class="rail-link" data-nav="biker" href="/biker.html">Biker</a>
+          <a class="rail-link" data-nav="invoice" href="/invoice.html">Invoice</a>
+          <a class="rail-link" data-nav="pickup" href="/pickup.html">Pickup</a>
+          <a class="rail-link" data-nav="recon" href="/recon.html">Recon</a>
+          <a class="rail-link" data-nav="match" href="/recon.html">Statement match</a>
+          <a class="rail-link" data-nav="source" href="/source.html">Source</a>
+          <a class="rail-link" data-nav="hub" href="/hub.html">Hub / tomorrow load</a>
+          <a class="rail-link" data-nav="connectors" data-pane="ops" href="#connectors">Connectors</a>
+          <a class="rail-link" data-nav="close" href="/recon.html">Beat close</a>
+        </div>
+      </aside>
+      <div class="pane">
+        <div class="wrap pane-ops">
+          <p class="sub">Production. Skip on. One theatre. 40 stops. 3000 members. Stock is not today's flow. Inventory is movements. Settlement on collected. No live UPI.</p>
+          <div class="realities" id="realities"></div>
+          <div class="jobs" id="jobs"></div>
+          <div class="open" id="open"></div>
+          <section class="connectors-panel" id="connectors">
+            <div class="h2-row">
+              <svg class="desk-icon" viewBox="0 0 40 40" width="40" height="40" aria-hidden="true"><use href="#i-connectors"/></svg>
+              <h2>Connectors</h2>
+            </div>
+            <p class="do">Staff inbound files. File upload is an action. Recon unmatched uses the UPI statement. Source and predict use the procure sheet. No live UPI. No Razorpay. No Google sign-in.</p>
+            <div class="pills" id="connectors-pills"></div>
+            <div class="uploads">
+              <div class="upload-card" data-kind="upi_statement">
+                <div class="job-kicker">UPI statement</div>
+                <strong>Bank CSV</strong>
+                <p class="do">Columns: date, utr, amount, note. Trigger collected. Not a member pay rail.</p>
+                <label class="file-btn" for="file-upi">Choose file</label>
+                <input type="file" accept=".csv,text/csv" id="file-upi" data-kind="upi_statement">
+                <div class="drop" data-kind="upi_statement" id="drop-upi">Drop UPI statement CSV here</div>
+                <div class="file-meta" id="meta-upi">No file yet</div>
+              </div>
+              <div class="upload-card" data-kind="procure">
+                <div class="job-kicker">Procure</div>
+                <strong>Buy sheet</strong>
+                <p class="do">Columns: sku, name, vendor, buy_inr, keep_qty, lead_days, last_buy, status.</p>
+                <label class="file-btn" for="file-procure">Choose file</label>
+                <input type="file" accept=".csv,text/csv" id="file-procure" data-kind="procure">
+                <div class="drop" data-kind="procure" id="drop-procure">Drop procure CSV here</div>
+                <div class="file-meta" id="meta-procure">No file yet</div>
+              </div>
+              <div class="upload-card" data-kind="vendors">
+                <div class="job-kicker">Vendors</div>
+                <strong>Vendor list</strong>
+                <p class="do">Optional. Vendor rows for the source desk.</p>
+                <label class="file-btn" for="file-vendors">Choose file</label>
+                <input type="file" accept=".csv,text/csv" id="file-vendors" data-kind="vendors">
+                <div class="drop" data-kind="vendors" id="drop-vendors">Drop vendors CSV here</div>
+                <div class="file-meta" id="meta-vendors">No file yet</div>
+              </div>
+            </div>
+          </section>
+        </div>
+        <div class="wrap pane-reports">
+          <p class="sub">Reports. Inventory, ageing, funnel, gates, and studios. Not the purchase-order buttons.</p>
+          <div class="kpis" id="kpis"></div>
+          <div class="picture">
+            <div class="card" id="inventory">
+              <svg class="card-icon" viewBox="0 0 40 40" width="40" height="40" aria-hidden="true"><use href="#i-inventory"/></svg>
+              <h3>Inventory</h3>
+              <p class="sub">On-hand vs opening by SKU. Stock is not today's flow. Hub owns the lot.</p>
+              <div id="invchart"></div>
+              <a class="desk-link" href="/inventory.html">Open inventory desk</a>
+            </div>
+            <div class="card" id="ageing">
+              <svg class="card-icon" viewBox="0 0 40 40" width="40" height="40" aria-hidden="true"><use href="#i-ageing"/></svg>
+              <h3>Ageing</h3>
+              <p class="sub">Days sitting / 90. Leftover age and miss that did not move. Thresholds proposed.</p>
+              <div id="agechart"></div>
+              <a class="desk-link" href="/ageing.html">Open ageing desk</a>
+            </div>
+          </div>
+          <div class="card" id="funnel-card" style="margin-bottom:18px">
+            <h3>Funnel</h3>
+            <p class="sub">Reserved to packed or loaded to collected. Leftover and miss sit on the right.</p>
+            <div class="funnel-board" id="funnel"></div>
+          </div>
+          <h2 id="studios-h">Studios</h2>
+          <p class="sub">One theatre. A new studio is a row. Not a rewrite.</p>
+          <div class="studios-table" id="studios"></div>
+          <h2 id="gates-h">Gates (proposed)</h2>
+          <p class="sub">Report only. Proposed bars stay as written: participation 30 or more in 100, sell-through 80 or more in 100, pre-order fill 95 or more in 100, member saving 3 or more in 100, inventory loss under 1 in 200, contribution 3 or more in 100. This board shows numerator and denominator only.</p>
+          <div id="gates" class="empty"></div>
         </div>
       </div>
-      <div class="card" style="margin-bottom:18px">
-        <h3>Funnel</h3>
-        <p class="sub">Reserved to packed or loaded to collected. Leftover and miss sit on the right.</p>
-        <div class="funnel-board" id="funnel"></div>
-      </div>
-      <section class="connectors-panel" id="connectors-desk">
-        <div class="h2-row">
-          <svg class="desk-icon" viewBox="0 0 40 40" width="40" height="40" aria-hidden="true"><use href="#i-connectors"/></svg>
-          <h2>Connectors</h2>
-        </div>
-        <p class="do">Staff inbound files. Always on this board. Recon unmatched uses the UPI statement. Source and predict use the procure sheet. No live UPI. No Razorpay. No Google sign-in.</p>
-        <div class="pills" id="connectors"></div>
-        <div class="uploads">
-          <div class="upload-card" data-kind="upi_statement">
-            <div class="job-kicker">UPI statement</div>
-            <strong>Bank CSV</strong>
-            <p class="do">Columns: date, utr, amount, note. Trigger collected. Not a member pay rail.</p>
-            <label class="file-btn" for="file-upi">Choose file</label>
-            <input type="file" accept=".csv,text/csv" id="file-upi" data-kind="upi_statement">
-            <div class="drop" data-kind="upi_statement" id="drop-upi">Drop UPI statement CSV here</div>
-            <div class="file-meta" id="meta-upi">No file yet</div>
-          </div>
-          <div class="upload-card" data-kind="procure">
-            <div class="job-kicker">Procure</div>
-            <strong>Buy sheet</strong>
-            <p class="do">Columns: sku, name, vendor, buy_inr, keep_qty, lead_days, last_buy, status.</p>
-            <label class="file-btn" for="file-procure">Choose file</label>
-            <input type="file" accept=".csv,text/csv" id="file-procure" data-kind="procure">
-            <div class="drop" data-kind="procure" id="drop-procure">Drop procure CSV here</div>
-            <div class="file-meta" id="meta-procure">No file yet</div>
-          </div>
-          <div class="upload-card" data-kind="vendors">
-            <div class="job-kicker">Vendors</div>
-            <strong>Vendor list</strong>
-            <p class="do">Optional. Vendor rows for the source desk.</p>
-            <label class="file-btn" for="file-vendors">Choose file</label>
-            <input type="file" accept=".csv,text/csv" id="file-vendors" data-kind="vendors">
-            <div class="drop" data-kind="vendors" id="drop-vendors">Drop vendors CSV here</div>
-            <div class="file-meta" id="meta-vendors">No file yet</div>
-          </div>
-        </div>
-      </section>
-      <div class="realities" id="realities"></div>
-      <div class="jobs" id="jobs"></div>
-      <div class="open" id="open"></div>
-      <h2>Studios</h2>
-      <p class="sub">One theatre. A new studio is a row. Not a rewrite.</p>
-      <div class="studios-table" id="studios"></div>
-      <h2>Gates (proposed)</h2>
-      <p class="sub">Report only. Proposed bars stay as written: participation 30 or more in 100, sell-through 80 or more in 100, pre-order fill 95 or more in 100, member saving 3 or more in 100, inventory loss under 1 in 200, contribution 3 or more in 100. This board shows numerator and denominator only.</p>
-      <div id="gates" class="empty"></div>
     </div>
   </div>
+<script src="/staff.js"></script>
 <script>
 var DATA=null;
 function num(n){ return n==null?0:n; }
@@ -169,7 +203,7 @@ function paintFiles(c){
   document.getElementById('meta-upi').textContent=fileMeta(srcOf(c,'upi_statement'));
   document.getElementById('meta-procure').textContent=fileMeta(srcOf(c,'procure'));
   document.getElementById('meta-vendors').textContent=fileMeta(srcOf(c,'vendors'));
-  document.getElementById('connectors').innerHTML=connectorsPills(c);
+  document.getElementById('connectors-pills').innerHTML=connectorsPills(c);
 }
 function paintPicture(){
   var t=DATA.tower||{};
@@ -258,10 +292,6 @@ function face(){
       num(ops.invoices)+' issued · trigger collected', open==='invoice'),
     jobBtn('pickup','After 5','Pickup','Tap the stop. Tap the bag. Collect by code or mark miss.',
       num(f.reserved)+' reserved · '+num(f.collected)+' collected · '+num(f.missed)+' miss', open==='pickup'),
-    jobBtn('inventory','Stock','Inventory','Lots and movements. On-hand is leftover. Not an editable quantity.',
-      num(k.onHand!=null?k.onHand:k.leftover)+' on-hand · '+num(k.opening)+' opening', open==='inventory'),
-    jobBtn('ageing','Sitting','Ageing','Days sitting and leftover age per SKU. Miss that did not move.',
-      ((t.ageing&&t.ageing.sitting)?t.ageing.sitting.num+' / '+t.ageing.sitting.den:'-')+' sitting 7+/SKUs', open==='ageing'),
     jobBtn('connectors','Inbound','Connectors','Choose file stays on this board. UPI statement and procure CSV.',
       (upi.rows||0)+' statement rows · '+(procure.rows||0)+' procure rows', open==='connectors'),
     jobBtn('recon','Night','Recon','Ledger count. Opening minus collected minus leftover must be 0.',
@@ -270,14 +300,10 @@ function face(){
       (s.matched||0)+' matched · '+(s.unmatchedStatement||0)+' statement open', open==='match'),
     jobBtn('source','Inbound','Source','Buy only where Nia cost is under kirana.',
       src.length+' SKUs on the procure sheet', open==='source'),
-    jobBtn('predict','Ledger','Predict','Order recs and miss risk from the ledger. Not a guess.',
-      'miss '+(k.miss_rate!=null?k.miss_rate+'%':'0%')+' · '+num(pred.chaseCount||k.chase)+' to chase', open==='predict'),
     jobBtn('close','Night','Beat close','Night close never plugs. Wrong leftover is rejected.',
       'balanced '+(k.balanced?'yes':'no')+' · miss '+num(k.missed), open==='close'),
-    jobBtn('next','Next day','Tomorrow load','Hub load from collected plus what is still holding.',
-      load.length+' SKUs to load', open==='next'),
-    jobBtn('hub','Hub','Hub load','Sign inbound. Movements only. Add a studio as a row, not a rewrite.',
-      num(f.loaded)+' loaded · '+num(t.stopCount||40)+' stops', open==='hub')
+    jobBtn('hub','Hub','Hub / tomorrow load','Sign inbound. Movements only. Hub load from collected plus what is still holding.',
+      num(f.loaded)+' loaded · '+load.length+' SKUs tomorrow', open==='hub')
   ].join('');
   document.querySelectorAll('button.job').forEach(function(el){
     el.addEventListener('click', function(){ pick(el.getAttribute('data-job')); });
@@ -293,7 +319,7 @@ function pick(id){
   if(DATA.openJob==='connectors'){
     box.className='open';
     box.innerHTML='';
-    document.getElementById('connectors-desk').scrollIntoView({ behavior:'smooth', block:'start' });
+    document.getElementById('connectors').scrollIntoView({ behavior:'smooth', block:'start' });
     return;
   }
   if(!DATA.openJob){ box.className='open'; box.innerHTML=''; return; }

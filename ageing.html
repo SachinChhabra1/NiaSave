@@ -29,6 +29,34 @@
       </div>
       <div class="meta"><a href="/ops.html">Ops</a> · <a href="/inventory.html">Inventory</a></div>
     </header>
+    <div class="shell">
+      <aside class="rail">
+        <div class="rail-block">
+          <h2 class="rail-h">Reports</h2>
+          <a class="rail-link" data-nav="inventory" href="/inventory.html">Inventory</a>
+          <a class="rail-link" data-nav="ageing" href="/ageing.html">Ageing</a>
+          <a class="rail-link" data-nav="funnel" href="/ops.html#funnel">Funnel</a>
+          <a class="rail-link" data-nav="gates" href="/ops.html#gates">Gates (proposed)</a>
+          <a class="rail-link" data-nav="predict" href="/predict.html">Predict</a>
+          <a class="rail-link" data-nav="studios" href="/ops.html#studios">Studios</a>
+        </div>
+        <div class="rail-block">
+          <h2 class="rail-h">Ops</h2>
+          <a class="rail-link" data-nav="po" href="/po.html">Purchase order</a>
+          <a class="rail-link" data-nav="order" href="/po.html#orders">Order</a>
+          <a class="rail-link" data-nav="dispatch" href="/dispatch.html">Dispatch</a>
+          <a class="rail-link" data-nav="biker" href="/biker.html">Biker</a>
+          <a class="rail-link" data-nav="invoice" href="/invoice.html">Invoice</a>
+          <a class="rail-link" data-nav="pickup" href="/pickup.html">Pickup</a>
+          <a class="rail-link" data-nav="recon" href="/recon.html">Recon</a>
+          <a class="rail-link" data-nav="match" href="/recon.html">Statement match</a>
+          <a class="rail-link" data-nav="source" href="/source.html">Source</a>
+          <a class="rail-link" data-nav="hub" href="/hub.html">Hub / tomorrow load</a>
+          <a class="rail-link" data-nav="connectors" href="/ops.html#connectors">Connectors</a>
+          <a class="rail-link" data-nav="close" href="/recon.html">Beat close</a>
+        </div>
+      </aside>
+      <div class="pane">
     <div class="wrap">
       <p class="sub">Bag board, not occupancy. Days sitting and leftover age per SKU. Miss that did not move. Thresholds stay proposed as numerator and denominator.</p>
       <p class="sub" id="beat">Beat …</p>
@@ -38,7 +66,10 @@
       <div id="bars">Loading…</div>
       <div id="table"></div>
     </div>
+      </div>
+    </div>
   </div>
+<script src="/staff.js"></script>
 <script>
 function num(n){ return n==null?0:n; }
 function load(){

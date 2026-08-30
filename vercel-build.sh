@@ -10,3 +10,8 @@ cp -f ops.html pickup.html recon.html predict.html hub.html next.html cash.html 
 if [ -d public/products ]; then cp -r public/products/. dist/products/; fi
 if [ -d assets ]; then cp -r assets/. dist/assets/; fi
 if [ -f manifest.webmanifest ]; then cp -f manifest.webmanifest dist/; fi
+if [ -f research/why-blue-collar-workers-quit.html ]; then
+  mkdir -p dist/research
+  cp -f research/why-blue-collar-workers-quit.html dist/research/why-blue-collar-workers-quit.html
+  cp -f research/why-blue-collar-workers-quit.html dist/research/why-blue-collar-workers-quit
+fi

@@ -9,3 +9,4 @@ fi
 cp -f ops.html pickup.html recon.html predict.html hub.html next.html cash.html source.html staff.css dist/
 if [ -d public/products ]; then cp -r public/products/. dist/products/; fi
 if [ -d assets ]; then cp -r assets/. dist/assets/; fi
+if [ -f manifest.webmanifest ]; then cp -f manifest.webmanifest dist/; fi

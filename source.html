@@ -4,12 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>NiaSave · Who we buy from</title>
+<link rel="icon" href="/assets/nia-logo.png" type="image/png">
+<link rel="apple-touch-icon" href="/assets/nia-logo.png">
 <link rel="stylesheet" href="/staff.css">
 </head>
 <body>
   <div class="narrow">
     <div class="narrow-card">
-      <div class="kicker">Rabbit · staff</div>
+      <div class="kicker">Rabbit · Jabali Officer</div>
       <h1>Open on a laptop</h1>
       <p>Source is a wide staff desk. It is not the member app.</p>
     </div>
@@ -31,14 +33,16 @@
   </div>
 <script>
 function fromLabel(d){
-  if(d.from && String(d.from).toLowerCase()!=='dummy') return d.from;
-  if(d.sheetFrom&&d.sheetFrom.procure && String(d.sheetFrom.procure).toLowerCase()!=='dummy') return d.sheetFrom.procure;
+  var raw=d.from || (d.sheetFrom && d.sheetFrom.procure) || '';
+  if(!raw) return 'From sheet';
+  var low=String(raw).toLowerCase();
+  if(low.indexOf('down')>=0) return 'Sheet down';
   return 'From sheet';
 }
 function load(){
   document.getElementById('wrap').textContent='Loading…';
   fetch('/api/source').then(function(r){ return r.json(); }).then(function(d){
-    document.getElementById('from').textContent=fromLabel(d)+' · connector procure + vendors';
+    document.getElementById('from').textContent=(d.theatre||'Rajputana Theatre')+' · 40 stops · 3000 members · '+fromLabel(d)+' · inbound procure + vendors';
     var rows=Array.isArray(d)?d:(d.sources||[]);
     if(!rows.length){ document.getElementById('wrap').innerHTML='<div class="empty">No sources.</div>'; return; }
     document.getElementById('wrap').innerHTML='<table><thead><tr><th>SKU</th><th>Vendor</th><th>Source</th><th>Nia cost</th><th>Kirana</th><th>Keep</th><th>Lead</th><th>Last buy</th><th>Status</th></tr></thead><tbody>'

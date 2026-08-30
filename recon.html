@@ -11,7 +11,7 @@
 <body>
   <div class="narrow">
     <div class="narrow-card">
-      <div class="kicker">Rabbit · staff</div>
+      <div class="kicker">Rabbit · Jabali Officer</div>
       <h1>Open on a laptop</h1>
       <p>Night recon is a wide staff desk. It is not the member app.</p>
     </div>
@@ -25,7 +25,7 @@
       <div class="meta"><a href="/ops.html">Ops</a> · <a href="/pickup.html">Pickup</a></div>
     </header>
     <div class="wrap">
-      <p class="sub">Opening minus collected minus leftover = 0 · one beat · unsold returns nightly</p>
+      <p class="sub">Opening minus collected minus leftover = 0. Night close never plugs a gap. Settlement on collected. Staff statement match. No live member UPI.</p>
       <p class="sub" id="beat">Beat …</p>
       <button type="button" onclick="load()">Refresh ledger</button>
       <button type="button" class="ghost" onclick="openBeat()">Open beat (hub)</button>
@@ -98,7 +98,7 @@ function closeBeat(){
     .then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); })
     .then(function(res){
       if(res.ok) document.getElementById('msg').textContent='Beat closed. Recon saved.';
-      else document.getElementById('msg').textContent='Reject: closing != leftover'+(res.j.mismatch?' · '+res.j.mismatch.length+' SKU(s)':'');
+      else document.getElementById('msg').textContent='Beat stays open. Night close never plugs. Closing != leftover'+(res.j.mismatch?' · '+res.j.mismatch.length+' SKU(s)':'');
       load();
     });
 }

@@ -334,7 +334,8 @@ function createState() {
     settlements,
     exceptions: seedExceptions(orders),
     statement,
-    cash: {}
+    cash: {},
+    studios: STUDIOS.map(s => ({ ...s }))
   };
 }
 
@@ -366,8 +367,89 @@ function funnelOf(list) {
   return f;
 }
 
+function liveStopCount() {
+  if (typeof state === "undefined" || !state || !state.studios) return STUDIO_COUNT;
+  return state.studios.length;
+}
+
+function remainingOnCart() {
+  const rem = emptySkuMap();
+  for (const sku of Object.keys(rem)) rem[sku] = state.beat.opening[sku] || 0;
+  for (const o of state.orders) {
+    if (!["packed", "loaded", "at_stop", "collected"].includes(o.status)) continue;
+    for (const line of o.lines) rem[line.id] = (rem[line.id] || 0) - (Number(line.qty) || 1);
+  }
+  return rem;
+}
+
+function movementsOf() {
+  const out = {};
+  for (const s of SKUS) {
+    out[s.id] = { inbound: state.beat.opening[s.id] || 0, packed: 0, loaded: 0, collected: 0, missed: 0, leftover: 0 };
+  }
+  for (const o of state.orders) {
+    for (const line of o.lines) {
+      const q = Number(line.qty) || 1;
+      const row = out[line.id];
+      if (!row) continue;
+      if (o.status === "packed" || o.status === "loaded" || o.status === "at_stop") row.packed += q;
+      if (o.status === "loaded" || o.status === "at_stop") row.loaded += q;
+      if (o.status === "collected") row.collected += q;
+      if (o.status === "missed") row.missed += q;
+    }
+  }
+  for (const sku of Object.keys(out)) {
+    out[sku].leftover = (state.beat.opening[sku] || 0) - out[sku].collected;
+  }
+  return out;
+}
+
+function gatesOf(funnel, led) {
+  const bags = state.orders.length;
+  const decided = (funnel.collected || 0) + (funnel.missed || 0);
+  const opening = Object.values(led.opening).reduce((a, b) => a + (b || 0), 0);
+  const missedUnits = Object.values(led.missed).reduce((a, b) => a + (b || 0), 0);
+  let keep = 0;
+  let amount = 0;
+  for (const o of state.orders) {
+    if (o.status !== "collected") continue;
+    keep += o.kept || 0;
+    amount += o.amount || 0;
+  }
+  return {
+    proposed: true,
+    participation: { num: bags, den: MEMBER_COUNT, label: "bags / members" },
+    sellThrough: { num: funnel.collected || 0, den: decided || 0, label: "collected / decided" },
+    preorderFill: { num: funnel.collected || 0, den: bags || 0, label: "collected / bags tonight" },
+    memberSaving: { num: keep, den: amount || 0, label: "kept Rs / bag Rs" },
+    inventoryLoss: { num: missedUnits, den: opening || 0, label: "missed units / opening" },
+    contribution: { num: keep, den: amount || 0, label: "kept Rs / take Rs" }
+  };
+}
+
+export function addStudio(body = {}) {
+  if (!state.studios) state.studios = STUDIOS.map(s => ({ ...s }));
+  const seq = state.studios.length + 1;
+  const id = "S" + String(seq).padStart(2, "0");
+  if (state.studios.some(s => s.id === id)) return { error: "stop_exists", status: 409, stopId: id };
+  const studio = {
+    id,
+    seq,
+    name: String(body.name || ("Nia Nest " + id)).slice(0, 48),
+    theatre: THEATRE.id,
+    theatreName: THEATRE.name,
+    hub: THEATRE.hub,
+    area: THEATRE.area,
+    slot: THEATRE.slot
+  };
+  state.studios.push(studio);
+  state.orderIdsByStop.set(id, []);
+  return { ok: true, stop: studio, stopCount: state.studios.length, rewritten: false };
+}
+
 function stopProgress() {
-  return STUDIOS.map(s => {
+  const list = state.studios || STUDIOS;
+  return list.map(s => {
     const bags = ordersAt(s.id);
     const f = funnelOf(bags);
     const open = f.reserved + f.packed + f.loaded + f.at_stop;
@@ -427,7 +509,7 @@ export function ledgerOf(beatDate) {
   return {
     beatDate: date,
     theatre: THEATRE.name,
-    stopCount: STUDIO_COUNT,
+    stopCount: liveStopCount(),
     memberCount: MEMBER_COUNT,
     orderCount,
     opening,
@@ -474,7 +556,7 @@ export function connectorsPayload() {
     product: "rabbit",
     dummy: DUMMY_DATA,
     theatre: THEATRE.name,
-    stopCount: STUDIO_COUNT,
+    stopCount: liveStopCount(),
     memberCount: MEMBER_COUNT,
     sources: [
       { id: "ledger", kind: "api", status: "ok", rows: led.rows.length },
@@ -510,9 +592,11 @@ export function stockPayload() {
   return {
     beatDate: led.beatDate,
     theatre: THEATRE.name,
-    stopCount: STUDIO_COUNT,
+    stopCount: liveStopCount(),
     opening: led.opening,
     stock: led.leftover,
+    remaining: remainingOnCart(),
+    movements: movementsOf(),
     holding: Object.entries(led.reserved).filter(([, n]) => n > 0).map(([sku, qty]) => ({ sku, qty })),
     owner: OWNER,
     nextBeat: state.beat.nextBeat,
@@ -533,7 +617,7 @@ export function beatPayload() {
     owner: OWNER,
     theatre: THEATRE.name,
     hub: THEATRE.hub,
-    stopCount: STUDIO_COUNT,
+    stopCount: liveStopCount(),
     memberCount: MEMBER_COUNT,
     bagsTonight: state.orders.length,
     bagsPerStop: BEAT_BAGS_PER_STOP,
@@ -552,7 +636,7 @@ export function stopsPayload() {
     area: THEATRE.area,
     beatDate: state.beat.beatDate,
     slot: SLOT,
-    stopCount: STUDIO_COUNT,
+    stopCount: liveStopCount(),
     memberCount: MEMBER_COUNT,
     membersPerStudio: MEMBERS_PER_STUDIO,
     bagsTonight: state.orders.length,
@@ -574,10 +658,11 @@ export function ordersPayload(query = {}) {
     spokenBeat: state.beat.spokenBeat,
     owner: OWNER,
     theatre: THEATRE.name,
-    stopCount: STUDIO_COUNT,
+    stopCount: liveStopCount(),
     memberCount: MEMBER_COUNT,
     bagsTonight: state.orders.length,
     bagsPerStop: BEAT_BAGS_PER_STOP,
+    remaining: remainingOnCart(),
     orderCount: state.orders.length,
     byStatus: f,
     skip: DUMMY_DATA
@@ -610,7 +695,7 @@ export function cashPayload(query = {}) {
   const base = {
     beatDate: today,
     theatre: THEATRE.name,
-    stopCount: STUDIO_COUNT,
+    stopCount: liveStopCount(),
     collectedCount: collected.length,
     dueToday: due,
     paidIn: due,
@@ -644,7 +729,7 @@ export function reconPayload() {
     saved: state.beat.closed,
     beatDate: led.beatDate,
     theatre: THEATRE.name,
-    stopCount: STUDIO_COUNT,
+    stopCount: liveStopCount(),
     orderCount: led.orderCount,
     opening: led.opening,
     reserved: led.reserved,
@@ -668,7 +753,7 @@ export function nextPayload() {
     owner: OWNER,
     slot: SLOT,
     theatre: THEATRE.name,
-    stopCount: STUDIO_COUNT,
+    stopCount: liveStopCount(),
     leftover: led.leftover,
     load: pred.load,
     predicted,
@@ -745,7 +830,7 @@ export function predictPayload() {
     owner: OWNER,
     slot: SLOT,
     theatre: THEATRE.name,
-    stopCount: STUDIO_COUNT,
+    stopCount: liveStopCount(),
     memberCount: MEMBER_COUNT,
     miss_rate: pred.miss_rate,
     load: pred.load,
@@ -847,6 +932,15 @@ export function scanOrder({ type, orderId, pickupCode, actor }) {
   const expected = expectedFrom(order.status);
   const ok = Array.isArray(expected) ? expected.includes(kind) : expected === kind;
   if (!ok) return { error: "wrong_stage", status: 409, have: order.status, want: expected };
+  if (kind === "packed") {
+    const rem = remainingOnCart();
+    for (const line of order.lines) {
+      const q = Number(line.qty) || 1;
+      if ((rem[line.id] || 0) < q) {
+        return { error: "last_unit_taken", status: 409, sku: line.id, remaining: rem[line.id] || 0 };
+      }
+    }
+  }
   if (kind === "collected") {
     const code = String(pickupCode || "").trim().toUpperCase();
     if (!code || code !== order.pickupCode) return { error: "bad_pickup_code", status: 409 };
@@ -916,7 +1010,7 @@ export function towerPayload() {
     theatre: THEATRE.name,
     hub: THEATRE.hub,
     area: THEATRE.area,
-    stopCount: STUDIO_COUNT,
+    stopCount: liveStopCount(),
     memberCount: MEMBER_COUNT,
     membersPerStudio: MEMBERS_PER_STUDIO,
     bagsTonight: state.orders.length,
@@ -929,11 +1023,12 @@ export function towerPayload() {
       leftover: sum(led.leftover),
       miss_rate: pred.miss_rate,
       balanced: led.balanced,
-      stops: STUDIO_COUNT,
+      stops: liveStopCount(),
       members: MEMBER_COUNT,
       bags: state.orders.length,
       chase: chaseCount
     },
+    gates: gatesOf(funnel, led),
     funnel,
     stopProgress: progress,
     connectors: connectorsPayload(),
@@ -1004,6 +1099,7 @@ export async function handleStaff(req, res, path, body, url) {
   if (method === "GET" && path === "/stock") return { status: 200, body: stockPayload() };
   if (method === "GET" && path === "/orders") return { status: 200, body: ordersPayload(q) };
   if (method === "GET" && path === "/stops") return { status: 200, body: stopsPayload() };
+  if (method === "POST" && path === "/stops") return done(addStudio(body));
   if (method === "GET" && path === "/beat") return { status: 200, body: beatPayload() };
   if (method === "POST" && path === "/beat/open") return done(openBeat(body));
   if (method === "POST" && path === "/beat/close") return done(closeBeat(body));

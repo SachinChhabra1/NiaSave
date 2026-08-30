@@ -11,7 +11,7 @@
 <body>
   <div class="narrow">
     <div class="narrow-card">
-      <div class="kicker">Rabbit · staff</div>
+      <div class="kicker">Rabbit · Jabali Officer</div>
       <h1>Open on a laptop</h1>
       <p>Pickup is a wide staff desk. It is not the member app.</p>
     </div>
@@ -47,7 +47,9 @@ function scan(orderId, type, pickupCode){
   }).then(function(r){ return r.json().then(function(j){ return { ok:r.ok, status:r.status, j:j }; }); })
   .then(function(res){
     if(!res.ok){
-      alert((res.j && res.j.error) || ('scan '+res.status));
+      var err=res.j && res.j.error;
+      if(err==='last_unit_taken') alert('Last unit already taken for '+(res.j.sku||'this SKU')+'. One reservation wins.');
+      else alert(err || ('scan '+res.status));
       return;
     }
     loadStop(STOP);
@@ -113,8 +115,11 @@ function loadStop(stop){
     var orders=d.orders||[];
     var packed=orders.filter(function(o){ return (o.status||'')==='packed'; });
     var rest=orders.filter(function(o){ return (o.status||'')!=='packed'; });
-    desk.innerHTML='<button type="button" class="ghost back" onclick="pickStop('+JSON.stringify(stop)+')">Back to 40 stops</button>'
+    var rem=d.remaining||{};
+    var last=Object.keys(rem).filter(function(sku){ return rem[sku]<=1; });
+    desk.innerHTML='<button type="button" class="ghost back" onclick="pickStop('+JSON.stringify(stop)+')">Back to stops</button>'
       + '<h2>'+(d.stopName||stop)+' · '+orders.length+' bags</h2>'
+      + (last.length?'<p class="sub">Last unit on cart: '+last.join(', ')+'. One reservation wins.</p>':'')
       + '<h2>Packed (before cart leaves)</h2>'
       + (packed.length ? packed.map(rowHtml).join('') : '<div class="empty">Nothing packed yet at this stop.</div>')
       + '<h2>On this stop</h2>'

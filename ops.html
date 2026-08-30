@@ -26,9 +26,13 @@
       <div class="meta" id="topmeta">Rajputana Theatre · 40 stops<br>No live UPI</div>
     </header>
     <div class="wrap">
-      <p class="sub">One theatre. 40 stops. 3000 members. Tap a card. One job. Wide laptop only. Studio cart after 17:00.</p>
+      <p class="sub">One theatre. 40 stops. 3000 members. Jabali Officer is the Studio Champion. Tap a card. One job. Wide laptop only.</p>
+      <div class="realities" id="realities"></div>
       <div class="jobs" id="jobs"></div>
       <div class="open" id="open"></div>
+      <h2>Gates (proposed)</h2>
+      <p class="sub">Report only. Thresholds stay proposed. Numerator and denominator. No new percent invented here.</p>
+      <div id="gates" class="empty"></div>
     </div>
   </div>
 <script>
@@ -56,18 +60,23 @@ function face(){
   var load=(pred.load||[]).filter(function(r){ return r.tomorrow_qty>0; });
   var src=(DATA.source&&DATA.source.sources)||[];
   var open=DATA.openJob||'';
+  document.getElementById('realities').innerHTML=[
+    'Ordered','Paid','Hub loaded','Collected or returned','Settled'
+  ].map(function(x){ return '<span class="reality">'+x+'</span>'; }).join('');
   document.getElementById('jobs').innerHTML=[
     jobBtn('pickup','After 5','Pickup','Pack the studio cart. Collect by code. Mark miss.',
       num(f.reserved)+' reserved · '+num(f.packed)+' packed · '+num(f.collected)+' collected · '+num(f.missed)+' miss', open==='pickup'),
-    jobBtn('recon','Night','Recon','Match the UPI statement after collected scan.',
-      (s.matched||0)+' matched · '+(s.unmatchedStatement||0)+' statement open', open==='recon'),
+    jobBtn('recon','Night','Recon','Ledger count. Opening minus collected minus leftover must be 0.',
+      'open '+num(k.opening)+' · collected '+num(k.collected)+' · leftover '+num(k.leftover), open==='recon'),
+    jobBtn('match','Night','Statement match','Staff recon. Bank lines vs settlements after collected scan. Not live member UPI.',
+      (s.matched||0)+' matched · '+(s.unmatchedStatement||0)+' statement open', open==='match'),
     jobBtn('source','Inbound','Source','Buy only where Nia cost is under kirana.',
       src.length+' SKUs on the procure sheet', open==='source'),
     jobBtn('predict','Ledger','Predict','Order recs and miss risk from the ledger. Not a guess.',
       'miss '+(k.miss_rate!=null?k.miss_rate+'%':'0%')+' · '+num(pred.chaseCount||k.chase)+' to chase', open==='predict'),
-    jobBtn('close','Night','Beat close','Opening minus collected must still be on the cart.',
-      'open '+num(k.opening)+' · collected '+num(k.collected)+' · miss '+num(k.missed), open==='close'),
-    jobBtn('next','Next day','Tomorrow load','Load from collected plus what is still holding.',
+    jobBtn('close','Night','Beat close','Night close never plugs. Wrong leftover is rejected.',
+      'balanced '+(k.balanced?'yes':'no')+' · miss '+num(k.missed), open==='close'),
+    jobBtn('next','Next day','Tomorrow load','Hub load from collected plus what is still holding.',
       load.length+' SKUs to load', open==='next')
   ].join('');
   document.querySelectorAll('button.job').forEach(function(el){
@@ -91,9 +100,13 @@ function pick(id){
       +checks([['Reserved',num(f.reserved)],['Packed',num(f.packed)],['Loaded',num(f.loaded)],['At stop',num(f.at_stop)],['Collected',num(f.collected)],['Miss',num(f.missed)]])
       +'<a class="desk-link" href="/pickup.html">Open pickup desk</a>';
   } else if(id==='recon'){
-    html='<h2>Recon</h2><p class="do">Settlement starts on collected scan. Not UPI capture. Not pack. Match the bank statement lines to those settlements.</p>'
-      +checks([['Settlements',s.count||0],['Matched',s.matched||0],['Statement open',s.unmatchedStatement||0],['Unmatched take',s.unmatchedSettlements||0]])
+    html='<h2>Recon</h2><p class="do">Night count. Opening minus collected minus leftover = 0. If it does not, the beat does not close.</p>'
+      +checks([['Opening',num(k.opening)],['Collected',num(k.collected)],['Leftover',num(k.leftover)],['Balanced',k.balanced?'yes':'no']])
       +'<a class="desk-link" href="/recon.html">Open recon desk</a>';
+  } else if(id==='match'){
+    html='<h2>Statement match</h2><p class="do">Settlement starts on collected scan. Not pack. Not pay. Not a UPI screenshot. Staff bank CSV only. No live member UPI.</p>'
+      +checks([['Settlements',s.count||0],['Matched',s.matched||0],['Statement open',s.unmatchedStatement||0],['Unmatched take',s.unmatchedSettlements||0]])
+      +'<a class="desk-link" href="/recon.html">Open statement match</a>';
   } else if(id==='source'){
     var n=((DATA.source&&DATA.source.sources)||[]).length;
     html='<h2>Source</h2><p class="do">Read the procure and vendor sheets. Keep a SKU only when Nia cost is under kirana.</p>'
@@ -104,15 +117,15 @@ function pick(id){
       +checks([['Miss rate',(k.miss_rate!=null?k.miss_rate+'%':'0%')],['Chase',num(pred.chaseCount||k.chase)],['Members',num(k.members||t.memberCount)],['Stops',num(k.stops||t.stopCount)]])
       +'<a class="desk-link" href="/predict.html">Open predict desk</a>';
   } else if(id==='close'){
-    html='<h2>Beat close</h2><p class="do">One beat. Opening minus collected must equal what is still here. Wrong close is rejected.</p>'
+    html='<h2>Beat close</h2><p class="do">Night close never plugs a gap. Opening minus collected minus leftover must be 0 or the beat stays open.</p>'
       +checks([['Opening',num(k.opening)],['Collected',num(k.collected)],['Miss',num(k.missed)],['Balanced',k.balanced?'yes':'no']])
       +'<a class="desk-link" href="/recon.html">Open beat close</a>';
   } else if(id==='next'){
     var rec=((pred.load)||[]).filter(function(r){ return r.tomorrow_qty>0; });
     var qty=rec.reduce(function(a,r){ return a+num(r.tomorrow_qty); },0);
-    html='<h2>Tomorrow load</h2><p class="do">Load what the ledger already proved: collected plus what is still holding, cut by miss rate.</p>'
+    html='<h2>Tomorrow load</h2><p class="do">Hub load from the ledger. Collected plus what is still holding, cut by miss rate. Not discretion.</p>'
       +checks([['SKUs to load',rec.length],['Units',qty],['Miss rate',(k.miss_rate!=null?k.miss_rate+'%':'0%')]])
-      +'<a class="desk-link" href="/next.html">Open tomorrow desk</a> · <a class="desk-link" href="/hub.html">Hub load</a>';
+      +'<a class="desk-link" href="/hub.html">Open hub load</a>';
   }
   box.className='open show';
   box.innerHTML=html;
@@ -127,6 +140,13 @@ function load(){
     var t=all[0]||{};
     document.getElementById('topmeta').innerHTML=(t.theatre||'Rajputana Theatre')+' · '+(t.stopCount||40)+' stops · '+(t.memberCount||3000)+' members<br>Beat '+(t.beatDate||'-')+' · '+(t.bagsTonight||0)+' bags tonight · no live UPI';
     face();
+    var g=t.gates||{};
+    var keys=['participation','sellThrough','preorderFill','memberSaving','inventoryLoss','contribution'];
+    var labels={participation:'Participation',sellThrough:'Sell-through',preorderFill:'Pre-order fill',memberSaving:'Member saving',inventoryLoss:'Inventory loss',contribution:'Contribution'};
+    document.getElementById('gates').innerHTML=keys.map(function(key){
+      var row=g[key]||{};
+      return '<div class="check"><div class="l">'+labels[key]+'</div><div class="n">'+(row.num!=null?row.num:'-')+' / '+(row.den!=null?row.den:'-')+'</div><div class="l">'+(row.label||'')+'</div></div>';
+    }).join('');
   }).catch(function(){
     document.getElementById('jobs').innerHTML='<div class="empty">Could not load the beat board.</div>';
   });

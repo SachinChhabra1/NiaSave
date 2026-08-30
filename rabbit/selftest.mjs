@@ -2,7 +2,7 @@ import {
   DUMMY_DATA, ledgerOf, predictPayload, settlementsPayload, closeBeat, openBeat,
   scanOrder, connectorsPayload, resetDummy, WEEK_BEAT, STUDIOS, MEMBERS,
   STUDIO_COUNT, MEMBER_COUNT, BEAT_BAGS_PER_STOP, ordersPayload, towerPayload,
-  jsonSize, TOWER_MAX_BYTES, THEATRE
+  jsonSize, TOWER_MAX_BYTES, THEATRE, addStudio, stopsPayload
 } from "./engine.mjs";
 
 const fails = [];
@@ -53,6 +53,13 @@ ok("tower under cap", towerBytes < TOWER_MAX_BYTES, String(towerBytes));
 ok("tower has no order blob", tower.ledger && tower.ledger.orders == null);
 ok("tower sized for go-live", tower.stopCount === 40 && tower.memberCount === 3000 && tower.bagsTonight === 200);
 ok("tower predict has no 3000 dump", (tower.predict.members || []).length === 0);
+ok("tower gates proposed", tower.gates && tower.gates.proposed === true && tower.gates.participation.den === 3000);
+
+const added = addStudio({ name: "Nia Nest sheet row" });
+ok("add studio without rewrite", added.ok && added.rewritten === false && added.stopCount === 41);
+ok("stops list grew", stopsPayload().stopCount === 41 && stopsPayload().stops.some(s => s.stopId === "S41"));
+resetDummy();
+ok("reset back to 40", stopsPayload().stopCount === 40);
 
 const bad = closeBeat({ closing: { groundnut_oil: 999 }, beatDate: WEEK_BEAT });
 ok("close 409 on mismatch", bad.status === 409 && bad.mismatch && bad.mismatch.length);

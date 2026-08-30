@@ -166,7 +166,7 @@ function load(){
     var d=all[0], n=all[1];
     beatDate=d.beatDate||'';
     opening=Object.assign({}, d.opening||{});
-    document.getElementById('beat').textContent=(d.theatre||'Rajputana Theatre')+' · Beat '+beatDate+' · '+(d.stopCount||40)+' stops · opening on file';
+    document.getElementById('beat').textContent=(d.theatre||'Rajputana Theatre')+' · Beat '+beatDate+' · '+(d.stopCount||40)+' studios · opening on file';
     var mv=d.movements||{};
     var mskus=Object.keys(mv).sort();
     document.getElementById('moves').innerHTML=mskus.length

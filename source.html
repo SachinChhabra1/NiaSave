@@ -78,7 +78,7 @@ function fromLabel(d){
 function load(){
   document.getElementById('wrap').textContent='Loading…';
   fetch('/api/source').then(function(r){ return r.json(); }).then(function(d){
-    document.getElementById('from').textContent=(d.theatre||'Rajputana Theatre')+' · 40 stops · 3000 members · '+fromLabel(d);
+    document.getElementById('from').textContent=(d.theatre||'Rajputana Theatre')+' · 40 studios · 3000 members · '+fromLabel(d);
     var rows=Array.isArray(d)?d:(d.sources||[]);
     if(!rows.length){ document.getElementById('wrap').innerHTML='<div class="empty">No file yet. Choose a procure CSV on the Connectors desk.</div>'; return; }
     document.getElementById('wrap').innerHTML='<table><thead><tr><th>SKU</th><th>Name</th><th>Vendor</th><th>Buy</th><th>Keep</th><th>Lead</th><th>Last buy</th><th>Status</th></tr></thead><tbody>'

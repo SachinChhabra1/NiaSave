@@ -92,7 +92,7 @@ function load(){
   ]).then(function(all){
     var d=all[0], s=all[1];
     ledger=d;
-    document.getElementById('beat').textContent=(d.theatre||'Rajputana Theatre')+' · Beat '+(d.beatDate||'-')+' · '+(d.stopCount||40)+' stops · '+(d.orderCount||0)+' bags';
+    document.getElementById('beat').textContent=(d.theatre||'Rajputana Theatre')+' · Beat '+(d.beatDate||'-')+' · '+(d.stopCount||40)+' studios · '+(d.orderCount||0)+' bags';
     var skus=skusOf(d);
     if(!skus.length){ document.getElementById('wrap').innerHTML='<div class="msg">No SKUs yet.</div>'; }
     else {

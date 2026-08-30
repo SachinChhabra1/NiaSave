@@ -42,7 +42,7 @@
         <img class="nia-logo" src="/assets/nia-logo.png" alt="Nia">
         <h1>Operation Polo</h1>
       </div>
-      <div class="meta" id="topmeta">Rajputana Theatre · 40 stops<br>No live UPI</div>
+      <div class="meta" id="topmeta">Rajputana Theatre · 40 studios<br>No live UPI</div>
     </header>
     <div class="shell">
       <aside class="rail">
@@ -73,7 +73,7 @@
       </aside>
       <div class="pane">
         <div class="wrap pane-ops">
-          <p class="sub">Production. Skip on. One theatre. 40 stops. 3000 members. Stock is not today's flow. Inventory is movements. Settlement on collected. No live UPI.</p>
+          <p class="sub">Production. Skip on. One theatre. 40 studios. 3000 members. Stock is not today's flow. Inventory is movements. Settlement on collected. No live UPI.</p>
           <div class="realities" id="realities">
             <span class="reality"><b>1</b> Member ordered</span>
             <span class="reality-arrow" aria-hidden="true">→</span>
@@ -385,7 +385,7 @@ function pick(id){
       +'<a class="desk-link" href="/source.html">Open source desk</a>';
   } else if(id==='predict'){
     html=titleRow('predict','Predict')+'<p class="do">Use opening, collected, and miss. Do not invent a load. Chase bags still on the beat.</p>'
-      +checks([['Miss rate',(k.miss_rate!=null?k.miss_rate+'%':'0%')],['Chase',num(pred.chaseCount||k.chase)],['Members',num(k.members||t.memberCount)],['Stops',num(k.stops||t.stopCount)]])
+      +checks([['Miss rate',(k.miss_rate!=null?k.miss_rate+'%':'0%')],['Chase',num(pred.chaseCount||k.chase)],['Members',num(k.members||t.memberCount)],['Studios',num(k.stops||t.stopCount)]])
       +'<a class="desk-link" href="/predict.html">Open predict desk</a>';
   } else if(id==='close'){
     html=titleRow('close','Beat close')+'<p class="do">Night close never plugs a gap. Opening minus collected minus leftover must be 0 or the beat stays open.</p>'
@@ -399,7 +399,7 @@ function pick(id){
       +'<a class="desk-link" href="/hub.html">Open hub load</a>';
   } else if(id==='hub'){
     html=titleRow('hub','Hub load')+'<p class="do">Inventory is movements. Sign opening posts inbound. A new studio is a row. Do not rewrite the beat.</p>'
-      +checks([['Loaded',num(f.loaded)],['Stops',num(t.stopCount||40)],['Members',num(t.memberCount||3000)]])
+      +checks([['Loaded',num(f.loaded)],['Studios',num(t.stopCount||40)],['Members',num(t.memberCount||3000)]])
       +'<a class="desk-link" href="/hub.html">Open hub desk</a>';
   }
   box.className='open show';
@@ -456,7 +456,7 @@ function load(){
   ]).then(function(all){
     DATA={ tower:all[0], set:all[1], source:all[2], conn:all[3], openJob:'' };
     var t=all[0]||{};
-    document.getElementById('topmeta').innerHTML=(t.theatre||'Rajputana Theatre')+' · '+(t.stopCount||40)+' stops · '+(t.memberCount||3000)+' members<br>Beat '+(t.beatDate||'-')+' · '+(t.bagsTonight||0)+' bags tonight · no live UPI';
+    document.getElementById('topmeta').innerHTML=(t.theatre||'Rajputana Theatre')+' · '+(t.stopCount||40)+' studios · '+(t.memberCount||3000)+' members<br>Beat '+(t.beatDate||'-')+' · '+(t.bagsTonight||0)+' bags tonight · no live UPI';
     face();
     var g=t.gates||{};
     var keys=['participation','sellThrough','preorderFill','memberSaving','inventoryLoss','contribution'];

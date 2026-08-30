@@ -176,7 +176,7 @@ function loadStops(){
   fetch('/api/orders?pickup=today').then(function(r){ return r.json(); }).then(function(d){
     window.__stops=d;
     var beatLine=(d.theatre||'Rajputana Theatre')+' · Beat '+(d.beatDate||'-');
-    beatLine+=' · '+(d.stopCount||40)+' stops · '+(d.memberCount||3000)+' members · '+(d.orderCount||0)+' bags tonight';
+    beatLine+=' · '+(d.stopCount||40)+' studios · '+(d.memberCount||3000)+' members · '+(d.orderCount||0)+' bags tonight';
     document.getElementById('beat').textContent=beatLine;
     faceStops(d);
     if(STOP) loadStop(STOP);

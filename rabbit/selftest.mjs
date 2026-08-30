@@ -4,8 +4,10 @@ import {
   STUDIO_COUNT, MEMBER_COUNT, BEAT_BAGS_PER_STOP, ordersPayload, towerPayload,
   jsonSize, TOWER_MAX_BYTES, THEATRE, addStudio, stopsPayload, stockPayload, SKUS,
   placeMemberOrder, authOtp, authVerify, authMe, saveMemberFlags, ageingPayload, inventoryPayload,
-  mutatePo, poPayload, mutateDispatch, mutateInvoice, invoicePayload
+  mutatePo, poPayload, mutateDispatch, mutateInvoice, invoicePayload,
+  dispatchPayload, bikerPayload, mutateBiker
 } from "./engine.mjs";
+import { readFileSync } from "fs";
 
 const fails = [];
 function ok(name, cond, extra) {
@@ -209,8 +211,57 @@ ok("vendor bill vs PO", bill.ok === true && bill.invoiceId === "INV-V-" + po2.po
 noDummyWord("invoice", invoicePayload());
 resetDummy();
 
+const dStops = dispatchPayload().stops || [];
+const s01 = dStops.find(s => s.stopId === "S01");
+const s30 = dStops.find(s => s.stopId === "S30");
+const s31 = dStops.find(s => s.stopId === "S31");
+ok("S01 pin", Boolean(s01 && s01.lat === 21.2266 && s01.lng === 72.83613 && s01.seq === 1));
+ok("S30 pin", Boolean(s30 && s30.lat === 21.2324 && s30.lng === 72.84387 && s30.seq === 30));
+ok("30 shop pins", dStops.filter(s => s.lat != null && s.lng != null).length === 30);
+ok("S31 off biker run", Boolean(s31 && s31.lat == null && s31.lng == null));
+
+const bike0 = bikerPayload();
+ok("biker skip liveUpi", bike0.skip === true && bike0.liveUpi === false && bike0.shops.length === 30);
+ok("biker shops have lat lng", bike0.shops.every(s => typeof s.lat === "number" && typeof s.lng === "number" && s.seq >= 1 && s.seq <= 30));
+ok("biker hub this phone", bike0.hub && bike0.hub.label === "this phone, not surveyed" && bike0.rider === "this phone" && bike0.bikeId === "BIKE-01");
+const loadNoRun = mutateBiker({ action: "load" });
+ok("load needs a run", loadNoRun.status === 404 || loadNoRun.error === "run_required");
+const booked = mutateBiker({ action: "book" });
+ok("book biker runId", booked.ok === true && /^RUN-\d+$/.test(booked.runId) && booked.run && booked.run.bikeId === "BIKE-01");
+const loadTooSoonBike = mutateBiker({ action: "load", runId: booked.runId });
+ok("unpacked cannot load bike", loadTooSoonBike.status === 409 && loadTooSoonBike.error === "unpacked_remain");
+for (let i = 1; i <= 30; i++) {
+  mutateDispatch({ action: "pack", stopId: "S" + String(i).padStart(2, "0") });
+}
+const loadedBike = mutateBiker({ action: "load", runId: booked.runId });
+ok("load at hub after pack", loadedBike.ok === true && loadedBike.loaded >= 1);
+const dropped = mutateBiker({ action: "drop", runId: booked.runId, stopId: "S01" });
+ok("drop at shop pin", dropped.ok === true && dropped.stopId === "S01" && dropped.lat === 21.2266 && dropped.lng === 72.83613 && dropped.seq === 1);
+const back = mutateBiker({ action: "return", runId: booked.runId });
+ok("return to hub", back.ok === true && back.run && back.run.status === "returned");
+noDummyWord("biker", bikerPayload());
+ok("stock keys after biker", ["beatDate","theatre","stopCount","opening","stock","remaining","movements","holding"].every(k => stockPayload()[k] !== undefined));
+resetDummy();
+
+const staffPages = [
+  "ops.html","po.html","dispatch.html","invoice.html","pickup.html","recon.html",
+  "hub.html","source.html","predict.html","inventory.html","ageing.html","biker.html",
+  "cash.html","next.html"
+];
+for (const file of staffPages) {
+  const html = readFileSync(new URL("../" + file, import.meta.url), "utf8");
+  ok(file + " says Operation Polo", /Operation Polo/.test(html));
+  ok(file + " has no Rabbit", !/Rabbit|RABBIT/.test(html));
+  ok(file + " has no Jabali", !/Jabali|Jamali|JABALI|JAMALI/.test(html));
+  ok(file + " has no Dummy", !/Dummy/.test(html));
+}
+const opsHtml = readFileSync(new URL("../ops.html", import.meta.url), "utf8");
+ok("ops nia then polo svg", /class="nia-logo"[\s\S]{0,500}class="polo-icon"/.test(opsHtml));
+ok("ops job icons in source", /id="i-biker"/.test(opsHtml) && /id="i-po"/.test(opsHtml) && /id="i-dispatch"/.test(opsHtml));
+ok("biker desk exists", /Book biker/.test(readFileSync(new URL("../biker.html", import.meta.url), "utf8")));
+
 if (fails.length) {
   process.stderr.write("FAIL\n" + fails.join("\n") + "\n");
   process.exit(1);
 }
-process.stdout.write("rabbit selftest passed\n");
+process.stdout.write("polo selftest passed\n");

@@ -1,5 +1,5 @@
 /**
- * RABBIT — NiaSave staff control plane (studio-cart only).
+ * Operation Polo staff control plane (studio-cart only).
  * Go-live load: 1 theatre, 40 studios, 3000 members.
  * One evening beat, ~5 bags per stop (~200 orders). Not 10k. Not one cart.
  * Skip ON. No OTP send. No WhatsApp product. No live member UPI / Razorpay.
@@ -16,6 +16,15 @@ import {
   codeFor,
   kindLetter
 } from "./scale.mjs";
+import { SHOPS_30 } from "./shops-30.mjs";
+
+const SHOP_PIN = Object.fromEntries(SHOPS_30.shops.map(s => [s.stopId, s]));
+
+function pinStudio(studio) {
+  const pin = SHOP_PIN[studio.id];
+  if (!pin) return { ...studio };
+  return { ...studio, lat: pin.lat, lng: pin.lng, seq: pin.seq, area: pin.area };
+}
 
 const DUMMY_DATA = process.env.DUMMY_DATA !== "0";
 
@@ -40,8 +49,9 @@ export const SKUS = [
 
 const SKU_BY_ID = Object.fromEntries(SKUS.map(s => [s.id, s]));
 
-export const STUDIOS = buildStudios();
+export const STUDIOS = buildStudios().map(pinStudio);
 export const MEMBERS = buildMembers(STUDIOS);
+export { SHOPS_30 };
 const studioById = new Map(STUDIOS.map(s => [s.id, s]));
 const memberById = new Map(MEMBERS.map(m => [m.memberId, m]));
 const membersByStudio = new Map();
@@ -342,7 +352,8 @@ function createState() {
     memberSession: { memberId: "ravi", phone: "ravi" },
     pos: [],
     invoices: [],
-    dispatches: []
+    dispatches: [],
+    bikerRuns: []
   };
 }
 
@@ -460,7 +471,7 @@ function stopProgress() {
     const bags = ordersAt(s.id);
     const f = funnelOf(bags);
     const open = f.reserved + f.packed + f.loaded + f.at_stop;
-    return {
+    const row = {
       stopId: s.id,
       name: s.name,
       area: s.area,
@@ -471,8 +482,14 @@ function stopProgress() {
       packed: f.packed,
       loaded: f.loaded,
       at_stop: f.at_stop,
-      open
+      open,
+      seq: s.seq
     };
+    if (s.lat != null && s.lng != null) {
+      row.lat = s.lat;
+      row.lng = s.lng;
+    }
+    return row;
   });
 }
 
@@ -606,7 +623,7 @@ export function connectorsPayload() {
   const vendors = uploadMeta("vendors");
   const upi = uploadMeta("upi_statement");
   return {
-    product: "rabbit",
+    product: "polo",
     skip: DUMMY_DATA,
     theatre: THEATRE.name,
     stopCount: liveStopCount(),
@@ -1243,7 +1260,8 @@ export function scanOrder({ type, orderId, pickupCode, actor }) {
   const ok = Array.isArray(expected) ? expected.includes(kind) : expected === kind;
   const officerCollect = (kind === "collected" || kind === "missed")
     && ["reserved", "paid", "packed", "loaded", "at_stop"].includes(order.status);
-  if (!ok && !officerCollect) return { error: "wrong_stage", status: 409, have: order.status, want: expected };
+  const hubReturn = kind === "returned" && ["loaded", "packed"].includes(order.status);
+  if (!ok && !officerCollect && !hubReturn) return { error: "wrong_stage", status: 409, have: order.status, want: expected };
   if (kind === "packed") {
     const rem = remainingOnCart();
     for (const line of order.lines) {
@@ -1314,7 +1332,7 @@ export function towerPayload() {
   const sum = map => Object.values(map).reduce((a, b) => a + (b || 0), 0);
   const chaseCount = funnel.reserved + funnel.packed + funnel.loaded + funnel.at_stop;
   return {
-    product: "rabbit",
+    product: "polo",
     skip: DUMMY_DATA,
     beatDate: led.beatDate,
     owner: OWNER,
@@ -1379,7 +1397,8 @@ export function towerPayload() {
       poSent: (state.pos || []).filter(p => p.status === "sent").length,
       poReceived: (state.pos || []).filter(p => p.status === "received").length,
       invoices: (state.invoices || []).length,
-      dispatchNotes: (state.dispatches || []).length
+      dispatchNotes: (state.dispatches || []).length,
+      bikerRuns: (state.bikerRuns || []).length
     }
   };
 }
@@ -1664,6 +1683,166 @@ export function mutateInvoice(body = {}) {
   return { error: "bad_action", status: 400 };
 }
 
+function bikerLive() {
+  const out = [];
+  for (const pin of SHOPS_30.shops) {
+    for (const o of ordersAt(pin.stopId)) {
+      if (!["collected", "missed", "returned"].includes(o.status)) out.push(o);
+    }
+  }
+  return out;
+}
+
+function openBikerRun() {
+  return (state.bikerRuns || []).find(r => r.status !== "returned" && r.status !== "closed") || null;
+}
+
+export function bikerPayload() {
+  const live = bikerLive();
+  const unpacked = live.filter(o => o.status === "reserved" || o.status === "paid");
+  const packed = live.filter(o => o.status === "packed");
+  const loaded = live.filter(o => o.status === "loaded");
+  const atStop = live.filter(o => o.status === "at_stop");
+  return {
+    skip: true,
+    liveUpi: false,
+    bikeId: "BIKE-01",
+    rider: "this phone",
+    hub: SHOPS_30.hub,
+    shops: SHOPS_30.shops.map(s => {
+      const bags = ordersAt(s.stopId);
+      const f = funnelOf(bags);
+      const studio = (state.studios || STUDIOS).find(x => x.id === s.stopId) || {};
+      return {
+        stopId: s.stopId,
+        name: studio.name || s.name,
+        lat: s.lat,
+        lng: s.lng,
+        seq: s.seq,
+        area: s.area,
+        bags: bags.length,
+        reserved: f.reserved,
+        packed: f.packed,
+        loaded: f.loaded,
+        at_stop: f.at_stop,
+        collected: f.collected
+      };
+    }),
+    run: openBikerRun(),
+    runs: state.bikerRuns || [],
+    unpacked: unpacked.length,
+    packed: packed.length,
+    loaded: loaded.length,
+    atStop: atStop.length,
+    leftoverOnBike: loaded.length,
+    slot: SLOT,
+    beatDate: state.beat.beatDate,
+    theatre: THEATRE.name
+  };
+}
+
+export function mutateBiker(body = {}) {
+  const action = body.action;
+  if (action === "book") {
+    const open = openBikerRun();
+    if (open) return { error: "run_open", status: 409, runId: open.runId, run: open };
+    const run = {
+      runId: "RUN-" + String((state.bikerRuns || []).length + 1).padStart(4, "0"),
+      bikeId: "BIKE-01",
+      rider: "this phone",
+      status: "booked",
+      beatDate: state.beat.beatDate,
+      slot: SLOT,
+      drops: [],
+      loadedAt: null,
+      returnedAt: null,
+      leftoverReturned: 0,
+      skip: true,
+      liveUpi: false,
+      createdAt: now()
+    };
+    state.bikerRuns.push(run);
+    return { ok: true, runId: run.runId, run, skip: true, liveUpi: false, desk: bikerPayload() };
+  }
+  const run = (state.bikerRuns || []).find(r => r.runId === (body.runId || body.run)) || openBikerRun();
+  if (!run) return { error: "run_required", status: 404 };
+
+  if (action === "load") {
+    const live = bikerLive();
+    const unpacked = live.filter(o => o.status === "reserved" || o.status === "paid");
+    if (unpacked.length) return { error: "unpacked_remain", status: 409, unpacked: unpacked.length };
+    const packed = live.filter(o => o.status === "packed");
+    if (!packed.length) return { error: "no_packed", status: 409 };
+    let loaded = 0;
+    for (const o of packed) {
+      const r = scanOrder({ type: "loaded", orderId: o.id, actor: "biker" });
+      if (r.ok) loaded += 1;
+    }
+    run.status = "loaded";
+    run.loadedAt = now();
+    run.loaded = loaded;
+    return { ok: true, runId: run.runId, loaded, run, skip: true, liveUpi: false, desk: bikerPayload() };
+  }
+
+  if (action === "drop") {
+    const stop = body.stopId || body.stop;
+    const pin = SHOP_PIN[stop];
+    if (!pin) return { error: "not_on_run", status: 400, stop };
+    if (run.status === "booked") return { error: "not_loaded", status: 409 };
+    if (run.status === "returned" || run.status === "closed") return { error: "run_closed", status: 409 };
+    const live = ordersAt(stop).filter(o => !["collected", "missed", "returned"].includes(o.status));
+    for (const o of live) {
+      if (o.status === "packed") scanOrder({ type: "loaded", orderId: o.id, actor: "biker" });
+    }
+    let arrived = 0;
+    for (const o of live) {
+      if (o.status === "loaded") {
+        const r = scanOrder({ type: "arrived", orderId: o.id, actor: "biker" });
+        if (r.ok) arrived += 1;
+      }
+    }
+    run.status = "on_run";
+    run.drops.push({
+      stopId: stop,
+      name: pin.name,
+      lat: pin.lat,
+      lng: pin.lng,
+      seq: pin.seq,
+      arrived,
+      at: now()
+    });
+    return {
+      ok: true,
+      runId: run.runId,
+      stopId: stop,
+      lat: pin.lat,
+      lng: pin.lng,
+      seq: pin.seq,
+      arrived,
+      run,
+      skip: true,
+      liveUpi: false,
+      desk: bikerPayload()
+    };
+  }
+
+  if (action === "return") {
+    const leftover = bikerLive().filter(o => o.status === "loaded");
+    let returned = 0;
+    for (const o of leftover) {
+      const r = scanOrder({ type: "returned", orderId: o.id, actor: "biker" });
+      if (r.ok) returned += 1;
+    }
+    const still = bikerLive().filter(o => o.status === "loaded");
+    if (still.length) return { error: "leftover_on_bike", status: 409, leftover: still.length };
+    run.status = "returned";
+    run.returnedAt = now();
+    run.leftoverReturned = returned;
+    return { ok: true, runId: run.runId, leftoverReturned: returned, run, skip: true, liveUpi: false, desk: bikerPayload() };
+  }
+  return { error: "bad_action", status: 400 };
+}
+
 export function staffPath(pathname, rewrittenPath) {
   let p = rewrittenPath ? "/" + String(rewrittenPath).replace(/^\/+/, "") : pathname;
   p = (p || "/").replace(/\/+$/, "") || "/";
@@ -1677,7 +1856,7 @@ export function isStaffPath(p) {
     "/connectors", "/connectors/upload", "/predict", "/ledger", "/stock", "/inventory", "/ageing",
     "/orders", "/order", "/member", "/member/answer", "/auth/me", "/auth/otp", "/auth/verify",
     "/beat", "/beat/open", "/beat/close", "/scan", "/recon", "/next", "/source",
-    "/cash", "/settlements", "/tower", "/stops", "/po", "/dispatch", "/invoice"
+    "/cash", "/settlements", "/tower", "/stops", "/po", "/dispatch", "/invoice", "/biker"
   ].includes(p);
 }
 
@@ -1722,6 +1901,8 @@ export async function handleStaff(req, res, path, body, url) {
   if (method === "POST" && path === "/dispatch") return done(mutateDispatch(body || {}));
   if (method === "GET" && path === "/invoice") return { status: 200, body: invoicePayload() };
   if (method === "POST" && path === "/invoice") return done(mutateInvoice(body || {}));
+  if (method === "GET" && path === "/biker") return { status: 200, body: bikerPayload() };
+  if (method === "POST" && path === "/biker") return done(mutateBiker(body || {}));
   if (method === "GET" && path === "/tower") return { status: 200, body: towerPayload() };
   if ((path === "/beat/open" || path === "/beat/close" || path === "/scan") && method === "GET") {
     return { status: 405, body: { error: "Use POST" } };

@@ -1,0 +1,41 @@
+{
+  "hub": {
+    "name": "Rajputana Hub",
+    "area": "Ved Road",
+    "lat": 21.2295,
+    "lng": 72.84,
+    "label": "this phone, not surveyed"
+  },
+  "shops": [
+    {"stopId":"S01","name":"Nia Nest Ompal","lat":21.2266,"lng":72.83613,"seq":1,"area":"Ved Road"},
+    {"stopId":"S02","name":"Nia Nest Shiv Kumar","lat":21.2266,"lng":72.83768,"seq":2,"area":"Ved Road"},
+    {"stopId":"S03","name":"Nia Nest Ram Bhatari","lat":21.2266,"lng":72.83922,"seq":3,"area":"Ved Road"},
+    {"stopId":"S04","name":"Nia Nest Jaswant Singh","lat":21.2266,"lng":72.84078,"seq":4,"area":"Ved Road"},
+    {"stopId":"S05","name":"Nia Nest Vansh","lat":21.2266,"lng":72.84233,"seq":5,"area":"Ved Road"},
+    {"stopId":"S06","name":"Nia Nest Kamala Devi","lat":21.2266,"lng":72.84387,"seq":6,"area":"Ved Road"},
+    {"stopId":"S07","name":"Nia Nest Rekha Yadav","lat":21.22805,"lng":72.83613,"seq":7,"area":"Ved Road"},
+    {"stopId":"S08","name":"Nia Nest Pradip Yadav","lat":21.22805,"lng":72.83768,"seq":8,"area":"Ved Road"},
+    {"stopId":"S09","name":"Nia Nest Bal Kishan 01","lat":21.22805,"lng":72.83922,"seq":9,"area":"Ved Road"},
+    {"stopId":"S10","name":"Nia Nest Binu","lat":21.22805,"lng":72.84078,"seq":10,"area":"Ved Road"},
+    {"stopId":"S11","name":"Nia Nest Kaushlya","lat":21.22805,"lng":72.84233,"seq":11,"area":"Ved Road"},
+    {"stopId":"S12","name":"Nia Nest Praveen","lat":21.22805,"lng":72.84387,"seq":12,"area":"Ved Road"},
+    {"stopId":"S13","name":"Nia Nest Azad Singh","lat":21.2295,"lng":72.83613,"seq":13,"area":"Ved Road"},
+    {"stopId":"S14","name":"Nia Nest Parul Yadav","lat":21.2295,"lng":72.83768,"seq":14,"area":"Ved Road"},
+    {"stopId":"S15","name":"Nia Nest Bala Devi","lat":21.2295,"lng":72.83922,"seq":15,"area":"Ved Road"},
+    {"stopId":"S16","name":"Nia Nest Narender","lat":21.2295,"lng":72.84078,"seq":16,"area":"Ved Road"},
+    {"stopId":"S17","name":"Nia Nest Gulshan Yadav","lat":21.2295,"lng":72.84233,"seq":17,"area":"Ved Road"},
+    {"stopId":"S18","name":"Nia Nest Subash Yadav","lat":21.2295,"lng":72.84387,"seq":18,"area":"Ved Road"},
+    {"stopId":"S19","name":"Nia Nest Ravinder Yadav","lat":21.23095,"lng":72.83613,"seq":19,"area":"Ved Road"},
+    {"stopId":"S20","name":"Nia Nest Naveen","lat":21.23095,"lng":72.83768,"seq":20,"area":"Ved Road"},
+    {"stopId":"S21","name":"Nia Nest Rajender Kumar","lat":21.23095,"lng":72.83922,"seq":21,"area":"Ved Road"},
+    {"stopId":"S22","name":"Nia Nest Dhanesh Kumar","lat":21.23095,"lng":72.84078,"seq":22,"area":"Ved Road"},
+    {"stopId":"S23","name":"Nia Nest Kanwal Kumar","lat":21.23095,"lng":72.84233,"seq":23,"area":"Ved Road"},
+    {"stopId":"S24","name":"Nia Nest Sunita Devi","lat":21.23095,"lng":72.84387,"seq":24,"area":"Ved Road"},
+    {"stopId":"S25","name":"Nia Nest Bal Kishan 02","lat":21.2324,"lng":72.83613,"seq":25,"area":"Ved Road"},
+    {"stopId":"S26","name":"Nia Nest Ankit Rao","lat":21.2324,"lng":72.83768,"seq":26,"area":"Ved Road"},
+    {"stopId":"S27","name":"Nia Nest Ved Road 01","lat":21.2324,"lng":72.83922,"seq":27,"area":"Ved Road"},
+    {"stopId":"S28","name":"Nia Nest Ved Road 02","lat":21.2324,"lng":72.84078,"seq":28,"area":"Ved Road"},
+    {"stopId":"S29","name":"Nia Nest North Hall","lat":21.2324,"lng":72.84233,"seq":29,"area":"Ved Road"},
+    {"stopId":"S30","name":"Nia Nest East Hall","lat":21.2324,"lng":72.84387,"seq":30,"area":"Ved Road"}
+  ]
+}

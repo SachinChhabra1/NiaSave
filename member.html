@@ -572,9 +572,11 @@
   .category-card-meta{font-size:12.5px;color:#747478;margin-top:4px}
   .category-card-meta:empty{display:none}
   .category-card-meta.live-save-meta{font-weight:700;color:var(--ink);font-size:13px;line-height:1.35}
-  .story-how{display:inline-flex;align-items:flex-start;gap:6px;text-align:left}
-  .story-how svg{flex:0 0 auto;width:18px;height:18px;margin-top:1px;color:var(--navy)}
-  .story-how-txt{min-width:0}
+  .card-pig-row{display:flex;align-items:flex-start;gap:6px;margin-top:6px;min-width:0;width:100%}
+  .card-pig-ico{flex:0 0 auto;display:flex;line-height:0;color:var(--navy);margin-top:1px}
+  .card-pig-ico svg,.card-pig-svg{width:18px;height:18px;display:block;flex:0 0 auto}
+  .card-pig-amt{flex:0 0 auto;font-size:13px;font-weight:700;color:var(--ink);letter-spacing:-.02em;line-height:1.35;white-space:nowrap}
+  .card-pig-how{flex:1 1 auto;min-width:0;font-size:12.5px;font-weight:700;color:var(--ink);line-height:1.35}
   .live-save{font-weight:700;font-size:17px;letter-spacing:-.02em;line-height:1.25;color:var(--ink);margin:8px 0 0}
   .live-how{margin:10px 0 16px;font-size:13px;line-height:1.5;color:var(--mute)}
   .piggy{
@@ -916,11 +918,11 @@ var GO_LIVE = { theatres:1, studios:40, members:3000 };
 */
 var WEEK_HOME = {
   need: 1000,
-  fridayExtra: 720,   // this week: Friday extra hours at current job
-  missDay: 840,       // this week: miss a full work day
-  shopKeep: 50,       // this week: groundnut 260-210; bag kept = MRP minus shop
-  rideCost: 60,       // this week demo only; do not print as his auto fare
-  mealOut: 120,       // this week demo only; do not print as his meal
+  fridayExtra: 720,   // this month: Friday extra hours at current job
+  missDay: 840,       // this month: miss a full work day
+  shopKeep: 50,       // this month: groundnut 260-210; bag kept = MRP minus shop
+  rideCost: 60,       // this month demo only; do not print as his auto fare
+  mealOut: 120,       // this month demo only; do not print as his meal
   nearby: [
     { id:'laundry', title:'near_laundry', when:'near_sat', hours:0, pay:500, dist:'near_walk' },
     { id:'kitchen', title:'near_kitchen', when:'near_sun', hours:0, pay:520, dist:'near_1km' },
@@ -1035,7 +1037,7 @@ var T = {
     intro3:'Everything here is measured one way. What reaches home.',
     topsub:'Surat · Ved Road', public_sub:'Essentials. More for home.',
     auth_title:'Continue with your phone', auth_copy:'10-digit Indian mobile number.', auth_phone_label:'Phone number', auth_phone_placeholder:'10-digit mobile number', auth_send:'Send OTP', auth_phone_error:'Enter your 10-digit mobile number.', auth_otp_title:'Enter the OTP', auth_otp_copy:'Enter the 6-digit OTP sent to', auth_otp_label:'6-digit OTP', auth_verify:'Verify & continue', auth_otp_error:'Enter the 6-digit OTP.', auth_change:'Change phone number', auth_back:'Back to Save', auth_private:'Live, Earn and Send need your phone.',
-    tab_live:'Live', tab_earn:'Earn', tab_save:'Save', tab_send:'Send', daily:'Daily', seeall:'See all', payslip_k:'Your pay, from the slip', payslip_t:"This week's slip", payslip_d:'You type pay, OT, and cut.', payslip_add:'Save', payslip_done:'Slip saved', payslip_read:'', goal_k:'Your roof, sooner', goal_t:'The roof at home', goal_by:'Roof home by', goal_perweek:'OT shifts a week', goal_hours:'hours', goal_sooner:'months sooner', goal_none:'at this pace', goal_frompay:'From your slip', goal_addpay:'Add your slip numbers',
+    tab_live:'Live', tab_earn:'Earn', tab_save:'Save', tab_send:'Send', daily:'Daily', seeall:'See all', payslip_k:'Your pay, from the slip', payslip_t:"This month's slip", payslip_d:'You type pay, OT, and cut.', payslip_add:'Save', payslip_done:'Slip saved', payslip_read:'', goal_k:'Your roof, sooner', goal_t:'The roof at home', goal_by:'Roof home by', goal_perweek:'OT shifts a week', goal_hours:'hours', goal_sooner:'months sooner', goal_none:'at this pace', goal_frompay:'From your slip', goal_addpay:'Add your slip numbers',
     /* send */
     send_t:'Remit more',
     send_s:'How much reaches home?',
@@ -1052,7 +1054,7 @@ var T = {
     send_card_goal_n:'How much this month', send_card_goal_m:'Write the rupees for home.',
     send_card_sent_n:'How much did you send?', send_card_sent_m:'Write what went home.',
     send_prog_goal:'of month goal met', send_prog_month:'of month gone', send_prog_empty:'Write what you sent first.',
-    earn_slip_ask:"So we can see if this week's pay can do that.",
+    earn_slip_ask:"So we can see if this month's pay can do that.",
     reach:'can reach Maa this month', nofee:'No fee.', sendhome:'Send home',
     feeds:'What filled this envelope',
     from_live:'Live', from_live_d:'near work, no city rent',
@@ -1124,15 +1126,15 @@ var T = {
     earn_t:'Extra hours',
     earn_s:'',
     earn_trends_say:'Your pay each month.',
-    earn_week_this:'this week',
+    earn_week_this:'this month',
     earn_week_last:'last week',
     earn_week_2:'2 weeks ago',
     earn_week_3:'3 weeks ago',
-    earn_add_slip:"Add this week's slip.",
+    earn_add_slip:"Add this month's slip.",
     earn_card_ot_n:'OT this month', earn_card_ot_m:'Extra shifts toward home.',
     earn_card_gig_n:'Shift if listed', earn_card_gig_m:'If a nearby shift is listed.',
     earn_card_fri_n:'Friday extra hours', earn_card_fri_m:'Extra hours.',
-    earn_card_slip_n:"This week's slip", earn_card_slip_m:'Pay, OT, cut.',
+    earn_card_slip_n:"This month's slip", earn_card_slip_m:'Pay, OT, cut.',
     earn_card_village_n:'Someone from your village', earn_card_village_m:'Someone from your village.',
     earn_card_plant_n:'Not only this factory', earn_card_plant_m:'Another plant if listed.',
     village_toast:'Someone from your village noted.', recommend_btn:'Recommend', bag_credit:'Off the bag',
@@ -1140,7 +1142,7 @@ var T = {
     studio_mess1_m:'Ved Road · food and stay. · ₹3,300/month',
     studio_mess2_n:'Trinath Sahu Kaka mess, Ved Road',
     studio_mess2_m:'Across a 10-foot-wide road into the factory.',
-    thisweek:'This week', friday:'Friday · no cut',
+    thisweek:'This month', friday:'Friday · no cut',
     today:'Today', shift:'8:00-5:00 · Ved Road', bus:'Bus near the studio', helper:'Ramesh · call for help',
     extra_k:'One extra shift', extra_t:'Tonight 6-8 PM · at the Studio', extra_d:'Extra hours toward home.',
     take:'Take it', no:'Not today',
@@ -1152,7 +1154,7 @@ var T = {
     /* save */
     save_t:'Shop', save_s:'Lower cost than the kirana',
     save_payslip_line:'Lower cost here. More can go home.',
-    kept_lbl:'Kirana subtraction this week', kept_home:'Kirana subtraction this week on this phone.',
+    kept_lbl:'Kirana subtraction this month', kept_home:'Kirana subtraction this month on this phone.',
     search:'Salt, oil, noodles', keep:'keep', youpay:'', add:'Add', added:'Added', out:'Out',
     every:'Every rupee kept here reaches home.',
     /* bag */
@@ -1162,17 +1164,17 @@ var T = {
     name_ask:'Name and Studio', pay_upi:'Pay at pickup',
     done_t:'Your bag is with the hub.', done_d:'At your Studio by 5:15 PM.', close:'Done',
     perkw:'Bag ₹500 this month, a fever day is free.',
-    /* this week → home */
-    week_lbl:'Extra this week',
+    /* this month → home */
+    week_lbl:'Extra this month',
     week_reach:'toward home',
     week_pick:'Pick one path. You do not have time for both.',
     week_do: "How this money is made",
     week_dont: "Don't spend it on this",
     path_fri_t:'Extra hours Friday', path_fri_d:'At this job.',
     path_week_t:'Nearby shifts if listed', path_week_d:'If a nearby shift is listed.',
-    path_pick:'Pick this path', path_yours:'Your path this week', path_change:'Change path',
+    path_pick:'Pick this path', path_yours:'Your path this month', path_change:'Change path',
     dont_miss_t: "Don't miss a work day",
-    dont_miss_d: "Miss a day. That day's wage goes (this week).",
+    dont_miss_d: "Miss a day. That day's wage goes (this month).",
     dont_ride_t: "Don't take a paid ride",
     dont_ride_d: "Walk. Skip the paid ride.",
     dont_meal_t: "Don't eat outside Nest",
@@ -1184,14 +1186,14 @@ var T = {
     near_laundry:'Laundry', near_kitchen:'Kitchen packing', near_loading:'Loading help',
     near_sat:'Saturday · if listed', near_sun:'Sunday · if listed', near_sat_pm:'Saturday · if listed',
     near_walk:'Walk from Nest', near_1km:'About 1 km from Nest', near_15km:'About 1.5 km from Nest',
-    take_work:'Take this work', work_taken:'Taken for this week',
+    take_work:'Take this work', work_taken:'Taken for this month',
     two_cover: "Listed shifts only.",
-    save_week_home:'Oil kirana subtraction this week.',
-    save_band_t:'kirana subtraction this week', save_band_d:'Lower cost shop picks this week',
+    save_week_home:'Oil kirana subtraction this month.',
+    save_band_t:'kirana subtraction this month', save_band_d:'Lower cost shop picks this month',
     leave_k: "If you must go home",
     leave_diwali_t: "Diwali in 54 days",
     leave_diwali_d: "Tell us 7 days before. Bed stays.",
-    leave_days_t:'Days written this week: 6',
+    leave_days_t:'Days written this month: 6',
     leave_days_d:'Do not walk off unpaid. Money owed stays written.',
     leave_ticket_t:'Ticket home ₹800',
     leave_ticket_d:"Keep this if you must go home.",
@@ -1201,7 +1203,7 @@ var T = {
     stay_k:'Work that does not disappear',
     stay_rain_t:'Laundry and kitchen still run in the rains',
     stay_rain_d:"Same nearby work. No new thekedar.",
-    stay_owe_t: "Thekedar owes ₹2,400 this week",
+    stay_owe_t: "Thekedar owes ₹2,400 this month",
     stay_owe_d: "Mark today. Don't walk off.",
     stay_shut_t:'If the site is closed tomorrow',
     stay_shut_d:'Those same nearby jobs are still there.',
@@ -1215,7 +1217,7 @@ var T = {
     city_late_d:'Eat from this shop. Not a meal out.',
     city_dry_t:'Three dry days in Ration',
     city_dry_d:"Rice, dal, oil if the site shuts.",
-    city_cheap_t:'Lower cost shop this week',
+    city_cheap_t:'Lower cost shop this month',
     city_cheap_d:"City weeks beat going home empty.",
     send_stay_k:'Send so you do not have to go',
     send_before_t:'Send before the train',
@@ -1224,8 +1226,8 @@ var T = {
     send_hand_d:"Not thekedar debt. Only money in hand.",
     send_ticket_t:'Ticket ₹800 is separate',
     send_ticket_d:'Do not take it from what you send to family.',
-    send_worth_t:'Extra toward home this week',
-    send_worth_d:'That is why staying this week is worth it.',
+    send_worth_t:'Extra toward home this month',
+    send_worth_d:'That is why staying this month is worth it.',
     pay_q: "Do you pay a thekedar every month?",
     pay_yes:'Yes',
     pay_no:'No',
@@ -1241,7 +1243,7 @@ var T = {
     ask_stay_k: "What would make you stay?",
     stay_chip_paid:'Paid on time',
     stay_chip_bed:'Bed held when I go home',
-    stay_chip_food:'Lower cost food this week',
+    stay_chip_food:'Lower cost food this month',
     stay_chip_hours:'Extra hours nearby',
     stay_chip_else:'Something else',
     stay_else_ph:'One line. what would help',
@@ -1272,7 +1274,7 @@ var T = {
 
     owe_marked:'Marked today',
     day_mon:'Mon', day_tue:'Tue', day_wed:'Wed', day_thu:'Thu', day_fri:'Fri', day_sat:'Sat', day_sun:'Sun',
-    days_k: "Days written this week",
+    days_k: "Days written this month",
     days_math:'Mark each work day',
     days_owner: "Your days. They stay written.",
     days_total: "Days written",
@@ -1309,12 +1311,12 @@ var T = {
     came_mark50:'50%',
     came_mark75:'75%',
     came_shop:'Lower cost shop keep counts from 25%',
-    split_k:'This week’s extra',
+    split_k:'This month’s extra',
     split_home:'Home',
     split_bad:'Bad day',
     split_hand:'In hand',
     bad_tog_t:'Set aside for a bad day',
-    bad_tog_d:'5% of this week’s extra. Use now. no lock.',
+    bad_tog_d:'5% of this month’s extra. Use now. no lock.',
     bad_use:'Use now',
     bad_used:'Used · no lock',
     bad_adeq:'₹50 of ₹2,400 · one wage cycle',
@@ -1325,7 +1327,7 @@ var T = {
     season_tog_t:'Next-season pot',
     season_tog_d:'Optional. Off by default.',
     shop_vs_t: "This shop vs kirana",
-    shop_vs_d: "Lower cost this week.",
+    shop_vs_d: "Lower cost this month.",
     talk_note:'Ask about walk, pay, shop, home, wash, bag, Friday, Maa, or days.',
     talk_listen:'Listening…',
     talk_done:'Done',
@@ -1949,9 +1951,9 @@ var commerceView='home', selectedProduct='groundnut_oil', selectedCategory='oils
 var liveView='home', liveCard=null, earnView='home', earnCard=null, sendView='home', sendCard=null;
 var pickedLive={};
 var studioPinLookup='';
-var WASH_WEEK_CHARGE=50; // this week charge on this phone
-var WASH_HOURS=2; // this week hours back
-var WASH_OT_DEFAULT=90; // this week default OT rate until he types his
+var WASH_WEEK_CHARGE=50; // this month charge on this phone
+var WASH_HOURS=2; // this month hours back
+var WASH_OT_DEFAULT=90; // this month default OT rate until he types his
 function washOtRate(){
   if(payslipRead && payslipOt!=null && payslipOt>=0) return payslipOt;
   return WASH_OT_DEFAULT;
@@ -2032,7 +2034,7 @@ function payslipCutLabel(){
 }
 function payslipSummaryLine(){
   if(!payslipRead||!(payslipPay>0)) return t('payslip_d');
-  return money(payslipPay)+' this week · OT '+money(payslipOt||0)+'/hr · '+payslipCutLabel();
+  return money(payslipPay)+' this month · OT '+money(payslipOt||0)+'/hr · '+payslipCutLabel();
 }
 function wageIn(){ return payslipRead&&(payslipPay>0)?payslipPay:null; }
 function onPayslipFilePicked(){ /* no OCR. member types pay, OT, cut */ }
@@ -2064,7 +2066,7 @@ function savePayslipDetails(){
 }
 function payslipDetailsFields(){
   return '<div class="payslip-details-form">'
-    + '<label for="payslipPayIn">This week\'s pay?</label>'
+    + '<label for="payslipPayIn">This month\'s pay?</label>'
     + '<input type="number" inputmode="numeric" id="payslipPayIn" min="1" step="1" placeholder="0" value="'+(payslipPay>0?payslipPay:'')+'">'
     + '<label for="payslipOtIn">OT?</label>'
     + '<input type="number" inputmode="numeric" id="payslipOtIn" min="0" step="1" placeholder="0" value="'+(payslipOt!=null&&payslipOt>=0?payslipOt:'')+'">'
@@ -2587,7 +2589,7 @@ function contractorPanel(){
 }
 
 var SWAP_COPY={
-  en:{hero_k:'This week',hero_t:'This shop keeps more for home.',hero_d:'',hero_cta:'Use the lower-cost oil →',shopcat:'What do you need?',homecare:'Cleaning',homecare_m:'Detergent, dishwash and floor cleaner',personal:'Soap & shampoo',personal_m:'Bathing and everyday care',oils:'Cooking oil',oils_m:'Mustard, groundnut and other oils',essentials:'Ration',essentials_m:'Atta, rice, dal and salt',all:'All',cleaning:'Cleaning',ownlabel:'Nia own label',bath:'Bath & body',checked:'Price checked',save_more:'Save more',save:'Save',add:'Add',added:'Added',swap_k:'A lower-price match',more_home:'more to home',switch:'Switch and save',switched:'Switched',keep_original:'Keep my original choice',food_t:'Food stays the brand you trust',food_d:'We do not substitute food. Taste, safety and trust come first.',reg_t:'A regulated item. we keep the brand',reg_d:'Recognised personal-care brands stay unchanged.',own_t:'Already the lowest price',own_d:'This is our label, so there is no lower-price swap to show.',proof_t:'Priced for your week',proof_d:'Same pack. Nia price vs kirana.',add_choice:'Add my choice',keep_week:'Kirana subtraction this week: {n}.',aisle_keep_oil:'Oil kirana subtraction this week: {n}',aisle_keep:'Kirana subtraction this week: {n}',kirana_at:'at kirana',also_take:'People also take',in_stock:'In stock',search_hits:'Matches',bag_pickup:'Pre-order · Studio cart after 5',bag_vs:'Kirana subtraction'},
+  en:{hero_k:'This month',hero_t:'This shop keeps more for home.',hero_d:'',hero_cta:'Use the lower-cost oil →',shopcat:'What do you need?',homecare:'Cleaning',homecare_m:'Detergent, dishwash and floor cleaner',personal:'Soap & shampoo',personal_m:'Bathing and everyday care',oils:'Cooking oil',oils_m:'Mustard, groundnut and other oils',essentials:'Ration',essentials_m:'Atta, rice, dal and salt',all:'All',cleaning:'Cleaning',ownlabel:'Nia own label',bath:'Bath & body',checked:'Price checked',save_more:'Save more',save:'Save',add:'Add',added:'Added',swap_k:'A lower-price match',more_home:'more to home',switch:'Switch and save',switched:'Switched',keep_original:'Keep my original choice',food_t:'Food stays the brand you trust',food_d:'We do not substitute food. Taste, safety and trust come first.',reg_t:'A regulated item. we keep the brand',reg_d:'Recognised personal-care brands stay unchanged.',own_t:'Already the lowest price',own_d:'This is our label, so there is no lower-price swap to show.',proof_t:'Priced for your week',proof_d:'Same pack. Nia price vs kirana.',add_choice:'Add my choice',keep_week:'Kirana subtraction this month: {n}.',aisle_keep_oil:'Oil kirana subtraction this month: {n}',aisle_keep:'Kirana subtraction this month: {n}',kirana_at:'at kirana',also_take:'People also take',in_stock:'In stock',search_hits:'Matches',bag_pickup:'Pre-order · Studio cart after 5',bag_vs:'Kirana subtraction'},
   hi:{hero_k:'इस हफ़्ते',hero_t:'यह दुकान घर के लिए और रखती है।',hero_d:'',hero_cta:'कम कीमत का तेल लें →',shopcat:'क्या चाहिए?',homecare:'सफाई का सामान',homecare_m:'सर्फ, बर्तन और फर्श की सफाई',personal:'साबुन/शैम्पू',personal_m:'नहाने और रोज़ की देखभाल का सामान',oils:'खाना पकाने का तेल',oils_m:'सरसों, मूंगफली और दूसरे तेल',essentials:'राशन',essentials_m:'आटा, चावल, दाल और नमक',all:'सभी',cleaning:'सफ़ाई',ownlabel:'Nia का अपना',bath:'नहाना और शरीर',checked:'कीमत जाँची',save_more:'और बचाएँ',save:'बचत',add:'जोड़ें',added:'जुड़ गया',swap_k:'कम कीमत का समान विकल्प',more_home:'और घर',switch:'बदलें और बचाएँ',switched:'बदल दिया',keep_original:'अपनी पहली पसंद रखें',food_t:'खाने में भरोसे का ब्रांड रहता है',food_d:'हम खाने का सामान नहीं बदलते। स्वाद, सुरक्षा और भरोसा पहले आते हैं।',reg_t:'नियमित वस्तु. ब्रांड वही रहता है',reg_d:'पहचाना हुआ निजी-देखभाल ब्रांड नहीं बदला जाता।',own_t:'पहले से सबसे कम कीमत',own_d:'यह हमारा अपना लेबल है, इसलिए इससे कम कीमत का विकल्प नहीं है।',proof_t:'आपके हफ़्ते की कीमत',proof_d:'वही पैक। Nia कीमत vs किराना।',add_choice:'अपनी पसंद जोड़ें',keep_week:'इस हफ़्ते किराना घटौती: {n}।',aisle_keep_oil:'इस हफ़्ते तेल किराना घटौती: {n}',aisle_keep:'इस हफ़्ते किराना घटौती: {n}',kirana_at:'किराना पर',also_take:'और लोग ये लेते हैं',in_stock:'स्टॉक में',search_hits:'मिलान',bag_pickup:'शाम 5 बजे के बाद उठाएँ',bag_vs:'किराना घटौती'},
   bn:{hero_k:'এই সপ্তাহে',hero_t:'এই দোকান বাড়ির জন্য আরও রাখে।',hero_d:'',hero_cta:'সস্তা তেল নিন →',shopcat:'কী দরকার?',homecare:'পরিষ্কারের জিনিস',homecare_m:'কাপড়, বাসন আর মেঝে পরিষ্কার',personal:'সাবান/শ্যাম্পু',personal_m:'স্নান আর রোজকার যত্ন',oils:'রান্নার তেল',oils_m:'সর্ষে, বাদাম আর অন্য তেল',essentials:'রেশন',essentials_m:'চাল, আটা, ডাল আর নুন',save:'বাঁচাও',add:'যোগ',proof_t:'দাম',proof_d:'একই প্যাক। Nia দাম vs কিরাণা।',add_choice:'আমার পছন্দ যোগ',keep_week:'এই সপ্তাহে কিরাণা বিয়োগ: {n}।',aisle_keep_oil:'এই সপ্তাহে তেল কিরাণা বিয়োগ: {n}',aisle_keep:'এই সপ্তাহে কিরাণা বিয়োগ: {n}',kirana_at:'কিরাণায়'},
   ta:{hero_k:'இந்த வாரம்',hero_t:'இந்த கடை வீட்டிற்கு மேலும் வைக்கும்.',hero_d:'',hero_cta:'மலிவு எண்ணெய் எடு →',shopcat:'என்ன வேண்டும்?',homecare:'சுத்தம் செய்யும் பொருட்கள்',homecare_m:'டிடர்ஜெண்ட், பாத்திரம் மற்றும் தரை சுத்தம்',personal:'சோப்பு/ஷாம்பு',personal_m:'குளியல் மற்றும் தினசரி பயன்பாடு',oils:'சமையல் எண்ணெய்',oils_m:'கடுகு, நிலக்கடலை மற்றும் பிற எண்ணெய்கள்',essentials:'மளிகை',essentials_m:'அரிசி, மாவு, பருப்பு மற்றும் உப்பு',all:'அனைத்தும்',cleaning:'சுத்தம்',ownlabel:'Nia சொந்த லேபல்',bath:'குளியல் மற்றும் உடல்',checked:'விலை சரிபார்க்கப்பட்டது',save_more:'மேலும் சேமிக்கவும்',save:'சேமிப்பு',add:'சேர்',added:'சேர்க்கப்பட்டது',swap_k:'குறைந்த விலை பொருத்தம்',more_home:'மேலும் வீட்டிற்கு',switch:'மாற்றி சேமிக்கவும்',switched:'மாற்றப்பட்டது',keep_original:'முதல் தேர்வை வைத்திரு',food_t:'உணவில் நம்பகமான பிராண்டே இருக்கும்',food_d:'உணவுப் பொருளை மாற்றமாட்டோம். சுவை, பாதுகாப்பு, நம்பிக்கை முதலில்.',reg_t:'ஒழுங்குபடுத்தப்பட்ட பொருள். பிராண்டை வைத்திருப்போம்',reg_d:'அறிமுகமான தனிப்பட்ட பராமரிப்பு பிராண்டு மாறாது.',own_t:'ஏற்கனவே குறைந்த விலை',own_d:'இது எங்கள் சொந்த லேபல்; இன்னொரு குறைந்த விலை மாற்று இல்லை.',proof_t:'உங்கள் வாரத்திற்கான விலை',proof_d:'அதே பேக். Nia விலை vs கிரானா.',add_choice:'என் தேர்வை சேர்',keep_week:'இந்த வாரம் கிரானா கழிவு: {n}.',aisle_keep_oil:'இந்த வாரம் எண்ணெய் கிரானா கழிவு: {n}',aisle_keep:'இந்த வாரம் கிரானா கழிவு: {n}',kirana_at:'கிரானாவில்'},
@@ -2690,15 +2692,41 @@ function commerceCard(p){
 function categoryCard(id,photo,name,meta){
   return '<button class="category-card" onclick="openCategory(\''+id+'\')"><span class="category-card-photo '+photo+'"></span><span class="category-card-copy"><span><span class="category-card-name">'+name+'</span><span class="category-card-meta">'+meta+'</span></span><span class="category-card-arrow">'+IC.chev+'</span></span></button>';
 }
-function storyCard(name,meta,photoClass,onclick,metaClass){
+function piggyMarkSvg(){
+  /* Exact same thin-stroke SVG as the Save tab icon. Never a photo. Never <img>. */
+  return String(IC.pig).replace('<svg ', '<svg class="card-pig-svg" ');
+}
+function liveTabCopy(id, part){
+  var ids=['studio','wash','hubfood','cooler','cycle','raincape','dontmiss','akka','group','dropin','recreation','thrift','grievance'];
+  var n=ids.indexOf(id)+1;
+  return t('live_card'+n+'_'+part);
+}
+function storyCard(name,meta,photoClass,onclick,metaClass,piggyAmt){
   var click=onclick?' onclick="'+onclick+'"':'';
-  var mc=metaClass?' '+metaClass:'';
   var sid='';
   if(onclick){
     var m=String(onclick).match(/openStoryCard\('([^']+)','([^']+)'\)/);
     if(m) sid=' data-story="'+m[1]+'-'+m[2]+'"';
   }
-  return '<button type="button" class="category-card story-card"'+sid+click+'><span class="category-card-photo story-photo '+photoClass+'"></span><span class="category-card-copy"><span><span class="category-card-name">'+name+'</span><span class="category-card-meta'+mc+'">'+meta+'</span></span><span class="category-card-arrow">'+IC.chev+'</span></span></button>';
+  var below='';
+  if(piggyAmt !== undefined){
+    var amtHtml='';
+    if(piggyAmt!=null && Number(piggyAmt)>0){
+      amtHtml='<span class="card-pig-amt">'+money(Number(piggyAmt))+'</span>';
+    }
+    var how=(meta && String(meta)!=='')?String(meta):'';
+    below='<span class="card-pig-row" data-piggy="1">'
+      + '<span class="card-pig-ico" aria-hidden="true">'+piggyMarkSvg()+'</span>'
+      + amtHtml
+      + (how?('<span class="card-pig-how">'+how+'</span>'):'')
+      + '</span>';
+  } else if(meta && String(meta)!==''){
+    below='<span class="category-card-meta'+(metaClass?(' '+metaClass):'')+'">'+meta+'</span>';
+  }
+  return '<button type="button" class="category-card story-card"'+sid+click+'>'
+    + '<span class="category-card-photo story-photo '+photoClass+'"></span>'
+    + '<span class="category-card-copy"><span><span class="category-card-name">'+name+'</span>'+below+'</span>'
+    + '<span class="category-card-arrow">'+IC.chev+'</span></span></button>';
 }
 function openStoryCard(which,id){
   clearBlockingOverlays();
@@ -2895,20 +2923,13 @@ function sendAisle(){
   return '<div class="pad fadein">'+storyAisleHead(t('send_card_sent_n'),'','send')+body+'</div>';
 }
 function liveCards(){
-  /* Live list: photo + name + chevron. Wash states a save: SVG piggy left of ₹50 a week. Akka: no fake piggy number. */
-  return storyCard(t('live_card1_n'), '', 'story-studio', "openStoryCard('live','studio')")
-    + storyCard(t('live_card2_n'), storyHowLine(t('live_card2_m')), 'story-wash', "openStoryCard('live','wash')", 'live-save-meta')
-    + storyCard(t('live_card3_n'), '', 'story-eat', "openStoryCard('live','hubfood')")
-    + storyCard(t('live_card4_n'), '', 'story-cooler', "openStoryCard('live','cooler')")
-    + storyCard(t('live_card5_n'), '', 'story-cycle', "openStoryCard('live','cycle')")
-    + storyCard(t('live_card6_n'), '', 'story-rain', "openStoryCard('live','raincape')")
-    + storyCard(t('live_card7_n'), '', 'story-day', "openStoryCard('live','dontmiss')")
-    + storyCard(t('live_card8_n'), '', 'story-akka', "openStoryCard('live','akka')")
-    + storyCard(t('live_card9_n'), '', 'story-group', "openStoryCard('live','group')")
-    + storyCard(t('live_card10_n'), '', 'story-dropin', "openStoryCard('live','dropin')")
-    + storyCard(t('live_card11_n'), '', 'story-recreation', "openStoryCard('live','recreation')")
-    + storyCard(t('live_card12_n'), '', 'story-thrift', "openStoryCard('live','thrift')")
-    + storyCard(t('live_card13_n'), '', 'story-grievance', "openStoryCard('live','grievance')");
+  /* Live list: photo + name + piggyMarkSvg on all 13. Wash keep ₹50. Other cards how-only. */
+  var ids=['studio','wash','hubfood','cooler','cycle','raincape','dontmiss','akka','group','dropin','recreation','thrift','grievance'];
+  var photos={studio:'story-studio',wash:'story-wash',hubfood:'story-eat',cooler:'story-cooler',cycle:'story-cycle',raincape:'story-rain',dontmiss:'story-day',akka:'story-akka',group:'story-group',dropin:'story-dropin',recreation:'story-recreation',thrift:'story-thrift',grievance:'story-grievance'};
+  return ids.map(function(id){
+    var amt=(id==='wash')?WASH_WEEK_CHARGE:null;
+    return storyCard(liveTabCopy(id,'n'), liveTabCopy(id,'m'), photos[id], "openStoryCard('live','"+id+"')", undefined, amt);
+  }).join('');
 }
 function earnCards(){
   var cards=storyCard(t('earn_card_ot_n'), t('earn_card_ot_m'), 'story-friday', "openStoryCard('earn','ot')");
@@ -2948,7 +2969,7 @@ function commerceHome(){
     + '</div>'
     + '<div class="commerce-sub-row">'
     + '<div class="commerce-sub">'+fulfillmentSub()+'</div>'
-    + '<button type="button" class="saved-pill" onclick="openBag()" aria-label="'+money(kept)+' kirana subtraction this week. Open bag.">'+money(kept)+' kept</button>'
+    + '<button type="button" class="saved-pill" onclick="openBag()" aria-label="'+money(kept)+' kirana subtraction this month. Open bag.">'+money(kept)+' kept</button>'
     + '</div>'
     + '</header>'
     + '<label class="commerce-search">'+IC.search+'<input id="shopSearch" aria-label="Search products" placeholder="Search oils, dal, atta" value="'+String(shopQuery||'').replace(/"/g,'&quot;')+'" oninput="onShopSearch(this)"></label>'
@@ -3453,10 +3474,10 @@ var TALK_LANG={en:'en-IN',hi:'hi-IN',bn:'bn-IN',ta:'ta-IN',kn:'kn-IN'};
 var TALK_REPLY={
   en:{
     walk:'Walk to work. Rupees stay for home.',
-    pay:'More pay this week. Add your slip when you are ready.',
+    pay:'More pay this month. Add your slip when you are ready.',
     shop:'Lower cost than kirana. Pickup after 5.',
     home:'How much should reach home this month? You write the number.',
-    wash:'Save 2 hours this week for OT.',
+    wash:'Save 2 hours this month for OT.',
     bag:'Your bag is pickup after 5.',
     friday:'Friday extra hours toward home.',
     maa:'Write how much should reach Maa this month.',

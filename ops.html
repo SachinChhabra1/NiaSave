@@ -27,6 +27,7 @@
     </header>
     <div class="wrap">
       <p class="sub">Production. Skip on. One theatre. 40 stops. 3000 members. Jabali Officer is the Studio Champion. Three taps after the member is identified: stop, bag, collect. Tap a card. One job. Control plane, not a shop.</p>
+      <p class="sub" id="connectors">Connectors …</p>
       <div class="realities" id="realities"></div>
       <div class="jobs" id="jobs"></div>
       <div class="open" id="open"></div>
@@ -38,6 +39,24 @@
 <script>
 var DATA=null;
 function num(n){ return n==null?0:n; }
+function connectorsLine(c){
+  var src=(c&&c.sources)||[];
+  function row(id){
+    for(var i=0;i<src.length;i++){ if(src[i].id===id) return src[i]; }
+    return {};
+  }
+  function down(s){
+    var st=String(s.status||'').toLowerCase();
+    return !s.id || st.indexOf('down')>=0 || st==='error' || st==='fail' || st==='offline';
+  }
+  var ledger=row('ledger');
+  var procure=row('procure');
+  var upi=row('upi_statement');
+  var a=(!ledger.id || down(ledger)) ? 'sheet down' : (String(ledger.status||'')==='ok' ? 'ledger ok' : 'sheet down');
+  var b=down(procure) ? 'sheet down' : 'procure from sheet';
+  var u=down(upi) ? 'sheet down' : 'UPI statement inbound';
+  return a+' · '+b+' · '+u;
+}
 function jobBtn(id, kicker, title, action, nums, on){
   return '<button type="button" class="job'+(on?' on':'')+'" data-job="'+id+'">'
     + '<div class="job-kicker">'+kicker+'</div>'
@@ -64,8 +83,8 @@ function face(){
     'Ordered','Paid','Hub loaded','Collected or returned','Settled'
   ].map(function(x){ return '<span class="reality">'+x+'</span>'; }).join('');
   document.getElementById('jobs').innerHTML=[
-    jobBtn('pickup','After 5','Pickup','Pack the studio cart. Collect by code. Mark miss.',
-      num(f.reserved)+' reserved · '+num(f.packed)+' packed · '+num(f.collected)+' collected · '+num(f.missed)+' miss', open==='pickup'),
+    jobBtn('pickup','After 5','Pickup','Tap the stop. Tap the bag. Collect by code or mark miss.',
+      num(f.reserved)+' reserved · '+num(f.collected)+' collected · '+num(f.missed)+' miss', open==='pickup'),
     jobBtn('recon','Night','Recon','Ledger count. Opening minus collected minus leftover must be 0.',
       'open '+num(k.opening)+' · collected '+num(k.collected)+' · leftover '+num(k.leftover), open==='recon'),
     jobBtn('match','Night','Statement match','Staff recon. Bank lines vs settlements after collected scan. Not live member UPI.',
@@ -98,8 +117,8 @@ function pick(id){
   var pred=t.predict||{};
   var html='';
   if(id==='pickup'){
-    html='<h2>Pickup</h2><p class="do">Pack reserved bags before the cart leaves. Load. Arrive at the studio. Collect by pickup code after 17:00. If they do not come, mark miss.</p>'
-      +checks([['Reserved',num(f.reserved)],['Packed',num(f.packed)],['Loaded',num(f.loaded)],['At stop',num(f.at_stop)],['Collected',num(f.collected)],['Miss',num(f.missed)]])
+    html='<h2>Pickup</h2><p class="do">Three taps after the member is identified: tap the stop, tap the bag, collect by code. Miss if they do not come. Pack, load, and arrived stay on hub.</p>'
+      +checks([['Reserved',num(f.reserved)],['Collected',num(f.collected)],['Miss',num(f.missed)]])
       +'<a class="desk-link" href="/pickup.html">Open pickup desk</a>';
   } else if(id==='recon'){
     html='<h2>Recon</h2><p class="do">Night count. Opening minus collected minus leftover = 0. If it does not, the beat does not close.</p>'
@@ -139,12 +158,14 @@ function pick(id){
 function load(){
   Promise.all([
     fetch('/api/tower').then(function(r){ return r.json(); }),
-    fetch('/api/settlements?beat=today').then(function(r){ return r.json(); }),
-    fetch('/api/source').then(function(r){ return r.json(); })
+    fetch('/api/settlements?beat=today&unmatched=1').then(function(r){ return r.json(); }),
+    fetch('/api/source').then(function(r){ return r.json(); }),
+    fetch('/api/connectors').then(function(r){ return r.json(); })
   ]).then(function(all){
-    DATA={ tower:all[0], set:all[1], source:all[2], openJob:'' };
+    DATA={ tower:all[0], set:all[1], source:all[2], conn:all[3], openJob:'' };
     var t=all[0]||{};
     document.getElementById('topmeta').innerHTML=(t.theatre||'Rajputana Theatre')+' · '+(t.stopCount||40)+' stops · '+(t.memberCount||3000)+' members<br>Beat '+(t.beatDate||'-')+' · '+(t.bagsTonight||0)+' bags tonight · no live UPI';
+    document.getElementById('connectors').textContent=connectorsLine(t.connectors||all[3]||{});
     face();
     var g=t.gates||{};
     var keys=['participation','sellThrough','preorderFill','memberSaving','inventoryLoss','contribution'];

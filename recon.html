@@ -34,7 +34,7 @@
       <div class="msg" id="msg"></div>
       <div id="wrap">Loading…</div>
       <h2>UPI statement match</h2>
-      <p class="sub">Staff connector · inbound bank CSV · settlement starts on collected scan, not capture</p>
+      <p class="sub">Staff connector · inbound bank CSV · unmatched first · settlement starts on collected scan, not capture. No live member UPI.</p>
       <div id="stmt">Loading…</div>
     </div>
   </div>
@@ -52,7 +52,7 @@ function load(){
   document.getElementById('wrap').textContent='Loading…';
   Promise.all([
     fetch('/api/ledger?beat=today').then(function(r){ return r.json(); }),
-    fetch('/api/settlements?beat=today').then(function(r){ return r.json(); })
+    fetch('/api/settlements?beat=today&unmatched=1').then(function(r){ return r.json(); })
   ]).then(function(all){
     var d=all[0], s=all[1];
     ledger=d;
@@ -69,13 +69,13 @@ function load(){
       }).join('');
       document.getElementById('wrap').innerHTML='<table><thead><tr><th>SKU</th><th>Opening</th><th>Reserved</th><th>Collected</th><th>Missed</th><th>Leftover</th><th>Close</th><th>O-C-L</th></tr></thead><tbody>'+rows+'</tbody></table>';
     }
-    var st=s.statement||[];
-    var sets=s.settlements||[];
+    var sets=(s.unmatchedSettlementsList&&s.unmatchedSettlementsList.length)?s.unmatchedSettlementsList:(s.settlements||[]).filter(function(x){ return !x.matched; });
+    var st=(s.unmatchedStatementLines&&s.unmatchedStatementLines.length)?s.unmatchedStatementLines:(s.statement||[]).filter(function(x){ return !x.matched; });
     document.getElementById('stmt').innerHTML=
-      '<p class="sub">Settlements '+(s.count!=null?s.count:sets.length)+' · showing '+sets.length+' · matched '+(s.matched||0)+' · unmatched settlements '+(s.unmatchedSettlements||0)+' · unmatched statement '+(s.unmatchedStatement||0)+'</p>'
+      '<p class="sub">Night match. Unmatched first. Trigger collected. Settlements '+(s.count!=null?s.count:0)+' · unmatched settlements '+(s.unmatchedSettlements!=null?s.unmatchedSettlements:sets.length)+' · unmatched statement '+(s.unmatchedStatement!=null?s.unmatchedStatement:st.length)+' · matched '+(s.matched||0)+'</p>'
       + '<table><thead><tr><th>Kind</th><th>Ref</th><th>Rs</th><th>Status</th></tr></thead><tbody>'
-      + sets.map(function(x){ return '<tr><td>settlement</td><td>'+(x.pickupCode||x.id)+'</td><td>'+x.amount+'</td><td>'+(x.matched?'matched · '+x.utr:'unmatched')+'</td></tr>'; }).join('')
-      + st.map(function(x){ return '<tr><td>statement</td><td>'+x.utr+'</td><td>'+x.amount+'</td><td>'+(x.matched?'matched':'unmatched')+'</td></tr>'; }).join('')
+      + (sets.length?sets.map(function(x){ return '<tr><td>settlement</td><td>'+(x.pickupCode||x.id)+'</td><td>'+x.amount+'</td><td>unmatched</td></tr>'; }).join(''):'<tr><td colspan="4">No unmatched settlements.</td></tr>')
+      + (st.length?st.map(function(x){ return '<tr><td>statement</td><td>'+(x.utr||x.id||'-')+'</td><td>'+x.amount+'</td><td>unmatched</td></tr>'; }).join(''):'<tr><td colspan="4">No unmatched statement lines.</td></tr>')
       + '</tbody></table>';
   }).catch(function(){ document.getElementById('wrap').textContent='Could not load ledger.'; });
 }

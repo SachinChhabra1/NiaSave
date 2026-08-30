@@ -35,6 +35,11 @@
       <div id="moves">Loading…</div>
       <h2>Today opening</h2>
       <div id="wrap">Loading…</div>
+      <h2>Studio cart · pack / load / arrive</h2>
+      <p class="sub">Hub only. Officer pickup is stop, bag, collect. Last unit: one reservation wins.</p>
+      <button type="button" onclick="loadCart()">Refresh cart</button>
+      <div id="cartstops" class="stops"></div>
+      <div id="cartdesk"><div class="empty">Tap a stop to pack, load, or mark arrived.</div></div>
       <h2>Next-day load</h2>
       <p class="sub" id="nextbeat">…</p>
       <div id="nextwrap">Loading…</div>
@@ -43,6 +48,79 @@
 <script>
 var opening={};
 var beatDate='';
+var CART='';
+function lineText(lines){
+  return (lines||[]).map(function(l){ return (l.id||'?')+' × '+(l.qty||1); }).join(' · ');
+}
+function hubScan(orderId, type){
+  return fetch('/api/scan', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({ type:type, orderId:orderId, actor:'hub' })
+  }).then(function(r){ return r.json().then(function(j){ return { ok:r.ok, status:r.status, j:j }; }); })
+  .then(function(res){
+    if(!res.ok){
+      var err=res.j && res.j.error;
+      if(err==='last_unit_taken') alert('Last unit already taken for '+(res.j.sku||'this SKU')+'. One reservation wins.');
+      else alert(err || ('scan '+res.status));
+      return;
+    }
+    loadCartStop(CART);
+  }).catch(function(){ alert('Could not scan'); });
+}
+function cartRow(o){
+  var id=JSON.stringify(o.id||'');
+  var st=o.status||'reserved';
+  var actions='';
+  if(st==='reserved' || st==='paid'){
+    actions='<button type="button" onclick=\'hubScan('+id+',"packed")\'>Pack</button>';
+  } else if(st==='packed'){
+    actions='<button type="button" onclick=\'hubScan('+id+',"loaded")\'>Load cart</button>';
+  } else if(st==='loaded'){
+    actions='<button type="button" onclick=\'hubScan('+id+',"arrived")\'>Arrived</button>';
+  }
+  return '<div class="row"><div class="who">'+(o.phone||o.memberId||'-')+'<span class="pill'+(st==='packed'?' warn':'')+'">'+st+'</span></div>'
+    + '<div class="code">'+(o.pickupCode||'-')+'</div>'
+    + '<div class="skus">'+lineText(o.lines)+'</div>'
+    + (actions?'<div class="actions">'+actions+'</div>':'<p class="sub">Ready for officer collect.</p>')
+    + '</div>';
+}
+function loadCartStop(stop){
+  var desk=document.getElementById('cartdesk');
+  desk.innerHTML='<div class="empty">Loading '+stop+'…</div>';
+  fetch('/api/orders?pickup=today&stop='+encodeURIComponent(stop)).then(function(r){ return r.json(); }).then(function(d){
+    var orders=(d.orders||[]).filter(function(o){
+      var st=o.status||'';
+      return st!=='collected' && st!=='missed' && st!=='returned';
+    });
+    var rem=d.remaining||{};
+    var last=Object.keys(rem).filter(function(sku){ return rem[sku]<=1; });
+    desk.innerHTML='<h2>'+(d.stopName||stop)+' · pack before the cart leaves</h2>'
+      + (last.length?'<p class="sub">Last unit on cart: '+last.join(', ')+'. One reservation wins.</p>':'')
+      + (orders.length?orders.map(cartRow).join(''):'<div class="empty">No open bags to pack at this stop.</div>');
+  }).catch(function(){ desk.innerHTML='<div class="empty">Could not load cart.</div>'; });
+}
+function loadCart(){
+  fetch('/api/orders?pickup=today').then(function(r){ return r.json(); }).then(function(d){
+    var stops=d.stops||[];
+    document.getElementById('cartstops').innerHTML=stops.map(function(s){
+      return '<button type="button" class="stop'+(s.stopId===CART?' on':'')+'" data-stop="'+s.stopId+'">'
+        + '<div class="stop-id">'+s.stopId+'</div>'
+        + '<strong>'+(s.name||s.stopId)+'</strong>'
+        + '<div class="stop-num">'+s.bags+' bags · '+s.open+' open</div></button>';
+    }).join('');
+    document.querySelectorAll('#cartstops button.stop').forEach(function(el){
+      el.addEventListener('click', function(){
+        var id=el.getAttribute('data-stop');
+        CART = CART===id ? '' : id;
+        loadCart();
+        if(CART) loadCartStop(CART);
+        else document.getElementById('cartdesk').innerHTML='<div class="empty">Tap a stop to pack, load, or mark arrived.</div>';
+      });
+    });
+    if(CART) loadCartStop(CART);
+  }).catch(function(){ document.getElementById('cartstops').innerHTML='<div class="empty">Could not load stops.</div>'; });
+}
 function load(){
   document.getElementById('wrap').textContent='Loading…';
   Promise.all([
@@ -82,6 +160,7 @@ function load(){
         }).join('')
         +'</tbody></table>'
       : '<div class="empty">No next-day load.</div>';
+    loadCart();
   }).catch(function(){ document.getElementById('wrap').textContent='Could not load stock.'; });
 }
 function signOpen(){

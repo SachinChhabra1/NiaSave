@@ -859,20 +859,35 @@ export function settlementsPayload(query = {}) {
   const date = !query.beat || query.beat === "today" ? state.beat.beatDate : query.beat;
   const all = state.settlements.filter(s => s.beatDate === date);
   const statement = state.statement.filter(s => s.date === date);
-  const paged = query.limit != null;
-  const limit = paged ? Math.min(50, Math.max(1, Number(query.limit) || PAGE)) : all.length;
-  const offset = paged ? Math.max(0, Number(query.offset) || 0) : 0;
+  const unmatchedSet = all.filter(s => !s.matched);
+  const matchedSet = all.filter(s => s.matched);
+  const unmatchedStmt = statement.filter(s => !s.matched);
+  const matchedStmt = statement.filter(s => s.matched);
+  const night = query.unmatched === "1" || query.unmatched === true || query.view === "match";
+  const wantAll = night || query.limit == null || query.limit === "0" || query.limit === "all";
+  let settlements;
+  if (night) {
+    settlements = unmatchedSet;
+  } else if (wantAll) {
+    settlements = unmatchedSet.concat(matchedSet);
+  } else {
+    const pageLimit = Math.min(200, Math.max(1, Number(query.limit) || PAGE));
+    settlements = unmatchedSet.concat(matchedSet.slice(0, pageLimit));
+  }
   return {
     beatDate: date,
     theatre: THEATRE.name,
-    settlements: all.slice(offset, offset + limit),
-    statement,
+    settlements,
+    statement: unmatchedStmt.concat(matchedStmt),
+    unmatchedSettlementsList: unmatchedSet,
+    unmatchedStatementLines: unmatchedStmt,
     count: all.length,
-    limit,
-    offset,
-    matched: all.filter(s => s.matched).length,
-    unmatchedSettlements: all.filter(s => !s.matched).length,
-    unmatchedStatement: statement.filter(s => !s.matched).length,
+    limit: wantAll || night ? settlements.length : Number(query.limit) || PAGE,
+    offset: 0,
+    unmatchedFirst: true,
+    matched: matchedSet.length,
+    unmatchedSettlements: unmatchedSet.length,
+    unmatchedStatement: unmatchedStmt.length,
     trigger: "collected",
     liveUpi: false
   };
@@ -942,7 +957,9 @@ export function scanOrder({ type, orderId, pickupCode, actor }) {
   }
   const expected = expectedFrom(order.status);
   const ok = Array.isArray(expected) ? expected.includes(kind) : expected === kind;
-  if (!ok) return { error: "wrong_stage", status: 409, have: order.status, want: expected };
+  const officerCollect = (kind === "collected" || kind === "missed")
+    && ["reserved", "paid", "packed", "loaded", "at_stop"].includes(order.status);
+  if (!ok && !officerCollect) return { error: "wrong_stage", status: 409, have: order.status, want: expected };
   if (kind === "packed") {
     const rem = remainingOnCart();
     for (const line of order.lines) {
@@ -1121,7 +1138,8 @@ export async function handleStaff(req, res, path, body, url) {
   if (method === "GET" && path === "/cash") return { status: 200, body: cashPayload(q) };
   if (method === "POST" && path === "/cash") return done(saveCash(body));
   if (method === "GET" && path === "/settlements") {
-    const page = { ...q, limit: q.limit != null ? q.limit : String(PAGE) };
+    const page = { ...q };
+    if (q.unmatched == null && q.view == null && q.limit == null) page.unmatched = "1";
     return { status: 200, body: settlementsPayload(page) };
   }
   if (method === "GET" && path === "/tower") return { status: 200, body: towerPayload() };

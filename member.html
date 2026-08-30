@@ -745,21 +745,22 @@
     border:0;border-radius:20px;background-color:#31373B;background-size:cover;background-position:center;
     color:#fff;font-family:var(--font);text-align:left;cursor:pointer;appearance:none;
   }
-  .live-studio-hero:before{content:"";position:absolute;inset:0;background:rgba(7,13,18,.48);pointer-events:none}
+  .live-studio-hero:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,13,18,.68) 0%,rgba(7,13,18,.38) 48%,rgba(7,13,18,.78) 100%);pointer-events:none}
   .live-studio-content{position:relative;z-index:1;display:flex;min-height:244px;padding:18px;flex-direction:column}
-  .live-studio-name{display:block;font-size:25px;font-weight:750;line-height:1.05;letter-spacing:-.04em;color:#fff}
+  .live-studio-name{display:block;max-width:200px;font-size:22px;font-weight:750;line-height:1.08;letter-spacing:-.035em;color:#fff}
   .live-studio-desc{display:block;margin-top:4px;font-size:13px;font-weight:500;line-height:1.3;color:rgba(255,255,255,.88)}
-  .live-studio-hero .studio-amenities{margin-top:14px}
-  .live-studio-hero .studio-amenities-title{margin-bottom:8px;color:#fff;font-size:10.5px;font-weight:700;text-align:center}
+  .live-studio-hero .studio-amenities{margin-top:auto;padding-top:18px}
+  .live-studio-hero .studio-amenities-title{margin-bottom:9px;color:#fff;font-size:10.5px;font-weight:700;text-align:center}
   .live-studio-hero .studio-amenities-items{grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
   .live-studio-hero .studio-amenity{color:rgba(255,255,255,.88)}
   .live-studio-hero .studio-amenity svg{width:16px;height:16px;color:#fff}
   .live-studio-hero .studio-amenity span{font-size:8px;color:rgba(255,255,255,.9)}
-  .live-studio-foot{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-top:auto;padding-top:14px;padding-right:118px}
+  .live-studio-foot{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.28)}
   .live-studio-save,.live-studio-price{display:flex;min-width:0;flex-direction:column}
+  .live-studio-save{align-items:flex-end;text-align:right}
   .live-studio-save small,.live-studio-price small{font-size:9px;font-weight:650;line-height:1.15;color:rgba(255,255,255,.72)}
-  .live-studio-save strong{font-size:24px;font-weight:750;line-height:1.05;letter-spacing:-.04em;color:#fff}
-  .live-studio-price strong{font-size:15px;font-weight:700;line-height:1.15;color:#fff}
+  .live-studio-save strong{font-size:17px;font-weight:700;line-height:1.1;letter-spacing:-.025em;color:#fff}
+  .live-studio-price strong{font-size:23px;font-weight:750;line-height:1.05;letter-spacing:-.04em;color:#fff}
   .live-service-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:stretch}
   .live-service-tile{
     display:flex;min-width:0;overflow:hidden;flex-direction:column;border:1px solid var(--hair2);border-radius:16px;
@@ -781,7 +782,7 @@
     grid-template-columns:36px 1fr 36px;align-items:center;overflow:hidden;border-radius:999px;
     background:rgba(255,255,255,.95);box-shadow:0 3px 12px rgba(0,0,0,.14);
   }
-  .live-studio-hero>.live-card-stepper{left:auto;right:14px;bottom:14px;width:108px;height:40px;grid-template-columns:40px 1fr 40px}
+  .live-studio-hero>.live-card-stepper{left:auto;right:14px;top:14px;bottom:auto;width:108px;height:40px;grid-template-columns:40px 1fr 40px}
   .live-card-stepper button{width:100%;height:100%;padding:0;border:0;background:transparent;color:var(--navy);font:500 22px/1 var(--font);cursor:pointer}
   .live-card-stepper button:disabled{color:#B9BABD;cursor:default}
   .live-card-stepper .proof-qty{font-size:13px}
@@ -3368,8 +3369,8 @@ function liveStudioHero(model,photoClass){
   return '<article class="live-studio-hero story-photo '+photoClass+'" role="button" tabindex="0" onclick="openStoryCard(\'live\',\'studio\')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openStoryCard(\'live\',\'studio\');}" aria-label="'+aria+'">'
     + '<span class="live-studio-content"><span class="live-studio-name">'+name+'</span><span class="live-studio-desc">'+model.desc+'</span>'
     + complimentaryStrip()
-    + '<span class="live-studio-foot"><span class="live-studio-save"><small>Save every month</small><strong>'+money(model.amount)+'</strong></span>'
-    + '<span class="live-studio-price"><small>Price</small><strong>'+money(model.nia)+'/mo</strong></span></span></span>'
+    + '<span class="live-studio-foot"><span class="live-studio-price"><small>Monthly price</small><strong>'+money(model.nia)+'</strong></span>'
+    + '<span class="live-studio-save"><small>You save</small><strong>'+money(model.amount)+'/month</strong></span></span></span>'
     + liveCardStepper(id,name,true)+'</article>';
 }
 function liveServiceTile(id,name,photoClass,model){

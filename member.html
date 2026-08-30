@@ -570,7 +570,11 @@
   .category-card-copy>span:first-child{display:flex;flex-direction:column;min-width:0;flex:1}
   .category-card-name{font-size:19px;font-weight:750;letter-spacing:-.025em;color:var(--shop-ink)}
   .category-card-meta{font-size:12.5px;color:#747478;margin-top:4px}
+  .category-card-meta:empty{display:none}
   .category-card-meta.live-save-meta{font-weight:700;color:var(--ink);font-size:13px;line-height:1.35}
+  .story-how{display:inline-flex;align-items:flex-start;gap:6px;text-align:left}
+  .story-how svg{flex:0 0 auto;width:18px;height:18px;margin-top:1px;color:var(--navy)}
+  .story-how-txt{min-width:0}
   .live-save{font-weight:700;font-size:17px;letter-spacing:-.02em;line-height:1.25;color:var(--ink);margin:8px 0 0}
   .live-how{margin:10px 0 16px;font-size:13px;line-height:1.5;color:var(--mute)}
   .piggy{
@@ -578,7 +582,7 @@
     background:#F7F3EC;border:1px solid var(--hair2);border-radius:16px;box-sizing:border-box;
   }
   .piggy-left{flex:0 0 auto;display:flex;align-items:center;gap:10px;min-width:0}
-  .piggy-left img{width:52px;height:52px;object-fit:cover;border-radius:12px;display:block;background:#EDE8E2}
+  .piggy-left svg{width:28px;height:28px;display:block;color:var(--navy);flex:0 0 auto}
   .piggy-amt{font-size:22px;font-weight:700;letter-spacing:-.03em;color:var(--ink);line-height:1.1;white-space:nowrap}
   .piggy-amt.empty{font-size:15px;font-weight:600;color:var(--mute)}
   .piggy-right{flex:1 1 auto;min-width:0;font-size:13.5px;line-height:1.4;color:var(--ink);font-weight:500}
@@ -1996,7 +2000,7 @@ function towardTargetStr(amt){
   if(!(maaMonthTarget>0)||!(amt>0)) return null;
   return money(amt)+' toward '+money(maaMonthTarget);
 }
-function earnFriMeta(){ return towardTargetStr(WEEK_HOME.fridayExtra)||t('earn_card_fri_m'); }
+function earnFriMeta(){ return t('earn_card_fri_m'); }
 function payTrendsBlock(){
   var labels=[t('earn_week_this'),t('earn_week_last'),t('earn_week_2'),t('earn_week_3')];
   var amounts=payslipRead?weeklyPay.slice(0,4):[0,0,0,0];
@@ -2188,6 +2192,7 @@ var IC={
   home:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5 12 5l8 6.5"/><path d="M6 10.5V19h12v-8.5"/></svg>',
   brief:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16v11H4z"/><path d="M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7"/></svg>',
   pig:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5c0-3 2.7-5 6-5 2.2 0 3.3-.9 4-2 .5 2 .3 3 0 3.6 1.3.8 2 2 2 3.4 0 3-2.7 5-6 5s-6-2-6-5Z"/></svg>',
+  piggy:'<svg class="piggy-svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12.5c0-3 2.7-5 6-5 2.2 0 3.3-.9 4-2 .5 2 .3 3 0 3.6 1.3.8 2 2 2 3.4 0 3-2.7 5-6 5s-6-2-6-5Z"/><circle cx="15.5" cy="11" r=".6" fill="currentColor"/></svg>',
   phone:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="3" width="10" height="18" rx="2.4"/><path d="M11 18h2"/></svg>',
   receipt:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-2-1.4L14 21l-2-1.4L10 21l-2-1.4L6 21z"/><path d="M9 8h6M9 12h6"/></svg>',
   shield:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.2-2.9 8-7 9-4.1-1-7-4.8-7-9V6z"/></svg>',
@@ -2281,9 +2286,13 @@ function oilKeepAmount(){
 function piggyBlock(amt, howHtml){
   var has=amt!=null && amt!=='' && Number(amt)>0;
   return '<div class="piggy" role="group" aria-label="Keep">'
-    + '<div class="piggy-left"><img src="assets/piggy-keep.png" alt="">'
+    + '<div class="piggy-left">'+IC.piggy
     + '<div class="piggy-amt'+(has?'':' empty')+'">'+(has?money(Number(amt)):'')+'</div></div>'
     + '<div class="piggy-right">'+howHtml+'</div></div>';
+}
+function storyHowLine(howHtml){
+  if(!howHtml) return '';
+  return '<span class="story-how">'+IC.piggy+'<span class="story-how-txt">'+howHtml+'</span></span>';
 }
 function studioBarName(){
   var p=pickedLive && pickedLive.studio;
@@ -2733,7 +2742,7 @@ function liveCardTitle(id){
 }
 function liveAisleHow(id){
   if(id==='wash'){
-    /* Piggy: weekly charge ₹50, or empty until OT typed. Never put washOtEarn (₹180) in the piggy. */
+    /* Piggy: weekly charge ₹50, or empty until OT typed. Never put wash OT rupees in the piggy. */
     var washPigAmt = (payslipRead && payslipOt!=null && payslipOt>=0) ? 0 : WASH_WEEK_CHARGE;
     var washHow = t('piggy_how_wash_charge');
     return piggyBlock(washPigAmt, washHow);
@@ -2744,7 +2753,7 @@ function liveAisleHow(id){
   if(id==='cycle') return '<p class="quiet live-how">'+t('live_how_cycle')+'</p>';
   if(id==='raincape') return '<p class="quiet live-how">'+t('live_how_rain')+'</p>';
   if(id==='dontmiss') return '<p class="quiet live-how">'+t('live_how_dontmiss')+'</p>';
-  if(id==='akka') return '<p class="quiet live-how">'+t('live_how_akka')+'</p>';
+  if(id==='akka') return '<p class="quiet live-how">'+t('live_how_akka')+'</p>'; /* Tell Akka: no fake piggy number. */
   if(id==='group') return '<p class="quiet live-how">'+t('live_how_group')+'</p>';
   if(id==='dropin') return '<p class="quiet live-how">'+t('live_how_dropin')+'</p>';
   if(id==='recreation') return '<p class="quiet live-how">'+t('live_how_recreation')+'</p>';
@@ -2753,7 +2762,7 @@ function liveAisleHow(id){
   return '';
 }
 function liveAisle(){
-  var id=liveCard, rows='', how=liveAisleHow(id), save=liveSaveLine(id);
+  var id=liveCard, rows='', how=liveAisleHow(id), save=(id==='wash'||id==='akka')?'':liveSaveLine(id);
   if(id==='studio'){
     var pinVal=String(studioPinLookup||'').replace(/\D/g,'').slice(0,6);
     rows='<div class="studio-pin">'
@@ -2819,8 +2828,8 @@ function liveAisle(){
 function earnAisle(){
   var id=earnCard, rows='';
   if(id==='ot'){
-    rows=storyPickRow('2 OT shifts this month',towardTargetStr(360)||t('earn_card_ot_m'),"toast('OT noted')")
-      +storyPickRow('4 OT shifts this month',towardTargetStr(720)||t('earn_card_ot_m'),"toast('OT noted')");
+    rows=storyPickRow('2 OT shifts this month',t('earn_card_ot_m'),"toast('OT noted')")
+      +storyPickRow('4 OT shifts this month',t('earn_card_ot_m'),"toast('OT noted')");
   } else if(id==='gig'){
     WEEK_HOME.nearby.forEach(function(job){
       var taken=!!takenJobs[job.id];
@@ -2886,23 +2895,23 @@ function sendAisle(){
   return '<div class="pad fadein">'+storyAisleHead(t('send_card_sent_n'),'','send')+body+'</div>';
 }
 function liveCards(){
-  return storyCard(t('live_card1_n'), liveSaveLine('studio'), 'story-studio', "openStoryCard('live','studio')", 'live-save-meta')
-    + storyCard(t('live_card2_n'), liveSaveLine('wash'), 'story-wash', "openStoryCard('live','wash')", 'live-save-meta')
-    + storyCard(t('live_card3_n'), liveSaveLine('hubfood'), 'story-eat', "openStoryCard('live','hubfood')", 'live-save-meta')
-    + storyCard(t('live_card4_n'), liveSaveLine('cooler'), 'story-cooler', "openStoryCard('live','cooler')", 'live-save-meta')
-    + storyCard(t('live_card5_n'), liveSaveLine('cycle'), 'story-cycle', "openStoryCard('live','cycle')", 'live-save-meta')
-    + storyCard(t('live_card6_n'), liveSaveLine('raincape'), 'story-rain', "openStoryCard('live','raincape')", 'live-save-meta')
-    + storyCard(t('live_card7_n'), liveSaveLine('dontmiss'), 'story-day', "openStoryCard('live','dontmiss')", 'live-save-meta')
-    + storyCard(t('live_card8_n'), liveSaveLine('akka'), 'story-akka', "openStoryCard('live','akka')", 'live-save-meta')
-    + storyCard(t('live_card9_n'), liveSaveLine('group'), 'story-group', "openStoryCard('live','group')", 'live-save-meta')
-    + storyCard(t('live_card10_n'), liveSaveLine('dropin'), 'story-dropin', "openStoryCard('live','dropin')", 'live-save-meta')
-    + storyCard(t('live_card11_n'), liveSaveLine('recreation'), 'story-recreation', "openStoryCard('live','recreation')", 'live-save-meta')
-    + storyCard(t('live_card12_n'), liveSaveLine('thrift'), 'story-thrift', "openStoryCard('live','thrift')", 'live-save-meta')
-    + storyCard(t('live_card13_n'), liveSaveLine('grievance'), 'story-grievance', "openStoryCard('live','grievance')", 'live-save-meta');
+  /* Live list: photo + name + chevron. Wash states a save: SVG piggy left of ₹50 a week. Akka: no fake piggy number. */
+  return storyCard(t('live_card1_n'), '', 'story-studio', "openStoryCard('live','studio')")
+    + storyCard(t('live_card2_n'), storyHowLine(t('live_card2_m')), 'story-wash', "openStoryCard('live','wash')", 'live-save-meta')
+    + storyCard(t('live_card3_n'), '', 'story-eat', "openStoryCard('live','hubfood')")
+    + storyCard(t('live_card4_n'), '', 'story-cooler', "openStoryCard('live','cooler')")
+    + storyCard(t('live_card5_n'), '', 'story-cycle', "openStoryCard('live','cycle')")
+    + storyCard(t('live_card6_n'), '', 'story-rain', "openStoryCard('live','raincape')")
+    + storyCard(t('live_card7_n'), '', 'story-day', "openStoryCard('live','dontmiss')")
+    + storyCard(t('live_card8_n'), '', 'story-akka', "openStoryCard('live','akka')")
+    + storyCard(t('live_card9_n'), '', 'story-group', "openStoryCard('live','group')")
+    + storyCard(t('live_card10_n'), '', 'story-dropin', "openStoryCard('live','dropin')")
+    + storyCard(t('live_card11_n'), '', 'story-recreation', "openStoryCard('live','recreation')")
+    + storyCard(t('live_card12_n'), '', 'story-thrift', "openStoryCard('live','thrift')")
+    + storyCard(t('live_card13_n'), '', 'story-grievance', "openStoryCard('live','grievance')");
 }
 function earnCards(){
-  var otMeta=towardTargetStr(360)||t('earn_card_ot_m');
-  var cards=storyCard(t('earn_card_ot_n'), otMeta, 'story-friday', "openStoryCard('earn','ot')");
+  var cards=storyCard(t('earn_card_ot_n'), t('earn_card_ot_m'), 'story-friday', "openStoryCard('earn','ot')");
   if(WEEK_HOME.nearby && WEEK_HOME.nearby.length){
     cards+=storyCard(t('earn_card_gig_n'), t('earn_card_gig_m'), 'story-nearby', "openStoryCard('earn','gig')");
   }

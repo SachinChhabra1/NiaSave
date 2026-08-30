@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NiaSave · Beat recon</title>
+<link rel="icon" href="/assets/nia-logo.png" type="image/png">
+<link rel="apple-touch-icon" href="/assets/nia-logo.png">
+<link rel="stylesheet" href="/staff.css">
+</head>
+<body>
+  <div class="narrow">
+    <div class="narrow-card">
+      <div class="kicker">Rabbit · staff</div>
+      <h1>Open on a laptop</h1>
+      <p>Night recon is a wide staff desk. It is not the member app.</p>
+    </div>
+  </div>
+  <div class="tower">
+    <header class="top">
+      <div>
+        <div class="brand">Rabbit · recon</div>
+        <h1>Night count</h1>
+      </div>
+      <div class="meta"><a href="/ops.html">Ops</a> · <a href="/pickup.html">Pickup</a></div>
+    </header>
+    <div class="wrap">
+      <p class="sub">Opening minus collected minus leftover = 0 · one beat · unsold returns nightly</p>
+      <p class="sub" id="beat">Beat …</p>
+      <button type="button" onclick="load()">Refresh ledger</button>
+      <button type="button" class="ghost" onclick="openBeat()">Open beat (hub)</button>
+      <button type="button" class="ghost" onclick="closeBeat()">Close beat</button>
+      <label class="sub" style="display:block;margin-top:8px">Damage (optional, SKU notes only) <input id="damage" placeholder="e.g. oil 1 cracked" style="width:220px;margin-left:8px"></label>
+      <div class="msg" id="msg"></div>
+      <div id="wrap">Loading…</div>
+      <h2>UPI statement match</h2>
+      <p class="sub">Staff connector · inbound bank CSV · settlement starts on collected scan, not capture</p>
+      <div id="stmt">Loading…</div>
+    </div>
+  </div>
+<script>
+var ledger=null;
+function num(n){ return n==null?0:n; }
+function skusOf(d){
+  var s={};
+  ['opening','reserved','collected','missed','leftover'].forEach(function(k){
+    Object.keys(d[k]||{}).forEach(function(id){ s[id]=true; });
+  });
+  return Object.keys(s).sort();
+}
+function load(){
+  document.getElementById('wrap').textContent='Loading…';
+  Promise.all([
+    fetch('/api/ledger?beat=today').then(function(r){ return r.json(); }),
+    fetch('/api/settlements?beat=today').then(function(r){ return r.json(); })
+  ]).then(function(all){
+    var d=all[0], s=all[1];
+    ledger=d;
+    document.getElementById('beat').textContent=(d.theatre||'Rajputana Theatre')+' · Beat '+(d.beatDate||'-')+' · '+(d.stopCount||40)+' stops · '+(d.orderCount||0)+' bags';
+    var skus=skusOf(d);
+    if(!skus.length){ document.getElementById('wrap').innerHTML='<div class="msg">No SKUs yet.</div>'; }
+    else {
+      var rows=skus.map(function(sku){
+        var o=num(d.opening[sku]), r=num(d.reserved[sku]), c=num(d.collected[sku]), m=num(d.missed[sku]), l=num(d.leftover[sku]);
+        var ok=(o-c-l)===0;
+        return '<tr><td>'+sku+'</td><td>'+o+'</td><td>'+r+'</td><td>'+c+'</td><td>'+m+'</td><td>'+l+'</td>'
+          + '<td><input data-sku="'+sku+'" value="'+l+'"></td>'
+          + '<td class="'+(ok?'':'bad')+'">'+(o-c-l)+'</td></tr>';
+      }).join('');
+      document.getElementById('wrap').innerHTML='<table><thead><tr><th>SKU</th><th>Opening</th><th>Reserved</th><th>Collected</th><th>Missed</th><th>Leftover</th><th>Close</th><th>O-C-L</th></tr></thead><tbody>'+rows+'</tbody></table>';
+    }
+    var st=s.statement||[];
+    var sets=s.settlements||[];
+    document.getElementById('stmt').innerHTML=
+      '<p class="sub">Settlements '+(s.count!=null?s.count:sets.length)+' · showing '+sets.length+' · matched '+(s.matched||0)+' · unmatched settlements '+(s.unmatchedSettlements||0)+' · unmatched statement '+(s.unmatchedStatement||0)+'</p>'
+      + '<table><thead><tr><th>Kind</th><th>Ref</th><th>Rs</th><th>Status</th></tr></thead><tbody>'
+      + sets.map(function(x){ return '<tr><td>settlement</td><td>'+(x.pickupCode||x.id)+'</td><td>'+x.amount+'</td><td>'+(x.matched?'matched · '+x.utr:'unmatched')+'</td></tr>'; }).join('')
+      + st.map(function(x){ return '<tr><td>statement</td><td>'+x.utr+'</td><td>'+x.amount+'</td><td>'+(x.matched?'matched':'unmatched')+'</td></tr>'; }).join('')
+      + '</tbody></table>';
+  }).catch(function(){ document.getElementById('wrap').textContent='Could not load ledger.'; });
+}
+function openBeat(){
+  if(!ledger) return;
+  fetch('/api/beat/open',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({opening:ledger.opening||{},beatDate:ledger.beatDate})})
+    .then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); })
+    .then(function(res){
+      document.getElementById('msg').textContent=res.ok?'Beat opened.':(res.j.error||'open failed');
+      load();
+    });
+}
+function closeBeat(){
+  if(!ledger) return;
+  var closing={};
+  document.querySelectorAll('input[data-sku]').forEach(function(el){
+    closing[el.getAttribute('data-sku')]=parseInt(el.value,10)||0;
+  });
+  fetch('/api/beat/close',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({closing:closing,beatDate:ledger.beatDate})})
+    .then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); })
+    .then(function(res){
+      if(res.ok) document.getElementById('msg').textContent='Beat closed. Recon saved.';
+      else document.getElementById('msg').textContent='Reject: closing != leftover'+(res.j.mismatch?' · '+res.j.mismatch.length+' SKU(s)':'');
+      load();
+    });
+}
+load();
+</script>
+</body>
+</html>

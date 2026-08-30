@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NiaSave · Tomorrow load</title>
+<link rel="stylesheet" href="/staff.css">
+</head>
+<body>
+  <div class="narrow">
+    <div class="narrow-card">
+      <div class="kicker">Rabbit · staff</div>
+      <h1>Open on a laptop</h1>
+      <p>Tomorrow load is a wide staff desk. It is not the member app.</p>
+    </div>
+  </div>
+  <div class="tower">
+    <header class="top">
+      <div>
+        <div class="brand">Rabbit · next</div>
+        <h1>Tomorrow load</h1>
+      </div>
+      <div class="meta"><a href="/ops.html">Ops</a> · <a href="/predict.html">Predict</a></div>
+    </header>
+    <div class="wrap">
+      <p class="sub">Predicted opening · collected plus buffer · slot 17:00 · owner hub</p>
+      <p class="sub" id="beat">…</p>
+      <button type="button" onclick="load()">Refresh</button>
+      <button type="button" onclick="saveNext()">Save as next opening</button>
+      <div class="msg" id="msg"></div>
+      <div id="wrap">Loading…</div>
+    </div>
+  </div>
+<script>
+var nextBeat='';
+var predicted={};
+var whyBySku={};
+function load(){
+  document.getElementById('wrap').textContent='Loading…';
+  fetch('/api/next').then(function(r){ return r.json(); }).then(function(d){
+    nextBeat=d.nextBeatDate||'';
+    predicted=Object.assign({}, d.predicted||d.suggested||{});
+    whyBySku={};
+    (d.load||[]).forEach(function(row){ whyBySku[row.sku]=row.why||''; });
+    document.getElementById('beat').textContent=(d.theatre||'Rajputana Theatre')+' · '+(d.stopCount||40)+' stops · this beat '+(d.beatDate||'-')+' · next '+nextBeat+(d.already_open?' · already open':'');
+    var skus=Object.keys(predicted).sort();
+    var rows=skus.map(function(sku){
+      var left=(d.leftover&&d.leftover[sku]!=null)?d.leftover[sku]:'-';
+      var pred=(predicted[sku]!=null)?predicted[sku]:'-';
+      var why=whyBySku[sku]||'';
+      var human=(d.opening&&d.opening[sku]!=null)?d.opening[sku]:'';
+      return '<tr><td>'+sku+'</td><td>'+left+'</td><td>'+pred+'</td><td class="left"><span class="why">'+why+'</span></td><td><input data-sku="'+sku+'" value="'+human+'" placeholder="'+pred+'"></td></tr>';
+    }).join('');
+    document.getElementById('wrap').innerHTML='<table><thead><tr><th>SKU</th><th>Leftover</th><th>Predicted</th><th>Why</th><th>Open next</th></tr></thead><tbody>'+rows+'</tbody></table>';
+  }).catch(function(){ document.getElementById('wrap').textContent='Could not load next load.'; });
+}
+function saveNext(){
+  var opening={};
+  document.querySelectorAll('input[data-sku]').forEach(function(el){
+    opening[el.getAttribute('data-sku')]=parseInt(el.value,10)||0;
+  });
+  fetch('/api/beat/open',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({ beatDate:nextBeat, opening:opening, replace:true })
+  }).then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); })
+    .then(function(res){
+      document.getElementById('msg').textContent=res.ok?('Saved opening for '+res.j.beatDate):((res.j&&res.j.error)||'Save failed');
+      load();
+    });
+}
+load();
+</script>
+</body>
+</html>

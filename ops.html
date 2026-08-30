@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NiaSave · Ops</title>
+<link rel="icon" href="/assets/nia-logo.png" type="image/png">
+<link rel="apple-touch-icon" href="/assets/nia-logo.png">
+<link rel="stylesheet" href="/staff.css">
+</head>
+<body>
+  <div class="narrow">
+    <div class="narrow-card">
+      <div class="kicker">Rabbit · Jabali Officer</div>
+      <h1>Open on a laptop</h1>
+      <p>This board is a wide staff desk. It is not the member app.</p>
+    </div>
+  </div>
+
+  <div class="tower">
+    <header class="top">
+      <div>
+        <div class="brand">Rabbit · Jabali Officer</div>
+        <h1>Beat board</h1>
+      </div>
+      <div class="meta" id="topmeta">Rajputana Theatre · 40 stops<br>No live UPI</div>
+    </header>
+    <div class="wrap">
+      <p class="sub">One theatre. 40 stops. 3000 members. Tap a card. One job. Wide laptop only. Studio cart after 17:00.</p>
+      <div class="jobs" id="jobs"></div>
+      <div class="open" id="open"></div>
+    </div>
+  </div>
+<script>
+var DATA=null;
+function num(n){ return n==null?0:n; }
+function jobBtn(id, kicker, title, action, nums, on){
+  return '<button type="button" class="job'+(on?' on':'')+'" data-job="'+id+'">'
+    + '<div class="job-kicker">'+kicker+'</div>'
+    + '<strong>'+title+'</strong>'
+    + '<div class="job-do">'+action+'</div>'
+    + '<div class="job-num">'+nums+'</div>'
+    + '</button>';
+}
+function checks(rows){
+  return '<div class="checks">'+rows.map(function(r){
+    return '<div class="check"><div class="l">'+r[0]+'</div><div class="n">'+r[1]+'</div></div>';
+  }).join('')+'</div>';
+}
+function face(){
+  var t=DATA.tower||{};
+  var f=t.funnel||{};
+  var k=t.kpis||{};
+  var s=DATA.set||{};
+  var pred=t.predict||{};
+  var load=(pred.load||[]).filter(function(r){ return r.tomorrow_qty>0; });
+  var src=(DATA.source&&DATA.source.sources)||[];
+  var open=DATA.openJob||'';
+  document.getElementById('jobs').innerHTML=[
+    jobBtn('pickup','After 5','Pickup','Pack the studio cart. Collect by code. Mark miss.',
+      num(f.reserved)+' reserved · '+num(f.packed)+' packed · '+num(f.collected)+' collected · '+num(f.missed)+' miss', open==='pickup'),
+    jobBtn('recon','Night','Recon','Match the UPI statement after collected scan.',
+      (s.matched||0)+' matched · '+(s.unmatchedStatement||0)+' statement open', open==='recon'),
+    jobBtn('source','Inbound','Source','Buy only where Nia cost is under kirana.',
+      src.length+' SKUs on the procure sheet', open==='source'),
+    jobBtn('predict','Ledger','Predict','Order recs and miss risk from the ledger. Not a guess.',
+      'miss '+(k.miss_rate!=null?k.miss_rate+'%':'0%')+' · '+num(pred.chaseCount||k.chase)+' to chase', open==='predict'),
+    jobBtn('close','Night','Beat close','Opening minus collected must still be on the cart.',
+      'open '+num(k.opening)+' · collected '+num(k.collected)+' · miss '+num(k.missed), open==='close'),
+    jobBtn('next','Next day','Tomorrow load','Load from collected plus what is still holding.',
+      load.length+' SKUs to load', open==='next')
+  ].join('');
+  document.querySelectorAll('button.job').forEach(function(el){
+    el.addEventListener('click', function(){ pick(el.getAttribute('data-job')); });
+  });
+}
+function pick(id){
+  if(!DATA) return;
+  DATA.openJob = DATA.openJob===id ? '' : id;
+  face();
+  var box=document.getElementById('open');
+  if(!DATA.openJob){ box.className='open'; box.innerHTML=''; return; }
+  var t=DATA.tower||{};
+  var f=t.funnel||{};
+  var k=t.kpis||{};
+  var s=DATA.set||{};
+  var pred=t.predict||{};
+  var html='';
+  if(id==='pickup'){
+    html='<h2>Pickup</h2><p class="do">Pack reserved bags before the cart leaves. Load. Arrive at the studio. Collect by pickup code after 17:00. If they do not come, mark miss.</p>'
+      +checks([['Reserved',num(f.reserved)],['Packed',num(f.packed)],['Loaded',num(f.loaded)],['At stop',num(f.at_stop)],['Collected',num(f.collected)],['Miss',num(f.missed)]])
+      +'<a class="desk-link" href="/pickup.html">Open pickup desk</a>';
+  } else if(id==='recon'){
+    html='<h2>Recon</h2><p class="do">Settlement starts on collected scan. Not UPI capture. Not pack. Match the bank statement lines to those settlements.</p>'
+      +checks([['Settlements',s.count||0],['Matched',s.matched||0],['Statement open',s.unmatchedStatement||0],['Unmatched take',s.unmatchedSettlements||0]])
+      +'<a class="desk-link" href="/recon.html">Open recon desk</a>';
+  } else if(id==='source'){
+    var n=((DATA.source&&DATA.source.sources)||[]).length;
+    html='<h2>Source</h2><p class="do">Read the procure and vendor sheets. Keep a SKU only when Nia cost is under kirana.</p>'
+      +checks([['SKUs',n],['From','sheet']])
+      +'<a class="desk-link" href="/source.html">Open source desk</a>';
+  } else if(id==='predict'){
+    html='<h2>Predict</h2><p class="do">Use opening, collected, and miss. Do not invent a load. Chase bags still on the beat.</p>'
+      +checks([['Miss rate',(k.miss_rate!=null?k.miss_rate+'%':'0%')],['Chase',num(pred.chaseCount||k.chase)],['Members',num(k.members||t.memberCount)],['Stops',num(k.stops||t.stopCount)]])
+      +'<a class="desk-link" href="/predict.html">Open predict desk</a>';
+  } else if(id==='close'){
+    html='<h2>Beat close</h2><p class="do">One beat. Opening minus collected must equal what is still here. Wrong close is rejected.</p>'
+      +checks([['Opening',num(k.opening)],['Collected',num(k.collected)],['Miss',num(k.missed)],['Balanced',k.balanced?'yes':'no']])
+      +'<a class="desk-link" href="/recon.html">Open beat close</a>';
+  } else if(id==='next'){
+    var rec=((pred.load)||[]).filter(function(r){ return r.tomorrow_qty>0; });
+    var qty=rec.reduce(function(a,r){ return a+num(r.tomorrow_qty); },0);
+    html='<h2>Tomorrow load</h2><p class="do">Load what the ledger already proved: collected plus what is still holding, cut by miss rate.</p>'
+      +checks([['SKUs to load',rec.length],['Units',qty],['Miss rate',(k.miss_rate!=null?k.miss_rate+'%':'0%')]])
+      +'<a class="desk-link" href="/next.html">Open tomorrow desk</a> · <a class="desk-link" href="/hub.html">Hub load</a>';
+  }
+  box.className='open show';
+  box.innerHTML=html;
+}
+function load(){
+  Promise.all([
+    fetch('/api/tower').then(function(r){ return r.json(); }),
+    fetch('/api/settlements?beat=today').then(function(r){ return r.json(); }),
+    fetch('/api/source').then(function(r){ return r.json(); })
+  ]).then(function(all){
+    DATA={ tower:all[0], set:all[1], source:all[2], openJob:'' };
+    var t=all[0]||{};
+    document.getElementById('topmeta').innerHTML=(t.theatre||'Rajputana Theatre')+' · '+(t.stopCount||40)+' stops · '+(t.memberCount||3000)+' members<br>Beat '+(t.beatDate||'-')+' · '+(t.bagsTonight||0)+' bags tonight · no live UPI';
+    face();
+  }).catch(function(){
+    document.getElementById('jobs').innerHTML='<div class="empty">Could not load the beat board.</div>';
+  });
+}
+load();
+</script>
+</body>
+</html>

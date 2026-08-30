@@ -6,7 +6,7 @@ if [ -f member.html ]; then
 elif [ -f index.html ]; then
   cp index.html dist/index.html
 fi
-cp -f ops.html pickup.html recon.html predict.html hub.html next.html cash.html source.html staff.css dist/
+cp -f ops.html pickup.html recon.html predict.html hub.html next.html cash.html source.html inventory.html ageing.html staff.css dist/
 if [ -d public/products ]; then cp -r public/products/. dist/products/; fi
 if [ -d assets ]; then cp -r assets/. dist/assets/; fi
 if [ -f manifest.webmanifest ]; then cp -f manifest.webmanifest dist/; fi

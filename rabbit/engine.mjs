@@ -336,7 +336,10 @@ function createState() {
     statement,
     cash: {},
     studios: STUDIOS.map(s => ({ ...s })),
-    uploads: { upi_statement: null, procure: null, vendors: null }
+    uploads: { upi_statement: null, procure: null, vendors: null },
+    memberFlags: {},
+    memberAnswers: [],
+    memberSession: { memberId: "ravi", phone: "ravi" }
   };
 }
 
@@ -699,6 +702,188 @@ export function stockPayload() {
     persist: state.persist,
     blob: state.blob
   };
+}
+
+function daysBetween(from, to) {
+  const a = Date.parse(from);
+  const b = Date.parse(to);
+  if (!Number.isFinite(a) || !Number.isFinite(b)) return 0;
+  return Math.max(0, Math.round((b - a) / 86400000));
+}
+
+function lastBuyOf(sku) {
+  const u = state.uploads && state.uploads.procure && state.uploads.procure.rows;
+  if (u) {
+    const row = u.find(r => r.sku === sku);
+    if (row && row.last_buy) return row.last_buy;
+  }
+  const item = skuOf(sku);
+  return item.last_buy || "";
+}
+
+export function ageingPayload() {
+  const led = ledgerOf();
+  const beat = led.beatDate;
+  const rows = Object.keys(led.opening).sort().map(sku => {
+    const buy = lastBuyOf(sku);
+    const daysSitting = buy ? daysBetween(buy, beat) : daysBetween(state.beat.openedAt.slice(0, 10), beat) || 1;
+    const leftover = led.leftover[sku] || 0;
+    const missed = led.missed[sku] || 0;
+    return {
+      sku,
+      daysSitting,
+      leftoverAge: leftover ? daysSitting : 0,
+      leftover,
+      missed,
+      opening: led.opening[sku] || 0,
+      sitting: { num: daysSitting, den: 90, label: "days sitting / 90" }
+    };
+  });
+  const over7 = rows.filter(r => r.daysSitting >= 7);
+  const leftoverUnits = rows.reduce((n, r) => n + r.leftover, 0);
+  const leftoverAged = rows.filter(r => r.leftoverAge >= 7).reduce((n, r) => n + r.leftover, 0);
+  const missedUnits = rows.reduce((n, r) => n + r.missed, 0);
+  const decidedUnits = rows.reduce((n, r) => n + (led.collected[r.sku] || 0) + r.missed, 0);
+  return {
+    beatDate: beat,
+    theatre: THEATRE.name,
+    stopCount: liveStopCount(),
+    owner: OWNER,
+    proposed: true,
+    sitting: { num: over7.length, den: rows.length, label: "SKUs sitting 7 or more days / SKUs" },
+    leftoverAge: { num: leftoverAged, den: leftoverUnits || 0, label: "leftover aged 7 or more / leftover" },
+    missStuck: { num: missedUnits, den: decidedUnits || 0, label: "miss that did not move / decided" },
+    rows
+  };
+}
+
+export function inventoryPayload() {
+  const stock = stockPayload();
+  const led = ledgerOf();
+  const lots = led.rows.map(r => ({
+    sku: r.sku,
+    owner: OWNER,
+    opening: r.opening,
+    inbound: (stock.movements[r.sku] && stock.movements[r.sku].inbound) || r.opening,
+    reserved: r.reserved,
+    collected: r.collected,
+    leftover: r.leftover,
+    missed: r.missed,
+    onHand: r.leftover,
+    packed: (stock.movements[r.sku] && stock.movements[r.sku].packed) || 0,
+    loaded: (stock.movements[r.sku] && stock.movements[r.sku].loaded) || 0
+  }));
+  return {
+    beatDate: stock.beatDate,
+    theatre: stock.theatre,
+    stopCount: stock.stopCount,
+    owner: OWNER,
+    stock,
+    ledger: led,
+    lots,
+    movements: stock.movements
+  };
+}
+
+export function placeMemberOrder(body = {}) {
+  const linesIn = Array.isArray(body.lines) ? body.lines : [];
+  if (!linesIn.length) return { error: "no_lines", status: 400 };
+  const lines = linesIn.map(l => {
+    const item = skuOf(l.id);
+    return {
+      id: l.id,
+      qty: Number(l.qty) || 1,
+      nia: Number(l.nia) || item.nia,
+      kirana: Number(l.kirana) || item.kirana
+    };
+  });
+  const amount = orderAmount(lines);
+  const kept = lines.reduce((n, l) => n + ((skuOf(l.id).keep || 0) * (l.qty || 1)), 0);
+  const pickupCode = "M" + String(state.orders.length + 1).padStart(4, "0");
+  const memberId = String(body.memberId || body.phone || "ravi");
+  const order = {
+    id: "ord-" + pickupCode.toLowerCase(),
+    pickupCode,
+    member: body.member || memberId,
+    memberId,
+    phone: body.phone || memberId,
+    stopId: body.stopId || "S01",
+    nest: "",
+    lines,
+    pickup: body.pickup || "after 5",
+    slot: body.slot || SLOT,
+    beatDate: body.beatDate || WEEK_BEAT,
+    cart: body.cart || "studio",
+    fulfillment: body.fulfillment || "hub_collect",
+    status: "reserved",
+    kept,
+    upiRef: body.upiRef || "",
+    owner: OWNER,
+    payStatus: "skip",
+    amount,
+    due: amount,
+    paid: 0,
+    method: "cash",
+    date: body.beatDate || WEEK_BEAT
+  };
+  state.orders.push(order);
+  state.ordersById.set(order.id, order);
+  state.ordersByCode.set(order.pickupCode, order);
+  if (!state.orderIdsByStop.has(order.stopId)) state.orderIdsByStop.set(order.stopId, []);
+  state.orderIdsByStop.get(order.stopId).push(order.id);
+  state.reservations.push({
+    id: "res-" + order.pickupCode,
+    orderId: order.id,
+    beatDate: order.beatDate,
+    sku: lines[0].id,
+    qty: lines[0].qty,
+    status: "holding"
+  });
+  return {
+    id: order.id,
+    pickupCode: order.pickupCode,
+    kept,
+    beat: order.beatDate === WEEK_BEAT ? "tonight" : "next beat",
+    memberId,
+    payStatus: "skip",
+    trigger: "collected",
+    settled: false,
+    stock: remainingOnCart()
+  };
+}
+
+export function authOtp() {
+  return { ok: true, skip: true, sent: false };
+}
+
+export function authVerify(body = {}) {
+  const phone = String(body.phone || "ravi");
+  state.memberSession = { memberId: phone, phone };
+  return { ok: true, skip: true, memberId: phone, phone };
+}
+
+export function authMe() {
+  const session = state.memberSession || { memberId: "ravi", phone: "ravi" };
+  return {
+    ok: true,
+    skip: true,
+    memberId: session.memberId,
+    phone: session.phone,
+    flags: state.memberFlags || {},
+    answers: state.memberAnswers || []
+  };
+}
+
+export function saveMemberFlags(body = {}) {
+  const flags = body.flags && typeof body.flags === "object" ? body.flags : {};
+  state.memberFlags = { ...(state.memberFlags || {}), ...flags };
+  return { ok: true, skip: true, flags: state.memberFlags };
+}
+
+export function saveMemberAnswer(body = {}) {
+  const row = { tab: body.tab || "", qid: body.qid || "", val: body.val };
+  state.memberAnswers = (state.memberAnswers || []).concat([row]);
+  return { ok: true, skip: true };
 }
 
 export function beatPayload() {
@@ -1141,17 +1326,20 @@ export function towerPayload() {
     bagsPerStop: BEAT_BAGS_PER_STOP,
     kpis: {
       opening: sum(led.opening),
+      onHand: sum(led.leftover),
       reserved: sum(led.reserved),
       collected: sum(led.collected),
       missed: sum(led.missed),
       leftover: sum(led.leftover),
       miss_rate: pred.miss_rate,
+      daysOfStock: { num: sum(led.leftover), den: sum(led.collected) || 0, label: "leftover / collected" },
       balanced: led.balanced,
       stops: liveStopCount(),
       members: MEMBER_COUNT,
       bags: state.orders.length,
       chase: chaseCount
     },
+    ageing: ageingPayload(),
     gates: gatesOf(funnel, led),
     funnel,
     stopProgress: progress,
@@ -1206,8 +1394,9 @@ export function staffPath(pathname, rewrittenPath) {
 
 export function isStaffPath(p) {
   return [
-    "/connectors", "/connectors/upload", "/predict", "/ledger", "/stock", "/orders", "/beat",
-    "/beat/open", "/beat/close", "/scan", "/recon", "/next", "/source",
+    "/connectors", "/connectors/upload", "/predict", "/ledger", "/stock", "/inventory", "/ageing",
+    "/orders", "/order", "/member", "/member/answer", "/auth/me", "/auth/otp", "/auth/verify",
+    "/beat", "/beat/open", "/beat/close", "/scan", "/recon", "/next", "/source",
     "/cash", "/settlements", "/tower", "/stops"
   ].includes(p);
 }
@@ -1222,7 +1411,15 @@ export async function handleStaff(req, res, path, body, url) {
   if (method === "GET" && path === "/predict") return { status: 200, body: predictPayload() };
   if (method === "GET" && path === "/ledger") return { status: 200, body: ledgerOf(q.beat) };
   if (method === "GET" && path === "/stock") return { status: 200, body: stockPayload() };
+  if (method === "GET" && path === "/inventory") return { status: 200, body: inventoryPayload() };
+  if (method === "GET" && path === "/ageing") return { status: 200, body: ageingPayload() };
   if (method === "GET" && path === "/orders") return { status: 200, body: ordersPayload(q) };
+  if (method === "POST" && path === "/order") return done(placeMemberOrder(body || {}));
+  if (method === "POST" && path === "/member") return done(saveMemberFlags(body || {}));
+  if (method === "POST" && path === "/member/answer") return done(saveMemberAnswer(body || {}));
+  if (method === "GET" && path === "/auth/me") return { status: 200, body: authMe() };
+  if (method === "POST" && path === "/auth/otp") return { status: 200, body: authOtp() };
+  if (method === "POST" && path === "/auth/verify") return done(authVerify(body || {}));
   if (method === "GET" && path === "/stops") return { status: 200, body: stopsPayload() };
   if (method === "POST" && path === "/stops") return done(addStudio(body));
   if (method === "GET" && path === "/beat") return { status: 200, body: beatPayload() };

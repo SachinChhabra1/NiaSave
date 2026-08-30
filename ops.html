@@ -27,14 +27,31 @@
       <div class="meta" id="topmeta">Rajputana Theatre · 40 stops<br>No live UPI</div>
     </header>
     <div class="wrap">
-      <p class="sub">Production. Skip on. One theatre. 40 stops. 3000 members. Jabali Officer is the Studio Champion. Three taps after the member is identified: stop, bag, collect. Tap a card. One job. Control plane, not a shop.</p>
-      <div class="pills" id="connectors"></div>
-      <div class="realities" id="realities"></div>
-      <div class="jobs" id="jobs"></div>
-      <div class="open" id="open"></div>
-      <section class="open" id="connectors-desk">
+      <p class="sub">Production. Skip on. One theatre. 40 stops. 3000 members. Jabali Officer is the Studio Champion. Stock is not today's flow. Inventory is movements. Settlement on collected. No live UPI.</p>
+      <div class="kpis" id="kpis"></div>
+      <div class="picture">
+        <div class="card">
+          <h3>Inventory</h3>
+          <p class="sub">On-hand vs opening by SKU. Stock is not today's flow. Hub owns the lot.</p>
+          <div id="invchart"></div>
+          <a class="desk-link" href="/inventory.html">Open inventory desk</a>
+        </div>
+        <div class="card">
+          <h3>Ageing</h3>
+          <p class="sub">Days sitting / 90. Leftover age and miss that did not move. Thresholds proposed.</p>
+          <div id="agechart"></div>
+          <a class="desk-link" href="/ageing.html">Open ageing desk</a>
+        </div>
+      </div>
+      <div class="card" style="margin-bottom:18px">
+        <h3>Funnel</h3>
+        <p class="sub">Reserved to packed or loaded to collected. Leftover and miss sit on the right.</p>
+        <div class="funnel-board" id="funnel"></div>
+      </div>
+      <section class="connectors-panel" id="connectors-desk">
         <h2>Connectors</h2>
-        <p class="do">Staff inbound files. Recon unmatched uses the UPI statement. Source and predict use the procure sheet. No live UPI. No Razorpay. No Google sign-in.</p>
+        <p class="do">Staff inbound files. Always on this board. Recon unmatched uses the UPI statement. Source and predict use the procure sheet. No live UPI. No Razorpay. No Google sign-in.</p>
+        <div class="pills" id="connectors"></div>
         <div class="uploads">
           <div class="upload-card" data-kind="upi_statement">
             <div class="job-kicker">UPI statement</div>
@@ -65,6 +82,12 @@
           </div>
         </div>
       </section>
+      <div class="realities" id="realities"></div>
+      <div class="jobs" id="jobs"></div>
+      <div class="open" id="open"></div>
+      <h2>Studios</h2>
+      <p class="sub">One theatre. A new studio is a row. Not a rewrite.</p>
+      <div class="studios-table" id="studios"></div>
       <h2>Gates (proposed)</h2>
       <p class="sub">Report only. Proposed bars stay as written: participation 30 or more in 100, sell-through 80 or more in 100, pre-order fill 95 or more in 100, member saving 3 or more in 100, inventory loss under 1 in 200, contribution 3 or more in 100. This board shows numerator and denominator only.</p>
       <div id="gates" class="empty"></div>
@@ -117,6 +140,64 @@ function paintFiles(c){
   document.getElementById('meta-vendors').textContent=fileMeta(srcOf(c,'vendors'));
   document.getElementById('connectors').innerHTML=connectorsPills(c);
 }
+function paintPicture(){
+  var t=DATA.tower||{};
+  var k=t.kpis||{};
+  var led=t.ledger||{};
+  var f=t.funnel||{};
+  var age=t.ageing||{};
+  var opening=led.opening||{};
+  var leftover=led.leftover||{};
+  var skus=Object.keys(opening).sort();
+  var maxOpen=1;
+  skus.forEach(function(sku){ if(num(opening[sku])>maxOpen) maxOpen=num(opening[sku]); });
+  document.getElementById('kpis').innerHTML=[
+    ['Opening', num(k.opening)],
+    ['On-hand', num(k.onHand!=null?k.onHand:k.leftover)],
+    ['Collected', num(k.collected)],
+    ['Leftover', num(k.leftover)],
+    ['Miss', num(k.missed)],
+    ['Days of stock', (k.daysOfStock&&k.daysOfStock.num!=null?k.daysOfStock.num:'-')+' / '+(k.daysOfStock&&k.daysOfStock.den!=null?k.daysOfStock.den:'-')]
+  ].map(function(r){ return '<div class="kpi"><div class="l">'+r[0]+'</div><div class="n">'+r[1]+'</div></div>'; }).join('');
+  document.getElementById('invchart').innerHTML=skus.map(function(sku){
+    var o=num(opening[sku]), h=num(leftover[sku]);
+    return '<div class="chart-row"><div class="chart-sku">'+sku+'</div><div class="bars">'
+      + '<div class="bar-track"><div class="bar open" style="width:'+Math.round(o/maxOpen*100)+'%"></div></div>'
+      + '<div class="bar-track"><div class="bar hand" style="width:'+Math.round(h/maxOpen*100)+'%"></div></div>'
+      + '</div><div class="chart-nums">'+h+' / '+o+'</div></div>';
+  }).join('') || '<div class="empty">No opening.</div>';
+  var rows=age.rows||[];
+  document.getElementById('agechart').innerHTML=(rows.length?rows.map(function(r){
+    var d=num(r.daysSitting);
+    var w=Math.max(4, Math.min(100, Math.round(d/90*100)));
+    return '<div class="chart-row"><div class="chart-sku">'+r.sku+'</div><div class="bars">'
+      + '<div class="bar-track"><div class="bar age" style="width:'+w+'%"></div></div>'
+      + '</div><div class="chart-nums">'+d+' / 90</div></div>';
+  }).join('')+'<div class="checks" style="margin-top:10px">'
+    + '<div class="check"><div class="l">'+(age.sitting&&age.sitting.label||'sitting')+'</div><div class="n">'+(age.sitting?age.sitting.num+' / '+age.sitting.den:'-')+'</div></div>'
+    + '<div class="check"><div class="l">'+(age.missStuck&&age.missStuck.label||'miss')+'</div><div class="n">'+(age.missStuck?age.missStuck.num+' / '+age.missStuck.den:'-')+'</div></div>'
+    + '</div>':'<div class="empty">No ageing rows.</div>');
+  var packed=num(f.packed)+num(f.loaded)+num(f.at_stop);
+  var stages=[
+    ['Reserved', num(f.reserved)],
+    ['Packed / loaded', packed],
+    ['Collected', num(f.collected)],
+    ['Leftover / miss', num(k.leftover)+' / '+num(f.missed)]
+  ];
+  var maxF=1;
+  [num(f.reserved), packed, num(f.collected), num(k.leftover)+num(f.missed)].forEach(function(n){ if(n>maxF) maxF=n; });
+  document.getElementById('funnel').innerHTML=stages.map(function(s,i){
+    var raw=[num(f.reserved), packed, num(f.collected), num(k.leftover)+num(f.missed)][i];
+    var h=Math.max(8, Math.round(raw/maxF*100));
+    return '<div class="col"><b style="height:'+h+'%"></b><span>'+s[0]+'<br>'+s[1]+'</span></div>';
+  }).join('');
+  var stops=t.stopProgress||[];
+  document.getElementById('studios').innerHTML='<table><thead><tr><th>Stop</th><th>Name</th><th>Bags</th><th>Open</th><th>Collected</th><th>Miss</th></tr></thead><tbody>'
+    +(stops.map(function(s){
+      return '<tr><td>'+s.stopId+'</td><td class="left">'+(s.name||s.stopId)+'</td><td class="num">'+num(s.bags)+'</td><td class="num">'+num(s.open)+'</td><td class="num">'+num(s.collected)+'</td><td class="num">'+num(s.missed)+'</td></tr>';
+    }).join('')||'<tr><td colspan="6">No studios.</td></tr>')
+    +'</tbody></table>';
+}
 function face(){
   var t=DATA.tower||{};
   var f=t.funnel||{};
@@ -135,7 +216,11 @@ function face(){
   document.getElementById('jobs').innerHTML=[
     jobBtn('pickup','After 5','Pickup','Tap the stop. Tap the bag. Collect by code or mark miss.',
       num(f.reserved)+' reserved · '+num(f.collected)+' collected · '+num(f.missed)+' miss', open==='pickup'),
-    jobBtn('connectors','Inbound','Connectors','Choose file. UPI statement for recon. Procure for source and predict.',
+    jobBtn('inventory','Stock','Inventory','Lots and movements. On-hand is leftover. Not an editable quantity.',
+      num(k.onHand!=null?k.onHand:k.leftover)+' on-hand · '+num(k.opening)+' opening', open==='inventory'),
+    jobBtn('ageing','Sitting','Ageing','Days sitting and leftover age per SKU. Miss that did not move.',
+      ((t.ageing&&t.ageing.sitting)?t.ageing.sitting.num+' / '+t.ageing.sitting.den:'-')+' sitting 7+/SKUs', open==='ageing'),
+    jobBtn('connectors','Inbound','Connectors','Choose file stays on this board. UPI statement and procure CSV.',
       (upi.rows||0)+' statement rows · '+(procure.rows||0)+' procure rows', open==='connectors'),
     jobBtn('recon','Night','Recon','Ledger count. Opening minus collected minus leftover must be 0.',
       'open '+num(k.opening)+' · collected '+num(k.collected)+' · leftover '+num(k.leftover), open==='recon'),
@@ -156,15 +241,20 @@ function face(){
     el.addEventListener('click', function(){ pick(el.getAttribute('data-job')); });
   });
   paintFiles(conn);
+  paintPicture();
 }
 function pick(id){
   if(!DATA) return;
   DATA.openJob = DATA.openJob===id ? '' : id;
   face();
   var box=document.getElementById('open');
-  var connDesk=document.getElementById('connectors-desk');
-  connDesk.className = DATA.openJob==='connectors' ? 'open show' : 'open';
-  if(!DATA.openJob || DATA.openJob==='connectors'){ box.className='open'; box.innerHTML=''; if(DATA.openJob!=='connectors') return; return; }
+  if(DATA.openJob==='connectors'){
+    box.className='open';
+    box.innerHTML='';
+    document.getElementById('connectors-desk').scrollIntoView({ behavior:'smooth', block:'start' });
+    return;
+  }
+  if(!DATA.openJob){ box.className='open'; box.innerHTML=''; return; }
   var t=DATA.tower||{};
   var f=t.funnel||{};
   var k=t.kpis||{};
@@ -175,6 +265,15 @@ function pick(id){
     html='<h2>Pickup</h2><p class="do">Three taps after the member is identified: tap the stop, tap the bag, collect by code. Miss if they do not come. Pack, load, and arrived stay on hub.</p>'
       +checks([['Reserved',num(f.reserved)],['Collected',num(f.collected)],['Miss',num(f.missed)]])
       +'<a class="desk-link" href="/pickup.html">Open pickup desk</a>';
+  } else if(id==='inventory'){
+    html='<h2>Inventory</h2><p class="do">Lots and movements. On-hand is leftover. Owner is hub. Not an editable quantity field. A new studio is a row.</p>'
+      +checks([['On-hand',num(k.onHand!=null?k.onHand:k.leftover)],['Opening',num(k.opening)],['Collected',num(k.collected)],['Leftover',num(k.leftover)]])
+      +'<a class="desk-link" href="/inventory.html">Open inventory desk</a>';
+  } else if(id==='ageing'){
+    var ag=t.ageing||{};
+    html='<h2>Ageing</h2><p class="do">Days sitting per SKU. Leftover age. Miss that did not move. Thresholds stay proposed as numerator and denominator.</p>'
+      +checks([['Sitting 7+',(ag.sitting?ag.sitting.num+' / '+ag.sitting.den:'-')],['Leftover age',(ag.leftoverAge?ag.leftoverAge.num+' / '+ag.leftoverAge.den:'-')],['Miss stuck',(ag.missStuck?ag.missStuck.num+' / '+ag.missStuck.den:'-')]])
+      +'<a class="desk-link" href="/ageing.html">Open ageing desk</a>';
   } else if(id==='recon'){
     html='<h2>Recon</h2><p class="do">Night count. Opening minus collected minus leftover = 0. If it does not, the beat does not close.</p>'
       +checks([['Opening',num(k.opening)],['Collected',num(k.collected)],['Leftover',num(k.leftover)],['Balanced',k.balanced?'yes':'no']])
@@ -225,8 +324,7 @@ function sendCsv(kind, file){
         if(DATA.tower) DATA.tower.connectors=DATA.conn;
         fetch('/api/source').then(function(r){ return r.json(); }).then(function(src){
           DATA.source=src;
-          if(DATA.openJob==='connectors'){ face(); pick('connectors'); }
-          else face();
+          face();
         }).catch(function(){ face(); });
         fetch('/api/settlements?beat=today&unmatched=1').then(function(r){ return r.json(); }).then(function(set){ DATA.set=set; face(); });
       }).catch(function(){ alert('Could not upload'); });

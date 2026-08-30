@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0B0E14">
+<title>NiaSave · Ageing</title>
+<link rel="icon" href="/assets/nia-logo.png" type="image/png">
+<link rel="apple-touch-icon" href="/assets/nia-logo.png">
+<link rel="stylesheet" href="/staff.css">
+</head>
+<body>
+  <div class="narrow">
+    <div class="narrow-card">
+      <div class="kicker">Rabbit · Jabali Officer</div>
+      <h1>Open on a laptop</h1>
+      <p>Ageing is a wide staff desk. It is not the member app.</p>
+    </div>
+  </div>
+  <div class="tower">
+    <header class="top">
+      <div>
+        <div class="brand">Rabbit · ageing</div>
+        <h1>Days sitting</h1>
+      </div>
+      <div class="meta"><a href="/ops.html">Ops</a> · <a href="/inventory.html">Inventory</a></div>
+    </header>
+    <div class="wrap">
+      <p class="sub">Bag board, not occupancy. Days sitting and leftover age per SKU. Miss that did not move. Thresholds stay proposed as numerator and denominator.</p>
+      <p class="sub" id="beat">Beat …</p>
+      <button type="button" onclick="load()">Refresh</button>
+      <div class="checks" id="gates"></div>
+      <h2>Per SKU</h2>
+      <div id="bars">Loading…</div>
+      <div id="table"></div>
+    </div>
+  </div>
+<script>
+function num(n){ return n==null?0:n; }
+function load(){
+  fetch('/api/ageing').then(function(r){ return r.json(); }).then(function(d){
+    document.getElementById('beat').textContent=(d.theatre||'Rajputana Theatre')+' · Beat '+(d.beatDate||'-')+' · '+(d.stopCount||40)+' stops · proposed 90-day board';
+    document.getElementById('gates').innerHTML=[
+      ['Sitting 7+ / SKUs', d.sitting],
+      ['Leftover aged 7+ / leftover', d.leftoverAge],
+      ['Miss stuck / decided', d.missStuck]
+    ].map(function(pair){
+      var g=pair[1]||{};
+      return '<div class="check"><div class="l">'+pair[0]+'</div><div class="n">'+(g.num!=null?g.num:'-')+' / '+(g.den!=null?g.den:'-')+'</div><div class="l">'+(g.label||'')+'</div></div>';
+    }).join('');
+    var rows=d.rows||[];
+    document.getElementById('bars').innerHTML=rows.length
+      ? rows.map(function(r){
+          var days=num(r.daysSitting);
+          var w=Math.max(4, Math.min(100, Math.round(days/90*100)));
+          return '<div class="chart-row"><div class="chart-sku">'+r.sku+'</div><div class="bars">'
+            + '<div class="bar-track"><div class="bar age" style="width:'+w+'%"></div></div>'
+            + '</div><div class="chart-nums">'+days+' / 90</div></div>';
+        }).join('')
+      : '<div class="empty">No ageing rows.</div>';
+    document.getElementById('table').innerHTML=rows.length
+      ? '<table><thead><tr><th>SKU</th><th>Days sitting</th><th>Leftover age</th><th>Leftover</th><th>Miss</th><th>Sitting / 90</th></tr></thead><tbody>'
+        +rows.map(function(r){
+          return '<tr><td>'+r.sku+'</td><td class="num">'+num(r.daysSitting)+'</td><td class="num">'+num(r.leftoverAge)+'</td><td class="num">'+num(r.leftover)+'</td><td class="num">'+num(r.missed)+'</td><td class="num">'+num(r.sitting&&r.sitting.num)+' / 90</td></tr>';
+        }).join('')
+        +'</tbody></table>'
+      : '';
+  }).catch(function(){
+    document.getElementById('bars').textContent='Could not load ageing.';
+  });
+}
+load();
+</script>
+</body>
+</html>

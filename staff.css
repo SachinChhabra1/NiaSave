@@ -128,6 +128,9 @@ button.job .job-num{font-size:13px;color:var(--navy);font-weight:650;font-varian
 .check .l{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--mute)}
 .check .n{font-size:20px;font-weight:650;letter-spacing:-.03em;margin-top:2px;font-variant-numeric:tabular-nums}
 .open a.desk-link{display:inline-block;margin-top:4px;font-weight:650}
+.realities{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+.reality{background:#E8EEF2;color:var(--navy);border-radius:999px;padding:5px 10px;font-size:12px;font-weight:650}
+#gates{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 18px}
 .stops{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:8px 0 16px}
 button.stop{
   display:block;width:100%;text-align:left;

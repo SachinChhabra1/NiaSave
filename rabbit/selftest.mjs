@@ -2,7 +2,7 @@ import {
   DUMMY_DATA, ledgerOf, predictPayload, settlementsPayload, closeBeat, openBeat,
   scanOrder, connectorsPayload, resetDummy, WEEK_BEAT, STUDIOS, MEMBERS,
   STUDIO_COUNT, MEMBER_COUNT, BEAT_BAGS_PER_STOP, ordersPayload, towerPayload,
-  jsonSize, TOWER_MAX_BYTES, THEATRE
+  jsonSize, TOWER_MAX_BYTES, THEATRE, addStudio, stopsPayload
 } from "./engine.mjs";
 
 const fails = [];
@@ -32,6 +32,7 @@ ok("predict load from ledger", pred.load.some(r => r.tomorrow_qty > 0 && r.why.i
 ok("chase not empty", pred.chase.length > 0 && pred.chaseCount > pred.chase.length);
 ok("predict samples only", pred.members.length <= 12 && pred.quietMembers.length <= 12 && pred.sendPending.length <= 12);
 ok("predict knows 3000", pred.memberCount === 3000 && pred.stopCount === 40);
+ok("predict gates num/den", pred.gates && pred.gates.proposed === true && pred.gates.participation.den === 3000 && pred.gates.sellThrough.num != null);
 
 const set = settlementsPayload({ beat: "today" });
 ok("settlements after collected", set.count >= 3 && set.trigger === "collected" && set.liveUpi === false);
@@ -46,6 +47,16 @@ ok("orders default slim", listed.orders.length === 0 && listed.orderCount === 20
 const one = ordersPayload({ pickup: "today", stop: "S01" });
 ok("orders one stop", one.orders.length === BEAT_BAGS_PER_STOP && one.orders.every(o => o.stopId === "S01"));
 ok("S1HOLD on S01", one.orders.some(o => o.id === "ord-s1hold" && o.pickupCode === "S1HOLD"));
+ok("public pay is skip or captured", one.orders.every(o => o.payStatus === "skip" || o.payStatus === "captured"));
+function noDummyWord(name, obj) {
+  ok(name + " has no Dummy word", !/dummy/i.test(JSON.stringify(obj)));
+}
+noDummyWord("predict", pred);
+noDummyWord("tower", towerPayload());
+noDummyWord("orders one stop", one);
+noDummyWord("connectors", connectorsPayload());
+noDummyWord("settlements", set);
+noDummyWord("stops", stopsPayload());
 
 const tower = towerPayload();
 const towerBytes = jsonSize(tower);
@@ -53,6 +64,21 @@ ok("tower under cap", towerBytes < TOWER_MAX_BYTES, String(towerBytes));
 ok("tower has no order blob", tower.ledger && tower.ledger.orders == null);
 ok("tower sized for go-live", tower.stopCount === 40 && tower.memberCount === 3000 && tower.bagsTonight === 200);
 ok("tower predict has no 3000 dump", (tower.predict.members || []).length === 0);
+ok("tower gates proposed", tower.gates && tower.gates.proposed === true && tower.gates.participation.den === 3000);
+
+const added = addStudio({ name: "Nia Nest sheet row" });
+ok("add studio without rewrite", added.ok && added.rewritten === false && added.stopCount === 41);
+ok("stops list grew", stopsPayload().stopCount === 41 && stopsPayload().stops.some(s => s.stopId === "S41"));
+resetDummy();
+ok("reset back to 40", stopsPayload().stopCount === 40);
+
+resetDummy();
+const zeroOpen = {};
+for (const sku of Object.keys(ledgerOf().opening)) zeroOpen[sku] = 0;
+openBeat({ opening: zeroOpen, beatDate: WEEK_BEAT, replace: true });
+const lastUnit = scanOrder({ type: "packed", orderId: "ord-s1hold", actor: "test" });
+ok("last unit one reservation wins", lastUnit.status === 409 && lastUnit.error === "last_unit_taken");
+resetDummy();
 
 const bad = closeBeat({ closing: { groundnut_oil: 999 }, beatDate: WEEK_BEAT });
 ok("close 409 on mismatch", bad.status === 409 && bad.mismatch && bad.mismatch.length);

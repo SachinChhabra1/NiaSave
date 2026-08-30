@@ -5,7 +5,7 @@ import {
   jsonSize, TOWER_MAX_BYTES, THEATRE, addStudio, stopsPayload, stockPayload, SKUS,
   placeMemberOrder, authOtp, authVerify, authMe, saveMemberFlags, ageingPayload, inventoryPayload,
   mutatePo, poPayload, mutateDispatch, mutateInvoice, invoicePayload,
-  dispatchPayload, bikerPayload, mutateBiker
+  dispatchPayload, bikerPayload, mutateBiker, memberPayload, memberOrderGet, handleStaff
 } from "./engine.mjs";
 import { readFileSync } from "fs";
 
@@ -175,6 +175,24 @@ ok("member flags", saveMemberFlags({ flags: { fridayHours: true } }).flags.frida
 noDummyWord("order", ord);
 noDummyWord("auth me", authMe());
 resetDummy();
+
+const mem = memberPayload();
+ok("GET member skip ravi", mem.skip === true && mem.memberId === "ravi" && mem.name === "Ravi");
+ok("GET member frozen keys", ["memberId","name","studioId","nest","hub","theatre","hasMira","friday_send","last_bag","last_mira"].every(k => mem[k] !== undefined));
+const phoneOrder = memberOrderGet();
+ok("GET order 200 skip", phoneOrder.skip === true && phoneOrder.memberId === "ravi" && Array.isArray(phoneOrder.orders));
+ok("GET order uses order records", phoneOrder.orders.every(o => o.id && o.memberId === "ravi" && o.pickupCode));
+ok("GET orders staff still slim", ordersPayload({ pickup: "today" }).orders.length === 0 && ordersPayload({ pickup: "today" }).orderCount === 200);
+noDummyWord("GET member", mem);
+noDummyWord("GET order", phoneOrder);
+const getMem = await handleStaff({ method: "GET" }, {}, "/member", {}, new URL("http://x/api/member"));
+ok("GET /member 200", getMem.status === 200 && getMem.body.skip === true && getMem.body.memberId === "ravi");
+const getOrd = await handleStaff({ method: "GET" }, {}, "/order", {}, new URL("http://x/api/order"));
+ok("GET /order 200", getOrd.status === 200 && Array.isArray(getOrd.body.orders) && getOrd.body.skip === true);
+const postEmpty = await handleStaff({ method: "POST" }, {}, "/order", {}, new URL("http://x/api/order"));
+ok("POST /order no_lines", postEmpty.status === 400 && postEmpty.body.error === "no_lines");
+ok("GET /auth/me skip", (await handleStaff({ method: "GET" }, {}, "/auth/me", {}, new URL("http://x/api/auth/me"))).body.skip === true);
+ok("stock keys after phone GET", ["beatDate","theatre","stopCount","opening","stock","remaining","movements","holding"].every(k => stockPayload()[k] !== undefined));
 
 const poDraft = poPayload();
 ok("po draft from load", (poDraft.draft || []).length > 0 && poDraft.draft.every(r => r.sku && r.qty > 0));

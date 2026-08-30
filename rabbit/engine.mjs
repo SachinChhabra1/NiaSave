@@ -894,6 +894,41 @@ export function authMe() {
   };
 }
 
+export function memberPayload(query = {}) {
+  const session = state.memberSession || { memberId: "ravi", phone: "ravi" };
+  const id = String(query.memberId || query.phone || session.memberId || "ravi");
+  const row = memberById.get(id) || memberById.get("ravi");
+  return {
+    memberId: row.memberId,
+    name: row.name,
+    studioId: row.studioId,
+    nest: row.nest,
+    hub: row.hub,
+    theatre: row.theatre,
+    hasMira: row.hasMira,
+    friday_send: row.friday_send,
+    last_bag: row.last_bag,
+    last_mira: row.last_mira,
+    phone: session.phone || row.memberId,
+    flags: state.memberFlags || {},
+    answers: state.memberAnswers || [],
+    ok: true,
+    skip: true
+  };
+}
+
+export function memberOrderGet(query = {}) {
+  const session = state.memberSession || { memberId: "ravi", phone: "ravi" };
+  const memberId = String(query.memberId || query.phone || session.memberId || "ravi");
+  const orders = state.orders.filter(o => o.memberId === memberId);
+  return {
+    skip: true,
+    memberId,
+    orderCount: orders.length,
+    orders
+  };
+}
+
 export function saveMemberFlags(body = {}) {
   const flags = body.flags && typeof body.flags === "object" ? body.flags : {};
   state.memberFlags = { ...(state.memberFlags || {}), ...flags };
@@ -1873,7 +1908,9 @@ export async function handleStaff(req, res, path, body, url) {
   if (method === "GET" && path === "/inventory") return { status: 200, body: inventoryPayload() };
   if (method === "GET" && path === "/ageing") return { status: 200, body: ageingPayload() };
   if (method === "GET" && path === "/orders") return { status: 200, body: ordersPayload(q) };
+  if (method === "GET" && path === "/order") return { status: 200, body: memberOrderGet(q) };
   if (method === "POST" && path === "/order") return done(placeMemberOrder(body || {}));
+  if (method === "GET" && path === "/member") return { status: 200, body: memberPayload(q) };
   if (method === "POST" && path === "/member") return done(saveMemberFlags(body || {}));
   if (method === "POST" && path === "/member/answer") return done(saveMemberAnswer(body || {}));
   if (method === "GET" && path === "/auth/me") return { status: 200, body: authMe() };

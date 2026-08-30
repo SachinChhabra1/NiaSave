@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NiaSave · Who we buy from</title>
+<link rel="stylesheet" href="/staff.css">
+</head>
+<body>
+  <div class="narrow">
+    <div class="narrow-card">
+      <div class="kicker">Rabbit · staff</div>
+      <h1>Open on a laptop</h1>
+      <p>Source is a wide staff desk. It is not the member app.</p>
+    </div>
+  </div>
+  <div class="tower">
+    <header class="top">
+      <div>
+        <div class="brand">Rabbit · source</div>
+        <h1>Who we buy from</h1>
+      </div>
+      <div class="meta"><a href="/ops.html">Ops</a></div>
+    </header>
+    <div class="wrap">
+      <p class="sub">Procure plus vendors sheets · only where Nia cost is under kirana</p>
+      <p class="sub" id="from">…</p>
+      <button type="button" onclick="load()">Refresh</button>
+      <div id="wrap" class="empty">Loading…</div>
+    </div>
+  </div>
+<script>
+function fromLabel(d){
+  if(d.from) return d.from;
+  if(d.sheetFrom&&d.sheetFrom.procure) return d.sheetFrom.procure;
+  return 'Dummy';
+}
+function load(){
+  document.getElementById('wrap').textContent='Loading…';
+  fetch('/api/source').then(function(r){ return r.json(); }).then(function(d){
+    document.getElementById('from').textContent=fromLabel(d)+' · connector procure + vendors';
+    var rows=Array.isArray(d)?d:(d.sources||[]);
+    if(!rows.length){ document.getElementById('wrap').innerHTML='<div class="empty">No sources.</div>'; return; }
+    document.getElementById('wrap').innerHTML='<table><thead><tr><th>SKU</th><th>Vendor</th><th>Source</th><th>Nia cost</th><th>Kirana</th><th>Keep</th><th>Lead</th><th>Last buy</th><th>Status</th></tr></thead><tbody>'
+      +rows.map(function(r){
+        return '<tr><td>'+r.sku+'</td><td class="left">'+(r.vendor||r.source||'-')+'</td><td class="left">'+r.source+'</td><td>Rs '+r.niaCost+'</td><td>Rs '+r.kirana+'</td><td>Rs '+r.keep+'</td><td>'+(r.lead_days!=null?r.lead_days+'d':'-')+'</td><td>'+(r.last_buy||'-')+'</td><td>'+(r.status||'-')+'</td></tr>';
+      }).join('')
+      +'</tbody></table>';
+  }).catch(function(){ document.getElementById('wrap').textContent='Could not load sources.'; });
+}
+load();
+</script>
+</body>
+</html>

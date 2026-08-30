@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NiaSave · Rabbit ops</title>
+<link rel="stylesheet" href="/staff.css">
+</head>
+<body>
+  <div class="narrow">
+    <div class="narrow-card">
+      <div class="kicker">Rabbit · staff</div>
+      <h1>Open on a laptop</h1>
+      <p>This board is a wide staff desk. It is not the member app.</p>
+    </div>
+  </div>
+
+  <div class="tower">
+    <header class="top">
+      <div>
+        <div class="brand">Rabbit · NiaSave ops</div>
+        <h1>Control tower</h1>
+      </div>
+      <div class="meta" id="topmeta">Beat …<br>Staff sample · no live UPI</div>
+    </header>
+    <div class="wrap">
+      <p class="sub">Wide laptop desk · studio cart after 17:00 · predict from ledger · not a member tab</p>
+      <div class="kpis" id="kpis"></div>
+      <div class="desks">
+        <a class="desk" href="/hub.html"><strong>Hub load</strong><span>Today opening and tomorrow load</span></a>
+        <a class="desk" href="/pickup.html"><strong>Tonight pickup</strong><span>Pack · code collect · miss</span></a>
+        <a class="desk" href="/recon.html"><strong>Night recon</strong><span>Ledger identity plus UPI statement</span></a>
+        <a class="desk" href="/predict.html"><strong>Predict</strong><span>Order recs and miss risk from ledger</span></a>
+        <a class="desk" href="/source.html"><strong>Source</strong><span>Procure and vendor sheets</span></a>
+        <a class="desk" href="/next.html"><strong>Tomorrow</strong><span>Next-day load from leftover</span></a>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <h3>Beat funnel</h3>
+          <div class="funnel" id="funnel"></div>
+          <div class="funnel-leg"><span>Reserved</span><span>Packed</span><span>Loaded</span><span>At stop</span><span>Collected</span><span>Missed</span></div>
+          <p class="sub" id="funnel-sub">…</p>
+        </div>
+        <div class="card">
+          <h3>Connectors</h3>
+          <div class="pills" id="connectors"></div>
+          <p class="sub" id="conn-sub">Staff inbound · Dummy first · no WhatsApp product</p>
+        </div>
+      </div>
+      <div class="grid" style="margin-top:14px">
+        <div class="card">
+          <h3>Predict from ledger</h3>
+          <div id="predict-wrap" class="empty">Loading…</div>
+        </div>
+        <div class="card">
+          <h3>UPI statement match</h3>
+          <p class="sub">Settlement trigger is collected scan. Not UPI capture. Not pack.</p>
+          <div id="set-wrap" class="empty">Loading…</div>
+        </div>
+      </div>
+    </div>
+  </div>
+<script>
+function num(n){ return n==null?0:n; }
+function bar(n, max){
+  var h = max? Math.max(8, Math.round(n/max*80)) : 8;
+  return h;
+}
+function load(){
+  Promise.all([
+    fetch('/api/tower').then(function(r){ return r.json(); }),
+    fetch('/api/connectors').then(function(r){ return r.json(); }),
+    fetch('/api/settlements?beat=today').then(function(r){ return r.json(); })
+  ]).then(function(all){
+    var t=all[0], c=all[1], s=all[2];
+    var k=t.kpis||{};
+    document.getElementById('topmeta').innerHTML='Beat '+(t.beatDate||'-')+' · owner '+(t.owner||'hub')+' · slot '+(t.slot||'17:00')+'<br>Staff sample · no live UPI · DUMMY_DATA on';
+    document.getElementById('kpis').innerHTML=[
+      ['Opening',k.opening],
+      ['Reserved',k.reserved],
+      ['Collected',k.collected],
+      ['Missed',k.missed],
+      ['Leftover',k.leftover],
+      ['Miss rate',(k.miss_rate!=null?k.miss_rate+'%':'0%')]
+    ].map(function(row){
+      return '<div class="kpi"><div class="l">'+row[0]+'</div><div class="n">'+row[1]+'</div></div>';
+    }).join('');
+    var f=t.funnel||{};
+    var vals=[num(f.reserved),num(f.packed),num(f.loaded),num(f.at_stop),num(f.collected),num(f.missed)];
+    var max=Math.max.apply(null,vals.concat([1]));
+    var cls=['','','','','ok','miss'];
+    document.getElementById('funnel').innerHTML=vals.map(function(v,i){
+      return '<b class="'+cls[i]+'" style="height:'+bar(v,max)+'px" title="'+v+'"></b>';
+    }).join('');
+    document.getElementById('funnel-sub').textContent=vals.reduce(function(a,b){return a+b;},0)+' bags on this week beat · identity opening minus collected minus leftover = 0';
+    var bits=(c.sources||[]).map(function(src){
+      var cls=src.status==='ok'?'ok':(src.status==='dummy'?'warn':'');
+      return '<span class="pill '+cls+'">'+src.id+' · '+src.status+' · '+src.rows+'</span>';
+    });
+    document.getElementById('connectors').innerHTML=bits.join('');
+    var load=(t.predict&&t.predict.load)||[];
+    var rec=load.filter(function(r){ return r.tomorrow_qty>0; });
+    document.getElementById('predict-wrap').innerHTML=rec.length
+      ? '<table><thead><tr><th>SKU</th><th>Qty</th><th class="left">Why</th></tr></thead><tbody>'
+        +rec.map(function(r){ return '<tr><td>'+r.sku+'</td><td>'+r.tomorrow_qty+'</td><td class="left"><span class="why">'+r.why+'</span></td></tr>'; }).join('')
+        +'</tbody></table>'
+      : '<div class="empty">Nothing to load from ledger.</div>';
+    var st=s.statement||[];
+    var sets=s.settlements||[];
+    document.getElementById('set-wrap').innerHTML=
+      '<p class="sub">Settlements '+sets.length+' · matched '+(s.matched||0)+' · statement open '+(s.unmatchedStatement||0)+'</p>'
+      + '<table><thead><tr><th>UTR</th><th>Rs</th><th>Match</th></tr></thead><tbody>'
+      + st.map(function(line){
+          return '<tr><td>'+line.utr+'</td><td>'+line.amount+'</td><td>'+(line.matched?'matched':'unmatched')+'</td></tr>';
+        }).join('')
+      + '</tbody></table>';
+  }).catch(function(){
+    document.getElementById('kpis').innerHTML='<div class="empty">Could not load Rabbit tower.</div>';
+  });
+}
+load();
+</script>
+</body>
+</html>

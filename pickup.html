@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NiaSave · Tonight cart</title>
+<link rel="stylesheet" href="/staff.css">
+</head>
+<body>
+  <div class="narrow">
+    <div class="narrow-card">
+      <div class="kicker">Rabbit · staff</div>
+      <h1>Open on a laptop</h1>
+      <p>Pickup is a wide staff desk. It is not the member app.</p>
+    </div>
+  </div>
+  <div class="tower">
+    <header class="top">
+      <div>
+        <div class="brand">Rabbit · pickup</div>
+        <h1>Tonight studio cart</h1>
+      </div>
+      <div class="meta"><a href="/ops.html">Ops</a> · <a href="/recon.html">Recon</a></div>
+    </header>
+    <div class="wrap">
+      <p class="sub">Collect by code · pickup after 5 (17:00) · hub owner · studio cart only</p>
+      <p class="sub" id="beat">Beat …</p>
+      <button type="button" onclick="load()">Refresh</button>
+      <h2>Packed (before cart leaves)</h2>
+      <div id="packed" class="empty">Loading…</div>
+      <h2>On the beat</h2>
+      <div id="list" class="empty">Loading…</div>
+    </div>
+  </div>
+<script>
+function lineText(lines){
+  return (lines||[]).map(function(l){ return (l.id||'?')+' × '+(l.qty||1); }).join(' · ');
+}
+function scan(orderId, type, pickupCode){
+  var body={ type:type, orderId:orderId, actor:'pickup' };
+  if(pickupCode) body.pickupCode=String(pickupCode).trim().toUpperCase();
+  return fetch('/api/scan', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(body)
+  }).then(function(r){ return r.json().then(function(j){ return { ok:r.ok, status:r.status, j:j }; }); })
+  .then(function(res){
+    if(!res.ok){
+      alert((res.j && res.j.error) || ('scan '+res.status));
+      return;
+    }
+    load();
+  }).catch(function(){ alert('Could not scan'); });
+}
+function collectWithCode(orderId, inputId){
+  var el=document.getElementById(inputId);
+  var code=el ? el.value : '';
+  if(!code){ alert('Enter pickup code'); return; }
+  scan(orderId, 'collected', code);
+}
+function rowHtml(o){
+  var id=JSON.stringify(o.id||'');
+  var code=o.pickupCode||'-';
+  var phone=o.phone||o.memberId||o.member||'-';
+  var st=o.status||'reserved';
+  var inputId='code_'+String(o.id||'').replace(/[^a-zA-Z0-9]/g,'_').slice(0,40);
+  var actions='';
+  if(st==='reserved' || st==='paid'){
+    actions='<button type="button" onclick=\'scan('+id+',"packed")\'>Pack</button>';
+  } else if(st==='packed'){
+    actions='<button type="button" onclick=\'scan('+id+',"loaded")\'>Load cart</button>';
+  } else if(st==='loaded'){
+    actions='<button type="button" onclick=\'scan('+id+',"arrived")\'>Arrived</button>';
+  } else if(st==='at_stop'){
+    actions='<input class="code-in" id="'+inputId+'" placeholder="CODE" maxlength="8" autocomplete="off">'
+      + '<button type="button" onclick=\'collectWithCode('+id+','+JSON.stringify(inputId)+')\'>Collect</button>'
+      + '<button type="button" class="ghost" onclick=\'scan('+id+',"missed")\'>Missed</button>';
+  }
+  return '<div class="row"><div class="who">'+phone+'<span class="pill'+(st==='packed'?' warn':'')+'">'+st+'</span></div>'
+    + '<div class="code">'+code+'</div>'
+    + '<div class="meta">'+(o.id||'')+' · slot '+(o.slot||'17:00')+' · beat '+(o.beatDate||'-')+' · kept Rs '+(o.kept||0)+'</div>'
+    + '<div class="skus">'+lineText(o.lines)+'</div>'
+    + (actions ? '<div class="actions">'+actions+'</div>' : '')
+    + '</div>';
+}
+function load(){
+  var packedEl=document.getElementById('packed');
+  var listEl=document.getElementById('list');
+  packedEl.textContent='Loading…';
+  listEl.textContent='Loading…';
+  fetch('/api/orders?pickup=today').then(function(r){ return r.json(); }).then(function(d){
+    var beatLine='Beat '+(d.beatDate||'-');
+    if(d.nextBeat) beatLine+=' · after noon → next beat';
+    beatLine+=' · owner hub';
+    document.getElementById('beat').textContent=beatLine;
+    var orders=d.orders||[];
+    var packed=orders.filter(function(o){ return (o.status||'')==='packed'; });
+    var rest=orders.filter(function(o){ return (o.status||'')!=='packed'; });
+    packedEl.innerHTML=packed.length
+      ? packed.map(function(o){ return rowHtml(o); }).join('')
+      : '<div class="empty">Nothing packed yet. Pack reserved bags before the cart leaves.</div>';
+    listEl.innerHTML=rest.length
+      ? rest.map(function(o){ return rowHtml(o); }).join('')
+      : '<div class="empty">No open pre-orders on the beat.</div>';
+  }).catch(function(){
+    packedEl.innerHTML='<div class="empty">Could not load orders.</div>';
+    listEl.innerHTML='<div class="empty">Could not load orders.</div>';
+  });
+}
+load();
+</script>
+</body>
+</html>

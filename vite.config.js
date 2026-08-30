@@ -7,7 +7,8 @@ export default defineConfig({
     host: "127.0.0.1",
     proxy: {
       "/health": "http://127.0.0.1:8787",
-      "/v1": "http://127.0.0.1:8787"
+      "/v1": "http://127.0.0.1:8787",
+      "/api": "http://127.0.0.1:8787"
     }
   }
 });

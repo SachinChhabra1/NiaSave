@@ -7,6 +7,7 @@
 import http from "node:http";
 import { randomUUID, createHash } from "node:crypto";
 import { pathToFileURL } from "node:url";
+import { handleStaff, isStaffPath, staffPath } from "../rabbit/engine.mjs";
 
 const PORT = Number(process.env.PORT || 8787);
 const DEMO = process.env.DEMO !== "0";
@@ -201,6 +202,13 @@ export async function handler(req, res) {
   const path = rewrittenPath ? `/${rewrittenPath.replace(/^\/+/, "")}` : url.pathname;
   const key = req.headers["idempotency-key"];
   try {
+    const rabbitPath = staffPath(path, rewrittenPath);
+    if (isStaffPath(rabbitPath)) {
+      const body = (req.method === "POST" || req.method === "PUT") ? await readBody(req) : {};
+      const out = await handleStaff(req, res, rabbitPath, body, url);
+      if (out) return json(res, out.status, out.body);
+    }
+
     if (req.method === "GET" && (path === "/health" || path === "/v1/health")) {
       return json(res, 200, { ok: true, product: "niasave", demo: DEMO, time: now(), hubStage: state.hubDay.stage });
     }

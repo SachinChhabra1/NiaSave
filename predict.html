@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NiaSave · Predict</title>
+<link rel="stylesheet" href="/staff.css">
+<style>
+  th,td{text-align:left}
+  td.num,th.num{text-align:right}
+</style>
+</head>
+<body>
+  <div class="narrow">
+    <div class="narrow-card">
+      <div class="kicker">Rabbit · staff</div>
+      <h1>Open on a laptop</h1>
+      <p>Predict is a wide staff desk. It is not the member app.</p>
+    </div>
+  </div>
+  <div class="tower">
+    <header class="top">
+      <div>
+        <div class="brand">Rabbit · predict</div>
+        <h1>From the ledger</h1>
+      </div>
+      <div class="meta"><a href="/ops.html">Ops</a> · <a href="/next.html">Tomorrow load</a></div>
+    </header>
+    <div class="wrap">
+      <p class="sub">Staff only · numbers decide · slot 17:00 · owner hub · not discretion</p>
+      <p class="sub" id="beat">…</p>
+      <p class="sub" id="from">…</p>
+      <button type="button" onclick="load()">Refresh</button>
+      <div id="root">Loading…</div>
+    </div>
+  </div>
+<script>
+function fromLabel(d){
+  var p=d.sheetFrom&&d.sheetFrom.procure?d.sheetFrom.procure:'Dummy';
+  var m=d.sheetFrom&&d.sheetFrom.members?d.sheetFrom.members:'Dummy';
+  if(p.indexOf('sheet')>=0||m.indexOf('sheet')>=0) return 'From sheet';
+  if(p.indexOf('down')>=0||m.indexOf('down')>=0) return 'Sheet down · Dummy';
+  return 'Dummy';
+}
+function table(cols, rows, empty){
+  if(!rows.length) return '<div class="empty">'+empty+'</div>';
+  var head=cols.map(function(c){ return '<th'+(c.num?' class="num"':'')+'>'+c.label+'</th>'; }).join('');
+  var body=rows.map(function(r){
+    return '<tr>'+cols.map(function(c){
+      var v=r[c.key];
+      return '<td'+(c.num?' class="num"':'')+'>'+(c.raw?v:(v==null?'-':String(v)))+'</td>';
+    }).join('')+'</tr>';
+  }).join('');
+  return '<table><thead><tr>'+head+'</tr></thead><tbody>'+body+'</tbody></table>';
+}
+function section(title, html){ return '<h2>'+title+'</h2>'+html; }
+function load(){
+  document.getElementById('root').textContent='Loading…';
+  fetch('/api/predict').then(function(r){ return r.json(); }).then(function(d){
+    document.getElementById('beat').textContent='Beat '+(d.beatDate||'-')+' · owner '+(d.owner||'hub')+' · slot '+(d.slot||'17:00')+' · miss_rate '+(d.miss_rate!=null?d.miss_rate+'%':'-');
+    document.getElementById('from').textContent=fromLabel(d);
+    var html='';
+    html+=section('Tomorrow load', table(
+      [{label:'SKU',key:'sku'},{label:'Collected',key:'collected',num:true},{label:'Reserved',key:'reserved',num:true},{label:'miss_rate',key:'miss_rate',num:true},{label:'Qty',key:'tomorrow_qty',num:true},{label:'Why',key:'why',raw:true}],
+      (d.load||[]).map(function(r){ return { sku:r.sku, collected:r.collected, reserved:r.reserved, miss_rate:r.miss_rate, tomorrow_qty:r.tomorrow_qty, why:'<span class="why">'+r.why+'</span>' }; }),
+      'Nothing to load.'
+    ));
+    html+=section('Members this beat', table(
+      [{label:'Member',key:'memberId'},{label:'Nest',key:'nest'},{label:'Hub',key:'hub'},{label:'Bag',key:'hasBag'},{label:'Mira',key:'hasMira'},{label:'Send',key:'friday_send'}],
+      (d.members||[]).map(function(r){ return { memberId:r.memberId, nest:r.nest||'-', hub:r.hub||'-', hasBag:r.hasBag?'yes':'no', hasMira:r.hasMira?'yes':'no', friday_send:r.friday_send||'-' }; }),
+      'No members.'
+    ));
+    html+=section('Chase', table(
+      [{label:'Code',key:'code'},{label:'Status',key:'status'},{label:'Why',key:'why',raw:true}],
+      (d.chase||[]).map(function(r){ return { code:'<code>'+(r.pickupCode||'-')+'</code>', status:r.status, why:'<span class="why">'+r.why+'</span>' }; }),
+      'No chase rows.'
+    ));
+    html+=section('Quiet members', table(
+      [{label:'Member',key:'memberId'},{label:'Why',key:'why',raw:true}],
+      (d.quietMembers||[]).map(function(r){ return { memberId:r.memberId, why:'<span class="why">'+r.why+'</span>' }; }),
+      'No quiet members.'
+    ));
+    html+=section('Friday send', table(
+      [{label:'Member',key:'memberId'},{label:'Why',key:'why',raw:true}],
+      (d.sendPending||[]).map(function(r){ return { memberId:r.memberId, why:'<span class="why">'+r.why+'</span>' }; }),
+      'No send pending.'
+    ));
+    html+=section('Source rec', table(
+      [{label:'SKU',key:'sku'},{label:'Source',key:'source'},{label:'Left',key:'left',num:true},{label:'Why',key:'why',raw:true}],
+      (d.source||[]).map(function(r){ return { sku:r.sku, source:r.source, left:r.leftover, why:'<span class="why">'+r.why+'</span>' }; }),
+      'No source picks.'
+    ));
+    html+=section('Settlements due', table(
+      [{label:'Code',key:'code'},{label:'Amount',key:'amount',num:true},{label:'Why',key:'why',raw:true}],
+      (d.settlementsDue||[]).map(function(r){ return { code:'<code>'+(r.pickupCode||'-')+'</code>', amount:'Rs '+(r.amount||0), why:'<span class="why">'+r.why+'</span>' }; }),
+      'No settlements due.'
+    ));
+    document.getElementById('root').innerHTML=html;
+  }).catch(function(){ document.getElementById('root').textContent='Could not load predict.'; });
+}
+load();
+</script>
+</body>
+</html>

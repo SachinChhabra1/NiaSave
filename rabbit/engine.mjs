@@ -339,7 +339,10 @@ function createState() {
     uploads: { upi_statement: null, procure: null, vendors: null },
     memberFlags: {},
     memberAnswers: [],
-    memberSession: { memberId: "ravi", phone: "ravi" }
+    memberSession: { memberId: "ravi", phone: "ravi" },
+    pos: [],
+    invoices: [],
+    dispatches: []
   };
 }
 
@@ -1370,6 +1373,13 @@ export function towerPayload() {
       reserved: led.reserved,
       rows: led.rows,
       balanced: led.balanced
+    },
+    ops: {
+      poOpen: (state.pos || []).filter(p => p.status === "open").length,
+      poSent: (state.pos || []).filter(p => p.status === "sent").length,
+      poReceived: (state.pos || []).filter(p => p.status === "received").length,
+      invoices: (state.invoices || []).length,
+      dispatchNotes: (state.dispatches || []).length
     }
   };
 }
@@ -1382,6 +1392,276 @@ function queryOf(url) {
   const q = {};
   url.searchParams.forEach((v, k) => { if (k !== "path") q[k] = v; });
   return q;
+}
+
+const GSTIN_PHONE = "this phone";
+
+function procureBook() {
+  const u = state.uploads && state.uploads.procure && state.uploads.procure.rows;
+  if (u && u.length) {
+    return u.map(r => ({
+      sku: r.sku || "",
+      vendor: r.vendor || "",
+      niaCost: Number(r.buy_inr) || 0,
+      name: r.name || r.sku || ""
+    }));
+  }
+  return SKUS.map(s => ({ sku: s.id, vendor: s.vendor, niaCost: s.nia, name: s.id }));
+}
+
+function draftPoLines() {
+  const next = nextPayload();
+  const book = Object.fromEntries(procureBook().map(r => [r.sku, r]));
+  const lines = [];
+  for (const row of next.load) {
+    const qty = Number(row.tomorrow_qty) || 0;
+    if (!qty) continue;
+    const p = book[row.sku] || { sku: row.sku, vendor: skuOf(row.sku).vendor, niaCost: skuOf(row.sku).nia };
+    lines.push({
+      sku: row.sku,
+      vendor: p.vendor || "",
+      qty,
+      niaCost: Number(p.niaCost) || 0,
+      beatDate: next.nextBeatDate
+    });
+  }
+  return lines;
+}
+
+function poCounts() {
+  const list = state.pos || [];
+  return {
+    open: list.filter(p => p.status === "open").length,
+    sent: list.filter(p => p.status === "sent").length,
+    received: list.filter(p => p.status === "received").length,
+    cancelled: list.filter(p => p.status === "cancelled").length
+  };
+}
+
+export function poPayload() {
+  return {
+    skip: DUMMY_DATA,
+    theatre: THEATRE.name,
+    beatDate: state.beat.beatDate,
+    nextBeatDate: NEXT_BEAT,
+    slot: SLOT,
+    draft: draftPoLines(),
+    pos: state.pos || [],
+    counts: poCounts()
+  };
+}
+
+export function mutatePo(body = {}) {
+  const action = body.action || "create";
+  if (action === "create") {
+    const lines = Array.isArray(body.lines) && body.lines.length ? body.lines : draftPoLines();
+    if (!lines.length) return { error: "no_lines", status: 400 };
+    const poId = "PO-" + String((state.pos || []).length + 1).padStart(4, "0");
+    const po = {
+      poId,
+      status: "open",
+      vendor: body.vendor || lines[0].vendor || "",
+      beatDate: body.beatDate || lines[0].beatDate || NEXT_BEAT,
+      lines,
+      amount: lines.reduce((n, l) => n + (Number(l.niaCost) || 0) * (Number(l.qty) || 0), 0),
+      createdAt: now(),
+      sentAt: null,
+      receivedAt: null
+    };
+    state.pos.push(po);
+    return { ok: true, poId, po, pos: state.pos, counts: poCounts() };
+  }
+  const po = (state.pos || []).find(p => p.poId === body.poId);
+  if (!po) return { error: "po_not_found", status: 404 };
+  if (action === "send") {
+    if (po.status !== "open") return { error: "not_open", status: 409, have: po.status };
+    po.status = "sent";
+    po.sentAt = now();
+    return { ok: true, poId: po.poId, po, counts: poCounts() };
+  }
+  if (action === "receive") {
+    if (po.status === "received") return { error: "already_received", status: 409 };
+    if (po.status === "cancelled") return { error: "cancelled", status: 409 };
+    if (po.status !== "sent" && po.status !== "open") return { error: "not_receivable", status: 409, have: po.status };
+    po.status = "received";
+    po.receivedAt = now();
+    for (const line of po.lines) {
+      const sku = line.sku;
+      const qty = Number(line.qty) || 0;
+      if (!sku || !qty) continue;
+      state.beat.opening[sku] = (state.beat.opening[sku] || 0) + qty;
+    }
+    return { ok: true, poId: po.poId, po, inbound: true, movements: movementsOf(), counts: poCounts() };
+  }
+  if (action === "cancel") {
+    if (po.status === "received") return { error: "already_received", status: 409 };
+    po.status = "cancelled";
+    return { ok: true, poId: po.poId, po, counts: poCounts() };
+  }
+  return { error: "bad_action", status: 400 };
+}
+
+export function dispatchPayload(query = {}) {
+  const stop = query.stop;
+  const base = {
+    beatDate: state.beat.beatDate,
+    theatre: THEATRE.name,
+    slot: SLOT,
+    stopCount: liveStopCount(),
+    notes: state.dispatches || [],
+    stops: stopProgress()
+  };
+  if (!stop) {
+    return { ...base, orders: [], unpacked: 0, packed: 0, loaded: 0, bags: 0 };
+  }
+  const studio = studioById.get(stop);
+  const orders = ordersAt(stop).filter(o => !["collected", "missed", "returned"].includes(o.status));
+  const unpacked = orders.filter(o => o.status === "reserved" || o.status === "paid");
+  const packed = orders.filter(o => o.status === "packed");
+  const loaded = orders.filter(o => o.status === "loaded" || o.status === "at_stop");
+  return {
+    ...base,
+    stop,
+    stopName: studio?.name || stop,
+    orders,
+    unpacked: unpacked.length,
+    packed: packed.length,
+    loaded: loaded.length,
+    bags: orders.length
+  };
+}
+
+export function mutateDispatch(body = {}) {
+  const stop = body.stopId || body.stop;
+  if (!stop) return { error: "stop_required", status: 400 };
+  const action = body.action;
+  const live = () => ordersAt(stop).filter(o => !["collected", "missed", "returned"].includes(o.status));
+  if (action === "pack" || action === "pack_remaining") {
+    let packed = 0;
+    for (const o of live()) {
+      if (o.status === "reserved" || o.status === "paid") {
+        const r = scanOrder({ type: "packed", orderId: o.id, actor: "dispatch" });
+        if (r.ok) packed += 1;
+      }
+    }
+    return { ok: true, stop, packed, desk: dispatchPayload({ stop }) };
+  }
+  if (action === "load") {
+    const unpacked = live().filter(o => o.status === "reserved" || o.status === "paid");
+    if (unpacked.length) return { error: "unpacked_remain", status: 409, unpacked: unpacked.length };
+    let loaded = 0;
+    for (const o of live()) {
+      if (o.status === "packed") {
+        const r = scanOrder({ type: "loaded", orderId: o.id, actor: "dispatch" });
+        if (r.ok) loaded += 1;
+      }
+    }
+    return { ok: true, stop, loaded, desk: dispatchPayload({ stop }) };
+  }
+  if (action === "dispatch") {
+    const unpacked = live().filter(o => o.status === "reserved" || o.status === "paid");
+    if (unpacked.length) return { error: "unpacked_remain", status: 409, unpacked: unpacked.length };
+    for (const o of live()) {
+      if (o.status === "packed") scanOrder({ type: "loaded", orderId: o.id, actor: "dispatch" });
+    }
+    let arrived = 0;
+    for (const o of live()) {
+      if (o.status === "loaded") {
+        const r = scanOrder({ type: "arrived", orderId: o.id, actor: "dispatch" });
+        if (r.ok) arrived += 1;
+      }
+    }
+    const after = live();
+    const studio = (state.studios || STUDIOS).find(s => s.id === stop);
+    const note = {
+      noteId: "DN-" + String((state.dispatches || []).length + 1).padStart(4, "0"),
+      beatDate: state.beat.beatDate,
+      stopId: stop,
+      stopName: studio?.name || stop,
+      slot: SLOT,
+      bags: after.length,
+      packed: after.filter(o => ["packed", "loaded", "at_stop"].includes(o.status)).length,
+      loaded: after.filter(o => o.status === "loaded" || o.status === "at_stop").length,
+      arrived,
+      at: now()
+    };
+    state.dispatches.push(note);
+    return { ok: true, noteId: note.noteId, note, desk: dispatchPayload({ stop }) };
+  }
+  return { error: "bad_action", status: 400 };
+}
+
+export function invoicePayload() {
+  const collected = state.orders.filter(o => o.status === "collected");
+  const invoices = state.invoices || [];
+  return {
+    skip: DUMMY_DATA,
+    theatre: THEATRE.name,
+    beatDate: state.beat.beatDate,
+    liveUpi: false,
+    trigger: "collected",
+    gstin: GSTIN_PHONE,
+    invoices,
+    collectedReady: collected.filter(o => !invoices.some(i => i.kind === "member" && i.pickupCode === o.pickupCode)).slice(0, 40).map(o => ({
+      orderId: o.id,
+      pickupCode: o.pickupCode,
+      memberId: o.memberId,
+      amount: o.amount,
+      lines: o.lines,
+      stopId: o.stopId
+    })),
+    posReady: (state.pos || []).filter(p => p.status === "received" && !invoices.some(i => i.kind === "vendor" && i.poId === p.poId))
+  };
+}
+
+export function mutateInvoice(body = {}) {
+  const action = body.action;
+  if (action === "receipt") {
+    const order = (body.orderId && state.ordersById.get(body.orderId))
+      || (body.pickupCode && state.ordersByCode.get(String(body.pickupCode).trim().toUpperCase()));
+    if (!order) return { error: "order_not_found", status: 404 };
+    if (order.status !== "collected") return { error: "not_collected", status: 409, have: order.status };
+    if ((state.invoices || []).some(i => i.kind === "member" && i.pickupCode === order.pickupCode)) {
+      return { error: "already_invoiced", status: 409 };
+    }
+    const inv = {
+      invoiceId: "INV-M-" + order.pickupCode,
+      kind: "member",
+      pickupCode: order.pickupCode,
+      memberId: order.memberId,
+      lines: order.lines,
+      amount: order.amount,
+      trigger: "collected",
+      gstin: body.gstin || GSTIN_PHONE,
+      liveUpi: false,
+      beatDate: order.beatDate,
+      createdAt: now()
+    };
+    state.invoices.push(inv);
+    return { ok: true, invoiceId: inv.invoiceId, invoice: inv };
+  }
+  if (action === "vendor_bill") {
+    const po = (state.pos || []).find(p => p.poId === body.poId);
+    if (!po) return { error: "po_not_found", status: 404 };
+    if ((state.invoices || []).some(i => i.kind === "vendor" && i.poId === po.poId)) {
+      return { error: "already_billed", status: 409 };
+    }
+    const inv = {
+      invoiceId: "INV-V-" + po.poId,
+      kind: "vendor",
+      poId: po.poId,
+      vendor: po.vendor,
+      amount: po.amount,
+      lines: po.lines,
+      gstin: body.gstin || GSTIN_PHONE,
+      liveUpi: false,
+      beatDate: po.beatDate,
+      createdAt: now()
+    };
+    state.invoices.push(inv);
+    return { ok: true, invoiceId: inv.invoiceId, invoice: inv };
+  }
+  return { error: "bad_action", status: 400 };
 }
 
 export function staffPath(pathname, rewrittenPath) {
@@ -1397,7 +1677,7 @@ export function isStaffPath(p) {
     "/connectors", "/connectors/upload", "/predict", "/ledger", "/stock", "/inventory", "/ageing",
     "/orders", "/order", "/member", "/member/answer", "/auth/me", "/auth/otp", "/auth/verify",
     "/beat", "/beat/open", "/beat/close", "/scan", "/recon", "/next", "/source",
-    "/cash", "/settlements", "/tower", "/stops"
+    "/cash", "/settlements", "/tower", "/stops", "/po", "/dispatch", "/invoice"
   ].includes(p);
 }
 
@@ -1436,6 +1716,12 @@ export async function handleStaff(req, res, path, body, url) {
     if (q.unmatched == null && q.view == null && q.limit == null) page.unmatched = "1";
     return { status: 200, body: settlementsPayload(page) };
   }
+  if (method === "GET" && path === "/po") return { status: 200, body: poPayload() };
+  if (method === "POST" && path === "/po") return done(mutatePo(body || {}));
+  if (method === "GET" && path === "/dispatch") return { status: 200, body: dispatchPayload(q) };
+  if (method === "POST" && path === "/dispatch") return done(mutateDispatch(body || {}));
+  if (method === "GET" && path === "/invoice") return { status: 200, body: invoicePayload() };
+  if (method === "POST" && path === "/invoice") return done(mutateInvoice(body || {}));
   if (method === "GET" && path === "/tower") return { status: 200, body: towerPayload() };
   if ((path === "/beat/open" || path === "/beat/close" || path === "/scan") && method === "GET") {
     return { status: 405, body: { error: "Use POST" } };

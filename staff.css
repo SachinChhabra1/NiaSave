@@ -137,15 +137,17 @@ input,select{
 input.code-in{border-radius:10px;padding:10px 12px;font-size:16px;letter-spacing:.1em;text-transform:uppercase;width:140px;font-family:var(--mono)}
 input[type=text]{min-width:120px}
 input[type=file]{
-  display:block;
-  width:100%;
-  max-width:420px;
-  padding:8px 0;
-  color:var(--fg);
-  background:transparent;
+  position:absolute;
+  width:1px;
+  height:1px;
+  padding:0;
+  margin:-1px;
+  overflow:hidden;
+  clip:rect(0,0,0,0);
   border:0;
-  font-size:13px;
+  opacity:0;
 }
+.file-btn{position:relative}
 button{
   border:0;
   background:var(--accent);

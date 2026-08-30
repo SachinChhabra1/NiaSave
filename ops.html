@@ -77,7 +77,9 @@ function face(){
     jobBtn('close','Night','Beat close','Night close never plugs. Wrong leftover is rejected.',
       'balanced '+(k.balanced?'yes':'no')+' · miss '+num(k.missed), open==='close'),
     jobBtn('next','Next day','Tomorrow load','Hub load from collected plus what is still holding.',
-      load.length+' SKUs to load', open==='next')
+      load.length+' SKUs to load', open==='next'),
+    jobBtn('hub','Hub','Hub load','Sign inbound. Movements only. Add a studio as a row, not a rewrite.',
+      num(f.loaded)+' loaded · '+num(t.stopCount||40)+' stops', open==='hub')
   ].join('');
   document.querySelectorAll('button.job').forEach(function(el){
     el.addEventListener('click', function(){ pick(el.getAttribute('data-job')); });
@@ -126,6 +128,10 @@ function pick(id){
     html='<h2>Tomorrow load</h2><p class="do">Hub load from the ledger. Collected plus what is still holding, cut by miss rate. Not discretion.</p>'
       +checks([['SKUs to load',rec.length],['Units',qty],['Miss rate',(k.miss_rate!=null?k.miss_rate+'%':'0%')]])
       +'<a class="desk-link" href="/hub.html">Open hub load</a>';
+  } else if(id==='hub'){
+    html='<h2>Hub load</h2><p class="do">Inventory is movements. Sign opening posts inbound. A new studio is a row. Do not rewrite the beat.</p>'
+      +checks([['Loaded',num(f.loaded)],['Stops',num(t.stopCount||40)],['Members',num(t.memberCount||3000)]])
+      +'<a class="desk-link" href="/hub.html">Open hub desk</a>';
   }
   box.className='open show';
   box.innerHTML=html;

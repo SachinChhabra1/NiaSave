@@ -46,6 +46,15 @@ ok("orders default slim", listed.orders.length === 0 && listed.orderCount === 20
 const one = ordersPayload({ pickup: "today", stop: "S01" });
 ok("orders one stop", one.orders.length === BEAT_BAGS_PER_STOP && one.orders.every(o => o.stopId === "S01"));
 ok("S1HOLD on S01", one.orders.some(o => o.id === "ord-s1hold" && o.pickupCode === "S1HOLD"));
+ok("public pay is skip or captured", one.orders.every(o => o.payStatus === "skip" || o.payStatus === "captured"));
+function noDummyWord(name, obj) {
+  ok(name + " has no Dummy word", !/dummy/i.test(JSON.stringify(obj)));
+}
+noDummyWord("tower", towerPayload());
+noDummyWord("orders one stop", one);
+noDummyWord("connectors", connectorsPayload());
+noDummyWord("settlements", set);
+noDummyWord("stops", stopsPayload());
 
 const tower = towerPayload();
 const towerBytes = jsonSize(tower);

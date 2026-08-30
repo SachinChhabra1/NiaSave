@@ -2,7 +2,7 @@
  * RABBIT — NiaSave staff control plane (studio-cart only).
  * Go-live load: 1 theatre, 40 studios, 3000 members.
  * One evening beat, ~5 bags per stop (~200 orders). Not 10k. Not one cart.
- * Dummy skip ON. No OTP send. No WhatsApp product. No live member UPI / Razorpay.
+ * Skip ON. No OTP send. No WhatsApp product. No live member UPI / Razorpay.
  * Do not flip DUMMY_DATA off. Member phone is owned elsewhere.
  */
 import {
@@ -117,7 +117,7 @@ function makeOrder({ memberId, sku, qty = 1, status, pickupCode, payStatus, stop
     kept: item.keep * qty,
     upiRef: "",
     owner: OWNER,
-    payStatus: payStatus || (status === "collected" ? "captured" : "dummy"),
+    payStatus: payStatus || (status === "collected" ? "captured" : "skip"),
     amount,
     due: amount,
     paid: status === "collected" ? amount : 0,
@@ -168,7 +168,7 @@ function seedOrders() {
         status,
         pickupCode,
         stopId: studio.id,
-        payStatus: status === "collected" || status === "missed" ? "captured" : "dummy"
+        payStatus: status === "collected" || status === "missed" ? "captured" : "skip"
       }));
     }
   }
@@ -224,7 +224,7 @@ function seedPayments(orders) {
     orderId: o.id,
     amount: o.amount,
     method: "upi",
-    status: o.payStatus === "captured" ? "captured" : "dummy",
+    status: o.payStatus === "captured" ? "captured" : "skip",
     live: false,
     razorpay: false,
     createdAt: WEEK_BEAT + "T10:00:00.000Z"

@@ -61,6 +61,22 @@ function load(){
     document.getElementById('beat').textContent=(d.theatre||'Rajputana Theatre')+' · '+(d.stopCount||40)+' stops · '+(d.memberCount||3000)+' members · Beat '+(d.beatDate||'-')+' · miss_rate '+(d.miss_rate!=null?d.miss_rate+'%':'-');
     document.getElementById('from').textContent=fromLabel(d);
     var html='';
+    var g=d.gates||{};
+    var keys=['participation','sellThrough','preorderFill','memberSaving','inventoryLoss','contribution'];
+    var labels={
+      participation:'Participation (proposed 30/100)',
+      sellThrough:'Sell-through (proposed 80/100)',
+      preorderFill:'Pre-order fill (proposed 95/100)',
+      memberSaving:'Member saving (proposed 3/100)',
+      inventoryLoss:'Inventory loss (proposed under 1/200)',
+      contribution:'Contribution (proposed 3/100)'
+    };
+    html+=section('Gates (proposed)', '<p class="sub">Report only. Numerator and denominator. Thresholds stay proposed. This desk does not invent a percent.</p><div id="gates">'
+      +keys.map(function(key){
+        var row=g[key]||{};
+        return '<div class="check"><div class="l">'+labels[key]+'</div><div class="n">'+(row.num!=null?row.num:'-')+' / '+(row.den!=null?row.den:'-')+'</div><div class="l">'+(row.label||'')+'</div></div>';
+      }).join('')
+      +'</div>');
     html+=section('Tomorrow load', table(
       [{label:'SKU',key:'sku'},{label:'Collected',key:'collected',num:true},{label:'Reserved',key:'reserved',num:true},{label:'miss_rate',key:'miss_rate',num:true},{label:'Qty',key:'tomorrow_qty',num:true},{label:'Why',key:'why',raw:true}],
       (d.load||[]).map(function(r){ return { sku:r.sku, collected:r.collected, reserved:r.reserved, miss_rate:r.miss_rate, tomorrow_qty:r.tomorrow_qty, why:'<span class="why">'+r.why+'</span>' }; }),

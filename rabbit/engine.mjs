@@ -825,6 +825,7 @@ export function predictPayload() {
     amount: s.amount,
     why: "Collected · statement not matched"
   }));
+  const funnel = funnelOf(state.orders);
   return {
     beatDate: led.beatDate,
     owner: OWNER,
@@ -832,7 +833,9 @@ export function predictPayload() {
     theatre: THEATRE.name,
     stopCount: liveStopCount(),
     memberCount: MEMBER_COUNT,
+    skip: DUMMY_DATA,
     miss_rate: pred.miss_rate,
+    gates: gatesOf(funnel, led),
     load: pred.load,
     chase: chaseAll.slice(0, CHASE_SAMPLE),
     chaseCount: chaseAll.length,
@@ -883,6 +886,10 @@ export function openBeat({ opening, beatDate, replace }) {
   const next = opening && typeof opening === "object" ? opening : state.beat.opening;
   const clean = emptySkuMap();
   for (const sku of Object.keys(clean)) clean[sku] = Number(next[sku]) || 0;
+  if (replace && date === state.beat.beatDate) {
+    state.beat.opening = clean;
+    return { ok: true, beatDate: date, opening: clean, replaced: true };
+  }
   if (date === NEXT_BEAT || replace) {
     state.nextOpening = clean;
     return { ok: true, beatDate: date, opening: clean, queued: date !== state.beat.beatDate };

@@ -32,6 +32,7 @@ ok("predict load from ledger", pred.load.some(r => r.tomorrow_qty > 0 && r.why.i
 ok("chase not empty", pred.chase.length > 0 && pred.chaseCount > pred.chase.length);
 ok("predict samples only", pred.members.length <= 12 && pred.quietMembers.length <= 12 && pred.sendPending.length <= 12);
 ok("predict knows 3000", pred.memberCount === 3000 && pred.stopCount === 40);
+ok("predict gates num/den", pred.gates && pred.gates.proposed === true && pred.gates.participation.den === 3000 && pred.gates.sellThrough.num != null);
 
 const set = settlementsPayload({ beat: "today" });
 ok("settlements after collected", set.count >= 3 && set.trigger === "collected" && set.liveUpi === false);
@@ -50,6 +51,7 @@ ok("public pay is skip or captured", one.orders.every(o => o.payStatus === "skip
 function noDummyWord(name, obj) {
   ok(name + " has no Dummy word", !/dummy/i.test(JSON.stringify(obj)));
 }
+noDummyWord("predict", pred);
 noDummyWord("tower", towerPayload());
 noDummyWord("orders one stop", one);
 noDummyWord("connectors", connectorsPayload());
@@ -69,6 +71,14 @@ ok("add studio without rewrite", added.ok && added.rewritten === false && added.
 ok("stops list grew", stopsPayload().stopCount === 41 && stopsPayload().stops.some(s => s.stopId === "S41"));
 resetDummy();
 ok("reset back to 40", stopsPayload().stopCount === 40);
+
+resetDummy();
+const zeroOpen = {};
+for (const sku of Object.keys(ledgerOf().opening)) zeroOpen[sku] = 0;
+openBeat({ opening: zeroOpen, beatDate: WEEK_BEAT, replace: true });
+const lastUnit = scanOrder({ type: "packed", orderId: "ord-s1hold", actor: "test" });
+ok("last unit one reservation wins", lastUnit.status === 409 && lastUnit.error === "last_unit_taken");
+resetDummy();
 
 const bad = closeBeat({ closing: { groundnut_oil: 999 }, beatDate: WEEK_BEAT });
 ok("close 409 on mismatch", bad.status === 409 && bad.mismatch && bad.mismatch.length);

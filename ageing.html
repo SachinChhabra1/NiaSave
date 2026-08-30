@@ -74,7 +74,7 @@
 function num(n){ return n==null?0:n; }
 function load(){
   fetch('/api/ageing').then(function(r){ return r.json(); }).then(function(d){
-    document.getElementById('beat').textContent=(d.theatre||'Rajputana Theatre')+' · Beat '+(d.beatDate||'-')+' · '+(d.stopCount||40)+' stops · proposed 90-day board';
+    document.getElementById('beat').textContent=(d.theatre||'Rajputana Theatre')+' · Beat '+(d.beatDate||'-')+' · '+(d.stopCount||40)+' studios · proposed 90-day board';
     document.getElementById('gates').innerHTML=[
       ['Sitting 7+ / SKUs', d.sitting],
       ['Leftover aged 7+ / leftover', d.leftoverAge],

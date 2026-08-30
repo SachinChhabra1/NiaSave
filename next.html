@@ -80,7 +80,7 @@ function load(){
     predicted=Object.assign({}, d.predicted||d.suggested||{});
     whyBySku={};
     (d.load||[]).forEach(function(row){ whyBySku[row.sku]=row.why||''; });
-    document.getElementById('beat').textContent=(d.theatre||'Rajputana Theatre')+' · '+(d.stopCount||40)+' stops · this beat '+(d.beatDate||'-')+' · next '+nextBeat+(d.already_open?' · already open':'');
+    document.getElementById('beat').textContent=(d.theatre||'Rajputana Theatre')+' · '+(d.stopCount||40)+' studios · this beat '+(d.beatDate||'-')+' · next '+nextBeat+(d.already_open?' · already open':'');
     var skus=Object.keys(predicted).sort();
     var rows=skus.map(function(sku){
       var left=(d.leftover&&d.leftover[sku]!=null)?d.leftover[sku]:'-';

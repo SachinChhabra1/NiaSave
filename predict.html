@@ -95,7 +95,7 @@ function section(title, html){ return '<h2>'+title+'</h2>'+html; }
 function load(){
   document.getElementById('root').textContent='Loading…';
   fetch('/api/predict').then(function(r){ return r.json(); }).then(function(d){
-    document.getElementById('beat').textContent=(d.theatre||'Rajputana Theatre')+' · '+(d.stopCount||40)+' stops · '+(d.memberCount||3000)+' members · Beat '+(d.beatDate||'-')+' · miss_rate '+(d.miss_rate!=null?d.miss_rate+'%':'-');
+    document.getElementById('beat').textContent=(d.theatre||'Rajputana Theatre')+' · '+(d.stopCount||40)+' studios · '+(d.memberCount||3000)+' members · Beat '+(d.beatDate||'-')+' · miss_rate '+(d.miss_rate!=null?d.miss_rate+'%':'-');
     document.getElementById('from').textContent=fromLabel(d);
     var html='';
     var g=d.gates||{};

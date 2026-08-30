@@ -81,7 +81,7 @@ function load(){
   ]).then(function(all){
     var stock=all[0]||{};
     var led=all[1]||{};
-    document.getElementById('beat').textContent=(stock.theatre||led.theatre||'Rajputana Theatre')+' · Beat '+(stock.beatDate||led.beatDate||'-')+' · '+(stock.stopCount||led.stopCount||40)+' stops · owner hub';
+    document.getElementById('beat').textContent=(stock.theatre||led.theatre||'Rajputana Theatre')+' · Beat '+(stock.beatDate||led.beatDate||'-')+' · '+(stock.stopCount||led.stopCount||40)+' studios · owner hub';
     var opening=led.opening||stock.opening||{};
     var leftover=led.leftover||stock.stock||{};
     var reserved=led.reserved||{};

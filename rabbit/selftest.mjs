@@ -284,6 +284,8 @@ ok("ops nia then Operation Polo", /class="nia-logo"[\s\S]{0,200}Operation Polo/.
 ok("ops has no polo-icon", !/polo-icon/.test(opsHtml));
 ok("ops job icons in source", /id="i-biker"/.test(opsHtml) && /id="i-po"/.test(opsHtml) && /id="i-dispatch"/.test(opsHtml));
 const rail = (opsHtml.split('class="rail"')[1] || "").split('class="pane"')[0];
+ok("ops load says 40 studios", /40 studios/.test(opsHtml) && /One theatre\. 40 studios\. 3000 members/.test(opsHtml));
+ok("ops load has no 40 stops", !/40 stops/.test(opsHtml) && !/\+' stops/.test(opsHtml) && !/\['Stops'/.test(opsHtml));
 ok("ops sequence 1 to 5", /1<\/b> Member ordered[\s\S]*→[\s\S]*2<\/b> Hub loaded[\s\S]*→[\s\S]*3<\/b> Member collected or returned[\s\S]*→[\s\S]*4<\/b> Hub settled with officer[\s\S]*→[\s\S]*5<\/b> Nia paid vendor/.test(opsHtml));
 ok("ops vendor pay is last", opsHtml.indexOf("5</b> Nia paid vendor") > opsHtml.indexOf("4</b> Hub settled with officer") && opsHtml.indexOf("5</b> Nia paid vendor") > opsHtml.indexOf("2</b> Hub loaded"));
 ok("ops no bare Settled or Paid labels", !/<b>\d<\/b> Settled/.test(opsHtml) && !/<b>\d<\/b> Paid/.test(opsHtml) && !/'Settled'/.test(opsHtml) && !/'Paid'/.test(opsHtml));

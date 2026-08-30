@@ -2,7 +2,8 @@ import {
   DUMMY_DATA, ledgerOf, predictPayload, settlementsPayload, closeBeat, openBeat,
   scanOrder, connectorsPayload, uploadConnector, sourcePayload, resetDummy, WEEK_BEAT, STUDIOS, MEMBERS,
   STUDIO_COUNT, MEMBER_COUNT, BEAT_BAGS_PER_STOP, ordersPayload, towerPayload,
-  jsonSize, TOWER_MAX_BYTES, THEATRE, addStudio, stopsPayload
+  jsonSize, TOWER_MAX_BYTES, THEATRE, addStudio, stopsPayload, stockPayload, SKUS,
+  placeMemberOrder, authOtp, authVerify, authMe, saveMemberFlags, ageingPayload, inventoryPayload
 } from "./engine.mjs";
 
 const fails = [];
@@ -144,6 +145,33 @@ noDummyWord("connectors after upload", connectorsPayload());
 noDummyWord("source after upload", sourcePayload());
 resetDummy();
 ok("reset clears uploads", connectorsPayload().sources.find(s => s.id === "upi_statement").status === "empty");
+
+const stock = stockPayload();
+ok("stock frozen keys", ["beatDate","theatre","stopCount","opening","stock","remaining","movements","holding"].every(k => stock[k] !== undefined));
+ok("sku ids frozen", SKUS.map(s => s.id).join(" ") === "groundnut_oil mustard_oil sunflower_oil coconut_oil detergent_pick nia_detergent bathsoap_pick nia_bathsoap toothpaste_pick essentials_pick");
+const age = ageingPayload();
+ok("ageing num/den", age.proposed === true && age.sitting.den === 10 && age.rows.length === 10 && age.rows.every(r => r.sitting.den === 90));
+const inv = inventoryPayload();
+ok("inventory wraps stock", inv.stock && inv.stock.beatDate === stock.beatDate && inv.ledger && inv.lots.length === 10);
+noDummyWord("stock", stock);
+noDummyWord("ageing", age);
+noDummyWord("inventory wrap", inv);
+
+const setBefore = settlementsPayload({ beat: "today" }).count;
+const ord = placeMemberOrder({
+  beatDate: WEEK_BEAT, cart: "studio", fulfillment: "hub_collect",
+  member: "Ravi", memberId: "ravi", phone: "ravi",
+  pickup: "after 5", slot: "17:00", upiRef: "",
+  lines: [{ id: "groundnut_oil", qty: 1, nia: 185, kirana: 255 }]
+});
+ok("order returns pickupCode", Boolean(ord.pickupCode) && Boolean(ord.id) && ord.payStatus === "skip");
+ok("order does not settle", ord.settled === false && ord.trigger === "collected" && settlementsPayload({ beat: "today" }).count === setBefore);
+ok("otp skip no send", authOtp().ok === true && authOtp().sent === false);
+ok("verify skip", authVerify({ phone: "9876541042" }).ok === true && authMe().memberId === "9876541042");
+ok("member flags", saveMemberFlags({ flags: { fridayHours: true } }).flags.fridayHours === true);
+noDummyWord("order", ord);
+noDummyWord("auth me", authMe());
+resetDummy();
 
 if (fails.length) {
   process.stderr.write("FAIL\n" + fails.join("\n") + "\n");

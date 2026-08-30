@@ -251,6 +251,38 @@ button.stop .stop-num{font-size:12px;color:var(--fg-muted);font-variant-numeric:
 .drop.over{border-color:var(--accent);color:var(--info)}
 .file-meta{font-size:12px;color:var(--fg-muted);font-family:var(--mono);line-height:1.45}
 .file-meta .n{color:var(--fg)}
+.picture{display:grid;grid-template-columns:1.2fr .8fr;gap:12px;margin:0 0 18px}
+.picture .card h3{margin:0 0 6px;font-size:14px;letter-spacing:.04em;text-transform:uppercase;color:var(--fg-muted)}
+.picture .card .sub{margin:0 0 10px}
+.chart-row{display:grid;grid-template-columns:140px 1fr 88px;gap:8px;align-items:center;margin:0 0 7px}
+.chart-sku{font-size:11px;font-family:var(--mono);color:var(--fg-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chart-nums{font-size:11px;font-family:var(--mono);text-align:right;color:var(--fg)}
+.bars{display:flex;flex-direction:column;gap:3px}
+.bar-track{height:7px;background:var(--raised);border-radius:99px;overflow:hidden}
+.bar{height:7px;border-radius:99px;min-width:2px}
+.bar.open{background:var(--funnel-1)}
+.bar.hand{background:var(--chart)}
+.bar.age{background:linear-gradient(90deg,var(--funnel-1),var(--funnel-2),var(--funnel-3))}
+.bar.miss{background:var(--warn)}
+.funnel-board{display:flex;gap:8px;align-items:flex-end;height:110px;margin:8px 0 6px}
+.funnel-board .col{flex:1;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-end;height:100%}
+.funnel-board .col b{display:block;border-radius:6px 6px 2px 2px;min-height:6px}
+.funnel-board .col:nth-child(1) b{background:var(--funnel-1)}
+.funnel-board .col:nth-child(2) b{background:var(--chart)}
+.funnel-board .col:nth-child(3) b{background:var(--ok)}
+.funnel-board .col:nth-child(4) b{background:var(--warn)}
+.funnel-board .col span{font-size:10px;color:var(--fg-muted);font-family:var(--mono);text-align:center;margin-top:6px}
+.connectors-panel{
+  display:block;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:18px 18px 14px;
+  margin:0 0 18px;
+}
+.connectors-panel h2{margin:0 0 8px;font-size:20px;letter-spacing:-.02em;text-transform:none;color:var(--fg)}
+.connectors-panel .do{font-size:14px;line-height:1.5;margin:0 0 14px;color:var(--fg)}
+.studios-table{max-height:280px;overflow:auto;margin:0 0 18px}
 @media (min-width:900px) and (max-width:1100px){
   .kpis{grid-template-columns:repeat(3,minmax(0,1fr))}
   .desks{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -258,4 +290,5 @@ button.stop .stop-num{font-size:12px;color:var(--fg-muted);font-variant-numeric:
   .uploads{grid-template-columns:1fr}
   .stops{grid-template-columns:repeat(3,minmax(0,1fr))}
   .grid{grid-template-columns:1fr}
+  .picture{grid-template-columns:1fr}
 }

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0B0E14">
+<title>NiaSave · Inventory</title>
+<link rel="icon" href="/assets/nia-logo.png" type="image/png">
+<link rel="apple-touch-icon" href="/assets/nia-logo.png">
+<link rel="stylesheet" href="/staff.css">
+</head>
+<body>
+  <div class="narrow">
+    <div class="narrow-card">
+      <div class="kicker">Rabbit · Jabali Officer</div>
+      <h1>Open on a laptop</h1>
+      <p>Inventory is a wide staff desk. It is not the member app.</p>
+    </div>
+  </div>
+  <div class="tower">
+    <header class="top">
+      <div>
+        <div class="brand">Rabbit · inventory</div>
+        <h1>Lots and movements</h1>
+      </div>
+      <div class="meta"><a href="/ops.html">Ops</a> · <a href="/ageing.html">Ageing</a> · <a href="/hub.html">Hub</a></div>
+    </header>
+    <div class="wrap">
+      <p class="sub">Stock is not today's flow. On-hand is leftover. Owner is hub. Not an editable quantity. A new studio is a row. Wraps GET /api/stock and GET /api/ledger.</p>
+      <p class="sub" id="beat">Beat …</p>
+      <button type="button" onclick="load()">Refresh</button>
+      <button type="button" class="ghost" onclick="addStop()">Add studio row</button>
+      <div class="msg" id="msg"></div>
+      <h2>Lots</h2>
+      <div id="lots">Loading…</div>
+      <h2>Movements</h2>
+      <div id="moves">Loading…</div>
+    </div>
+  </div>
+<script>
+function num(n){ return n==null?0:n; }
+function load(){
+  Promise.all([
+    fetch('/api/stock').then(function(r){ return r.json(); }),
+    fetch('/api/ledger?beat=today').then(function(r){ return r.json(); })
+  ]).then(function(all){
+    var stock=all[0]||{};
+    var led=all[1]||{};
+    document.getElementById('beat').textContent=(stock.theatre||led.theatre||'Rajputana Theatre')+' · Beat '+(stock.beatDate||led.beatDate||'-')+' · '+(stock.stopCount||led.stopCount||40)+' stops · owner hub';
+    var opening=led.opening||stock.opening||{};
+    var leftover=led.leftover||stock.stock||{};
+    var reserved=led.reserved||{};
+    var collected=led.collected||{};
+    var missed=led.missed||{};
+    var mv=stock.movements||{};
+    var skus=Object.keys(opening).sort();
+    document.getElementById('lots').innerHTML=skus.length
+      ? '<table><thead><tr><th>SKU</th><th>Owner</th><th>Opening</th><th>On-hand</th><th>Reserved</th><th>Collected</th><th>Leftover</th><th>Miss</th></tr></thead><tbody>'
+        +skus.map(function(sku){
+          return '<tr><td>'+sku+'</td><td>hub</td><td class="num">'+num(opening[sku])+'</td><td class="num">'+num(leftover[sku])+'</td><td class="num">'+num(reserved[sku])+'</td><td class="num">'+num(collected[sku])+'</td><td class="num">'+num(leftover[sku])+'</td><td class="num">'+num(missed[sku])+'</td></tr>';
+        }).join('')
+        +'</tbody></table>'
+      : '<div class="empty">No lots.</div>';
+    document.getElementById('moves').innerHTML=skus.length
+      ? '<table><thead><tr><th>SKU</th><th>Inbound</th><th>Packed</th><th>Loaded</th><th>Collected</th><th>Missed</th><th>Leftover</th></tr></thead><tbody>'
+        +skus.map(function(sku){
+          var r=mv[sku]||{};
+          return '<tr><td>'+sku+'</td><td class="num">'+num(r.inbound)+'</td><td class="num">'+num(r.packed)+'</td><td class="num">'+num(r.loaded)+'</td><td class="num">'+num(r.collected)+'</td><td class="num">'+num(r.missed)+'</td><td class="num">'+num(r.leftover)+'</td></tr>';
+        }).join('')
+        +'</tbody></table>'
+      : '<div class="empty">No movements.</div>';
+    document.getElementById('msg').textContent='Inventory is movements. This desk does not edit a free quantity field.';
+  }).catch(function(){
+    document.getElementById('lots').textContent='Could not load stock.';
+  });
+}
+function addStop(){
+  fetch('/api/stops',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:'Nia Nest sheet row'})})
+    .then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); })
+    .then(function(res){
+      document.getElementById('msg').textContent=res.ok
+        ? ('Studio added · '+res.j.stop.id+' · '+res.j.stopCount+' stops · no rewrite')
+        : ((res.j&&res.j.error)||'Add failed');
+    });
+}
+load();
+</script>
+</body>
+</html>

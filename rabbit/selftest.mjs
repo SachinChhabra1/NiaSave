@@ -37,6 +37,9 @@ ok("predict gates num/den", pred.gates && pred.gates.proposed === true && pred.g
 const set = settlementsPayload({ beat: "today" });
 ok("settlements after collected", set.count >= 3 && set.trigger === "collected" && set.liveUpi === false);
 ok("statement matched and unmatched", set.matched >= 1 && set.unmatchedStatement >= 1 && set.unmatchedSettlements >= 1);
+const night = settlementsPayload({ beat: "today", unmatched: "1" });
+ok("night unmatched first", night.unmatchedFirst === true && night.settlements.length === night.unmatchedSettlements && night.settlements.every(s => !s.matched));
+ok("night unmatched statement lines", (night.unmatchedStatementLines || []).length === night.unmatchedStatement);
 
 const conn = connectorsPayload();
 ok("connectors", (conn.sources || []).map(s => s.id).join(",") === "ledger,procure,members,vendors,upi_statement");
@@ -89,6 +92,9 @@ ok("close 200 when leftover matches", goodClose.ok === true);
 const already = openBeat({ opening: led.opening, beatDate: WEEK_BEAT });
 ok("open 409 when already open", already.status === 409 && already.error === "already_open");
 
+resetDummy();
+const officer = scanOrder({ type: "collected", orderId: "ord-s1hold", pickupCode: "S1HOLD", actor: "pickup" });
+ok("officer collect from reserved", officer.ok && officer.order.status === "collected");
 resetDummy();
 const packed = scanOrder({ type: "packed", orderId: "ord-s1hold", actor: "test" });
 ok("scan reserved to packed", packed.ok && packed.order.status === "packed");

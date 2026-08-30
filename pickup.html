@@ -25,7 +25,7 @@
       <div class="meta"><a href="/ops.html">Ops</a> · <a href="/recon.html">Recon</a></div>
     </header>
     <div class="wrap">
-      <p class="sub">Production. Skip on. Three taps after the member is identified: tap the stop, tap the bag, collect by code. Last unit: one reservation wins. No live UPI.</p>
+      <p class="sub">Production. Skip on. Three taps after the member is identified: tap the stop, tap the bag, collect by code. Miss if they do not come. Pack, load, and arrived stay on hub. Last unit: one reservation wins. No live UPI.</p>
       <p class="sub" id="beat">Beat …</p>
       <button type="button" onclick="loadStops()">Refresh stops</button>
       <div id="stops" class="stops"></div>
@@ -34,6 +34,7 @@
   </div>
 <script>
 var STOP='';
+var BAG='';
 function lineText(lines){
   return (lines||[]).map(function(l){ return (l.id||'?')+' × '+(l.qty||1); }).join(' · ');
 }
@@ -52,6 +53,7 @@ function scan(orderId, type, pickupCode){
       else alert(err || ('scan '+res.status));
       return;
     }
+    BAG='';
     loadStop(STOP);
   }).catch(function(){ alert('Could not scan'); });
 }
@@ -61,30 +63,30 @@ function collectWithCode(orderId, inputId){
   if(!code){ alert('Enter pickup code'); return; }
   scan(orderId, 'collected', code);
 }
-function rowHtml(o){
-  var id=JSON.stringify(o.id||'');
-  var code=o.pickupCode||'-';
-  var phone=o.phone||o.memberId||o.member||'-';
+function bagRow(o, open){
   var st=o.status||'reserved';
+  var phone=o.phone||o.memberId||o.member||'-';
+  var done=st==='collected'||st==='missed'||st==='returned';
+  return '<button type="button" class="job'+(open?' on':'')+'" data-bag="'+o.id+'">'
+    + '<div class="job-kicker">'+(o.stopId||'-')+' · '+(o.slot||'17:00')+'</div>'
+    + '<strong>'+phone+'</strong>'
+    + '<div class="job-do">'+lineText(o.lines)+'</div>'
+    + '<div class="job-num">'+(done?st:'tap bag · then collect by code')+'</div>'
+    + '</button>';
+}
+function bagDesk(o){
+  var id=JSON.stringify(o.id||'');
   var inputId='code_'+String(o.id||'').replace(/[^a-zA-Z0-9]/g,'_').slice(0,40);
-  var actions='';
-  if(st==='reserved' || st==='paid'){
-    actions='<button type="button" onclick=\'scan('+id+',"packed")\'>Pack</button>';
-  } else if(st==='packed'){
-    actions='<button type="button" onclick=\'scan('+id+',"loaded")\'>Load cart</button>';
-  } else if(st==='loaded'){
-    actions='<button type="button" onclick=\'scan('+id+',"arrived")\'>Arrived</button>';
-  } else if(st==='at_stop'){
-    actions='<input class="code-in" id="'+inputId+'" placeholder="CODE" maxlength="8" autocomplete="off">'
-      + '<button type="button" onclick=\'collectWithCode('+id+','+JSON.stringify(inputId)+')\'>Collect</button>'
-      + '<button type="button" class="ghost" onclick=\'scan('+id+',"missed")\'>Missed</button>';
+  var st=o.status||'reserved';
+  if(st==='collected'||st==='missed'||st==='returned'){
+    return '<div class="open show"><h2>Bag</h2><p class="do">Already '+st+'.</p></div>';
   }
-  return '<div class="row"><div class="who">'+phone+'<span class="pill'+(st==='packed'?' warn':'')+'">'+st+'</span></div>'
-    + '<div class="code">'+code+'</div>'
-    + '<div class="meta">'+(o.id||'')+' · stop '+(o.stopId||'-')+' · slot '+(o.slot||'17:00')+' · kept Rs '+(o.kept||0)+'</div>'
-    + '<div class="skus">'+lineText(o.lines)+'</div>'
-    + (actions ? '<div class="actions">'+actions+'</div>' : '')
-    + '</div>';
+  return '<div class="open show"><h2>Collect by code</h2>'
+    + '<p class="do">Member identified. Enter the pickup code. Miss if they do not come. Pack, load, and arrived are on hub.</p>'
+    + '<div class="code">'+(o.pickupCode||'-')+'</div>'
+    + '<div class="actions"><input class="code-in" id="'+inputId+'" placeholder="CODE" maxlength="8" autocomplete="off">'
+    + '<button type="button" onclick=\'collectWithCode('+id+','+JSON.stringify(inputId)+')\'>Collect</button>'
+    + '<button type="button" class="ghost" onclick=\'scan('+id+',"missed")\'>Miss</button></div></div>';
 }
 function stopBtn(s, on){
   return '<button type="button" class="stop'+(on?' on':'')+'" data-stop="'+s.stopId+'">'
@@ -103,8 +105,9 @@ function faceStops(d){
   });
 }
 function pickStop(id){
-  if(STOP===id){ STOP=''; document.getElementById('desk').innerHTML=''; faceStops(window.__stops||{}); return; }
+  if(STOP===id){ STOP=''; BAG=''; document.getElementById('desk').innerHTML=''; faceStops(window.__stops||{}); return; }
   STOP=id;
+  BAG='';
   faceStops(window.__stops||{});
   loadStop(id);
 }
@@ -113,17 +116,22 @@ function loadStop(stop){
   desk.innerHTML='<div class="empty">Loading '+stop+'…</div>';
   fetch('/api/orders?pickup=today&stop='+encodeURIComponent(stop)).then(function(r){ return r.json(); }).then(function(d){
     var orders=d.orders||[];
-    var packed=orders.filter(function(o){ return (o.status||'')==='packed'; });
-    var rest=orders.filter(function(o){ return (o.status||'')!=='packed'; });
     var rem=d.remaining||{};
     var last=Object.keys(rem).filter(function(sku){ return rem[sku]<=1; });
+    var chosen=null;
+    orders.forEach(function(o){ if(o.id===BAG) chosen=o; });
     desk.innerHTML='<button type="button" class="ghost back" onclick="pickStop('+JSON.stringify(stop)+')">Back to stops</button>'
       + '<h2>'+(d.stopName||stop)+' · '+orders.length+' bags</h2>'
+      + '<p class="sub">Tap a bag. Then collect by code or mark miss.</p>'
       + (last.length?'<p class="sub">Last unit on cart: '+last.join(', ')+'. One reservation wins.</p>':'')
-      + '<h2>Packed (before cart leaves)</h2>'
-      + (packed.length ? packed.map(rowHtml).join('') : '<div class="empty">Nothing packed yet at this stop.</div>')
-      + '<h2>On this stop</h2>'
-      + (rest.length ? rest.map(rowHtml).join('') : '<div class="empty">No open bags at this stop.</div>');
+      + '<div class="jobs">'+(orders.length ? orders.map(function(o){ return bagRow(o, o.id===BAG); }).join('') : '<div class="empty">No bags at this stop.</div>')+'</div>'
+      + (chosen?bagDesk(chosen):'<div class="empty">Tap a bag.</div>');
+    desk.querySelectorAll('button[data-bag]').forEach(function(el){
+      el.addEventListener('click', function(){
+        BAG = BAG===el.getAttribute('data-bag') ? '' : el.getAttribute('data-bag');
+        loadStop(stop);
+      });
+    });
   }).catch(function(){
     desk.innerHTML='<div class="empty">Could not load this stop.</div>';
   });
@@ -136,7 +144,7 @@ function loadStops(){
     document.getElementById('beat').textContent=beatLine;
     faceStops(d);
     if(STOP) loadStop(STOP);
-    else document.getElementById('desk').innerHTML='<div class="empty">Tap a stop. Then pack, load, and collect by code.</div>';
+    else document.getElementById('desk').innerHTML='<div class="empty">Tap a stop. Then tap a bag. Collect by code.</div>';
   }).catch(function(){
     document.getElementById('stops').innerHTML='<div class="empty">Could not load stops.</div>';
   });

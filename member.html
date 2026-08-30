@@ -718,7 +718,7 @@
   }
   .proof-copy{grid-column:2;grid-row:1;display:flex;flex-direction:column;min-width:0;min-height:126px;padding:16px 14px 14px}
   .proof-name{display:block;font-size:17px;font-weight:700;letter-spacing:-.025em;line-height:1.18;color:var(--ink)}
-  .proof-desc{display:block;margin-top:2px;font-size:12.75px;font-weight:450;line-height:1.42;color:#747478}
+  .proof-desc{display:none}
   .proof-saving{display:grid;grid-template-columns:auto minmax(0,1fr) 20px;align-items:end;gap:6px;margin-top:auto;padding-top:10px;color:var(--navy)}
   .proof-saving strong{font-size:25px;font-weight:750;letter-spacing:-.04em;line-height:1}
   .proof-saving em{font-size:11.75px;font-style:normal;font-weight:650;line-height:1.2}
@@ -748,7 +748,7 @@
   .live-studio-hero:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,13,18,.68) 0%,rgba(7,13,18,.38) 48%,rgba(7,13,18,.78) 100%);pointer-events:none}
   .live-studio-content{position:relative;z-index:1;display:flex;min-height:244px;padding:18px;flex-direction:column}
   .live-studio-name{display:block;max-width:200px;font-size:22px;font-weight:750;line-height:1.08;letter-spacing:-.035em;color:#fff}
-  .live-studio-desc{display:block;margin-top:4px;font-size:13px;font-weight:500;line-height:1.3;color:rgba(255,255,255,.88)}
+  .live-studio-desc{display:none}
   .live-studio-hero .studio-amenities{margin-top:auto;padding-top:18px}
   .live-studio-hero .studio-amenities-title{margin-bottom:9px;color:#fff;font-size:10.5px;font-weight:700;text-align:center}
   .live-studio-hero .studio-amenities-items{grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
@@ -768,9 +768,9 @@
   }
   .live-service-tile:active,.live-studio-hero:active{transform:scale(.994)}
   .live-tile-photo{position:relative;display:block;width:100%;aspect-ratio:1.18/1;min-height:126px;background-color:#E9E6E1;background-size:cover}
-  .live-tile-copy{display:flex;min-height:132px;padding:12px;flex:1 1 auto;flex-direction:column}
+  .live-tile-copy{display:flex;min-height:104px;padding:12px;flex:1 1 auto;flex-direction:column}
   .live-tile-name{display:block;font-size:16px;font-weight:700;line-height:1.16;letter-spacing:-.025em;color:var(--ink)}
-  .live-tile-desc{display:block;min-height:32px;margin-top:3px;font-size:11.5px;font-weight:450;line-height:1.35;color:var(--mute)}
+  .live-tile-desc{display:none}
   .live-tile-values{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px;margin-top:auto;padding-top:10px;border-top:1px solid var(--hair)}
   .live-tile-save,.live-tile-price{display:flex;min-width:0;flex-direction:column}
   .live-tile-price{align-items:flex-end;text-align:right}
@@ -796,7 +796,7 @@
   .salary-history-card svg{display:block;width:20px;height:20px;color:var(--navy);flex:0 0 auto}
   .salary-history-copy{display:flex;flex:1;min-width:0;flex-direction:column;gap:2px}
   .salary-history-copy strong{font-size:15px;font-weight:650;line-height:1.2}
-  .salary-history-copy span{font-size:11.5px;font-weight:450;color:var(--mute);line-height:1.3}
+  .salary-history-copy span{display:none}
   .salary-history-arrow{color:var(--mute2);font-size:18px;line-height:1}
   .story-photo{background-color:#E9E6E1;background-image:url('assets/story-editorial-sheet.jpg');background-repeat:no-repeat;background-size:auto 400%}
   .story-photo.story-studio{background-image:url('assets/studio-bunk-lockers.jpg');background-size:cover;background-position:center}
@@ -806,16 +806,16 @@
   .story-photo.story-cycle{background-position:6.91% 33.333%}
   .story-photo.story-rain{background-position:35.64% 33.333%}
   .story-photo.story-day{background-position:64.36% 33.333%}
-  .story-photo.story-friday{background-image:url('assets/earn-extra-hours-v2.jpg');background-size:cover;background-position:center}
-  .story-photo.story-friday-extra{background-image:url('assets/earn-friday-extra-v3.jpg');background-size:cover;background-position:center}
-  .story-photo.story-nearby{background-image:url('assets/earn-nearby-work-v2.jpg');background-size:cover;background-position:center}
+  .story-photo.story-friday{background-image:url('assets/earn-ot-editorial-v4.jpg');background-size:cover;background-position:center}
+  .story-photo.story-friday-extra{background-image:url('assets/earn-friday-editorial-v4.jpg');background-size:cover;background-position:center}
+  .story-photo.story-nearby{background-image:url('assets/earn-gigs-editorial-v4.jpg');background-size:cover;background-position:center}
   .story-photo.story-slip{background-image:url('assets/earn-wallet-v1.png');background-size:cover;background-position:center}
   .story-photo.story-goal{background-position:64.36% 66.666%}
   .story-photo.story-sent{background-position:93.09% 66.666%}
   .story-photo.story-accident{background-image:url('assets/insurance-accident-v2.jpg');background-size:cover;background-position:center}
   .story-photo.story-life{background-image:url('assets/insurance-life-v2.jpg');background-size:cover;background-position:center}
-  .story-photo.story-village{background-image:url('assets/earn-village-referral-v3.jpg');background-size:cover;background-position:center}
-  .story-photo.story-plant{background-image:url('assets/earn-plant-work-v3.jpg');background-size:cover;background-position:center}
+  .story-photo.story-village{background-image:url('assets/earn-friend-editorial-v4.jpg');background-size:cover;background-position:center}
+  .story-photo.story-plant{background-image:url('assets/earn-work-editorial-v4.jpg');background-size:cover;background-position:center}
   .story-photo.story-akka{background-image:url('assets/tribe-akka-tea.jpg');background-size:cover;background-position:center}
   .story-photo.story-group{background-image:url('assets/tribe-group-cups.jpg');background-size:cover;background-position:center}
   .story-photo.story-dropin{background-image:url('assets/tribe-clinic-kit.jpg');background-size:cover;background-position:center}
@@ -1151,7 +1151,7 @@ var EARN_INCOME_RANGE = {
 var weekPath = null;   // 'friday' | 'weekend' | null. one path on the phone
 var takenJobs = {};    // nearby work id → true after dummy confirm
 var DUMMY_PLANTS=[
-  {id:'plant_b', name:'Talk to your JCO', when:'Need a new job?', pay:0}
+  {id:'plant_b', name:'Talk to JCO', when:'Find new work', pay:0}
 ];
 var pickedPlant=null;
 var contractorPay = null; // null | true | false. dummy: pay a contractor monthly?
@@ -1381,7 +1381,7 @@ var T = {
     earn_card_fri_n:'TGIF', earn_card_fri_m:'Friday pays more.',
     earn_card_slip_n:'Check your pay', earn_card_slip_m:'See pay, OT and cuts.',
     earn_card_village_n:'Bring a friend', earn_card_village_m:'Get ₹500 items free.',
-    earn_card_plant_n:'Need a new job?', earn_card_plant_m:'Talk to your JCO.',
+    earn_card_plant_n:'Find new work', earn_card_plant_m:'Talk to your JCO.',
     village_toast:'Friend added.', recommend_btn:'Recommend', bag_credit:'Off the bag',
     studio_mess1_n:'Bhimba bhai mess, Ved Road',
     studio_mess1_m:'Ved Road · food and stay. · ₹3,300/month',
@@ -2317,7 +2317,7 @@ function payTrendsBlock(){
 function salaryHistoryCard(){
   return '<button type="button" class="salary-history-card" onclick="openStoryCard(\'earn\',\'history\')">'
     + IC.receipt
-    + '<span class="salary-history-copy"><strong>See salary history</strong><span>Pay by month · Check cooperative scheme eligibility</span></span>'
+    + '<span class="salary-history-copy"><strong>See salary history</strong></span>'
     + '<span class="salary-history-arrow">›</span></button>';
 }
 function payslipCutLabel(){
@@ -2693,8 +2693,7 @@ function sendPlanner(){
 }
 function screenSend(){
   if(sendView==='aisle' && sendCard) return sendAisle();
-  var head = '<div class="h1">'+t('send_t')+'</div>'
-    + '<div class="sub">'+(maaMonthTarget>0?(money(maaMonthTarget)+' for home'):t('send_s'))+'</div>';
+  var head = '<div class="h1">'+t('send_t')+'</div>';
   var purpose = '<img class="send-purpose" src="assets/send-purpose-family.jpg" alt="Mother with her two sons">';
   var body = purpose+sendPlanner()
     + '<section class="insurance-section"><div class="insurance-head"><h2>'+t('send_ins_title')+'</h2><p class="insurance-intro">'+t('send_ins_intro')+'</p></div>'
@@ -2703,15 +2702,13 @@ function screenSend(){
 }
 function screenLive(){
   if(liveView==='aisle' && liveCard) return liveAisle();
-  var head = '<div class="h1">'+t('live_t')+'</div>'
-    + '<div class="sub">'+t('live_s')+'</div>';
+  var head = '<div class="h1">'+t('live_t')+'</div>';
   var body = '<div class="live-card-layout">'+liveCards()+'</div>';
   return '<div class="pad fadein">'+head+homeMonthBanner()+body+'</div>';
 }
 function screenEarn(){
   if(earnView==='aisle' && earnCard) return earnAisle();
-  var head = '<div class="h1">'+t('earn_t')+'</div>'
-    + '<div class="sub">'+(t('earn_s')||'')+'</div>';
+  var head = '<div class="h1">'+t('earn_t')+'</div>';
   var trends = salaryHistoryCard();
   var cards = '<div class="story-cards category-cards proof-cards earn-proof-cards">'+earnCards()+'</div>';
   var wageNote = '<div class="earn-wage-note"><strong>Income guide.</strong> Uses the official ₹556–₹827 daily wage bands. Exact pay depends on work and location. <a href="https://clc.gov.in/clc/sites/default/files/mygov_17748804861.pdf" target="_blank" rel="noopener">Source</a></div>';
@@ -3075,7 +3072,7 @@ function productSaving(p){
 }
 function categoryCard(id,photo,name,meta){
   var discount=categoryDiscountLabel(id);
-  return '<button class="category-card" onclick="openCategory(\''+id+'\')"><span class="category-card-photo '+photo+'"></span><span class="category-card-copy"><span><span class="category-card-name">'+name+'</span><span class="category-card-meta">'+meta+'</span><span class="category-card-discount">'+discount+'</span></span><span class="category-card-arrow">'+IC.chev+'</span></span></button>';
+  return '<button class="category-card" onclick="openCategory(\''+id+'\')"><span class="category-card-photo '+photo+'"></span><span class="category-card-copy"><span><span class="category-card-name">'+name+'</span><span class="category-card-discount">'+discount+'</span></span><span class="category-card-arrow">'+IC.chev+'</span></span></button>';
 }
 function liveTabCopy(id, part){
   var ids=['studio','wash','hubfood','cooler','cycle','raincape','dontmiss','akka','group','dropin','recreation','thrift','grievance'];
@@ -3130,7 +3127,7 @@ function earnPhotoCard(id,name,desc,photoClass){
   var income=EARN_INCOME_RANGE[id]||'';
   return '<button type="button" class="proof-card earn-proof-card" data-story="earn-'+id+'" onclick="openStoryCard(\'earn\',\''+id+'\')" aria-label="'+name+'. '+desc+(income?' '+income:'')+'">'
     + '<span class="proof-main"><span class="proof-photo story-photo '+photoClass+'"></span>'
-    + '<span class="proof-copy"><span class="proof-name">'+name+'</span><span class="proof-desc">'+desc+'</span>'+(income?'<span class="earn-income-range">'+income+'</span>':'')+'</span></span></button>';
+    + '<span class="proof-copy"><span class="proof-name">'+name+'</span>'+(income?'<span class="earn-income-range">'+income+'</span>':'')+'</span></span></button>';
 }
 function openStoryCard(which,id){
   clearBlockingOverlays();
@@ -3367,7 +3364,7 @@ function liveStudioHero(model,photoClass){
   var id='studio', name=liveTabCopy(id,'n');
   var aria=name+'. Saved '+money(model.amount)+' every month. With Nia '+money(model.nia)+'.';
   return '<article class="live-studio-hero story-photo '+photoClass+'" role="button" tabindex="0" onclick="openStoryCard(\'live\',\'studio\')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openStoryCard(\'live\',\'studio\');}" aria-label="'+aria+'">'
-    + '<span class="live-studio-content"><span class="live-studio-name">'+name+'</span><span class="live-studio-desc">'+model.desc+'</span>'
+    + '<span class="live-studio-content"><span class="live-studio-name">'+name+'</span>'
     + complimentaryStrip()
     + '<span class="live-studio-foot"><span class="live-studio-price"><small>Monthly price</small><strong>'+money(model.nia)+'</strong></span>'
     + '<span class="live-studio-save"><small>You save</small><strong>'+money(model.amount)+'/month</strong></span></span></span>'
@@ -3378,7 +3375,7 @@ function liveServiceTile(id,name,photoClass,model){
   var aria=name+'. Saved '+money(model.amount)+' every month. Price '+niaText+'.';
   return '<article class="live-service-tile" role="button" tabindex="0" onclick="openStoryCard(\'live\',\''+id+'\')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openStoryCard(\'live\',\''+id+'\');}" aria-label="'+aria+'">'
     + '<span class="live-tile-photo story-photo '+photoClass+'">'+liveCardStepper(id,name,false)+'</span>'
-    + '<span class="live-tile-copy"><span class="live-tile-name">'+name+'</span><span class="live-tile-desc">'+model.desc+'</span>'
+    + '<span class="live-tile-copy"><span class="live-tile-name">'+name+'</span>'
     + '<span class="live-tile-values"><span class="live-tile-save"><small>Save</small><strong>'+money(model.amount)+'</strong></span>'
     + '<span class="live-tile-price"><small>Price</small><strong>'+niaText+'</strong></span></span></span></article>';
 }
@@ -3428,7 +3425,6 @@ function commerceHome(){
   return '<div class="commerce fadein">'
     + '<header class="commerce-head">'
     + '<h1 class="commerce-title">'+t('save_t')+'</h1>'
-    + '<div class="commerce-sub">'+t('save_s')+'</div>'
     + '<div class="fulfill-toggle" role="tablist" aria-label="Pickup or delivery">'
     + '<button type="button" class="fulfill-seg'+(hubOn?' on':'')+'" role="tab" aria-selected="'+(hubOn?'true':'false')+'" onclick="setSaveFulfillment(&quot;hub_collect&quot;)">Hub pick up</button>'
     + '<button type="button" class="fulfill-seg'+(!hubOn?' on':'')+'" role="tab" aria-selected="'+(!hubOn?'true':'false')+'" onclick="setSaveFulfillment(&quot;studio_stop&quot;)">Studio Delivery</button>'
@@ -3583,7 +3579,7 @@ function pickPlant(id){
   render();
 }
 var storySheetsReady=false;
-var STORY_SHEET_CSS=".story-photo{background-color:#E9E6E1;background-image:url('assets/story-editorial-sheet.jpg');background-repeat:no-repeat;background-size:auto 400%}\n.story-photo.story-studio{background-image:url('assets/studio-bunk-lockers.jpg');background-size:cover;background-position:center}.story-photo.story-wash{background-image:url('assets/wash-folded-clothes.jpg');background-size:cover;background-position:center}.story-photo.story-eat{background-position:64.36% 0%}.story-photo.story-cooler{background-image:url('assets/air-cooler-shared.jpg');background-size:cover;background-position:center}\n.story-photo.story-cycle{background-position:6.91% 33.333%}.story-photo.story-rain{background-position:35.64% 33.333%}.story-photo.story-day{background-position:64.36% 33.333%}.story-photo.story-friday{background-image:url('assets/earn-extra-hours-v2.jpg');background-size:cover;background-position:center}.story-photo.story-friday-extra{background-image:url('assets/earn-friday-extra-v3.jpg');background-size:cover;background-position:center}\n.story-photo.story-nearby{background-image:url('assets/earn-nearby-work-v2.jpg');background-size:cover;background-position:center}.story-photo.story-slip{background-image:url('assets/earn-wallet-v1.png');background-size:cover;background-position:center}.story-photo.story-goal{background-position:64.36% 66.666%}.story-photo.story-sent{background-position:93.09% 66.666%}.story-photo.story-accident{background-image:url('assets/insurance-accident-v2.jpg');background-size:cover;background-position:center}.story-photo.story-life{background-image:url('assets/insurance-life-v2.jpg');background-size:cover;background-position:center}\n.story-photo.story-village{background-image:url('assets/earn-village-referral-v3.jpg');background-size:cover;background-position:center}.story-photo.story-plant{background-image:url('assets/earn-plant-work-v3.jpg');background-size:cover;background-position:center}\n.story-photo.story-akka{background-image:url('assets/tribe-akka-tea.jpg');background-size:cover;background-position:center}.story-photo.story-group{background-image:url('assets/tribe-group-cups.jpg');background-size:cover;background-position:center}.story-photo.story-dropin{background-image:url('assets/tribe-clinic-kit.jpg');background-size:cover;background-position:center}.story-photo.story-recreation{background-image:url('assets/tribe-recreation.jpg');background-size:cover;background-position:center}.story-photo.story-thrift{background-image:url('assets/tribe-save-box.jpg');background-size:cover;background-position:center}.story-photo.story-grievance{background-image:url('assets/tribe-akka-tea.jpg');background-size:cover;background-position:center}\n";
+var STORY_SHEET_CSS=".story-photo{background-color:#E9E6E1;background-image:url('assets/story-editorial-sheet.jpg');background-repeat:no-repeat;background-size:auto 400%}\n.story-photo.story-studio{background-image:url('assets/studio-bunk-lockers.jpg');background-size:cover;background-position:center}.story-photo.story-wash{background-image:url('assets/wash-folded-clothes.jpg');background-size:cover;background-position:center}.story-photo.story-eat{background-position:64.36% 0%}.story-photo.story-cooler{background-image:url('assets/air-cooler-shared.jpg');background-size:cover;background-position:center}\n.story-photo.story-cycle{background-position:6.91% 33.333%}.story-photo.story-rain{background-position:35.64% 33.333%}.story-photo.story-day{background-position:64.36% 33.333%}.story-photo.story-friday{background-image:url('assets/earn-ot-editorial-v4.jpg');background-size:cover;background-position:center}.story-photo.story-friday-extra{background-image:url('assets/earn-friday-editorial-v4.jpg');background-size:cover;background-position:center}\n.story-photo.story-nearby{background-image:url('assets/earn-gigs-editorial-v4.jpg');background-size:cover;background-position:center}.story-photo.story-slip{background-image:url('assets/earn-wallet-v1.png');background-size:cover;background-position:center}.story-photo.story-goal{background-position:64.36% 66.666%}.story-photo.story-sent{background-position:93.09% 66.666%}.story-photo.story-accident{background-image:url('assets/insurance-accident-v2.jpg');background-size:cover;background-position:center}.story-photo.story-life{background-image:url('assets/insurance-life-v2.jpg');background-size:cover;background-position:center}\n.story-photo.story-village{background-image:url('assets/earn-friend-editorial-v4.jpg');background-size:cover;background-position:center}.story-photo.story-plant{background-image:url('assets/earn-work-editorial-v4.jpg');background-size:cover;background-position:center}\n.story-photo.story-akka{background-image:url('assets/tribe-akka-tea.jpg');background-size:cover;background-position:center}.story-photo.story-group{background-image:url('assets/tribe-group-cups.jpg');background-size:cover;background-position:center}.story-photo.story-dropin{background-image:url('assets/tribe-clinic-kit.jpg');background-size:cover;background-position:center}.story-photo.story-recreation{background-image:url('assets/tribe-recreation.jpg');background-size:cover;background-position:center}.story-photo.story-thrift{background-image:url('assets/tribe-save-box.jpg');background-size:cover;background-position:center}.story-photo.story-grievance{background-image:url('assets/tribe-akka-tea.jpg');background-size:cover;background-position:center}\n";
 function ensureStorySheets(){
   if(storySheetsReady) return;
   var el=document.getElementById('story-sheets');

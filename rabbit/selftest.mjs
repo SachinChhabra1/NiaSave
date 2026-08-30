@@ -257,6 +257,10 @@ for (const file of staffPages) {
   ok(file + " has no polo-icon", !/polo-icon/.test(html));
 }
 const opsHtml = readFileSync(new URL("../ops.html", import.meta.url), "utf8");
+const staffCss = readFileSync(new URL("../staff.css", import.meta.url), "utf8");
+ok("staff.css has no IBM Plex", !/IBM Plex|Plex Sans|Plex Mono|fonts\.googleapis/.test(staffCss));
+ok("staff.css phone --font", /--font:-apple-system,"SF Pro Display","SF Pro Text","Helvetica Neue","Segoe UI",Arial,sans-serif/.test(staffCss));
+ok("staff.css phone --mono", /--mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace/.test(staffCss));
 ok("ops nia then Operation Polo", /class="nia-logo"[\s\S]{0,200}Operation Polo/.test(opsHtml));
 ok("ops has no polo-icon", !/polo-icon/.test(opsHtml));
 ok("ops job icons in source", /id="i-biker"/.test(opsHtml) && /id="i-po"/.test(opsHtml) && /id="i-dispatch"/.test(opsHtml));

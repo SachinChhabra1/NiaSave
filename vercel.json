@@ -3,8 +3,33 @@
   "buildCommand": "sh vercel-build.sh",
   "outputDirectory": "dist",
   "rewrites": [
+    { "source": "/research/why-blue-collar-workers-quit", "destination": "/research/why-blue-collar-workers-quit.html" },
+    { "source": "/research/why-blue-collar-workers-quit/", "destination": "/research/why-blue-collar-workers-quit.html" },
     { "source": "/health", "destination": "/api?path=health" },
     { "source": "/v1/:path*", "destination": "/api?path=v1/:path*" },
     { "source": "/api/:path*", "destination": "/api?path=:path*" }
+  ],
+  "headers": [
+    {
+      "source": "/research/why-blue-collar-workers-quit",
+      "headers": [
+        { "key": "Content-Type", "value": "text/html; charset=utf-8" },
+        { "key": "Content-Disposition", "value": "inline" }
+      ]
+    },
+    {
+      "source": "/research/why-blue-collar-workers-quit/",
+      "headers": [
+        { "key": "Content-Type", "value": "text/html; charset=utf-8" },
+        { "key": "Content-Disposition", "value": "inline" }
+      ]
+    },
+    {
+      "source": "/research/why-blue-collar-workers-quit.html",
+      "headers": [
+        { "key": "Content-Type", "value": "text/html; charset=utf-8" },
+        { "key": "Content-Disposition", "value": "inline" }
+      ]
+    }
   ]
 }

@@ -274,7 +274,7 @@ button.job .job-num{font-size:16px;color:var(--accent);font-weight:500;font-fami
   font-weight:600;
   line-height:1;
 }
-@media (max-width:1100px){
+@media (max-width:1400px){
   .realities{flex-wrap:wrap}
 }
 #gates{display:flex;flex-wrap:wrap;gap:16px;margin:0 0 28px}

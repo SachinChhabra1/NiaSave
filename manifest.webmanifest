@@ -1,0 +1,24 @@
+{
+  "name": "NiaSave",
+  "short_name": "NiaSave",
+  "description": "Shop essentials. Keep more for home.",
+  "start_url": "/?tab=save",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#F3EEE7",
+  "theme_color": "#1C3F5C",
+  "icons": [
+    {
+      "src": "/assets/nia-logo.png",
+      "sizes": "689x565",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/nia-logo.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

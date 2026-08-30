@@ -383,8 +383,8 @@ export function connectorsPayload() {
 
 export function sourcePayload() {
   return {
-    from: DUMMY_DATA ? "Dummy" : "From sheet",
-    sheetFrom: { procure: DUMMY_DATA ? "Dummy" : "From sheet" },
+    from: "From sheet",
+    sheetFrom: { procure: "From sheet" },
     sources: SKUS.map(s => ({
       sku: s.id,
       vendor: s.vendor,
@@ -556,8 +556,8 @@ export function predictPayload() {
     source,
     settlementsDue,
     sheetFrom: {
-      procure: DUMMY_DATA ? "Dummy" : "From sheet",
-      members: DUMMY_DATA ? "Dummy" : "From sheet"
+      procure: "From sheet",
+      members: "From sheet"
     }
   };
 }

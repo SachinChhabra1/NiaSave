@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>NiaSave · Predict</title>
+<link rel="icon" href="/assets/nia-logo.png" type="image/png">
+<link rel="apple-touch-icon" href="/assets/nia-logo.png">
 <link rel="stylesheet" href="/staff.css">
 <style>
   th,td{text-align:left}
@@ -36,11 +38,10 @@
   </div>
 <script>
 function fromLabel(d){
-  var p=d.sheetFrom&&d.sheetFrom.procure?d.sheetFrom.procure:'Dummy';
-  var m=d.sheetFrom&&d.sheetFrom.members?d.sheetFrom.members:'Dummy';
-  if(p.indexOf('sheet')>=0||m.indexOf('sheet')>=0) return 'From sheet';
-  if(p.indexOf('down')>=0||m.indexOf('down')>=0) return 'Sheet down · Dummy';
-  return 'Dummy';
+  var p=d.sheetFrom&&d.sheetFrom.procure?d.sheetFrom.procure:'From sheet';
+  var m=d.sheetFrom&&d.sheetFrom.members?d.sheetFrom.members:'From sheet';
+  if(p.indexOf('down')>=0||m.indexOf('down')>=0) return 'Sheet down · staff inbound';
+  return 'From sheet';
 }
 function table(cols, rows, empty){
   if(!rows.length) return '<div class="empty">'+empty+'</div>';

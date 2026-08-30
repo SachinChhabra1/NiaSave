@@ -31,9 +31,9 @@
   </div>
 <script>
 function fromLabel(d){
-  if(d.from) return d.from;
-  if(d.sheetFrom&&d.sheetFrom.procure) return d.sheetFrom.procure;
-  return 'Dummy';
+  if(d.from && String(d.from).toLowerCase()!=='dummy') return d.from;
+  if(d.sheetFrom&&d.sheetFrom.procure && String(d.sheetFrom.procure).toLowerCase()!=='dummy') return d.sheetFrom.procure;
+  return 'From sheet';
 }
 function load(){
   document.getElementById('wrap').textContent='Loading…';

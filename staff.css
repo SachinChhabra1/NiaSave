@@ -100,8 +100,37 @@ button{border:0;background:#1A1917;color:#fff;border-radius:10px;padding:10px 14
 button.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
 .bad{color:var(--bad);font-weight:650}
 code{font-size:12px;background:#F7F3EC;padding:2px 6px;border-radius:6px}
+.jobs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:8px 0 18px}
+button.job{
+  display:block;width:100%;text-align:left;
+  background:var(--paper);color:var(--ink);
+  border:1px solid var(--line);border-radius:16px;
+  padding:18px 18px 16px;cursor:pointer;font-weight:inherit;
+}
+button.job:hover{border-color:#C9C1B4}
+button.job.on{border-color:var(--navy);box-shadow:0 0 0 2px rgba(28,63,92,.18)}
+button.job .job-kicker{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin-bottom:6px}
+button.job strong{display:block;font-size:20px;letter-spacing:-.03em;margin-bottom:6px}
+button.job .job-do{font-size:14px;color:var(--ink);line-height:1.4;margin-bottom:10px}
+button.job .job-num{font-size:13px;color:var(--navy);font-weight:650;font-variant-numeric:tabular-nums}
+.open{
+  display:none;
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:20px 22px 18px;
+}
+.open.show{display:block}
+.open h2{margin:0 0 8px;font-size:22px;letter-spacing:-.03em}
+.open .do{font-size:15px;line-height:1.5;margin:0 0 14px}
+.checks{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
+.check{background:#F7F3EC;border-radius:10px;padding:8px 12px;min-width:88px}
+.check .l{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--mute)}
+.check .n{font-size:20px;font-weight:650;letter-spacing:-.03em;margin-top:2px;font-variant-numeric:tabular-nums}
+.open a.desk-link{display:inline-block;margin-top:4px;font-weight:650}
 @media (min-width:900px) and (max-width:1100px){
   .kpis{grid-template-columns:repeat(3,minmax(0,1fr))}
   .desks{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .jobs{grid-template-columns:repeat(2,minmax(0,1fr))}
   .grid{grid-template-columns:1fr}
 }

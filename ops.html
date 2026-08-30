@@ -3,13 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>NiaSave · Rabbit ops</title>
+<title>NiaSave · Ops</title>
+<link rel="icon" href="/assets/nia-logo.png" type="image/png">
+<link rel="apple-touch-icon" href="/assets/nia-logo.png">
 <link rel="stylesheet" href="/staff.css">
 </head>
 <body>
   <div class="narrow">
     <div class="narrow-card">
-      <div class="kicker">Rabbit · staff</div>
+      <div class="kicker">Rabbit · Jabali Officer</div>
       <h1>Open on a laptop</h1>
       <p>This board is a wide staff desk. It is not the member app.</p>
     </div>
@@ -18,104 +20,115 @@
   <div class="tower">
     <header class="top">
       <div>
-        <div class="brand">Rabbit · NiaSave ops</div>
-        <h1>Control tower</h1>
+        <div class="brand">Rabbit · Jabali Officer</div>
+        <h1>Beat board</h1>
       </div>
-      <div class="meta" id="topmeta">Beat …<br>Staff sample · no live UPI</div>
+      <div class="meta" id="topmeta">Beat …<br>No live UPI</div>
     </header>
     <div class="wrap">
-      <p class="sub">Wide laptop desk · studio cart after 17:00 · predict from ledger · not a member tab</p>
-      <div class="kpis" id="kpis"></div>
-      <div class="desks">
-        <a class="desk" href="/hub.html"><strong>Hub load</strong><span>Today opening and tomorrow load</span></a>
-        <a class="desk" href="/pickup.html"><strong>Tonight pickup</strong><span>Pack · code collect · miss</span></a>
-        <a class="desk" href="/recon.html"><strong>Night recon</strong><span>Ledger identity plus UPI statement</span></a>
-        <a class="desk" href="/predict.html"><strong>Predict</strong><span>Order recs and miss risk from ledger</span></a>
-        <a class="desk" href="/source.html"><strong>Source</strong><span>Procure and vendor sheets</span></a>
-        <a class="desk" href="/next.html"><strong>Tomorrow</strong><span>Next-day load from leftover</span></a>
-      </div>
-      <div class="grid">
-        <div class="card">
-          <h3>Beat funnel</h3>
-          <div class="funnel" id="funnel"></div>
-          <div class="funnel-leg"><span>Reserved</span><span>Packed</span><span>Loaded</span><span>At stop</span><span>Collected</span><span>Missed</span></div>
-          <p class="sub" id="funnel-sub">…</p>
-        </div>
-        <div class="card">
-          <h3>Connectors</h3>
-          <div class="pills" id="connectors"></div>
-          <p class="sub" id="conn-sub">Staff inbound · Dummy first · no WhatsApp product</p>
-        </div>
-      </div>
-      <div class="grid" style="margin-top:14px">
-        <div class="card">
-          <h3>Predict from ledger</h3>
-          <div id="predict-wrap" class="empty">Loading…</div>
-        </div>
-        <div class="card">
-          <h3>UPI statement match</h3>
-          <p class="sub">Settlement trigger is collected scan. Not UPI capture. Not pack.</p>
-          <div id="set-wrap" class="empty">Loading…</div>
-        </div>
-      </div>
+      <p class="sub">Tap a card. One job. Then run the numbers. Wide laptop only. Studio cart after 17:00.</p>
+      <div class="jobs" id="jobs"></div>
+      <div class="open" id="open"></div>
     </div>
   </div>
 <script>
+var DATA=null;
 function num(n){ return n==null?0:n; }
-function bar(n, max){
-  var h = max? Math.max(8, Math.round(n/max*80)) : 8;
-  return h;
+function jobBtn(id, kicker, title, action, nums, on){
+  return '<button type="button" class="job'+(on?' on':'')+'" data-job="'+id+'">'
+    + '<div class="job-kicker">'+kicker+'</div>'
+    + '<strong>'+title+'</strong>'
+    + '<div class="job-do">'+action+'</div>'
+    + '<div class="job-num">'+nums+'</div>'
+    + '</button>';
+}
+function checks(rows){
+  return '<div class="checks">'+rows.map(function(r){
+    return '<div class="check"><div class="l">'+r[0]+'</div><div class="n">'+r[1]+'</div></div>';
+  }).join('')+'</div>';
+}
+function face(){
+  var t=DATA.tower||{};
+  var f=t.funnel||{};
+  var k=t.kpis||{};
+  var s=DATA.set||{};
+  var pred=t.predict||{};
+  var load=(pred.load||[]).filter(function(r){ return r.tomorrow_qty>0; });
+  var src=(DATA.source&&DATA.source.sources)||[];
+  var open=DATA.openJob||'';
+  document.getElementById('jobs').innerHTML=[
+    jobBtn('pickup','After 5','Pickup','Pack the studio cart. Collect by code. Mark miss.',
+      num(f.reserved)+' reserved · '+num(f.packed)+' packed · '+num(f.collected)+' collected · '+num(f.missed)+' miss', open==='pickup'),
+    jobBtn('recon','Night','Recon','Match the UPI statement after collected scan.',
+      (s.matched||0)+' matched · '+(s.unmatchedStatement||0)+' statement open', open==='recon'),
+    jobBtn('source','Inbound','Source','Buy only where Nia cost is under kirana.',
+      src.length+' SKUs on the procure sheet', open==='source'),
+    jobBtn('predict','Ledger','Predict','Order recs and miss risk from the ledger. Not a guess.',
+      'miss '+(k.miss_rate!=null?k.miss_rate+'%':'0%')+' · '+(pred.chase||[]).length+' to chase', open==='predict'),
+    jobBtn('close','Night','Beat close','Opening minus collected must still be on the cart.',
+      'open '+num(k.opening)+' · collected '+num(k.collected)+' · miss '+num(k.missed), open==='close'),
+    jobBtn('next','Next day','Tomorrow load','Load from collected plus what is still holding.',
+      load.length+' SKUs to load', open==='next')
+  ].join('');
+  document.querySelectorAll('button.job').forEach(function(el){
+    el.addEventListener('click', function(){ pick(el.getAttribute('data-job')); });
+  });
+}
+function pick(id){
+  if(!DATA) return;
+  DATA.openJob = DATA.openJob===id ? '' : id;
+  face();
+  var box=document.getElementById('open');
+  if(!DATA.openJob){ box.className='open'; box.innerHTML=''; return; }
+  var t=DATA.tower||{};
+  var f=t.funnel||{};
+  var k=t.kpis||{};
+  var s=DATA.set||{};
+  var pred=t.predict||{};
+  var html='';
+  if(id==='pickup'){
+    html='<h2>Pickup</h2><p class="do">Pack reserved bags before the cart leaves. Load. Arrive at the studio. Collect by pickup code after 17:00. If they do not come, mark miss.</p>'
+      +checks([['Reserved',num(f.reserved)],['Packed',num(f.packed)],['Loaded',num(f.loaded)],['At stop',num(f.at_stop)],['Collected',num(f.collected)],['Miss',num(f.missed)]])
+      +'<a class="desk-link" href="/pickup.html">Open pickup desk</a>';
+  } else if(id==='recon'){
+    html='<h2>Recon</h2><p class="do">Settlement starts on collected scan. Not UPI capture. Not pack. Match the bank statement lines to those settlements.</p>'
+      +checks([['Settlements',s.count||0],['Matched',s.matched||0],['Statement open',s.unmatchedStatement||0],['Unmatched take',s.unmatchedSettlements||0]])
+      +'<a class="desk-link" href="/recon.html">Open recon desk</a>';
+  } else if(id==='source'){
+    var n=((DATA.source&&DATA.source.sources)||[]).length;
+    html='<h2>Source</h2><p class="do">Read the procure and vendor sheets. Keep a SKU only when Nia cost is under kirana.</p>'
+      +checks([['SKUs',n],['From','sheet']])
+      +'<a class="desk-link" href="/source.html">Open source desk</a>';
+  } else if(id==='predict'){
+    html='<h2>Predict</h2><p class="do">Use opening, collected, and miss. Do not invent a load. Chase bags still on the beat.</p>'
+      +checks([['Miss rate',(k.miss_rate!=null?k.miss_rate+'%':'0%')],['Chase',(pred.chase||[]).length],['Quiet',(pred.quietMembers||[]).length],['Send hold',(pred.sendPending||[]).length]])
+      +'<a class="desk-link" href="/predict.html">Open predict desk</a>';
+  } else if(id==='close'){
+    html='<h2>Beat close</h2><p class="do">One beat. Opening minus collected must equal what is still here. Wrong close is rejected.</p>'
+      +checks([['Opening',num(k.opening)],['Collected',num(k.collected)],['Miss',num(k.missed)],['Balanced',k.balanced?'yes':'no']])
+      +'<a class="desk-link" href="/recon.html">Open beat close</a>';
+  } else if(id==='next'){
+    var rec=((pred.load)||[]).filter(function(r){ return r.tomorrow_qty>0; });
+    var qty=rec.reduce(function(a,r){ return a+num(r.tomorrow_qty); },0);
+    html='<h2>Tomorrow load</h2><p class="do">Load what the ledger already proved: collected plus what is still holding, cut by miss rate.</p>'
+      +checks([['SKUs to load',rec.length],['Units',qty],['Miss rate',(k.miss_rate!=null?k.miss_rate+'%':'0%')]])
+      +'<a class="desk-link" href="/next.html">Open tomorrow desk</a> · <a class="desk-link" href="/hub.html">Hub load</a>';
+  }
+  box.className='open show';
+  box.innerHTML=html;
 }
 function load(){
   Promise.all([
     fetch('/api/tower').then(function(r){ return r.json(); }),
-    fetch('/api/connectors').then(function(r){ return r.json(); }),
-    fetch('/api/settlements?beat=today').then(function(r){ return r.json(); })
+    fetch('/api/settlements?beat=today').then(function(r){ return r.json(); }),
+    fetch('/api/source').then(function(r){ return r.json(); })
   ]).then(function(all){
-    var t=all[0], c=all[1], s=all[2];
-    var k=t.kpis||{};
-    document.getElementById('topmeta').innerHTML='Beat '+(t.beatDate||'-')+' · owner '+(t.owner||'hub')+' · slot '+(t.slot||'17:00')+'<br>Staff sample · no live UPI · DUMMY_DATA on';
-    document.getElementById('kpis').innerHTML=[
-      ['Opening',k.opening],
-      ['Reserved',k.reserved],
-      ['Collected',k.collected],
-      ['Missed',k.missed],
-      ['Leftover',k.leftover],
-      ['Miss rate',(k.miss_rate!=null?k.miss_rate+'%':'0%')]
-    ].map(function(row){
-      return '<div class="kpi"><div class="l">'+row[0]+'</div><div class="n">'+row[1]+'</div></div>';
-    }).join('');
-    var f=t.funnel||{};
-    var vals=[num(f.reserved),num(f.packed),num(f.loaded),num(f.at_stop),num(f.collected),num(f.missed)];
-    var max=Math.max.apply(null,vals.concat([1]));
-    var cls=['','','','','ok','miss'];
-    document.getElementById('funnel').innerHTML=vals.map(function(v,i){
-      return '<b class="'+cls[i]+'" style="height:'+bar(v,max)+'px" title="'+v+'"></b>';
-    }).join('');
-    document.getElementById('funnel-sub').textContent=vals.reduce(function(a,b){return a+b;},0)+' bags on this week beat · identity opening minus collected minus leftover = 0';
-    var bits=(c.sources||[]).map(function(src){
-      var cls=src.status==='ok'?'ok':(src.status==='dummy'?'warn':'');
-      return '<span class="pill '+cls+'">'+src.id+' · '+src.status+' · '+src.rows+'</span>';
-    });
-    document.getElementById('connectors').innerHTML=bits.join('');
-    var load=(t.predict&&t.predict.load)||[];
-    var rec=load.filter(function(r){ return r.tomorrow_qty>0; });
-    document.getElementById('predict-wrap').innerHTML=rec.length
-      ? '<table><thead><tr><th>SKU</th><th>Qty</th><th class="left">Why</th></tr></thead><tbody>'
-        +rec.map(function(r){ return '<tr><td>'+r.sku+'</td><td>'+r.tomorrow_qty+'</td><td class="left"><span class="why">'+r.why+'</span></td></tr>'; }).join('')
-        +'</tbody></table>'
-      : '<div class="empty">Nothing to load from ledger.</div>';
-    var st=s.statement||[];
-    var sets=s.settlements||[];
-    document.getElementById('set-wrap').innerHTML=
-      '<p class="sub">Settlements '+sets.length+' · matched '+(s.matched||0)+' · statement open '+(s.unmatchedStatement||0)+'</p>'
-      + '<table><thead><tr><th>UTR</th><th>Rs</th><th>Match</th></tr></thead><tbody>'
-      + st.map(function(line){
-          return '<tr><td>'+line.utr+'</td><td>'+line.amount+'</td><td>'+(line.matched?'matched':'unmatched')+'</td></tr>';
-        }).join('')
-      + '</tbody></table>';
+    DATA={ tower:all[0], set:all[1], source:all[2], openJob:'' };
+    var t=all[0]||{};
+    document.getElementById('topmeta').innerHTML='Beat '+(t.beatDate||'-')+' · owner '+(t.owner||'hub')+' · slot '+(t.slot||'17:00')+'<br>No live UPI · no OTP · no WhatsApp product';
+    face();
   }).catch(function(){
-    document.getElementById('kpis').innerHTML='<div class="empty">Could not load Rabbit tower.</div>';
+    document.getElementById('jobs').innerHTML='<div class="empty">Could not load the beat board.</div>';
   });
 }
 load();

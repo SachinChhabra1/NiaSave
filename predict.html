@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0B0E14">
 <title>NiaSave · Predict</title>
 <link rel="icon" href="/assets/nia-logo.png" type="image/png">
 <link rel="apple-touch-icon" href="/assets/nia-logo.png">
@@ -38,10 +39,11 @@
   </div>
 <script>
 function fromLabel(d){
-  var p=d.sheetFrom&&d.sheetFrom.procure?d.sheetFrom.procure:'From sheet';
+  var p=d.sheetFrom&&d.sheetFrom.procure?d.sheetFrom.procure:'No file yet';
   var m=d.sheetFrom&&d.sheetFrom.members?d.sheetFrom.members:'From sheet';
   if(p.indexOf('down')>=0||m.indexOf('down')>=0) return 'Sheet down · staff inbound';
-  return 'From sheet';
+  if(p==='No file yet') return 'Procure · no file yet';
+  return 'Procure · '+p;
 }
 function table(cols, rows, empty){
   if(!rows.length) return '<div class="empty">'+empty+'</div>';

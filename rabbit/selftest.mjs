@@ -1,6 +1,6 @@
 import {
   DUMMY_DATA, ledgerOf, predictPayload, settlementsPayload, closeBeat, openBeat,
-  scanOrder, connectorsPayload, resetDummy, WEEK_BEAT, STUDIOS, MEMBERS,
+  scanOrder, connectorsPayload, uploadConnector, sourcePayload, resetDummy, WEEK_BEAT, STUDIOS, MEMBERS,
   STUDIO_COUNT, MEMBER_COUNT, BEAT_BAGS_PER_STOP, ordersPayload, towerPayload,
   jsonSize, TOWER_MAX_BYTES, THEATRE, addStudio, stopsPayload
 } from "./engine.mjs";
@@ -44,6 +44,9 @@ ok("night unmatched statement lines", (night.unmatchedStatementLines || []).leng
 const conn = connectorsPayload();
 ok("connectors", (conn.sources || []).map(s => s.id).join(",") === "ledger,procure,members,vendors,upi_statement");
 ok("members sheet is 3000", conn.sources.find(s => s.id === "members").rows === 3000);
+ok("upi empty until upload", conn.sources.find(s => s.id === "upi_statement").status === "empty" && conn.sources.find(s => s.id === "upi_statement").rows === 0);
+ok("procure empty until upload", conn.sources.find(s => s.id === "procure").status === "empty" && conn.sources.find(s => s.id === "procure").rows === 0);
+ok("source empty until upload", sourcePayload().sources.length === 0 && sourcePayload().from === "No file yet");
 
 const listed = ordersPayload({ pickup: "today" });
 ok("orders default slim", listed.orders.length === 0 && listed.orderCount === 200 && listed.stops.length === 40);
@@ -105,6 +108,42 @@ ok("collected scan settles", collected.ok && collected.order.status === "collect
 ok("scan has no ledger blob", collected.ledger == null);
 const after = settlementsPayload({ beat: "today" });
 ok("new settlement exists", after.settlements.some(s => s.pickupCode === "S1HOLD" && s.trigger === "collected"));
+
+resetDummy();
+const upiUp = uploadConnector({
+  kind: "upi_statement",
+  filename: "bank.csv",
+  csv: "date,utr,amount,note\n2026-08-31,UTRTEST1,320,essentials\n2026-08-31,UTRTEST2,1,open\n"
+});
+ok("upload upi", upiUp.ok === true && upiUp.rows === 2 && upiUp.filename === "bank.csv");
+const connAfter = connectorsPayload();
+const upiSrc = connAfter.sources.find(s => s.id === "upi_statement");
+ok("connectors reflect upi", upiSrc.status === "ok" && upiSrc.rows === 2 && upiSrc.filename === "bank.csv");
+const nightAfter = settlementsPayload({ beat: "today", unmatched: "1" });
+ok("recon uses uploaded statement", (nightAfter.unmatchedStatementLines || []).some(x => x.utr === "UTRTEST2"));
+ok("uploaded statement matched collected", nightAfter.matched >= 1 && (nightAfter.statement || []).some(x => x.utr === "UTRTEST1" && x.matched));
+
+const procUp = uploadConnector({
+  kind: "procure",
+  filename: "procure.csv",
+  csv: "sku,name,vendor,buy_inr,keep_qty,lead_days,last_buy,status\ngroundnut_oil,Oil,Tumkur,185,75,3,2026-08-18,active\n"
+});
+ok("upload procure", procUp.ok === true && procUp.rows === 1);
+ok("source uses procure rows", sourcePayload().sources[0] && sourcePayload().sources[0].sku === "groundnut_oil" && sourcePayload().from === "procure.csv");
+const predAfter = predictPayload();
+ok("predict uses procure rows", predAfter.source.some(r => r.sku === "groundnut_oil") && predAfter.sheetFrom.procure === "procure.csv");
+
+const vendUp = uploadConnector({
+  kind: "vendors",
+  filename: "vendors.csv",
+  csv: "vendor,phone,notes\nTumkur,99999,press\n"
+});
+ok("upload vendors", vendUp.ok === true && vendUp.rows === 1 && connectorsPayload().sources.find(s => s.id === "vendors").status === "ok");
+ok("upload bad kind rejected", uploadConnector({ kind: "razorpay", csv: "a,b\n1,2\n" }).status === 400);
+noDummyWord("connectors after upload", connectorsPayload());
+noDummyWord("source after upload", sourcePayload());
+resetDummy();
+ok("reset clears uploads", connectorsPayload().sources.find(s => s.id === "upi_statement").status === "empty");
 
 if (fails.length) {
   process.stderr.write("FAIL\n" + fails.join("\n") + "\n");

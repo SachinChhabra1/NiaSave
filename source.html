@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0B0E14">
 <title>NiaSave · Who we buy from</title>
 <link rel="icon" href="/assets/nia-logo.png" type="image/png">
 <link rel="apple-touch-icon" href="/assets/nia-logo.png">
@@ -25,7 +26,7 @@
       <div class="meta"><a href="/ops.html">Ops</a></div>
     </header>
     <div class="wrap">
-      <p class="sub">Procure plus vendors sheets · only where Nia cost is under kirana</p>
+      <p class="sub">Procure plus vendors from the Connectors desk · keep a SKU only when Nia cost is under kirana · no live buy</p>
       <p class="sub" id="from">…</p>
       <button type="button" onclick="load()">Refresh</button>
       <div id="wrap" class="empty">Loading…</div>
@@ -34,20 +35,20 @@
 <script>
 function fromLabel(d){
   var raw=d.from || (d.sheetFrom && d.sheetFrom.procure) || '';
-  if(!raw) return 'From sheet';
+  if(!raw || raw==='No file yet') return 'No file yet';
   var low=String(raw).toLowerCase();
   if(low.indexOf('down')>=0) return 'Sheet down';
-  return 'From sheet';
+  return raw;
 }
 function load(){
   document.getElementById('wrap').textContent='Loading…';
   fetch('/api/source').then(function(r){ return r.json(); }).then(function(d){
-    document.getElementById('from').textContent=(d.theatre||'Rajputana Theatre')+' · 40 stops · 3000 members · '+fromLabel(d)+' · inbound procure + vendors';
+    document.getElementById('from').textContent=(d.theatre||'Rajputana Theatre')+' · 40 stops · 3000 members · '+fromLabel(d);
     var rows=Array.isArray(d)?d:(d.sources||[]);
-    if(!rows.length){ document.getElementById('wrap').innerHTML='<div class="empty">No sources.</div>'; return; }
-    document.getElementById('wrap').innerHTML='<table><thead><tr><th>SKU</th><th>Vendor</th><th>Source</th><th>Nia cost</th><th>Kirana</th><th>Keep</th><th>Lead</th><th>Last buy</th><th>Status</th></tr></thead><tbody>'
+    if(!rows.length){ document.getElementById('wrap').innerHTML='<div class="empty">No file yet. Choose a procure CSV on the Connectors desk.</div>'; return; }
+    document.getElementById('wrap').innerHTML='<table><thead><tr><th>SKU</th><th>Name</th><th>Vendor</th><th>Buy</th><th>Keep</th><th>Lead</th><th>Last buy</th><th>Status</th></tr></thead><tbody>'
       +rows.map(function(r){
-        return '<tr><td>'+r.sku+'</td><td class="left">'+(r.vendor||r.source||'-')+'</td><td class="left">'+r.source+'</td><td>Rs '+r.niaCost+'</td><td>Rs '+r.kirana+'</td><td>Rs '+r.keep+'</td><td>'+(r.lead_days!=null?r.lead_days+'d':'-')+'</td><td>'+(r.last_buy||'-')+'</td><td>'+(r.status||'-')+'</td></tr>';
+        return '<tr><td>'+r.sku+'</td><td class="left">'+(r.name||'-')+'</td><td class="left">'+(r.vendor||r.source||'-')+'</td><td class="num">Rs '+(r.niaCost!=null?r.niaCost:'-')+'</td><td class="num">'+(r.keep!=null?r.keep:'-')+'</td><td>'+(r.lead_days!=null?r.lead_days+'d':'-')+'</td><td>'+(r.last_buy||'-')+'</td><td>'+(r.status||'-')+'</td></tr>';
       }).join('')
       +'</tbody></table>';
   }).catch(function(){ document.getElementById('wrap').textContent='Could not load sources.'; });

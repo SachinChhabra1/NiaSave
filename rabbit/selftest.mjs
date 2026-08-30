@@ -260,6 +260,10 @@ const opsHtml = readFileSync(new URL("../ops.html", import.meta.url), "utf8");
 ok("ops nia then Operation Polo", /class="nia-logo"[\s\S]{0,200}Operation Polo/.test(opsHtml));
 ok("ops has no polo-icon", !/polo-icon/.test(opsHtml));
 ok("ops job icons in source", /id="i-biker"/.test(opsHtml) && /id="i-po"/.test(opsHtml) && /id="i-dispatch"/.test(opsHtml));
+const rail = (opsHtml.split('class="rail"')[1] || "").split('class="pane"')[0];
+ok("ops rail Reports and Ops", /<h2 class="rail-h"[^>]*>Reports<\/h2>/.test(rail) && /<h2 class="rail-h"[^>]*>Ops<\/h2>/.test(rail));
+ok("inventory under Reports", rail.indexOf("Reports") < rail.indexOf(">Inventory<") && rail.indexOf(">Inventory<") < rail.indexOf(">Ops<"));
+ok("biker po dispatch under Ops", rail.indexOf(">Ops<") < rail.indexOf(">Biker<") && rail.indexOf(">Ops<") < rail.indexOf(">Purchase order<") && rail.indexOf(">Ops<") < rail.indexOf(">Dispatch<"));
 ok("biker desk exists", /Book biker/.test(readFileSync(new URL("../biker.html", import.meta.url), "utf8")));
 
 if (fails.length) {

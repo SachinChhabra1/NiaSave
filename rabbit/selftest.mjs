@@ -3,7 +3,8 @@ import {
   scanOrder, connectorsPayload, uploadConnector, sourcePayload, resetDummy, WEEK_BEAT, STUDIOS, MEMBERS,
   STUDIO_COUNT, MEMBER_COUNT, BEAT_BAGS_PER_STOP, ordersPayload, towerPayload,
   jsonSize, TOWER_MAX_BYTES, THEATRE, addStudio, stopsPayload, stockPayload, SKUS,
-  placeMemberOrder, authOtp, authVerify, authMe, saveMemberFlags, ageingPayload, inventoryPayload
+  placeMemberOrder, authOtp, authVerify, authMe, saveMemberFlags, ageingPayload, inventoryPayload,
+  mutatePo, poPayload, mutateDispatch, mutateInvoice, invoicePayload
 } from "./engine.mjs";
 
 const fails = [];
@@ -171,6 +172,41 @@ ok("verify skip", authVerify({ phone: "9876541042" }).ok === true && authMe().me
 ok("member flags", saveMemberFlags({ flags: { fridayHours: true } }).flags.fridayHours === true);
 noDummyWord("order", ord);
 noDummyWord("auth me", authMe());
+resetDummy();
+
+const poDraft = poPayload();
+ok("po draft from load", (poDraft.draft || []).length > 0 && poDraft.draft.every(r => r.sku && r.qty > 0));
+const created = mutatePo({ action: "create" });
+ok("create PO returns poId", created.ok === true && /^PO-\d+$/.test(created.poId));
+const sentPo = mutatePo({ action: "send", poId: created.poId });
+ok("mark PO sent", sentPo.ok === true && sentPo.po.status === "sent");
+const inboundSku = (created.po.lines[0] && created.po.lines[0].sku) || "groundnut_oil";
+const openBefore = stockPayload().opening[inboundSku] || 0;
+const recvPo = mutatePo({ action: "receive", poId: created.poId });
+ok("mark PO received inbound", recvPo.ok === true && recvPo.inbound === true && recvPo.po.status === "received");
+ok("receive posts inbound not qty field", stockPayload().opening[inboundSku] > openBefore && stockPayload().movements[inboundSku].inbound === stockPayload().opening[inboundSku]);
+ok("stock keys after receive", ["beatDate","theatre","stopCount","opening","stock","remaining","movements","holding"].every(k => stockPayload()[k] !== undefined));
+noDummyWord("po", poPayload());
+
+resetDummy();
+const loadTooSoon = mutateDispatch({ action: "load", stopId: "S01" });
+ok("unpacked cannot load", loadTooSoon.status === 409 && loadTooSoon.error === "unpacked_remain");
+const packedStop = mutateDispatch({ action: "pack", stopId: "S01" });
+ok("pack remaining", packedStop.ok === true && packedStop.packed >= 1);
+const dispatched = mutateDispatch({ action: "dispatch", stopId: "S01" });
+ok("dispatch note", dispatched.ok === true && /^DN-\d+$/.test(dispatched.noteId) && dispatched.note && dispatched.note.stopId === "S01" && dispatched.note.slot === "17:00");
+
+const collectedBag = ordersPayload({ pickup: "today", stop: "S02" }).orders.find(o => o.status === "collected");
+ok("has collected bag for receipt", Boolean(collectedBag && collectedBag.pickupCode));
+const receipt = mutateInvoice({ action: "receipt", pickupCode: collectedBag && collectedBag.pickupCode });
+ok("member invoice on collected", receipt.ok === true && receipt.invoiceId && receipt.invoice.trigger === "collected" && receipt.invoice.gstin === "this phone" && receipt.invoice.liveUpi === false);
+resetDummy();
+const po2 = mutatePo({ action: "create" });
+mutatePo({ action: "send", poId: po2.poId });
+mutatePo({ action: "receive", poId: po2.poId });
+const bill = mutateInvoice({ action: "vendor_bill", poId: po2.poId });
+ok("vendor bill vs PO", bill.ok === true && bill.invoiceId === "INV-V-" + po2.poId && bill.invoice.poId === po2.poId);
+noDummyWord("invoice", invoicePayload());
 resetDummy();
 
 if (fails.length) {

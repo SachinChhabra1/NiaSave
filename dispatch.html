@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0B0E14">
+<title>NiaSave · Dispatch</title>
+<link rel="icon" href="/assets/nia-logo.png" type="image/png">
+<link rel="apple-touch-icon" href="/assets/nia-logo.png">
+<link rel="stylesheet" href="/staff.css">
+</head>
+<body>
+  <div class="narrow">
+    <div class="narrow-card">
+      <div class="kicker">Rabbit · Jabali Officer</div>
+      <h1>Open on a laptop</h1>
+      <p>Dispatch is a wide staff desk. It is not the member app.</p>
+    </div>
+  </div>
+  <div class="tower">
+    <header class="top">
+      <div>
+        <div class="brand">Rabbit · dispatch</div>
+        <h1>Cart leaves the hub</h1>
+      </div>
+      <div class="meta"><a href="/ops.html">Ops</a> · <a href="/hub.html">Hub</a> · <a href="/po.html">PO</a></div>
+    </header>
+    <div class="wrap">
+      <p class="sub">Packed list before the cart leaves. Unpacked cannot go loaded. Dispatch to a studio stop at 17:00. No door. No address. Reuses pack, load, and arrived scans.</p>
+      <p class="sub" id="beat">Beat …</p>
+      <button type="button" onclick="loadStops()">Refresh stops</button>
+      <div class="msg" id="msg"></div>
+      <div id="stops" class="stops"></div>
+      <div id="desk"><div class="empty">Tap a stop. Pack remaining. Load. Dispatch.</div></div>
+      <h2>Dispatch notes</h2>
+      <div id="notes"></div>
+    </div>
+  </div>
+<script>
+var STOP='';
+function num(n){ return n==null?0:n; }
+function post(action){
+  return fetch('/api/dispatch',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({ action:action, stopId:STOP })
+  }).then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); });
+}
+function paintNotes(notes){
+  notes=notes||[];
+  document.getElementById('notes').innerHTML=notes.length
+    ? '<table><thead><tr><th>Note</th><th>Beat</th><th>Stop</th><th>Bags</th><th>Packed</th><th>Loaded</th><th>Slot</th></tr></thead><tbody>'
+      +notes.map(function(n){
+        return '<tr><td>'+n.noteId+'</td><td>'+n.beatDate+'</td><td>'+n.stopId+' · '+(n.stopName||'')+'</td><td class="num">'+num(n.bags)+'</td><td class="num">'+num(n.packed)+'</td><td class="num">'+num(n.loaded)+'</td><td>'+(n.slot||'17:00')+'</td></tr>';
+      }).join('')
+      +'</tbody></table>'
+    : '<div class="empty">No dispatch notes yet.</div>';
+}
+function loadStop(stop){
+  var desk=document.getElementById('desk');
+  desk.innerHTML='<div class="empty">Loading '+stop+'…</div>';
+  fetch('/api/dispatch?stop='+encodeURIComponent(stop)).then(function(r){ return r.json(); }).then(function(d){
+    var orders=d.orders||[];
+    var rows=orders.map(function(o){
+      return '<tr><td>'+(o.pickupCode||o.id)+'</td><td>'+(o.status||'')+'</td><td class="left">'+(o.lines||[]).map(function(l){ return (l.id||'?')+' × '+(l.qty||1); }).join(' · ')+'</td></tr>';
+    }).join('');
+    desk.innerHTML='<h2>'+(d.stopName||stop)+' · packed list</h2>'
+      + '<p class="sub">Bags '+num(d.bags)+' · unpacked '+num(d.unpacked)+' · packed '+num(d.packed)+' · loaded '+num(d.loaded)+' · slot '+(d.slot||'17:00')+'</p>'
+      + '<div class="actions">'
+      +   '<button type="button" onclick="doPack()">Pack remaining</button>'
+      +   '<button type="button" onclick="doLoad()">Load cart</button>'
+      +   '<button type="button" onclick="doDispatch()">Dispatch to stop</button>'
+      + '</div>'
+      + (orders.length
+        ? '<table><thead><tr><th>Bag</th><th>Status</th><th>Lines</th></tr></thead><tbody>'+rows+'</tbody></table>'
+        : '<div class="empty">No open bags at this stop.</div>')
+      + '<div class="open show" id="notebox" style="margin-top:12px;display:none"></div>';
+    paintNotes(d.notes);
+  }).catch(function(){ desk.innerHTML='<div class="empty">Could not load this stop.</div>'; });
+}
+function faceStops(d){
+  var stops=d.stops||[];
+  document.getElementById('stops').innerHTML=stops.map(function(s){
+    return '<button type="button" class="stop'+(s.stopId===STOP?' on':'')+'" data-stop="'+s.stopId+'">'
+      + '<div class="stop-id">'+s.stopId+'</div>'
+      + '<strong>'+(s.name||s.stopId)+'</strong>'
+      + '<div class="stop-num">'+s.open+' open · '+s.packed+' packed · '+s.loaded+' loaded</div></button>';
+  }).join('');
+  document.querySelectorAll('button.stop').forEach(function(el){
+    el.addEventListener('click', function(){
+      var id=el.getAttribute('data-stop');
+      STOP = STOP===id ? '' : id;
+      loadStops();
+    });
+  });
+}
+function loadStops(){
+  fetch('/api/dispatch').then(function(r){ return r.json(); }).then(function(d){
+    document.getElementById('beat').textContent=(d.theatre||'Rajputana Theatre')+' · Beat '+(d.beatDate||'-')+' · slot '+(d.slot||'17:00')+' · no door · no address';
+    faceStops(d);
+    paintNotes(d.notes);
+    if(STOP) loadStop(STOP);
+    else document.getElementById('desk').innerHTML='<div class="empty">Tap a stop. Pack remaining. Load. Dispatch.</div>';
+  }).catch(function(){ document.getElementById('stops').innerHTML='<div class="empty">Could not load stops.</div>'; });
+}
+function doPack(){
+  if(!STOP) return;
+  post('pack').then(function(res){
+    document.getElementById('msg').textContent=res.ok?('Packed '+num(res.j.packed)+' bag(s) at '+STOP):((res.j&&res.j.error)||'Pack failed');
+    loadStop(STOP);
+  });
+}
+function doLoad(){
+  if(!STOP) return;
+  post('load').then(function(res){
+    if(!res.ok && res.j && res.j.error==='unpacked_remain'){
+      document.getElementById('msg').textContent='Unpacked cannot go loaded. Pack remaining first. '+num(res.j.unpacked)+' unpacked.';
+      return;
+    }
+    document.getElementById('msg').textContent=res.ok?('Loaded '+num(res.j.loaded)+' at '+STOP):((res.j&&res.j.error)||'Load failed');
+    loadStop(STOP);
+  });
+}
+function doDispatch(){
+  if(!STOP) return;
+  post('dispatch').then(function(res){
+    if(!res.ok && res.j && res.j.error==='unpacked_remain'){
+      document.getElementById('msg').textContent='Unpacked cannot go loaded. Pack remaining first.';
+      return;
+    }
+    if(!res.ok){ document.getElementById('msg').textContent=(res.j&&res.j.error)||'Dispatch failed'; return; }
+    var n=res.j.note||{};
+    document.getElementById('msg').textContent='Dispatch note '+n.noteId;
+    loadStop(STOP);
+    var box=document.getElementById('notebox');
+    if(box){
+      box.style.display='block';
+      box.innerHTML='<h2>Dispatch note '+n.noteId+'</h2>'
+        + '<p class="do">Beat '+n.beatDate+' · Stop '+n.stopId+' · '+(n.stopName||'')+' · slot '+(n.slot||'17:00')+'</p>'
+        + '<div class="checks">'
+        +   '<div class="check"><div class="l">Bags</div><div class="n">'+num(n.bags)+'</div></div>'
+        +   '<div class="check"><div class="l">Packed</div><div class="n">'+num(n.packed)+'</div></div>'
+        +   '<div class="check"><div class="l">Loaded</div><div class="n">'+num(n.loaded)+'</div></div>'
+        +   '<div class="check"><div class="l">Arrived</div><div class="n">'+num(n.arrived)+'</div></div>'
+        + '</div>';
+    }
+  });
+}
+loadStops();
+</script>
+</body>
+</html>

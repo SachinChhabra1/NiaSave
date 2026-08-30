@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0B0E14">
+<title>NiaSave · Purchase orders</title>
+<link rel="icon" href="/assets/nia-logo.png" type="image/png">
+<link rel="apple-touch-icon" href="/assets/nia-logo.png">
+<link rel="stylesheet" href="/staff.css">
+</head>
+<body>
+  <div class="narrow">
+    <div class="narrow-card">
+      <div class="kicker">Rabbit · Jabali Officer</div>
+      <h1>Open on a laptop</h1>
+      <p>Purchase orders are a wide staff desk. It is not the member app.</p>
+    </div>
+  </div>
+  <div class="tower">
+    <header class="top">
+      <div>
+        <div class="brand">Rabbit · purchase order</div>
+        <h1>Place the order</h1>
+      </div>
+      <div class="meta"><a href="/ops.html">Ops</a> · <a href="/invoice.html">Invoice</a> · <a href="/dispatch.html">Dispatch</a></div>
+    </header>
+    <div class="wrap">
+      <p class="sub">Officer places the order. Draft from procure plus tomorrow load. Create PO, mark sent, mark received. Received posts inbound. Not an editable quantity. Skip on. No live UPI.</p>
+      <p class="sub" id="beat">Beat …</p>
+      <div class="pills" id="counts"></div>
+      <div class="msg" id="msg"></div>
+      <h2>Draft from tomorrow load</h2>
+      <div id="draft">Loading…</div>
+      <div class="actions">
+        <button type="button" id="createBtn" onclick="createPo()">Create PO</button>
+        <button type="button" class="ghost" onclick="load()">Refresh</button>
+      </div>
+      <h2 id="orders">Open / sent / received / cancelled</h2>
+      <div id="list"></div>
+    </div>
+  </div>
+<script>
+function num(n){ return n==null?0:n; }
+function post(action, extra){
+  var body=Object.assign({ action:action }, extra||{});
+  return fetch('/api/po',{ method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) })
+    .then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); });
+}
+function load(){
+  fetch('/api/po').then(function(r){ return r.json(); }).then(function(d){
+    document.getElementById('beat').textContent=(d.theatre||'Rajputana Theatre')+' · this beat '+(d.beatDate||'-')+' · next '+(d.nextBeatDate||'-')+' · slot '+(d.slot||'17:00');
+    var c=d.counts||{};
+    document.getElementById('counts').innerHTML=
+      '<span class="pill warn">open '+num(c.open)+'</span>'
+      +'<span class="pill info">sent '+num(c.sent)+'</span>'
+      +'<span class="pill ok">received '+num(c.received)+'</span>'
+      +'<span class="pill">cancelled '+num(c.cancelled)+'</span>';
+    var draft=d.draft||[];
+    document.getElementById('draft').innerHTML=draft.length
+      ? '<table><thead><tr><th>Vendor</th><th>SKU</th><th>Qty</th><th>Nia cost</th><th>Beat</th></tr></thead><tbody>'
+        +draft.map(function(r){
+          return '<tr><td class="left">'+(r.vendor||'-')+'</td><td>'+r.sku+'</td><td class="num">'+num(r.qty)+'</td><td class="num">Rs '+num(r.niaCost)+'</td><td>'+(r.beatDate||'-')+'</td></tr>';
+        }).join('')
+        +'</tbody></table>'
+      : '<div class="empty">No tomorrow load to order.</div>';
+    document.getElementById('createBtn').disabled=!draft.length;
+    var pos=d.pos||[];
+    document.getElementById('list').innerHTML=pos.length
+      ? '<table><thead><tr><th>PO</th><th>Vendor</th><th>Status</th><th>Amount</th><th>Lines</th><th>Action</th></tr></thead><tbody>'
+        +pos.map(function(p){
+          var act='';
+          if(p.status==='open'){
+            act='<button type="button" onclick="sendPo('+JSON.stringify(p.poId)+')">Mark sent</button> '
+              +'<button type="button" class="ghost" onclick="recvPo('+JSON.stringify(p.poId)+')">Mark received</button> '
+              +'<button type="button" class="ghost" onclick="cancelPo('+JSON.stringify(p.poId)+')">Cancel</button>';
+          } else if(p.status==='sent'){
+            act='<button type="button" onclick="recvPo('+JSON.stringify(p.poId)+')">Mark received</button>';
+          }
+          return '<tr><td>'+p.poId+'</td><td class="left">'+(p.vendor||'-')+'</td><td>'+p.status+'</td><td class="num">Rs '+num(p.amount)+'</td><td class="num">'+(p.lines||[]).length+'</td><td class="left">'+act+'</td></tr>';
+        }).join('')
+        +'</tbody></table>'
+      : '<div class="empty">No purchase orders yet. Create PO from the draft.</div>';
+  }).catch(function(){ document.getElementById('draft').textContent='Could not load purchase orders.'; });
+}
+function createPo(){
+  post('create').then(function(res){
+    document.getElementById('msg').textContent=res.ok?('Created '+res.j.poId):((res.j&&res.j.error)||'Create failed');
+    load();
+  });
+}
+function sendPo(id){
+  post('send',{ poId:id }).then(function(res){
+    document.getElementById('msg').textContent=res.ok?('Sent '+res.j.poId):((res.j&&res.j.error)||'Send failed');
+    load();
+  });
+}
+function recvPo(id){
+  post('receive',{ poId:id }).then(function(res){
+    document.getElementById('msg').textContent=res.ok?('Received '+res.j.poId+' · inbound posted'):((res.j&&res.j.error)||'Receive failed');
+    load();
+  });
+}
+function cancelPo(id){
+  post('cancel',{ poId:id }).then(function(res){
+    document.getElementById('msg').textContent=res.ok?('Cancelled '+res.j.poId):((res.j&&res.j.error)||'Cancel failed');
+    load();
+  });
+}
+load();
+</script>
+</body>
+</html>

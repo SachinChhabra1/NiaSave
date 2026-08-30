@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0B0E14">
+<title>NiaSave · Invoicing</title>
+<link rel="icon" href="/assets/nia-logo.png" type="image/png">
+<link rel="apple-touch-icon" href="/assets/nia-logo.png">
+<link rel="stylesheet" href="/staff.css">
+</head>
+<body>
+  <div class="narrow">
+    <div class="narrow-card">
+      <div class="kicker">Rabbit · Jabali Officer</div>
+      <h1>Open on a laptop</h1>
+      <p>Invoicing is a wide staff desk. It is not the member app.</p>
+    </div>
+  </div>
+  <div class="tower">
+    <header class="top">
+      <div>
+        <div class="brand">Rabbit · invoice</div>
+        <h1>Receipts and vendor bills</h1>
+      </div>
+      <div class="meta"><a href="/ops.html">Ops</a> · <a href="/po.html">PO</a> · <a href="/recon.html">Recon</a></div>
+    </header>
+    <div class="wrap">
+      <p class="sub">Member receipt on collected scan. Vendor bill versus PO. Skip on. No live UPI. No Razorpay. GSTIN this phone if a GSTIN is missing.</p>
+      <p class="sub" id="beat">Beat …</p>
+      <div class="msg" id="msg"></div>
+      <button type="button" onclick="load()">Refresh</button>
+      <h2>Member receipts due</h2>
+      <p class="sub">Trigger collected. Not pack. Not pay capture.</p>
+      <div id="receipts">Loading…</div>
+      <h2>Vendor bills due</h2>
+      <p class="sub">Bill versus a received PO.</p>
+      <div id="bills"></div>
+      <h2>Issued</h2>
+      <div id="issued"></div>
+    </div>
+  </div>
+<script>
+function num(n){ return n==null?0:n; }
+function post(body){
+  return fetch('/api/invoice',{ method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) })
+    .then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); });
+}
+function load(){
+  fetch('/api/invoice').then(function(r){ return r.json(); }).then(function(d){
+    document.getElementById('beat').textContent=(d.theatre||'Rajputana Theatre')+' · Beat '+(d.beatDate||'-')+' · GSTIN '+(d.gstin||'this phone')+' · trigger collected · no live UPI';
+    var ready=d.collectedReady||[];
+    document.getElementById('receipts').innerHTML=ready.length
+      ? '<table><thead><tr><th>Code</th><th>Member</th><th>Amount</th><th>Lines</th><th>Action</th></tr></thead><tbody>'
+        +ready.map(function(o){
+          var lines=(o.lines||[]).map(function(l){ return (l.id||'?')+' × '+(l.qty||1); }).join(' · ');
+          return '<tr><td>'+o.pickupCode+'</td><td>'+(o.memberId||'-')+'</td><td class="num">Rs '+num(o.amount)+'</td><td class="left">'+lines+'</td>'
+            + '<td><button type="button" onclick="issueReceipt('+JSON.stringify(o.pickupCode)+')">Issue receipt</button></td></tr>';
+        }).join('')
+        +'</tbody></table>'
+      : '<div class="empty">No collected bags waiting on a receipt.</div>';
+    var pos=d.posReady||[];
+    document.getElementById('bills').innerHTML=pos.length
+      ? '<table><thead><tr><th>PO</th><th>Vendor</th><th>Amount</th><th>Action</th></tr></thead><tbody>'
+        +pos.map(function(p){
+          return '<tr><td>'+p.poId+'</td><td class="left">'+(p.vendor||'-')+'</td><td class="num">Rs '+num(p.amount)+'</td>'
+            + '<td><button type="button" onclick="issueBill('+JSON.stringify(p.poId)+')">Issue vendor bill</button></td></tr>';
+        }).join('')
+        +'</tbody></table>'
+      : '<div class="empty">No received PO waiting on a vendor bill.</div>';
+    var inv=d.invoices||[];
+    document.getElementById('issued').innerHTML=inv.length
+      ? '<table><thead><tr><th>Invoice</th><th>Kind</th><th>Ref</th><th>Amount</th><th>GSTIN</th></tr></thead><tbody>'
+        +inv.map(function(i){
+          var ref=i.kind==='member'?(i.pickupCode||''):(i.poId||'');
+          return '<tr><td>'+i.invoiceId+'</td><td>'+i.kind+'</td><td>'+ref+'</td><td class="num">Rs '+num(i.amount)+'</td><td>'+(i.gstin||'this phone')+'</td></tr>';
+        }).join('')
+        +'</tbody></table>'
+      : '<div class="empty">No invoices issued.</div>';
+  }).catch(function(){ document.getElementById('receipts').textContent='Could not load invoices.'; });
+}
+function issueReceipt(code){
+  post({ action:'receipt', pickupCode:code }).then(function(res){
+    document.getElementById('msg').textContent=res.ok?('Issued '+res.j.invoiceId):((res.j&&res.j.error)||'Receipt failed');
+    load();
+  });
+}
+function issueBill(poId){
+  post({ action:'vendor_bill', poId:poId }).then(function(res){
+    document.getElementById('msg').textContent=res.ok?('Issued '+res.j.invoiceId):((res.j&&res.j.error)||'Bill failed');
+    load();
+  });
+}
+load();
+</script>
+</body>
+</html>

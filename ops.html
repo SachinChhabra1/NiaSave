@@ -213,7 +213,16 @@ function face(){
   document.getElementById('realities').innerHTML=[
     'Ordered','Paid','Hub loaded','Collected or returned','Settled'
   ].map(function(x){ return '<span class="reality">'+x+'</span>'; }).join('');
+  var ops=t.ops||{};
   document.getElementById('jobs').innerHTML=[
+    jobBtn('po','Buy','Purchase order','Create a PO from procure plus tomorrow load. Mark sent. Mark received.',
+      num(ops.poOpen)+' open · '+num(ops.poSent)+' sent · '+num(ops.poReceived)+' received', open==='po'),
+    jobBtn('order','Buy','Order','Officer places the order. Open, sent, received, cancelled on the PO desk.',
+      num(ops.poOpen)+' open · '+num(ops.poSent)+' sent', open==='order'),
+    jobBtn('dispatch','Hub','Dispatch','Pack remaining. Load. Dispatch to the studio stop at 17:00. Unpacked cannot go loaded.',
+      num(ops.dispatchNotes)+' notes · '+num(f.packed)+' packed · '+num(f.loaded)+' loaded', open==='dispatch'),
+    jobBtn('invoice','Night','Invoice','Member receipt on collected. Vendor bill versus PO. GSTIN this phone if missing.',
+      num(ops.invoices)+' issued · trigger collected', open==='invoice'),
     jobBtn('pickup','After 5','Pickup','Tap the stop. Tap the bag. Collect by code or mark miss.',
       num(f.reserved)+' reserved · '+num(f.collected)+' collected · '+num(f.missed)+' miss', open==='pickup'),
     jobBtn('inventory','Stock','Inventory','Lots and movements. On-hand is leftover. Not an editable quantity.',
@@ -261,7 +270,19 @@ function pick(id){
   var s=DATA.set||{};
   var pred=t.predict||{};
   var html='';
-  if(id==='pickup'){
+  if(id==='po' || id==='order'){
+    html='<h2>'+(id==='order'?'Order':'Purchase order')+'</h2><p class="do">Create a PO from procure plus tomorrow load. Officer marks sent, then received. Received posts inbound. Not an editable quantity.</p>'
+      +checks([['Open',num((t.ops||{}).poOpen)],['Sent',num((t.ops||{}).poSent)],['Received',num((t.ops||{}).poReceived)]])
+      +'<a class="desk-link" href="/po.html'+(id==='order'?'#orders':'')+'">Open '+(id==='order'?'order':'PO')+' desk</a>';
+  } else if(id==='dispatch'){
+    html='<h2>Dispatch</h2><p class="do">Packed list before the cart leaves. Unpacked cannot go loaded. Dispatch to a studio stop at 17:00. No door. No address.</p>'
+      +checks([['Notes',num((t.ops||{}).dispatchNotes)],['Packed',num(f.packed)],['Loaded',num(f.loaded)]])
+      +'<a class="desk-link" href="/dispatch.html">Open dispatch desk</a>';
+  } else if(id==='invoice'){
+    html='<h2>Invoice</h2><p class="do">Member receipt on collected. Vendor bill versus PO. GSTIN this phone if missing. No live UPI.</p>'
+      +checks([['Issued',num((t.ops||{}).invoices)],['Trigger','collected']])
+      +'<a class="desk-link" href="/invoice.html">Open invoice desk</a>';
+  } else if(id==='pickup'){
     html='<h2>Pickup</h2><p class="do">Three taps after the member is identified: tap the stop, tap the bag, collect by code. Miss if they do not come. Pack, load, and arrived stay on hub.</p>'
       +checks([['Reserved',num(f.reserved)],['Collected',num(f.collected)],['Miss',num(f.missed)]])
       +'<a class="desk-link" href="/pickup.html">Open pickup desk</a>';

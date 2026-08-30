@@ -78,13 +78,13 @@
           <div class="realities" id="realities">
             <span class="reality"><b>1</b> Ordered</span>
             <span class="reality-arrow" aria-hidden="true">→</span>
-            <span class="reality"><b>2</b> Paid</span>
+            <span class="reality"><b>2</b> Hub loaded</span>
             <span class="reality-arrow" aria-hidden="true">→</span>
-            <span class="reality"><b>3</b> Hub loaded</span>
+            <span class="reality"><b>3</b> Collected or returned</span>
             <span class="reality-arrow" aria-hidden="true">→</span>
-            <span class="reality"><b>4</b> Collected or returned</span>
+            <span class="reality"><b>4</b> Settled</span>
             <span class="reality-arrow" aria-hidden="true">→</span>
-            <span class="reality"><b>5</b> Settled</span>
+            <span class="reality"><b>5</b> Paid</span>
           </div>
           <div class="jobs" id="jobs"></div>
           <div class="open" id="open"></div>
@@ -286,7 +286,7 @@ function face(){
   var upi=srcOf(conn,'upi_statement');
   var procure=srcOf(conn,'procure');
   document.getElementById('realities').innerHTML=[
-    'Ordered','Paid','Hub loaded','Collected or returned','Settled'
+    'Ordered','Hub loaded','Collected or returned','Settled','Paid'
   ].map(function(x,i){
     return (i?'<span class="reality-arrow" aria-hidden="true">→</span>':'')
       + '<span class="reality"><b>'+(i+1)+'</b> '+x+'</span>';

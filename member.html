@@ -1095,7 +1095,7 @@
     <h1 class="quit-h">Helping members save more and remit more</h1>
     <p class="quit-close">Go-live load: 1 theatre · 40 studios · 3,000 members. This phone is one member month: browse, bag, pickup. Paid monthly.</p>
     <ul class="quit-rows">
-      <li><button type="button" class="quit-row" data-tab="live"><span class="num">1</span><span class="tx"><span class="t">Studio near work</span><span class="d">Walk. Rupees stay for home.</span></span><span class="tab">Live</span></button></li>
+      <li><button type="button" class="quit-row" data-tab="live"><span class="num">1</span><span class="tx"><span class="t">Live near work</span><span class="d">Walk. Rupees stay for home.</span></span><span class="tab">Live</span></button></li>
       <li><button type="button" class="quit-row" data-tab="earn"><span class="num">2</span><span class="tx"><span class="t">TGIF</span><span class="d">Friday pays more.</span></span><span class="tab">Earn</span></button></li>
       <li><button type="button" class="quit-row" data-tab="save"><span class="num">3</span><span class="tx"><span class="t">Lower cost than kirana</span><span class="d">Pickup after 5.</span></span><span class="tab">Save</span></button></li>
       <li><button type="button" class="quit-row" data-tab="send"><span class="num">4</span><span class="tx"><span class="t">Remit more</span><span class="d">How much reaches home?</span></span><span class="tab">Send</span></button></li>
@@ -1252,19 +1252,19 @@ var substitutionProducts = [
   {id:'essentials_pick',brand:'Everyday essentials',hi:{en:'Rice, atta and salt',hi:'चावल, आटा और नमक',bn:'চাল, আটা ও নুন',ta:'அரிசி, மாவு மற்றும் உப்பு',kn:'ಅಕ್ಕಿ, ಹಿಟ್ಟು ಮತ್ತು ಉಪ್ಪು'},price:355,mrp:390,photoClass:'essentials',photoSheet:'sub',category:'food'}
 ];
 var liveServiceProducts = [
-  {id:'live_studio',brand:'Studio near work',price:2200,mrp:3000,img:'assets/studio-bunk-lockers.jpg',category:'live'},
-  {id:'live_wash',brand:'Washing service',price:220,mrp:780,img:'assets/wash-folded-clothes.jpg',category:'live'},
-  {id:'live_hubfood',brand:'Hub meals',price:2300,mrp:2800,img:'assets/nia-logo-transparent.png',category:'live'},
-  {id:'live_cooler',brand:'Shared air cooler',price:400,mrp:600,img:'assets/air-cooler-shared.jpg',category:'live'},
-  {id:'live_cycle',brand:'Shared cycle',price:200,mrp:800,img:'assets/nia-logo-transparent.png',category:'live'},
-  {id:'live_raincape',brand:'Rain cape',price:150,mrp:700,img:'assets/nia-logo-transparent.png',category:'live'},
-  {id:'live_dontmiss',brand:'Attendance help',price:50,mrp:400,img:'assets/nia-logo-transparent.png',category:'live'},
+  {id:'live_studio',brand:'Live near work',price:2200,mrp:3000,img:'assets/studio-bunk-lockers.jpg',category:'live'},
+  {id:'live_wash',brand:'Get clothes washed',price:220,mrp:780,img:'assets/wash-folded-clothes.jpg',category:'live'},
+  {id:'live_hubfood',brand:'Two meals daily',price:2300,mrp:2800,img:'assets/nia-logo-transparent.png',category:'live'},
+  {id:'live_cooler',brand:'Sleep cooler',price:400,mrp:600,img:'assets/air-cooler-shared.jpg',category:'live'},
+  {id:'live_cycle',brand:'Travel for less',price:200,mrp:800,img:'assets/nia-logo-transparent.png',category:'live'},
+  {id:'live_raincape',brand:'Stay dry',price:150,mrp:700,img:'assets/nia-logo-transparent.png',category:'live'},
+  {id:'live_dontmiss',brand:'Protect your pay',price:50,mrp:400,img:'assets/nia-logo-transparent.png',category:'live'},
   {id:'live_akka',brand:'Tell Akka',price:50,mrp:400,img:'assets/tribe-akka-tea.jpg',category:'live'},
-  {id:'live_group',brand:'Sunday chai with group',price:50,mrp:400,img:'assets/tribe-group-cups.jpg',category:'live'},
-  {id:'live_dropin',brand:'Clinic',price:150,mrp:500,img:'assets/tribe-clinic-kit.jpg',category:'live'},
-  {id:'live_recreation',brand:'Recreation',price:100,mrp:700,img:'assets/tribe-recreation.jpg',category:'live'},
-  {id:'live_thrift',brand:'Village savings',price:50,mrp:500,img:'assets/tribe-save-box.jpg',category:'live'},
-  {id:'live_grievance',brand:'Wage help',price:50,mrp:400,img:'assets/nia-logo-transparent.png',category:'live'}
+  {id:'live_group',brand:'Sunday chai',price:50,mrp:400,img:'assets/tribe-group-cups.jpg',category:'live'},
+  {id:'live_dropin',brand:'See a doctor',price:150,mrp:500,img:'assets/tribe-clinic-kit.jpg',category:'live'},
+  {id:'live_recreation',brand:'Play after work',price:100,mrp:700,img:'assets/tribe-recreation.jpg',category:'live'},
+  {id:'live_thrift',brand:'Save together',price:50,mrp:500,img:'assets/tribe-save-box.jpg',category:'live'},
+  {id:'live_grievance',brand:'Fix wage issues',price:50,mrp:400,img:'assets/nia-logo-transparent.png',category:'live'}
 ];
 var allProducts = products.concat(commerceProducts,substitutionProducts,liveServiceProducts);
 var bag = {};   // id -> qty
@@ -1278,7 +1278,7 @@ var T = {
     intro3:'Everything here is measured one way. What reaches home.',
     topsub:'Surat · Ved Road', public_sub:'Essentials. More for home.',
     auth_title:'Continue with your phone', auth_copy:'10-digit Indian mobile number.', auth_phone_label:'Phone number', auth_phone_placeholder:'10-digit mobile number', auth_send:'Send OTP', auth_phone_error:'Enter your 10-digit mobile number.', auth_otp_title:'Enter the OTP', auth_otp_copy:'Enter the 6-digit OTP sent to', auth_otp_label:'6-digit OTP', auth_verify:'Verify & continue', auth_otp_error:'Enter the 6-digit OTP.', auth_change:'Change phone number', auth_back:'Back to Save', auth_private:'Live, Earn and Send need your phone.',
-    tab_live:'Live', tab_earn:'Earn', tab_save:'Save', tab_send:'Send', daily:'Daily', seeall:'See all', payslip_k:'Your pay, from the slip', payslip_t:"This month's slip", payslip_d:'You type pay, OT, and cut.', payslip_add:'Save', payslip_done:'Slip saved', payslip_read:'', goal_k:'Your roof, sooner', goal_t:'The roof at home', goal_by:'Roof home by', goal_perweek:'OT shifts a week', goal_hours:'hours', goal_sooner:'months sooner', goal_none:'at this pace', goal_frompay:'From your slip', goal_addpay:'Add your slip numbers',
+    tab_live:'Live', tab_earn:'Earn', tab_save:'Save', tab_send:'Send', daily:'Daily', seeall:'See all', payslip_k:'Your pay, from the slip', payslip_t:'Check your pay', payslip_d:'You type pay, OT, and cut.', payslip_add:'Save', payslip_done:'Slip saved', payslip_read:'', goal_k:'Your roof, sooner', goal_t:'The roof at home', goal_by:'Roof home by', goal_perweek:'OT shifts a week', goal_hours:'hours', goal_sooner:'months sooner', goal_none:'at this pace', goal_frompay:'From your slip', goal_addpay:'Add your slip numbers',
     /* send */
     send_t:'Send',
     send_s:'Send money home.',
@@ -1312,20 +1312,20 @@ var T = {
     live_s:'Daily life made easier.',
     live_keep_banner:'This month you keep {n}',
     live_keep_empty:'This month. Rupees stay for home.',
-    live_card1_n:'Studio near work', live_card1_m:'Walk to work.',
-    live_card2_n:'Washing service', live_card2_m:'Get clothes washed.',
+    live_card1_n:'Live near work', live_card1_m:'Walk to work.',
+    live_card2_n:'Get clothes washed', live_card2_m:'Washing service.',
     live_card2_s:'You pay ₹220 a month. Hours back can go to OT. Type your slip for those rupees.',
-    live_card3_n:'Hub meals', live_card3_m:'Two daily meals.',
-    live_card4_n:'Shared air cooler', live_card4_m:'One per room.',
-    live_card5_n:'Shared cycle', live_card5_m:'Travel to work.',
-    live_card6_n:'Rain cape', live_card6_m:'Travel in rain.',
-    live_card7_n:'Attendance help', live_card7_m:'Protect your pay.',
+    live_card3_n:'Two meals daily', live_card3_m:'Hub meals.',
+    live_card4_n:'Sleep cooler', live_card4_m:'Shared air cooler.',
+    live_card5_n:'Travel for less', live_card5_m:'Shared cycle.',
+    live_card6_n:'Stay dry', live_card6_m:'Rain cape.',
+    live_card7_n:'Protect your pay', live_card7_m:'Attendance help.',
     live_card8_n:'Tell Akka', live_card8_m:'Resolve any issue.',
-    live_card9_n:'Sunday chai with group', live_card9_m:'Tea every Sunday.',
-    live_card10_n:'Clinic', live_card10_m:'Nearby health support.',
-    live_card11_n:'Recreation', live_card11_m:'Play and exercise.',
-    live_card12_n:'Village savings', live_card12_m:'Save with friends.',
-    live_card13_n:'Wage help', live_card13_m:'Report wage problems.',
+    live_card9_n:'Sunday chai', live_card9_m:'Chai with your group.',
+    live_card10_n:'See a doctor', live_card10_m:'Nearby clinic.',
+    live_card11_n:'Play after work', live_card11_m:'Recreation.',
+    live_card12_n:'Save together', live_card12_m:'With friends.',
+    live_card13_n:'Fix wage issues', live_card13_m:'Get wage help.',
     piggy_how_oil:'Oil. 260 at the kirana. 210 here. You keep 50.',
     piggy_how_wash_charge:'You pay ₹220 a month. Hours back can go to OT. Type your slip for those rupees.',
     piggy_how_wash_ot:'Hours back can go to OT. Type your slip for those rupees.',
@@ -1376,11 +1376,11 @@ var T = {
     earn_week_2:'2 weeks ago',
     earn_week_3:'3 weeks ago',
     earn_add_slip:"Add this month's slip.",
-    earn_card_ot_n:'OT this month', earn_card_ot_m:'Add extra shifts.',
-    earn_card_gig_n:'Nearby Gig Shift', earn_card_gig_m:'Take a nearby shift.',
+    earn_card_ot_n:'Earn with OT', earn_card_ot_m:'Add extra shifts.',
+    earn_card_gig_n:'Find nearby gigs', earn_card_gig_m:'Take a nearby shift.',
     earn_card_fri_n:'TGIF', earn_card_fri_m:'Friday pays more.',
-    earn_card_slip_n:"This month's slip", earn_card_slip_m:'See pay, OT and cuts.',
-    earn_card_village_n:'Recommend someone', earn_card_village_m:'Get ₹500 items free.',
+    earn_card_slip_n:'Check your pay', earn_card_slip_m:'See pay, OT and cuts.',
+    earn_card_village_n:'Bring a friend', earn_card_village_m:'Get ₹500 items free.',
     earn_card_plant_n:'Need a new job?', earn_card_plant_m:'Talk to your JCO.',
     village_toast:'Friend added.', recommend_btn:'Recommend', bag_credit:'Off the bag',
     studio_mess1_n:'Bhimba bhai mess, Ved Road',
@@ -2944,7 +2944,7 @@ function contractorPanel(){
 }
 
 var SWAP_COPY={
-  en:{hero_k:'This month',hero_t:'This shop keeps more for home.',hero_d:'',hero_cta:'Use the lower-cost oil →',shopcat:'What do you need?',homecare:'Cleaning',homecare_m:'Detergent, dishwash and floor cleaner',personal:'Soap & shampoo',personal_m:'Bathing and everyday care',oils:'Cooking oil',oils_m:'Regular oils. 1 L packs',essentials:'Ration',essentials_m:'Atta, rice, dal and salt',snacks:'Biscuits & snacks',snacks_m:'Biscuits and namkeen',tea_sugar:'Tea & sugar',tea_sugar_m:'Chai and sugar',tshirts:'T-shirts',tshirts_m:'Basic cotton T-shirts',innerwear:'Innerwear',innerwear_m:'Vests and trunks',all:'All',cleaning:'Cleaning',ownlabel:'Nia own label',bath:'Bath & body',checked:'Price checked',save_more:'Save more',save:'Save',add:'Add',added:'Added',swap_k:'A lower-price match',more_home:'more to home',switch:'Switch and save',switched:'Switched',keep_original:'Keep my original choice',food_t:'Food stays the brand you trust',food_d:'We do not substitute food. Taste, safety and trust come first.',reg_t:'A regulated item. we keep the brand',reg_d:'Recognised personal-care brands stay unchanged.',own_t:'Already the lowest price',own_d:'This is our label, so there is no lower-price swap to show.',proof_t:'Price check',proof_d:'Nia vs kirana.',add_choice:'Add my choice',keep_week:'Save {n} this month.',aisle_keep_oil:'Save {n} this month',aisle_keep:'Save {n} this month',kirana_at:'at kirana',also_take:'People also take',in_stock:'In stock',search_hits:'Matches',bag_pickup:'Pre-order · Studio cart after 5',bag_vs:'Save'},
+  en:{hero_k:'This month',hero_t:'This shop keeps more for home.',hero_d:'',hero_cta:'Use the lower-cost oil →',shopcat:'What do you need?',homecare:'Cleaning essentials',homecare_m:'Detergent, dishwash and floor cleaner',personal:'Bath essentials',personal_m:'Soap, shampoo and everyday care',oils:'Cooking oil',oils_m:'Regular oils. 1 L packs',essentials:'Daily ration',essentials_m:'Atta, rice, dal and salt',snacks:'Biscuits & snacks',snacks_m:'Biscuits and namkeen',tea_sugar:'Chai essentials',tea_sugar_m:'Tea and sugar',tshirts:'T-shirts',tshirts_m:'Basic cotton T-shirts',innerwear:'Innerwear',innerwear_m:'Vests and trunks',all:'All',cleaning:'Cleaning',ownlabel:'Nia own label',bath:'Bath & body',checked:'Price checked',save_more:'Save more',save:'Save',add:'Add',added:'Added',swap_k:'A lower-price match',more_home:'more to home',switch:'Switch and save',switched:'Switched',keep_original:'Keep my original choice',food_t:'Food stays the brand you trust',food_d:'We do not substitute food. Taste, safety and trust come first.',reg_t:'A regulated item. we keep the brand',reg_d:'Recognised personal-care brands stay unchanged.',own_t:'Already the lowest price',own_d:'This is our label, so there is no lower-price swap to show.',proof_t:'Price check',proof_d:'Nia vs kirana.',add_choice:'Add my choice',keep_week:'Save {n} this month.',aisle_keep_oil:'Save {n} this month',aisle_keep:'Save {n} this month',kirana_at:'at kirana',also_take:'People also take',in_stock:'In stock',search_hits:'Matches',bag_pickup:'Pre-order · Studio cart after 5',bag_vs:'Save'},
   hi:{hero_k:'इस हफ़्ते',hero_t:'यह दुकान घर के लिए और रखती है।',hero_d:'',hero_cta:'कम कीमत का तेल लें →',shopcat:'क्या चाहिए?',homecare:'सफाई का सामान',homecare_m:'सर्फ, बर्तन और फर्श की सफाई',personal:'साबुन/शैम्पू',personal_m:'नहाने और रोज़ की देखभाल का सामान',oils:'खाना पकाने का तेल',oils_m:'सरसों, मूंगफली और दूसरे तेल',essentials:'राशन',essentials_m:'आटा, चावल, दाल और नमक',all:'सभी',cleaning:'सफ़ाई',ownlabel:'Nia का अपना',bath:'नहाना और शरीर',checked:'कीमत जाँची',save_more:'और बचाएँ',save:'बचत',add:'जोड़ें',added:'जुड़ गया',swap_k:'कम कीमत का समान विकल्प',more_home:'और घर',switch:'बदलें और बचाएँ',switched:'बदल दिया',keep_original:'अपनी पहली पसंद रखें',food_t:'खाने में भरोसे का ब्रांड रहता है',food_d:'हम खाने का सामान नहीं बदलते। स्वाद, सुरक्षा और भरोसा पहले आते हैं।',reg_t:'नियमित वस्तु. ब्रांड वही रहता है',reg_d:'पहचाना हुआ निजी-देखभाल ब्रांड नहीं बदला जाता।',own_t:'पहले से सबसे कम कीमत',own_d:'यह हमारा अपना लेबल है, इसलिए इससे कम कीमत का विकल्प नहीं है।',proof_t:'आपके हफ़्ते की कीमत',proof_d:'वही पैक। Nia कीमत vs किराना।',add_choice:'अपनी पसंद जोड़ें',keep_week:'इस हफ़्ते किराना घटौती: {n}।',aisle_keep_oil:'इस हफ़्ते तेल किराना घटौती: {n}',aisle_keep:'इस हफ़्ते किराना घटौती: {n}',kirana_at:'किराना पर',also_take:'और लोग ये लेते हैं',in_stock:'स्टॉक में',search_hits:'मिलान',bag_pickup:'शाम 5 बजे के बाद उठाएँ',bag_vs:'किराना घटौती'},
   bn:{hero_k:'এই সপ্তাহে',hero_t:'এই দোকান বাড়ির জন্য আরও রাখে।',hero_d:'',hero_cta:'সস্তা তেল নিন →',shopcat:'কী দরকার?',homecare:'পরিষ্কারের জিনিস',homecare_m:'কাপড়, বাসন আর মেঝে পরিষ্কার',personal:'সাবান/শ্যাম্পু',personal_m:'স্নান আর রোজকার যত্ন',oils:'রান্নার তেল',oils_m:'সর্ষে, বাদাম আর অন্য তেল',essentials:'রেশন',essentials_m:'চাল, আটা, ডাল আর নুন',save:'বাঁচাও',add:'যোগ',proof_t:'দাম',proof_d:'একই প্যাক। Nia দাম vs কিরাণা।',add_choice:'আমার পছন্দ যোগ',keep_week:'এই সপ্তাহে কিরাণা বিয়োগ: {n}।',aisle_keep_oil:'এই সপ্তাহে তেল কিরাণা বিয়োগ: {n}',aisle_keep:'এই সপ্তাহে কিরাণা বিয়োগ: {n}',kirana_at:'কিরাণায়'},
   ta:{hero_k:'இந்த வாரம்',hero_t:'இந்த கடை வீட்டிற்கு மேலும் வைக்கும்.',hero_d:'',hero_cta:'மலிவு எண்ணெய் எடு →',shopcat:'என்ன வேண்டும்?',homecare:'சுத்தம் செய்யும் பொருட்கள்',homecare_m:'டிடர்ஜெண்ட், பாத்திரம் மற்றும் தரை சுத்தம்',personal:'சோப்பு/ஷாம்பு',personal_m:'குளியல் மற்றும் தினசரி பயன்பாடு',oils:'சமையல் எண்ணெய்',oils_m:'கடுகு, நிலக்கடலை மற்றும் பிற எண்ணெய்கள்',essentials:'மளிகை',essentials_m:'அரிசி, மாவு, பருப்பு மற்றும் உப்பு',all:'அனைத்தும்',cleaning:'சுத்தம்',ownlabel:'Nia சொந்த லேபல்',bath:'குளியல் மற்றும் உடல்',checked:'விலை சரிபார்க்கப்பட்டது',save_more:'மேலும் சேமிக்கவும்',save:'சேமிப்பு',add:'சேர்',added:'சேர்க்கப்பட்டது',swap_k:'குறைந்த விலை பொருத்தம்',more_home:'மேலும் வீட்டிற்கு',switch:'மாற்றி சேமிக்கவும்',switched:'மாற்றப்பட்டது',keep_original:'முதல் தேர்வை வைத்திரு',food_t:'உணவில் நம்பகமான பிராண்டே இருக்கும்',food_d:'உணவுப் பொருளை மாற்றமாட்டோம். சுவை, பாதுகாப்பு, நம்பிக்கை முதலில்.',reg_t:'ஒழுங்குபடுத்தப்பட்ட பொருள். பிராண்டை வைத்திருப்போம்',reg_d:'அறிமுகமான தனிப்பட்ட பராமரிப்பு பிராண்டு மாறாது.',own_t:'ஏற்கனவே குறைந்த விலை',own_d:'இது எங்கள் சொந்த லேபல்; இன்னொரு குறைந்த விலை மாற்று இல்லை.',proof_t:'உங்கள் வாரத்திற்கான விலை',proof_d:'அதே பேக். Nia விலை vs கிரானா.',add_choice:'என் தேர்வை சேர்',keep_week:'இந்த வாரம் கிரானா கழிவு: {n}.',aisle_keep_oil:'இந்த வாரம் எண்ணெய் கிரானா கழிவு: {n}',aisle_keep:'இந்த வாரம் கிரானா கழிவு: {n}',kirana_at:'கிரானாவில்'},

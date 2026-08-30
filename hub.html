@@ -65,10 +65,11 @@ function load(){
       : '<div class="empty">No movements.</div>';
     var skus=Object.keys(opening).sort();
     var rows=skus.map(function(sku){
-      return '<tr><td>'+sku+'</td><td><input data-sku="'+sku+'" value="'+(opening[sku]||0)+'"></td><td>'+(d.stock&&d.stock[sku]!=null?d.stock[sku]:'-')+'</td></tr>';
+      var inbound=(mv[sku]&&mv[sku].inbound!=null)?mv[sku].inbound:(opening[sku]||0);
+      return '<tr><td>'+sku+'</td><td>'+inbound+'</td><td>'+(d.stock&&d.stock[sku]!=null?d.stock[sku]:'-')+'</td></tr>';
     }).join('');
-    document.getElementById('wrap').innerHTML='<table><thead><tr><th>SKU</th><th>Opening</th><th>Left now</th></tr></thead><tbody>'+rows+'</tbody></table>';
-    document.getElementById('msg').textContent='Opening shown. Sign again only if beat not yet open.';
+    document.getElementById('wrap').innerHTML='<table><thead><tr><th>SKU</th><th>Inbound</th><th>Left now</th></tr></thead><tbody>'+rows+'</tbody></table>';
+    document.getElementById('msg').textContent='Inventory is movements. Sign opening posts inbound. It does not edit a free quantity field.';
     document.getElementById('nextbeat').textContent='Next '+(n.nextBeatDate||'-')+' · slot '+(n.slot||'17:00')+' · predicted from collected plus holding';
     var pred=n.predicted||n.suggested||{};
     var why={};
@@ -84,10 +85,7 @@ function load(){
   }).catch(function(){ document.getElementById('wrap').textContent='Could not load stock.'; });
 }
 function signOpen(){
-  var body={ opening:{}, beatDate:beatDate };
-  document.querySelectorAll('input[data-sku]').forEach(function(el){
-    body.opening[el.getAttribute('data-sku')]=parseInt(el.value,10)||0;
-  });
+  var body={ opening:Object.assign({}, opening), beatDate:beatDate };
   fetch('/api/beat/open',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
     .then(function(r){ return r.json().then(function(j){ return {ok:r.ok,status:r.status,j:j}; }); })
     .then(function(res){

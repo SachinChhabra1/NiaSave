@@ -554,7 +554,7 @@ export function connectorsPayload() {
   const skuRows = SKUS.length;
   return {
     product: "rabbit",
-    dummy: DUMMY_DATA,
+    skip: DUMMY_DATA,
     theatre: THEATRE.name,
     stopCount: liveStopCount(),
     memberCount: MEMBER_COUNT,
@@ -929,6 +929,10 @@ export function scanOrder({ type, orderId, pickupCode, actor }) {
   if (!order) return { error: "order_not_found", status: 404 };
   const kind = SCAN_TYPES[type];
   if (!kind) return { error: "bad_scan_type", status: 400 };
+  if (kind === "collected" && order.status === "collected") {
+    const code = String(pickupCode || "").trim().toUpperCase();
+    if (code && code === order.pickupCode) return { ok: true, order, already: true };
+  }
   const expected = expectedFrom(order.status);
   const ok = Array.isArray(expected) ? expected.includes(kind) : expected === kind;
   if (!ok) return { error: "wrong_stage", status: 409, have: order.status, want: expected };
@@ -1003,7 +1007,7 @@ export function towerPayload() {
   const chaseCount = funnel.reserved + funnel.packed + funnel.loaded + funnel.at_stop;
   return {
     product: "rabbit",
-    dummy: DUMMY_DATA,
+    skip: DUMMY_DATA,
     beatDate: led.beatDate,
     owner: OWNER,
     slot: SLOT,

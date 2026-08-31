@@ -7,6 +7,7 @@
     "dev": "vite",
     "dev:api": "node api/server.mjs",
     "build": "vite build",
+    "build:production": "sh vercel-build.sh",
     "preview": "vite preview",
     "test": "node rabbit/selftest.mjs",
     "test:storage": "node lib/runtime-store.test.mjs && node lib/polo-persistence.test.mjs"

@@ -1,21 +1,63 @@
 # NiaSave
 
-P0 mobile web experience for Nia members. The app lands on Save and includes Work, Nest, Save, and Home with a shared bag and demo checkout.
+NiaSave is a phone-first member application with a connected staff operating console, Operation Polo.
+
+## What is live
+
+- Member journeys: **Live, Earn, Save and Send**
+- Five interface languages: English, Hindi, Bangla, Tamil and Kannada
+- Embedded Nia voice assistant through ElevenLabs
+- Save catalogue, bag, pickup-code and order-reservation flow
+- Operation Polo for orders, stock, packing, dispatch, collection, invoicing and reconciliation
+- Shared, durable runtime state in Neon Postgres
+- One Vercel origin for the phone, Operation Polo and APIs
+
+Production:
+
+- Member app: <https://www.niasave.com/>
+- Operation Polo: <https://www.niasave.com/ops.html>
+- Health: <https://www.niasave.com/health>
+
+## Current release boundary
+
+The system is a controlled pilot. OTP and payments are deliberately skipped. Send is planning only and does not move money. Seeded member, price and operating data must not be reported as live commercial activity.
+
+Before loading real member data or money, complete the control gates in [docs/HANDOVER.md](docs/HANDOVER.md), especially staff access control, audit logging, provider webhooks, privacy controls and recovery testing.
+
+## Repository and deployment
+
+- GitHub: `SachinChhabra1/NiaSave`
+- Production branch: `main`
+- Vercel project: `niasave`
+- Vercel project ID: `prj_tTLIuOGLv8YcEE2CP1NHNsZFDFq6`
+- Vercel automatically builds and deploys merges to `main`
+- GitHub Actions runs tests and a production build on pull requests and pushes to `main`
+
+The production build is controlled by `vercel.json` and `vercel-build.sh`. The build copies `member.html` to `dist/index.html` and publishes the staff pages and static assets. The React files under `src/` are not the current production phone surface.
 
 ## Local development
 
 ```bash
-npm install
+npm ci
 npm run dev:api
+```
+
+In another terminal:
+
+```bash
 npm run dev
 ```
 
-The frontend runs at `http://127.0.0.1:5173` and proxies `/health` and `/v1` to the in-memory API at `http://127.0.0.1:8787`.
+Run the release checks:
 
-Demo member: `9876541042` · Ravi K · `NIA-1042`.
+```bash
+npm test
+npm run test:storage
+npm run build:production
+```
 
-## Production
+`test:storage` runs the full persistence integration only when `DATABASE_URL` is present. `build:production` runs the same artifact builder used by Vercel. Copy `.env.example` to a local untracked file and supply development-only values when needed.
 
-Vercel builds the Vite frontend from the repository root. `vercel.json` rewrites the public backend contract to the serverless handler under `/api`.
+## Team handover
 
-The send-home rail is intentionally not configured in P0 and returns `501`.
+Start with [docs/HANDOVER.md](docs/HANDOVER.md). It records the architecture, release process, environment contract, production blockers, ownership questions and definitions of done. Provider teams should also use the detailed [OTP](docs/OTP.md) and [UPI](docs/UPI.md) integration contracts.

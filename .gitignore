@@ -4,5 +4,6 @@ dist/
 .DS_Store
 npm-debug.log*
 .env*
+!.env.example
 .agents/
 skills-lock.json

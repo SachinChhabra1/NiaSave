@@ -1,5 +1,6 @@
 /**
- * NiaSave P0 API — in-memory. Demo 9876541042 / NIA-1042.
+ * NiaSave P0 API. Operation Polo state is durable when DATABASE_URL is configured.
+ * Demo member 9876541042 / NIA-1042 remains while OTP and payment are skipped.
  * Nest rupee 2200 interim. Send-home rail not configured.
  * Staff desk contract only. Member phone is owned elsewhere — do not rename tabs.
  * Not for rafiqicentral.com or harness.
@@ -7,7 +8,8 @@
 import http from "node:http";
 import { randomUUID, createHash } from "node:crypto";
 import { pathToFileURL } from "node:url";
-import { handleStaff, isStaffPath, staffPath } from "../rabbit/engine.mjs";
+import { handleStaff, isStaffPath, staffPath, staffStorageStatus } from "../rabbit/engine.mjs";
+import { hasDurableStore, loadRuntimeState, saveRuntimeState } from "../lib/runtime-store.mjs";
 
 const PORT = Number(process.env.PORT || 8787);
 const DEMO = process.env.DEMO !== "0";
@@ -77,6 +79,35 @@ const state = {
     carts: []
   }
 };
+
+const MEMBER_RUNTIME_STATE_KEY = "member-app";
+
+function snapshotMemberState() {
+  return {
+    extra: state.extra,
+    rsvp: state.rsvp,
+    issues: state.issues,
+    orders: [...state.orders.entries()],
+    bags: [...state.bags.entries()],
+    bagKeep: state.bagKeep,
+    bagSpend: state.bagSpend,
+    payMonth: state.payMonth,
+    nestRupee: state.nestRupee,
+    food: state.food,
+    other: state.other,
+    sent: state.sent,
+    hubDay: state.hubDay
+  };
+}
+
+function restoreMemberState(value) {
+  if (!value || typeof value !== "object") return;
+  for (const key of ["extra", "rsvp", "issues", "bagKeep", "bagSpend", "payMonth", "nestRupee", "food", "other", "sent", "hubDay"]) {
+    if (value[key] !== undefined) state[key] = value[key];
+  }
+  state.orders = new Map(Array.isArray(value.orders) ? value.orders : []);
+  state.bags = new Map(Array.isArray(value.bags) ? value.bags : []);
+}
 
 function leftover() {
   const available = state.payMonth - state.nestRupee - state.bagSpend - state.food - state.other - state.sent;
@@ -201,16 +232,33 @@ export async function handler(req, res) {
   const rewrittenPath = url.searchParams.get("path");
   const path = rewrittenPath ? `/${rewrittenPath.replace(/^\/+/, "")}` : url.pathname;
   const key = req.headers["idempotency-key"];
+  const rabbitPath = staffPath(path, rewrittenPath);
+  const staffRequest = isStaffPath(rabbitPath);
+  let memberStateVersion = null;
   try {
-    const rabbitPath = staffPath(path, rewrittenPath);
-    if (isStaffPath(rabbitPath)) {
+    if (!staffRequest && hasDurableStore()) {
+      const loaded = await loadRuntimeState(MEMBER_RUNTIME_STATE_KEY, snapshotMemberState());
+      restoreMemberState(loaded.value);
+      memberStateVersion = loaded.version;
+    }
+
+    if (staffRequest) {
       const body = (req.method === "POST" || req.method === "PUT") ? await readBody(req) : {};
       const out = await handleStaff(req, res, rabbitPath, body, url);
       if (out) return json(res, out.status, out.body);
     }
 
     if (req.method === "GET" && (path === "/health" || path === "/v1/health")) {
-      return json(res, 200, { ok: true, product: "niasave", demo: DEMO, time: now(), hubStage: state.hubDay.stage });
+      const storage = await staffStorageStatus();
+      return json(res, 200, {
+        ok: true,
+        product: "niasave",
+        demo: DEMO,
+        demoScope: ["otp", "payments"],
+        time: now(),
+        hubStage: state.hubDay.stage,
+        storage
+      });
     }
 
     if (req.method === "POST" && (path === "/v1/members/lookup" || path === "/v1/save/lookup")) {
@@ -404,6 +452,18 @@ export async function handler(req, res) {
   } catch (err) {
     if (err.message === "invalid_json") return json(res, 400, { error: "invalid_json" });
     return json(res, 500, { error: "server_error" });
+  } finally {
+    const successfulMutation = memberStateVersion != null
+      && (req.method === "POST" || req.method === "PUT")
+      && res.statusCode < 400;
+    if (successfulMutation) {
+      try {
+        const saved = await saveRuntimeState(MEMBER_RUNTIME_STATE_KEY, snapshotMemberState(), memberStateVersion);
+        if (!saved.ok) console.error("member_state_conflict", { path, version: memberStateVersion });
+      } catch (error) {
+        console.error("member_state_save_failed", { path, message: error.message });
+      }
+    }
   }
 }
 

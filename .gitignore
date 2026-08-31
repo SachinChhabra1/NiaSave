@@ -3,3 +3,6 @@ dist/
 .vercel/
 .DS_Store
 npm-debug.log*
+.env*
+.agents/
+skills-lock.json

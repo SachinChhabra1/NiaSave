@@ -2,8 +2,8 @@
  * Operation Polo staff control plane (studio-cart only).
  * Go-live load: 1 theatre, 40 studios, 3000 members.
  * One evening beat, ~5 bags per stop (~200 orders). Not 10k. Not one cart.
- * Skip ON. No OTP send. No WhatsApp product. No live member UPI / Razorpay.
- * Do not flip DUMMY_DATA off. Member phone is owned elsewhere.
+ * Durable state uses Postgres when DATABASE_URL is configured; local development falls back to memory.
+ * Skip remains ON for OTP and payment only. No WhatsApp product or live member UPI / Razorpay.
  */
 import {
   THEATRE,
@@ -17,6 +17,7 @@ import {
   kindLetter
 } from "./scale.mjs";
 import { SHOPS_30 } from "./shops-30.mjs";
+import { hasDurableStore, loadRuntimeState, saveRuntimeState } from "../lib/runtime-store.mjs";
 
 const SHOP_PIN = Object.fromEntries(SHOPS_30.shops.map(s => [s.stopId, s]));
 
@@ -314,7 +315,7 @@ function createState() {
   const idx = indexOrders(orders);
   return {
     dummy: DUMMY_DATA,
-    persist: "memory",
+    persist: hasDurableStore() ? "postgres" : "memory",
     blob: false,
     beat: {
       beatDate: WEEK_BEAT,
@@ -349,6 +350,8 @@ function createState() {
     uploads: { upi_statement: null, procure: null, vendors: null },
     memberFlags: {},
     memberAnswers: [],
+    memberFlagsById: {},
+    memberAnswersById: {},
     memberSession: { memberId: "ravi", phone: "ravi" },
     pos: [],
     invoices: [],
@@ -358,6 +361,70 @@ function createState() {
 }
 
 let state = createState();
+
+const RUNTIME_STATE_KEY = process.env.NIA_RUNTIME_STATE_KEY || "operation-polo";
+
+function snapshotState(value = state) {
+  const {
+    ordersById,
+    ordersByCode,
+    orderIdsByStop,
+    ...serializable
+  } = value;
+  return serializable;
+}
+
+function restoreState(value, storage = "memory") {
+  const base = createState();
+  const restored = { ...base, ...(value || {}) };
+  restored.orders = Array.isArray(restored.orders) ? restored.orders : base.orders;
+  restored.studios = Array.isArray(restored.studios) ? restored.studios : base.studios;
+  restored.reservations = Array.isArray(restored.reservations) ? restored.reservations : base.reservations;
+  restored.scans = Array.isArray(restored.scans) ? restored.scans : base.scans;
+  restored.payments = Array.isArray(restored.payments) ? restored.payments : base.payments;
+  restored.settlements = Array.isArray(restored.settlements) ? restored.settlements : base.settlements;
+  restored.exceptions = Array.isArray(restored.exceptions) ? restored.exceptions : base.exceptions;
+  restored.statement = Array.isArray(restored.statement) ? restored.statement : base.statement;
+  restored.pos = Array.isArray(restored.pos) ? restored.pos : [];
+  restored.invoices = Array.isArray(restored.invoices) ? restored.invoices : [];
+  restored.dispatches = Array.isArray(restored.dispatches) ? restored.dispatches : [];
+  restored.bikerRuns = Array.isArray(restored.bikerRuns) ? restored.bikerRuns : [];
+  restored.memberFlagsById = restored.memberFlagsById && typeof restored.memberFlagsById === "object"
+    ? restored.memberFlagsById
+    : { ravi: restored.memberFlags || {} };
+  restored.memberAnswersById = restored.memberAnswersById && typeof restored.memberAnswersById === "object"
+    ? restored.memberAnswersById
+    : { ravi: restored.memberAnswers || [] };
+  restored.persist = storage;
+  restored.blob = false;
+  Object.assign(restored, indexOrders(restored.orders));
+  state = restored;
+}
+
+async function runWithPersistentState(mutating, work) {
+  if (!hasDurableStore()) return work();
+
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const loaded = await loadRuntimeState(RUNTIME_STATE_KEY, snapshotState(createState()));
+    restoreState(loaded.value, loaded.storage);
+    const result = await work();
+    if (!mutating || !result || result.status >= 400) return result;
+
+    const saved = await saveRuntimeState(RUNTIME_STATE_KEY, snapshotState(), loaded.version);
+    if (saved.ok) return result;
+  }
+
+  return {
+    status: 409,
+    body: { error: "state_conflict", message: "Please try again." }
+  };
+}
+
+export async function staffStorageStatus() {
+  if (!hasDurableStore()) return { storage: "memory", connected: false, version: 0 };
+  const loaded = await loadRuntimeState(RUNTIME_STATE_KEY, snapshotState(createState()));
+  return { storage: loaded.storage, connected: true, version: loaded.version };
+}
 
 export function resetDummy() {
   state = createState();
@@ -884,13 +951,14 @@ export function authVerify(body = {}) {
 
 export function authMe() {
   const session = state.memberSession || { memberId: "ravi", phone: "ravi" };
+  const memberId = String(session.memberId || "ravi");
   return {
     ok: true,
     skip: true,
-    memberId: session.memberId,
+    memberId,
     phone: session.phone,
-    flags: state.memberFlags || {},
-    answers: state.memberAnswers || []
+    flags: (state.memberFlagsById && state.memberFlagsById[memberId]) || {},
+    answers: (state.memberAnswersById && state.memberAnswersById[memberId]) || []
   };
 }
 
@@ -910,8 +978,8 @@ export function memberPayload(query = {}) {
     last_bag: row.last_bag,
     last_mira: row.last_mira,
     phone: session.phone || row.memberId,
-    flags: state.memberFlags || {},
-    answers: state.memberAnswers || [],
+    flags: (state.memberFlagsById && state.memberFlagsById[id]) || {},
+    answers: (state.memberAnswersById && state.memberAnswersById[id]) || [],
     ok: true,
     skip: true
   };
@@ -931,14 +999,22 @@ export function memberOrderGet(query = {}) {
 
 export function saveMemberFlags(body = {}) {
   const flags = body.flags && typeof body.flags === "object" ? body.flags : {};
-  state.memberFlags = { ...(state.memberFlags || {}), ...flags };
-  return { ok: true, skip: true, flags: state.memberFlags };
+  const session = state.memberSession || { memberId: "ravi" };
+  const memberId = String(body.memberId || body.phone || session.memberId || "ravi");
+  if (!state.memberFlagsById) state.memberFlagsById = {};
+  state.memberFlagsById[memberId] = { ...(state.memberFlagsById[memberId] || {}), ...flags };
+  state.memberFlags = state.memberFlagsById.ravi || {};
+  return { ok: true, skip: true, memberId, flags: state.memberFlagsById[memberId] };
 }
 
 export function saveMemberAnswer(body = {}) {
-  const row = { tab: body.tab || "", qid: body.qid || "", val: body.val };
-  state.memberAnswers = (state.memberAnswers || []).concat([row]);
-  return { ok: true, skip: true };
+  const session = state.memberSession || { memberId: "ravi" };
+  const memberId = String(body.memberId || body.phone || session.memberId || "ravi");
+  const row = { tab: body.tab || "", qid: body.qid || "", val: body.val, at: now() };
+  if (!state.memberAnswersById) state.memberAnswersById = {};
+  state.memberAnswersById[memberId] = (state.memberAnswersById[memberId] || []).concat([row]);
+  state.memberAnswers = state.memberAnswersById.ravi || [];
+  return { ok: true, skip: true, memberId };
 }
 
 export function beatPayload() {
@@ -1895,7 +1971,7 @@ export function isStaffPath(p) {
   ].includes(p);
 }
 
-export async function handleStaff(req, res, path, body, url) {
+async function handleStaffOnce(req, res, path, body, url) {
   const q = queryOf(url);
   const method = req.method;
 
@@ -1945,6 +2021,13 @@ export async function handleStaff(req, res, path, body, url) {
     return { status: 405, body: { error: "Use POST" } };
   }
   return null;
+}
+
+export async function handleStaff(req, res, path, body, url) {
+  const mutating = (req.method === "POST" || req.method === "PUT")
+    && path !== "/auth/otp"
+    && path !== "/auth/verify";
+  return runWithPersistentState(mutating, () => handleStaffOnce(req, res, path, body, url));
 }
 
 export const SCAN_FLOW_ORDER = SCAN_FLOW;

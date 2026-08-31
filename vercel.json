@@ -1,5 +1,5 @@
 {
-  "installCommand": "echo skip",
+  "installCommand": "npm install",
   "buildCommand": "sh vercel-build.sh",
   "outputDirectory": "dist",
   "rewrites": [

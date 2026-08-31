@@ -7,13 +7,15 @@
     "dev": "vite",
     "dev:api": "node api/server.mjs",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "node rabbit/selftest.mjs",
+    "test:storage": "node lib/runtime-store.test.mjs && node lib/polo-persistence.test.mjs"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^1.1.0",
     "@vitejs/plugin-react": "latest",
-    "vite": "latest",
     "react": "latest",
-    "react-dom": "latest"
-  },
-  "devDependencies": {}
+    "react-dom": "latest",
+    "vite": "latest"
+  }
 }

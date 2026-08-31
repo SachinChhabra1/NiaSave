@@ -934,6 +934,51 @@
   .detail-step button{flex:1;height:58px;border:0;background:transparent;color:#fff;font-size:22px;font-weight:700;cursor:pointer}
   .detail-step span{min-width:48px;text-align:center;font-size:18px;font-weight:750;color:#fff}
 
+  /* One card system for Live and Save. Studio remains the single hero exception. */
+  .live-service-tile,.category-card,.shop-card{
+    overflow:hidden;border:1px solid var(--hair2);border-radius:16px;background:#fff;box-shadow:none;
+    transition:border-color .18s,transform .18s;
+  }
+  .live-service-tile:hover,.category-card:hover,.shop-card:hover{
+    border-color:var(--soft);box-shadow:none;transform:none;
+  }
+  .live-service-tile:active,.category-card:active,.shop-card:active{transform:scale(.994)}
+  .live-tile-photo,.category-card-photo{
+    width:100%;aspect-ratio:1.18/1;min-height:126px;border:0;background-color:#E9E6E1;
+  }
+  .live-tile-copy,.category-card-copy{
+    display:flex;min-height:104px;padding:12px;align-items:stretch;flex-direction:column;
+  }
+  .live-tile-name,.category-card-name,.shop-name{
+    font-size:16px;font-weight:700;line-height:1.16;letter-spacing:-.025em;color:var(--ink);
+  }
+  .category-card-body{display:flex;min-height:80px;flex:1;flex-direction:column}
+  .category-card-values,.shop-price{
+    display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:end;
+    margin-top:auto;padding-top:10px;border-top:1px solid var(--hair);
+  }
+  .category-card-discount,.shop-saving,.shop-buy{
+    display:flex;min-width:0;flex-direction:column;margin:0;
+  }
+  .category-card-discount small,.shop-price small{
+    font-size:9px;font-weight:650;line-height:1.15;color:var(--mute);
+  }
+  .category-card-discount strong,.shop-saving strong{
+    font-size:14px;font-weight:750;line-height:1.15;color:var(--navy);
+  }
+  .category-card-arrow{
+    width:30px;height:30px;border:0;border-radius:999px;background:transparent;color:var(--navy);
+  }
+  .shop-card{border-radius:16px}
+  .shop-copy{padding:12px}
+  .shop-meta{font-size:12px;line-height:1.3;color:var(--mute);margin-top:3px}
+  .shop-price{grid-template-columns:minmax(0,1fr) minmax(0,1fr);width:100%;gap:6px}
+  .shop-buy{align-items:flex-end;text-align:right}
+  .shop-buy strong{font-size:13px;font-weight:750;line-height:1.2;color:#4C4D50;white-space:nowrap}
+  .shop-action{padding-top:10px}
+  .shop-add,.shop-step{height:38px;border-radius:999px}
+  .shop-step button{height:38px}
+
 
   .pack-photo{display:block;width:100%;height:100%;object-fit:contain;object-position:center;background:#F3F1ED}
   .shop-photo{background-color:#F3F1ED;overflow:hidden}
@@ -3045,7 +3090,7 @@ function commerceCard(p){
     + '<div class="shop-copy"><button class="shop-name" onclick="openProduct(&quot;'+p.id+'&quot;)">'+p.brand+'</button><div class="shop-meta">'+meta+'</div>'
     + '<div class="in-stock">'+stockLabel(p.id)+'</div>'
     + (swap?'<div class="swap-hint">'+sw('save_more')+'</div>':'')
-    + '<div class="shop-price"><span class="shop-mrp">MRP '+money(p.mrp)+'</span><span class="shop-discount">'+money(saving)+' off</span><span class="shop-now">Buy for '+money(p.price)+'</span></div>'
+    + '<div class="shop-price"><span class="shop-saving"><small>Save</small><strong>'+money(saving)+' off</strong></span><span class="shop-buy"><small>MRP '+money(p.mrp)+'</small><strong>Buy for '+money(p.price)+'</strong></span></div>'
     + '<div class="shop-action">'+qtyControl(p.id,'card')+'</div></div></article>';
 }
 
@@ -3072,7 +3117,7 @@ function productSaving(p){
 }
 function categoryCard(id,photo,name,meta){
   var discount=categoryDiscountLabel(id);
-  return '<button class="category-card" onclick="openCategory(\''+id+'\')"><span class="category-card-photo '+photo+'"></span><span class="category-card-copy"><span><span class="category-card-name">'+name+'</span><span class="category-card-discount">'+discount+'</span></span><span class="category-card-arrow">'+IC.chev+'</span></span></button>';
+  return '<button class="category-card" onclick="openCategory(\''+id+'\')"><span class="category-card-photo '+photo+'"></span><span class="category-card-copy"><span class="category-card-body"><span class="category-card-name">'+name+'</span><span class="category-card-values"><span class="category-card-discount"><small>Save</small><strong>'+discount+'</strong></span><span class="category-card-arrow">'+IC.chev+'</span></span></span></span></button>';
 }
 function liveTabCopy(id, part){
   var ids=['studio','wash','hubfood','cooler','cycle','raincape','dontmiss','akka','group','dropin','recreation','thrift','grievance'];

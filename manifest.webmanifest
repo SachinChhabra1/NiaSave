@@ -9,16 +9,16 @@
   "theme_color": "#1C3F5C",
   "icons": [
     {
-      "src": "/assets/nia-logo.png",
-      "sizes": "689x565",
+      "src": "/assets/nia-app-icon-192.png",
+      "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "any maskable"
     },
     {
-      "src": "/assets/nia-logo.png",
-      "sizes": "any",
+      "src": "/assets/nia-app-icon-512.png",
+      "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "any maskable"
     }
   ]
 }

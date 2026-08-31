@@ -949,8 +949,12 @@
   .live-tile-copy,.category-card-copy{
     display:flex;min-height:104px;padding:12px;align-items:stretch;flex-direction:column;
   }
-  .live-tile-name,.category-card-name,.shop-name{
-    font-size:16px;font-weight:700;line-height:1.16;letter-spacing:-.025em;color:var(--ink);
+  .live-tile-name,.category-card-name{
+    font-size:clamp(12.5px,3.55vw,14px);font-weight:700;line-height:1.15;
+    letter-spacing:-.03em;color:var(--ink);white-space:nowrap;
+  }
+  .shop-name{
+    font-size:14px;font-weight:700;line-height:1.16;letter-spacing:-.025em;color:var(--ink);
   }
   .category-card-body{display:flex;min-height:80px;flex:1;flex-direction:column}
   .category-card-values,.shop-price{

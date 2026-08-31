@@ -1308,7 +1308,7 @@ var liveServiceProducts = [
   {id:'live_cycle',brand:'Travel for less',price:200,mrp:800,img:'assets/nia-logo-transparent.png',category:'live'},
   {id:'live_raincape',brand:'Stay dry',price:150,mrp:700,img:'assets/nia-logo-transparent.png',category:'live'},
   {id:'live_dontmiss',brand:'Mark work days',price:50,mrp:400,img:'assets/attendance-mark-days-v1.jpg',category:'live'},
-  {id:'live_akka',brand:'Tell Akka',price:50,mrp:400,img:'assets/tribe-akka-tea.jpg',category:'live'},
+  {id:'live_akka',brand:'Talk to counsellor',price:50,mrp:400,img:'assets/tribe-akka-tea.jpg',category:'live'},
   {id:'live_group',brand:'Sunday chai',price:50,mrp:400,img:'assets/tribe-group-cups.jpg',category:'live'},
   {id:'live_dropin',brand:'See a doctor',price:150,mrp:500,img:'assets/tribe-clinic-kit.jpg',category:'live'},
   {id:'live_recreation',brand:'Play after work',price:100,mrp:700,img:'assets/tribe-recreation.jpg',category:'live'},
@@ -1369,7 +1369,7 @@ var T = {
     live_card5_n:'Travel for less', live_card5_m:'Shared cycle.',
     live_card6_n:'Stay dry', live_card6_m:'Rain cape.',
     live_card7_n:'Mark work days', live_card7_m:'Attendance help.',
-    live_card8_n:'Tell Akka', live_card8_m:'Resolve any issue.',
+    live_card8_n:'Talk to counsellor', live_card8_m:'Counselling support.',
     live_card9_n:'Sunday chai', live_card9_m:'Chai with your group.',
     live_card10_n:'See a doctor', live_card10_m:'Nearby clinic.',
     live_card11_n:'Play after work', live_card11_m:'Recreation.',
@@ -1388,7 +1388,7 @@ var T = {
     live_how_cycle:'Skip the auto. Rupees stay for home.',
     live_how_rain:"Still reach work. That day's wage stays.",
     live_how_dontmiss:"Mark each work day. That day's wage stays.",
-    live_how_akka:'One tap to tell Akka. She listens. Not the factory.',
+    live_how_akka:'Talk to a counsellor. She listens.',
     live_how_group:'Tea every Sunday.',
     live_how_dropin:'This month slots. Not shared with the factory.',
     live_how_recreation:'Facilities as listed. Group opens after you pick.',
@@ -1399,7 +1399,7 @@ var T = {
     tribe_akka_shop:'Shop or wait', tribe_akka_shop_m:'Keep for home, not the bazaar trip.',
     tribe_akka_home:'Send home', tribe_akka_home_m:'How much this month can hold.',
     tribe_akka_safe:'Feel safe here', tribe_akka_safe_m:'Who to tell, without the employer.',
-    tribe_akka_tell:'Tell Akka', tribe_akka_tell_m:'She listens. Not the factory.',
+    tribe_akka_tell:'Talk to counsellor', tribe_akka_tell_m:'Counselling support.',
     tribe_group_lang:'Language circle', tribe_group_lang_m:'Evenings in your tongue.',
     tribe_group_talk:'Evening talk', tribe_group_talk_m:'After shift, small group.',
     tribe_dropin_self:'Self-care clinic', tribe_dropin_self_m:'Tue 7 PM · this month · not shared with the factory',
@@ -2528,7 +2528,7 @@ function t(k){
   var v=(d&&d[k]!=null)?d[k]:((T.en&&T.en[k]!=null)?T.en[k]:null);
   if(v!=null && String(v)!=='') return v;
   /* Never paint a raw i18n key. Never Dummy. */
-  return 'Tell Akka. She listens.';
+  return 'Talk to a counsellor.';
 }
 function money(n){ return '₹'+n.toLocaleString('en-IN'); }
 
@@ -3231,7 +3231,7 @@ function liveAisleHow(id){
   if(id==='cycle') return '<p class="quiet live-how">'+t('live_how_cycle')+'</p>';
   if(id==='raincape') return '<p class="quiet live-how">'+t('live_how_rain')+'</p>';
   if(id==='dontmiss') return '<p class="quiet live-how">'+t('live_how_dontmiss')+'</p>';
-  if(id==='akka') return '<p class="quiet live-how">'+t('live_how_akka')+'</p>'; /* Tell Akka: no fake piggy number. */
+  if(id==='akka') return '<p class="quiet live-how">'+t('live_how_akka')+'</p>'; /* Counselling: no fake piggy number. */
   if(id==='group') return '<p class="quiet live-how">'+t('live_how_group')+'</p>';
   if(id==='dropin') return '<p class="quiet live-how">'+t('live_how_dropin')+'</p>';
   if(id==='recreation') return '<p class="quiet live-how">'+t('live_how_recreation')+'</p>';

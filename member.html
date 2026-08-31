@@ -786,10 +786,9 @@
   .live-card-stepper button{width:100%;height:100%;padding:0;border:0;background:transparent;color:var(--navy);font:500 22px/1 var(--font);cursor:pointer}
   .live-card-stepper button:disabled{color:#B9BABD;cursor:default}
   .live-card-stepper .proof-qty{font-size:13px}
-  .earn-proof-card{grid-template-rows:auto;border:0!important;background:transparent}
-  .pad .proof-cards .earn-proof-card .proof-photo{grid-row:1;border:0!important}
-  .earn-proof-card .proof-copy{grid-row:1;min-height:126px;justify-content:center}
-  .earn-income-range{display:block;margin-top:8px;font-size:14px;font-weight:750;line-height:1.25;color:var(--navy)}
+  .earn-service-grid{margin:12px 0 4px}
+  .earn-tile-values{grid-template-columns:minmax(0,1fr)}
+  .earn-tile-income strong{font-size:13px;white-space:nowrap}
   .earn-wage-note{margin:10px 0 14px;padding:10px 12px;border-top:1px solid #E2E2E2;border-bottom:1px solid #E2E2E2;font-size:11.5px;line-height:1.4;color:var(--mute)}
   .earn-wage-note a{color:var(--navy);font-weight:650;text-decoration:none}
   .salary-history-card{display:flex;width:100%;min-height:64px;align-items:center;gap:12px;margin:14px 0 4px;padding:13px 14px;border:1px solid #D0D0D0;border-radius:12px;background:#fff;color:var(--ink);font-family:var(--font);text-align:left;cursor:pointer}
@@ -934,7 +933,7 @@
   .detail-step button{flex:1;height:58px;border:0;background:transparent;color:#fff;font-size:22px;font-weight:700;cursor:pointer}
   .detail-step span{min-width:48px;text-align:center;font-size:18px;font-weight:750;color:#fff}
 
-  /* One card system for Live and Save. Studio remains the single hero exception. */
+  /* One card system for Live, Earn and Save. Studio remains the single hero exception. */
   .live-service-tile,.category-card,.shop-card{
     overflow:hidden;border:1px solid var(--hair2);border-radius:16px;background:#fff;box-shadow:none;
     transition:border-color .18s,transform .18s;
@@ -2759,7 +2758,7 @@ function screenEarn(){
   if(earnView==='aisle' && earnCard) return earnAisle();
   var head = '<div class="h1">'+t('earn_t')+'</div>';
   var trends = salaryHistoryCard();
-  var cards = '<div class="story-cards category-cards proof-cards earn-proof-cards">'+earnCards()+'</div>';
+  var cards = '<div class="live-service-grid earn-service-grid">'+earnCards()+'</div>';
   var wageNote = '<div class="earn-wage-note"><strong>Income guide.</strong> Uses the official ₹556–₹827 daily wage bands. Exact pay depends on work and location. <a href="https://clc.gov.in/clc/sites/default/files/mygov_17748804861.pdf" target="_blank" rel="noopener">Source</a></div>';
   return '<div class="pad fadein">'+head+homeMonthBanner()+trends+wageNote+cards+'</div>';
 }
@@ -3174,9 +3173,15 @@ function proofCard(id,name,photoClass,onclick,model){
 }
 function earnPhotoCard(id,name,desc,photoClass){
   var income=EARN_INCOME_RANGE[id]||'';
-  return '<button type="button" class="proof-card earn-proof-card" data-story="earn-'+id+'" onclick="openStoryCard(\'earn\',\''+id+'\')" aria-label="'+name+'. '+desc+(income?' '+income:'')+'">'
-    + '<span class="proof-main"><span class="proof-photo story-photo '+photoClass+'"></span>'
-    + '<span class="proof-copy"><span class="proof-name">'+name+'</span>'+(income?'<span class="earn-income-range">'+income+'</span>':'')+'</span></span></button>';
+  var label='Income', value=income;
+  if(id==='gig'){ label='Earn per shift'; value=income.replace(' a shift',''); }
+  else if(id==='village'){ label='Free items'; value='₹500'; }
+  else if(id==='slip'){ label='Monthly pay'; value='Check'; }
+  else { label='Earn each month'; value=income.replace(' a month',''); }
+  return '<button type="button" class="live-service-tile earn-service-tile" data-story="earn-'+id+'" onclick="openStoryCard(\'earn\',\''+id+'\')" aria-label="'+name+'. '+desc+(income?' '+income:'')+'">'
+    + '<span class="live-tile-photo story-photo '+photoClass+'"></span>'
+    + '<span class="live-tile-copy"><span class="live-tile-name">'+name+'</span>'
+    + '<span class="live-tile-values earn-tile-values"><span class="live-tile-save earn-tile-income"><small>'+label+'</small><strong>'+value+'</strong></span></span></span></button>';
 }
 function openStoryCard(which,id){
   clearBlockingOverlays();

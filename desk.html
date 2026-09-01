@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#F6F8FB">
+<title>Nia Ops</title>
+<link rel="icon" href="/assets/nia-logo.png" type="image/png">
+<link rel="stylesheet" href="/staff.css">
+<style>
+  .ops-home { max-width: 920px; margin: 0 auto; padding: 28px 20px 64px; }
+  .ops-home .mark { display:flex; align-items:center; gap:12px; margin-bottom:8px; }
+  .ops-home h1 { margin: 0 0 6px; }
+  .ops-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap:14px; margin-top:18px; }
+  .ops-card { text-align:left; background:#fff; border:1px solid #E4E9F1; border-radius:16px; padding:18px 18px 16px; cursor:pointer; }
+  .ops-card:hover, .ops-card.on { border-color:#1A73E8; box-shadow:0 0 0 3px rgba(26,115,232,.12); }
+  .ops-card .k { font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:#667085; }
+  .ops-card strong { display:block; font-size:22px; margin:6px 0 4px; }
+  .ops-card p { margin:0; color:#475467; font-size:14px; }
+  .ops-card .meta { margin-top:10px; font-size:13px; color:#1A73E8; }
+  .login-box { max-width:420px; background:#fff; border:1px solid #E4E9F1; border-radius:16px; padding:22px; margin-top:18px; }
+  .login-box label { display:block; font-size:13px; margin:10px 0 4px; }
+  .login-box input { width:100%; box-sizing:border-box; padding:10px 12px; border:1px solid #D0D5DD; border-radius:10px; font:inherit; }
+  .login-box button { margin-top:14px; }
+  .who { font-size:13px; color:#667085; margin-top:8px; }
+  .err { color:#B42318; font-size:13px; margin-top:8px; min-height:18px; }
+</style>
+</head>
+<body>
+  <div class="ops-home">
+    <div class="mark">
+      <img class="nia-logo" src="/assets/nia-logo.png" alt="Nia" width="36" height="36">
+    </div>
+    <div class="kicker">Nia Ops</div>
+    <h1>One desk. Pick the product.</h1>
+    <p class="sub" id="lead">Polo is Save. Bison is Living. Login, then open the board you run tonight.</p>
+    <p class="who" id="who"></p>
+
+    <div id="login-panel" class="login-box" hidden>
+      <div class="kicker" id="login-kicker">Sign in</div>
+      <h2 id="login-title" style="margin:6px 0 0">Staff login</h2>
+      <p class="sub">Same staff book as Polo. Email and desk password.</p>
+      <label for="email">Email</label>
+      <input id="email" type="email" autocomplete="username" value="satish@nia.one">
+      <label for="password">Password</label>
+      <input id="password" type="password" autocomplete="current-password">
+      <div class="err" id="err"></div>
+      <button type="button" id="go">Enter desk</button>
+      <button type="button" class="ghost" id="back">Back to products</button>
+    </div>
+
+    <div id="products" class="ops-grid"></div>
+  </div>
+<script>
+var PRODUCTS = [
+  { id: "polo", name: "Operation Polo", product: "Save", href: "/ops.html", line: "Bags, beat, hub, recon, statement match.", live: true },
+  { id: "bison", name: "Operation Bison", product: "Living", href: "/bison.html", line: "Nests, clocks, vacant, join-month. Stayflexi book.", live: true },
+  { id: "essentials", name: "Essentials", product: "Keep", href: "", line: "Catalog and bag keep. Not a separate staff board yet.", live: false },
+  { id: "work", name: "Work", product: "Earn", href: "", line: "Shifts and extras. Member rail only for now.", live: false }
+];
+var picked = null;
+
+function staff() {
+  try { return JSON.parse(sessionStorage.getItem("niaOpsStaff") || "null"); } catch (e) { return null; }
+}
+function token() { return sessionStorage.getItem("niaOpsToken") || ""; }
+
+function paintWho() {
+  var s = staff();
+  document.getElementById("who").textContent = s ? (s.name + " · " + s.role + " · " + (s.email || "")) : "Not signed in.";
+}
+
+function paintProducts() {
+  var authed = !!token();
+  document.getElementById("products").innerHTML = PRODUCTS.map(function (p) {
+    return '<button type="button" class="ops-card" data-id="' + p.id + '">' +
+      '<div class="k">' + p.product + '</div>' +
+      '<strong>' + p.name + '</strong>' +
+      '<p>' + p.line + '</p>' +
+      '<div class="meta">' + (p.live ? (authed ? "Open desk" : "Select, then login") : "Not on this desk yet") + '</div>' +
+      '</button>';
+  }).join("");
+  document.querySelectorAll(".ops-card").forEach(function (el) {
+    el.addEventListener("click", function () { choose(el.getAttribute("data-id")); });
+  });
+}
+
+function choose(id) {
+  var p = PRODUCTS.filter(function (x) { return x.id === id; })[0];
+  if (!p) return;
+  if (!p.live) { alert(p.name + " is not on this ops desk yet."); return; }
+  picked = p;
+  if (token()) { location.href = p.href; return; }
+  document.getElementById("products").hidden = true;
+  document.getElementById("login-panel").hidden = false;
+  document.getElementById("login-kicker").textContent = p.product;
+  document.getElementById("login-title").textContent = "Enter " + p.name;
+  document.getElementById("err").textContent = "";
+  document.getElementById("password").focus();
+}
+
+function back() {
+  picked = null;
+  document.getElementById("login-panel").hidden = true;
+  document.getElementById("products").hidden = false;
+}
+
+function login() {
+  var email = document.getElementById("email").value.trim();
+  var password = document.getElementById("password").value;
+  document.getElementById("err").textContent = "";
+  fetch("/v1/staff/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email: email, password: password })
+  }).then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
+    .then(function (res) {
+      if (!res.ok) { document.getElementById("err").textContent = (res.j && res.j.error) || "Login failed"; return; }
+      sessionStorage.setItem("niaOpsToken", res.j.token);
+      sessionStorage.setItem("niaOpsStaff", JSON.stringify(res.j.staff || {}));
+      paintWho();
+      location.href = (picked && picked.href) || "/ops.html";
+    }).catch(function () {
+      document.getElementById("err").textContent = "Could not reach the staff book.";
+    });
+}
+
+document.getElementById("go").addEventListener("click", login);
+document.getElementById("back").addEventListener("click", back);
+document.getElementById("password").addEventListener("keydown", function (e) { if (e.key === "Enter") login(); });
+paintWho();
+paintProducts();
+</script>
+</body>
+</html>

@@ -14,7 +14,8 @@
   @media (max-width:640px){ .ops-grid { grid-template-columns: 1fr; } }
   .ops-card { text-align:left; background:#fff; border:1px solid #E4E9F1; border-radius:16px; padding:22px 20px 18px; cursor:pointer; }
   .ops-card:hover { border-color:#1A73E8; box-shadow:0 0 0 3px rgba(26,115,232,.12); }
-  .ops-card strong { display:block; font-size:28px; margin:0 0 8px; }
+  .ops-card .k { font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:#667085; }
+  .ops-card strong { display:block; font-size:28px; margin:4px 0 8px; }
   .ops-card p { margin:0; color:#475467; font-size:14px; }
   .ops-card .meta { margin-top:12px; font-size:13px; color:#1A73E8; }
   .login-box { max-width:420px; background:#fff; border:1px solid #E4E9F1; border-radius:16px; padding:22px; margin-top:18px; }
@@ -30,8 +31,8 @@
     <div class="mark">
       <img class="nia-logo" src="/assets/nia-logo.png" alt="Nia" width="36" height="36">
     </div>
-    <h1>Polo and Bison</h1>
-    <p class="sub">Pick a desk, then login.</p>
+    <h1>Ops</h1>
+    <p class="sub">Polo is Save. Bison is Living. Pick the card, then login.</p>
     <p class="who" id="who"></p>
     <div id="login-panel" class="login-box" hidden>
       <h2 id="login-title" style="margin:6px 0 0">Staff login</h2>
@@ -48,8 +49,8 @@
   </div>
 <script>
 var PRODUCTS = [
-  { id: "polo", name: "Polo", href: "/ops.html", line: "Bags, beat, hub, recon." },
-  { id: "bison", name: "Bison", href: "/bison.html", line: "Nests, clocks, vacant, join-month." }
+  { id: "polo", name: "Polo", product: "Save", href: "/ops.html", line: "Bags, beat, hub, recon." },
+  { id: "bison", name: "Bison", product: "Living", href: "/bison.html", line: "Theatre, studio, nest. Clocks and vacant." }
 ];
 var picked = null;
 function staff() { try { return JSON.parse(sessionStorage.getItem("niaOpsStaff") || "null"); } catch (e) { return null; } }
@@ -62,7 +63,9 @@ function paintProducts() {
   var authed = !!token();
   document.getElementById("products").innerHTML = PRODUCTS.map(function (p) {
     return '<button type="button" class="ops-card" data-id="' + p.id + '">' +
-      '<strong>' + p.name + '</strong><p>' + p.line + '</p>' +
+      '<div class="k">' + p.product + '</div>' +
+      '<strong>' + p.name + '</strong>' +
+      '<p>' + p.line + '</p>' +
       '<div class="meta">' + (authed ? "Open " + p.name : "Login to " + p.name) + '</div></button>';
   }).join("");
   document.querySelectorAll(".ops-card").forEach(function (el) {
@@ -76,7 +79,7 @@ function choose(id) {
   if (token()) { location.href = p.href; return; }
   document.getElementById("products").hidden = true;
   document.getElementById("login-panel").hidden = false;
-  document.getElementById("login-title").textContent = "Enter " + p.name;
+  document.getElementById("login-title").textContent = "Enter " + p.name + " · " + p.product;
   document.getElementById("err").textContent = "";
   document.getElementById("password").focus();
 }

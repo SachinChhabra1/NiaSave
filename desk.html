@@ -4,20 +4,19 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#F6F8FB">
-<title>Nia Ops</title>
+<title>Polo and Bison</title>
 <link rel="icon" href="/assets/nia-logo.png" type="image/png">
 <link rel="stylesheet" href="/staff.css">
 <style>
   .ops-home { max-width: 920px; margin: 0 auto; padding: 28px 20px 64px; }
-  .ops-home .mark { display:flex; align-items:center; gap:12px; margin-bottom:8px; }
   .ops-home h1 { margin: 0 0 6px; }
-  .ops-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap:14px; margin-top:18px; }
-  .ops-card { text-align:left; background:#fff; border:1px solid #E4E9F1; border-radius:16px; padding:18px 18px 16px; cursor:pointer; }
+  .ops-grid { display:grid; grid-template-columns: repeat(2, minmax(240px, 1fr)); gap:14px; margin-top:18px; }
+  @media (max-width:640px){ .ops-grid { grid-template-columns: 1fr; } }
+  .ops-card { text-align:left; background:#fff; border:1px solid #E4E9F1; border-radius:16px; padding:22px 20px 18px; cursor:pointer; }
   .ops-card:hover { border-color:#1A73E8; box-shadow:0 0 0 3px rgba(26,115,232,.12); }
-  .ops-card .k { font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:#667085; }
-  .ops-card strong { display:block; font-size:22px; margin:6px 0 4px; }
+  .ops-card strong { display:block; font-size:28px; margin:0 0 8px; }
   .ops-card p { margin:0; color:#475467; font-size:14px; }
-  .ops-card .meta { margin-top:10px; font-size:13px; color:#1A73E8; }
+  .ops-card .meta { margin-top:12px; font-size:13px; color:#1A73E8; }
   .login-box { max-width:420px; background:#fff; border:1px solid #E4E9F1; border-radius:16px; padding:22px; margin-top:18px; }
   .login-box label { display:block; font-size:13px; margin:10px 0 4px; }
   .login-box input { width:100%; box-sizing:border-box; padding:10px 12px; border:1px solid #D0D5DD; border-radius:10px; font:inherit; }
@@ -31,12 +30,10 @@
     <div class="mark">
       <img class="nia-logo" src="/assets/nia-logo.png" alt="Nia" width="36" height="36">
     </div>
-    <div class="kicker">Nia Ops</div>
-    <h1>Polo or Bison</h1>
-    <p class="sub">One desk. Pick Polo or Bison, then login.</p>
+    <h1>Polo and Bison</h1>
+    <p class="sub">Pick a desk, then login.</p>
     <p class="who" id="who"></p>
     <div id="login-panel" class="login-box" hidden>
-      <div class="kicker" id="login-kicker">Sign in</div>
       <h2 id="login-title" style="margin:6px 0 0">Staff login</h2>
       <p class="sub">Staff email and desk password.</p>
       <label for="email">Email</label>
@@ -51,7 +48,7 @@
   </div>
 <script>
 var PRODUCTS = [
-  { id: "polo", name: "Polo", href: "/ops.html", line: "Bags, beat, hub, recon, statement match." },
+  { id: "polo", name: "Polo", href: "/ops.html", line: "Bags, beat, hub, recon." },
   { id: "bison", name: "Bison", href: "/bison.html", line: "Nests, clocks, vacant, join-month." }
 ];
 var picked = null;
@@ -59,14 +56,14 @@ function staff() { try { return JSON.parse(sessionStorage.getItem("niaOpsStaff")
 function token() { return sessionStorage.getItem("niaOpsToken") || ""; }
 function paintWho() {
   var s = staff();
-  document.getElementById("who").textContent = s ? (s.name + " · " + s.role + " · " + (s.email || "")) : "Not signed in.";
+  document.getElementById("who").textContent = s ? (s.name + " · " + s.role) : "Not signed in.";
 }
 function paintProducts() {
   var authed = !!token();
   document.getElementById("products").innerHTML = PRODUCTS.map(function (p) {
     return '<button type="button" class="ops-card" data-id="' + p.id + '">' +
-      '<div class="k">Nia Ops</div><strong>' + p.name + '</strong><p>' + p.line + '</p>' +
-      '<div class="meta">' + (authed ? "Open " + p.name : "Select, then login") + '</div></button>';
+      '<strong>' + p.name + '</strong><p>' + p.line + '</p>' +
+      '<div class="meta">' + (authed ? "Open " + p.name : "Login to " + p.name) + '</div></button>';
   }).join("");
   document.querySelectorAll(".ops-card").forEach(function (el) {
     el.addEventListener("click", function () { choose(el.getAttribute("data-id")); });
@@ -79,7 +76,6 @@ function choose(id) {
   if (token()) { location.href = p.href; return; }
   document.getElementById("products").hidden = true;
   document.getElementById("login-panel").hidden = false;
-  document.getElementById("login-kicker").textContent = p.name;
   document.getElementById("login-title").textContent = "Enter " + p.name;
   document.getElementById("err").textContent = "";
   document.getElementById("password").focus();

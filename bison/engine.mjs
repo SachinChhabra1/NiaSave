@@ -1,7 +1,6 @@
 /**
- * Operation Bison — Living control plane on niasave.com.
- * Polo owns Save. Bison owns Living. Finance bills the nest.
- * Occupancy book is Stayflexi Group Master (3339 bookings / 56 codes / 2026-06-30).
+ * Operation Bison control plane on niasave.com.
+ * Polo runs bags. Bison runs nests. Finance bills the nest.
  * Durable state key: operation-bison.
  */
 import { hasDurableStore, loadRuntimeState, saveRuntimeState } from "../lib/runtime-store.mjs";
@@ -10,7 +9,7 @@ const DUMMY_DATA = process.env.DUMMY_DATA !== "0";
 const RUNTIME_STATE_KEY = process.env.NIA_BISON_STATE_KEY || "operation-bison";
 const OCC_TARGET = 78;
 const AS_OF = "2026-06-30";
-const SOURCE = "Stayflexi Group Master Report";
+const SOURCE = "Bison occupancy book";
 
 function now() { return new Date().toISOString(); }
 
@@ -48,6 +47,7 @@ function restoreState(value, storage = "memory") {
   restored.assignments = Array.isArray(restored.assignments) ? restored.assignments : [];
   restored.clocks = Array.isArray(restored.clocks) ? restored.clocks : [];
   restored.audit = Array.isArray(restored.audit) ? restored.audit : [];
+  restored.source = SOURCE;
   restored.persist = storage;
   state = restored;
 }
@@ -89,17 +89,17 @@ export function towerPayload(query = {}) {
   const sites = sitesFor(city).map(s => ({ ...s, clock: clockLabel(s), pendingPerNest: pendingPerNest(s) }));
   const overdue = sites.filter(s => String(s.clock).startsWith("Overdue"));
   return {
-    product: "bison", sibling: "polo", skip: DUMMY_DATA, asOf: state.asOf, persist: state.persist, source: state.source,
+    product: "bison", sibling: "polo", skip: DUMMY_DATA, asOf: state.asOf, persist: state.persist, source: SOURCE,
     bookings: state.bookings, studioCodes: state.studioCodes, city,
     cities: ["All", ...Array.from(new Set(state.sites.map(s => s.city)))],
     theatres: ["All", ...Array.from(new Set(state.sites.map(s => s.theatre).filter(Boolean)))],
     clusters: ["All", ...Array.from(new Set(state.sites.map(s => s.cluster).filter(Boolean)))],
     kpis: { occupied: t.occupied, contracted: t.contracted, vacant: t.vacant, occPct: t.occPct, occTarget: t.occTarget, overdueClocks: overdue.length, pending: t.pending, joinMonths: state.joinMonths.length, sites: sites.length },
     sites,
-    blockers: sites.filter(s => s.status === "alarm" || String(s.clock).startsWith("Overdue")).map(s => ({ level: s.status, area: "Living", site: s.studio + " · " + s.code, city: s.city, text: clockLabel(s), owner: s.owner, when: clockLabel(s) })),
+    blockers: sites.filter(s => s.status === "alarm" || String(s.clock).startsWith("Overdue")).map(s => ({ level: s.status, area: "Bison", site: s.studio + " · " + s.code, city: s.city, text: clockLabel(s), owner: s.owner, when: clockLabel(s) })),
     actNow: sites.filter(s => s.status !== "ok").map(s => ({ id: s.id, site: s.studio, city: s.city, model: s.model, code: s.code, lastCount: s.lastCount, status: s.status, weekly: s.weeklyPp + " pp · ₹" + pendingPerNest(s) + "/nest · " + s.vacant + " vacant", action: pendingPerNest(s) > 2000 ? "Collections first. Clock still must close." : "Close the clock, then fill.", desk: "/bison", holdFill: pendingPerNest(s) > 2000 })),
     joinMonths: state.joinMonths,
-    note: "Stayflexi Group Master is the occupancy book. Living fills nests. Finance bills them."
+    note: "Bison runs nests. Polo runs bags. Finance bills the nest."
   };
 }
 export function sitesPayload(query = {}) { return { ok: true, city: query.city || "All", sites: towerPayload(query).sites }; }

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#F6F8FB">
+<title>Operation Bison</title>
+<link rel="icon" href="/assets/nia-logo.png" type="image/png">
+<link rel="stylesheet" href="/staff.css">
+</head>
+<body>
+  <div class="narrow">
+    <div class="narrow-card">
+      <div class="kicker">Operation Bison</div>
+      <h1>Open on a laptop</h1>
+      <p>Living desk. Occupancy, clocks, vacant, join-month. Not the member app. Not Polo.</p>
+    </div>
+  </div>
+  <div class="tower" data-pane="ops">
+    <header class="top">
+      <div class="mark">
+        <img class="nia-logo" src="/assets/nia-logo.png" alt="Nia">
+        <h1>Operation Bison</h1>
+      </div>
+      <div class="meta" id="topmeta">Stayflexi · nests<br>Polo is Save</div>
+    </header>
+    <div class="shell">
+      <aside class="rail">
+        <div class="rail-block">
+          <h2 class="rail-h">Living</h2>
+          <a class="rail-link on" href="/bison.html">Bison</a>
+          <a class="rail-link" href="#clocks">Clocks</a>
+          <a class="rail-link" href="#vacant">Vacant</a>
+          <a class="rail-link" href="#join">Join months</a>
+        </div>
+        <div class="rail-block">
+          <h2 class="rail-h">Save</h2>
+          <a class="rail-link" href="/ops.html">Operation Polo</a>
+        </div>
+      </aside>
+      <div class="pane">
+        <div class="wrap pane-ops">
+          <p class="sub">Stayflexi Group Master is the occupancy book. Living fills nests. Finance bills them. Polo remains Save.</p>
+          <div class="realities">
+            <span class="reality"><b>1</b> Clock closed</span>
+            <span class="reality-arrow">→</span>
+            <span class="reality"><b>2</b> Vacant counted</span>
+            <span class="reality-arrow">→</span>
+            <span class="reality"><b>3</b> Nest assigned</span>
+            <span class="reality-arrow">→</span>
+            <span class="reality"><b>4</b> Join-month held</span>
+            <span class="reality-arrow">→</span>
+            <span class="reality"><b>5</b> Finance bills</span>
+          </div>
+          <div class="kpis" id="kpis"></div>
+          <p class="sub">City
+            <select id="city"></select>
+          </p>
+          <div class="jobs" id="jobs"></div>
+          <div class="open" id="open"></div>
+          <h2 id="clocks">Overdue clocks</h2>
+          <div id="clocks-tbl" class="studios-table"></div>
+          <h2 id="vacant">Sites</h2>
+          <div id="sites-tbl" class="studios-table"></div>
+          <h2 id="join">Join months</h2>
+          <div id="join-tbl" class="studios-table"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+<script>
+var DATA=null;
+function num(n){ return n==null?0:n; }
+function rupee(n){ return '₹'+Number(n||0).toLocaleString('en-IN'); }
+function paint(){
+  var t=DATA||{};
+  var k=t.kpis||{};
+  document.getElementById('topmeta').innerHTML='Stayflexi · '+num(k.sites|| (DATA.sites||[]).length)+' nests · '+num(k.occupied)+' in / '+num(k.contracted)+' book<br>'+num(k.vacant)+' vacant · '+num(k.occPct)+'% · as of '+(t.asOf||'-');
+  document.getElementById('kpis').innerHTML=[
+    ['Occupied', num(k.occupied)],
+    ['Vacant', num(k.vacant)],
+    ['Occupancy', num(k.occPct)+'%'],
+    ['Overdue clocks', num(k.overdueClocks)],
+    ['Pending', rupee(k.pending)],
+    ['Join months', num(k.joinMonths)]
+  ].map(function(r){ return '<div class="kpi"><div class="l">'+r[0]+'</div><div class="n">'+r[1]+'</div></div>'; }).join('');
+  var city=document.getElementById('city');
+  var cur=city.value||t.city||'All';
+  city.innerHTML=(t.cities||['All']).map(function(c){ return '<option'+(c===cur?' selected':'')+'>'+c+'</option>'; }).join('');
+  var act=t.actNow||[];
+  document.getElementById('jobs').innerHTML=act.map(function(a){
+    return '<button type="button" class="job" data-id="'+a.id+'"><div class="job-kicker">'+a.city+' · '+a.model+'</div><strong>'+a.site+'</strong><div class="job-do">'+a.action+'</div><div class="job-num">'+a.weekly+'</div></button>';
+  }).join('') || '<div class="empty">No act-now sites in this city.</div>';
+  document.querySelectorAll('button.job').forEach(function(el){
+    el.addEventListener('click', function(){ openSite(el.getAttribute('data-id')); });
+  });
+  var overdue=(t.sites||[]).filter(function(s){ return String(s.clock||'').indexOf('Overdue')===0; });
+  document.getElementById('clocks-tbl').innerHTML=table(['Site','City','Clock','Open','Owner'], overdue.map(function(s){
+    return [s.studio,s.city,s.clock,s.openActions,s.owner];
+  }));
+  document.getElementById('sites-tbl').innerHTML=table(['Site','Theatre','Occ','Vacant','₹/nest','Overdue CO','Clock','Status'], (t.sites||[]).map(function(s){
+    return [s.studio+' · '+s.code,s.theatre||s.city,s.occupied+'/'+s.contracted,s.vacant,s.pendingPerNest,s.overdueCheckout||0,s.clock,s.status];
+  }));
+  document.getElementById('join-tbl').innerHTML=table(['Month','Members','Notices','Unverified','First-90','Note'], (t.joinMonths||[]).map(function(m){
+    return [m.label,m.members,m.notices,m.unverified,m.first90Open,m.note];
+  }));
+}
+function table(heads, rows){
+  return '<table><thead><tr>'+heads.map(function(h){ return '<th>'+h+'</th>'; }).join('')+'</tr></thead><tbody>'
+    +(rows.map(function(r){ return '<tr>'+r.map(function(c,i){ return '<td'+(i?' class="num"':'')+'>'+c+'</td>'; }).join('')+'</tr>'; }).join('')||'<tr><td colspan="'+heads.length+'">None.</td></tr>')
+    +'</tbody></table>';
+}
+function openSite(id){
+  var a=(DATA.actNow||[]).find(function(x){ return x.id===id; });
+  var s=(DATA.sites||[]).find(function(x){ return x.id===id; });
+  var box=document.getElementById('open');
+  if(!s){ box.className='open'; box.innerHTML=''; return; }
+  box.className='open show';
+  box.innerHTML='<h2>'+s.studio+'</h2><p class="do">'+(a&&a.action||'Close the clock, then fill.')+'</p>'
+    +'<div class="checks">'
+    +chk('Vacant',s.vacant)+chk('Occupied',s.occupied)+chk('Clock',s.clock)+chk('₹/nest',s.pendingPerNest)
+    +'</div>'
+    +'<div class="actions">'
+    +'<button type="button" id="do-clock">Clear clock</button>'
+    +'<button type="button" class="ghost" id="do-assign">Assign 1 nest</button>'
+    +'<button type="button" class="ghost" id="do-vacate">Vacate 1 nest</button>'
+    +'</div>';
+  document.getElementById('do-clock').onclick=function(){ post('/api/bison/clock',{siteId:id,nextHours:18}); };
+  document.getElementById('do-assign').onclick=function(){ post('/api/bison/assign',{siteId:id,nests:1}); };
+  document.getElementById('do-vacate').onclick=function(){ post('/api/bison/vacate',{siteId:id,nests:1}); };
+}
+function chk(l,n){ return '<div class="check"><div class="l">'+l+'</div><div class="n">'+n+'</div></div>'; }
+function post(url,body){
+  fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
+    .then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); })
+    .then(function(res){
+      if(!res.ok){ alert((res.j&&(res.j.message||res.j.error))||'Failed'); return; }
+      load();
+    }).catch(function(){ alert('Could not reach Bison'); });
+}
+function load(){
+  var city=(document.getElementById('city')&&document.getElementById('city').value)||'All';
+  fetch('/api/bison/tower?city='+encodeURIComponent(city)).then(function(r){ return r.json(); }).then(function(t){
+    DATA=t; paint();
+  }).catch(function(){
+    document.getElementById('jobs').innerHTML='<div class="empty">Could not load Operation Bison.</div>';
+  });
+}
+document.getElementById('city').addEventListener('change', load);
+load();
+</script>
+</body>
+</html>

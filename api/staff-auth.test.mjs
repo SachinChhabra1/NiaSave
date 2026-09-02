@@ -13,15 +13,20 @@ test("staff tokens are signed, time-limited and tamper-evident", () => {
   assert.equal(verifyStaffToken(token, issuedAt + 13 * 60 * 60 * 1000), null);
 });
 
-test("Bison and Polo desk APIs require a 2 Para staff token", async t => {
+test("Bison desk APIs require a 2 Para staff token; Polo skip-on GETs do not", async t => {
   const server = http.createServer(handler);
   await new Promise(resolve => server.listen(0, "127.0.0.1", resolve));
   t.after(() => server.close());
   const base = `http://127.0.0.1:${server.address().port}`;
   const deniedBison = await fetch(`${base}/api/bison/tower`);
   assert.equal(deniedBison.status, 401);
-  const deniedPolo = await fetch(`${base}/api/tower`);
-  assert.equal(deniedPolo.status, 401);
+  const skipPolo = await fetch(`${base}/api/orders`);
+  assert.equal(skipPolo.status, 200);
+  const skipBody = await skipPolo.json();
+  assert.equal(skipBody.skip, true);
+  assert.equal(skipBody.liveUpi, false);
+  const deniedPost = await fetch(`${base}/api/beat/open`, { method: "POST" });
+  assert.equal(deniedPost.status, 401);
   const token = issueStaffToken(admin);
   const allowed = await fetch(`${base}/api/bison/tower`, { headers: { Authorization: `Bearer ${token}` } });
   assert.equal(allowed.status, 200);

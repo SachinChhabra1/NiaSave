@@ -8,7 +8,7 @@
 import http from "node:http";
 import { randomUUID, createHash, createHmac, timingSafeEqual } from "node:crypto";
 import { pathToFileURL } from "node:url";
-import { handleStaff, isStaffPath, staffPath, staffStorageStatus } from "../rabbit/engine.mjs";
+import { handleStaff, isStaffPath, staffPath, staffStorageStatus, DUMMY_DATA } from "../rabbit/engine.mjs";
 import { handleBison, isBisonPath, bisonPath, bisonStorageStatus } from "../bison/engine.mjs";
 import { hasDurableStore, loadRuntimeState, saveRuntimeState } from "../lib/runtime-store.mjs";
 
@@ -148,9 +148,12 @@ export async function handler(req, res) {
     if (staffRequest) {
       const body = (req.method === "POST" || req.method === "PUT") ? await readBody(req) : {};
       if (PROTECTED_DESK_PATHS.has(rabbitPath)) {
-        const staff = requireStaff(req, res, ["studio", "hub", "money", "pilot"]);
-        if (!staff) return;
-        body.actor = `${staff.name} · ${staff.email}`;
+        const skipOpenGet = DUMMY_DATA && req.method === "GET";
+        if (!skipOpenGet) {
+          const staff = requireStaff(req, res, ["studio", "hub", "money", "pilot"]);
+          if (!staff) return;
+          body.actor = `${staff.name} · ${staff.email}`;
+        }
       }
       const out = await handleStaff(req, res, rabbitPath, body, url);
       if (out) return json(res, out.status, out.body);

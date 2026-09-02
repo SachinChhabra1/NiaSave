@@ -7,6 +7,7 @@ import {
   mutatePo, poPayload, mutateDispatch, mutateInvoice, invoicePayload,
   dispatchPayload, bikerPayload, mutateBiker, memberPayload, memberOrderGet, handleStaff
 } from "./engine.mjs";
+import { handler } from "../api/server.mjs";
 import { readFileSync } from "fs";
 
 const fails = [];
@@ -260,6 +261,35 @@ ok("return to hub", back.ok === true && back.run && back.run.status === "returne
 noDummyWord("biker", bikerPayload());
 ok("stock keys after biker", ["beatDate","theatre","stopCount","opening","stock","remaining","movements","holding"].every(k => stockPayload()[k] !== undefined));
 resetDummy();
+
+function staffGet(path) {
+  return new Promise((resolve, reject) => {
+    const req = { method: "GET", url: path, headers: {} };
+    const res = {
+      statusCode: 0,
+      writeHead(code) { this.statusCode = code; },
+      end(s) {
+        try {
+          resolve({ status: this.statusCode, raw: s, body: JSON.parse(s || "{}") });
+        } catch (e) {
+          reject(e);
+        }
+      }
+    };
+    Promise.resolve(handler(req, res)).catch(reject);
+  });
+}
+const skipBar = ["/api/orders", "/api/ledger", "/api/predict", "/api/biker", "/api/po", "/api/invoice", "/api/connectors", "/api/beat"];
+for (const path of skipBar) {
+  const got = await staffGet(path);
+  ok(path + " unauth 200 JSON", got.status === 200 && got.body && got.body.error !== "staff_required" && typeof got.raw === "string" && !/^<!DOCTYPE|^<html/i.test(got.raw));
+  ok(path + " skip liveUpi", got.body.skip === true && got.body.liveUpi === false);
+  noDummyWord(path, got.body);
+}
+const getMemberLive = await staffGet("/api/member");
+ok("GET /api/member still 200", getMemberLive.status === 200 && getMemberLive.body.skip === true);
+const getStockLive = await staffGet("/api/stock");
+ok("GET /api/stock keys frozen", ["beatDate","theatre","stopCount","opening","stock","remaining","movements","holding"].every(k => getStockLive.body[k] !== undefined));
 
 const staffPages = [
   "ops.html","po.html","dispatch.html","invoice.html","pickup.html","recon.html",

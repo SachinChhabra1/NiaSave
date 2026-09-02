@@ -610,7 +610,9 @@ export function ledgerOf(beatDate) {
     leftover,
     owner: OWNER,
     rows,
-    balanced: rows.every(r => r.ok)
+    balanced: rows.every(r => r.ok),
+    skip: DUMMY_DATA,
+    liveUpi: false
   };
 }
 
@@ -692,6 +694,7 @@ export function connectorsPayload() {
   return {
     product: "polo",
     skip: DUMMY_DATA,
+    liveUpi: false,
     theatre: THEATRE.name,
     stopCount: liveStopCount(),
     memberCount: MEMBER_COUNT,
@@ -1019,6 +1022,8 @@ export function saveMemberAnswer(body = {}) {
 
 export function beatPayload() {
   return {
+    skip: DUMMY_DATA,
+    liveUpi: false,
     beatDate: state.beat.beatDate,
     open: state.beat.open,
     openedAt: state.beat.openedAt,
@@ -1076,7 +1081,8 @@ export function ordersPayload(query = {}) {
     remaining: remainingOnCart(),
     orderCount: state.orders.length,
     byStatus: f,
-    skip: DUMMY_DATA
+    skip: DUMMY_DATA,
+    liveUpi: false
   };
   if (stop) {
     const studio = studioById.get(stop);
@@ -1246,6 +1252,7 @@ export function predictPayload() {
     stopCount: liveStopCount(),
     memberCount: MEMBER_COUNT,
     skip: DUMMY_DATA,
+    liveUpi: false,
     miss_rate: pred.miss_rate,
     gates: gatesOf(funnel, led),
     load: pred.load,
@@ -1571,6 +1578,7 @@ function poCounts() {
 export function poPayload() {
   return {
     skip: DUMMY_DATA,
+    liveUpi: false,
     theatre: THEATRE.name,
     beatDate: state.beat.beatDate,
     nextBeatDate: NEXT_BEAT,

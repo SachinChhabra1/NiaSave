@@ -1,6 +1,6 @@
 # NiaSave
 
-NiaSave is a phone-first member application with a connected staff operating console, Operation Polo.
+NiaSave is a phone-first member application with two connected staff desks in 2 Para: Polo for Save and Bison for Living.
 
 ## What is live
 
@@ -9,6 +9,7 @@ NiaSave is a phone-first member application with a connected staff operating con
 - Embedded Nia voice assistant through ElevenLabs
 - Save catalogue, bag, pickup-code and order-reservation flow
 - Operation Polo for orders, stock, packing, dispatch, collection, invoicing and reconciliation
+- Bison for the theatre → studio → nest book, member contracts, clocks and collections
 - Shared, durable runtime state in Neon Postgres
 - One Vercel origin for the phone, Operation Polo and APIs
 
@@ -16,6 +17,8 @@ Production:
 
 - Member app: <https://www.niasave.com/>
 - Operation Polo: <https://www.niasave.com/ops.html>
+- 2 Para: <https://www.niasave.com/2para.html>
+- Bison: <https://www.niasave.com/bison.html>
 - Health: <https://www.niasave.com/health>
 
 ## Current release boundary
@@ -52,6 +55,7 @@ Run the release checks:
 
 ```bash
 npm test
+npm run test:bison
 npm run test:storage
 npm run build:production
 ```

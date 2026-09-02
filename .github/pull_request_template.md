@@ -5,6 +5,7 @@ Describe the member, staff, API or operating change in plain language.
 ## Proof
 
 - [ ] `npm test`
+- [ ] `npm run test:bison`
 - [ ] `npm run test:storage`
 - [ ] `npm run build:production`
 - [ ] Relevant phone screen checked at narrow width

@@ -6,7 +6,7 @@
  * Not for rafiqicentral.com or harness.
  */
 import http from "node:http";
-import { randomUUID, createHash } from "node:crypto";
+import { randomUUID, createHash, createHmac, timingSafeEqual } from "node:crypto";
 import { pathToFileURL } from "node:url";
 import { handleStaff, isStaffPath, staffPath, staffStorageStatus } from "../rabbit/engine.mjs";
 import { handleBison, isBisonPath, bisonPath, bisonStorageStatus } from "../bison/engine.mjs";
@@ -15,9 +15,12 @@ import { hasDurableStore, loadRuntimeState, saveRuntimeState } from "../lib/runt
 const PORT = Number(process.env.PORT || 8787);
 const DEMO = process.env.DEMO !== "0";
 const STAFF_PASSWORD = process.env.STAFF_PASSWORD || "SaveDesk#29Aug";
+const STAFF_TOKEN_SECRET = process.env.STAFF_TOKEN_SECRET || process.env.SESSION_SECRET || STAFF_PASSWORD;
+const STAFF_TOKEN_TTL_SECONDS = 12 * 60 * 60;
 const now = () => new Date().toISOString();
 const NOT_NIA = "This phone is not with Nia.";
 const HUB_FLOW = ["pack", "count", "leave", "sell", "return", "close"];
+const PROTECTED_DESK_PATHS = new Set(["/connectors", "/connectors/upload", "/predict", "/ledger", "/inventory", "/ageing", "/orders", "/beat", "/beat/open", "/beat/close", "/scan", "/recon", "/next", "/source", "/cash", "/settlements", "/tower", "/stops", "/po", "/dispatch", "/invoice", "/biker"]);
 
 const member = {
   id: "NIA-1042", name: "Ravi K", phone: "9876541042", job: "Warehouse picker",
@@ -42,6 +45,7 @@ const staffSeed = [
   { id: "stf-kavita", email: "kavita@nia.one", name: "Kavita", role: "money", desks: ["money"] },
   { id: "stf-pilot", email: "pilot@nia.one", name: "Pilot", role: "pilot", desks: ["pilot"] }
 ];
+if (process.env.STAFF_QA_EMAIL) staffSeed.push({ id: "stf-qa", email: String(process.env.STAFF_QA_EMAIL).toLowerCase(), name: "QA", role: "admin", desks: ["studio", "hub", "money", "pilot"] });
 
 const state = {
   extra: { id: "extra-tonight", status: "open" }, rsvp: false, issues: [],
@@ -89,11 +93,28 @@ function readBody(req) {
 }
 function digits(phone) { return String(phone || "").replace(/\D/g, "").slice(-10); }
 function tokenHash(token) { return createHash("sha256").update(String(token)).digest("hex"); }
+function signTokenPart(part) { return createHmac("sha256", STAFF_TOKEN_SECRET).update(part).digest("base64url"); }
+export function issueStaffToken(staff, at = Date.now()) {
+  const payload = Buffer.from(JSON.stringify({ sub: staff.id, email: staff.email, iat: Math.floor(at / 1000), exp: Math.floor(at / 1000) + STAFF_TOKEN_TTL_SECONDS, nonce: randomUUID() })).toString("base64url");
+  return `${payload}.${signTokenPart(payload)}`;
+}
+export function verifyStaffToken(raw, at = Date.now()) {
+  const [payload, signature, extra] = String(raw || "").split(".");
+  if (!payload || !signature || extra) return null;
+  const expected = signTokenPart(payload); const have = Buffer.from(signature); const want = Buffer.from(expected);
+  if (have.length !== want.length || !timingSafeEqual(have, want)) return null;
+  try {
+    const claims = JSON.parse(Buffer.from(payload, "base64url").toString("utf8"));
+    if (!claims.exp || claims.exp <= Math.floor(at / 1000)) return null;
+    const staff = staffSeed.find(row => row.id === claims.sub && row.email === claims.email);
+    return staff ? { ...staff, tokenIssuedAt: new Date(claims.iat * 1000).toISOString(), tokenExpiresAt: new Date(claims.exp * 1000).toISOString() } : null;
+  } catch { return null; }
+}
 function staffFromReq(req) {
   const header = String(req.headers.authorization || "");
   const raw = header.toLowerCase().startsWith("bearer ") ? header.slice(7).trim() : "";
   if (!raw) return null;
-  return state.tokens.get(tokenHash(raw)) || null;
+  return verifyStaffToken(raw) || state.tokens.get(tokenHash(raw)) || null;
 }
 function requireStaff(req, res, desks) {
   const staff = staffFromReq(req);
@@ -115,21 +136,30 @@ export async function handler(req, res) {
   const key = req.headers["idempotency-key"];
   const rabbitPath = staffPath(path, rewrittenPath);
   const staffRequest = isStaffPath(rabbitPath);
+  const livingPath = bisonPath(path, rewrittenPath);
+  const livingRequest = isBisonPath(livingPath);
   let memberStateVersion = null;
   try {
-    if (!staffRequest && hasDurableStore()) {
+    if (!staffRequest && !livingRequest && hasDurableStore()) {
       const loaded = await loadRuntimeState(MEMBER_RUNTIME_STATE_KEY, snapshotMemberState());
       restoreMemberState(loaded.value);
       memberStateVersion = loaded.version;
     }
     if (staffRequest) {
       const body = (req.method === "POST" || req.method === "PUT") ? await readBody(req) : {};
+      if (PROTECTED_DESK_PATHS.has(rabbitPath)) {
+        const staff = requireStaff(req, res, ["studio", "hub", "money", "pilot"]);
+        if (!staff) return;
+        body.actor = `${staff.name} · ${staff.email}`;
+      }
       const out = await handleStaff(req, res, rabbitPath, body, url);
       if (out) return json(res, out.status, out.body);
     }
-    const livingPath = bisonPath(path, rewrittenPath);
-    if (isBisonPath(livingPath)) {
+    if (livingRequest) {
       const body = (req.method === "POST" || req.method === "PUT") ? await readBody(req) : {};
+      const staff = requireStaff(req, res, ["studio", "money"]);
+      if (!staff) return;
+      body.actor = `${staff.name} · ${staff.email}`;
       const out = await handleBison(req, res, livingPath, body, url);
       if (out) return json(res, out.status, out.body);
     }
@@ -220,7 +250,7 @@ export async function handler(req, res) {
       const password = String(body.password || "");
       const found = staffSeed.find(s => s.email === email);
       if (!found || password !== STAFF_PASSWORD) return json(res, 401, { error: "bad_credentials" });
-      const token = randomUUID() + "." + randomUUID();
+      const token = issueStaffToken(found);
       const record = { ...found, tokenIssuedAt: now() };
       state.tokens.set(tokenHash(token), record);
       return json(res, 200, { token, staff: { id: found.id, email: found.email, name: found.name, role: found.role, desks: found.desks } });

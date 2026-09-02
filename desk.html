@@ -50,6 +50,8 @@ var PRODUCTS = [
   { id: "bison", name: "Bison", href: "/bison.html", line: "Theatre, studio, nest." }
 ];
 var picked = null;
+var requestedNext = new URLSearchParams(location.search).get("next") || "";
+function safeNext(value) { return /^\/(?:ops|bison|pickup|recon|predict|hub|next|cash|source|inventory|ageing|po|dispatch|invoice|biker)(?:\.html)?(?:[?#].*)?$/.test(value || "") ? value : ""; }
 function staff() { try { return JSON.parse(sessionStorage.getItem("niaOpsStaff") || "null"); } catch (e) { return null; } }
 function token() { return sessionStorage.getItem("niaOpsToken") || ""; }
 function paintWho() {
@@ -93,7 +95,7 @@ function login() {
       if (!res.ok) { document.getElementById("err").textContent = (res.j && res.j.error) || "Login failed"; return; }
       sessionStorage.setItem("niaOpsToken", res.j.token);
       sessionStorage.setItem("niaOpsStaff", JSON.stringify(res.j.staff || {}));
-      location.href = (picked && picked.href) || "/ops.html";
+      location.href = safeNext(requestedNext) || (picked && picked.href) || "/ops.html";
     }).catch(function () { document.getElementById("err").textContent = "Could not reach the staff book."; });
 }
 document.getElementById("go").addEventListener("click", login);
@@ -101,6 +103,12 @@ document.getElementById("back").addEventListener("click", back);
 document.getElementById("password").addEventListener("keydown", function (e) { if (e.key === "Enter") login(); });
 paintWho();
 paintProducts();
+if (safeNext(requestedNext) && !token()) {
+  picked = requestedNext.indexOf("bison") >= 0 ? PRODUCTS[1] : PRODUCTS[0];
+  document.getElementById("products").hidden = true;
+  document.getElementById("login-panel").hidden = false;
+  document.getElementById("login-title").textContent = picked.name;
+}
 </script>
 </body>
 </html>

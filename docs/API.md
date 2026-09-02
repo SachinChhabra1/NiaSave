@@ -51,7 +51,37 @@ GET  /api/biker
 POST /api/biker
 ```
 
-These routes persist state in Postgres when `DATABASE_URL` is configured. They are not yet protected by production staff authentication and must not receive real operational or member data until that blocker is closed.
+These routes persist state in Postgres when `DATABASE_URL` is configured. Operational desk routes require the signed 2 Para bearer token; member-facing `/api/member`, `/api/order`, `/api/stock` and `/api/auth/*` retain their separate pilot contract.
+
+## Bison routes
+
+```text
+GET  /api/bison/tower
+GET  /api/bison/hierarchy
+GET  /api/bison/inventory
+GET  /api/bison/bookings
+POST /api/bison/bookings
+POST /api/bison/checkin
+POST /api/bison/checkout
+GET  /api/bison/members
+POST /api/bison/members
+GET  /api/bison/contracts
+POST /api/bison/contracts
+POST /api/bison/contracts/amend
+POST /api/bison/contracts/end
+GET  /api/bison/clocks
+POST /api/bison/clock
+GET  /api/bison/collections
+POST /api/bison/collections/charges
+POST /api/bison/collections/payments
+POST /api/bison/collections/work
+GET  /api/bison/audit
+POST /api/bison/audit
+GET  /api/bison/audit-log
+POST /api/bison/ingest
+```
+
+All Bison routes require a 2 Para bearer token with studio, money or administrator access. Mutation actors are taken from that token, never from the request body. Historic cluster collection balances remain unallocated until staff ties a supported amount to a member contract.
 
 ## Legacy P0 routes
 

@@ -46,7 +46,8 @@ Current code reads:
 - `DEMO`
 - `DUMMY_DATA`
 - `STAFF_PASSWORD`
-- `SESSION_SECRET` is provisioned but not yet used by the current public member-session implementation
+- `STAFF_TOKEN_SECRET`
+- `SESSION_SECRET` signs 2 Para staff tokens when `STAFF_TOKEN_SECRET` is not set; it is not yet used by the current public member-session implementation
 
 Before a real-data launch, explicitly set `DEMO=0` and `DUMMY_DATA=0` only after OTP, payments, staff access, source data and operational checks pass. Do not use those switches as a substitute for implementing the missing integrations.
 
@@ -74,12 +75,11 @@ Before a real-data launch, explicitly set `DEMO=0` and `DUMMY_DATA=0` only after
 
 ### C. Staff access and audit
 
-Operation Polo pages and `/api/*` mutation routes are not yet protected by production role-based authentication. This is a launch blocker.
+Polo and Bison staff pages now return to 2 Para when the browser has no valid session. Operational APIs require a signed, 12-hour bearer token and enforce desk roles. Bison mutation actors are derived from the token.
 
-- Put every staff page and mutation behind identity and role checks.
-- Remove fallback credentials and rotate any credential used during the prototype.
-- Separate member, studio, hub, finance and administrator permissions.
-- Record actor, timestamp, previous state, next state and reason for every mutation.
+- Set a dedicated `STAFF_TOKEN_SECRET`; remove fallback credentials and rotate the prototype password.
+- Replace the shared password with individual identity before use beyond the controlled staff pilot.
+- Complete immutable before/after audit coverage for older Polo mutations; Bison contract, clock and collection actions already record actor and time.
 
 ### D. Data model and source ownership
 

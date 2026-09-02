@@ -33,6 +33,9 @@ jobs:
       - name: Run Operation Polo self-test
         run: npm test
 
+      - name: Run Bison and staff-gate tests
+        run: npm run test:bison
+
       - name: Run storage tests
         run: npm run test:storage
 

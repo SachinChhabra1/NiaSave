@@ -7,177 +7,92 @@
 <title>Bison</title>
 <link rel="icon" href="/assets/nia-logo.png" type="image/png">
 <link rel="stylesheet" href="/staff.css">
+<style>
+  .bison-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin:12px 0 28px}
+  .bison-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:22px}
+  .bison-card h3{margin:0 0 8px;font-size:20px}.bison-card .sub{font-size:15px;margin-bottom:16px}
+  .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.form-grid .wide{grid-column:1/-1}
+  .form-grid label{display:block;font-size:13px;color:var(--fg-muted);margin:0 0 5px}.form-grid input,.form-grid select{width:100%;min-width:0;padding:10px 12px;font-size:15px}
+  .compact-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:14px}.compact-actions button{padding:10px 14px;min-height:42px;font-size:15px}
+  .checkline{display:flex;align-items:center;gap:8px;font-size:14px}.checkline input{width:auto}.statusline{min-height:22px;margin-top:10px;font-size:14px;color:var(--fg-muted)}
+  .statusline.bad{color:var(--danger)}.recon{font-family:var(--mono);font-size:14px;color:var(--fg-muted);margin:-10px 0 24px}
+  tr.pick{cursor:pointer}tr.pick:hover{background:var(--bg)}.tag{display:inline-block;padding:4px 8px;border-radius:99px;background:var(--bg);font-size:12px;font-family:var(--mono)}
+  @media(max-width:1100px){.bison-grid{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.form-grid .wide{grid-column:auto}}
+</style>
 </head>
 <body>
-  <div class="narrow">
-    <div class="narrow-card">
-      <div class="kicker">Bison</div>
-      <h1>Open on a laptop</h1>
-      <p>Theatre, studio, nest. Clocks, vacant, join-month. Not Polo.</p>
-    </div>
-  </div>
+  <div class="narrow"><div class="narrow-card"><div class="kicker">Bison</div><h1>Open on a laptop</h1><p>Theatre, studio, nest. Contracts, clocks and collections.</p></div></div>
   <div class="tower" data-pane="ops">
-    <header class="top">
-      <div class="mark">
-        <img class="nia-logo" src="/assets/nia-logo.png" alt="Nia">
-        <h1>Bison</h1>
-      </div>
-      <div class="meta" id="topmeta">Bison</div>
-    </header>
+    <header class="top"><div class="mark"><img class="nia-logo" src="/assets/nia-logo.png" alt="Nia"><h1>Bison</h1></div><div class="meta" id="topmeta">Loading the Living book…</div></header>
     <div class="shell">
       <aside class="rail">
-        <div class="rail-block">
-          <h2 class="rail-h">Bison</h2>
-          <a class="rail-link on" href="/bison.html">Bison</a>
-          <a class="rail-link" href="#theatres">Theatres</a>
-          <a class="rail-link" href="#studios">Studios</a>
-          <a class="rail-link" href="#nests">Nests</a>
-          <a class="rail-link" href="#clocks">Clocks</a>
-          <a class="rail-link" href="#join">Join months</a>
-        </div>
-        <div class="rail-block">
-          <h2 class="rail-h">Polo</h2>
-          <a class="rail-link" href="/ops.html">Polo</a>
-          <a class="rail-link" href="/desk.html">Ops home</a>
-        </div>
+        <div class="rail-block"><h2 class="rail-h">Bison</h2><a class="rail-link on" href="/bison.html">Control</a><a class="rail-link" href="#hierarchy">Theatres & studios</a><a class="rail-link" href="#contracts">Member contracts</a><a class="rail-link" href="#clocks">Clocks</a><a class="rail-link" href="#collections">Collections</a><a class="rail-link" href="#nests">Nests</a></div>
+        <div class="rail-block"><h2 class="rail-h">2 Para</h2><a class="rail-link" href="/ops.html">Polo</a><a class="rail-link" href="/desk.html">2 Para</a></div>
       </aside>
-      <div class="pane">
-        <div class="wrap pane-ops">
-          <p class="sub">Theatre holds studios. Studio holds nests. Bison runs that book. Polo runs bags.</p>
-          <div class="realities">
-            <span class="reality"><b>1</b> Clock closed</span>
-            <span class="reality-arrow">→</span>
-            <span class="reality"><b>2</b> Vacant nests counted</span>
-            <span class="reality-arrow">→</span>
-            <span class="reality"><b>3</b> Nest assigned</span>
-            <span class="reality-arrow">→</span>
-            <span class="reality"><b>4</b> Join-month held</span>
-            <span class="reality-arrow">→</span>
-            <span class="reality"><b>5</b> Finance bills</span>
-          </div>
-          <div class="kpis" id="kpis"></div>
-          <p class="sub">Theatre
-            <select id="theatre"></select>
-            Studio
-            <select id="city"></select>
-          </p>
-          <div class="jobs" id="jobs"></div>
-          <div class="open" id="open"></div>
-          <h2 id="clocks">Overdue clocks</h2>
-          <div id="clocks-tbl" class="studios-table"></div>
-          <h2 id="theatres">Theatres</h2>
-          <div id="theatre-tbl" class="studios-table"></div>
-          <h2 id="studios">Studios</h2>
-          <div id="sites-tbl" class="studios-table"></div>
-          <h2 id="nests">Nests on the book</h2>
-          <div id="nests-tbl" class="studios-table"></div>
-          <h2 id="join">Join months</h2>
-          <div id="join-tbl" class="studios-table"></div>
+      <main class="pane"><div class="wrap pane-ops">
+        <p class="sub">Theatre holds studios. Studio holds nests. A member contract assigns the nest. Every clock and collection action carries a staff identity.</p>
+        <div class="realities"><span class="reality"><b>1</b> Contract verified</span><span class="reality-arrow">→</span><span class="reality"><b>2</b> Clock closed</span><span class="reality-arrow">→</span><span class="reality"><b>3</b> Vacant counted</span><span class="reality-arrow">→</span><span class="reality"><b>4</b> Nest assigned</span><span class="reality-arrow">→</span><span class="reality"><b>5</b> Collection posted</span></div>
+        <div class="kpis" id="kpis"></div><div class="recon" id="recon"></div>
+        <p class="sub">Theatre <select id="theatre"></select></p>
+        <div class="bison-grid">
+          <section class="bison-card" id="new-contract-card"><h3>New member contract</h3><p class="sub">Create the member, contract, opening charge and nest reservation together.</p>
+            <div class="form-grid">
+              <div><label for="member-name">Member name</label><input id="member-name" autocomplete="off"></div><div><label for="member-phone">Phone</label><input id="member-phone" inputmode="numeric" autocomplete="off"></div>
+              <div class="wide"><label for="contract-studio">Studio</label><select id="contract-studio"></select></div><div><label for="contract-nest">Nest label</label><input id="contract-nest" placeholder="R10N1"></div><div><label for="contract-rent">Monthly rupee</label><input id="contract-rent" type="number" value="2200" min="1"></div>
+              <div><label for="contract-start">Start</label><input id="contract-start" type="date"></div><div><label for="contract-end">End</label><input id="contract-end" type="date"></div><div><label for="contract-deposit">Deposit</label><input id="contract-deposit" type="number" value="0" min="0"></div><div><label for="contract-signed">Document</label><select id="contract-signed"><option value="pending">Pending</option><option value="signed">Signed</option></select></div>
+            </div><div class="compact-actions"><button type="button" id="create-contract">Create contract</button></div><div class="statusline" id="contract-status"></div>
+          </section>
+          <section class="bison-card" id="clock-card"><h3 id="clock-title">Close a studio clock</h3><p class="sub">Select a studio below. All three checks and evidence are mandatory.</p>
+            <div class="form-grid"><div><label for="counted-nests">Nests counted</label><input id="counted-nests" type="number" min="0"></div><div><label for="vacant-nests">Vacant verified</label><input id="vacant-nests" type="number" min="0"></div><div class="wide"><label for="clock-evidence">Evidence</label><input id="clock-evidence" placeholder="Register checked; photo reference…"></div>
+              <label class="checkline"><input id="physical-check" type="checkbox"> Physical count complete</label><label class="checkline"><input id="vacant-check" type="checkbox"> Vacant list verified</label><label class="checkline wide"><input id="collection-check" type="checkbox"> Collections reviewed</label>
+            </div><div class="compact-actions"><button type="button" id="close-clock" disabled>Close clock for 18 hours</button></div><div class="statusline" id="clock-status">No studio selected.</div>
+          </section>
         </div>
-      </div>
+        <h2 id="hierarchy">Theatre → studio</h2><div id="theatre-tbl" class="studios-table"></div><div id="studios-tbl" class="studios-table"></div>
+        <h2 id="contracts">Member contracts</h2><p class="sub">Historic contracts remain marked for review until staff verifies the document.</p><div id="contracts-tbl" class="studios-table"></div>
+        <h2 id="clocks">Clock discipline</h2><div id="clocks-tbl" class="studios-table"></div>
+        <h2 id="collections">Collections</h2><p class="sub">Cluster balances stay unallocated until tied to a member contract. No member is chased from a roll-up assumption.</p><div id="ageing-tbl" class="studios-table"></div><div id="collections-tbl" class="studios-table"></div>
+        <section class="bison-card" id="collection-card" hidden><h3 id="collection-title">Work collection</h3><div class="form-grid"><div><label for="collection-contract">Allocate to contract ID</label><input id="collection-contract"></div><div><label for="allocation-amount">Amount to allocate</label><input id="allocation-amount" type="number" min="1"></div><div><label for="collection-owner">Owner</label><input id="collection-owner"></div><div><label for="collection-promise">Promise date</label><input id="collection-promise" type="date"></div><div><label for="collection-state">Status</label><select id="collection-state"><option value="open">Open</option><option value="promised">Promised</option><option value="disputed">Disputed</option><option value="waived">Waived</option></select></div><div class="wide"><label for="collection-note">Work note</label><input id="collection-note"></div><div><label for="payment-amount">Payment amount</label><input id="payment-amount" type="number" min="1"></div><div><label for="payment-ref">Payment reference</label><input id="payment-ref"></div></div><div class="compact-actions"><button id="save-collection" type="button">Save work</button><button id="post-payment" class="ghost" type="button">Post payment</button></div><div class="statusline" id="collection-status"></div></section>
+        <h2 id="nests">Named nests on today’s book</h2><div id="nests-tbl" class="studios-table"></div>
+      </div></main>
     </div>
   </div>
+<script src="/staff.js"></script>
 <script>
-var DATA=null;
-function num(n){ return n==null?0:n; }
-function rupee(n){ return '₹'+Number(n||0).toLocaleString('en-IN'); }
-function studios(){ return DATA && DATA.sites || []; }
-function filtered(){
-  var th=document.getElementById('theatre').value||'All';
-  var st=document.getElementById('city').value||'All';
-  return studios().filter(function(s){
-    if(th!=='All' && s.theatre!==th) return false;
-    if(st!=='All' && s.studio!==st && s.city!==st && s.cluster!==st) return false;
-    return true;
-  });
-}
+var DATA=null, CONTRACTS=null, COLLECTIONS=null, SELECTED_STUDIO=null, SELECTED_RECEIVABLE=null;
+function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function num(n){return n==null?0:n;} function rupee(n){return '₹'+Number(n||0).toLocaleString('en-IN');}
+function isoPlus(days){var d=new Date();d.setDate(d.getDate()+days);return d.toISOString().slice(0,10);}
+function table(heads,rows,cls){return '<table><thead><tr>'+heads.map(function(h){return '<th>'+esc(h)+'</th>';}).join('')+'</tr></thead><tbody>'+(rows.map(function(r){return '<tr'+(cls?' class="'+cls+'"':'')+'>'+r.map(function(c,i){return '<td'+(i?' class="num"':'')+'>'+esc(c)+'</td>';}).join('')+'</tr>';}).join('')||'<tr><td colspan="'+heads.length+'">None.</td></tr>')+'</tbody></table>';}
+function currentStudios(){var theatre=document.getElementById('theatre').value||'All';return (DATA&&DATA.studios||[]).filter(function(s){return theatre==='All'||s.theatre===theatre;});}
+function setStatus(id,message,bad){var el=document.getElementById(id);el.textContent=message||'';el.className='statusline'+(bad?' bad':'');}
 function paint(){
-  var t=DATA||{};
-  var k=t.kpis||{};
-  var list=filtered();
-  document.getElementById('topmeta').innerHTML='Bison · theatre → studio → nest<br>'+num(k.occupied)+' nests in / '+num(k.contracted)+' book · '+num(k.vacant)+' vacant · '+num(k.occPct)+'%' ;
-  document.getElementById('kpis').innerHTML=[
-    ['Nests in', num(k.occupied)],['Vacant nests', num(k.vacant)],['Occupancy', num(k.occPct)+'%'],
-    ['Overdue clocks', num(k.overdueClocks)],['Pending', rupee(k.pending)],['Join months', num(k.joinMonths)]
-  ].map(function(r){ return '<div class="kpi"><div class="l">'+r[0]+'</div><div class="n">'+r[1]+'</div></div>'; }).join('');
-  var theatres=['All'].concat(t.theatres||[]).filter(function(x,i,a){ return x && a.indexOf(x)===i; });
-  if(theatres.indexOf('All')!==0) theatres=['All'].concat((t.theatres||[]).filter(function(x){ return x && x!=='All'; }));
-  var th=document.getElementById('theatre');
-  var thCur=th.value||'All';
-  th.innerHTML=theatres.map(function(c){ return '<option'+(c===thCur?' selected':'')+'>'+c+'</option>'; }).join('');
-  var city=document.getElementById('city');
-  var studiosIn=list.map(function(s){ return s.studio; }).filter(function(x,i,a){ return x && a.indexOf(x)===i; });
-  var cur=city.value||'All';
-  city.innerHTML=['All'].concat(studiosIn).map(function(c){ return '<option'+(c===cur?' selected':'')+'>'+c+'</option>'; }).join('');
-  var act=(t.actNow||[]).filter(function(a){
-    return list.some(function(s){ return s.id===a.id; });
-  });
-  document.getElementById('jobs').innerHTML=act.map(function(a){
-    var s=studios().filter(function(x){ return x.id===a.id; })[0]||{};
-    return '<button type="button" class="job" data-id="'+a.id+'"><div class="job-kicker">'+(s.theatre||a.city)+' · studio</div><strong>'+(s.studio||a.site)+'</strong><div class="job-do">'+a.action+'</div><div class="job-num">'+a.weekly+'</div></button>';
-  }).join('') || '<div class="empty">No act-now studios in this theatre.</div>';
-  document.querySelectorAll('button.job').forEach(function(el){
-    el.addEventListener('click', function(){ openStudio(el.getAttribute('data-id')); });
-  });
-  var overdue=list.filter(function(s){ return String(s.clock||'').indexOf('Overdue')===0; });
-  document.getElementById('clocks-tbl').innerHTML=table(['Theatre','Studio','Clock','Open','Owner'], overdue.map(function(s){ return [s.theatre,s.studio,s.clock,s.openActions,s.owner]; }));
-  var byTh={};
-  list.forEach(function(s){
-    var key=s.theatre||s.city;
-    if(!byTh[key]) byTh[key]={ theatre:key, studios:0, occupied:0, contracted:0, vacant:0 };
-    byTh[key].studios += 1; byTh[key].occupied += num(s.occupied); byTh[key].contracted += num(s.contracted); byTh[key].vacant += num(s.vacant);
-  });
-  document.getElementById('theatre-tbl').innerHTML=table(['Theatre','Studios','Nests in','Book','Vacant nests'], Object.keys(byTh).sort().map(function(k){
-    var r=byTh[k]; return [r.theatre,r.studios,r.occupied,r.contracted,r.vacant];
-  }));
-  document.getElementById('sites-tbl').innerHTML=table(['Theatre','Studio','Code','Nests in','Book','Vacant nests','₹/nest','Clock'], list.map(function(s){
-    return [s.theatre,s.studio,s.code,s.occupied,s.contracted,s.vacant,s.pendingPerNest,s.clock];
-  }));
-  var nests=t.bookings||[];
-  document.getElementById('nests-tbl').innerHTML=table(['Theatre','Studio','Nest','Guest','Status','Arrive','Depart'], nests.map(function(b){
-    var s=studios().filter(function(x){ return x.id===b.siteId; })[0]||{};
-    return [s.theatre||'', s.studio||b.siteId, b.nestId, b.guest, b.status, b.arrive, b.depart];
-  }));
-  document.getElementById('join-tbl').innerHTML=table(['Month','Members','Notices','Unverified','First-90','Note'], (t.joinMonths||[]).map(function(m){
-    return [m.label,m.members,m.notices,m.unverified,m.first90Open,m.note];
-  }));
+  var t=DATA||{},k=t.kpis||{},r=t.reconciliation||{},studios=currentStudios();
+  document.getElementById('topmeta').innerHTML='Bison · '+num(k.studios)+' studios<br>'+num(k.committed)+' committed / '+num(k.capacity)+' capacity · as of '+esc(t.asOf||'-');
+  document.getElementById('kpis').innerHTML=[['In house',k.inHouse],['Reserved',k.reserved],['Vacant',k.vacant],['Studios',k.studios],['Overdue clocks',k.overdueClocks],['Active contracts',k.activeContracts],['Contract review',k.contractsNeedReview],['Pending',rupee(k.pending)],['Unallocated',rupee(k.unallocated)]].map(function(row){return '<div class="kpi"><div class="l">'+esc(row[0])+'</div><div class="n">'+esc(num(row[1]))+'</div></div>';}).join('');
+  document.getElementById('recon').textContent=(r.ok?'Reconciled':'Mismatch')+' · '+num(r.capacity)+' capacity = '+num(r.booked)+' committed + '+num(r.vacant)+' vacant · delta '+num(r.delta)+' · '+(r.source||'');
+  var th=document.getElementById('theatre'),cur=th.value||'All',choices=(t.theatres||['All']).filter(function(x,i,a){return x&&a.indexOf(x)===i;});th.innerHTML=choices.map(function(x){return '<option'+(x===cur?' selected':'')+'>'+esc(x)+'</option>';}).join('');
+  var options=(t.studios||[]).map(function(s){return '<option value="'+esc(s.id)+'">'+esc(s.theatre+' · '+s.code+' · '+s.vacant+' vacant')+'</option>';}).join('');document.getElementById('contract-studio').innerHTML='<option value="">Select studio</option>'+options;
+  var byTheatre={};studios.forEach(function(s){if(!byTheatre[s.theatre])byTheatre[s.theatre]={studios:0,capacity:0,booked:0,vacant:0};byTheatre[s.theatre].studios++;byTheatre[s.theatre].capacity+=num(s.capacity);byTheatre[s.theatre].booked+=num(s.booked);byTheatre[s.theatre].vacant+=num(s.vacant);});
+  document.getElementById('theatre-tbl').innerHTML=table(['Theatre','Studios','Capacity','Committed','Vacant'],Object.keys(byTheatre).sort().map(function(name){var x=byTheatre[name];return[name,x.studios,x.capacity,x.booked,x.vacant];}));
+  document.getElementById('studios-tbl').innerHTML=table(['Studio','Theatre','Committed','In','Reserved','Vacant','Clock'],studios.map(function(s){return[s.code,s.theatre,s.booked+'/'+s.capacity,s.inHouse,s.reserved,s.vacant,s.clock];}),'pick');
+  document.querySelectorAll('#studios-tbl tr.pick').forEach(function(row,index){row.onclick=function(){selectStudio(studios[index].id);};});
+  var cs=CONTRACTS&&CONTRACTS.contracts||t.contracts||[];document.getElementById('contracts-tbl').innerHTML=table(['Member','Studio','Nest','Start','End','Rupee','Document','State'],cs.map(function(c){return[c.member,c.studio,c.nestId,c.startDate,c.endDate,rupee(c.monthlyRent),c.signedStatus,c.status];}));
+  var overdue=studios.filter(function(s){return String(s.clock).indexOf('Overdue')===0;});document.getElementById('clocks-tbl').innerHTML=table(['Studio','Theatre','Clock','Owner','Committed','Vacant'],overdue.map(function(s){return[s.code,s.theatre,s.clock,s.owner,s.booked,s.vacant];}),'pick');document.querySelectorAll('#clocks-tbl tr.pick').forEach(function(row,index){row.onclick=function(){selectStudio(overdue[index].id);};});
+  var col=COLLECTIONS||{},age=col.ageing||{};document.getElementById('ageing-tbl').innerHTML=table(['Current','1–30','31–60','61–90','90+','Unallocated'],[[rupee(age.current),rupee(age.d1_30),rupee(age.d31_60),rupee(age.d61_90),rupee(age.d90plus),rupee(age.unallocated)]]);
+  var rec=col.receivables||t.collections||[];document.getElementById('collections-tbl').innerHTML=table(['Member','Studio','Kind','Due','Balance','Owner','State'],rec.map(function(x){return[x.member,x.studio,x.kind,x.dueDate,rupee(x.balance),x.owner,x.status];}),'pick');document.querySelectorAll('#collections-tbl tr.pick').forEach(function(row,index){row.onclick=function(){selectReceivable(rec[index]);};});
+  var nests=t.bookings||[];document.getElementById('nests-tbl').innerHTML=table(['Studio','Nest','Member','State','Arrive','Depart'],nests.map(function(b){var s=(t.studios||[]).find(function(x){return x.id===b.studioId;})||{};return[s.code||b.studioId,b.nestId,b.guest,b.status,b.arrive,b.depart];}));
 }
-function table(heads, rows){
-  return '<table><thead><tr>'+heads.map(function(h){ return '<th>'+h+'</th>'; }).join('')+'</tr></thead><tbody>'
-    +(rows.map(function(r){ return '<tr>'+r.map(function(c,i){ return '<td'+(i?' class="num"':'')+'>'+c+'</td>'; }).join('')+'</tr>'; }).join('')||'<tr><td colspan="'+heads.length+'">None.</td></tr>')
-    +'</tbody></table>';
-}
-function openStudio(id){
-  var a=(DATA.actNow||[]).find(function(x){ return x.id===id; });
-  var s=(DATA.sites||[]).find(function(x){ return x.id===id; });
-  var box=document.getElementById('open');
-  if(!s){ box.className='open'; box.innerHTML=''; return; }
-  box.className='open show';
-  box.innerHTML='<h2>'+s.theatre+' · '+s.studio+'</h2><p class="do">'+(a&&a.action||'Close the clock, then fill vacant nests.')+'</p>'
-    +'<div class="checks">'+chk('Vacant nests',s.vacant)+chk('Nests in',s.occupied)+chk('Clock',s.clock)+chk('₹/nest',s.pendingPerNest)+'</div>'
-    +'<div class="actions"><button type="button" id="do-clock">Clear clock</button>'
-    +'<button type="button" class="ghost" id="do-assign">Assign 1 nest</button>'
-    +'<button type="button" class="ghost" id="do-vacate">Vacate 1 nest</button></div>';
-  document.getElementById('do-clock').onclick=function(){ post('/api/bison/clock',{siteId:id,nextHours:18}); };
-  document.getElementById('do-assign').onclick=function(){ post('/api/bison/assign',{siteId:id,nests:1}); };
-  document.getElementById('do-vacate').onclick=function(){ post('/api/bison/vacate',{siteId:id,nests:1}); };
-}
-function chk(l,n){ return '<div class="check"><div class="l">'+l+'</div><div class="n">'+n+'</div></div>'; }
-function post(url,body){
-  fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
-    .then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); })
-    .then(function(res){ if(!res.ok){ alert((res.j&&(res.j.message||res.j.error))||'Failed'); return; } load(); })
-    .catch(function(){ alert('Could not reach Bison'); });
-}
-function load(){
-  var theatre=(document.getElementById('theatre')&&document.getElementById('theatre').value)||'All';
-  var city=theatre!=='All'?theatre:'All';
-  fetch('/api/bison/tower?city='+encodeURIComponent(city)).then(function(r){ return r.json(); }).then(function(t){ DATA=t; paint(); })
-    .catch(function(){ document.getElementById('jobs').innerHTML='<div class="empty">Could not load Bison.</div>'; });
-}
-document.getElementById('theatre').addEventListener('change', function(){ document.getElementById('city').value='All'; load(); });
-document.getElementById('city').addEventListener('change', function(){ if(DATA) paint(); });
-load();
+function selectStudio(id){SELECTED_STUDIO=(DATA.studios||[]).find(function(s){return s.id===id;})||null;document.getElementById('close-clock').disabled=!SELECTED_STUDIO;document.getElementById('clock-title').textContent=SELECTED_STUDIO?'Close '+SELECTED_STUDIO.code:'Close a studio clock';setStatus('clock-status',SELECTED_STUDIO?SELECTED_STUDIO.clock:'No studio selected.');location.hash='clock-card';}
+function selectReceivable(row){SELECTED_RECEIVABLE=row;document.getElementById('collection-card').hidden=false;document.getElementById('collection-title').textContent='Work '+row.id+' · '+rupee(row.balance);document.getElementById('collection-contract').value=row.contractId||'';document.getElementById('allocation-amount').value=row.memberId?'':row.balance;document.getElementById('allocation-amount').max=row.balance||'';document.getElementById('collection-owner').value=row.owner||'';document.getElementById('collection-promise').value=row.promiseDate||'';document.getElementById('collection-state').value=['open','promised','disputed','waived'].indexOf(row.status)>=0?row.status:'open';document.getElementById('payment-amount').max=row.balance||'';setStatus('collection-status',row.memberId?'Member linked.':'Allocate only the supported amount to a contract before posting payment.');location.hash='collection-card';}
+function api(url,body){var init=body?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}:{};return fetch(url,init).then(function(r){return r.json().then(function(j){if(!r.ok)throw new Error(j.message||j.error||'Failed');return j;});});}
+function load(){return Promise.all([api('/api/bison/tower?city=All'),api('/api/bison/contracts?limit=100'),api('/api/bison/collections?limit=100')]).then(function(rows){DATA=rows[0];CONTRACTS=rows[1];COLLECTIONS=rows[2];paint();}).catch(function(e){document.getElementById('recon').textContent='Could not load Bison · '+e.message;});}
+document.getElementById('theatre').onchange=paint;
+document.getElementById('create-contract').onclick=function(){var button=this;button.disabled=true;setStatus('contract-status','Creating member…');api('/api/bison/members',{name:document.getElementById('member-name').value,phone:document.getElementById('member-phone').value}).then(function(m){setStatus('contract-status','Creating contract…');return api('/api/bison/contracts',{memberId:m.member.id,studioId:document.getElementById('contract-studio').value,nestId:document.getElementById('contract-nest').value,monthlyRent:Number(document.getElementById('contract-rent').value),deposit:Number(document.getElementById('contract-deposit').value||0),startDate:document.getElementById('contract-start').value,endDate:document.getElementById('contract-end').value,signedStatus:document.getElementById('contract-signed').value});}).then(function(c){setStatus('contract-status','Created '+c.contract.id+'.');return load();}).catch(function(e){setStatus('contract-status',e.message,true);}).finally(function(){button.disabled=false;});};
+document.getElementById('close-clock').onclick=function(){if(!SELECTED_STUDIO)return;var button=this;button.disabled=true;api('/api/bison/clock',{studioId:SELECTED_STUDIO.id,evidence:document.getElementById('clock-evidence').value,countedNests:document.getElementById('counted-nests').value,vacantNests:document.getElementById('vacant-nests').value,checks:{physicalCount:document.getElementById('physical-check').checked,vacantVerified:document.getElementById('vacant-check').checked,collectionsReviewed:document.getElementById('collection-check').checked},nextHours:18}).then(function(){setStatus('clock-status','Clock closed with staff identity and evidence.');return load();}).catch(function(e){setStatus('clock-status',e.message,true);}).finally(function(){button.disabled=false;});};
+document.getElementById('save-collection').onclick=function(){if(!SELECTED_RECEIVABLE)return;api('/api/bison/collections/work',{receivableId:SELECTED_RECEIVABLE.id,contractId:document.getElementById('collection-contract').value,allocationAmount:document.getElementById('allocation-amount').value,owner:document.getElementById('collection-owner').value,promiseDate:document.getElementById('collection-promise').value,status:document.getElementById('collection-state').value,note:document.getElementById('collection-note').value}).then(function(){setStatus('collection-status','Collection work saved.');return load();}).catch(function(e){setStatus('collection-status',e.message,true);});};
+document.getElementById('post-payment').onclick=function(){if(!SELECTED_RECEIVABLE)return;api('/api/bison/collections/payments',{receivableId:SELECTED_RECEIVABLE.id,amount:Number(document.getElementById('payment-amount').value),reference:document.getElementById('payment-ref').value,method:'upi'}).then(function(){setStatus('collection-status','Payment posted and balance updated.');return load();}).catch(function(e){setStatus('collection-status',e.message,true);});};
+document.getElementById('contract-start').value=new Date().toISOString().slice(0,10);document.getElementById('contract-end').value=isoPlus(30);load();
 </script>
 </body>
 </html>

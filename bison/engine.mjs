@@ -1,40 +1,46 @@
 /**
- * Bison occupancy control plane.
- * Polo runs bags. Bison runs nests.
+ * Bison Living control plane.
+ * Theatre -> studio -> nest, member contracts, clocks and collections.
  */
+import { randomUUID } from "node:crypto";
 import { hasDurableStore, loadRuntimeState, saveRuntimeState } from "../lib/runtime-store.mjs";
+import { STUDIO_COUNT, buildStudioMaster, sourceStudioId, studioIdForSource } from "./catalog.mjs";
 
 const DUMMY_DATA = process.env.DUMMY_DATA !== "0";
 const RUNTIME_STATE_KEY = process.env.NIA_BISON_STATE_KEY || "operation-bison";
 const HOLD_FILL_RS = 2000;
 const TAX_PCT = 12;
 const NEST_RATE = 2200;
-const SOURCE = "Bison occupancy book";
+const SOURCE = "Bison Living book";
 const OCC_TARGET = 78;
+const SCHEMA_VERSION = 2;
 
 function now() { return new Date().toISOString(); }
 function today() { return now().slice(0, 10); }
 function plusDays(iso, n) { const d = new Date(iso + "T00:00:00.000Z"); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); }
 function daysBetween(a, b) { const x = Date.parse(a), y = Date.parse(b); if (!Number.isFinite(x) || !Number.isFinite(y)) return 0; return Math.max(0, Math.round((y - x) / 86400000)); }
 function hoursFromNow(h) { return new Date(Date.now() + h * 3600000).toISOString(); }
+function id(prefix) { return `${prefix}-${randomUUID().slice(0, 12)}`; }
+function text(value, max = 120) { return String(value || "").trim().slice(0, max); }
+function money(value) { const n = Number(value); return Number.isFinite(n) ? Math.round(n) : NaN; }
 
 function seedSites() {
   return [
-    { id: "hsr", city: "Bengaluru", studio: "HSR", code: "WLG-HSR", theatre: "Wellington", cluster: "HSR", model: "FONO", occupied: 774, contracted: 900, vacant: 126, pending: 1364700, owner: "ACT-SHREY", clockDueAt: hoursFromNow(-6), openActions: 83, weeklyPp: 8.5, lastCount: 526, status: "alarm", overdueCheckout: 58, pendingPerNest: 1763, rate: NEST_RATE },
-    { id: "blr", city: "Bengaluru", studio: "BLR Central", code: "WLG-BLR", theatre: "Wellington", cluster: "BLR", model: "SP", occupied: 61, contracted: 65, vacant: 4, pending: 189100, owner: "ACT-SHREY", clockDueAt: hoursFromNow(18), openActions: 0, weeklyPp: 87.7, lastCount: 57, status: "alarm", overdueCheckout: 0, pendingPerNest: 3100, rate: NEST_RATE },
-    { id: "chk", city: "Bengaluru", studio: "CHK", code: "DCN-CHK", theatre: "Deccan", cluster: "CHK", model: "FONO", occupied: 165, contracted: 187, vacant: 22, pending: 319800, owner: "ACT-SHREY", clockDueAt: hoursFromNow(-6), openActions: 2, weeklyPp: 85.6, lastCount: 162, status: "watch", overdueCheckout: 1, pendingPerNest: 1938, rate: NEST_RATE },
-    { id: "fn", city: "NCR", studio: "FN", code: "RJT-FN", theatre: "Rajputana", cluster: "FN", model: "FONO", occupied: 909, contracted: 1008, vacant: 99, pending: 1980000, owner: "ACT-SHREY", clockDueAt: hoursFromNow(-6), openActions: 105, weeklyPp: 76.0, lastCount: 766, status: "alarm", overdueCheckout: 36, pendingPerNest: 2178, rate: NEST_RATE },
-    { id: "mns", city: "NCR", studio: "MNS", code: "RJT-MNS", theatre: "Rajputana", cluster: "MNS", model: "FONO", occupied: 436, contracted: 464, vacant: 28, pending: 1031650, owner: "ACT-SHREY", clockDueAt: hoursFromNow(-6), openActions: 128, weeklyPp: 82.8, lastCount: 383, status: "alarm", overdueCheckout: 126, pendingPerNest: 2366, rate: NEST_RATE },
-    { id: "sri", city: "Chennai", studio: "SRI", code: "CRM-SRI", theatre: "Coromandel", cluster: "SRI", model: "FONO", occupied: 262, contracted: 507, vacant: 245, pending: 666060, owner: "ACT-SHREY", clockDueAt: hoursFromNow(-6), openActions: 81, weeklyPp: 31.8, lastCount: 189, status: "alarm", overdueCheckout: 68, pendingPerNest: 2542, rate: NEST_RATE }
+    { id: "hsr", city: "Bengaluru", studio: "HSR", code: "WLG-HSR", theatre: "Wellington", cluster: "HSR", model: "FONO", occupied: 774, contracted: 900, vacant: 126, pending: 1364700, owner: "ACT-SHREY", clockDueAt: hoursFromNow(-6), openActions: 83, weeklyPp: 8.5, lastCount: 526, overdueCheckout: 58, rate: NEST_RATE },
+    { id: "blr", city: "Bengaluru", studio: "BLR Central", code: "WLG-BLR", theatre: "Wellington", cluster: "BLR", model: "SP", occupied: 61, contracted: 65, vacant: 4, pending: 189100, owner: "ACT-SHREY", clockDueAt: hoursFromNow(18), openActions: 0, weeklyPp: 87.7, lastCount: 57, overdueCheckout: 0, rate: NEST_RATE },
+    { id: "chk", city: "Bengaluru", studio: "CHK", code: "DCN-CHK", theatre: "Deccan", cluster: "CHK", model: "FONO", occupied: 165, contracted: 187, vacant: 22, pending: 319800, owner: "ACT-SHREY", clockDueAt: hoursFromNow(-6), openActions: 2, weeklyPp: 85.6, lastCount: 162, overdueCheckout: 1, rate: NEST_RATE },
+    { id: "fn", city: "NCR", studio: "FN", code: "RJT-FN", theatre: "Rajputana", cluster: "FN", model: "FONO", occupied: 909, contracted: 1008, vacant: 99, pending: 1980000, owner: "ACT-SHREY", clockDueAt: hoursFromNow(-6), openActions: 105, weeklyPp: 76.0, lastCount: 766, overdueCheckout: 36, rate: NEST_RATE },
+    { id: "mns", city: "NCR", studio: "MNS", code: "RJT-MNS", theatre: "Rajputana", cluster: "MNS", model: "FONO", occupied: 436, contracted: 464, vacant: 28, pending: 1031650, owner: "ACT-SHREY", clockDueAt: hoursFromNow(-6), openActions: 128, weeklyPp: 82.8, lastCount: 383, overdueCheckout: 126, rate: NEST_RATE },
+    { id: "sri", city: "Chennai", studio: "SRI", code: "CRM-SRI", theatre: "Coromandel", cluster: "SRI", model: "FONO", occupied: 262, contracted: 507, vacant: 245, pending: 666060, owner: "ACT-SHREY", clockDueAt: hoursFromNow(-6), openActions: 81, weeklyPp: 31.8, lastCount: 189, overdueCheckout: 68, rate: NEST_RATE }
   ];
 }
 function seedGroups() { return [{ id: "grp-nia", name: "Nia members", kind: "member" }, { id: "grp-vendor", name: "Vendor walk-in", kind: "company" }]; }
 function seedBookings() {
   const t = today();
   return [
-    { id: "bkg-1001", siteId: "hsr", nestId: "HSR-012", guest: "Ravi K", companyId: "grp-nia", arrive: t, depart: plusDays(t, 30), status: "in", rate: NEST_RATE, taxPct: TAX_PCT, folio: [{ id: "fol-1", kind: "rent", amount: NEST_RATE, note: "Night 1", at: now() }], createdAt: now() },
-    { id: "bkg-1002", siteId: "chk", nestId: "CHK-004", guest: "Imran S", companyId: "grp-nia", arrive: t, depart: plusDays(t, 14), status: "reserved", rate: NEST_RATE, taxPct: TAX_PCT, folio: [], createdAt: now() },
-    { id: "bkg-1003", siteId: "sri", nestId: "SRI-088", guest: "Karthik M", companyId: "grp-vendor", arrive: plusDays(t, -2), depart: t, status: "in", rate: NEST_RATE, taxPct: TAX_PCT, folio: [{ id: "fol-2", kind: "rent", amount: NEST_RATE * 2, note: "2 nights", at: now() }], createdAt: now() }
+    { id: "bkg-1001", siteId: "hsr", nestId: "R12N1", guest: "Ravi K", companyId: "grp-nia", arrive: t, depart: plusDays(t, 30), status: "in", rate: NEST_RATE, taxPct: TAX_PCT, folio: [{ id: "fol-1", kind: "rent", amount: NEST_RATE, note: "Month 1", at: now() }], createdAt: now() },
+    { id: "bkg-1002", siteId: "chk", nestId: "R4N1", guest: "Imran S", companyId: "grp-nia", arrive: t, depart: plusDays(t, 14), status: "reserved", rate: NEST_RATE, taxPct: TAX_PCT, folio: [], createdAt: now() },
+    { id: "bkg-1003", siteId: "sri", nestId: "RGN1", guest: "Karthik M", companyId: "grp-vendor", arrive: plusDays(t, -2), depart: plusDays(t, 28), status: "in", rate: NEST_RATE, taxPct: TAX_PCT, folio: [{ id: "fol-2", kind: "rent", amount: NEST_RATE, note: "Month 1", at: now() }], createdAt: now() }
   ];
 }
 function seedJoinMonths() {
@@ -45,212 +51,357 @@ function seedJoinMonths() {
     { id: "2026-06", label: "Jun 26", members: 3164, notices: 39, unverified: 62, first90Open: 2492, status: "alarm", note: "Notice save." }
   ];
 }
-function createState() {
-  return { dummy: DUMMY_DATA, persist: hasDurableStore() ? "postgres" : "memory", asOf: today(), source: SOURCE, bookingsCount: 3339, studioCodes: 56, sites: seedSites(), groups: seedGroups(), bookings: seedBookings(), audits: [], ingest: [], joinMonths: seedJoinMonths(), assignments: [], clocks: [], auditLog: [] };
+function baseState() {
+  return { schemaVersion: SCHEMA_VERSION, dummy: DUMMY_DATA, persist: hasDurableStore() ? "postgres" : "memory", asOf: today(), source: SOURCE, sites: seedSites(), studios: [], groups: seedGroups(), bookings: seedBookings(), members: [], contracts: [], receivables: [], collectionPayments: [], audits: [], ingest: [], joinMonths: seedJoinMonths(), assignments: [], clocks: [], auditLog: [] };
 }
-let state = createState();
-function snapshotState(value = state) { return JSON.parse(JSON.stringify(value)); }
-function restoreState(value, storage = "memory") {
-  const base = createState();
+
+let state;
+function findSite(value) { return state.sites.find(row => row.id === value || row.code === value); }
+function findStudio(value) { return state.studios.find(row => row.id === value || row.code === value || row.sourceStudioId === String(value || "")); }
+function findBooking(value) { return state.bookings.find(row => row.id === value); }
+function findMember(value) { return state.members.find(row => row.id === value); }
+function findContract(value) { return state.contracts.find(row => row.id === value); }
+function findReceivable(value) { return state.receivables.find(row => row.id === value); }
+function log(actor, action, ref, detail) {
+  state.auditLog.unshift({ id: id("log"), at: now(), actor: text(actor || "desk", 80), action, ref: ref || null, detail: text(detail, 240) });
+  state.auditLog = state.auditLog.slice(0, 1200);
+}
+
+function normalizeState(value, storage = "memory") {
+  const base = baseState();
   const restored = { ...base, ...(value || {}) };
   restored.sites = Array.isArray(restored.sites) && restored.sites.length ? restored.sites : base.sites;
   restored.groups = Array.isArray(restored.groups) && restored.groups.length ? restored.groups : base.groups;
   restored.bookings = Array.isArray(restored.bookings) ? restored.bookings : base.bookings;
-  restored.audits = Array.isArray(restored.audits) ? restored.audits : [];
-  restored.ingest = Array.isArray(restored.ingest) ? restored.ingest : [];
+  for (const key of ["studios", "members", "contracts", "receivables", "collectionPayments", "audits", "ingest", "assignments", "clocks", "auditLog"]) restored[key] = Array.isArray(restored[key]) ? restored[key] : [];
   restored.joinMonths = Array.isArray(restored.joinMonths) ? restored.joinMonths : base.joinMonths;
-  restored.assignments = Array.isArray(restored.assignments) ? restored.assignments : [];
-  restored.clocks = Array.isArray(restored.clocks) ? restored.clocks : [];
-  restored.auditLog = Array.isArray(restored.auditLog) ? restored.auditLog : [];
-  restored.source = SOURCE; restored.persist = storage; state = restored;
+  restored.source = SOURCE;
+  restored.persist = storage;
+  restored.schemaVersion = SCHEMA_VERSION;
+
+  restored.studios = buildStudioMaster(restored.sites, restored.bookings, today(), restored.studios);
+  const studioBySource = new Map(restored.studios.map(row => [row.sourceStudioId, row]));
+  const firstBySite = new Map(restored.studios.map(row => [row.siteId, row]));
+  for (const booking of restored.bookings) {
+    const fromSource = studioBySource.get(sourceStudioId(booking));
+    const studio = fromSource || restored.studios.find(row => row.id === booking.studioId) || firstBySite.get(booking.siteId);
+    if (studio) {
+      booking.studioId = studio.id;
+      booking.sourceStudioId = studio.sourceStudioId;
+      booking.nestCode = `${studio.code}-${text(booking.nestId || "UNASSIGNED", 40).replace(/\s+/g, "-").toUpperCase()}`;
+    }
+  }
+
+  const memberIds = new Set(restored.members.map(row => row.id));
+  const contractIds = new Set(restored.contracts.map(row => row.id));
+  for (const booking of restored.bookings) {
+    if (!booking.memberId) booking.memberId = `mem-${text(booking.id, 70).toLowerCase().replace(/[^a-z0-9-]/g, "-")}`;
+    if (!memberIds.has(booking.memberId)) {
+      restored.members.push({ id: booking.memberId, name: text(booking.guest || "Member", 80), phone: "", governmentIdLast4: "", verificationStatus: "needs_review", source: "historic_house_book", createdAt: booking.createdAt || now() });
+      memberIds.add(booking.memberId);
+    }
+    if (!booking.contractId) booking.contractId = `ctr-${text(booking.id, 70).toLowerCase().replace(/[^a-z0-9-]/g, "-")}`;
+    if (!contractIds.has(booking.contractId)) {
+      restored.contracts.push({ id: booking.contractId, memberId: booking.memberId, bookingId: booking.id, studioId: booking.studioId, nestId: booking.nestId, startDate: booking.arrive, endDate: booking.depart, monthlyRent: Number(booking.rate) || NEST_RATE, deposit: 0, billingDay: 1, signedStatus: "imported_needs_review", status: booking.status === "in" ? "active" : booking.status === "reserved" ? "pending" : booking.status === "cancelled" ? "cancelled" : "ended", noticeDate: null, amendments: [], source: "historic_house_book", createdAt: booking.createdAt || now() });
+      contractIds.add(booking.contractId);
+    }
+  }
+  for (const site of restored.sites) {
+    if ((Number(site.pending) || 0) <= 0) continue;
+    if (restored.receivables.some(row => row.source === "cluster_rollup" && row.siteId === site.id)) continue;
+    restored.receivables.push({ id: `recv-legacy-${site.id}`, memberId: null, contractId: null, studioId: null, siteId: site.id, kind: "historic_balance", dueDate: restored.asOf || today(), amount: Number(site.pending) || 0, paidAmount: 0, status: "needs_allocation", owner: site.owner || "finance", promiseDate: null, note: "Imported cluster balance; allocate to member contracts before recovery action.", source: "cluster_rollup", createdAt: now() });
+  }
+  return restored;
 }
-function log(actor, action, ref, detail) {
-  state.auditLog.unshift({ id: "log-" + (state.auditLog.length + 1), at: now(), actor: actor || "desk", action, ref: ref || null, detail: detail || "" });
-  state.auditLog = state.auditLog.slice(0, 400);
+function restoreState(value, storage = "memory") { state = normalizeState(value, storage); }
+state = normalizeState(baseState(), hasDurableStore() ? "postgres" : "memory");
+function snapshotState() { return JSON.parse(JSON.stringify(state)); }
+
+function liveOnDate(date, filter = {}) {
+  return state.bookings.filter(booking => {
+    if (booking.status === "cancelled" || booking.status === "out") return false;
+    if (filter.siteId && booking.siteId !== filter.siteId) return false;
+    if (filter.studioId && booking.studioId !== filter.studioId) return false;
+    return booking.arrive <= date && date < booking.depart;
+  });
 }
-function findSite(id) { return state.sites.find(s => s.id === id || s.code === id); }
-function findBooking(id) { return state.bookings.find(b => b.id === id); }
-function pendingPerNest(site) { if (site.pendingPerNest != null) return site.pendingPerNest; return site.occupied ? Math.round((site.pending || 0) / site.occupied) : 0; }
-function clockLabel(site, at = Date.now()) {
-  const due = Date.parse(site.clockDueAt); if (!Number.isFinite(due)) return "No clock";
-  const hours = Math.round((due - at) / 3600000); return hours < 0 ? "Overdue " + Math.abs(hours) + "h" : "Due " + hours + "h";
+function studioInventory(studio, date = today()) {
+  const live = liveOnDate(date, { studioId: studio.id });
+  const inHouse = live.filter(row => row.status === "in").length;
+  const reserved = live.filter(row => row.status === "reserved").length;
+  return { booked: live.length, inHouse, reserved, vacant: Math.max(0, studio.capacity - live.length), occPct: studio.capacity ? Math.round((live.length / studio.capacity) * 1000) / 10 : 0, live };
 }
-function refreshSite(site) {
-  const clock = clockLabel(site); const heavy = pendingPerNest(site) > HOLD_FILL_RS;
-  if (clock.startsWith("Overdue") && heavy) site.status = "alarm"; else if (clock.startsWith("Overdue") || heavy) site.status = "watch"; else site.status = "ok"; return site;
+function outstanding(row) { return Math.max(0, (Number(row.amount) || 0) - (Number(row.paidAmount) || 0)); }
+function pendingFor(filter = {}) { return state.receivables.filter(row => (!filter.siteId || row.siteId === filter.siteId) && (!filter.studioId || row.studioId === filter.studioId)).reduce((n, row) => n + outstanding(row), 0); }
+function clockLabel(studio, at = Date.now()) {
+  const due = Date.parse(studio.clockDueAt); if (!Number.isFinite(due)) return "No clock";
+  const hours = Math.round((due - at) / 3600000); return hours < 0 ? `Overdue ${Math.abs(hours)}h` : `Due ${hours}h`;
 }
-function liveOnDate(date, siteId) {
-  return state.bookings.filter(b => { if (b.status === "cancelled" || b.status === "out") return false; if (siteId && b.siteId !== siteId) return false; return b.arrive <= date && date < b.depart; });
+function studioRow(studio, date = today()) {
+  const inv = studioInventory(studio, date); const pending = pendingFor({ studioId: studio.id }); const clock = clockLabel(studio);
+  const status = clock.startsWith("Overdue") && pending > HOLD_FILL_RS ? "alarm" : clock.startsWith("Overdue") || pending > HOLD_FILL_RS ? "watch" : "ok";
+  return { ...studio, ...inv, live: undefined, pending, pendingPerNest: inv.inHouse ? Math.round(pending / inv.inHouse) : pending, clock, status };
 }
-function nestTaken(siteId, nestId, arrive, depart, exceptId) {
-  if (!nestId) return false;
-  return state.bookings.some(b => { if (b.id === exceptId || b.status === "cancelled" || b.status === "out") return false; if (b.siteId !== siteId || b.nestId !== nestId) return false; return !(depart <= b.arrive || arrive >= b.depart); });
+function siteRows(date = today(), studios = state.studios) {
+  return state.sites.filter(site => studios.some(studio => studio.siteId === site.id)).map(site => {
+    const rows = studios.filter(studio => studio.siteId === site.id).map(studio => studioRow(studio, date));
+    const capacity = rows.reduce((n, row) => n + row.capacity, 0); const booked = rows.reduce((n, row) => n + row.booked, 0); const inHouse = rows.reduce((n, row) => n + row.inHouse, 0); const reserved = rows.reduce((n, row) => n + row.reserved, 0); const vacant = Math.max(0, capacity - booked); const pending = pendingFor({ siteId: site.id });
+    const overdue = rows.filter(row => row.clock.startsWith("Overdue")).length;
+    const status = overdue && pending > HOLD_FILL_RS ? "alarm" : overdue || pending > HOLD_FILL_RS ? "watch" : "ok";
+    return { ...site, studios: rows.length, capacity, contracted: capacity, booked, occupied: inHouse, inHouse, reserved, vacant, pending, pendingPerNest: inHouse ? Math.round(pending / inHouse) : pending, occPct: capacity ? Math.round((booked / capacity) * 1000) / 10 : 0, overdueClocks: overdue, clock: overdue ? `${overdue} overdue` : "Current", status };
+  });
 }
-function folioTotal(booking) {
-  const rent = (booking.folio || []).reduce((n, l) => n + (Number(l.amount) || 0), 0);
-  const tax = Math.round(rent * ((booking.taxPct || 0) / 100)); return { rent, tax, gross: rent + tax };
+function selectStudios(query = {}) {
+  const value = query.city || query.theatre || query.cluster || "All";
+  if (!value || value === "All") return state.studios;
+  return state.studios.filter(row => row.city === value || row.theatre === value || row.cluster === value || row.siteId === value || row.id === value || row.code === value);
 }
-function nextId(prefix, list) { return prefix + "-" + String((list || []).length + 1001); }
-function folioOf(booking) { const tot = folioTotal(booking); return { bookingId: booking.id, guest: booking.guest, nestId: booking.nestId, rate: booking.rate, taxPct: booking.taxPct, lines: booking.folio || [], rent: tot.rent, tax: tot.tax, gross: tot.gross }; }
+function nestTaken(studioId, nestId, arrive, depart, exceptId) {
+  if (!studioId || !nestId) return false;
+  return state.bookings.some(row => row.id !== exceptId && row.status !== "cancelled" && row.status !== "out" && row.studioId === studioId && row.nestId === nestId && !(depart <= row.arrive || arrive >= row.depart));
+}
+function folioTotal(booking) { const rent = (booking.folio || []).reduce((n, row) => n + (Number(row.amount) || 0), 0); const tax = Math.round(rent * ((booking.taxPct || 0) / 100)); return { rent, tax, gross: rent + tax }; }
+function folioOf(booking) { const total = folioTotal(booking); return { bookingId: booking.id, memberId: booking.memberId, contractId: booking.contractId, guest: booking.guest, nestId: booking.nestId, nestCode: booking.nestCode, rate: booking.rate, taxPct: booking.taxPct, lines: booking.folio || [], ...total }; }
+
+export function hierarchyPayload(query = {}) {
+  const studios = selectStudios(query).map(row => studioRow(row, query.date || today()));
+  const sites = siteRows(query.date || today(), studios);
+  const theatres = Array.from(new Set(studios.map(row => row.theatre))).sort().map(name => ({ name, studios: studios.filter(row => row.theatre === name).length, capacity: studios.filter(row => row.theatre === name).reduce((n, row) => n + row.capacity, 0) }));
+  return { ok: true, date: query.date || today(), theatres, sites, studios, studioCount: studios.length };
+}
 
 export function createBooking(body = {}) {
-  const site = findSite(body.siteId || body.code); if (!site) return { error: "site_not_found", status: 404 };
-  const arrive = String(body.arrive || today()); const depart = String(body.depart || plusDays(arrive, 30));
+  let studio = findStudio(body.studioId || body.studioCode);
+  const site = findSite(body.siteId || body.code) || (studio && findSite(studio.siteId));
+  if (!studio && site) studio = state.studios.map(row => studioRow(row, body.arrive || today())).find(row => row.siteId === site.id && row.vacant > 0);
+  if (!site || !studio) return { error: studio ? "site_not_found" : "studio_not_found", status: 404 };
+  const arrive = text(body.arrive || today(), 10); const depart = text(body.depart || plusDays(arrive, 30), 10);
   if (depart <= arrive) return { error: "bad_dates", status: 400 };
-  const nights = daysBetween(arrive, depart) || 1;
-  const vacantOnDate = Math.max(0, site.contracted - liveOnDate(arrive, site.id).length);
-  if (vacantOnDate < 1 && !body.force) return { error: "no_vacant", status: 409, vacant: vacantOnDate };
-  const nestId = String(body.nestId || (site.code + "-" + String(site.occupied + 1).padStart(3, "0")));
-  if (nestTaken(site.id, nestId, arrive, depart)) return { error: "nest_taken", status: 409, nestId };
-  const rate = Number(body.rate) || site.rate || NEST_RATE;
-  const booking = { id: nextId("bkg", state.bookings), siteId: site.id, nestId, guest: String(body.guest || "Member").slice(0, 48), companyId: body.companyId || "grp-nia", arrive, depart, status: "reserved", rate, taxPct: body.taxPct != null ? Number(body.taxPct) : TAX_PCT, folio: [{ id: nextId("fol", []), kind: "rent", amount: rate * nights, note: nights + " night(s)", at: now() }], createdAt: now() };
-  state.bookings.unshift(booking); log(body.actor, "book", booking.id, nestId); return { ok: true, booking, folio: folioOf(booking) };
+  const available = studio.capacity - liveOnDate(arrive, { studioId: studio.id }).length;
+  if (available < 1 && !body.force) return { error: "no_vacant", status: 409, vacant: available };
+  const nestId = text(body.nestId || body.nestLabel || `N${studio.capacity - Math.max(0, available) + 1}`, 40).toUpperCase();
+  if (nestTaken(studio.id, nestId, arrive, depart)) return { error: "nest_taken", status: 409, nestId, studioId: studio.id };
+  const rate = money(body.rate); const booking = { id: id("bkg"), siteId: site.id, studioId: studio.id, sourceStudioId: studio.sourceStudioId, nestId, nestCode: `${studio.code}-${nestId.replace(/\s+/g, "-")}`, guest: text(body.guest || (findMember(body.memberId) || {}).name || "Member", 80), memberId: body.memberId || null, contractId: body.contractId || null, companyId: body.companyId || "grp-nia", arrive, depart, status: body.status === "in" ? "in" : "reserved", rate: Number.isFinite(rate) && rate > 0 ? rate : (site.rate || NEST_RATE), taxPct: body.taxPct != null ? Number(body.taxPct) : TAX_PCT, folio: [], createdAt: now() };
+  state.bookings.unshift(booking); log(body.actor, "booking_created", booking.id, booking.nestCode); return { ok: true, booking, folio: folioOf(booking) };
 }
 export function amendBooking(body = {}) {
   const booking = findBooking(body.bookingId || body.id); if (!booking) return { error: "booking_not_found", status: 404 };
-  if (booking.status === "cancelled" || booking.status === "out") return { error: "closed", status: 409, statusHave: booking.status };
-  const arrive = String(body.arrive || booking.arrive); const depart = String(body.depart || booking.depart);
+  if (["cancelled", "out"].includes(booking.status)) return { error: "closed", status: 409, statusHave: booking.status };
+  const studio = findStudio(body.studioId || booking.studioId); if (!studio) return { error: "studio_not_found", status: 404 };
+  const arrive = text(body.arrive || booking.arrive, 10); const depart = text(body.depart || booking.depart, 10); const nestId = text(body.nestId || booking.nestId, 40).toUpperCase();
   if (depart <= arrive) return { error: "bad_dates", status: 400 };
-  const nestId = body.nestId ? String(body.nestId) : booking.nestId;
-  if (nestTaken(booking.siteId, nestId, arrive, depart, booking.id)) return { error: "nest_taken", status: 409, nestId };
-  booking.arrive = arrive; booking.depart = depart; booking.nestId = nestId;
-  if (body.guest) booking.guest = String(body.guest).slice(0, 48);
-  if (body.rate != null) booking.rate = Number(body.rate);
-  if (body.companyId) booking.companyId = body.companyId;
-  log(body.actor, "amend", booking.id, nestId); return { ok: true, booking };
+  if (nestTaken(studio.id, nestId, arrive, depart, booking.id)) return { error: "nest_taken", status: 409, nestId, studioId: studio.id };
+  Object.assign(booking, { studioId: studio.id, siteId: studio.siteId, sourceStudioId: studio.sourceStudioId, nestId, nestCode: `${studio.code}-${nestId.replace(/\s+/g, "-")}`, arrive, depart });
+  if (body.guest) booking.guest = text(body.guest, 80); if (body.rate != null) booking.rate = money(body.rate); if (body.companyId) booking.companyId = body.companyId;
+  log(body.actor, "booking_amended", booking.id, booking.nestCode); return { ok: true, booking };
 }
 export function cancelBooking(body = {}) {
   const booking = findBooking(body.bookingId || body.id); if (!booking) return { error: "booking_not_found", status: 404 };
   if (booking.status === "in") return { error: "in_house", status: 409, message: "Check out first." };
-  booking.status = "cancelled"; booking.cancelledAt = now(); log(body.actor, "cancel", booking.id, ""); return { ok: true, booking };
+  booking.status = "cancelled"; booking.cancelledAt = now(); const contract = findContract(booking.contractId); if (contract) contract.status = "cancelled";
+  log(body.actor, "booking_cancelled", booking.id, body.reason); return { ok: true, booking };
 }
 export function checkIn(body = {}) {
   const booking = findBooking(body.bookingId || body.id); if (!booking) return { error: "booking_not_found", status: 404 };
   if (booking.status !== "reserved") return { error: "not_reserved", status: 409, have: booking.status };
-  const site = findSite(booking.siteId); const nestId = String(body.nestId || booking.nestId);
-  if (!nestId) return { error: "nest_required", status: 400 };
-  if (nestTaken(booking.siteId, nestId, booking.arrive, booking.depart, booking.id)) return { error: "nest_taken", status: 409, nestId };
-  booking.nestId = nestId; booking.status = "in"; booking.checkedInAt = now();
-  if (site && site.vacant > 0) { site.vacant -= 1; site.occupied += 1; refreshSite(site); }
-  log(body.actor, "checkin", booking.id, nestId); return { ok: true, booking };
+  if (!booking.studioId || !booking.nestId) return { error: "studio_and_nest_required", status: 400 };
+  if (nestTaken(booking.studioId, booking.nestId, booking.arrive, booking.depart, booking.id)) return { error: "nest_taken", status: 409 };
+  booking.status = "in"; booking.checkedInAt = now(); const contract = findContract(booking.contractId); if (contract) contract.status = "active";
+  log(body.actor, "checked_in", booking.id, booking.nestCode); return { ok: true, booking };
 }
 export function checkOut(body = {}) {
   const booking = findBooking(body.bookingId || body.id); if (!booking) return { error: "booking_not_found", status: 404 };
   if (booking.status !== "in") return { error: "not_in_house", status: 409, have: booking.status };
-  const site = findSite(booking.siteId); booking.status = "out"; booking.checkedOutAt = now();
-  if (site) { site.occupied = Math.max(0, site.occupied - 1); site.vacant += 1; refreshSite(site); }
-  log(body.actor, "checkout", booking.id, booking.nestId); return { ok: true, booking, folio: folioOf(booking) };
+  booking.status = "out"; booking.checkedOutAt = now(); const contract = findContract(booking.contractId); if (contract) { contract.status = "ended"; contract.endedAt = now(); }
+  log(body.actor, "checked_out", booking.id, booking.nestCode); return { ok: true, booking, folio: folioOf(booking) };
 }
 export function addFolio(body = {}) {
   const booking = findBooking(body.bookingId || body.id); if (!booking) return { error: "booking_not_found", status: 404 };
-  const amount = Number(body.amount); if (!Number.isFinite(amount)) return { error: "bad_amount", status: 400 };
-  const line = { id: nextId("fol", booking.folio || []), kind: String(body.kind || "other"), amount, note: String(body.note || ""), at: now() };
-  booking.folio = (booking.folio || []).concat([line]); log(body.actor, "folio", booking.id, line.kind); return { ok: true, folio: folioOf(booking) };
+  const amount = money(body.amount); if (!Number.isFinite(amount)) return { error: "bad_amount", status: 400 };
+  const line = { id: id("fol"), kind: text(body.kind || "other", 40), amount, note: text(body.note, 160), at: now(), actor: text(body.actor || "desk", 80) };
+  booking.folio = (booking.folio || []).concat([line]); log(body.actor, "folio_posted", booking.id, `${line.kind} ${amount}`); return { ok: true, folio: folioOf(booking) };
 }
-export function addGroup(body = {}) {
-  const name = String(body.name || "").trim(); if (!name) return { error: "name_required", status: 400 };
-  const row = { id: nextId("grp", state.groups), name, kind: body.kind || "company" }; state.groups.push(row); return { ok: true, group: row, groups: state.groups };
+export function addGroup(body = {}) { const name = text(body.name, 100); if (!name) return { error: "name_required", status: 400 }; const row = { id: id("grp"), name, kind: text(body.kind || "company", 40), createdAt: now() }; state.groups.push(row); log(body.actor, "group_created", row.id, name); return { ok: true, group: row, groups: state.groups }; }
+
+export function createMember(body = {}) {
+  const name = text(body.name, 80); if (!name) return { error: "name_required", status: 400 };
+  const phone = text(body.phone, 20).replace(/\D/g, ""); if (phone && state.members.some(row => row.phone === phone)) return { error: "phone_exists", status: 409 };
+  const member = { id: id("mem"), name, phone, governmentIdLast4: text(body.governmentIdLast4, 4), verificationStatus: body.verificationStatus === "verified" ? "verified" : "needs_review", source: "bison_desk", createdAt: now(), createdBy: text(body.actor || "desk", 80) };
+  state.members.unshift(member); log(body.actor, "member_created", member.id, name); return { ok: true, member };
 }
+export function membersPayload(query = {}) {
+  let rows = state.members; const q = text(query.q, 80).toLowerCase(); if (q) rows = rows.filter(row => `${row.name} ${row.phone} ${row.id}`.toLowerCase().includes(q));
+  return { ok: true, count: rows.length, needsReview: rows.filter(row => row.verificationStatus !== "verified").length, members: rows.slice(0, Math.min(200, Number(query.limit) || 100)) };
+}
+export function createContract(body = {}) {
+  const member = findMember(body.memberId); if (!member) return { error: "member_not_found", status: 404 };
+  const studio = findStudio(body.studioId || body.studioCode); if (!studio) return { error: "studio_not_found", status: 404 };
+  const monthlyRent = money(body.monthlyRent); const deposit = money(body.deposit || 0); if (!Number.isFinite(monthlyRent) || monthlyRent <= 0 || !Number.isFinite(deposit) || deposit < 0) return { error: "bad_money", status: 400 };
+  const startDate = text(body.startDate || today(), 10); const endDate = text(body.endDate || plusDays(startDate, 30), 10); if (endDate <= startDate) return { error: "bad_dates", status: 400 };
+  const signedStatus = ["pending", "signed", "imported_needs_review"].includes(body.signedStatus) ? body.signedStatus : "pending";
+  const contract = { id: id("ctr"), memberId: member.id, bookingId: null, studioId: studio.id, nestId: text(body.nestId || body.nestLabel, 40).toUpperCase(), startDate, endDate, monthlyRent, deposit, billingDay: Math.min(28, Math.max(1, Number(body.billingDay) || 1)), signedStatus, status: signedStatus === "signed" ? "active" : "pending", noticeDate: null, amendments: [], source: "bison_desk", createdAt: now(), createdBy: text(body.actor || "desk", 80) };
+  if (!contract.nestId) return { error: "nest_required", status: 400 };
+  const booked = createBooking({ studioId: studio.id, nestId: contract.nestId, arrive: startDate, depart: endDate, rate: monthlyRent, guest: member.name, memberId: member.id, contractId: contract.id, status: signedStatus === "signed" && body.checkIn ? "in" : "reserved", actor: body.actor });
+  if (!booked.ok) return booked;
+  contract.bookingId = booked.booking.id; state.contracts.unshift(contract); booked.booking.contractId = contract.id;
+  if (body.firstCharge !== false) chargeCollection({ contractId: contract.id, amount: monthlyRent, dueDate: startDate, kind: "membership", note: "Opening membership charge", actor: body.actor });
+  log(body.actor, "contract_created", contract.id, `${studio.code} ${contract.nestId}`); return { ok: true, contract, booking: booked.booking };
+}
+export function amendContract(body = {}) {
+  const contract = findContract(body.contractId || body.id); if (!contract) return { error: "contract_not_found", status: 404 };
+  if (["ended", "cancelled"].includes(contract.status)) return { error: "contract_closed", status: 409 };
+  const reason = text(body.reason, 200); if (!reason) return { error: "reason_required", status: 400 };
+  const before = { endDate: contract.endDate, monthlyRent: contract.monthlyRent, deposit: contract.deposit, billingDay: contract.billingDay, signedStatus: contract.signedStatus };
+  if (body.endDate) contract.endDate = text(body.endDate, 10); if (body.monthlyRent != null) contract.monthlyRent = money(body.monthlyRent); if (body.deposit != null) contract.deposit = money(body.deposit); if (body.billingDay != null) contract.billingDay = Math.min(28, Math.max(1, Number(body.billingDay) || 1)); if (["pending", "signed"].includes(body.signedStatus)) contract.signedStatus = body.signedStatus;
+  if (contract.endDate <= contract.startDate || contract.monthlyRent <= 0 || contract.deposit < 0) { Object.assign(contract, before); return { error: "bad_amendment", status: 400 }; }
+  contract.status = contract.signedStatus === "signed" ? "active" : "pending"; contract.amendments.push({ id: id("amd"), at: now(), actor: text(body.actor || "desk", 80), reason, before, after: { endDate: contract.endDate, monthlyRent: contract.monthlyRent, deposit: contract.deposit, billingDay: contract.billingDay, signedStatus: contract.signedStatus } });
+  const booking = findBooking(contract.bookingId); if (booking) { booking.depart = contract.endDate; booking.rate = contract.monthlyRent; }
+  log(body.actor, "contract_amended", contract.id, reason); return { ok: true, contract };
+}
+export function endContract(body = {}) {
+  const contract = findContract(body.contractId || body.id); if (!contract) return { error: "contract_not_found", status: 404 };
+  const reason = text(body.reason, 200); if (!reason) return { error: "reason_required", status: 400 };
+  const booking = findBooking(contract.bookingId); if (booking && booking.status === "in") checkOut({ bookingId: booking.id, actor: body.actor }); else if (booking && booking.status === "reserved") booking.status = "cancelled";
+  contract.status = "ended"; contract.noticeDate = text(body.noticeDate || today(), 10); contract.endedAt = now(); contract.endReason = reason;
+  log(body.actor, "contract_ended", contract.id, reason); return { ok: true, contract };
+}
+export function contractsPayload(query = {}) {
+  let rows = state.contracts; if (query.status) rows = rows.filter(row => row.status === query.status); if (query.studioId) rows = rows.filter(row => row.studioId === query.studioId); if (query.memberId) rows = rows.filter(row => row.memberId === query.memberId);
+  const contracts = rows.slice(0, Math.min(300, Number(query.limit) || 100)).map(row => ({ ...row, member: (findMember(row.memberId) || {}).name || "Unlinked", studio: (findStudio(row.studioId) || {}).code || "Unlinked" }));
+  return { ok: true, count: rows.length, active: state.contracts.filter(row => row.status === "active").length, pending: state.contracts.filter(row => row.status === "pending").length, needsReview: state.contracts.filter(row => row.signedStatus === "imported_needs_review").length, contracts };
+}
+
+export function chargeCollection(body = {}) {
+  const contract = findContract(body.contractId); if (!contract) return { error: "contract_not_found", status: 404 };
+  const amount = money(body.amount); if (!Number.isFinite(amount) || amount <= 0) return { error: "bad_amount", status: 400 };
+  const row = { id: id("recv"), memberId: contract.memberId, contractId: contract.id, studioId: contract.studioId, siteId: (findStudio(contract.studioId) || {}).siteId || null, kind: text(body.kind || "membership", 40), dueDate: text(body.dueDate || today(), 10), amount, paidAmount: 0, status: "open", owner: text(body.owner || body.actor || "finance", 80), promiseDate: null, note: text(body.note, 200), source: "bison_desk", createdAt: now() };
+  state.receivables.unshift(row); log(body.actor, "charge_posted", row.id, `${row.kind} ${amount}`); return { ok: true, receivable: row };
+}
+export function recordCollectionPayment(body = {}) {
+  const row = findReceivable(body.receivableId); if (!row) return { error: "receivable_not_found", status: 404 };
+  if (!row.memberId || !row.contractId) return { error: "allocate_first", status: 409, message: "Allocate the historic balance to a member contract before posting payment." };
+  const amount = money(body.amount); if (!Number.isFinite(amount) || amount <= 0 || amount > outstanding(row)) return { error: "bad_amount", status: 400, outstanding: outstanding(row) };
+  const reference = text(body.reference, 100); if (!reference) return { error: "reference_required", status: 400 };
+  const payment = { id: id("colpay"), receivableId: row.id, memberId: row.memberId, contractId: row.contractId, amount, method: text(body.method || "upi", 30), reference, at: now(), actor: text(body.actor || "finance", 80) };
+  state.collectionPayments.unshift(payment); row.paidAmount = (Number(row.paidAmount) || 0) + amount; row.status = outstanding(row) === 0 ? "paid" : "partial";
+  log(body.actor, "collection_payment", row.id, `${amount} ${reference}`); return { ok: true, payment, receivable: row };
+}
+export function workCollection(body = {}) {
+  const row = findReceivable(body.receivableId); if (!row) return { error: "receivable_not_found", status: 404 };
+  const note = text(body.note, 240); if (!note && body.owner == null && body.promiseDate == null && body.status == null && body.contractId == null) return { error: "work_detail_required", status: 400 };
+  let worked = row;
+  if (body.contractId) {
+    const contract = findContract(body.contractId); if (!contract) return { error: "contract_not_found", status: 404 };
+    const balance = outstanding(row); const allocation = body.allocationAmount == null || body.allocationAmount === "" ? balance : money(body.allocationAmount);
+    if (!Number.isFinite(allocation) || allocation <= 0 || allocation > balance) return { error: "bad_allocation", status: 400, outstanding: balance };
+    if (!row.memberId && allocation < balance) {
+      row.amount -= allocation;
+      worked = { ...row, id: id("recv"), memberId: contract.memberId, contractId: contract.id, studioId: contract.studioId, siteId: (findStudio(contract.studioId) || {}).siteId || row.siteId, amount: allocation, paidAmount: 0, status: "open", source: "allocated_cluster_rollup", createdAt: now() };
+      state.receivables.unshift(worked);
+    } else {
+      worked.contractId = contract.id; worked.memberId = contract.memberId; worked.studioId = contract.studioId; worked.siteId = (findStudio(contract.studioId) || {}).siteId || worked.siteId; worked.status = outstanding(worked) ? "open" : "paid"; worked.source = "allocated_cluster_rollup";
+    }
+  }
+  if (body.owner != null) worked.owner = text(body.owner, 80); if (body.promiseDate != null) worked.promiseDate = text(body.promiseDate, 10) || null; if (["open", "promised", "disputed", "waived"].includes(body.status)) worked.status = body.status; if (note) worked.note = [worked.note, `${now()} ${text(body.actor || "desk", 80)}: ${note}`].filter(Boolean).join("\n").slice(-1200);
+  log(body.actor, "collection_worked", worked.id, note || worked.status); return { ok: true, receivable: worked, sourceReceivable: worked.id === row.id ? null : row };
+}
+export function collectionsPayload(query = {}) {
+  let rows = state.receivables; if (query.siteId) rows = rows.filter(row => row.siteId === query.siteId); if (query.status) rows = rows.filter(row => row.status === query.status);
+  const enriched = rows.map(row => { const due = daysBetween(row.dueDate, today()); const balance = outstanding(row); return { ...row, balance, ageDays: due, member: (findMember(row.memberId) || {}).name || "Unallocated", studio: (findStudio(row.studioId) || {}).code || "Cluster roll-up" }; });
+  const total = enriched.reduce((n, row) => n + row.balance, 0); const unallocated = enriched.filter(row => !row.memberId).reduce((n, row) => n + row.balance, 0);
+  const ageing = { current: 0, d1_30: 0, d31_60: 0, d61_90: 0, d90plus: 0, unallocated };
+  enriched.filter(row => row.memberId).forEach(row => { const key = row.ageDays <= 0 ? "current" : row.ageDays <= 30 ? "d1_30" : row.ageDays <= 60 ? "d31_60" : row.ageDays <= 90 ? "d61_90" : "d90plus"; ageing[key] += row.balance; });
+  return { ok: true, total, unallocated, allocated: total - unallocated, open: enriched.filter(row => row.balance > 0).length, ageing, receivables: enriched.sort((a, b) => b.balance - a.balance).slice(0, Math.min(300, Number(query.limit) || 100)), payments: state.collectionPayments.slice(0, 100) };
+}
+
+export function clearClock(body = {}) {
+  const studio = findStudio(body.studioId || body.studioCode); if (!studio) return { error: "studio_required", status: 400 };
+  const actor = text(body.actor, 80); const evidence = text(body.evidence, 240); const checks = body.checks || {};
+  if (!actor) return { error: "actor_required", status: 400 };
+  if (evidence.length < 3) return { error: "evidence_required", status: 400 };
+  if (!checks.physicalCount || !checks.vacantVerified || !checks.collectionsReviewed) return { error: "checklist_incomplete", status: 400, required: ["physicalCount", "vacantVerified", "collectionsReviewed"] };
+  const before = studio.clockDueAt; const closedAt = now(); const nextHours = Math.min(48, Math.max(6, Number(body.nextHours) || 18)); studio.clockDueAt = hoursFromNow(nextHours);
+  const event = { id: id("clock"), studioId: studio.id, siteId: studio.siteId, closedAt, previousDueAt: before, nextDueAt: studio.clockDueAt, actor, evidence, checks: { physicalCount: true, vacantVerified: true, collectionsReviewed: true }, countedNests: body.countedNests == null ? null : Number(body.countedNests), vacantNests: body.vacantNests == null ? null : Number(body.vacantNests) };
+  state.clocks.unshift(event); state.clocks = state.clocks.slice(0, 1200); log(actor, "clock_closed", studio.id, evidence); return { ok: true, event, studio: studioRow(studio) };
+}
+export function clocksPayload(query = {}) { const studios = selectStudios(query).map(row => studioRow(row)); return { ok: true, overdue: studios.filter(row => row.clock.startsWith("Overdue")).length, studios, events: state.clocks.filter(row => !query.studioId || row.studioId === query.studioId).slice(0, 200) }; }
+
+function reconcile(date = today(), studios = state.studios) { const rows = studios.map(row => studioInventory(row, date)); const capacity = studios.reduce((n, row) => n + row.capacity, 0); const booked = rows.reduce((n, row) => n + row.booked, 0); const inHouse = rows.reduce((n, row) => n + row.inHouse, 0); const reserved = rows.reduce((n, row) => n + row.reserved, 0); const vacant = rows.reduce((n, row) => n + row.vacant, 0); return { date, capacity, booked, inHouse, reserved, vacant, delta: capacity - booked - vacant, ok: capacity === booked + vacant && booked === inHouse + reserved, source: "named-nest date book" }; }
 export function inventoryPayload(query = {}) {
-  const date = query.date || today(); const siteFilter = query.site;
-  const sites = state.sites.filter(s => !siteFilter || s.id === siteFilter || s.code === siteFilter);
-  return { ok: true, date, rows: sites.map(s => { const live = liveOnDate(date, s.id); const booked = live.length; return { siteId: s.id, site: s.studio, code: s.code, date, contracted: s.contracted, booked, inHouse: live.filter(b => b.status === "in").length, reserved: live.filter(b => b.status === "reserved").length, vacant: Math.max(0, s.contracted - booked), occPct: s.contracted ? Math.round((booked / s.contracted) * 1000) / 10 : 0, nests: live.map(b => ({ nestId: b.nestId, bookingId: b.id, guest: b.guest, status: b.status })) }; }) };
+  const date = query.date || today(); const studios = selectStudios({ ...query, city: query.site || query.city }); const studioRows = studios.map(row => { const inv = studioInventory(row, date); return { studioId: row.id, studio: row.name, code: row.code, siteId: row.siteId, theatre: row.theatre, date, capacity: row.capacity, contracted: row.capacity, ...inv, live: undefined, nests: inv.live.map(booking => ({ nestId: booking.nestId, nestCode: booking.nestCode, bookingId: booking.id, memberId: booking.memberId, contractId: booking.contractId, guest: booking.guest, status: booking.status })) }; });
+  const rows = siteRows(date, studios).map(site => ({ ...site, date, nests: studioRows.filter(row => row.siteId === site.id).flatMap(row => row.nests) }));
+  return { ok: true, date, rows, studios: studioRows, reconciliation: reconcile(date, studios) };
 }
-export function auditPayload(query = {}) {
-  const date = query.date || today(); const existing = state.audits.find(a => a.date === date); const inv = inventoryPayload({ date });
-  return { ok: true, date, closed: Boolean(existing), closedAt: existing && existing.at, inventory: inv.rows, last: state.audits[0] || null };
-}
-export function runAudit(body = {}) {
-  const date = String(body.date || today()); if (state.audits.some(a => a.date === date)) return { error: "already_closed", status: 409, date };
-  const inv = inventoryPayload({ date });
-  const row = { date, at: now(), actor: body.actor || "desk", occupied: inv.rows.reduce((n, r) => n + r.booked, 0), vacant: inv.rows.reduce((n, r) => n + r.vacant, 0), inHouse: inv.rows.reduce((n, r) => n + r.inHouse, 0) };
-  state.audits.unshift(row); state.asOf = date; return { ok: true, audit: row, inventory: inv.rows };
+export function auditPayload(query = {}) { const date = query.date || today(); const existing = state.audits.find(row => row.date === date); return { ok: true, date, closed: Boolean(existing), closedAt: existing && existing.at, reconciliation: reconcile(date), last: state.audits[0] || null }; }
+export function runAudit(body = {}) { const date = text(body.date || today(), 10); if (state.audits.some(row => row.date === date)) return { error: "already_closed", status: 409, date }; const reconciliation = reconcile(date); if (!reconciliation.ok) return { error: "inventory_not_reconciled", status: 409, reconciliation }; const row = { id: id("audit"), date, at: now(), actor: text(body.actor || "desk", 80), ...reconciliation }; state.audits.unshift(row); state.asOf = date; log(body.actor, "night_audit_closed", row.id, date); return { ok: true, audit: row };
 }
 export function ingestBook(body = {}) {
-  const rows = Array.isArray(body.bookings) ? body.bookings : []; const sites = Array.isArray(body.sites) ? body.sites : [];
-  let booked = 0, updated = 0;
-  for (const s of sites) { const site = findSite(s.id || s.code); if (!site) continue; for (const k of ["occupied", "contracted", "vacant", "pending", "pendingPerNest", "rate"]) { if (s[k] != null) site[k] = s[k]; } refreshSite(site); updated += 1; }
-  for (const row of rows) {
-    const site = findSite(row.siteId || row.code); if (!site) continue;
-    state.bookings.unshift({ id: row.id || nextId("bkg", state.bookings), siteId: site.id, nestId: String(row.nestId || ""), guest: String(row.guest || "Member").slice(0, 48), companyId: row.companyId || "grp-nia", arrive: String(row.arrive || today()), depart: String(row.depart || plusDays(today(), 30)), status: ["in", "out", "cancelled"].includes(row.status) ? row.status : "reserved", rate: Number(row.rate) || site.rate || NEST_RATE, taxPct: row.taxPct != null ? Number(row.taxPct) : TAX_PCT, folio: Array.isArray(row.folio) ? row.folio : [], createdAt: now() });
-    booked += 1;
-  }
-  if (body.asOf) state.asOf = String(body.asOf);
-  state.ingest.unshift({ at: now(), bookings: booked, sites: updated, filename: body.filename || "ingest" });
-  return { ok: true, bookings: booked, sites: updated, asOf: state.asOf };
+  const rows = Array.isArray(body.bookings) ? body.bookings : []; const sites = Array.isArray(body.sites) ? body.sites : []; let booked = 0; let updated = 0;
+  for (const incoming of sites) { const site = findSite(incoming.id || incoming.code); if (!site) continue; for (const key of ["contracted", "pending", "rate", "owner", "clockDueAt"]) if (incoming[key] != null) site[key] = incoming[key]; updated += 1; }
+  for (const incoming of rows) { const sourceId = sourceStudioId(incoming); const studio = findStudio(incoming.studioId || incoming.studioCode || studioIdForSource(sourceId)); const site = findSite(incoming.siteId || incoming.code) || (studio && findSite(studio.siteId)); if (!site || !studio) continue; const booking = { id: incoming.id || id("bkg"), siteId: site.id, studioId: studio.id, sourceStudioId: studio.sourceStudioId, nestId: text(incoming.nestId || "UNASSIGNED", 40).toUpperCase(), guest: text(incoming.guest || "Member", 80), memberId: incoming.memberId || null, contractId: incoming.contractId || null, companyId: incoming.companyId || "grp-nia", arrive: text(incoming.arrive || today(), 10), depart: text(incoming.depart || plusDays(today(), 30), 10), status: ["in", "out", "cancelled"].includes(incoming.status) ? incoming.status : "reserved", rate: money(incoming.rate) || site.rate || NEST_RATE, taxPct: incoming.taxPct != null ? Number(incoming.taxPct) : TAX_PCT, folio: Array.isArray(incoming.folio) ? incoming.folio : [], createdAt: now() }; booking.nestCode = `${studio.code}-${booking.nestId.replace(/\s+/g, "-")}`; state.bookings.unshift(booking); booked += 1; }
+  if (body.asOf) state.asOf = text(body.asOf, 10); state = normalizeState(state, state.persist); state.ingest.unshift({ at: now(), actor: text(body.actor || "desk", 80), bookings: booked, sites: updated, filename: text(body.filename || "ingest", 160) }); log(body.actor, "book_ingested", null, `${booked} bookings`); return { ok: true, bookings: booked, sites: updated, asOf: state.asOf, studios: state.studios.length };
 }
-export function bookingsPayload(query = {}) {
-  let list = state.bookings; if (query.site) list = list.filter(b => b.siteId === query.site); if (query.status) list = list.filter(b => b.status === query.status);
-  return { ok: true, count: list.length, bookings: list.slice(0, 200).map(b => ({ ...b, folioSummary: folioTotal(b) })) };
-}
-function totals() {
-  const occupied = state.sites.reduce((n, s) => n + s.occupied, 0); const contracted = state.sites.reduce((n, s) => n + s.contracted, 0); const vacant = state.sites.reduce((n, s) => n + s.vacant, 0); const pending = state.sites.reduce((n, s) => n + s.pending, 0);
-  return { occupied, contracted, vacant, pending, occPct: contracted ? Math.round((occupied / contracted) * 1000) / 10 : 0, occTarget: OCC_TARGET };
-}
-function sitesFor(city) { if (!city || city === "All") return state.sites; return state.sites.filter(s => s.city === city || s.theatre === city || s.cluster === city); }
+export function bookingsPayload(query = {}) { let rows = state.bookings; if (query.site) rows = rows.filter(row => row.siteId === query.site); if (query.studioId) rows = rows.filter(row => row.studioId === query.studioId); if (query.status) rows = rows.filter(row => row.status === query.status); return { ok: true, count: rows.length, bookings: rows.slice(0, Math.min(300, Number(query.limit) || 200)).map(row => ({ ...row, folioSummary: folioTotal(row) })) }; }
 export function towerPayload(query = {}) {
-  const city = query.city || "All"; const list = sitesFor(city).map(s => ({ ...s, clock: clockLabel(s), pendingPerNest: pendingPerNest(s) })); const t = totals();
-  const overdue = list.filter(s => String(s.clock).startsWith("Overdue")); const openBookings = state.bookings.filter(b => b.status === "reserved" || b.status === "in");
-  return { product: "bison", sibling: "polo", skip: DUMMY_DATA, asOf: state.asOf, persist: state.persist, source: SOURCE, city, cities: ["All", ...Array.from(new Set(state.sites.map(s => s.city)))], theatres: ["All", ...Array.from(new Set(state.sites.map(s => s.theatre)))], clusters: ["All", ...Array.from(new Set(state.sites.map(s => s.cluster)))], kpis: { occupied: t.occupied, contracted: t.contracted, vacant: t.vacant, occPct: t.occPct, occTarget: t.occTarget, overdueClocks: overdue.length, pending: t.pending, joinMonths: state.joinMonths.length, sites: list.length, bookingsOpen: openBookings.length, inHouse: state.bookings.filter(b => b.status === "in").length }, sites: list, blockers: overdue.map(s => ({ level: s.status, area: "Bison", site: s.studio + " · " + s.code, city: s.city, text: s.clock, owner: s.owner, when: s.clock })), actNow: list.filter(s => s.status !== "ok").map(s => { const ppn = pendingPerNest(s); return { id: s.id, site: s.studio, city: s.city, model: s.model, code: s.code, lastCount: s.lastCount, status: s.status, weekly: s.weeklyPp + " pp · ₹" + ppn + "/nest · " + s.vacant + " vacant", action: ppn > HOLD_FILL_RS ? "Collections first. Clock still must close." : "Close the clock, then fill.", desk: "/bison", holdFill: ppn > HOLD_FILL_RS }; }), bookings: openBookings.slice(0, 40), groups: state.groups, joinMonths: state.joinMonths, note: "Bison runs nests. Polo runs bags. Finance bills the nest." };
+  const date = query.date || today(); const studios = selectStudios(query).map(row => studioRow(row, date)); const sites = siteRows(date, studios); const reconciliation = reconcile(date, studios); const collections = collectionsPayload({ limit: 20 }); const contracts = contractsPayload({ limit: 20 }); const overdue = studios.filter(row => row.clock.startsWith("Overdue"));
+  return { product: "bison", sibling: "polo", skip: DUMMY_DATA, schemaVersion: state.schemaVersion, asOf: date, persist: state.persist, source: SOURCE, city: query.city || "All", cities: ["All", ...Array.from(new Set(state.studios.map(row => row.city)))], theatres: ["All", ...Array.from(new Set(state.studios.map(row => row.theatre)))], clusters: ["All", ...Array.from(new Set(state.studios.map(row => row.cluster)))], reconciliation, kpis: { occupied: reconciliation.inHouse, inHouse: reconciliation.inHouse, reserved: reconciliation.reserved, committed: reconciliation.booked, capacity: reconciliation.capacity, contracted: reconciliation.capacity, vacant: reconciliation.vacant, occPct: reconciliation.capacity ? Math.round((reconciliation.booked / reconciliation.capacity) * 1000) / 10 : 0, occTarget: OCC_TARGET, overdueClocks: overdue.length, pending: collections.total, unallocated: collections.unallocated, members: state.members.length, activeContracts: contracts.active, contractsNeedReview: contracts.needsReview, studios: studios.length, sites: sites.length, bookingsOpen: reconciliation.booked }, sites, studios, blockers: overdue.map(row => ({ level: row.status, area: "Bison", studioId: row.id, site: `${row.theatre} · ${row.code}`, city: row.city, text: row.clock, owner: row.owner, when: row.clock })), actNow: studios.filter(row => row.status !== "ok").map(row => ({ id: row.id, siteId: row.siteId, site: row.name, theatre: row.theatre, city: row.city, model: (findSite(row.siteId) || {}).model, code: row.code, status: row.status, weekly: `${row.booked}/${row.capacity} committed · ₹${row.pendingPerNest}/nest · ${row.vacant} vacant`, action: row.pendingPerNest > HOLD_FILL_RS ? "Collections first. Clock still must close." : "Close the clock, then fill.", holdFill: row.pendingPerNest > HOLD_FILL_RS })), bookings: state.bookings.filter(row => row.status === "reserved" || row.status === "in").slice(0, 40), contracts: contracts.contracts, collections: collections.receivables, groups: state.groups, joinMonths: state.joinMonths, note: "Bison runs nests. Polo runs bags. Finance bills the nest." };
 }
-export function assignNest(body = {}) { return createBooking({ ...body, guest: body.guest || body.memberId || "Member" }); }
-export function vacateNest(body = {}) {
-  if (body.bookingId) return checkOut(body);
-  const site = findSite(body.siteId || body.code); if (!site) return { error: "site_not_found", status: 404 };
-  const inHouse = state.bookings.find(b => b.siteId === site.id && b.status === "in"); if (inHouse) return checkOut({ bookingId: inHouse.id, actor: body.actor });
-  if (site.occupied < 1) return { error: "not_occupied", status: 409 }; site.occupied -= 1; site.vacant += 1; refreshSite(site); return { ok: true, site };
-}
-export function clearClock(body = {}) {
-  const site = findSite(body.siteId || body.code); if (!site) return { error: "site_not_found", status: 404 };
-  site.clockDueAt = hoursFromNow(Number(body.nextHours) || 18); site.openActions = Math.max(0, (site.openActions || 0) - 1); refreshSite(site); return { ok: true, site: { ...site, clock: clockLabel(site) } };
-}
-export function bisonPath(pathname, rewrittenPath) { let p = rewrittenPath ? "/" + String(rewrittenPath).replace(/^\/+/, "") : pathname; p = (p || "/").replace(/\/+$/, "") || "/"; if (p.startsWith("/api/")) p = p.slice(4); return p; }
-export function isBisonPath(p) { return p === "/bison" || p.startsWith("/bison/") || p === "/living" || p.startsWith("/living/"); }
-function normalize(p) { return p.replace(/^\/living/, "/bison"); }
+export function assignNest(body = {}) { if (!body.memberId) return { error: "member_required", status: 400, message: "Create or select the member before assigning a nest." }; return createContract({ ...body, monthlyRent: body.monthlyRent || body.rate || NEST_RATE, startDate: body.startDate || body.arrive, endDate: body.endDate || body.depart, signedStatus: body.signedStatus || "pending" }); }
+export function vacateNest(body = {}) { const booking = body.bookingId ? findBooking(body.bookingId) : state.bookings.find(row => row.studioId === body.studioId && row.status === "in"); if (!booking) return { error: "booking_not_found", status: 404 }; return checkOut({ bookingId: booking.id, actor: body.actor }); }
+
+export function bisonPath(pathname, rewrittenPath) { let path = rewrittenPath ? "/" + String(rewrittenPath).replace(/^\/+/, "") : pathname; path = (path || "/").replace(/\/+$/, "") || "/"; if (path.startsWith("/api/")) path = path.slice(4); return path; }
+export function isBisonPath(path) { return path === "/bison" || path.startsWith("/bison/") || path === "/living" || path.startsWith("/living/"); }
+function normalize(path) { return path.replace(/^\/living/, "/bison"); }
 async function runWithPersistentState(mutating, work) {
   if (!hasDurableStore()) return work();
-  for (let attempt = 0; attempt < 3; attempt++) {
-    const loaded = await loadRuntimeState(RUNTIME_STATE_KEY, snapshotState(createState()));
-    restoreState(loaded.value, loaded.storage);
-    const result = await work();
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    const loaded = await loadRuntimeState(RUNTIME_STATE_KEY, snapshotState()); restoreState(loaded.value, loaded.storage); const result = await work();
     if (!mutating || !result || result.status >= 400) return result;
-    const saved = await saveRuntimeState(RUNTIME_STATE_KEY, snapshotState(), loaded.version);
-    if (saved.ok) return result;
+    const saved = await saveRuntimeState(RUNTIME_STATE_KEY, snapshotState(), loaded.version); if (saved.ok) return result;
   }
   return { status: 409, body: { error: "state_conflict", message: "Please try again." } };
 }
-export async function bisonStorageStatus() {
-  if (!hasDurableStore()) return { storage: "memory", connected: false, version: 0, product: "bison" };
-  const loaded = await loadRuntimeState(RUNTIME_STATE_KEY, snapshotState(createState()));
-  return { storage: loaded.storage, connected: true, version: loaded.version, product: "bison" };
-}
-export function resetBison() { state = createState(); return state; }
+export async function bisonStorageStatus() { if (!hasDurableStore()) return { storage: "memory", connected: false, version: 0, product: "bison", schemaVersion: SCHEMA_VERSION }; const loaded = await loadRuntimeState(RUNTIME_STATE_KEY, snapshotState()); return { storage: loaded.storage, connected: true, version: loaded.version, product: "bison", schemaVersion: SCHEMA_VERSION }; }
+export function resetBison() { state = normalizeState(baseState(), hasDurableStore() ? "postgres" : "memory"); return state; }
 function done(result, fallback = 200) { if (result && result.error) return { status: result.status || 400, body: result }; return { status: fallback, body: result }; }
 async function handleOnce(req, path, body, url) {
-  const q = {}; url.searchParams.forEach((v, k) => { if (k !== "path") q[k] = v; });
-  const p = normalize(path); const method = req.method;
-  if (method === "GET" && (p === "/bison" || p === "/bison/tower")) return { status: 200, body: towerPayload(q) };
-  if (method === "GET" && p === "/bison/sites") return { status: 200, body: { ok: true, sites: towerPayload(q).sites } };
-  if (method === "GET" && p === "/bison/bookings") return { status: 200, body: bookingsPayload(q) };
-  if (method === "POST" && p === "/bison/bookings") return done(createBooking(body || {}));
-  if (method === "POST" && p === "/bison/bookings/amend") return done(amendBooking(body || {}));
-  if (method === "POST" && p === "/bison/bookings/cancel") return done(cancelBooking(body || {}));
-  if (method === "POST" && p === "/bison/checkin") return done(checkIn(body || {}));
-  if (method === "POST" && p === "/bison/checkout") return done(checkOut(body || {}));
-  if (method === "GET" && p === "/bison/inventory") return { status: 200, body: inventoryPayload(q) };
-  if (method === "GET" && p === "/bison/folio") { const booking = findBooking(q.bookingId || q.id); if (!booking) return { status: 404, body: { error: "booking_not_found" } }; return { status: 200, body: folioOf(booking) }; }
-  if (method === "POST" && p === "/bison/folio") return done(addFolio(body || {}));
-  if (method === "GET" && p === "/bison/groups") return { status: 200, body: { ok: true, groups: state.groups } };
-  if (method === "POST" && p === "/bison/groups") return done(addGroup(body || {}));
-  if (method === "GET" && p === "/bison/audit") return { status: 200, body: auditPayload(q) };
-  if (method === "POST" && p === "/bison/audit") return done(runAudit(body || {}));
-  if (method === "POST" && p === "/bison/ingest") return done(ingestBook(body || {}));
-  if (method === "GET" && p === "/bison/join") return { status: 200, body: { ok: true, months: state.joinMonths } };
-  if (method === "POST" && p === "/bison/assign") return done(assignNest(body || {}));
-  if (method === "POST" && p === "/bison/vacate") return done(vacateNest(body || {}));
-  if (method === "POST" && p === "/bison/clock") return done(clearClock(body || {}));
+  const query = {}; url.searchParams.forEach((value, key) => { if (key !== "path") query[key] = value; }); const route = normalize(path); const method = req.method;
+  if (method === "GET" && (route === "/bison" || route === "/bison/tower")) return { status: 200, body: towerPayload(query) };
+  if (method === "GET" && route === "/bison/hierarchy") return { status: 200, body: hierarchyPayload(query) };
+  if (method === "GET" && route === "/bison/sites") return { status: 200, body: { ok: true, sites: towerPayload(query).sites } };
+  if (method === "GET" && route === "/bison/bookings") return { status: 200, body: bookingsPayload(query) };
+  if (method === "POST" && route === "/bison/bookings") return done(createBooking(body || {}), 201);
+  if (method === "POST" && route === "/bison/bookings/amend") return done(amendBooking(body || {}));
+  if (method === "POST" && route === "/bison/bookings/cancel") return done(cancelBooking(body || {}));
+  if (method === "POST" && route === "/bison/checkin") return done(checkIn(body || {}));
+  if (method === "POST" && route === "/bison/checkout") return done(checkOut(body || {}));
+  if (method === "GET" && route === "/bison/inventory") return { status: 200, body: inventoryPayload(query) };
+  if (method === "GET" && route === "/bison/folio") { const booking = findBooking(query.bookingId || query.id); return booking ? { status: 200, body: folioOf(booking) } : { status: 404, body: { error: "booking_not_found" } }; }
+  if (method === "POST" && route === "/bison/folio") return done(addFolio(body || {}));
+  if (method === "GET" && route === "/bison/groups") return { status: 200, body: { ok: true, groups: state.groups } };
+  if (method === "POST" && route === "/bison/groups") return done(addGroup(body || {}), 201);
+  if (method === "GET" && route === "/bison/members") return { status: 200, body: membersPayload(query) };
+  if (method === "POST" && route === "/bison/members") return done(createMember(body || {}), 201);
+  if (method === "GET" && route === "/bison/contracts") return { status: 200, body: contractsPayload(query) };
+  if (method === "POST" && route === "/bison/contracts") return done(createContract(body || {}), 201);
+  if (method === "POST" && route === "/bison/contracts/amend") return done(amendContract(body || {}));
+  if (method === "POST" && route === "/bison/contracts/end") return done(endContract(body || {}));
+  if (method === "GET" && route === "/bison/collections") return { status: 200, body: collectionsPayload(query) };
+  if (method === "POST" && route === "/bison/collections/charges") return done(chargeCollection(body || {}), 201);
+  if (method === "POST" && route === "/bison/collections/payments") return done(recordCollectionPayment(body || {}), 201);
+  if (method === "POST" && route === "/bison/collections/work") return done(workCollection(body || {}));
+  if (method === "GET" && route === "/bison/clocks") return { status: 200, body: clocksPayload(query) };
+  if (method === "POST" && route === "/bison/clock") return done(clearClock(body || {}));
+  if (method === "GET" && route === "/bison/audit") return { status: 200, body: auditPayload(query) };
+  if (method === "POST" && route === "/bison/audit") return done(runAudit(body || {}));
+  if (method === "GET" && route === "/bison/audit-log") return { status: 200, body: { ok: true, events: state.auditLog.slice(0, 300) } };
+  if (method === "POST" && route === "/bison/ingest") return done(ingestBook(body || {}));
+  if (method === "POST" && route === "/bison/migrate") { log(body.actor, "schema_migrated", null, `schema ${SCHEMA_VERSION}; ${state.studios.length} studios`); return { status: 200, body: { ok: true, schemaVersion: SCHEMA_VERSION, studios: state.studios.length, reconciliation: reconcile() } }; }
+  if (method === "GET" && route === "/bison/join") return { status: 200, body: { ok: true, months: state.joinMonths } };
+  if (method === "POST" && route === "/bison/assign") return done(assignNest(body || {}), 201);
+  if (method === "POST" && route === "/bison/vacate") return done(vacateNest(body || {}));
   return { status: 404, body: { error: "not_found", product: "bison" } };
 }
-export async function handleBison(req, res, path, body, url) {
-  return runWithPersistentState(req.method === "POST" || req.method === "PUT", () => handleOnce(req, path, body, url));
-}
+export async function handleBison(req, res, path, body, url) { return runWithPersistentState(req.method === "POST" || req.method === "PUT", () => handleOnce(req, path, body, url)); }
+
+export { SCHEMA_VERSION, STUDIO_COUNT };

@@ -1,4 +1,40 @@
-/* polo staff rail: highlight current desk, switch ops.html panes */
+/* 2 Para staff gate: validate the session and attach it to desk API calls. */
+(function () {
+  var token = sessionStorage.getItem("niaOpsToken") || "";
+  var rawFetch = window.fetch.bind(window);
+  var returning = location.pathname + location.search + location.hash;
+  function login() {
+    sessionStorage.removeItem("niaOpsToken");
+    sessionStorage.removeItem("niaOpsStaff");
+    location.replace("/desk.html?next=" + encodeURIComponent(returning));
+  }
+  if (!token) { login(); return; }
+  document.documentElement.style.visibility = "hidden";
+  window.fetch = function (input, init) {
+    var request = init ? Object.assign({}, init) : {};
+    var url = typeof input === "string" ? input : (input && input.url) || "";
+    var sameOrigin = !/^https?:/i.test(url) || url.indexOf(location.origin) === 0;
+    if (sameOrigin && (/^\/api\//.test(url) || /^\/v1\/staff\//.test(url))) {
+      var headers = new Headers((request && request.headers) || (input && input.headers) || {});
+      headers.set("Authorization", "Bearer " + token);
+      request.headers = headers;
+    }
+    return rawFetch(input, request).then(function (response) {
+      if (response.status === 401 && sameOrigin) login();
+      return response;
+    });
+  };
+  window.NIA_STAFF_READY = window.fetch("/v1/staff/me").then(function (response) {
+    if (!response.ok) throw new Error("staff_required");
+    return response.json();
+  }).then(function (payload) {
+    sessionStorage.setItem("niaOpsStaff", JSON.stringify(payload.staff || {}));
+    document.documentElement.style.visibility = "visible";
+    return payload.staff;
+  }).catch(function () { login(); });
+})();
+
+/* Polo staff rail: highlight current desk, switch ops.html panes. */
 (function () {
   function pane(name) {
     var tower = document.querySelector(".tower");

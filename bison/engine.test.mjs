@@ -15,7 +15,8 @@ import {
   collectionsPayload,
   workCollection,
   recordCollectionPayment,
-  createBooking
+  createBooking,
+  ingestBook
 } from "./engine.mjs";
 
 test("migrates the six clusters into a reconciled 56-studio hierarchy", () => {
@@ -41,6 +42,20 @@ test("keeps identical source nest labels separate across studios", () => {
   assert.equal(second.ok, true);
   assert.notEqual(first.booking.nestCode, second.booking.nestCode);
   assert.equal(inventoryPayload({ date: "2026-09-02" }).reconciliation.ok, true);
+});
+
+test("reconciles unique named nests while surfacing overlapping open stays", () => {
+  resetBison();
+  const studio = hierarchyPayload({}).studios[0];
+  ingestBook({ bookings: [
+    { id: "overlap-in", studioId: studio.id, siteId: studio.siteId, nestId: "R98N1", arrive: "2026-09-01", depart: "2026-10-01", status: "in" },
+    { id: "overlap-reserved", studioId: studio.id, siteId: studio.siteId, nestId: "R98N1", arrive: "2026-09-02", depart: "2026-10-02", status: "reserved" }
+  ], actor: "Test" });
+  const reconciliation = inventoryPayload({ date: "2026-09-02" }).reconciliation;
+  assert.equal(reconciliation.ok, true);
+  assert.equal(reconciliation.delta, 0);
+  assert.equal(reconciliation.openStays - reconciliation.booked, 1);
+  assert.equal(reconciliation.overlaps, 1);
 });
 
 test("creates an auditable member contract, booking and opening charge", () => {

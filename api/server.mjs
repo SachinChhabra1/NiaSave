@@ -16,11 +16,13 @@ const PORT = Number(process.env.PORT || 8787);
 const DEMO = process.env.DEMO !== "0";
 const STAFF_PASSWORD = process.env.STAFF_PASSWORD || "SaveDesk#29Aug";
 const STAFF_TOKEN_SECRET = process.env.STAFF_TOKEN_SECRET || process.env.SESSION_SECRET || STAFF_PASSWORD;
+const STAFF_AUTH_REQUIRED = process.env.STAFF_AUTH_REQUIRED === "1";
 const STAFF_TOKEN_TTL_SECONDS = 12 * 60 * 60;
 const now = () => new Date().toISOString();
 const NOT_NIA = "This phone is not with Nia.";
 const HUB_FLOW = ["pack", "count", "leave", "sell", "return", "close"];
 const PROTECTED_DESK_PATHS = new Set(["/connectors", "/connectors/upload", "/predict", "/ledger", "/inventory", "/ageing", "/orders", "/beat", "/beat/open", "/beat/close", "/scan", "/recon", "/next", "/source", "/cash", "/settlements", "/tower", "/stops", "/po", "/dispatch", "/invoice", "/biker"]);
+const OPEN_DESK_STAFF = { id: "stf-open-desk", email: "2para@nia.one", name: "2 Para desk", role: "open", desks: ["studio", "hub", "money", "pilot"] };
 
 const member = {
   id: "NIA-1042", name: "Ravi K", phone: "9876541042", job: "Warehouse picker",
@@ -117,7 +119,7 @@ function staffFromReq(req) {
   return verifyStaffToken(raw) || state.tokens.get(tokenHash(raw)) || null;
 }
 function requireStaff(req, res, desks) {
-  const staff = staffFromReq(req);
+  const staff = staffFromReq(req) || (STAFF_AUTH_REQUIRED ? null : OPEN_DESK_STAFF);
   if (!staff) { json(res, 401, { error: "staff_required" }); return null; }
   if (desks && desks.length && !staff.desks.some(d => desks.includes(d)) && staff.role !== "admin") {
     json(res, 403, { error: "desk_forbidden", staff: { id: staff.id, role: staff.role } }); return null;

@@ -75,7 +75,7 @@ Before a real-data launch, explicitly set `DEMO=0` and `DUMMY_DATA=0` only after
 
 ### C. Staff access and audit
 
-Polo and Bison staff pages now return to 2 Para when the browser has no valid session. Operational APIs require a signed, 12-hour bearer token and enforce desk roles. Bison mutation actors are derived from the token.
+Polo and Bison are temporarily open from the two 2 Para product cards while the dedicated login screen is being built. Operational mutations use the server-owned `2 Para desk` actor, not a client-supplied name. Set `STAFF_AUTH_REQUIRED=1` to restore the existing signed, 12-hour token enforcement.
 
 - Set a dedicated `STAFF_TOKEN_SECRET`; remove fallback credentials and rotate the prototype password.
 - Replace the shared password with individual identity before use beyond the controlled staff pilot.

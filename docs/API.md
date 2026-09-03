@@ -51,7 +51,7 @@ GET  /api/biker
 POST /api/biker
 ```
 
-These routes persist state in Postgres when `DATABASE_URL` is configured. Operational desk routes require the signed 2 Para bearer token; member-facing `/api/member`, `/api/order`, `/api/stock` and `/api/auth/*` retain their separate pilot contract.
+These routes persist state in Postgres when `DATABASE_URL` is configured. Operational desk access is temporarily open while the dedicated 2 Para login screen is being built. Set `STAFF_AUTH_REQUIRED=1` to restore signed-token enforcement. Member-facing `/api/member`, `/api/order`, `/api/stock` and `/api/auth/*` retain their separate pilot contract.
 
 ## Bison routes
 
@@ -81,7 +81,7 @@ GET  /api/bison/audit-log
 POST /api/bison/ingest
 ```
 
-All Bison routes require a 2 Para bearer token with studio, money or administrator access. Mutation actors are taken from that token, never from the request body. Historic cluster collection balances remain unallocated until staff ties a supported amount to a member contract.
+While 2 Para access is open, Bison mutations use the server-owned actor `2 Para desk`; request bodies cannot spoof it. When `STAFF_AUTH_REQUIRED=1`, routes require a bearer token with studio, money or administrator access and derive the actor from that identity. Historic cluster collection balances remain unallocated until staff ties a supported amount to a member contract.
 
 ## Legacy P0 routes
 

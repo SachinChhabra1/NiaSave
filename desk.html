@@ -8,107 +8,73 @@
 <link rel="icon" href="/assets/nia-logo.png" type="image/png">
 <link rel="stylesheet" href="/staff.css">
 <style>
-  .ops-home { max-width: 920px; margin: 0 auto; padding: 28px 20px 64px; }
-  .ops-home h1 { margin: 0 0 18px; }
-  .ops-grid { display:grid; grid-template-columns: repeat(2, minmax(240px, 1fr)); gap:14px; }
-  @media (max-width:640px){ .ops-grid { grid-template-columns: 1fr; } }
-  .ops-card { text-align:left; background:#fff; border:1px solid #E4E9F1; border-radius:16px; padding:22px 20px 20px; cursor:pointer; color:#111; }
-  .ops-card:hover { border-color:#111; }
-  .ops-card strong { display:block; font-size:42px; line-height:1; letter-spacing:-0.03em; color:#111; margin:0 0 10px; }
-  .ops-card p { margin:0; color:#475467; font-size:14px; }
-  .login-box { max-width:420px; background:#fff; border:1px solid #E4E9F1; border-radius:16px; padding:22px; margin-top:18px; }
-  .login-box label { display:block; font-size:13px; margin:10px 0 4px; }
-  .login-box input { width:100%; box-sizing:border-box; padding:10px 12px; border:1px solid #D0D5DD; border-radius:10px; font:inherit; }
-  .login-box button { margin-top:14px; }
-  .who { font-size:13px; color:#667085; margin:0 0 16px; }
-  .err { color:#B42318; font-size:13px; margin-top:8px; min-height:18px; }
+  :root { --nia-blue:#2C5880; --nia-blue-deep:#1C3F5C; --nia-blue-soft:#6A8CAE; }
+  body { min-height:100vh; background:#F6F8FB; }
+  .ops-home { max-width:1240px; margin:0 auto; padding:40px 32px 64px; }
+  .ops-head { display:flex; align-items:flex-end; justify-content:space-between; gap:32px; margin:0 0 32px; }
+  .ops-title { display:flex; align-items:center; gap:16px; }
+  .ops-title .mark { flex:0 0 auto; }
+  .ops-home h1 { margin:0; font-size:34px; line-height:1; letter-spacing:-.035em; }
+  .ops-intro { margin:0; color:#5B6574; font-size:17px; text-align:right; }
+  .ops-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px; }
+  .ops-card {
+    position:relative; display:flex; flex-direction:column; width:100%; min-height:430px;
+    text-align:left; background:#fff; border:1px solid #D0D7E0; border-radius:22px;
+    padding:40px; cursor:pointer; color:#161B24; overflow:hidden; text-decoration:none;
+    transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease;
+  }
+  .ops-card:hover { transform:translateY(-3px); border-color:var(--card-color); box-shadow:0 18px 42px rgba(28,63,92,.10); text-decoration:none; }
+  .ops-card:focus-visible { outline:3px solid rgba(44,88,128,.25); outline-offset:3px; }
+  .ops-card[data-id="polo"] { --card-color:var(--nia-blue); --mark-bg:rgba(44,88,128,.09); }
+  .ops-card[data-id="bison"] { --card-color:var(--nia-blue-deep); --mark-bg:rgba(28,63,92,.09); }
+  .product-mark { display:grid; place-items:center; width:120px; height:120px; border-radius:28px; background:var(--mark-bg); margin:0 0 auto; }
+  .product-mark img { display:block; width:88px; height:88px; }
+  .product-kind { display:block; margin:36px 0 8px; color:var(--card-color); font-size:15px; font-weight:600; letter-spacing:.02em; }
+  .ops-card strong { display:block; font-size:52px; line-height:1; letter-spacing:-.045em; color:#161B24; margin:0 0 14px; font-weight:700; }
+  .ops-card p { margin:0; color:#5B6574; font-size:18px; line-height:1.5; max-width:390px; }
+  .product-flow { display:flex; align-items:center; justify-content:space-between; gap:18px; margin-top:32px; padding-top:22px; border-top:1px solid #E4E9F1; color:#394657; font-size:15px; }
+  .product-flow span:first-child { line-height:1.45; }
+  .product-arrow { flex:0 0 auto; color:var(--card-color); font-size:28px; line-height:1; transition:transform .18s ease; }
+  .ops-card:hover .product-arrow { transform:translateX(4px); }
+  @media (prefers-reduced-motion:reduce){ .ops-card,.product-arrow { transition:none; } }
+  @media (max-width:760px){
+    .ops-home { padding:28px 20px 48px; }
+    .ops-head { align-items:flex-start; flex-direction:column; gap:14px; margin-bottom:24px; }
+    .ops-intro { text-align:left; }
+    .ops-grid { grid-template-columns:1fr; gap:18px; }
+    .ops-card { min-height:330px; padding:28px; }
+    .product-mark { width:96px; height:96px; border-radius:24px; }
+    .product-mark img { width:70px; height:70px; }
+    .product-kind { margin-top:28px; }
+    .ops-card strong { font-size:44px; }
+  }
 </style>
 </head>
 <body>
   <div class="ops-home">
-    <div class="mark">
-      <img class="nia-logo" src="/assets/nia-logo.png" alt="Nia" width="36" height="36">
+    <header class="ops-head">
+      <div class="ops-title">
+        <div class="mark"><img class="nia-logo" src="/assets/nia-logo.png" alt="Nia" width="40" height="40"></div>
+        <h1>2 Para</h1>
+      </div>
+      <p class="ops-intro">One operating room. Two desks.</p>
+    </header>
+    <div class="ops-grid">
+      <a class="ops-card" data-id="polo" href="/ops.html">
+        <span class="product-mark"><img src="/assets/polo-mark.svg" alt="" aria-hidden="true"></span>
+        <span class="product-kind">Save</span>
+        <strong>Polo</strong>
+        <p>Move every bag from plan to collection.</p>
+        <span class="product-flow"><span>Plan → pack → deliver → collect</span><span class="product-arrow" aria-hidden="true">→</span></span>
+      </a>
+      <a class="ops-card" data-id="bison" href="/bison.html">
+        <span class="product-mark"><img src="/assets/bison-mark.svg" alt="" aria-hidden="true"></span>
+        <span class="product-kind">Living</span>
+        <strong>Bison</strong>
+        <p>Run every member contract, studio and nest.</p>
+        <span class="product-flow"><span>Contract → assign → clock → collect</span><span class="product-arrow" aria-hidden="true">→</span></span>
+      </a>
     </div>
-    <h1>2 Para</h1>
-    <p class="who" id="who"></p>
-    <div id="login-panel" class="login-box" hidden>
-      <h2 id="login-title" style="margin:6px 0 0">Staff login</h2>
-      <p class="sub">Staff email and desk password.</p>
-      <label for="email">Email</label>
-      <input id="email" type="email" autocomplete="username" value="satish@nia.one">
-      <label for="password">Password</label>
-      <input id="password" type="password" autocomplete="current-password">
-      <div class="err" id="err"></div>
-      <button type="button" id="go">Enter desk</button>
-      <button type="button" class="ghost" id="back">Back</button>
-    </div>
-    <div id="products" class="ops-grid"></div>
   </div>
-<script>
-var PRODUCTS = [
-  { id: "polo", name: "Polo", href: "/ops.html", line: "Bags, beat, hub, recon." },
-  { id: "bison", name: "Bison", href: "/bison.html", line: "Theatre, studio, nest." }
-];
-var picked = null;
-var requestedNext = new URLSearchParams(location.search).get("next") || "";
-function safeNext(value) { return /^\/(?:ops|bison|pickup|recon|predict|hub|next|cash|source|inventory|ageing|po|dispatch|invoice|biker)(?:\.html)?(?:[?#].*)?$/.test(value || "") ? value : ""; }
-function staff() { try { return JSON.parse(sessionStorage.getItem("niaOpsStaff") || "null"); } catch (e) { return null; } }
-function token() { return sessionStorage.getItem("niaOpsToken") || ""; }
-function paintWho() {
-  var s = staff();
-  document.getElementById("who").textContent = s ? (s.name + " \u00b7 " + s.role) : "";
-}
-function paintProducts() {
-  document.getElementById("products").innerHTML = PRODUCTS.map(function (p) {
-    return '<button type="button" class="ops-card" data-id="' + p.id + '">' +
-      '<strong>' + p.name + '</strong>' +
-      '<p>' + p.line + '</p></button>';
-  }).join("");
-  document.querySelectorAll(".ops-card").forEach(function (el) {
-    el.addEventListener("click", function () { choose(el.getAttribute("data-id")); });
-  });
-}
-function choose(id) {
-  var p = PRODUCTS.filter(function (x) { return x.id === id; })[0];
-  if (!p) return;
-  picked = p;
-  if (token()) { location.href = p.href; return; }
-  document.getElementById("products").hidden = true;
-  document.getElementById("login-panel").hidden = false;
-  document.getElementById("login-title").textContent = p.name;
-  document.getElementById("err").textContent = "";
-  document.getElementById("password").focus();
-}
-function back() {
-  picked = null;
-  document.getElementById("login-panel").hidden = true;
-  document.getElementById("products").hidden = false;
-}
-function login() {
-  document.getElementById("err").textContent = "";
-  fetch("/v1/staff/login", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email: document.getElementById("email").value.trim(), password: document.getElementById("password").value })
-  }).then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
-    .then(function (res) {
-      if (!res.ok) { document.getElementById("err").textContent = (res.j && res.j.error) || "Login failed"; return; }
-      sessionStorage.setItem("niaOpsToken", res.j.token);
-      sessionStorage.setItem("niaOpsStaff", JSON.stringify(res.j.staff || {}));
-      location.href = safeNext(requestedNext) || (picked && picked.href) || "/ops.html";
-    }).catch(function () { document.getElementById("err").textContent = "Could not reach the staff book."; });
-}
-document.getElementById("go").addEventListener("click", login);
-document.getElementById("back").addEventListener("click", back);
-document.getElementById("password").addEventListener("keydown", function (e) { if (e.key === "Enter") login(); });
-paintWho();
-paintProducts();
-if (safeNext(requestedNext) && !token()) {
-  picked = requestedNext.indexOf("bison") >= 0 ? PRODUCTS[1] : PRODUCTS[0];
-  document.getElementById("products").hidden = true;
-  document.getElementById("login-panel").hidden = false;
-  document.getElementById("login-title").textContent = picked.name;
-}
-</script>
 </body>
 </html>

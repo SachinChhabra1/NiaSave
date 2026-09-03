@@ -8,7 +8,7 @@ import {
   dispatchPayload, bikerPayload, mutateBiker, memberPayload, memberOrderGet, handleStaff
 } from "./engine.mjs";
 import { handler } from "../api/server.mjs";
-import { readFileSync } from "fs";
+import { existsSync, readFileSync } from "fs";
 
 const fails = [];
 function ok(name, cond, extra) {
@@ -17,6 +17,10 @@ function ok(name, cond, extra) {
 }
 
 ok("DUMMY_DATA on", DUMMY_DATA === true);
+const vercelCfg = JSON.parse(readFileSync(new URL("../vercel.json", import.meta.url), "utf8"));
+ok("vercel rewrite /api to function", (vercelCfg.rewrites || []).some(r => r.source === "/api/:path*" && r.destination === "/api?path=:path*"));
+ok("vercel pins api/index.mjs", Boolean(vercelCfg.functions && vercelCfg.functions["api/index.mjs"]));
+ok("api function files present", existsSync(new URL("../api/index.mjs", import.meta.url)) && existsSync(new URL("../api/server.mjs", import.meta.url)) && existsSync(new URL("./engine.mjs", import.meta.url)));
 ok("one theatre", THEATRE.name === "Rajputana Theatre");
 ok("40 studios", STUDIOS.length === STUDIO_COUNT && STUDIO_COUNT === 40);
 ok("3000 members", MEMBERS.length === MEMBER_COUNT && MEMBER_COUNT === 3000);
@@ -280,16 +284,23 @@ function staffGet(path) {
   });
 }
 const skipBar = ["/api/orders", "/api/ledger", "/api/predict", "/api/biker", "/api/po", "/api/invoice", "/api/connectors", "/api/beat"];
+function notVercelMissing(got) {
+  const err = got.body && got.body.error;
+  return got.status !== 404 && !/NOT_FOUND/.test(got.raw || "") && err !== "NOT_FOUND" && !(err && err.code === "404");
+}
 for (const path of skipBar) {
   const got = await staffGet(path);
   ok(path + " unauth 200 JSON", got.status === 200 && got.body && got.body.error !== "staff_required" && typeof got.raw === "string" && !/^<!DOCTYPE|^<html/i.test(got.raw));
   ok(path + " skip liveUpi", got.body.skip === true && got.body.liveUpi === false);
+  ok(path + " not Vercel NOT_FOUND", notVercelMissing(got));
   noDummyWord(path, got.body);
 }
 const getMemberLive = await staffGet("/api/member");
-ok("GET /api/member still 200", getMemberLive.status === 200 && getMemberLive.body.skip === true);
+ok("GET /api/member still 200", getMemberLive.status === 200 && getMemberLive.body.skip === true && notVercelMissing(getMemberLive));
+const getOrderLive = await staffGet("/api/order");
+ok("GET /api/order 200 skip", getOrderLive.status === 200 && getOrderLive.body.skip === true && Array.isArray(getOrderLive.body.orders) && notVercelMissing(getOrderLive));
 const getStockLive = await staffGet("/api/stock");
-ok("GET /api/stock keys frozen", ["beatDate","theatre","stopCount","opening","stock","remaining","movements","holding"].every(k => getStockLive.body[k] !== undefined));
+ok("GET /api/stock keys frozen", ["beatDate","theatre","stopCount","opening","stock","remaining","movements","holding"].every(k => getStockLive.body[k] !== undefined) && notVercelMissing(getStockLive));
 
 const staffPages = [
   "ops.html","po.html","dispatch.html","invoice.html","pickup.html","recon.html",

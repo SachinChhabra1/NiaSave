@@ -5,7 +5,8 @@ import {
   jsonSize, TOWER_MAX_BYTES, THEATRE, addStudio, stopsPayload, stockPayload, SKUS,
   placeMemberOrder, authOtp, authVerify, authMe, saveMemberFlags, ageingPayload, inventoryPayload,
   mutatePo, poPayload, mutateDispatch, mutateInvoice, invoicePayload,
-  dispatchPayload, bikerPayload, mutateBiker, memberPayload, memberOrderGet, handleStaff
+  dispatchPayload, bikerPayload, mutateBiker, memberPayload, memberOrderGet, handleStaff,
+  clipToPoloLock
 } from "./engine.mjs";
 import { handler } from "../api/server.mjs";
 import { existsSync, readFileSync } from "fs";
@@ -82,10 +83,15 @@ ok("tower predict has no 3000 dump", (tower.predict.members || []).length === 0)
 ok("tower gates proposed", tower.gates && tower.gates.proposed === true && tower.gates.participation.den === 3000);
 
 const added = addStudio({ name: "Nia Nest sheet row" });
-ok("add studio without rewrite", added.ok && added.rewritten === false && added.stopCount === 41);
-ok("stops list grew", stopsPayload().stopCount === 41 && stopsPayload().stops.some(s => s.stopId === "S41"));
+ok("polo lock rejects S41", added.status === 409 && added.error === "polo_lock" && added.stopCount === 40);
+ok("stops stay 40", stopsPayload().stopCount === 40 && !stopsPayload().stops.some(s => s.stopId === "S41" || s.stopId === "S42"));
+const clipped = clipToPoloLock(
+  STUDIOS.concat([{ id: "S41", seq: 41, name: "empty 41" }, { id: "S42", seq: 42, name: "empty 42" }]),
+  [{ id: "ord-s41", stopId: "S41" }, { id: "ord-s01", stopId: "S01" }]
+);
+ok("clip drops S41 S42", clipped.studios.length === 40 && !clipped.studios.some(s => s.id === "S41" || s.id === "S42") && clipped.orders.every(o => o.stopId !== "S41" && o.stopId !== "S42") && clipped.orders.some(o => o.stopId === "S01"));
 resetDummy();
-ok("reset back to 40", stopsPayload().stopCount === 40);
+ok("reset stays 40", stopsPayload().stopCount === 40);
 
 resetDummy();
 const zeroOpen = {};
@@ -293,14 +299,22 @@ for (const path of skipBar) {
   ok(path + " unauth 200 JSON", got.status === 200 && got.body && got.body.error !== "staff_required" && typeof got.raw === "string" && !/^<!DOCTYPE|^<html/i.test(got.raw));
   ok(path + " skip liveUpi", got.body.skip === true && got.body.liveUpi === false);
   ok(path + " not Vercel NOT_FOUND", notVercelMissing(got));
+  if (path !== "/api/biker" && path !== "/api/po" && path !== "/api/invoice") {
+    ok(path + " stopCount 40", got.body.stopCount === 40);
+  }
   noDummyWord(path, got.body);
 }
+const getOrdersLive = await staffGet("/api/orders");
+ok("GET /api/orders no S41 S42", !(getOrdersLive.body.stops || []).some(s => s.stopId === "S41" || s.stopId === "S42") && !(getOrdersLive.body.orders || []).some(o => o.stopId === "S41" || o.stopId === "S42") && getOrdersLive.body.stopCount === 40 && getOrdersLive.body.memberCount === 3000);
+const getBikerLive = await staffGet("/api/biker");
+ok("GET /api/biker 30 shops S01-S30", getBikerLive.body.shops.length === 30 && getBikerLive.body.shops[0].stopId === "S01" && getBikerLive.body.shops[29].stopId === "S30" && !getBikerLive.body.shops.some(s => s.stopId === "S41" || s.stopId === "S42"));
 const getMemberLive = await staffGet("/api/member");
 ok("GET /api/member still 200", getMemberLive.status === 200 && getMemberLive.body.skip === true && notVercelMissing(getMemberLive));
 const getOrderLive = await staffGet("/api/order");
 ok("GET /api/order 200 skip", getOrderLive.status === 200 && getOrderLive.body.skip === true && Array.isArray(getOrderLive.body.orders) && notVercelMissing(getOrderLive));
 const getStockLive = await staffGet("/api/stock");
 ok("GET /api/stock keys frozen", ["beatDate","theatre","stopCount","opening","stock","remaining","movements","holding"].every(k => getStockLive.body[k] !== undefined) && notVercelMissing(getStockLive));
+ok("GET /api/stock stopCount 40", getStockLive.body.stopCount === 40);
 
 const staffPages = [
   "ops.html","po.html","dispatch.html","invoice.html","pickup.html","recon.html",

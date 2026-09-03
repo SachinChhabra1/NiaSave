@@ -307,18 +307,23 @@ for (const file of staffPages) {
 }
 const opsHtml = readFileSync(new URL("../ops.html", import.meta.url), "utf8");
 const bisonHtml = readFileSync(new URL("../bison.html", import.meta.url), "utf8");
+const bisonPages = ["bison.html","bison-studios.html","bison-contracts.html","bison-clocks.html","bison-collections.html","bison-nests.html"];
 const deskHtml = readFileSync(new URL("../desk.html", import.meta.url), "utf8");
 const staffJs = readFileSync(new URL("../staff.js", import.meta.url), "utf8");
 const staffCss = readFileSync(new URL("../staff.css", import.meta.url), "utf8");
+const bisonCss = readFileSync(new URL("../bison.css", import.meta.url), "utf8");
 ok("2 Para opens live Polo", /href="https:\/\/www\.niasave\.com\/ops\.html"/.test(deskHtml));
 ok("2 Para opens live Bison", /href="https:\/\/www\.niasave\.com\/bison\.html"/.test(deskHtml));
 ok("local Polo redirects live", /location\.protocol === 'file:'[\s\S]*niasave\.com\/ops\.html/.test(opsHtml));
-ok("local Bison redirects live", /location\.protocol === 'file:'[\s\S]*niasave\.com\/bison\.html/.test(bisonHtml));
+ok("local Bison redirects live", /location\.protocol\s*===?\s*['"]file:['"][\s\S]*niasave\.com/.test(bisonHtml));
 ok("all staff tables are sortable", /MutationObserver/.test(staffJs) && /aria-sort/.test(staffJs) && /table-sort-button/.test(staffJs));
-for (const file of staffPages.concat(["bison.html"])) {
+for (const file of staffPages.concat(bisonPages)) {
   const html = readFileSync(new URL("../" + file, import.meta.url), "utf8");
-  if (/<table|<th/.test(html)) ok(file + " loads table sorting", /<script src="\/staff\.js"><\/script>/.test(html));
+  if (/<table|<th|bison\.js/.test(html)) ok(file + " loads table sorting", /<script src="\/staff\.js"><\/script>/.test(html));
 }
+ok("Bison is split into work pages", bisonPages.every(file => readFileSync(new URL("../" + file, import.meta.url), "utf8").includes('data-bison-page=')));
+ok("Bison tables use page flow", !/studios-table/.test(bisonPages.map(file => readFileSync(new URL("../" + file, import.meta.url), "utf8")).join("\n")) && !/(?:max-height|overflow)\s*:\s*(?:auto|scroll)/.test(bisonCss));
+ok("Bison legacy sections route to pages", /#contracts[^\n]+bison-contracts\.html/.test(bisonHtml) && /#clocks[^\n]+bison-clocks\.html/.test(bisonHtml));
 ok("staff.css has no IBM Plex", !/IBM Plex|Plex Sans|Plex Mono|fonts\.googleapis/.test(staffCss));
 ok("staff.css phone --font", /--font:-apple-system,"SF Pro Display","SF Pro Text","Helvetica Neue","Segoe UI",Arial,sans-serif/.test(staffCss));
 ok("staff.css phone --mono", /--mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace/.test(staffCss));

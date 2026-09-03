@@ -16,6 +16,9 @@ import {
   workCollection,
   recordCollectionPayment,
   createBooking,
+  importBisonData,
+  membersPayload,
+  sheetConfig,
   ingestBook
 } from "./engine.mjs";
 
@@ -31,6 +34,34 @@ test("migrates the six clusters into a reconciled 56-studio hierarchy", () => {
   assert.equal(tower.reconciliation.ok, true);
   assert.equal(tower.reconciliation.delta, 0);
   assert.equal(tower.reconciliation.booked, tower.reconciliation.inHouse + tower.reconciliation.reserved);
+});
+
+test("validates browser and CSV imports without mutating on dry run", () => {
+  resetBison();
+  const before = membersPayload({ limit: 200 }).count;
+  const checked = importBisonData({ table: "members", rows: [{ member_name: "Dry Run Member", phone: "9876500000" }], commit: false, actor: "Importer" });
+  assert.equal(checked.ok, true);
+  assert.equal(checked.dryRun, true);
+  assert.equal(membersPayload({ limit: 200 }).count, before);
+  const saved = importBisonData({ table: "members", rows: [{ member_name: "Saved Member", phone: "9876500001" }], commit: true, actor: "Importer" });
+  assert.equal(saved.ok, true);
+  assert.equal(membersPayload({ q: "9876500001" }).count, 1);
+});
+
+test("rejects an entire import when any row is invalid", () => {
+  resetBison();
+  const before = membersPayload({ limit: 200 }).count;
+  const result = importBisonData({ table: "members", rows: [{ member_name: "Valid Member", phone: "9876500010" }, { phone: "9876500011" }], commit: true, actor: "Importer" });
+  assert.equal(result.error, "validation_failed");
+  assert.equal(membersPayload({ limit: 200 }).count, before);
+});
+
+test("stores a future Google Sheet link without claiming it synced", () => {
+  resetBison();
+  const result = sheetConfig({ url: "https://docs.google.com/spreadsheets/d/test-sheet-id/edit", enabled: false, actor: "Importer" });
+  assert.equal(result.ok, true);
+  assert.equal(result.config.spreadsheetId, "test-sheet-id");
+  assert.equal(result.config.lastSyncAt, null);
 });
 
 test("keeps identical source nest labels separate across studios", () => {

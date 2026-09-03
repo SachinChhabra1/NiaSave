@@ -52,7 +52,7 @@ function seedJoinMonths() {
   ];
 }
 function baseState() {
-  return { schemaVersion: SCHEMA_VERSION, dummy: DUMMY_DATA, persist: hasDurableStore() ? "postgres" : "memory", asOf: today(), source: SOURCE, sites: seedSites(), studios: [], groups: seedGroups(), bookings: seedBookings(), members: [], contracts: [], receivables: [], collectionPayments: [], audits: [], ingest: [], joinMonths: seedJoinMonths(), assignments: [], clocks: [], auditLog: [] };
+  return { schemaVersion: SCHEMA_VERSION, dummy: DUMMY_DATA, persist: hasDurableStore() ? "postgres" : "memory", asOf: today(), source: SOURCE, sites: seedSites(), studios: [], groups: seedGroups(), bookings: seedBookings(), members: [], contracts: [], receivables: [], collectionPayments: [], audits: [], ingest: [], joinMonths: seedJoinMonths(), assignments: [], clocks: [], auditLog: [], googleSheet: { url: "", spreadsheetId: "", enabled: false, lastSyncAt: null } };
 }
 
 let state;
@@ -358,6 +358,59 @@ export function towerPayload(query = {}) {
 export function assignNest(body = {}) { if (!body.memberId) return { error: "member_required", status: 400, message: "Create or select the member before assigning a nest." }; return createContract({ ...body, monthlyRent: body.monthlyRent || body.rate || NEST_RATE, startDate: body.startDate || body.arrive, endDate: body.endDate || body.depart, signedStatus: body.signedStatus || "pending" }); }
 export function vacateNest(body = {}) { const booking = body.bookingId ? findBooking(body.bookingId) : state.bookings.find(row => row.studioId === body.studioId && row.status === "in"); if (!booking) return { error: "booking_not_found", status: 404 }; return checkOut({ bookingId: booking.id, actor: body.actor }); }
 
+function importCell(row, ...keys) { for (const key of keys) if (row[key] != null && String(row[key]).trim() !== "") return row[key]; return ""; }
+function importMember(row, actor) {
+  const memberId = text(importCell(row, "member_id", "memberId"), 80);
+  const phone = text(importCell(row, "phone", "mobile"), 20).replace(/\D/g, "");
+  let member = (memberId && findMember(memberId)) || (phone && state.members.find(item => item.phone === phone));
+  if (member) {
+    if (importCell(row, "member_name", "name")) member.name = text(importCell(row, "member_name", "name"), 80);
+    if (phone) member.phone = phone;
+    if (importCell(row, "verification_status")) member.verificationStatus = text(row.verification_status, 30);
+    member.updatedAt = now(); member.updatedBy = actor; return { ok: true, member, updated: true };
+  }
+  return createMember({ name: importCell(row, "member_name", "name"), phone, governmentIdLast4: importCell(row, "government_id_last4"), verificationStatus: importCell(row, "verification_status"), actor });
+}
+export function importBisonData(body = {}) {
+  const table = text(body.table, 30).toLowerCase(); const rows = Array.isArray(body.rows) ? body.rows : [];
+  const actor = text(body.actor || "data desk", 80); const dryRun = body.commit !== true;
+  const allowed = ["studios", "members", "contracts", "bookings", "collections", "payments", "clocks"];
+  if (!allowed.includes(table)) return { error: "unsupported_table", status: 400, allowed };
+  if (!rows.length || rows.length > 2000) return { error: "rows_required", status: 400, message: "Upload 1 to 2,000 rows at a time." };
+  const before = snapshotState(); const results = []; const errors = [];
+  rows.forEach((raw, index) => {
+    const row = raw && typeof raw === "object" ? raw : {}; let result;
+    try {
+      if (table === "members") result = importMember(row, actor);
+      else if (table === "studios") {
+        const studio = findStudio(importCell(row, "studio_id", "studio_code", "studioId"));
+        if (!studio) result = { error: "studio_not_found", status: 404 };
+        else { const capacity = Number(importCell(row, "capacity")); if (capacity && capacity < studioInventory(studio).booked) result = { error: "capacity_below_committed", status: 409 }; else { if (capacity) studio.capacity = capacity; if (importCell(row, "owner")) studio.owner = text(row.owner, 80); if (importCell(row, "clock_due_at")) studio.clockDueAt = text(row.clock_due_at, 30); result = { ok: true, studio }; } }
+      } else if (table === "contracts") {
+        const memberResult = importMember(row, actor); if (!memberResult.ok) result = memberResult; else result = createContract({ memberId: memberResult.member.id, studioId: importCell(row, "studio_id", "studio_code"), nestId: importCell(row, "nest_id", "nest_label"), startDate: importCell(row, "start_date"), endDate: importCell(row, "end_date"), monthlyRent: importCell(row, "monthly_rent", "rent"), deposit: importCell(row, "deposit") || 0, signedStatus: importCell(row, "document_status", "signed_status") || "pending", checkIn: String(importCell(row, "check_in")).toLowerCase() === "true", actor });
+      } else if (table === "bookings") {
+        const action = text(importCell(row, "action"), 20).toLowerCase(); const bookingId = importCell(row, "booking_id", "bookingId");
+        if (action === "checkin") result = checkIn({ bookingId, actor }); else if (action === "checkout") result = checkOut({ bookingId, actor }); else if (action === "cancel") result = cancelBooking({ bookingId, reason: importCell(row, "reason"), actor }); else result = createBooking({ studioId: importCell(row, "studio_id", "studio_code"), nestId: importCell(row, "nest_id"), guest: importCell(row, "member_name", "guest"), arrive: importCell(row, "arrive", "start_date"), depart: importCell(row, "depart", "end_date"), status: importCell(row, "status"), rate: importCell(row, "rate", "monthly_rent"), actor });
+      } else if (table === "collections") result = chargeCollection({ contractId: importCell(row, "contract_id"), amount: importCell(row, "amount"), dueDate: importCell(row, "due_date"), kind: importCell(row, "kind") || "membership", owner: importCell(row, "owner"), note: importCell(row, "note"), actor });
+      else if (table === "payments") result = recordCollectionPayment({ receivableId: importCell(row, "receivable_id"), amount: importCell(row, "amount"), reference: importCell(row, "reference"), method: importCell(row, "method") || "upi", actor });
+      else if (table === "clocks") result = clearClock({ studioId: importCell(row, "studio_id", "studio_code"), countedNests: importCell(row, "counted_nests"), vacantNests: importCell(row, "vacant_nests"), evidence: importCell(row, "evidence"), checks: { physicalCount: String(importCell(row, "physical_count")).toLowerCase() === "true", vacantVerified: String(importCell(row, "vacant_verified")).toLowerCase() === "true", collectionsReviewed: String(importCell(row, "collections_reviewed")).toLowerCase() === "true" }, actor });
+    } catch (error) { result = { error: "row_failed", message: error.message, status: 400 }; }
+    if (!result || result.error) errors.push({ row: index + 2, error: result && result.error || "row_failed", message: result && result.message || "Invalid row" }); else results.push({ row: index + 2, id: (result.member || result.contract || result.booking || result.receivable || result.payment || result.event || result.studio || {}).id || null });
+  });
+  if (dryRun || errors.length) restoreState(before, before.persist);
+  if (errors.length) return { error: "validation_failed", status: 400, table, valid: results.length, errors };
+  if (!dryRun) { state = normalizeState(state, state.persist); state.ingest.unshift({ at: now(), actor, table, rows: results.length, filename: text(body.filename || "browser entry", 160) }); log(actor, "data_imported", null, `${table}: ${results.length} rows`); }
+  return { ok: true, table, dryRun, valid: results.length, results };
+}
+export function sheetConfig(body) {
+  if (!body) return { ok: true, config: state.googleSheet || { url: "", spreadsheetId: "", enabled: false, lastSyncAt: null } };
+  const url = text(body.url, 500); const match = url.match(/\/spreadsheets\/d\/([a-zA-Z0-9_-]+)/);
+  if (url && !match) return { error: "invalid_google_sheet_url", status: 400 };
+  state.googleSheet = { url, spreadsheetId: match ? match[1] : "", enabled: Boolean(body.enabled), lastSyncAt: state.googleSheet && state.googleSheet.lastSyncAt || null, updatedAt: now(), updatedBy: text(body.actor || "data desk", 80) };
+  log(body.actor, "google_sheet_configured", null, state.googleSheet.spreadsheetId || "cleared");
+  return { ok: true, config: state.googleSheet, message: state.googleSheet.enabled ? "Link saved. Automatic pull requires Google service credentials." : "Link saved for future sync." };
+}
+
 export function bisonPath(pathname, rewrittenPath) { let path = rewrittenPath ? "/" + String(rewrittenPath).replace(/^\/+/, "") : pathname; path = (path || "/").replace(/\/+$/, "") || "/"; if (path.startsWith("/api/")) path = path.slice(4); return path; }
 export function isBisonPath(path) { return path === "/bison" || path.startsWith("/bison/") || path === "/living" || path.startsWith("/living/"); }
 function normalize(path) { return path.replace(/^\/living/, "/bison"); }
@@ -401,6 +454,9 @@ async function handleOnce(req, path, body, url) {
   if (method === "POST" && route === "/bison/collections/work") return done(workCollection(body || {}));
   if (method === "GET" && route === "/bison/clocks") return { status: 200, body: clocksPayload(query) };
   if (method === "POST" && route === "/bison/clock") return done(clearClock(body || {}));
+  if (method === "POST" && route === "/bison/data/import") return done(importBisonData(body || {}));
+  if (method === "GET" && route === "/bison/data/config") return { status: 200, body: sheetConfig() };
+  if (method === "POST" && route === "/bison/data/config") return done(sheetConfig(body || {}));
   if (method === "GET" && route === "/bison/audit") return { status: 200, body: auditPayload(query) };
   if (method === "POST" && route === "/bison/audit") return done(runAudit(body || {}));
   if (method === "GET" && route === "/bison/audit-log") return { status: 200, body: { ok: true, events: state.auditLog.slice(0, 300) } };

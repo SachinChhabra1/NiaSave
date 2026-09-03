@@ -61,3 +61,5 @@ function bind(){
   if(byId('post-payment'))byId('post-payment').onclick=function(){if(!SELECTED_RECEIVABLE)return;api('/api/bison/collections/payments',{receivableId:SELECTED_RECEIVABLE.id,amount:Number(byId('payment-amount').value),reference:byId('payment-ref').value,method:'upi'}).then(function(){setStatus('collection-status','Payment posted and balance updated.');return load();}).catch(function(e){setStatus('collection-status',e.message,true);});};
 }
 bind();load();
+setInterval(function(){if(!document.hidden)load();},15000);
+document.addEventListener('visibilitychange',function(){if(!document.hidden)load();});

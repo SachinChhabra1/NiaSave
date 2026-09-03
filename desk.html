@@ -16,37 +16,41 @@
   .ops-title .mark { flex:0 0 auto; }
   .ops-home h1 { margin:0; font-size:34px; line-height:1; letter-spacing:-.035em; }
   .ops-intro { margin:0; color:#5B6574; font-size:17px; text-align:right; }
-  .ops-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px; }
+  .ops-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px; }
   .ops-card {
-    position:relative; display:flex; flex-direction:column; width:100%; min-height:430px;
-    text-align:left; background:#fff; border:1px solid #D0D7E0; border-radius:22px;
-    padding:40px; cursor:pointer; color:#161B24; overflow:hidden; text-decoration:none;
+    position:relative; display:flex; flex-direction:column; width:100%; min-width:0;
+    text-align:left; background:#F7F7F8; border:1px solid #D9DEE5; border-radius:22px;
+    cursor:pointer; color:#161B24; overflow:hidden; text-decoration:none;
     transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease;
   }
   .ops-card:hover { transform:translateY(-3px); border-color:var(--card-color); box-shadow:0 18px 42px rgba(28,63,92,.10); text-decoration:none; }
   .ops-card:focus-visible { outline:3px solid rgba(44,88,128,.25); outline-offset:3px; }
-  .ops-card[data-id="polo"] { --card-color:var(--nia-blue); --mark-bg:rgba(44,88,128,.09); }
-  .ops-card[data-id="bison"] { --card-color:var(--nia-blue-deep); --mark-bg:rgba(28,63,92,.09); }
-  .product-mark { display:grid; place-items:center; width:120px; height:120px; border-radius:28px; background:var(--mark-bg); margin:0 0 auto; }
-  .product-mark img { display:block; width:88px; height:88px; }
-  .product-kind { display:block; margin:36px 0 8px; color:var(--card-color); font-size:15px; font-weight:600; letter-spacing:.02em; }
-  .ops-card strong { display:block; font-size:52px; line-height:1; letter-spacing:-.045em; color:#161B24; margin:0 0 14px; font-weight:700; }
-  .ops-card p { margin:0; color:#5B6574; font-size:18px; line-height:1.5; max-width:390px; }
-  .product-flow { display:flex; align-items:center; justify-content:space-between; gap:18px; margin-top:32px; padding-top:22px; border-top:1px solid #E4E9F1; color:#394657; font-size:15px; }
+  .ops-card[data-id="polo"] { --card-color:var(--nia-blue); }
+  .ops-card[data-id="bison"] { --card-color:var(--nia-blue-deep); }
+  .product-plate { position:relative; display:block; width:100%; aspect-ratio:16/9; overflow:hidden; background:#ECEDEF; }
+  .product-plate img { display:block; width:100%; height:100%; object-fit:cover; transition:transform .3s ease; }
+  .ops-card[data-id="polo"] .product-plate img { object-position:center 47%; }
+  .ops-card[data-id="bison"] .product-plate img { object-position:center 43%; }
+  .ops-card:hover .product-plate img { transform:scale(1.018); }
+  .product-kind { position:absolute; top:18px; left:18px; display:block; padding:7px 11px; border-radius:999px; background:rgba(17,24,32,.68); color:#fff; font-size:12px; font-weight:650; letter-spacing:.02em; backdrop-filter:blur(6px); }
+  .product-body { display:flex; flex:1; flex-direction:column; padding:28px 30px 30px; }
+  .ops-card strong { display:block; font-size:46px; line-height:1; letter-spacing:-.045em; color:#161B24; margin:0 0 12px; font-weight:700; }
+  .ops-card p { margin:0; color:#5B6574; font-size:17px; line-height:1.5; max-width:440px; }
+  .product-flow { display:flex; align-items:center; justify-content:space-between; gap:18px; margin-top:auto; padding-top:28px; color:#394657; font-size:14px; }
   .product-flow span:first-child { line-height:1.45; }
-  .product-arrow { flex:0 0 auto; color:var(--card-color); font-size:28px; line-height:1; transition:transform .18s ease; }
-  .ops-card:hover .product-arrow { transform:translateX(4px); }
-  @media (prefers-reduced-motion:reduce){ .ops-card,.product-arrow { transition:none; } }
+  .product-action { flex:0 0 auto; display:inline-flex; align-items:center; min-height:42px; padding:0 17px; border:1px solid var(--card-color); border-radius:999px; color:var(--card-color); font-size:14px; font-weight:650; transition:background .18s ease,color .18s ease; }
+  .ops-card:hover .product-action { background:var(--card-color); color:#fff; }
+  @media (prefers-reduced-motion:reduce){ .ops-card,.product-plate img,.product-action { transition:none; } }
   @media (max-width:760px){
     .ops-home { padding:28px 20px 48px; }
     .ops-head { align-items:flex-start; flex-direction:column; gap:14px; margin-bottom:24px; }
     .ops-intro { text-align:left; }
     .ops-grid { grid-template-columns:1fr; gap:18px; }
-    .ops-card { min-height:330px; padding:28px; }
-    .product-mark { width:96px; height:96px; border-radius:24px; }
-    .product-mark img { width:70px; height:70px; }
-    .product-kind { margin-top:28px; }
-    .ops-card strong { font-size:44px; }
+    .product-plate { aspect-ratio:3/2; }
+    .product-kind { top:14px; left:14px; }
+    .product-body { padding:24px; min-height:238px; }
+    .ops-card strong { font-size:40px; }
+    .product-flow { padding-top:24px; }
   }
 </style>
 </head>
@@ -61,18 +65,26 @@
     </header>
     <div class="ops-grid">
       <a class="ops-card" data-id="polo" href="./ops.html">
-        <span class="product-mark"><img src="./assets/polo-mark.svg" alt="" aria-hidden="true"></span>
-        <span class="product-kind">Save</span>
-        <strong>Polo</strong>
-        <p>Move every bag from plan to collection.</p>
-        <span class="product-flow"><span>Plan → pack → deliver → collect</span><span class="product-arrow" aria-hidden="true">→</span></span>
+        <span class="product-plate">
+          <img src="./assets/save-trunks-v2.jpg" alt="A sealed NiaSave essentials pack ready to move">
+          <span class="product-kind">Save desk</span>
+        </span>
+        <span class="product-body">
+          <strong>Polo</strong>
+          <p>Move every bag from plan to collection.</p>
+          <span class="product-flow"><span>Plan → pack → deliver → collect</span><span class="product-action">Open Polo</span></span>
+        </span>
       </a>
       <a class="ops-card" data-id="bison" href="./bison.html">
-        <span class="product-mark"><img src="./assets/bison-mark.svg" alt="" aria-hidden="true"></span>
-        <span class="product-kind">Living</span>
-        <strong>Bison</strong>
-        <p>Run every member contract, studio and nest.</p>
-        <span class="product-flow"><span>Contract → assign → clock → collect</span><span class="product-arrow" aria-hidden="true">→</span></span>
+        <span class="product-plate">
+          <img src="./assets/studio-bunk-lockers.jpg" alt="An orderly Nia studio with nests and personal lockers">
+          <span class="product-kind">Living desk</span>
+        </span>
+        <span class="product-body">
+          <strong>Bison</strong>
+          <p>Run every member contract, studio and nest.</p>
+          <span class="product-flow"><span>Contract → assign → clock → collect</span><span class="product-action">Open Bison</span></span>
+        </span>
       </a>
     </div>
   </div>

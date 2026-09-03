@@ -36,5 +36,6 @@
         { "key": "Content-Disposition", "value": "inline" }
       ]
     }
-  ]
+  ],
+  "crons": [{ "path": "/api/bison/data/sync", "schedule": "*/15 * * * *" }]
 }

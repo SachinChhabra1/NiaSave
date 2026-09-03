@@ -2,7 +2,7 @@
  * Bison Living control plane.
  * Theatre -> studio -> nest, member contracts, clocks and collections.
  */
-import { randomUUID } from "node:crypto";
+import { randomUUID, createSign } from "node:crypto";
 import { hasDurableStore, loadRuntimeState, saveRuntimeState } from "../lib/runtime-store.mjs";
 import { STUDIO_COUNT, buildStudioMaster, sourceStudioId, studioIdForSource } from "./catalog.mjs";
 
@@ -52,7 +52,7 @@ function seedJoinMonths() {
   ];
 }
 function baseState() {
-  return { schemaVersion: SCHEMA_VERSION, dummy: DUMMY_DATA, persist: hasDurableStore() ? "postgres" : "memory", asOf: today(), source: SOURCE, sites: seedSites(), studios: [], groups: seedGroups(), bookings: seedBookings(), members: [], contracts: [], receivables: [], collectionPayments: [], audits: [], ingest: [], joinMonths: seedJoinMonths(), assignments: [], clocks: [], auditLog: [], googleSheet: { url: "", spreadsheetId: "", enabled: false, lastSyncAt: null } };
+  return { schemaVersion: SCHEMA_VERSION, dummy: DUMMY_DATA, persist: hasDurableStore() ? "postgres" : "memory", asOf: today(), source: SOURCE, sites: seedSites(), studios: [], groups: seedGroups(), bookings: seedBookings(), members: [], contracts: [], receivables: [], collectionPayments: [], audits: [], ingest: [], joinMonths: seedJoinMonths(), assignments: [], clocks: [], auditLog: [], sheetProcessed: [], googleSheet: { url: "", spreadsheetId: "", enabled: false, lastSyncAt: null } };
 }
 
 let state;
@@ -73,7 +73,7 @@ function normalizeState(value, storage = "memory") {
   restored.sites = Array.isArray(restored.sites) && restored.sites.length ? restored.sites : base.sites;
   restored.groups = Array.isArray(restored.groups) && restored.groups.length ? restored.groups : base.groups;
   restored.bookings = Array.isArray(restored.bookings) ? restored.bookings : base.bookings;
-  for (const key of ["studios", "members", "contracts", "receivables", "collectionPayments", "audits", "ingest", "assignments", "clocks", "auditLog"]) restored[key] = Array.isArray(restored[key]) ? restored[key] : [];
+  for (const key of ["studios", "members", "contracts", "receivables", "collectionPayments", "audits", "ingest", "assignments", "clocks", "auditLog", "sheetProcessed"]) restored[key] = Array.isArray(restored[key]) ? restored[key] : [];
   restored.joinMonths = Array.isArray(restored.joinMonths) ? restored.joinMonths : base.joinMonths;
   restored.source = SOURCE;
   restored.persist = storage;
@@ -391,7 +391,12 @@ export function importBisonData(body = {}) {
       } else if (table === "bookings") {
         const action = text(importCell(row, "action"), 20).toLowerCase(); const bookingId = importCell(row, "booking_id", "bookingId");
         if (action === "checkin") result = checkIn({ bookingId, actor }); else if (action === "checkout") result = checkOut({ bookingId, actor }); else if (action === "cancel") result = cancelBooking({ bookingId, reason: importCell(row, "reason"), actor }); else result = createBooking({ studioId: importCell(row, "studio_id", "studio_code"), nestId: importCell(row, "nest_id"), guest: importCell(row, "member_name", "guest"), arrive: importCell(row, "arrive", "start_date"), depart: importCell(row, "depart", "end_date"), status: importCell(row, "status"), rate: importCell(row, "rate", "monthly_rent"), actor });
-      } else if (table === "collections") result = chargeCollection({ contractId: importCell(row, "contract_id"), amount: importCell(row, "amount"), dueDate: importCell(row, "due_date"), kind: importCell(row, "kind") || "membership", owner: importCell(row, "owner"), note: importCell(row, "note"), actor });
+      } else if (table === "collections") {
+        let contractId = importCell(row, "contract_id");
+        if (!contractId) { const phone=text(importCell(row,"member_phone","phone"),20).replace(/\D/g,""); const member=state.members.find(item=>(phone&&item.phone===phone)||text(item.name,80).toLowerCase()===text(importCell(row,"member_name"),80).toLowerCase()); const studio=findStudio(importCell(row,"studio_code","studio_id")); const contract=state.contracts.find(item=>(!member||item.memberId===member.id)&&(!studio||item.studioId===studio.id)&&(!importCell(row,"nest_id")||item.nestId===text(row.nest_id,40).toUpperCase())); contractId=contract&&contract.id; }
+        result = chargeCollection({ contractId, amount: importCell(row, "amount"), dueDate: importCell(row, "due_date"), kind: importCell(row, "kind") || "membership", owner: importCell(row, "owner"), note: importCell(row, "note"), actor });
+        if (result.ok && Number(importCell(row,"collected_amount"))>0) result=recordCollectionPayment({ receivableId:result.receivable.id, amount:importCell(row,"collected_amount"), reference:importCell(row,"reference")||`SHEET-${index+2}`, method:"sheet", actor });
+      }
       else if (table === "payments") result = recordCollectionPayment({ receivableId: importCell(row, "receivable_id"), amount: importCell(row, "amount"), reference: importCell(row, "reference"), method: importCell(row, "method") || "upi", actor });
       else if (table === "clocks") result = clearClock({ studioId: importCell(row, "studio_id", "studio_code"), countedNests: importCell(row, "counted_nests"), vacantNests: importCell(row, "vacant_nests"), evidence: importCell(row, "evidence"), checks: { physicalCount: String(importCell(row, "physical_count")).toLowerCase() === "true", vacantVerified: String(importCell(row, "vacant_verified")).toLowerCase() === "true", collectionsReviewed: String(importCell(row, "collections_reviewed")).toLowerCase() === "true" }, actor });
     } catch (error) { result = { error: "row_failed", message: error.message, status: 400 }; }
@@ -409,6 +414,35 @@ export function sheetConfig(body) {
   state.googleSheet = { url, spreadsheetId: match ? match[1] : "", enabled: Boolean(body.enabled), lastSyncAt: state.googleSheet && state.googleSheet.lastSyncAt || null, updatedAt: now(), updatedBy: text(body.actor || "data desk", 80) };
   log(body.actor, "google_sheet_configured", null, state.googleSheet.spreadsheetId || "cleared");
   return { ok: true, config: state.googleSheet, message: state.googleSheet.enabled ? "Link saved. Automatic pull requires Google service credentials." : "Link saved for future sync." };
+}
+
+function base64url(value) { return Buffer.from(value).toString("base64url"); }
+async function googleAccessToken() {
+  const raw = process.env.BISON_GOOGLE_SERVICE_ACCOUNT_JSON; if (!raw) throw new Error("google_service_account_missing");
+  const account = JSON.parse(raw); const at = Math.floor(Date.now() / 1000);
+  const unsigned = `${base64url(JSON.stringify({ alg: "RS256", typ: "JWT" }))}.${base64url(JSON.stringify({ iss: account.client_email, scope: "https://www.googleapis.com/auth/spreadsheets.readonly", aud: "https://oauth2.googleapis.com/token", iat: at, exp: at + 3600 }))}`;
+  const signer = createSign("RSA-SHA256"); signer.update(unsigned); signer.end(); const assertion = `${unsigned}.${signer.sign(account.private_key, "base64url")}`;
+  const response = await fetch("https://oauth2.googleapis.com/token", { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: new URLSearchParams({ grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer", assertion }) });
+  const payload = await response.json(); if (!response.ok || !payload.access_token) throw new Error(payload.error_description || "google_token_failed"); return payload.access_token;
+}
+function sheetRows(values = []) { const headers = (values[0] || []).map(value => text(value, 80).toLowerCase().replace(/\*/g, "").replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "")); return values.slice(1).map((row, index) => ({ row: index + 2, data: Object.fromEntries(headers.map((header, column) => [header, row[column] == null ? "" : row[column]])) })).filter(item => Object.values(item.data).some(value => String(value).trim())); }
+export async function syncGoogleSheet(body = {}) {
+  const spreadsheetId = process.env.BISON_GOOGLE_SHEET_ID || (state.googleSheet || {}).spreadsheetId; if (!spreadsheetId) return { error: "google_sheet_missing", status: 400 };
+  try {
+    const token = await googleAccessToken(); const tabs = ["01_STUDIO_MASTER", "02_OCCUPANCY_INPUT", "03_CONTRACT_INPUT", "04_COLLECTION_INPUT", "05_CLOCK_CLOSE_INPUT"];
+    const params = new URLSearchParams(); tabs.forEach(tab => params.append("ranges", `'${tab}'!A1:T2001`)); params.set("majorDimension", "ROWS"); params.set("valueRenderOption", "FORMATTED_VALUE");
+    const response = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values:batchGet?${params}`, { headers: { Authorization: `Bearer ${token}` } }); const payload = await response.json(); if (!response.ok) throw new Error(payload.error && payload.error.message || "google_sheet_read_failed");
+    const before = snapshotState(); const summary = {}; const processed = new Set(state.sheetProcessed || []);
+    const configs = [
+      { tab: tabs[0], table: "studios", accept:r=>r.studio_code, map: r => ({ studio_code:r.studio_code, capacity:r.contracted_capacity, owner:r.jco_owner, clock_due_at:r.clock_due_time }) },
+      { tab: tabs[1], table: "bookings", accept:r=>r.studio_code&&r.room_nest_id&&r.member_name, map: r => ({ action:"create", studio_code:r.studio_code, nest_id:r.room_nest_id, member_name:r.member_name, arrive:r.check_in_date, depart:r.planned_checkout, status:String(r.booking_status).toLowerCase().includes("in house")?"in":"reserved", rate:r.monthly_rent }) },
+      { tab: tabs[2], table: "contracts", accept:r=>r.member_name&&r.studio_code&&r.nest_id, map: r => ({ member_name:r.member_name, phone:r.phone, studio_code:r.studio_code, nest_id:r.nest_id, start_date:r.start_date, end_date:r.end_date, monthly_rent:r.monthly_rent, deposit:r.deposit, document_status:String(r.signed_status||r.document_status).toLowerCase().includes("signed")?"signed":"pending", check_in:false }) },
+      { tab: tabs[3], table: "collections", accept:r=>r.member_phone&&r.studio_code&&r.nest_id&&r.due_date, map: r => ({ member_phone:r.member_phone, studio_code:r.studio_code, nest_id:r.nest_id, amount:r.determined_rent, collected_amount:r.collected_amount, due_date:r.due_date, kind:"membership", owner:r.collection_owner, reference:r.utr_reference }) },
+      { tab: tabs[4], table: "clocks", accept:r=>r.studio_code, map: r => ({ studio_code:r.studio_code, counted_nests:r.nests_counted, vacant_nests:r.vacant_verified, evidence:r.evidence_reference, physical_count:r.physical_count_complete, vacant_verified:r.vacant_list_verified, collections_reviewed:r.collections_reviewed }) }
+    ];
+    for (let i=0;i<configs.length;i++) { const config=configs[i], rows=sheetRows((payload.valueRanges[i]||{}).values), pending=rows.filter(item=>config.accept(item.data)&&!processed.has(`${config.tab}:${item.row}`)).map(item=>({ key:`${config.tab}:${item.row}`, row:config.map(item.data) })); if (!pending.length) { summary[config.tab]=0; continue; } const result=importBisonData({ table:config.table, rows:pending.map(item=>item.row), commit:true, filename:`Google Sheet ${config.tab}`, actor:"Google Sheet sync" }); if (!result.ok) { restoreState(before,before.persist); return { ...result, status:400, sheet:config.tab }; } pending.forEach(item=>processed.add(item.key)); summary[config.tab]=pending.length; }
+    state.sheetProcessed=Array.from(processed).slice(-20000); state.googleSheet={ ...(state.googleSheet||{}), url:`https://docs.google.com/spreadsheets/d/${spreadsheetId}/edit`, spreadsheetId, enabled:true, lastSyncAt:now(), lastSyncStatus:"ok", lastSyncSummary:summary }; log("Google Sheet sync","sheet_synced",spreadsheetId,JSON.stringify(summary)); return { ok:true, spreadsheetId, syncedAt:state.googleSheet.lastSyncAt, summary };
+  } catch (error) { state.googleSheet={ ...(state.googleSheet||{}), lastSyncAt:now(), lastSyncStatus:"error", lastSyncError:text(error.message,240) }; return { error:"google_sheet_sync_failed", message:error.message, status:502 }; }
 }
 
 export function bisonPath(pathname, rewrittenPath) { let path = rewrittenPath ? "/" + String(rewrittenPath).replace(/^\/+/, "") : pathname; path = (path || "/").replace(/\/+$/, "") || "/"; if (path.startsWith("/api/")) path = path.slice(4); return path; }
@@ -457,6 +491,7 @@ async function handleOnce(req, path, body, url) {
   if (method === "POST" && route === "/bison/data/import") return done(importBisonData(body || {}));
   if (method === "GET" && route === "/bison/data/config") return { status: 200, body: sheetConfig() };
   if (method === "POST" && route === "/bison/data/config") return done(sheetConfig(body || {}));
+  if ((method === "GET" || method === "POST") && route === "/bison/data/sync") { const secret=process.env.CRON_SECRET; if (method === "GET" && secret && req.headers.authorization !== `Bearer ${secret}`) return { status:401, body:{ error:"unauthorized" } }; return done(await syncGoogleSheet(body || {})); }
   if (method === "GET" && route === "/bison/audit") return { status: 200, body: auditPayload(query) };
   if (method === "POST" && route === "/bison/audit") return done(runAudit(body || {}));
   if (method === "GET" && route === "/bison/audit-log") return { status: 200, body: { ok: true, events: state.auditLog.slice(0, 300) } };

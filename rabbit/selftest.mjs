@@ -306,7 +306,13 @@ for (const file of staffPages) {
   ok(file + " has no Beat board", !/Beat board|beat board/.test(html));
 }
 const opsHtml = readFileSync(new URL("../ops.html", import.meta.url), "utf8");
+const bisonHtml = readFileSync(new URL("../bison.html", import.meta.url), "utf8");
+const deskHtml = readFileSync(new URL("../desk.html", import.meta.url), "utf8");
 const staffCss = readFileSync(new URL("../staff.css", import.meta.url), "utf8");
+ok("2 Para opens live Polo", /href="https:\/\/www\.niasave\.com\/ops\.html"/.test(deskHtml));
+ok("2 Para opens live Bison", /href="https:\/\/www\.niasave\.com\/bison\.html"/.test(deskHtml));
+ok("local Polo redirects live", /location\.protocol === 'file:'[\s\S]*niasave\.com\/ops\.html/.test(opsHtml));
+ok("local Bison redirects live", /location\.protocol === 'file:'[\s\S]*niasave\.com\/bison\.html/.test(bisonHtml));
 ok("staff.css has no IBM Plex", !/IBM Plex|Plex Sans|Plex Mono|fonts\.googleapis/.test(staffCss));
 ok("staff.css phone --font", /--font:-apple-system,"SF Pro Display","SF Pro Text","Helvetica Neue","Segoe UI",Arial,sans-serif/.test(staffCss));
 ok("staff.css phone --mono", /--mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace/.test(staffCss));

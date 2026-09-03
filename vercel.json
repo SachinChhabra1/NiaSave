@@ -2,6 +2,11 @@
   "installCommand": "npm install",
   "buildCommand": "sh vercel-build.sh",
   "outputDirectory": "dist",
+  "functions": {
+    "api/index.mjs": {
+      "includeFiles": "{api,rabbit,bison,lib}/**"
+    }
+  },
   "rewrites": [
     { "source": "/research/why-blue-collar-workers-quit", "destination": "/research/why-blue-collar-workers-quit.html" },
     { "source": "/research/why-blue-collar-workers-quit/", "destination": "/research/why-blue-collar-workers-quit.html" },

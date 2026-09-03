@@ -1,5 +1,10 @@
 #!/bin/sh
 set -eu
+# Staff HTML goes in dist. Serverless functions stay at repo-root api/.
+# A static-only upload that omits api/index.mjs must fail instead of shipping HTML without JSON.
+test -f api/index.mjs
+test -f api/server.mjs
+test -f rabbit/engine.mjs
 mkdir -p dist/products dist/assets
 if [ -f member.html ]; then
   cp member.html dist/index.html

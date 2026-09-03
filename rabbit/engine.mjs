@@ -374,6 +374,34 @@ function snapshotState(value = state) {
   return serializable;
 }
 
+function poloStopId(id) {
+  const m = /^S(\d+)$/.exec(String(id || ""));
+  if (!m) return false;
+  const n = Number(m[1]);
+  return n >= 1 && n <= STUDIO_COUNT;
+}
+
+export function clipToPoloLock(studios = [], orders = []) {
+  const byId = new Map();
+  for (const studio of Array.isArray(studios) ? studios : []) {
+    if (poloStopId(studio.id) && !byId.has(studio.id)) byId.set(studio.id, studio);
+  }
+  const keptStudios = STUDIOS.map(seed => byId.has(seed.id) ? byId.get(seed.id) : { ...seed });
+  const keptOrders = (Array.isArray(orders) ? orders : []).filter(o => poloStopId(o.stopId));
+  return { studios: keptStudios, orders: keptOrders };
+}
+
+function applyPoloLock(target) {
+  const beforeIds = (target.studios || []).map(s => s.id).join(",");
+  const beforeOrderStops = (target.orders || []).map(o => o.stopId).join(",");
+  const clipped = clipToPoloLock(target.studios, target.orders);
+  target.studios = clipped.studios;
+  target.orders = clipped.orders;
+  Object.assign(target, indexOrders(clipped.orders));
+  if (target.beat) target.beat.stopCount = STUDIO_COUNT;
+  return beforeIds !== clipped.studios.map(s => s.id).join(",") || beforeOrderStops !== clipped.orders.map(o => o.stopId).join(",");
+}
+
 function restoreState(value, storage = "memory") {
   const base = createState();
   const restored = { ...base, ...(value || {}) };
@@ -397,8 +425,9 @@ function restoreState(value, storage = "memory") {
     : { ravi: restored.memberAnswers || [] };
   restored.persist = storage;
   restored.blob = false;
-  Object.assign(restored, indexOrders(restored.orders));
+  const clipped = applyPoloLock(restored);
   state = restored;
+  return clipped;
 }
 
 async function runWithPersistentState(mutating, work) {
@@ -406,9 +435,10 @@ async function runWithPersistentState(mutating, work) {
 
   for (let attempt = 0; attempt < 3; attempt++) {
     const loaded = await loadRuntimeState(RUNTIME_STATE_KEY, snapshotState(createState()));
-    restoreState(loaded.value, loaded.storage);
+    const clipped = restoreState(loaded.value, loaded.storage);
     const result = await work();
-    if (!mutating || !result || result.status >= 400) return result;
+    if (!mutating && !clipped) return result;
+    if (!clipped && result && result.status >= 400) return result;
 
     const saved = await saveRuntimeState(RUNTIME_STATE_KEY, snapshotState(), loaded.version);
     if (saved.ok) return result;
@@ -453,8 +483,7 @@ function funnelOf(list) {
 }
 
 function liveStopCount() {
-  if (typeof state === "undefined" || !state || !state.studios) return STUDIO_COUNT;
-  return state.studios.length;
+  return STUDIO_COUNT;
 }
 
 function remainingOnCart() {
@@ -513,6 +542,10 @@ function gatesOf(funnel, led) {
 }
 
 export function addStudio(body = {}) {
+  applyPoloLock(state);
+  if ((state.studios || []).length >= STUDIO_COUNT) {
+    return { error: "polo_lock", status: 409, stopCount: STUDIO_COUNT, theatre: THEATRE.name, memberCount: MEMBER_COUNT };
+  }
   if (!state.studios) state.studios = STUDIOS.map(s => ({ ...s }));
   const seq = state.studios.length + 1;
   const id = "S" + String(seq).padStart(2, "0");
@@ -533,7 +566,7 @@ export function addStudio(body = {}) {
 }
 
 function stopProgress() {
-  const list = state.studios || STUDIOS;
+  const list = clipToPoloLock(state.studios || STUDIOS, []).studios;
   return list.map(s => {
     const bags = ordersAt(s.id);
     const f = funnelOf(bags);

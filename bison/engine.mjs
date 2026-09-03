@@ -430,7 +430,7 @@ export async function syncGoogleSheet(body = {}) {
   const spreadsheetId = process.env.BISON_GOOGLE_SHEET_ID || (state.googleSheet || {}).spreadsheetId; if (!spreadsheetId) return { error: "google_sheet_missing", status: 400 };
   try {
     const token = await googleAccessToken(); const tabs = ["01_STUDIO_MASTER", "02_OCCUPANCY_INPUT", "03_CONTRACT_INPUT", "04_COLLECTION_INPUT", "05_CLOCK_CLOSE_INPUT"];
-    const params = new URLSearchParams(); tabs.forEach(tab => params.append("ranges", `'${tab}'!A1:T2001`)); params.set("majorDimension", "ROWS"); params.set("valueRenderOption", "FORMATTED_VALUE");
+    const params = new URLSearchParams(); tabs.forEach(tab => params.append("ranges", `'${tab}'!A1:T2001`)); params.set("majorDimension", "ROWS"); params.set("valueRenderOption", "UNFORMATTED_VALUE"); params.set("dateTimeRenderOption", "FORMATTED_STRING");
     const response = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values:batchGet?${params}`, { headers: { Authorization: `Bearer ${token}` } }); const payload = await response.json(); if (!response.ok) throw new Error(payload.error && payload.error.message || "google_sheet_read_failed");
     const before = snapshotState(); const summary = {}; const processed = new Set(state.sheetProcessed || []);
     const configs = [

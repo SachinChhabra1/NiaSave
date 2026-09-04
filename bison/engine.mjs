@@ -448,6 +448,13 @@ async function googleAccessToken() {
   const payload = await response.json(); if (!response.ok || !payload.access_token) throw new Error(payload.error_description || "google_token_failed"); return payload.access_token;
 }
 function sheetRows(values = []) { const headers = (values[0] || []).map(value => text(value, 80).toLowerCase().replace(/\*/g, "").replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "")); return values.slice(1).map((row, index) => ({ row: index + 2, data: Object.fromEntries(headers.map((header, column) => [header, row[column] == null ? "" : row[column]])) })).filter(item => Object.values(item.data).some(value => String(value).trim())); }
+function sheetDate(value) {
+  if (typeof value === "number" && Number.isFinite(value)) return new Date(Date.UTC(1899,11,30) + Math.round(value) * 86400000).toISOString().slice(0,10);
+  const raw=String(value||"").trim(); if (!raw) return "";
+  const iso=raw.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/); if (iso) return `${iso[1]}-${iso[2].padStart(2,"0")}-${iso[3].padStart(2,"0")}`;
+  const local=raw.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/); if (local) return `${local[3]}-${local[2].padStart(2,"0")}-${local[1].padStart(2,"0")}`;
+  const parsed=new Date(raw); return Number.isNaN(parsed.getTime())?"":parsed.toISOString().slice(0,10);
+}
 export async function syncGoogleSheet(body = {}) {
   const spreadsheetId = process.env.BISON_GOOGLE_SHEET_ID || (state.googleSheet || {}).spreadsheetId; if (!spreadsheetId) return { error: "google_sheet_missing", status: 400 };
   try {
@@ -464,9 +471,9 @@ export async function syncGoogleSheet(body = {}) {
     const summary = {}; const processed = new Set(state.sheetProcessed || []);
     const configs = [
       { tab: tabs[0], table: "studios", accept:r=>r.studio_code, map: r => ({ theatre:r.theatre, studio_code:r.studio_code, studio_name:r.studio_name, capacity:r.contracted_capacity, owner:r.jco_owner, clock_due_at:r.clock_due_time }) },
-      { tab: tabs[1], table: "bookings", dedupeByNest:true, accept:r=>r.studio_code&&r.room_nest_id&&r.member_name&&String(r.import_status||"").toUpperCase()==="READY", map: r => { const status=String(r.booking_status||"").trim().toLowerCase().replace(/[\s-]+/g,"_"); const checkoutBase=String(r.check_in_date||"")>today()?r.check_in_date:today(); return ({ action:"create", studio_code:r.studio_code, nest_id:r.room_nest_id, member_name:r.member_name, arrive:r.check_in_date, depart:r.planned_checkout||plusDays(checkoutBase,30), status:["in","in_house","checked_in","occupied"].includes(status)?"in":"reserved", rate:r.monthly_rent }); } },
-      { tab: tabs[2], table: "contracts", accept:r=>r.member_name&&r.studio_code&&r.nest_id, map: r => ({ member_name:r.member_name, phone:r.phone, studio_code:r.studio_code, nest_id:r.nest_id, start_date:r.start_date, end_date:r.end_date, monthly_rent:r.monthly_rent, deposit:r.deposit, document_status:String(r.signed_status||r.document_status).toLowerCase().includes("signed")?"signed":"pending", check_in:false }) },
-      { tab: tabs[3], table: "collections", accept:r=>r.member_phone&&r.studio_code&&r.nest_id&&r.due_date, map: r => ({ member_phone:r.member_phone, studio_code:r.studio_code, nest_id:r.nest_id, amount:r.determined_rent, collected_amount:r.collected_amount, due_date:r.due_date, kind:"membership", owner:r.collection_owner, reference:r.utr_reference }) },
+      { tab: tabs[1], table: "bookings", dedupeByNest:true, accept:r=>r.studio_code&&r.room_nest_id&&r.member_name&&sheetDate(r.check_in_date)&&String(r.import_status||"").toUpperCase()==="READY", map: r => { const status=String(r.booking_status||"").trim().toLowerCase().replace(/[\s-]+/g,"_"), arrive=sheetDate(r.check_in_date), planned=sheetDate(r.planned_checkout), checkoutBase=arrive>today()?arrive:today(); return ({ action:"create", studio_code:r.studio_code, nest_id:r.room_nest_id, member_name:r.member_name, arrive, depart:planned||plusDays(checkoutBase,30), status:["in","in_house","checked_in","occupied"].includes(status)?"in":"reserved", rate:r.monthly_rent }); } },
+      { tab: tabs[2], table: "contracts", accept:r=>r.member_name&&r.studio_code&&r.nest_id&&sheetDate(r.start_date), map: r => ({ member_name:r.member_name, phone:r.phone, studio_code:r.studio_code, nest_id:r.nest_id, start_date:sheetDate(r.start_date), end_date:sheetDate(r.end_date), monthly_rent:r.monthly_rent, deposit:r.deposit, document_status:String(r.signed_status||r.document_status).toLowerCase().includes("signed")?"signed":"pending", check_in:false }) },
+      { tab: tabs[3], table: "collections", accept:r=>r.member_phone&&r.studio_code&&r.nest_id&&sheetDate(r.due_date), map: r => ({ member_phone:r.member_phone, studio_code:r.studio_code, nest_id:r.nest_id, amount:r.determined_rent, collected_amount:r.collected_amount, due_date:sheetDate(r.due_date), kind:"membership", owner:r.collection_owner, reference:r.utr_reference }) },
       { tab: tabs[4], table: "clocks", accept:r=>r.studio_code, map: r => ({ studio_code:r.studio_code, counted_nests:r.nests_counted, vacant_nests:r.vacant_verified, evidence:r.evidence_reference, physical_count:r.physical_count_complete, vacant_verified:r.vacant_list_verified, collections_reviewed:r.collections_reviewed }) }
     ];
     for (let i=0;i<configs.length;i++) {
@@ -476,7 +483,7 @@ export async function syncGoogleSheet(body = {}) {
         const byNest=new Map();
         for (const item of accepted) {
           const key=`${String(item.data.studio_code).trim().toUpperCase()}|${String(item.data.room_nest_id).trim().toUpperCase()}`, prior=byNest.get(key);
-          if (!prior || String(item.data.check_in_date||"")>String(prior.data.check_in_date||"")) byNest.set(key,item);
+          if (!prior || sheetDate(item.data.check_in_date)>sheetDate(prior.data.check_in_date)) byNest.set(key,item);
         }
         summary[`${config.tab}_DUPLICATES_SKIPPED`]=accepted.length-byNest.size; accepted=Array.from(byNest.values());
       }

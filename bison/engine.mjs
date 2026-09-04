@@ -464,15 +464,23 @@ export async function syncGoogleSheet(body = {}) {
     const summary = {}; const processed = new Set(state.sheetProcessed || []);
     const configs = [
       { tab: tabs[0], table: "studios", accept:r=>r.studio_code, map: r => ({ theatre:r.theatre, studio_code:r.studio_code, studio_name:r.studio_name, capacity:r.contracted_capacity, owner:r.jco_owner, clock_due_at:r.clock_due_time }) },
-      { tab: tabs[1], table: "bookings", accept:r=>r.studio_code&&r.room_nest_id&&r.member_name&&String(r.import_status||"").toUpperCase()==="READY", map: r => { const status=String(r.booking_status||"").trim().toLowerCase().replace(/[\s-]+/g,"_"); return ({ action:"create", studio_code:r.studio_code, nest_id:r.room_nest_id, member_name:r.member_name, arrive:r.check_in_date, depart:r.planned_checkout||plusDays(today(),30), status:["in","in_house","checked_in","occupied"].includes(status)?"in":"reserved", rate:r.monthly_rent }); } },
+      { tab: tabs[1], table: "bookings", dedupeByNest:true, accept:r=>r.studio_code&&r.room_nest_id&&r.member_name&&String(r.import_status||"").toUpperCase()==="READY", map: r => { const status=String(r.booking_status||"").trim().toLowerCase().replace(/[\s-]+/g,"_"); const checkoutBase=String(r.check_in_date||"")>today()?r.check_in_date:today(); return ({ action:"create", studio_code:r.studio_code, nest_id:r.room_nest_id, member_name:r.member_name, arrive:r.check_in_date, depart:r.planned_checkout||plusDays(checkoutBase,30), status:["in","in_house","checked_in","occupied"].includes(status)?"in":"reserved", rate:r.monthly_rent }); } },
       { tab: tabs[2], table: "contracts", accept:r=>r.member_name&&r.studio_code&&r.nest_id, map: r => ({ member_name:r.member_name, phone:r.phone, studio_code:r.studio_code, nest_id:r.nest_id, start_date:r.start_date, end_date:r.end_date, monthly_rent:r.monthly_rent, deposit:r.deposit, document_status:String(r.signed_status||r.document_status).toLowerCase().includes("signed")?"signed":"pending", check_in:false }) },
       { tab: tabs[3], table: "collections", accept:r=>r.member_phone&&r.studio_code&&r.nest_id&&r.due_date, map: r => ({ member_phone:r.member_phone, studio_code:r.studio_code, nest_id:r.nest_id, amount:r.determined_rent, collected_amount:r.collected_amount, due_date:r.due_date, kind:"membership", owner:r.collection_owner, reference:r.utr_reference }) },
       { tab: tabs[4], table: "clocks", accept:r=>r.studio_code, map: r => ({ studio_code:r.studio_code, counted_nests:r.nests_counted, vacant_nests:r.vacant_verified, evidence:r.evidence_reference, physical_count:r.physical_count_complete, vacant_verified:r.vacant_list_verified, collections_reviewed:r.collections_reviewed }) }
     ];
     for (let i=0;i<configs.length;i++) {
       const config=configs[i], rows=sheetRows((payload.valueRanges[i]||{}).values), pending=[];
-      for (const item of rows) {
-        if (!config.accept(item.data)) continue;
+      let accepted=rows.filter(item=>config.accept(item.data));
+      if (config.dedupeByNest) {
+        const byNest=new Map();
+        for (const item of accepted) {
+          const key=`${String(item.data.studio_code).trim().toUpperCase()}|${String(item.data.room_nest_id).trim().toUpperCase()}`, prior=byNest.get(key);
+          if (!prior || String(item.data.check_in_date||"")>String(prior.data.check_in_date||"")) byNest.set(key,item);
+        }
+        summary[`${config.tab}_DUPLICATES_SKIPPED`]=accepted.length-byNest.size; accepted=Array.from(byNest.values());
+      }
+      for (const item of accepted) {
         const mapped=config.map(item.data), legacyKey=`${config.tab}:${item.row}`, key=`${legacyKey}:${fingerprint(mapped)}`;
         if (processed.has(key)) continue;
         // Upgrade old row-only markers without replaying already imported data.

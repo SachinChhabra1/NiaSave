@@ -11,6 +11,7 @@ import { pathToFileURL } from "node:url";
 import { handleStaff, isStaffPath, staffPath, staffStorageStatus, DUMMY_DATA } from "../rabbit/engine.mjs";
 import { handleBison, isBisonPath, bisonPath, bisonStorageStatus } from "../bison/engine.mjs";
 import { hasDurableStore, loadRuntimeState, saveRuntimeState } from "../lib/runtime-store.mjs";
+import { readDograState, writeDograState } from "../lib/dogra-store.mjs";
 
 const PORT = Number(process.env.PORT || 8787);
 const DEMO = process.env.DEMO !== "0";
@@ -79,7 +80,7 @@ function nestCurrent() {
   return { memberId: member.id, nestId: "rajputana", name: "Rajputana Theatre", bed: "Bed 12", rupee: state.nestRupee, walk: "12 min to work", nextPay: "2026-09-01", included: [{ name: "Wi-Fi", status: "Working" }, { name: "Power", status: "Working" }, { name: "Water", status: "Working" }, { name: "Clean", status: "Today 11 AM" }, { name: "Gate", status: "24x7" }, { name: "Lock", status: "12" }, { name: "Bed", status: "In" }, { name: "Hall", status: "Till 10 PM" }], event: { id: "bada-khaana", title: "Bada Khaana this Sunday", when: "19:00", place: "Rajputana Theatre", attending: 46, mine: state.rsvp }, book: [{ id: "laundry", name: "Laundry", backBy: "18:00", price: 0 }, { id: "trim", name: "Trim", price: 80 }], issue: state.issues[0] || null };
 }
 function json(res, code, body) {
-  res.writeHead(code, { "content-type": "application/json; charset=utf-8", "access-control-allow-origin": "*", "access-control-allow-headers": "Content-Type, Idempotency-Key, Authorization", "access-control-allow-methods": "GET,POST,OPTIONS" });
+  res.writeHead(code, { "content-type": "application/json; charset=utf-8", "access-control-allow-origin": "*", "access-control-allow-headers": "Content-Type, Idempotency-Key, Authorization", "access-control-allow-methods": "GET,POST,PUT,OPTIONS" });
   res.end(JSON.stringify(body));
 }
 function readBody(req) {
@@ -140,9 +141,10 @@ export async function handler(req, res) {
   const staffRequest = isStaffPath(rabbitPath);
   const livingPath = bisonPath(path, rewrittenPath);
   const livingRequest = isBisonPath(livingPath);
+  const dograRequest = path === "/dogra/state" || path === "/api/dogra/state";
   let memberStateVersion = null;
   try {
-    if (!staffRequest && !livingRequest && hasDurableStore()) {
+    if (!staffRequest && !livingRequest && !dograRequest && hasDurableStore()) {
       const loaded = await loadRuntimeState(MEMBER_RUNTIME_STATE_KEY, snapshotMemberState());
       restoreMemberState(loaded.value);
       memberStateVersion = loaded.version;
@@ -167,6 +169,17 @@ export async function handler(req, res) {
       body.actor = `${staff.name} · ${staff.email}`;
       const out = await handleBison(req, res, livingPath, body, url);
       if (out) return json(res, out.status, out.body);
+    }
+    if (dograRequest) {
+      const staff = requireStaff(req, res, ["studio", "money", "pilot"]);
+      if (!staff) return;
+      if (req.method === "GET") return json(res, 200, await readDograState());
+      if (req.method === "PUT") {
+        const body = await readBody(req);
+        const out = await writeDograState(body.state, body.expectedVersion);
+        return json(res, out.status, out);
+      }
+      return json(res, 405, { error: "method_not_allowed" });
     }
     if (req.method === "GET" && (path === "/health" || path === "/v1/health")) {
       const storage = await staffStorageStatus();

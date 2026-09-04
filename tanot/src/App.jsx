@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { executives, initialCampaigns, initialCohorts, initialOpportunities, initialStudios, navItems, stageOrder } from './data'
 import { Header, NewCampaignModal, OpportunityDrawer, Sidebar } from './components'
 import { AccountsPage, ActivationsPage, CampaignsPage, InsightsPage, OverviewPage, PipelinePage, ResourcesPage, StudiosPage } from './pages'
@@ -15,31 +15,158 @@ const pageTitles = {
   insights: 'Insights & reports',
 }
 
-function usePersistentState(key, fallback) {
-  const [value, setValue] = useState(() => {
-    try {
-      const stored = localStorage.getItem(key)
-      return stored ? JSON.parse(stored) : fallback
-    } catch {
-      return fallback
+const localKeys = {
+  campaigns: 'nia-demand-campaigns',
+  opportunities: 'nia-demand-opportunities',
+  cohorts: 'nia-demand-cohorts',
+  actionState: 'nia-demand-action-state',
+  reportHistory: 'nia-demand-report-history',
+}
+
+function readLocalWorkspace() {
+  const fallback = {
+    schemaVersion: 1,
+    seeded: false,
+    campaigns: initialCampaigns,
+    opportunities: initialOpportunities,
+    cohorts: initialCohorts,
+    actionState: {},
+    reportHistory: [],
+    updatedAt: null,
+  }
+  try {
+    const stored = Object.fromEntries(Object.entries(localKeys).map(([field, key]) => {
+      const raw = localStorage.getItem(key)
+      return [field, raw ? JSON.parse(raw) : fallback[field]]
+    }))
+    const seeded = Object.values(localKeys).some((key) => localStorage.getItem(key) !== null)
+    return { ...fallback, ...stored, seeded }
+  } catch {
+    return fallback
+  }
+}
+
+function writeLocalWorkspace(workspace) {
+  try {
+    Object.entries(localKeys).forEach(([field, key]) => {
+      localStorage.setItem(key, JSON.stringify(workspace[field]))
+    })
+  } catch {
+    // The server remains authoritative when browser storage is unavailable.
+  }
+}
+
+function useDograWorkspace() {
+  const [workspace, setWorkspace] = useState(readLocalWorkspace)
+  const [syncState, setSyncState] = useState('loading')
+  const versionRef = useRef(0)
+  const readyRef = useRef(false)
+  const skipNextSaveRef = useRef(false)
+  const saveQueueRef = useRef(Promise.resolve())
+
+  useEffect(() => {
+    let cancelled = false
+    async function hydrate() {
+      try {
+        const response = await fetch('/api/dogra/state', { headers: { Accept: 'application/json' } })
+        if (!response.ok) throw new Error('load_failed')
+        let payload = await response.json()
+        const local = readLocalWorkspace()
+        if (!payload.state.seeded && local.seeded) {
+          const migration = await fetch('/api/dogra/state', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ state: local, expectedVersion: payload.version }),
+          })
+          if (migration.ok) payload = await migration.json()
+        }
+        if (cancelled) return
+        versionRef.current = Number(payload.version || 0)
+        skipNextSaveRef.current = true
+        setWorkspace(payload.state)
+        writeLocalWorkspace(payload.state)
+        readyRef.current = true
+        setSyncState('synced')
+      } catch {
+        if (!cancelled) {
+          readyRef.current = true
+          setSyncState('offline')
+        }
+      }
     }
-  })
-  useEffect(() => localStorage.setItem(key, JSON.stringify(value)), [key, value])
-  return [value, setValue]
+    void hydrate()
+    return () => { cancelled = true }
+  }, [])
+
+  useEffect(() => {
+    writeLocalWorkspace(workspace)
+    if (!readyRef.current) return
+    if (skipNextSaveRef.current) {
+      skipNextSaveRef.current = false
+      return
+    }
+    setSyncState('saving')
+    const timer = window.setTimeout(() => {
+      const snapshot = workspace
+      saveQueueRef.current = saveQueueRef.current.then(async () => {
+        let expectedVersion = versionRef.current
+        let response = await fetch('/api/dogra/state', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ state: snapshot, expectedVersion }),
+        })
+        if (response.status === 409) {
+          const conflict = await response.json()
+          expectedVersion = Number(conflict.current?.version || expectedVersion)
+          response = await fetch('/api/dogra/state', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ state: snapshot, expectedVersion }),
+          })
+        }
+        if (!response.ok) throw new Error('save_failed')
+        const payload = await response.json()
+        versionRef.current = Number(payload.version || expectedVersion)
+        setSyncState('synced')
+      }).catch(() => setSyncState('offline'))
+    }, 450)
+    return () => window.clearTimeout(timer)
+  }, [workspace])
+
+  function setter(field) {
+    return (next) => setWorkspace((current) => ({
+      ...current,
+      [field]: typeof next === 'function' ? next(current[field]) : next,
+    }))
+  }
+
+  return {
+    workspace,
+    syncState,
+    setCampaigns: setter('campaigns'),
+    setOpportunities: setter('opportunities'),
+    setCohorts: setter('cohorts'),
+    setActionState: setter('actionState'),
+    setReportHistory: setter('reportHistory'),
+  }
 }
 
 export default function App() {
   const [page, setPage] = useState('overview')
-  const [campaigns, setCampaigns] = usePersistentState('nia-demand-campaigns', initialCampaigns)
-  const [opportunities, setOpportunities] = usePersistentState('nia-demand-opportunities', initialOpportunities)
-  const [cohorts, setCohorts] = usePersistentState('nia-demand-cohorts', initialCohorts)
+  const {
+    workspace: { campaigns, opportunities, cohorts, actionState, reportHistory },
+    syncState,
+    setCampaigns,
+    setOpportunities,
+    setCohorts,
+    setActionState,
+    setReportHistory,
+  } = useDograWorkspace()
   const [selectedId, setSelectedId] = useState('o1')
   const [drawerOpen, setDrawerOpen] = useState(() => !window.matchMedia('(max-width: 900px)').matches)
   const [campaignModal, setCampaignModal] = useState(false)
   const [query, setQuery] = useState('')
   const [toast, setToast] = useState('')
-  const [actionState, setActionState] = usePersistentState('nia-demand-action-state', {})
-  const [reportHistory, setReportHistory] = usePersistentState('nia-demand-report-history', [])
   const [reportVersion, setReportVersion] = useState(0)
 
   const selected = opportunities.find((item) => item.id === selectedId)
@@ -173,6 +300,7 @@ export default function App() {
       )}
       {campaignModal && <NewCampaignModal onClose={() => setCampaignModal(false)} onCreate={createCampaign} />}
       {toast && <div className="toast" role="status">{toast}</div>}
+      {!toast && syncState === 'offline' && <div className="toast" role="status">Shared Dogra data is offline. Changes remain safe in this browser and will retry after reload.</div>}
     </div>
   )
 }

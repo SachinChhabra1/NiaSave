@@ -81,5 +81,17 @@ export function buildStudioMaster(sites, bookings, date, existing = []) {
       });
     });
   }
+
+  // Keep studios added from the live Bison master Sheet. The static catalog is
+  // only the original baseline; it must not discard later operational studios
+  // whenever durable state is normalised.
+  const catalogIds = new Set(rows.map(row => String(row.sourceStudioId || "")));
+  for (const studio of existing || []) {
+    const sourceId = String(studio.sourceStudioId || "");
+    if (!sourceId || catalogIds.has(sourceId)) continue;
+    globalIndex += 1;
+    rows.push({ ...studio, ordinal: globalIndex });
+    catalogIds.add(sourceId);
+  }
   return rows;
 }

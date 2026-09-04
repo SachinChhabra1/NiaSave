@@ -2,7 +2,7 @@
  * Bison Living control plane.
  * Theatre -> studio -> nest, member contracts, clocks and collections.
  */
-import { randomUUID, createSign } from "node:crypto";
+import { randomUUID, createSign, createHash } from "node:crypto";
 import { hasDurableStore, loadRuntimeState, saveRuntimeState } from "../lib/runtime-store.mjs";
 import { STUDIO_COUNT, buildStudioMaster, sourceStudioId, studioIdForSource } from "./catalog.mjs";
 
@@ -23,6 +23,7 @@ function hoursFromNow(h) { return new Date(Date.now() + h * 3600000).toISOString
 function id(prefix) { return `${prefix}-${randomUUID().slice(0, 12)}`; }
 function text(value, max = 120) { return String(value || "").trim().slice(0, max); }
 function money(value) { const n = Number(value); return Number.isFinite(n) ? Math.round(n) : NaN; }
+function fingerprint(value) { return createHash("sha256").update(JSON.stringify(value)).digest("hex").slice(0, 20); }
 
 function seedSites() {
   return [
@@ -383,14 +384,30 @@ export function importBisonData(body = {}) {
     try {
       if (table === "members") result = importMember(row, actor);
       else if (table === "studios") {
-        const studio = findStudio(importCell(row, "studio_id", "studio_code", "studioId"));
-        if (!studio) result = { error: "studio_not_found", status: 404 };
-        else { const capacity = Number(importCell(row, "capacity")); if (capacity && capacity < studioInventory(studio).booked) result = { error: "capacity_below_committed", status: 409 }; else { if (capacity) studio.capacity = capacity; if (importCell(row, "owner")) studio.owner = text(row.owner, 80); if (importCell(row, "clock_due_at")) studio.clockDueAt = text(row.clock_due_at, 30); result = { ok: true, studio }; } }
+        let studio = findStudio(importCell(row, "studio_id", "studio_code", "studioId"));
+        if (!studio) {
+          const code = text(importCell(row, "studio_code"), 80);
+          const theatre = text(importCell(row, "theatre"), 80);
+          const site = state.sites.find(item => item.theatre.toLowerCase() === theatre.toLowerCase()) || state.sites.find(item => code.startsWith(item.code));
+          if (!code || !site) result = { error: "studio_not_found", status: 404 };
+          else {
+            studio = { id: `std-live-${code.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`, sourceStudioId: code, siteId: site.id, theatre: site.theatre, cluster: site.cluster, city: site.city, name: text(importCell(row, "studio_name"), 120) || code, code, capacity: 0, owner: site.owner, clockDueAt: site.clockDueAt, createdAt: now(), ordinal: state.studios.length + 1 };
+            state.studios.push(studio);
+          }
+        }
+        if (!result) { const capacity = Number(importCell(row, "capacity")); if (capacity && capacity < studioInventory(studio).booked) result = { error: "capacity_below_committed", status: 409 }; else { if (capacity) studio.capacity = capacity; if (importCell(row, "owner")) studio.owner = text(row.owner, 80); if (importCell(row, "clock_due_at")) studio.clockDueAt = text(row.clock_due_at, 30); result = { ok: true, studio }; } }
       } else if (table === "contracts") {
         const memberResult = importMember(row, actor); if (!memberResult.ok) result = memberResult; else result = createContract({ memberId: memberResult.member.id, studioId: importCell(row, "studio_id", "studio_code"), nestId: importCell(row, "nest_id", "nest_label"), startDate: importCell(row, "start_date"), endDate: importCell(row, "end_date"), monthlyRent: importCell(row, "monthly_rent", "rent"), deposit: importCell(row, "deposit") || 0, signedStatus: importCell(row, "document_status", "signed_status") || "pending", checkIn: String(importCell(row, "check_in")).toLowerCase() === "true", actor });
       } else if (table === "bookings") {
         const action = text(importCell(row, "action"), 20).toLowerCase(); const bookingId = importCell(row, "booking_id", "bookingId");
-        if (action === "checkin") result = checkIn({ bookingId, actor }); else if (action === "checkout") result = checkOut({ bookingId, actor }); else if (action === "cancel") result = cancelBooking({ bookingId, reason: importCell(row, "reason"), actor }); else result = createBooking({ studioId: importCell(row, "studio_id", "studio_code"), nestId: importCell(row, "nest_id"), guest: importCell(row, "member_name", "guest"), arrive: importCell(row, "arrive", "start_date"), depart: importCell(row, "depart", "end_date"), status: importCell(row, "status"), rate: importCell(row, "rate", "monthly_rent"), actor });
+        if (action === "checkin") result = checkIn({ bookingId, actor }); else if (action === "checkout") result = checkOut({ bookingId, actor }); else if (action === "cancel") result = cancelBooking({ bookingId, reason: importCell(row, "reason"), actor }); else {
+          const studio=findStudio(importCell(row,"studio_id","studio_code")), nestId=text(importCell(row,"nest_id"),40).toUpperCase(), guest=text(importCell(row,"member_name","guest"),80), arrive=text(importCell(row,"arrive","start_date")||today(),10);
+          const existing=studio&&state.bookings.find(item=>item.studioId===studio.id&&item.nestId===nestId&&item.arrive===arrive&&text(item.guest,80).toLowerCase()===guest.toLowerCase());
+          if (existing) {
+            result=amendBooking({ bookingId:existing.id, studioId:studio.id, nestId, guest, arrive, depart:importCell(row,"depart","end_date")||existing.depart, rate:importCell(row,"rate","monthly_rent"), actor });
+            if (result.ok) result.booking.status=String(importCell(row,"status")).toLowerCase()==="in"?"in":"reserved";
+          } else result = createBooking({ studioId: importCell(row, "studio_id", "studio_code"), nestId, guest, arrive, depart: importCell(row, "depart", "end_date"), status: importCell(row, "status"), rate: importCell(row, "rate", "monthly_rent"), actor });
+        }
       } else if (table === "collections") {
         let contractId = importCell(row, "contract_id");
         if (!contractId) { const phone=text(importCell(row,"member_phone","phone"),20).replace(/\D/g,""); const member=state.members.find(item=>(phone&&item.phone===phone)||text(item.name,80).toLowerCase()===text(importCell(row,"member_name"),80).toLowerCase()); const studio=findStudio(importCell(row,"studio_code","studio_id")); const contract=state.contracts.find(item=>(!member||item.memberId===member.id)&&(!studio||item.studioId===studio.id)&&(!importCell(row,"nest_id")||item.nestId===text(row.nest_id,40).toUpperCase())); contractId=contract&&contract.id; }
@@ -434,13 +451,27 @@ export async function syncGoogleSheet(body = {}) {
     const response = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values:batchGet?${params}`, { headers: { Authorization: `Bearer ${token}` } }); const payload = await response.json(); if (!response.ok) throw new Error(payload.error && payload.error.message || "google_sheet_read_failed");
     const before = snapshotState(); const summary = {}; const processed = new Set(state.sheetProcessed || []);
     const configs = [
-      { tab: tabs[0], table: "studios", accept:r=>r.studio_code, map: r => ({ studio_code:r.studio_code, capacity:r.contracted_capacity, owner:r.jco_owner, clock_due_at:r.clock_due_time }) },
+      { tab: tabs[0], table: "studios", accept:r=>r.studio_code, map: r => ({ theatre:r.theatre, studio_code:r.studio_code, studio_name:r.studio_name, capacity:r.contracted_capacity, owner:r.jco_owner, clock_due_at:r.clock_due_time }) },
       { tab: tabs[1], table: "bookings", accept:r=>r.studio_code&&r.room_nest_id&&r.member_name, map: r => ({ action:"create", studio_code:r.studio_code, nest_id:r.room_nest_id, member_name:r.member_name, arrive:r.check_in_date, depart:r.planned_checkout, status:String(r.booking_status).toLowerCase().includes("in house")?"in":"reserved", rate:r.monthly_rent }) },
       { tab: tabs[2], table: "contracts", accept:r=>r.member_name&&r.studio_code&&r.nest_id, map: r => ({ member_name:r.member_name, phone:r.phone, studio_code:r.studio_code, nest_id:r.nest_id, start_date:r.start_date, end_date:r.end_date, monthly_rent:r.monthly_rent, deposit:r.deposit, document_status:String(r.signed_status||r.document_status).toLowerCase().includes("signed")?"signed":"pending", check_in:false }) },
       { tab: tabs[3], table: "collections", accept:r=>r.member_phone&&r.studio_code&&r.nest_id&&r.due_date, map: r => ({ member_phone:r.member_phone, studio_code:r.studio_code, nest_id:r.nest_id, amount:r.determined_rent, collected_amount:r.collected_amount, due_date:r.due_date, kind:"membership", owner:r.collection_owner, reference:r.utr_reference }) },
       { tab: tabs[4], table: "clocks", accept:r=>r.studio_code, map: r => ({ studio_code:r.studio_code, counted_nests:r.nests_counted, vacant_nests:r.vacant_verified, evidence:r.evidence_reference, physical_count:r.physical_count_complete, vacant_verified:r.vacant_list_verified, collections_reviewed:r.collections_reviewed }) }
     ];
-    for (let i=0;i<configs.length;i++) { const config=configs[i], rows=sheetRows((payload.valueRanges[i]||{}).values), pending=rows.filter(item=>config.accept(item.data)&&!processed.has(`${config.tab}:${item.row}`)).map(item=>({ key:`${config.tab}:${item.row}`, row:config.map(item.data) })); if (!pending.length) { summary[config.tab]=0; continue; } const result=importBisonData({ table:config.table, rows:pending.map(item=>item.row), commit:true, filename:`Google Sheet ${config.tab}`, actor:"Google Sheet sync" }); if (!result.ok) { restoreState(before,before.persist); return { ...result, status:400, sheet:config.tab }; } pending.forEach(item=>processed.add(item.key)); summary[config.tab]=pending.length; }
+    for (let i=0;i<configs.length;i++) {
+      const config=configs[i], rows=sheetRows((payload.valueRanges[i]||{}).values), pending=[];
+      for (const item of rows) {
+        if (!config.accept(item.data)) continue;
+        const mapped=config.map(item.data), legacyKey=`${config.tab}:${item.row}`, key=`${legacyKey}:${fingerprint(mapped)}`;
+        if (processed.has(key)) continue;
+        // Upgrade old row-only markers without replaying already imported data.
+        if (processed.has(legacyKey)) { processed.delete(legacyKey); processed.add(key); continue; }
+        pending.push({ key, row:mapped });
+      }
+      if (!pending.length) { summary[config.tab]=0; continue; }
+      const result=importBisonData({ table:config.table, rows:pending.map(item=>item.row), commit:true, filename:`Google Sheet ${config.tab}`, actor:"Google Sheet sync" });
+      if (!result.ok) { restoreState(before,before.persist); return { ...result, status:400, sheet:config.tab }; }
+      pending.forEach(item=>processed.add(item.key)); summary[config.tab]=pending.length;
+    }
     state.sheetProcessed=Array.from(processed).slice(-20000); state.googleSheet={ ...(state.googleSheet||{}), url:`https://docs.google.com/spreadsheets/d/${spreadsheetId}/edit`, spreadsheetId, enabled:true, lastSyncAt:now(), lastSyncStatus:"ok", lastSyncSummary:summary }; log("Google Sheet sync","sheet_synced",spreadsheetId,JSON.stringify(summary)); return { ok:true, spreadsheetId, syncedAt:state.googleSheet.lastSyncAt, summary };
   } catch (error) { state.googleSheet={ ...(state.googleSheet||{}), lastSyncAt:now(), lastSyncStatus:"error", lastSyncError:text(error.message,240) }; return { error:"google_sheet_sync_failed", message:error.message, status:502 }; }
 }

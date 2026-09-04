@@ -6,6 +6,7 @@ import {
   towerPayload,
   hierarchyPayload,
   inventoryPayload,
+  bookingsPayload,
   createMember,
   createContract,
   amendContract,
@@ -46,6 +47,27 @@ test("validates browser and CSV imports without mutating on dry run", () => {
   const saved = importBisonData({ table: "members", rows: [{ member_name: "Saved Member", phone: "9876500001" }], commit: true, actor: "Importer" });
   assert.equal(saved.ok, true);
   assert.equal(membersPayload({ q: "9876500001" }).count, 1);
+});
+
+test("adds and preserves a live Sheet studio outside the original catalog", () => {
+  resetBison();
+  const before = hierarchyPayload({}).studioCount;
+  const saved = importBisonData({ table: "studios", rows: [{ theatre: "Wellington", studio_code: "WLG-HSR-LIVE-01", studio_name: "Live Studio", capacity: 12 }], commit: true, actor: "Google Sheet sync" });
+  assert.equal(saved.ok, true);
+  const hierarchy = hierarchyPayload({});
+  assert.equal(hierarchy.studioCount, before + 1);
+  assert.equal(hierarchy.studios.find(row => row.code === "WLG-HSR-LIVE-01").capacity, 12);
+});
+
+test("updates a repeated Sheet booking instead of duplicating it", () => {
+  resetBison();
+  const studio = hierarchyPayload({}).studios[0];
+  const row = { action: "create", studio_code: studio.code, nest_id: "SYNC-N1", member_name: "Sync Member", start_date: "2026-09-04", end_date: "2026-10-04", status: "reserved", monthly_rent: 2200 };
+  assert.equal(importBisonData({ table: "bookings", rows: [row], commit: true, actor: "Google Sheet sync" }).ok, true);
+  assert.equal(importBisonData({ table: "bookings", rows: [{ ...row, monthly_rent: 2500 }], commit: true, actor: "Google Sheet sync" }).ok, true);
+  const matches = bookingsPayload({ studioId: studio.id }).bookings.filter(item => item.nestId === "SYNC-N1");
+  assert.equal(matches.length, 1);
+  assert.equal(matches[0].rate, 2500);
 });
 
 test("rejects an entire import when any row is invalid", () => {

@@ -533,6 +533,7 @@ export function resetBison() { state = normalizeState(baseState(), hasDurableSto
 function done(result, fallback = 200) { if (result && result.error) return { status: result.status || 400, body: result }; return { status: fallback, body: result }; }
 async function handleOnce(req, path, body, url) {
   const query = {}; url.searchParams.forEach((value, key) => { if (key !== "path") query[key] = value; }); const route = normalize(path); const method = req.method;
+  if (method === "GET" && route === "/bison/release") return { status: 200, body: { release: "bison-baseline-20260904-1" } };
   if (method === "GET" && (route === "/bison" || route === "/bison/tower")) return { status: 200, body: towerPayload(query) };
   if (method === "GET" && route === "/bison/hierarchy") return { status: 200, body: hierarchyPayload(query) };
   if (method === "GET" && route === "/bison/sites") return { status: 200, body: { ok: true, sites: towerPayload(query).sites } };

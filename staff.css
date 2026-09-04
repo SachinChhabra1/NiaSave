@@ -42,6 +42,22 @@ body{
 h1,h2,h3,.rail-h,.rail-link,.brand,.top h1,.narrow .kicker{font-family:var(--font)}
 a{color:var(--accent);text-decoration:none}
 a:hover{text-decoration:underline}
+.command-center-return{
+  min-height:36px;
+  margin-top:14px;
+  padding:8px 12px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  display:inline-flex;
+  align-items:center;
+  color:var(--fg-muted);
+  background:var(--raised);
+  font-size:13px;
+  font-weight:600;
+  letter-spacing:0;
+  text-transform:none;
+}
+.command-center-return:hover{color:var(--fg);text-decoration:none;background:var(--bg)}
 .narrow{display:none}
 .tower{display:block}
 @media (max-width:899px){
@@ -59,6 +75,7 @@ a:hover{text-decoration:underline}
   .narrow .kicker{font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--fg-muted);margin-bottom:14px;font-family:var(--font)}
   .narrow h1{font-size:36px;letter-spacing:-.03em;margin:0 0 14px}
   .narrow p{margin:0;color:var(--fg-muted);font-size:18px;line-height:1.5}
+  .narrow .command-center-return{margin-top:24px}
 }
 .top{
   background:var(--surface);

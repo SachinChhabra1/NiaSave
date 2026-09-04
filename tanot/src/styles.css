@@ -635,6 +635,8 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline-color:
   background: none;
 }
 .suite-mark::after { display: none; }
+.central-return { display: inline-flex; align-items: center; min-height: 24px; margin-bottom: 2px; color: #8bb2ff; font-size: 10px; font-weight: 500; text-decoration: none; }
+.central-return:hover { color: var(--ink); }
 .topbar-brand { flex-direction: column; }
 .topbar-brand strong { color: var(--ink); font-size: 13px; font-weight: 500; letter-spacing: 0; }
 .topbar-brand span { margin-top: 3px; color: var(--subtle); font-size: 10px; font-weight: 400; letter-spacing: 0; text-transform: none; }

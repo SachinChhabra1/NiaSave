@@ -16,6 +16,34 @@
   window.NIA_STAFF_READY = Promise.resolve({ id: "stf-open-desk", name: "2 Para desk", role: "open" });
 })();
 
+/* Keep every staff desk connected to the Rafiqi command center. */
+(function () {
+  var commandCenterUrl = "https://rafiqicentral.com/2para";
+
+  function makeLink() {
+    var link = document.createElement("a");
+    link.className = "command-center-return";
+    link.href = commandCenterUrl;
+    link.textContent = "← Nia Command Center";
+    link.setAttribute("aria-label", "Back to Nia Command Center");
+    return link;
+  }
+
+  function addReturnLinks() {
+    var desktopMark = document.querySelector(".tower .top .mark");
+    if (desktopMark && !desktopMark.querySelector(".command-center-return")) {
+      desktopMark.appendChild(makeLink());
+    }
+    var narrowCard = document.querySelector(".narrow-card");
+    if (narrowCard && !narrowCard.querySelector(".command-center-return")) {
+      narrowCard.appendChild(makeLink());
+    }
+  }
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", addReturnLinks);
+  else addReturnLinks();
+})();
+
 /* Every staff table can be sorted by any column, including tables rendered after API calls. */
 (function () {
   var collator = new Intl.Collator(undefined, { numeric: true, sensitivity: "base" });

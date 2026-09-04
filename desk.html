@@ -10,13 +10,13 @@
 <style>
   :root { --nia-blue:#2C5880; --nia-blue-deep:#1C3F5C; --nia-blue-soft:#6A8CAE; }
   body { min-height:100vh; background:#F6F8FB; }
-  .ops-home { max-width:1240px; margin:0 auto; padding:40px 32px 64px; }
+  .ops-home { max-width:1540px; margin:0 auto; padding:40px 32px 64px; }
   .ops-head { display:flex; align-items:flex-end; justify-content:space-between; gap:32px; margin:0 0 32px; }
   .ops-title { display:flex; align-items:center; gap:16px; }
   .ops-title .mark { flex:0 0 auto; }
   .ops-home h1 { margin:0; font-size:34px; line-height:1; letter-spacing:-.035em; }
   .ops-intro { margin:0; color:#5B6574; font-size:17px; text-align:right; }
-  .ops-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px; }
+  .ops-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:20px; }
   .ops-card {
     position:relative; display:flex; flex-direction:column; width:100%; min-width:0;
     text-align:left; background:#F7F7F8; border:1px solid #D9DEE5; border-radius:22px;
@@ -27,10 +27,14 @@
   .ops-card:focus-visible { outline:3px solid rgba(44,88,128,.25); outline-offset:3px; }
   .ops-card[data-id="polo"] { --card-color:var(--nia-blue); }
   .ops-card[data-id="bison"] { --card-color:var(--nia-blue-deep); }
+  .ops-card[data-id="tanot"] { --card-color:#C45E1A; }
+  .ops-card[data-id="madras"] { --card-color:var(--nia-blue-soft); }
   .product-plate { position:relative; display:block; width:100%; aspect-ratio:16/9; overflow:hidden; background:#ECEDEF; }
   .product-plate img { display:block; width:100%; height:100%; object-fit:cover; transition:transform .3s ease; }
   .ops-card[data-id="polo"] .product-plate img { object-position:center 47%; }
   .ops-card[data-id="bison"] .product-plate img { object-position:center 43%; }
+  .ops-card[data-id="tanot"] .product-plate img { object-position:center 28%; }
+  .ops-card[data-id="madras"] .product-plate img { object-position:center 62%; }
   .ops-card:hover .product-plate img { transform:scale(1.018); }
   .product-kind { position:absolute; top:18px; left:18px; display:block; padding:7px 11px; border-radius:999px; background:rgba(17,24,32,.68); color:#fff; font-size:12px; font-weight:650; letter-spacing:.02em; backdrop-filter:blur(6px); }
   .product-body { display:flex; flex:1; flex-direction:column; padding:28px 30px 30px; }
@@ -40,7 +44,10 @@
   .product-flow span:first-child { line-height:1.45; }
   .product-action { flex:0 0 auto; display:inline-flex; align-items:center; min-height:42px; padding:0 17px; border:1px solid var(--card-color); border-radius:999px; color:var(--card-color); font-size:14px; font-weight:650; transition:background .18s ease,color .18s ease; }
   .ops-card:hover .product-action { background:var(--card-color); color:#fff; }
+  .asset-credit { margin:18px 2px 0; color:#7A8494; font-size:11px; }
+  .asset-credit a { color:inherit; text-decoration:underline; }
   @media (prefers-reduced-motion:reduce){ .ops-card,.product-plate img,.product-action { transition:none; } }
+  @media (max-width:1320px){ .ops-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
   @media (max-width:760px){
     .ops-home { padding:28px 20px 48px; }
     .ops-head { align-items:flex-start; flex-direction:column; gap:14px; margin-bottom:24px; }
@@ -61,7 +68,7 @@
         <div class="mark"><img class="nia-logo" src="./assets/nia-logo.png" alt="Nia" width="40" height="40"></div>
         <h1>2 Para</h1>
       </div>
-      <p class="ops-intro">One operating room. Two desks.</p>
+      <p class="ops-intro">One operating room. Four products.</p>
     </header>
     <div class="ops-grid">
       <a class="ops-card" data-id="polo" href="https://www.niasave.com/ops.html">
@@ -86,7 +93,30 @@
           <span class="product-flow"><span>Contract → assign → clock → collect</span><span class="product-action">Open Bison</span></span>
         </span>
       </a>
+      <a class="ops-card" data-id="tanot" href="https://www.niasave.com/tanot/">
+        <span class="product-plate">
+          <img src="./assets/tanot-longewala-post.jpg" alt="Captured tank and memorial at Longewala Post">
+          <span class="product-kind">Enterprise demand</span>
+        </span>
+        <span class="product-body">
+          <strong>Tanot</strong>
+          <p>Turn enterprise campaigns into live Studio demand.</p>
+          <span class="product-flow"><span>Campaign → contract → mobilise → live</span><span class="product-action">Open Tanot</span></span>
+        </span>
+      </a>
+      <a class="ops-card" data-id="madras" href="https://para-2-madras.vercel.app">
+        <span class="product-plate">
+          <img src="./assets/train-station-night-bw.jpg" alt="Members arriving by train in search of work">
+          <span class="product-kind">Member acquisition</span>
+        </span>
+        <span class="product-body">
+          <strong>Madras</strong>
+          <p>Move every prospect from first contact to joined member.</p>
+          <span class="product-flow"><span>Source → qualify → match → join</span><span class="product-action">Open Madras</span></span>
+        </span>
+      </a>
     </div>
+    <p class="asset-credit">Tanot image: <a href="https://commons.wikimedia.org/wiki/File:Longewala_Post.jpg">Longewala Post</a> by Nirmal Katariya3 · CC BY-SA 4.0.</p>
   </div>
 </body>
 </html>

@@ -1,6 +1,6 @@
 # NiaSave
 
-NiaSave is a phone-first member application with two connected staff desks in 2 Para: Polo for Save and Bison for Living.
+NiaSave is a phone-first member application with three connected products in 2 Para: Polo for Save operations, Bison for Living operations, and Tanot for enterprise demand.
 
 ## What is live
 
@@ -10,6 +10,7 @@ NiaSave is a phone-first member application with two connected staff desks in 2 
 - Save catalogue, bag, pickup-code and order-reservation flow
 - Operation Polo for orders, stock, packing, dispatch, collection, invoicing and reconciliation
 - Bison for the theatre → studio → nest book, member contracts, clocks and collections
+- Tanot for enterprise campaigns, qualified demand, contracts, Studio allocation, mobilisation and live activation
 - Shared, durable runtime state in Neon Postgres
 - One Vercel origin for the phone, Operation Polo and APIs
 
@@ -19,6 +20,7 @@ Production:
 - Operation Polo: <https://www.niasave.com/ops.html>
 - 2 Para: <https://www.niasave.com/2para.html>
 - Bison: <https://www.niasave.com/bison.html>
+- Tanot: <https://www.niasave.com/tanot/>
 - Health: <https://www.niasave.com/health>
 
 ## Current release boundary
@@ -36,7 +38,7 @@ Before loading real member data or money, complete the control gates in [docs/HA
 - Vercel automatically builds and deploys merges to `main`
 - GitHub Actions runs tests and a production build on pull requests and pushes to `main`
 
-The production build is controlled by `vercel.json` and `vercel-build.sh`. The build copies `member.html` to `dist/index.html` and publishes the staff pages and static assets. The React files under `src/` are not the current production phone surface.
+The production build is controlled by `vercel.json` and `vercel-build.sh`. The build copies `member.html` to `dist/index.html`, publishes the static Polo and Bison surfaces, and compiles the Tanot React application to `dist/tanot/`. The React files under the root `src/` are not the current production phone surface.
 
 ## Local development
 

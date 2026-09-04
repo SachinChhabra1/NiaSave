@@ -1,15 +1,17 @@
 # NiaSave production handover
 
-As of 31 August 2026
+As of 3 September 2026
 
 ## 1. Current system
 
-NiaSave has two connected production surfaces:
+NiaSave has one member surface and a connected 2 Para product suite:
 
 1. The member phone at `https://www.niasave.com/`, covering Live, Earn, Save and Send in five interface languages with embedded Nia voice support.
 2. Operation Polo at `https://www.niasave.com/ops.html`, covering orders, stock, packing, dispatch, collection, invoicing and reconciliation.
+3. Bison at `https://www.niasave.com/bison.html`, covering theatres, Studios, nests, member contracts, clocks and collections.
+4. Tanot at `https://www.niasave.com/tanot/`, covering enterprise campaigns, accounts, qualified demand, contracts, Studio allocation, mobilisation, live activation, BD-executive funnels and evidence-backed action reports.
 
-Both surfaces and their APIs run from one Vercel project and use a shared Neon Postgres runtime store. The current system is a controlled pilot. OTP and payments are skipped. Send does not move money.
+The surfaces are published from one Vercel project. Polo and Bison use the shared Neon Postgres runtime store. Tanot currently uses explicitly illustrative in-browser records and local persistence; it is not yet connected to governed enterprise, campaign, calendar or Studio-capacity sources. The current system is a controlled pilot. OTP and payments are skipped. Send does not move money.
 
 ## 2. Source of truth and release flow
 

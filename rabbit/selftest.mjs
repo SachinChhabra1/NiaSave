@@ -339,6 +339,8 @@ const staffCss = readFileSync(new URL("../staff.css", import.meta.url), "utf8");
 const bisonCss = readFileSync(new URL("../bison.css", import.meta.url), "utf8");
 ok("2 Para opens live Polo", /href="https:\/\/www\.niasave\.com\/ops\.html"/.test(deskHtml));
 ok("2 Para opens live Bison", /href="https:\/\/www\.niasave\.com\/bison\.html"/.test(deskHtml));
+ok("2 Para opens live Tanot", /href="https:\/\/www\.niasave\.com\/tanot\/"/.test(deskHtml));
+ok("2 Para opens live Madras", /href="https:\/\/para-2-madras\.vercel\.app"/.test(deskHtml));
 ok("local Polo redirects live", /location\.protocol === 'file:'[\s\S]*niasave\.com\/ops\.html/.test(opsHtml));
 ok("local Bison redirects live", /location\.protocol\s*===?\s*['"]file:['"][\s\S]*niasave\.com/.test(bisonHtml));
 ok("all staff tables are sortable", /MutationObserver/.test(staffJs) && /aria-sort/.test(staffJs) && /table-sort-button/.test(staffJs));

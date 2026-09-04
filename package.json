@@ -7,11 +7,13 @@
     "dev": "vite",
     "dev:api": "node api/server.mjs",
     "build": "vite build",
+    "build:tanot": "vite build tanot --base=/tanot/ --outDir=../dist/tanot --emptyOutDir=false",
     "build:production": "sh vercel-build.sh",
     "preview": "vite preview",
     "test": "node rabbit/selftest.mjs",
     "test:storage": "node lib/runtime-store.test.mjs && node lib/polo-persistence.test.mjs",
-    "test:bison": "node --test bison/engine.test.mjs api/staff-auth.test.mjs"
+    "test:bison": "node --test bison/engine.test.mjs api/staff-auth.test.mjs",
+    "test:tanot": "node --test tanot/insightEngine.test.mjs"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",

@@ -15,11 +15,13 @@ The interface is available in English, Hindi, Bangla, Tamil and Kannada. Nia voi
 
 ## Staff surface
 
-`ops.html` is the Operation Polo entry point. The linked staff pages cover pickup, reconciliation, prediction, hub, next beat, cash, source, inventory, ageing, purchase orders, dispatch, invoices and biker runs.
+`desk.html` is the 2 Para product entry point. It opens Operation Polo for Save operations, Bison for Living operations, and Tanot at `/tanot/` for enterprise demand from campaign through live Studio activation.
+
+Tanot is a production-built React surface under `tanot/`. Its current campaign, opportunity, Studio and BD-executive records are explicitly illustrative and persist only in the browser until governed source integrations are added.
 
 ## Production source boundary
 
-The files under `src/` contain an earlier React/Vite prototype. They are not the current production phone because the custom Vercel build copies `member.html` directly. A future frontend rewrite must first choose one canonical implementation and remove the unused surface to prevent divergent fixes.
+The files under the root `src/` contain an earlier React/Vite member prototype. They are not the current production phone because the custom Vercel build copies `member.html` directly. Tanot's React source under `tanot/src/` is canonical and is compiled by `vercel-build.sh` into `dist/tanot/`.
 
 ## Product rules
 

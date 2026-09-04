@@ -16,6 +16,9 @@ cp -f desk.html dist/2para.html
 if [ -d public/products ]; then cp -r public/products/. dist/products/; fi
 if [ -d assets ]; then cp -r assets/. dist/assets/; fi
 if [ -f manifest.webmanifest ]; then cp -f manifest.webmanifest dist/; fi
+if [ -f tanot/index.html ]; then
+  npx vite build tanot --base=/tanot/ --outDir=../dist/tanot --emptyOutDir=false
+fi
 if [ -f research/why-blue-collar-workers-quit.html ]; then
   mkdir -p dist/research
   rm -f dist/research/why-blue-collar-workers-quit

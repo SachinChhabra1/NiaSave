@@ -36,6 +36,9 @@ jobs:
       - name: Run Bison and staff-gate tests
         run: npm run test:bison
 
+      - name: Run Tanot insight-engine tests
+        run: npm run test:tanot
+
       - name: Run storage tests
         run: npm run test:storage
 

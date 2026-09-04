@@ -55,6 +55,10 @@ function seedJoinMonths() {
 function baseState() {
   return { schemaVersion: SCHEMA_VERSION, dummy: DUMMY_DATA, persist: hasDurableStore() ? "postgres" : "memory", asOf: today(), source: SOURCE, sites: seedSites(), studios: [], groups: seedGroups(), bookings: seedBookings(), members: [], contracts: [], receivables: [], collectionPayments: [], audits: [], ingest: [], joinMonths: seedJoinMonths(), assignments: [], clocks: [], auditLog: [], sheetProcessed: [], googleSheet: { url: "", spreadsheetId: "", enabled: false, lastSyncAt: null } };
 }
+function liveBaselineState(previous = {}) {
+  const sites = seedSites().map(site => ({ ...site, occupied: 0, vacant: site.contracted, pending: 0, openActions: 0, lastCount: 0, overdueCheckout: 0 }));
+  return { schemaVersion: SCHEMA_VERSION, dummy: false, persist: previous.persist || (hasDurableStore() ? "postgres" : "memory"), asOf: today(), source: SOURCE, sites, studios: [], groups: seedGroups(), bookings: [], members: [], contracts: [], receivables: [], collectionPayments: [], audits: [], ingest: [], joinMonths: [], assignments: [], clocks: [], auditLog: [], sheetProcessed: [], googleSheet: previous.googleSheet || { url: "", spreadsheetId: "", enabled: true, lastSyncAt: null } };
+}
 
 let state;
 function findSite(value) { return state.sites.find(row => row.id === value || row.code === value); }
@@ -251,9 +255,10 @@ export function createContract(body = {}) {
   const signedStatus = ["pending", "signed", "imported_needs_review"].includes(body.signedStatus) ? body.signedStatus : "pending";
   const contract = { id: id("ctr"), memberId: member.id, bookingId: null, studioId: studio.id, nestId: text(body.nestId || body.nestLabel, 40).toUpperCase(), startDate, endDate, monthlyRent, deposit, billingDay: Math.min(28, Math.max(1, Number(body.billingDay) || 1)), signedStatus, status: signedStatus === "signed" ? "active" : "pending", noticeDate: null, amendments: [], source: "bison_desk", createdAt: now(), createdBy: text(body.actor || "desk", 80) };
   if (!contract.nestId) return { error: "nest_required", status: 400 };
-  const booked = createBooking({ studioId: studio.id, nestId: contract.nestId, arrive: startDate, depart: endDate, rate: monthlyRent, guest: member.name, memberId: member.id, contractId: contract.id, status: signedStatus === "signed" && body.checkIn ? "in" : "reserved", actor: body.actor });
+  const attached = body.attachExisting && state.bookings.find(row => row.studioId === studio.id && row.nestId === contract.nestId && text(row.guest, 80).toLowerCase() === member.name.toLowerCase());
+  const booked = attached ? { ok: true, booking: attached } : createBooking({ studioId: studio.id, nestId: contract.nestId, arrive: startDate, depart: endDate, rate: monthlyRent, guest: member.name, memberId: member.id, contractId: contract.id, status: signedStatus === "signed" && body.checkIn ? "in" : "reserved", actor: body.actor });
   if (!booked.ok) return booked;
-  contract.bookingId = booked.booking.id; state.contracts.unshift(contract); booked.booking.contractId = contract.id;
+  contract.bookingId = booked.booking.id; state.contracts.unshift(contract); booked.booking.contractId = contract.id; booked.booking.memberId = member.id;
   if (body.firstCharge !== false) chargeCollection({ contractId: contract.id, amount: monthlyRent, dueDate: startDate, kind: "membership", note: "Opening membership charge", actor: body.actor });
   log(body.actor, "contract_created", contract.id, `${studio.code} ${contract.nestId}`); return { ok: true, contract, booking: booked.booking };
 }
@@ -397,7 +402,7 @@ export function importBisonData(body = {}) {
         }
         if (!result) { const capacity = Number(importCell(row, "capacity")); if (capacity && capacity < studioInventory(studio).booked) result = { error: "capacity_below_committed", status: 409 }; else { if (capacity) studio.capacity = capacity; if (importCell(row, "owner")) studio.owner = text(row.owner, 80); if (importCell(row, "clock_due_at")) studio.clockDueAt = text(row.clock_due_at, 30); result = { ok: true, studio }; } }
       } else if (table === "contracts") {
-        const memberResult = importMember(row, actor); if (!memberResult.ok) result = memberResult; else result = createContract({ memberId: memberResult.member.id, studioId: importCell(row, "studio_id", "studio_code"), nestId: importCell(row, "nest_id", "nest_label"), startDate: importCell(row, "start_date"), endDate: importCell(row, "end_date"), monthlyRent: importCell(row, "monthly_rent", "rent"), deposit: importCell(row, "deposit") || 0, signedStatus: importCell(row, "document_status", "signed_status") || "pending", checkIn: String(importCell(row, "check_in")).toLowerCase() === "true", actor });
+        const memberResult = importMember(row, actor); if (!memberResult.ok) result = memberResult; else result = createContract({ memberId: memberResult.member.id, studioId: importCell(row, "studio_id", "studio_code"), nestId: importCell(row, "nest_id", "nest_label"), startDate: importCell(row, "start_date"), endDate: importCell(row, "end_date"), monthlyRent: importCell(row, "monthly_rent", "rent"), deposit: importCell(row, "deposit") || 0, signedStatus: importCell(row, "document_status", "signed_status") || "pending", checkIn: String(importCell(row, "check_in")).toLowerCase() === "true", attachExisting: true, firstCharge: false, actor });
       } else if (table === "bookings") {
         const action = text(importCell(row, "action"), 20).toLowerCase(); const bookingId = importCell(row, "booking_id", "bookingId");
         if (action === "checkin") result = checkIn({ bookingId, actor }); else if (action === "checkout") result = checkOut({ bookingId, actor }); else if (action === "cancel") result = cancelBooking({ bookingId, reason: importCell(row, "reason"), actor }); else {
@@ -449,7 +454,14 @@ export async function syncGoogleSheet(body = {}) {
     const token = await googleAccessToken(); const tabs = ["01_STUDIO_MASTER", "02_OCCUPANCY_INPUT", "03_CONTRACT_INPUT", "04_COLLECTION_INPUT", "05_CLOCK_CLOSE_INPUT"];
     const params = new URLSearchParams(); tabs.forEach(tab => params.append("ranges", `'${tab}'!A1:T6000`)); params.set("majorDimension", "ROWS"); params.set("valueRenderOption", "UNFORMATTED_VALUE"); params.set("dateTimeRenderOption", "FORMATTED_STRING");
     const response = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values:batchGet?${params}`, { headers: { Authorization: `Bearer ${token}` } }); const payload = await response.json(); if (!response.ok) throw new Error(payload.error && payload.error.message || "google_sheet_read_failed");
-    const before = snapshotState(); const summary = {}; const processed = new Set(state.sheetProcessed || []);
+    const before = snapshotState(); const replacing = body.replace === true;
+    if (replacing && body.confirm !== "REPLACE_SEEDED_BISON") return { error:"confirmation_required", message:"Set confirm to REPLACE_SEEDED_BISON.", status:400 };
+    if (replacing && hasDurableStore()) {
+      const backupKey=`${RUNTIME_STATE_KEY}-pre-live-backup`, currentBackup=await loadRuntimeState(backupKey, before), savedBackup=await saveRuntimeState(backupKey, before, currentBackup.version);
+      if (!savedBackup.ok) return { error:"backup_failed", status:409 };
+    }
+    if (replacing) restoreState(liveBaselineState(before), before.persist);
+    const summary = {}; const processed = new Set(state.sheetProcessed || []);
     const configs = [
       { tab: tabs[0], table: "studios", accept:r=>r.studio_code, map: r => ({ theatre:r.theatre, studio_code:r.studio_code, studio_name:r.studio_name, capacity:r.contracted_capacity, owner:r.jco_owner, clock_due_at:r.clock_due_time }) },
       { tab: tabs[1], table: "bookings", accept:r=>r.studio_code&&r.room_nest_id&&r.member_name&&String(r.import_status||"").toUpperCase()==="READY", map: r => { const status=String(r.booking_status||"").trim().toLowerCase().replace(/[\s-]+/g,"_"); return ({ action:"create", studio_code:r.studio_code, nest_id:r.room_nest_id, member_name:r.member_name, arrive:r.check_in_date, depart:r.planned_checkout||plusDays(today(),30), status:["in","in_house","checked_in","occupied"].includes(status)?"in":"reserved", rate:r.monthly_rent }); } },
@@ -472,7 +484,7 @@ export async function syncGoogleSheet(body = {}) {
       if (!result.ok) { restoreState(before,before.persist); return { ...result, status:400, sheet:config.tab }; }
       pending.forEach(item=>processed.add(item.key)); summary[config.tab]=pending.length;
     }
-    state.sheetProcessed=Array.from(processed).slice(-20000); state.googleSheet={ ...(state.googleSheet||{}), url:`https://docs.google.com/spreadsheets/d/${spreadsheetId}/edit`, spreadsheetId, enabled:true, lastSyncAt:now(), lastSyncStatus:"ok", lastSyncSummary:summary }; log("Google Sheet sync","sheet_synced",spreadsheetId,JSON.stringify(summary)); return { ok:true, spreadsheetId, syncedAt:state.googleSheet.lastSyncAt, summary };
+    state.sheetProcessed=Array.from(processed).slice(-20000); state.dummy=false; state.googleSheet={ ...(state.googleSheet||{}), url:`https://docs.google.com/spreadsheets/d/${spreadsheetId}/edit`, spreadsheetId, enabled:true, lastSyncAt:now(), lastSyncStatus:"ok", lastSyncSummary:summary }; log("Google Sheet sync",replacing?"baseline_replaced":"sheet_synced",spreadsheetId,JSON.stringify(summary)); return { ok:true, replaced:replacing, spreadsheetId, syncedAt:state.googleSheet.lastSyncAt, summary };
   } catch (error) { state.googleSheet={ ...(state.googleSheet||{}), lastSyncAt:now(), lastSyncStatus:"error", lastSyncError:text(error.message,240) }; return { error:"google_sheet_sync_failed", message:error.message, status:502 }; }
 }
 

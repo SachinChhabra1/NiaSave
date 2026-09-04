@@ -70,6 +70,16 @@ test("updates a repeated Sheet booking instead of duplicating it", () => {
   assert.equal(matches[0].rate, 2500);
 });
 
+test("attaches a Sheet contract to its existing occupancy booking", () => {
+  resetBison();
+  const studio = hierarchyPayload({}).studios[0];
+  const booking = createBooking({ studioId: studio.id, nestId: "SYNC-C1", guest: "Contract Sync", arrive: "2026-09-04", depart: "2026-10-04", status: "in", rate: 2200, actor: "Google Sheet sync" });
+  const imported = importBisonData({ table: "contracts", rows: [{ member_name: "Contract Sync", phone: "9000099999", studio_code: studio.code, nest_id: "SYNC-C1", start_date: "2026-09-04", end_date: "2026-10-04", monthly_rent: 2200, document_status: "signed" }], commit: true, actor: "Google Sheet sync" });
+  assert.equal(imported.ok, true);
+  assert.equal(contractsPayload({ memberId: booking.booking.memberId }).contracts[0].bookingId, booking.booking.id);
+  assert.equal(bookingsPayload({ studioId: studio.id }).bookings.filter(row => row.nestId === "SYNC-C1").length, 1);
+});
+
 test("rejects an entire import when any row is invalid", () => {
   resetBison();
   const before = membersPayload({ limit: 200 }).count;

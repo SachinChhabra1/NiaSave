@@ -377,7 +377,9 @@ ok("ops vendor pay is last", opsHtml.indexOf("5</b> Nia paid vendor") > opsHtml.
 ok("ops no bare Settled or Paid labels", !/<b>\d<\/b> Settled/.test(opsHtml) && !/<b>\d<\/b> Paid/.test(opsHtml) && !/'Settled'/.test(opsHtml) && !/'Paid'/.test(opsHtml));
 ok("ops h1 is Operation Polo once", (opsHtml.match(/<h1>Operation Polo<\/h1>/g) || []).length === 1);
 ok("ops title Operation Polo", /<title>Operation Polo<\/title>/.test(opsHtml));
-ok("ops rail Polo not Sikh", /href="\/ops.html">Polo</.test(rail) && !/Sikh|Jat|Dogra|Assam Rifles/.test(rail));
+ok("ops stamps nia-board Operation Polo", /name="nia-board" content="Operation Polo"/.test(opsHtml));
+ok("ops not Sikh Unit", !/Sikh Unit/.test(opsHtml));
+ok("ops rail Polo not Sikh", /href="\/ops.html">Polo</.test(rail) && /href="\/bison.html">Bison</.test(rail) && /href="\/tanot\/">Tanot</.test(rail) && /href="\/desk.html">All products</.test(rail) && !/Sikh|Jat|Dogra|Assam/.test(rail));
 const bisonRail = (bisonHtml.split('class="rail"')[1] || "").split('class="pane"')[0];
 ok("bison rail Polo Bison Tanot All products", /href="\/ops.html">Polo</.test(bisonRail) && /href="\/bison.html">Bison</.test(bisonRail) && /href="\/tanot\/">Tanot</.test(bisonRail) && /href="\/desk.html">All products</.test(bisonRail) && !/Sikh|Jat|Dogra|Assam Rifles/.test(bisonRail));
 ok("ops empty state Operation Polo", /Could not load Operation Polo/.test(opsHtml));

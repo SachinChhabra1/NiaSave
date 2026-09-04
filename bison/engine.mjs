@@ -449,8 +449,14 @@ async function googleAccessToken() {
 }
 function sheetRows(values = []) { const headers = (values[0] || []).map(value => text(value, 80).toLowerCase().replace(/\*/g, "").replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "")); return values.slice(1).map((row, index) => ({ row: index + 2, data: Object.fromEntries(headers.map((header, column) => [header, row[column] == null ? "" : row[column]])) })).filter(item => Object.values(item.data).some(value => String(value).trim())); }
 function sheetDate(value) {
-  if (typeof value === "number" && Number.isFinite(value)) return new Date(Date.UTC(1899,11,30) + Math.round(value) * 86400000).toISOString().slice(0,10);
+  if (typeof value === "number" && Number.isFinite(value)) {
+    const digits=String(Math.trunc(value));
+    if (/^\d{8}$/.test(digits)) return `${digits.slice(0,4)}-${digits.slice(4,6)}-${digits.slice(6,8)}`;
+    const serialDate=new Date(Date.UTC(1899,11,30) + Math.round(value) * 86400000);
+    return Number.isNaN(serialDate.getTime())?"":serialDate.toISOString().slice(0,10);
+  }
   const raw=String(value||"").trim(); if (!raw) return "";
+  if (/^\d{8}$/.test(raw)) return `${raw.slice(0,4)}-${raw.slice(4,6)}-${raw.slice(6,8)}`;
   const iso=raw.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/); if (iso) return `${iso[1]}-${iso[2].padStart(2,"0")}-${iso[3].padStart(2,"0")}`;
   const local=raw.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/); if (local) return `${local[3]}-${local[2].padStart(2,"0")}-${local[1].padStart(2,"0")}`;
   const parsed=new Date(raw); return Number.isNaN(parsed.getTime())?"":parsed.toISOString().slice(0,10);

@@ -480,8 +480,10 @@ export async function syncGoogleSheet(body = {}) {
         pending.push({ key, row:mapped });
       }
       if (!pending.length) { summary[config.tab]=0; continue; }
-      const result=importBisonData({ table:config.table, rows:pending.map(item=>item.row), commit:true, filename:`Google Sheet ${config.tab}`, actor:"Google Sheet sync" });
-      if (!result.ok) { restoreState(before,before.persist); return { ...result, status:400, sheet:config.tab }; }
+      for (let start=0;start<pending.length;start+=2000) {
+        const batch=pending.slice(start,start+2000), result=importBisonData({ table:config.table, rows:batch.map(item=>item.row), commit:true, filename:`Google Sheet ${config.tab}`, actor:"Google Sheet sync" });
+        if (!result.ok) { restoreState(before,before.persist); return { ...result, status:400, sheet:config.tab }; }
+      }
       pending.forEach(item=>processed.add(item.key)); summary[config.tab]=pending.length;
     }
     state.sheetProcessed=Array.from(processed).slice(-20000); state.dummy=false; state.googleSheet={ ...(state.googleSheet||{}), url:`https://docs.google.com/spreadsheets/d/${spreadsheetId}/edit`, spreadsheetId, enabled:true, lastSyncAt:now(), lastSyncStatus:"ok", lastSyncSummary:summary }; log("Google Sheet sync",replacing?"baseline_replaced":"sheet_synced",spreadsheetId,JSON.stringify(summary)); return { ok:true, replaced:replacing, spreadsheetId, syncedAt:state.googleSheet.lastSyncAt, summary };

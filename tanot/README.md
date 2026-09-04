@@ -1,6 +1,6 @@
-# Tanot · 2 Para Ops
+# Dogra · 2 Para Ops
 
-A working frontend MVP for Tanot, the enterprise-demand product in Para2's Ops suite alongside Polo and Bison: campaign → account → qualified demand → contract → Studio allocation → mobilisation → live.
+A working frontend MVP for Dogra (technical path and package: `tanot`), the enterprise-demand product in 2 Para alongside Sikh and Jat: campaign → account → qualified demand → contract → Studio allocation → mobilisation → live.
 
 ## Included
 
@@ -18,7 +18,7 @@ A working frontend MVP for Tanot, the enterprise-demand product in Para2's Ops s
 
 ## Design system
 
-The shell follows the existing Para2 product architecture used by Bison and Polo: a Nia mark with the Tanot name in the top header, a 260px operating rail, explicit `2 Para · Ops` sibling context, SF/system typography, a `#f6f8fb` canvas, `#0a84ff` accent controls, and border-first 16px surfaces. Tanot's header uses a restrained crop of a Longewala Post photograph to create a distinct product identity without reducing operating density.
+The shell follows the existing 2 Para product architecture used by Jat and Sikh: a Nia mark with the Dogra name in the top header, a 260px operating rail, explicit `2 Para · Ops` sibling context, SF/system typography, a `#f6f8fb` canvas, `#0a84ff` accent controls, and border-first 16px surfaces. Dogra's header uses a restrained crop of a Longewala Post photograph to create a distinct product identity without reducing operating density.
 
 Header photograph: [Longewala Post](https://commons.wikimedia.org/wiki/File:Longewala_Post.jpg) by Nirmal Katariya3, licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). The image is cropped in the interface.
 

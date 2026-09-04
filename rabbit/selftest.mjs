@@ -323,7 +323,7 @@ const staffPages = [
 ];
 for (const file of staffPages) {
   const html = readFileSync(new URL("../" + file, import.meta.url), "utf8");
-  ok(file + " says Operation Polo", /Operation Polo/.test(html));
+  ok(file + " says Sikh", /Sikh/.test(html));
   ok(file + " has no Rabbit", !/Rabbit|RABBIT/.test(html));
   ok(file + " has no Jabali", !/Jabali|Jamali|JABALI|JAMALI/.test(html));
   ok(file + " has no Dummy", !/Dummy/.test(html));
@@ -332,29 +332,33 @@ for (const file of staffPages) {
 }
 const opsHtml = readFileSync(new URL("../ops.html", import.meta.url), "utf8");
 const bisonHtml = readFileSync(new URL("../bison.html", import.meta.url), "utf8");
-const bisonPages = ["bison.html","bison-studios.html","bison-contracts.html","bison-clocks.html","bison-collections.html","bison-nests.html"];
+const bisonPages = ["bison.html","bison-studios.html","bison-contracts.html","bison-clocks.html","bison-collections.html","bison-nests.html","bison-data.html"];
 const deskHtml = readFileSync(new URL("../desk.html", import.meta.url), "utf8");
 const staffJs = readFileSync(new URL("../staff.js", import.meta.url), "utf8");
 const staffCss = readFileSync(new URL("../staff.css", import.meta.url), "utf8");
 const bisonCss = readFileSync(new URL("../bison.css", import.meta.url), "utf8");
-ok("2 Para opens live Polo", /href="https:\/\/www\.niasave\.com\/ops\.html"/.test(deskHtml));
-ok("2 Para opens live Bison", /href="https:\/\/www\.niasave\.com\/bison\.html"/.test(deskHtml));
-ok("2 Para opens live Tanot", /href="https:\/\/www\.niasave\.com\/tanot\/"/.test(deskHtml));
-ok("2 Para opens live Madras", /href="https:\/\/para-2-madras\.vercel\.app"/.test(deskHtml));
-ok("local Polo redirects live", /location\.protocol === 'file:'[\s\S]*niasave\.com\/ops\.html/.test(opsHtml));
-ok("local Bison redirects live", /location\.protocol\s*===?\s*['"]file:['"][\s\S]*niasave\.com/.test(bisonHtml));
+ok("2 Para opens live Sikh", /href="https:\/\/www\.niasave\.com\/ops\.html"/.test(deskHtml));
+ok("2 Para opens live Jat", /href="https:\/\/www\.niasave\.com\/bison\.html"/.test(deskHtml));
+ok("2 Para opens live Dogra", /href="https:\/\/www\.niasave\.com\/tanot\/"/.test(deskHtml));
+ok("2 Para opens live Assam Rifles", /href="https:\/\/para-2-madras\.vercel\.app"/.test(deskHtml));
+ok("2 Para shows approved display names", /<strong>Sikh<\/strong>[\s\S]*<strong>Jat<\/strong>[\s\S]*<strong>Dogra<\/strong>[\s\S]*<strong>Assam Rifles<\/strong>/.test(deskHtml));
+ok("2 Para shows approved open actions", /Open Sikh[\s\S]*Open Jat[\s\S]*Open Dogra[\s\S]*Open Assam Rifles/.test(deskHtml));
+ok("2 Para preserves technical identifiers", /data-id="polo"[\s\S]*data-id="bison"[\s\S]*data-id="tanot"[\s\S]*data-id="madras"/.test(deskHtml));
+ok("local Sikh redirects live", /location\.protocol === 'file:'[\s\S]*niasave\.com\/ops\.html/.test(opsHtml));
+ok("local Jat redirects live", /location\.protocol\s*===?\s*['"]file:['"][\s\S]*niasave\.com/.test(bisonHtml));
 ok("all staff tables are sortable", /MutationObserver/.test(staffJs) && /aria-sort/.test(staffJs) && /table-sort-button/.test(staffJs));
 for (const file of staffPages.concat(bisonPages)) {
   const html = readFileSync(new URL("../" + file, import.meta.url), "utf8");
   if (/<table|<th|bison\.js/.test(html)) ok(file + " loads table sorting", /<script src="\/staff\.js"><\/script>/.test(html));
 }
-ok("Bison is split into work pages", bisonPages.every(file => readFileSync(new URL("../" + file, import.meta.url), "utf8").includes('data-bison-page=')));
-ok("Bison tables use page flow", !/studios-table/.test(bisonPages.map(file => readFileSync(new URL("../" + file, import.meta.url), "utf8")).join("\n")) && !/(?:max-height|overflow)\s*:\s*(?:auto|scroll)/.test(bisonCss));
-ok("Bison legacy sections route to pages", /#contracts[^\n]+bison-contracts\.html/.test(bisonHtml) && /#clocks[^\n]+bison-clocks\.html/.test(bisonHtml));
+ok("Jat is split into work pages", bisonPages.every(file => readFileSync(new URL("../" + file, import.meta.url), "utf8").includes('data-bison-page=')));
+ok("Jat tables use page flow", !/studios-table/.test(bisonPages.map(file => readFileSync(new URL("../" + file, import.meta.url), "utf8")).join("\n")) && !/(?:max-height|overflow)\s*:\s*(?:auto|scroll)/.test(bisonCss));
+ok("Jat legacy sections route to pages", /#contracts[^\n]+bison-contracts\.html/.test(bisonHtml) && /#clocks[^\n]+bison-clocks\.html/.test(bisonHtml));
+ok("Jat pages use approved display branding", bisonPages.every(file => /Jat/.test(readFileSync(new URL("../" + file, import.meta.url), "utf8"))));
 ok("staff.css has no IBM Plex", !/IBM Plex|Plex Sans|Plex Mono|fonts\.googleapis/.test(staffCss));
 ok("staff.css phone --font", /--font:-apple-system,"SF Pro Display","SF Pro Text","Helvetica Neue","Segoe UI",Arial,sans-serif/.test(staffCss));
 ok("staff.css phone --mono", /--mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace/.test(staffCss));
-ok("ops nia then Operation Polo", /class="nia-logo"[\s\S]{0,200}Operation Polo/.test(opsHtml));
+ok("ops nia then Sikh", /class="nia-logo"[\s\S]{0,200}Sikh/.test(opsHtml));
 ok("ops has no polo-icon", !/polo-icon/.test(opsHtml));
 ok("ops job icons in source", /id="i-biker"/.test(opsHtml) && /id="i-po"/.test(opsHtml) && /id="i-dispatch"/.test(opsHtml));
 const rail = (opsHtml.split('class="rail"')[1] || "").split('class="pane"')[0];
@@ -363,7 +367,7 @@ ok("ops load has no 40 stops", !/40 stops/.test(opsHtml) && !/\+' stops/.test(op
 ok("ops sequence 1 to 5", /1<\/b> Member ordered[\s\S]*→[\s\S]*2<\/b> Hub loaded[\s\S]*→[\s\S]*3<\/b> Member collected or returned[\s\S]*→[\s\S]*4<\/b> Hub settled with officer[\s\S]*→[\s\S]*5<\/b> Nia paid vendor/.test(opsHtml));
 ok("ops vendor pay is last", opsHtml.indexOf("5</b> Nia paid vendor") > opsHtml.indexOf("4</b> Hub settled with officer") && opsHtml.indexOf("5</b> Nia paid vendor") > opsHtml.indexOf("2</b> Hub loaded"));
 ok("ops no bare Settled or Paid labels", !/<b>\d<\/b> Settled/.test(opsHtml) && !/<b>\d<\/b> Paid/.test(opsHtml) && !/'Settled'/.test(opsHtml) && !/'Paid'/.test(opsHtml));
-ok("ops h1 is Operation Polo once", (opsHtml.match(/<h1>Operation Polo<\/h1>/g) || []).length === 1);
+ok("ops h1 is Sikh once", (opsHtml.match(/<h1>Sikh<\/h1>/g) || []).length === 1);
 ok("ops header has no brand kicker", !/<div class="brand">/.test(opsHtml));
 ok("ops rail Reports and Ops", /<h2 class="rail-h"[^>]*>Reports<\/h2>/.test(rail) && /<h2 class="rail-h"[^>]*>Ops<\/h2>/.test(rail));
 ok("inventory under Reports", rail.indexOf("Reports") < rail.indexOf(">Inventory<") && rail.indexOf(">Inventory<") < rail.indexOf(">Ops<"));
@@ -374,4 +378,4 @@ if (fails.length) {
   process.stderr.write("FAIL\n" + fails.join("\n") + "\n");
   process.exit(1);
 }
-process.stdout.write("polo selftest passed\n");
+process.stdout.write("Sikh selftest passed\n");

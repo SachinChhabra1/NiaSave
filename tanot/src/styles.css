@@ -371,7 +371,7 @@ body { background: var(--canvas); color: var(--ink); font-family: "IBM Plex Sans
   .report-filters { width: 100%; }.report-filters label { flex: 1; }.report-filters select { width: 100%; min-width: 0; }.report-banner h3 { font-size: 18px; }.report-kpis div { padding: 12px; }.metric-contract { grid-template-columns: 1fr; }.finding-evidence { padding-left: 14px; }
 }
 
-/* Para2 Ops product shell — shared hierarchy with Bison and Polo */
+/* 2 Para Ops product shell — shared hierarchy with Jat and Sikh */
 :root {
   font-family: -apple-system, "SF Pro Display", "SF Pro Text", "Helvetica Neue", "Segoe UI", Arial, sans-serif;
   --canvas: #f6f8fb;

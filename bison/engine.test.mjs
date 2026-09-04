@@ -9,6 +9,7 @@ import {
   bookingsPayload,
   createMember,
   createContract,
+  checkIn,
   amendContract,
   contractsPayload,
   clearClock,
@@ -148,6 +149,18 @@ test("creates an auditable member contract, booking and opening charge", () => {
   assert.equal(amended.ok, true);
   assert.equal(amended.contract.amendments.length, 1);
   assert.equal(contractsPayload({ memberId: member.member.id }).count, 1);
+});
+
+test("checks a reserved contract member into the selected nest", () => {
+  resetBison();
+  const studio = hierarchyPayload({}).studios.find(row => row.vacant > 0);
+  const member = createMember({ name: "Check In Member", phone: "9000000011", actor: "Ops" });
+  const created = createContract({ memberId: member.member.id, studioId: studio.id, nestId: "QA-CHECKIN", startDate: "2026-09-04", endDate: "2026-10-04", monthlyRent: 2200, signedStatus: "signed", actor: "Ops" });
+  assert.equal(created.booking.status, "reserved");
+  const checkedIn = checkIn({ bookingId: created.booking.id, actor: "Ops" });
+  assert.equal(checkedIn.ok, true);
+  assert.equal(checkedIn.booking.status, "in");
+  assert.equal(checkIn({ bookingId: created.booking.id, actor: "Ops" }).error, "not_reserved");
 });
 
 test("requires evidence and all checks before closing a studio clock", () => {

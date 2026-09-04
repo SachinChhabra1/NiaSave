@@ -7,6 +7,7 @@
 .bison-filter{display:flex;align-items:center;gap:12px;margin:0 0 24px}.bison-filter label{font-size:15px;font-weight:600}.bison-filter select{min-width:220px;padding:10px 12px;font-size:15px}
 .bison-table{margin:0 0 36px}.bison-table table{margin:0}.bison-table th,.bison-table td{padding:13px 14px;font-size:15px}
 .bison-table th{font-size:12px}.bison-table tr.pick{cursor:pointer}.bison-table tr.pick:hover{background:var(--bg)}
+.bison-table .nest-checkin{min-height:34px;padding:7px 12px;font-size:13px;white-space:nowrap}
 .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.form-grid .wide{grid-column:1/-1}
 .form-grid label{display:block;font-size:13px;color:var(--fg-muted);margin:0 0 5px}.form-grid input,.form-grid select{width:100%;min-width:0;padding:10px 12px;font-size:15px}
 .compact-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:14px}.compact-actions button{padding:10px 14px;min-height:42px;font-size:15px}

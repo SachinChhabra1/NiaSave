@@ -337,6 +337,7 @@ const deskHtml = readFileSync(new URL("../desk.html", import.meta.url), "utf8");
 const staffJs = readFileSync(new URL("../staff.js", import.meta.url), "utf8");
 const staffCss = readFileSync(new URL("../staff.css", import.meta.url), "utf8");
 const bisonCss = readFileSync(new URL("../bison.css", import.meta.url), "utf8");
+const bisonJs = readFileSync(new URL("../bison.js", import.meta.url), "utf8");
 ok("2 Para opens live Polo", /href="https:\/\/www\.niasave\.com\/ops\.html"/.test(deskHtml));
 ok("2 Para opens live Bison", /href="https:\/\/www\.niasave\.com\/bison\.html"/.test(deskHtml));
 ok("2 Para opens live Tanot", /href="https:\/\/www\.niasave\.com\/tanot\/"/.test(deskHtml));
@@ -354,6 +355,7 @@ for (const file of staffPages.concat(bisonPages)) {
 ok("Bison is split into work pages", bisonPages.every(file => readFileSync(new URL("../" + file, import.meta.url), "utf8").includes('data-bison-page=')));
 ok("Bison tables use page flow", !/studios-table/.test(bisonPages.map(file => readFileSync(new URL("../" + file, import.meta.url), "utf8")).join("\n")) && !/(?:max-height|overflow)\s*:\s*(?:auto|scroll)/.test(bisonCss));
 ok("Bison legacy sections route to pages", /#contracts[^\n]+bison-contracts\.html/.test(bisonHtml) && /#clocks[^\n]+bison-clocks\.html/.test(bisonHtml));
+ok("Bison reserved nests expose a persisted check-in action", /class=\\?"nest-checkin/.test(bisonJs) && /\/api\/bison\/checkin/.test(bisonJs));
 ok("bison.html uses Bison not Jat", /<title>Bison · Control<\/title>/.test(bisonHtml) && /<h1>Bison<\/h1>/.test(bisonHtml) && !/Sikh|Jat|Dogra|Assam Rifles/.test(bisonHtml));
 ok("Bison pages use Bison not Jat", bisonPages.every(file => {
   const html = readFileSync(new URL("../" + file, import.meta.url), "utf8");

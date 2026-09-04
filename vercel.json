@@ -4,7 +4,8 @@
   "outputDirectory": "dist",
   "functions": {
     "api/index.mjs": {
-      "includeFiles": "{api,rabbit,bison,lib}/**"
+      "includeFiles": "{api,rabbit,bison,lib}/**",
+      "maxDuration": 60
     }
   },
   "rewrites": [

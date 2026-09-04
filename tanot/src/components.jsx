@@ -23,7 +23,7 @@ export function Sidebar({ items, active, onSelect }) {
     ['Delivery', items.filter(([id]) => ['studios', 'activations', 'insights'].includes(id))],
   ]
   return (
-    <aside className="sidebar" aria-label="Tanot navigation">
+    <aside className="sidebar" aria-label="Dogra navigation">
       <nav className="product-navigation">
         {groups.map(([title, groupItems]) => <div className="nav-group" key={title}><p>{title}</p>{groupItems.map(([id, label]) => (
           <button key={id} className={active === id ? 'active' : ''} onClick={() => onSelect(id)} aria-label={label} aria-current={active === id ? 'page' : undefined}>
@@ -33,9 +33,10 @@ export function Sidebar({ items, active, onSelect }) {
       </nav>
       <div className="para-family" aria-label="2 Para Ops products">
         <p>2 Para · Ops</p>
-        <a className="para-product" href="/ops.html"><span>Polo</span><small>Operations</small></a>
-        <a className="para-product" href="/bison.html"><span>Bison</span><small>Living</small></a>
-        <div className="para-product active"><span>Tanot</span><small>Enterprise demand</small></div>
+        <a className="para-product" href="/ops.html"><span>Sikh</span><small>Operations</small></a>
+        <a className="para-product" href="/bison.html"><span>Jat</span><small>Living</small></a>
+        <div className="para-product active"><span>Dogra</span><small>Enterprise demand</small></div>
+        <a className="para-product" href="https://para-2-madras.vercel.app"><span>Assam Rifles</span><small>Member acquisition</small></a>
         <a className="para-product" href="/desk.html"><span>2 Para</span><small>All products</small></a>
       </div>
       <div className="profile"><span>Sep MTD · illustrative</span><small>Updated just now</small><a className="photo-credit" href="https://commons.wikimedia.org/wiki/File:Longewala_Post.jpg" target="_blank" rel="noreferrer">Longewala Post image · CC BY-SA 4.0</a></div>
@@ -48,7 +49,7 @@ export function Header({ title, query, onQuery, onNew }) {
     <header className="topbar">
       <div className="suite-mark">
         <img src="/assets/nia-logo.png" alt="Nia" />
-        <div className="topbar-brand"><span>2 Para · Ops</span><strong>Tanot</strong></div>
+        <div className="topbar-brand"><span>2 Para · Ops</span><strong>Dogra</strong></div>
       </div>
       <div className="current-view"><span>Current view</span><strong>{title}</strong></div>
       <div className="header-actions">

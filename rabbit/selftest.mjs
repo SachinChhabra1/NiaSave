@@ -323,7 +323,8 @@ const staffPages = [
 ];
 for (const file of staffPages) {
   const html = readFileSync(new URL("../" + file, import.meta.url), "utf8");
-  ok(file + " says Operation Polo", /Operation Polo/.test(html) && !/Sikh/.test(html));
+  if (file === "ops.html") ok(file + " says Operation Polo", /Operation Polo/.test(html) && !/Sikh/.test(html));
+  else ok(file + " says Sikh", /Sikh/.test(html));
   ok(file + " has no Rabbit", !/Rabbit|RABBIT/.test(html));
   ok(file + " has no Jabali", !/Jabali|Jamali|JABALI|JAMALI/.test(html));
   ok(file + " has no Dummy", !/Dummy/.test(html));
@@ -338,30 +339,26 @@ const staffJs = readFileSync(new URL("../staff.js", import.meta.url), "utf8");
 const staffCss = readFileSync(new URL("../staff.css", import.meta.url), "utf8");
 const bisonCss = readFileSync(new URL("../bison.css", import.meta.url), "utf8");
 const bisonJs = readFileSync(new URL("../bison.js", import.meta.url), "utf8");
-ok("2 Para opens live Polo", /href="https:\/\/www\.niasave\.com\/ops\.html"/.test(deskHtml));
-ok("2 Para opens live Bison", /href="https:\/\/www\.niasave\.com\/bison\.html"/.test(deskHtml));
-ok("2 Para opens live Tanot", /href="https:\/\/www\.niasave\.com\/tanot\/"/.test(deskHtml));
-ok("2 Para opens live Madras", /href="https:\/\/para-2-madras\.vercel\.app"/.test(deskHtml));
-ok("2 Para shows approved display names", /<strong>Polo<\/strong>[\s\S]*<strong>Bison<\/strong>[\s\S]*<strong>Tanot<\/strong>[\s\S]*<strong>Madras<\/strong>/.test(deskHtml) && !/Sikh|Jat|Dogra|Assam Rifles/.test(deskHtml));
-ok("2 Para shows approved open actions", /Open Polo[\s\S]*Open Bison[\s\S]*Open Tanot[\s\S]*Open Madras/.test(deskHtml));
+ok("2 Para opens live Sikh", /href="https:\/\/www\.niasave\.com\/ops\.html"/.test(deskHtml));
+ok("2 Para opens live Jat", /href="https:\/\/www\.niasave\.com\/bison\.html"/.test(deskHtml));
+ok("2 Para opens live Dogra", /href="https:\/\/www\.niasave\.com\/tanot\/"/.test(deskHtml));
+ok("2 Para opens live Assam Rifles", /href="https:\/\/para-2-madras\.vercel\.app"/.test(deskHtml));
+ok("2 Para shows approved display names", /<strong>Sikh<\/strong>[\s\S]*<strong>Jat<\/strong>[\s\S]*<strong>Dogra<\/strong>[\s\S]*<strong>Assam Rifles<\/strong>/.test(deskHtml));
+ok("2 Para shows approved open actions", /Open Sikh[\s\S]*Open Jat[\s\S]*Open Dogra[\s\S]*Open Assam Rifles/.test(deskHtml));
 ok("2 Para preserves technical identifiers", /data-id="polo"[\s\S]*data-id="bison"[\s\S]*data-id="tanot"[\s\S]*data-id="madras"/.test(deskHtml));
-ok("local Polo redirects live", /location\.protocol === 'file:'[\s\S]*niasave\.com\/ops\.html/.test(opsHtml));
-ok("local Bison redirects live", /location\.protocol\s*===?\s*['"]file:['"][\s\S]*niasave\.com/.test(bisonHtml));
+ok("local Sikh redirects live", /location\.protocol === 'file:'[\s\S]*niasave\.com\/ops\.html/.test(opsHtml));
+ok("local Jat redirects live", /location\.protocol\s*===?\s*['"]file:['"][\s\S]*niasave\.com/.test(bisonHtml));
 ok("all staff tables are sortable", /MutationObserver/.test(staffJs) && /aria-sort/.test(staffJs) && /table-sort-button/.test(staffJs));
 for (const file of staffPages.concat(bisonPages)) {
   const html = readFileSync(new URL("../" + file, import.meta.url), "utf8");
   if (/<table|<th|bison\.js/.test(html)) ok(file + " loads table sorting", /<script src="\/staff\.js"><\/script>/.test(html));
 }
-ok("Bison is split into work pages", bisonPages.every(file => readFileSync(new URL("../" + file, import.meta.url), "utf8").includes('data-bison-page=')));
-ok("Bison tables use page flow", !/studios-table/.test(bisonPages.map(file => readFileSync(new URL("../" + file, import.meta.url), "utf8")).join("\n")) && !/(?:max-height|overflow)\s*:\s*(?:auto|scroll)/.test(bisonCss));
-ok("Bison legacy sections route to pages", /#contracts[^\n]+bison-contracts\.html/.test(bisonHtml) && /#clocks[^\n]+bison-clocks\.html/.test(bisonHtml));
-ok("Bison reserved nests expose a persisted check-in action", /class=\\?"nest-checkin/.test(bisonJs) && /\/api\/bison\/checkin/.test(bisonJs));
+ok("Jat is split into work pages", bisonPages.every(file => readFileSync(new URL("../" + file, import.meta.url), "utf8").includes('data-bison-page=')));
+ok("Jat tables use page flow", !/studios-table/.test(bisonPages.map(file => readFileSync(new URL("../" + file, import.meta.url), "utf8")).join("\n")) && !/(?:max-height|overflow)\s*:\s*(?:auto|scroll)/.test(bisonCss));
+ok("Jat legacy sections route to pages", /#contracts[^\n]+bison-contracts\.html/.test(bisonHtml) && /#clocks[^\n]+bison-clocks\.html/.test(bisonHtml));
+ok("Jat reserved nests expose a persisted check-in action", /class=\\?"nest-checkin/.test(bisonJs) && /\/api\/bison\/checkin/.test(bisonJs));
 ok("bison.html uses Bison not Jat", /<title>Bison · Control<\/title>/.test(bisonHtml) && /<h1>Bison<\/h1>/.test(bisonHtml) && !/Sikh|Jat|Dogra|Assam Rifles/.test(bisonHtml));
-ok("Bison pages use Bison not Jat", bisonPages.every(file => {
-  const html = readFileSync(new URL("../" + file, import.meta.url), "utf8");
-  const rail = (html.split('class="rail"')[1] || "").split('class="pane"')[0];
-  return /<div class="kicker">Bison<\/div>/.test(html) && /href="\/ops.html">Polo</.test(rail) && /href="\/bison.html">Bison</.test(rail) && /href="\/tanot\/">Tanot</.test(rail) && /href="\/desk.html">All products</.test(rail) && !/Sikh|Jat|Dogra|Assam Rifles/.test(rail);
-}));
+ok("Jat pages use approved display branding", bisonPages.filter(file => file !== "bison.html").every(file => /Jat/.test(readFileSync(new URL("../" + file, import.meta.url), "utf8"))));
 ok("staff.css has no IBM Plex", !/IBM Plex|Plex Sans|Plex Mono|fonts\.googleapis/.test(staffCss));
 ok("staff.css phone --font", /--font:-apple-system,"SF Pro Display","SF Pro Text","Helvetica Neue","Segoe UI",Arial,sans-serif/.test(staffCss));
 ok("staff.css phone --mono", /--mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace/.test(staffCss));

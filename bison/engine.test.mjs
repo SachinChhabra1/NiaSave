@@ -49,6 +49,17 @@ test("validates browser and CSV imports without mutating on dry run", () => {
   assert.equal(membersPayload({ q: "9876500001" }).count, 1);
 });
 
+test("reuses the same member for an exact name and phone retry", () => {
+  resetBison();
+  const first = createMember({ name: "Test123", phone: "959874585" });
+  const retry = createMember({ name: "Test123", phone: "959874585" });
+  assert.equal(retry.ok, true);
+  assert.equal(retry.existing, true);
+  assert.equal(retry.member.id, first.member.id);
+  assert.equal(membersPayload({ q: "959874585" }).count, 1);
+  assert.equal(createMember({ name: "Different Person", phone: "959874585" }).error, "phone_exists");
+});
+
 test("adds and preserves a live Sheet studio outside the original catalog", () => {
   resetBison();
   const before = hierarchyPayload({}).studioCount;

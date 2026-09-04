@@ -239,7 +239,9 @@ export function addGroup(body = {}) { const name = text(body.name, 100); if (!na
 
 export function createMember(body = {}) {
   const name = text(body.name, 80); if (!name) return { error: "name_required", status: 400 };
-  const phone = text(body.phone, 20).replace(/\D/g, ""); if (phone && state.members.some(row => row.phone === phone)) return { error: "phone_exists", status: 409 };
+  const phone = text(body.phone, 20).replace(/\D/g, ""); const existing = phone && state.members.find(row => row.phone === phone);
+  if (existing && existing.name.toLowerCase() === name.toLowerCase()) { log(body.actor, "member_retry_matched", existing.id, phone); return { ok: true, member: existing, existing: true }; }
+  if (existing) return { error: "phone_exists", status: 409 };
   const member = { id: id("mem"), name, phone, governmentIdLast4: text(body.governmentIdLast4, 4), verificationStatus: body.verificationStatus === "verified" ? "verified" : "needs_review", source: "bison_desk", createdAt: now(), createdBy: text(body.actor || "desk", 80) };
   state.members.unshift(member); log(body.actor, "member_created", member.id, name); return { ok: true, member };
 }

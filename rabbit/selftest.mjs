@@ -355,7 +355,8 @@ for (const file of staffPages.concat(bisonPages)) {
 ok("Jat is split into work pages", bisonPages.every(file => readFileSync(new URL("../" + file, import.meta.url), "utf8").includes('data-bison-page=')));
 ok("Jat tables use page flow", !/studios-table/.test(bisonPages.map(file => readFileSync(new URL("../" + file, import.meta.url), "utf8")).join("\n")) && !/(?:max-height|overflow)\s*:\s*(?:auto|scroll)/.test(bisonCss));
 ok("Jat legacy sections route to pages", /#contracts[^\n]+bison-contracts\.html/.test(bisonHtml) && /#clocks[^\n]+bison-clocks\.html/.test(bisonHtml));
-ok("Jat pages use approved display branding", bisonPages.every(file => /Jat/.test(readFileSync(new URL("../" + file, import.meta.url), "utf8"))));
+ok("bison.html uses Bison not Jat", /<title>Bison · Control<\/title>/.test(bisonHtml) && /<h1>Bison<\/h1>/.test(bisonHtml) && !/Sikh|Jat|Dogra|Assam Rifles/.test(bisonHtml));
+ok("Jat pages use approved display branding", bisonPages.filter(file => file !== "bison.html").every(file => /Jat/.test(readFileSync(new URL("../" + file, import.meta.url), "utf8"))));
 ok("staff.css has no IBM Plex", !/IBM Plex|Plex Sans|Plex Mono|fonts\.googleapis/.test(staffCss));
 ok("staff.css phone --font", /--font:-apple-system,"SF Pro Display","SF Pro Text","Helvetica Neue","Segoe UI",Arial,sans-serif/.test(staffCss));
 ok("staff.css phone --mono", /--mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace/.test(staffCss));
@@ -371,6 +372,8 @@ ok("ops no bare Settled or Paid labels", !/<b>\d<\/b> Settled/.test(opsHtml) && 
 ok("ops h1 is Operation Polo once", (opsHtml.match(/<h1>Operation Polo<\/h1>/g) || []).length === 1);
 ok("ops title Operation Polo", /<title>Operation Polo<\/title>/.test(opsHtml));
 ok("ops rail Polo not Sikh", /href="\/ops.html">Polo</.test(rail) && !/Sikh|Jat|Dogra|Assam Rifles/.test(rail));
+const bisonRail = (bisonHtml.split('class="rail"')[1] || "").split('class="pane"')[0];
+ok("bison rail Polo Bison Tanot All products", /href="\/ops.html">Polo</.test(bisonRail) && /href="\/bison.html">Bison</.test(bisonRail) && /href="\/tanot\/">Tanot</.test(bisonRail) && /href="\/desk.html">All products</.test(bisonRail) && !/Sikh|Jat|Dogra|Assam Rifles/.test(bisonRail));
 ok("ops empty state Operation Polo", /Could not load Operation Polo/.test(opsHtml));
 ok("ops header has no brand kicker", !/<div class="brand">/.test(opsHtml));
 ok("ops rail Reports and Ops", /<h2 class="rail-h"[^>]*>Reports<\/h2>/.test(rail) && /<h2 class="rail-h"[^>]*>Ops<\/h2>/.test(rail));

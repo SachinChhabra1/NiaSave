@@ -13,7 +13,7 @@ test("staff tokens are signed, time-limited and tamper-evident", () => {
   assert.equal(verifyStaffToken(token, issuedAt + 13 * 60 * 60 * 1000), null);
 });
 
-test("Jat and Sikh desk APIs run through the temporary open 2 Para actor", async t => {
+test("Bison and Polo desk APIs run through the temporary open 2 Para actor", async t => {
   const server = http.createServer(handler);
   await new Promise(resolve => server.listen(0, "127.0.0.1", resolve));
   t.after(() => server.close());

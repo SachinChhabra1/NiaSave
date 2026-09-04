@@ -207,7 +207,7 @@ export function generateManagementReport({ campaigns, opportunities, studios, ex
 
 export function reportToMarkdown(report) {
   const lines = [
-    '# Dogra management report',
+    '# Tanot management report',
     '',
     `**Period:** ${report.period}`,
     `**As of:** ${report.asOf}`,

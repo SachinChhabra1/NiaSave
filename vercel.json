@@ -2,6 +2,10 @@
   "installCommand": "npm install",
   "buildCommand": "sh vercel-build.sh",
   "outputDirectory": "dist",
+  "redirects": [
+    { "source": "/polo.html", "destination": "/ops.html", "permanent": false },
+    { "source": "/polo", "destination": "/ops.html", "permanent": false }
+  ],
   "functions": {
     "api/index.mjs": {
       "includeFiles": "{api,rabbit,bison,lib}/**",

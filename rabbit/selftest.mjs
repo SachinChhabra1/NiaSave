@@ -20,6 +20,9 @@ function ok(name, cond, extra) {
 ok("DUMMY_DATA on", DUMMY_DATA === true);
 const vercelCfg = JSON.parse(readFileSync(new URL("../vercel.json", import.meta.url), "utf8"));
 ok("vercel rewrite /api to function", (vercelCfg.rewrites || []).some(r => r.source === "/api/:path*" && r.destination === "/api?path=:path*"));
+ok("legacy Polo routes redirect to Sikh Unit", ["/polo.html", "/polo"].every(source =>
+  (vercelCfg.redirects || []).some(r => r.source === source && r.destination === "/ops.html")
+));
 ok("vercel pins api/index.mjs", Boolean(vercelCfg.functions && vercelCfg.functions["api/index.mjs"]));
 ok("api function files present", existsSync(new URL("../api/index.mjs", import.meta.url)) && existsSync(new URL("../api/server.mjs", import.meta.url)) && existsSync(new URL("./engine.mjs", import.meta.url)));
 ok("one theatre", THEATRE.name === "Rajputana Theatre");

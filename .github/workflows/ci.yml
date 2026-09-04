@@ -30,13 +30,13 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
 
-      - name: Run Sikh self-test
+      - name: Run Operation Polo self-test
         run: npm test
 
-      - name: Run Jat and staff-gate tests
+      - name: Run Bison and staff-gate tests
         run: npm run test:bison
 
-      - name: Run Dogra insight-engine tests
+      - name: Run Tanot insight-engine tests
         run: npm run test:tanot
 
       - name: Run storage tests

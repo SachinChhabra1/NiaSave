@@ -12,7 +12,7 @@ const report = (actionState = {}) => generateManagementReport({
   asOf: '2026-09-03',
 })
 
-test('Dogra reconciles campaign and opportunity totals', () => {
+test('Tanot reconciles campaign and opportunity totals', () => {
   const result = report()
   assert.equal(result.metrics.targeted, 4380)
   assert.equal(result.metrics.contracted, 288)
@@ -21,21 +21,21 @@ test('Dogra reconciles campaign and opportunity totals', () => {
   assert.equal(result.metrics.contractToLiveRate, 50)
 })
 
-test('Dogra generates stable owned actions with proof', () => {
+test('Tanot generates stable owned actions with proof', () => {
   const gap = report().actions.find((item) => item.id === 'activation-gap:o1')
   assert.equal(gap.owner, 'Arjun Rao')
   assert.equal(gap.dueDate, '2026-09-06')
   assert.match(gap.proof, /Live reaches 120/)
 })
 
-test('Dogra keeps observed gaps separate from unproven causes', () => {
+test('Tanot keeps observed gaps separate from unproven causes', () => {
   const gap = report().insights.find((item) => item.id === 'activation-gap:o1')
   assert.equal(gap.causeStatus, 'Unresolved')
   assert.match(gap.cause, /do not yet prove its cause/)
 })
 
-test('Dogra preserves action status and exports its product identity', () => {
+test('Tanot preserves action status and exports its product identity', () => {
   const result = report({ 'activation-gap:o1': 'Done' })
   assert.equal(result.actions.find((item) => item.id === 'activation-gap:o1').status, 'Done')
-  assert.match(reportToMarkdown(result), /^# Dogra management report/m)
+  assert.match(reportToMarkdown(result), /^# Tanot management report/m)
 })

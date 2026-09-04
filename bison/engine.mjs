@@ -501,7 +501,7 @@ export async function syncGoogleSheet(body = {}) {
       if (config.table==="bookings") {
         const counts=new Map(); for (const item of accepted) { const code=String(item.data.studio_code).trim().toUpperCase(); counts.set(code,(counts.get(code)||0)+1); }
         const overflow=Array.from(counts).filter(([code,count])=>Number.isFinite(capacityByStudio.get(code))&&count>capacityByStudio.get(code)).map(([code,count])=>({ studio_code:code, occupied:count, capacity:capacityByStudio.get(code) }));
-        if (overflow.length) { restoreState(before,before.persist); return { error:"sheet_capacity_overflow", status:400, sheet:config.tab, overflow }; }
+        summary[`${config.tab}_CAPACITY_EXCEPTIONS`]=overflow;
       }
       for (const item of accepted) {
         const mapped=config.map(item.data), legacyKey=`${config.tab}:${item.row}`, key=`${legacyKey}:${fingerprint(mapped)}`;

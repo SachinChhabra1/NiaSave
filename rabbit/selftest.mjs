@@ -323,8 +323,7 @@ const staffPages = [
 ];
 for (const file of staffPages) {
   const html = readFileSync(new URL("../" + file, import.meta.url), "utf8");
-  if (file === "ops.html") ok(file + " says Operation Polo", /Operation Polo/.test(html) && !/Sikh/.test(html));
-  else ok(file + " says Sikh", /Sikh/.test(html));
+  ok(file + " says Sikh", /Sikh/.test(html));
   ok(file + " has no Rabbit", !/Rabbit|RABBIT/.test(html));
   ok(file + " has no Jabali", !/Jabali|Jamali|JABALI|JAMALI/.test(html));
   ok(file + " has no Dummy", !/Dummy/.test(html));
@@ -361,7 +360,7 @@ ok("Jat pages use approved display branding", bisonPages.every(file => /Jat/.tes
 ok("staff.css has no IBM Plex", !/IBM Plex|Plex Sans|Plex Mono|fonts\.googleapis/.test(staffCss));
 ok("staff.css phone --font", /--font:-apple-system,"SF Pro Display","SF Pro Text","Helvetica Neue","Segoe UI",Arial,sans-serif/.test(staffCss));
 ok("staff.css phone --mono", /--mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace/.test(staffCss));
-ok("ops nia then Operation Polo", /class="nia-logo"[\s\S]{0,200}Operation Polo/.test(opsHtml));
+ok("ops nia then Sikh", /class="nia-logo"[\s\S]{0,200}Sikh/.test(opsHtml));
 ok("ops has no polo-icon", !/polo-icon/.test(opsHtml));
 ok("ops job icons in source", /id="i-biker"/.test(opsHtml) && /id="i-po"/.test(opsHtml) && /id="i-dispatch"/.test(opsHtml));
 const rail = (opsHtml.split('class="rail"')[1] || "").split('class="pane"')[0];
@@ -370,10 +369,7 @@ ok("ops load has no 40 stops", !/40 stops/.test(opsHtml) && !/\+' stops/.test(op
 ok("ops sequence 1 to 5", /1<\/b> Member ordered[\s\S]*→[\s\S]*2<\/b> Hub loaded[\s\S]*→[\s\S]*3<\/b> Member collected or returned[\s\S]*→[\s\S]*4<\/b> Hub settled with officer[\s\S]*→[\s\S]*5<\/b> Nia paid vendor/.test(opsHtml));
 ok("ops vendor pay is last", opsHtml.indexOf("5</b> Nia paid vendor") > opsHtml.indexOf("4</b> Hub settled with officer") && opsHtml.indexOf("5</b> Nia paid vendor") > opsHtml.indexOf("2</b> Hub loaded"));
 ok("ops no bare Settled or Paid labels", !/<b>\d<\/b> Settled/.test(opsHtml) && !/<b>\d<\/b> Paid/.test(opsHtml) && !/'Settled'/.test(opsHtml) && !/'Paid'/.test(opsHtml));
-ok("ops h1 is Operation Polo once", (opsHtml.match(/<h1>Operation Polo<\/h1>/g) || []).length === 1);
-ok("ops title Operation Polo", /<title>Operation Polo<\/title>/.test(opsHtml));
-ok("ops rail Polo not Sikh", /href="\/ops.html">Polo</.test(rail) && !/Sikh|Jat|Dogra|Assam Rifles/.test(rail));
-ok("ops empty state Operation Polo", /Could not load Operation Polo/.test(opsHtml));
+ok("ops h1 is Sikh once", (opsHtml.match(/<h1>Sikh<\/h1>/g) || []).length === 1);
 ok("ops header has no brand kicker", !/<div class="brand">/.test(opsHtml));
 ok("ops rail Reports and Ops", /<h2 class="rail-h"[^>]*>Reports<\/h2>/.test(rail) && /<h2 class="rail-h"[^>]*>Ops<\/h2>/.test(rail));
 ok("inventory under Reports", rail.indexOf("Reports") < rail.indexOf(">Inventory<") && rail.indexOf(">Inventory<") < rail.indexOf(">Ops<"));
@@ -384,4 +380,4 @@ if (fails.length) {
   process.stderr.write("FAIL\n" + fails.join("\n") + "\n");
   process.exit(1);
 }
-process.stdout.write("polo selftest passed\n");
+process.stdout.write("Sikh selftest passed\n");

@@ -53,7 +53,7 @@ Daily reconciliation must compare:
 - Provider payment and refund records
 - Provider settlement files
 - Bank credits
-- Sikh collection and order records
+- Sikh Unit collection and order records
 
 Every mismatch needs an owner, reason, ageing, evidence and resolution state. A payment is not fully closed until settlement is matched.
 

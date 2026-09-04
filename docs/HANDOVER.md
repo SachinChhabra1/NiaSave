@@ -7,12 +7,12 @@ As of 3 September 2026
 NiaSave has one member surface and a connected 2 Para product suite:
 
 1. The member phone at `https://www.niasave.com/`, covering Live, Earn, Save and Send in five interface languages with embedded Nia voice support.
-2. Sikh at `https://www.niasave.com/ops.html`, covering orders, stock, packing, dispatch, collection, invoicing and reconciliation.
-3. Jat at `https://www.niasave.com/bison.html`, covering theatres, Studios, nests, member contracts, clocks and collections.
-4. Dogra at `https://www.niasave.com/tanot/`, covering enterprise campaigns, accounts, qualified demand, contracts, Studio allocation, mobilisation, live activation, BD-executive funnels and evidence-backed action reports.
-5. Assam Rifles at `https://para-2-madras.vercel.app`, covering member acquisition from source through join.
+2. Sikh Unit at `https://www.niasave.com/ops.html`, covering orders, stock, packing, dispatch, collection, invoicing and reconciliation.
+3. Jat Unit at `https://www.niasave.com/bison.html`, covering theatres, Studios, nests, member contracts, clocks and collections.
+4. Dogra Unit at `https://www.niasave.com/tanot/`, covering enterprise campaigns, accounts, qualified demand, contracts, Studio allocation, mobilisation, live activation, BD-executive funnels and evidence-backed action reports.
+5. Assam Unit at `https://para-2-madras.vercel.app`, covering member acquisition from source through join.
 
-The NiaSave surfaces are published from one Vercel project. Sikh and Jat use the shared Neon Postgres runtime store. Dogra currently uses explicitly illustrative in-browser records and local persistence; it is not yet connected to governed enterprise, campaign, calendar or Studio-capacity sources. Assam Rifles is deployed separately behind the 2 Para launcher. The current system is a controlled pilot. OTP and payments are skipped. Send does not move money.
+The NiaSave surfaces are published from one Vercel project. Sikh Unit and Jat Unit use the shared Neon Postgres runtime store. Dogra Unit currently uses explicitly illustrative in-browser records and local persistence; it is not yet connected to governed enterprise, campaign, calendar or Studio-capacity sources. Assam Unit is deployed separately behind the 2 Para launcher. The current system is a controlled pilot. OTP and payments are skipped. Send does not move money.
 
 ## 2. Source of truth and release flow
 
@@ -78,11 +78,11 @@ Before a real-data launch, explicitly set `DEMO=0` and `DUMMY_DATA=0` only after
 
 ### C. Staff access and audit
 
-Sikh and Jat are temporarily open from their 2 Para product cards while the dedicated login screen is being built. Operational mutations use the server-owned `2 Para desk` actor, not a client-supplied name. Set `STAFF_AUTH_REQUIRED=1` to restore the existing signed, 12-hour token enforcement.
+Sikh Unit and Jat Unit are temporarily open from their 2 Para product cards while the dedicated login screen is being built. Operational mutations use the server-owned `2 Para desk` actor, not a client-supplied name. Set `STAFF_AUTH_REQUIRED=1` to restore the existing signed, 12-hour token enforcement.
 
 - Set a dedicated `STAFF_TOKEN_SECRET`; remove fallback credentials and rotate the prototype password.
 - Replace the shared password with individual identity before use beyond the controlled staff pilot.
-- Complete immutable before/after audit coverage for older Sikh mutations; Jat contract, clock and collection actions already record actor and time.
+- Complete immutable before/after audit coverage for older Sikh Unit mutations; Jat Unit contract, clock and collection actions already record actor and time.
 
 ### D. Data model and source ownership
 
@@ -133,7 +133,7 @@ The first live pilot is ready only when one verified member can:
 2. See only their own member record.
 3. Build a bag with a server-verified price.
 4. Complete or fail a UPI payment without creating duplicate orders.
-5. Produce one durable order in Sikh.
+5. Produce one durable order in Sikh Unit.
 6. Move through pack, dispatch and collection with named staff actors.
 7. Reconcile the collected amount to the provider settlement.
 8. Receive a receipt and, where applicable, a refund.

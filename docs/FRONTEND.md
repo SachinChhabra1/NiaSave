@@ -15,13 +15,13 @@ The interface is available in English, Hindi, Bangla, Tamil and Kannada. Nia voi
 
 ## Staff surface
 
-`desk.html` is the 2 Para product entry point. It opens Sikh at `/ops.html` for Save operations, Jat at `/bison.html` for Living operations, Dogra at `/tanot/` for enterprise demand, and Assam Rifles at `https://para-2-madras.vercel.app` for member acquisition.
+`desk.html` is the 2 Para product entry point. It opens Sikh Unit at `/ops.html` for Save operations, Jat Unit at `/bison.html` for Living operations, Dogra Unit at `/tanot/` for enterprise demand, and Assam Unit at `https://para-2-madras.vercel.app` for member acquisition.
 
-Dogra is a production-built React surface under the technical `tanot/` path. Its current campaign, opportunity, Studio and BD-executive records are explicitly illustrative and persist only in the browser until governed source integrations are added.
+Dogra Unit is a production-built React surface under the technical `tanot/` path. Its current campaign, opportunity, Studio and BD-executive records are explicitly illustrative and persist only in the browser until governed source integrations are added.
 
 ## Production source boundary
 
-The files under the root `src/` contain an earlier React/Vite member prototype. They are not the current production phone because the custom Vercel build copies `member.html` directly. Dogra's React source under the technical `tanot/src/` path is canonical and is compiled by `vercel-build.sh` into `dist/tanot/`.
+The files under the root `src/` contain an earlier React/Vite member prototype. They are not the current production phone because the custom Vercel build copies `member.html` directly. Dogra Unit's React source under the technical `tanot/src/` path is canonical and is compiled by `vercel-build.sh` into `dist/tanot/`.
 
 ## Product rules
 

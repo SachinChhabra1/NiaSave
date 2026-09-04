@@ -5,23 +5,25 @@ set -eu
 test -f api/index.mjs
 test -f api/server.mjs
 test -f rabbit/engine.mjs
-# Product rail lock. Vercel Git production copies these files as-is.
-# Regiment names on ops.html / bison.html must fail the build so a git revert cannot ship.
-# Instant Rollback of 329544d still bypasses this gate. A new main SHA must ship after any promote.
+# Product naming lock. Vercel Git production copies these files as-is.
+# Fail closed if a future rollback tries to ship the retired product names.
 lock_fail() { echo "product rail lock: $1" >&2; exit 1; }
-echo "product rail lock 1856 IST: Operation Polo / Polo"
-grep -q '<title>Operation Polo</title>' ops.html || lock_fail "ops.html title must be Operation Polo"
-grep -q 'name="nia-board" content="Operation Polo"' ops.html || lock_fail "ops.html must stamp Operation Polo"
-grep -q 'href="/ops.html">Polo<' ops.html || lock_fail "ops.html rail must label Polo"
-grep -Eq 'Sikh|Jat|Dogra|Assam' ops.html && lock_fail "ops.html has regiment names"
-grep -q '<title>Bison' bison.html || lock_fail "bison.html title must be Bison"
-grep -q 'href="/bison.html">Bison<' bison.html || lock_fail "bison.html rail must label Bison"
-grep -Eq 'Sikh|Jat|Dogra|Assam' bison.html && lock_fail "bison.html has regiment names"
-for f in bison-studios.html bison-contracts.html bison-clocks.html bison-collections.html bison-nests.html bison-data.html; do
-  grep -q 'href="/ops.html">Polo<' "$f" || lock_fail "$f rail must label Polo"
-  grep -q 'href="/bison.html">Bison<' "$f" || lock_fail "$f rail must label Bison"
-  grep -Eq 'Sikh|Jat|Dogra|Assam' "$f" && lock_fail "$f has regiment names"
+echo "product naming lock: Nia Command Center / Sikh Unit / Jat Unit / Dogra Unit / Assam Unit"
+grep -q '<title>Nia Command Center</title>' desk.html || lock_fail "desk.html title must be Nia Command Center"
+for unit in 'Sikh Unit' 'Jat Unit' 'Dogra Unit' 'Assam Unit'; do
+  grep -q "<strong>$unit</strong>" desk.html || lock_fail "desk.html must include $unit"
 done
+grep -q '<title>Sikh Unit</title>' ops.html || lock_fail "ops.html title must be Sikh Unit"
+grep -q '<h1>Sikh Unit</h1>' ops.html || lock_fail "ops.html heading must be Sikh Unit"
+grep -q 'href="/ops.html">Sikh Unit<' ops.html || lock_fail "ops.html rail must label Sikh Unit"
+grep -q '<title>Jat Unit' bison.html || lock_fail "bison.html title must be Jat Unit"
+grep -q 'href="/bison.html">Jat Unit<' bison.html || lock_fail "bison.html rail must label Jat Unit"
+for f in bison-studios.html bison-contracts.html bison-clocks.html bison-collections.html bison-nests.html bison-data.html; do
+  grep -q 'Jat Unit' "$f" || lock_fail "$f must label Jat Unit"
+  grep -q 'href="/ops.html">Sikh Unit<' "$f" || lock_fail "$f rail must label Sikh Unit"
+  grep -q 'href="/bison.html">Jat Unit<' "$f" || lock_fail "$f rail must label Jat Unit"
+done
+grep -q 'Dogra Unit' tanot/src/components.jsx || lock_fail "Dogra app must label Dogra Unit"
 mkdir -p dist/products dist/assets
 if [ -f member.html ]; then
   cp member.html dist/index.html

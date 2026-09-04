@@ -34,7 +34,7 @@ export default function App() {
   const [opportunities, setOpportunities] = usePersistentState('nia-demand-opportunities', initialOpportunities)
   const [cohorts, setCohorts] = usePersistentState('nia-demand-cohorts', initialCohorts)
   const [selectedId, setSelectedId] = useState('o1')
-  const [drawerOpen, setDrawerOpen] = useState(true)
+  const [drawerOpen, setDrawerOpen] = useState(() => !window.matchMedia('(max-width: 900px)').matches)
   const [campaignModal, setCampaignModal] = useState(false)
   const [query, setQuery] = useState('')
   const [toast, setToast] = useState('')

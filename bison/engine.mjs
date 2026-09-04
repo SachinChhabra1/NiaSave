@@ -84,7 +84,7 @@ function normalizeState(value, storage = "memory") {
   restored.persist = storage;
   restored.schemaVersion = SCHEMA_VERSION;
 
-  restored.studios = buildStudioMaster(restored.sites, restored.bookings, today(), restored.studios);
+  restored.studios = restored.dummy === false ? restored.studios : buildStudioMaster(restored.sites, restored.bookings, today(), restored.studios);
   const studioBySource = new Map(restored.studios.map(row => [row.sourceStudioId, row]));
   const firstBySite = new Map(restored.studios.map(row => [row.siteId, row]));
   for (const booking of restored.bookings) {

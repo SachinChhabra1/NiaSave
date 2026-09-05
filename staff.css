@@ -525,6 +525,7 @@ code{background:var(--raised);font-size:11px}
 
 @media(max-width:899px){
   .top{min-height:58px;padding:0 16px}
+  button,.file-btn,select,input:not([type="checkbox"]):not([type="radio"]),.command-center-return{min-height:44px}
   .top .meta{max-width:42vw}
   .shell{display:block;min-height:calc(100vh - 58px)}
   .rail{

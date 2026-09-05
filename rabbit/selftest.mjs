@@ -20,7 +20,7 @@ function ok(name, cond, extra) {
 ok("DUMMY_DATA on", DUMMY_DATA === true);
 const vercelCfg = JSON.parse(readFileSync(new URL("../vercel.json", import.meta.url), "utf8"));
 ok("vercel rewrite /api to function", (vercelCfg.rewrites || []).some(r => r.source === "/api/:path*" && r.destination === "/api?path=:path*"));
-ok("legacy Polo routes redirect to Sikh Unit", ["/polo.html", "/polo"].every(source =>
+ok("legacy Polo routes redirect to ops.html", ["/polo.html", "/polo"].every(source =>
   (vercelCfg.redirects || []).some(r => r.source === source && r.destination === "/ops.html")
 ));
 ok("vercel pins api/index.mjs", Boolean(vercelCfg.functions && vercelCfg.functions["api/index.mjs"]));
@@ -326,8 +326,7 @@ const staffPages = [
 ];
 for (const file of staffPages) {
   const html = readFileSync(new URL("../" + file, import.meta.url), "utf8");
-  if (file === "ops.html") ok(file + " says Operation Polo", /Operation Polo/.test(html) && !/Sikh/.test(html));
-  else ok(file + " says Sikh Unit", /Sikh Unit/.test(html));
+  if (file === "ops.html") ok(file + " says Operation Polo", /Operation Polo/.test(html) && !/Sikh|Jat|Dogra|Assam/.test(html));
   ok(file + " has no Rabbit", !/Rabbit|RABBIT/.test(html));
   ok(file + " has no Jabali", !/Jabali|Jamali|JABALI|JAMALI/.test(html));
   ok(file + " has no Dummy", !/Dummy/.test(html));
@@ -342,12 +341,13 @@ const staffJs = readFileSync(new URL("../staff.js", import.meta.url), "utf8");
 const staffCss = readFileSync(new URL("../staff.css", import.meta.url), "utf8");
 const bisonCss = readFileSync(new URL("../bison.css", import.meta.url), "utf8");
 const bisonJs = readFileSync(new URL("../bison.js", import.meta.url), "utf8");
-ok("2 Para opens live Sikh Unit", /href="https:\/\/www\.niasave\.com\/ops\.html"/.test(deskHtml));
-ok("2 Para opens live Jat Unit", /href="https:\/\/www\.niasave\.com\/bison\.html"/.test(deskHtml));
-ok("2 Para opens live Dogra Unit", /href="https:\/\/www\.niasave\.com\/tanot\/"/.test(deskHtml));
-ok("2 Para opens live Assam Unit", /href="https:\/\/para-2-madras\.vercel\.app"/.test(deskHtml));
-ok("2 Para shows approved unit names", /<strong>Sikh Unit<\/strong>[\s\S]*<strong>Jat Unit<\/strong>[\s\S]*<strong>Dogra Unit<\/strong>[\s\S]*<strong>Assam Unit<\/strong>/.test(deskHtml));
-ok("2 Para shows approved unit actions", /Open Sikh Unit[\s\S]*Open Jat Unit[\s\S]*Open Dogra Unit[\s\S]*Open Assam Unit/.test(deskHtml));
+ok("2 Para opens live Polo", /href="https:\/\/www\.niasave\.com\/ops\.html"/.test(deskHtml));
+ok("2 Para opens live Bison", /href="https:\/\/www\.niasave\.com\/bison\.html"/.test(deskHtml));
+ok("2 Para opens live Tanot", /href="https:\/\/www\.niasave\.com\/tanot\/"/.test(deskHtml));
+ok("2 Para preserves Madras id", /data-id="madras"/.test(deskHtml));
+ok("2 Para shows Polo Bison Tanot", /<strong>Polo<\/strong>[\s\S]*<strong>Bison<\/strong>[\s\S]*<strong>Tanot<\/strong>/.test(deskHtml));
+ok("2 Para shows Polo Bison Tanot actions", /Open Polo[\s\S]*Open Bison[\s\S]*Open Tanot/.test(deskHtml));
+ok("2 Para has no regiment Unit labels", !/Sikh Unit|Jat Unit|Dogra Unit|Assam Unit/.test(deskHtml));
 ok("2 Para preserves technical identifiers", /data-id="polo"[\s\S]*data-id="bison"[\s\S]*data-id="tanot"[\s\S]*data-id="madras"/.test(deskHtml));
 ok("local Sikh redirects live", /location\.protocol === 'file:'[\s\S]*niasave\.com\/ops\.html/.test(opsHtml));
 ok("local Jat redirects live", /location\.protocol\s*===?\s*['"]file:['"][\s\S]*niasave\.com/.test(bisonHtml));
@@ -360,7 +360,12 @@ ok("Jat is split into work pages", bisonPages.every(file => readFileSync(new URL
 ok("Jat tables use page flow", !/studios-table/.test(bisonPages.map(file => readFileSync(new URL("../" + file, import.meta.url), "utf8")).join("\n")) && !/(?:max-height|overflow)\s*:\s*(?:auto|scroll)/.test(bisonCss));
 ok("Jat legacy sections route to pages", /#contracts[^\n]+bison-contracts\.html/.test(bisonHtml) && /#clocks[^\n]+bison-clocks\.html/.test(bisonHtml));
 ok("Jat reserved nests expose a persisted check-in action", /class=\\?"nest-checkin/.test(bisonJs) && /\/api\/bison\/checkin/.test(bisonJs));
-ok("Jat pages use approved display branding", bisonPages.every(file => /Jat Unit/.test(readFileSync(new URL("../" + file, import.meta.url), "utf8"))));
+ok("Bison pages lock Polo Bison Tanot All products", bisonPages.every(file => {
+  const html = readFileSync(new URL("../" + file, import.meta.url), "utf8");
+  const pageRail = (html.split('class="rail"')[1] || "").split('class="pane"')[0];
+  return /<div class="kicker">Bison<\/div>/.test(html) && /href="\/ops.html">Polo</.test(pageRail) && /href="\/bison.html">Bison</.test(pageRail) && /href="\/tanot\/">Tanot</.test(pageRail) && /href="\/desk.html">All products</.test(pageRail) && !/Sikh|Jat|Dogra|Assam/.test(html);
+}));
+ok("bison.html uses Bison not Jat", /<title>Bison · Control<\/title>/.test(bisonHtml) && /<h1>Bison<\/h1>/.test(bisonHtml) && !/Sikh|Jat|Dogra|Assam/.test(bisonHtml));
 ok("staff.css has no IBM Plex", !/IBM Plex|Plex Sans|Plex Mono|fonts\.googleapis/.test(staffCss));
 ok("staff.css phone --font", /--font:-apple-system,"SF Pro Display","SF Pro Text","Helvetica Neue","Segoe UI",Arial,sans-serif/.test(staffCss));
 ok("staff.css phone --mono", /--mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace/.test(staffCss));

@@ -1,13 +1,9 @@
 import { readFileSync } from "node:fs";
 
 const root = new URL("../", import.meta.url);
-const retiredPublicNames = /\b(?:Polo|Bison|Tanot|Madras)\b/i;
-const staffPages = [
-  "ops.html", "po.html", "dispatch.html", "invoice.html", "pickup.html", "recon.html",
-  "hub.html", "source.html", "predict.html", "inventory.html", "ageing.html", "biker.html",
-  "cash.html", "next.html"
-];
-const jatPages = [
+const regiment = /Sikh|Jat|Dogra|Assam/;
+const poloPages = ["ops.html"];
+const bisonPages = [
   "bison.html", "bison-studios.html", "bison-contracts.html", "bison-clocks.html",
   "bison-collections.html", "bison-nests.html", "bison-data.html"
 ];
@@ -16,50 +12,41 @@ function read(file) {
   return readFileSync(new URL(file, root), "utf8");
 }
 
-function publicText(html) {
-  const metadata = Array.from(html.matchAll(
-    /<meta\b(?=[^>]*(?:name|property)=["'](?:description|og:title|og:description|twitter:title|twitter:description)["'])[^>]*content=["']([^"']*)["'][^>]*>/gi
-  ), match => match[1]);
-  const visible = html
-    .replace(/<script\b[\s\S]*?<\/script>/gi, " ")
-    .replace(/<style\b[\s\S]*?<\/style>/gi, " ")
-    .replace(/<[^>]+>/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-  return [visible, ...metadata].join(" ");
-}
-
 function assert(condition, message) {
   if (!condition) throw new Error(message);
 }
 
-for (const file of staffPages) {
+for (const file of poloPages) {
   const html = read(file);
-  assert(publicText(html).includes("Sikh Unit"), `${file} must identify Sikh Unit`);
-  assert(!retiredPublicNames.test(publicText(html)), `${file} exposes a retired public name`);
+  assert(html.includes("<title>Operation Polo</title>"), `${file} title must be Operation Polo`);
+  assert(html.includes("<h1>Operation Polo</h1>"), `${file} heading must be Operation Polo`);
+  assert(html.includes('href="/ops.html">Polo<'), `${file} rail must label Polo`);
+  assert(html.includes('href="/bison.html">Bison<'), `${file} rail must label Bison`);
+  assert(html.includes('href="/tanot/">Tanot<'), `${file} rail must label Tanot`);
+  assert(html.includes('href="/desk.html">All products<'), `${file} rail must label All products`);
+  assert(html.includes("Could not load Operation Polo."), `${file} empty-state must say Operation Polo`);
+  assert(!regiment.test(html), `${file} has regiment names`);
 }
 
-for (const file of jatPages) {
+for (const file of bisonPages) {
   const html = read(file);
-  assert(publicText(html).includes("Jat Unit"), `${file} must identify Jat Unit`);
-  assert(!retiredPublicNames.test(publicText(html)), `${file} exposes a retired public name`);
+  assert(html.includes('href="/ops.html">Polo<'), `${file} rail must label Polo`);
+  assert(html.includes('href="/bison.html">Bison<'), `${file} rail must label Bison`);
+  assert(html.includes('href="/tanot/">Tanot<'), `${file} rail must label Tanot`);
+  assert(html.includes('href="/desk.html">All products<'), `${file} rail must label All products`);
+  assert(!regiment.test(html), `${file} has regiment names`);
 }
 
 const desk = read("desk.html");
-assert(publicText(desk).includes("Nia Command Center"), "desk.html must identify Nia Command Center");
-for (const unit of ["Sikh Unit", "Jat Unit", "Dogra Unit", "Assam Unit"]) {
-  assert(publicText(desk).includes(unit), `desk.html must include ${unit}`);
-}
-assert(!retiredPublicNames.test(publicText(desk)), "desk.html exposes a retired public name");
+assert(desk.includes("<strong>Polo</strong>"), "desk.html must label Polo");
+assert(desk.includes("<strong>Bison</strong>"), "desk.html must label Bison");
+assert(desk.includes("<strong>Tanot</strong>"), "desk.html must label Tanot");
+assert(!regiment.test(desk), "desk.html has regiment names");
 
-const ops = read("ops.html");
-for (const [href, unit] of [
-  ['/ops.html', 'Sikh Unit'],
-  ['/bison.html', 'Jat Unit'],
-  ['/tanot/', 'Dogra Unit'],
-  ['https://para-2-madras.vercel.app/', 'Assam Unit']
-]) {
-  assert(ops.includes(`href="${href}">${unit}<`), `ops.html directory must link ${unit}`);
-}
+const staffJs = read("staff.js");
+assert(!/Polo:\s*"Sikh Unit"/.test(staffJs), "staff.js rewrites Polo to Sikh Unit");
+assert(!/"Operation Polo":\s*"Sikh Unit"/.test(staffJs), "staff.js rewrites Operation Polo to Sikh Unit");
+assert(!/label:\s*"Sikh Unit"/.test(staffJs), "staff.js injects Sikh Unit rail labels");
+assert(!/unitLinks\s*=/.test(staffJs), "staff.js must not inject a Unit directory");
 
 process.stdout.write("Public naming lock passed\n");

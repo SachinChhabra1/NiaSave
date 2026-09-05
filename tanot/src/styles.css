@@ -630,12 +630,12 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline-color:
   min-width: 0;
   margin: 0;
   padding: 0;
-  gap: 0;
+  gap: 12px;
   overflow: visible;
   background: none;
 }
 .suite-mark::after { display: none; }
-.central-return { display: inline-flex; align-items: center; min-height: 24px; margin-bottom: 2px; color: #64A9FF; font-size: 10px; font-weight: 500; text-decoration: none; }
+.central-return { display: inline-flex; align-items: center; min-height: 40px; margin: 0; padding-left: 12px; border-left: 1px solid var(--line); color: #64A9FF; font-size: 10px; font-weight: 500; text-decoration: none; white-space: nowrap; }
 .central-return:hover { color: var(--ink); }
 .topbar-brand { flex-direction: column; }
 .topbar-brand strong { color: var(--ink); font-size: 13px; font-weight: 500; letter-spacing: 0; }
@@ -745,6 +745,8 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline-color:
 }
 
 @media (max-width: 560px) {
+  .suite-mark { gap: 8px; }
+  .central-return { padding-left: 8px; font-size: 9px; }
   .topbar-brand strong { max-width: none; font-size: 13px; }
   .header-actions .date-control, .header-actions .search { display: none; }
   .metrics-row { grid-template-columns: 1fr 1fr; }

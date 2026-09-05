@@ -52,8 +52,8 @@ export function Header({ title, query, onQuery, onNew }) {
   return (
     <header className="topbar">
       <div className="suite-mark">
-        <a className="central-return" href="https://rafiqicentral.com/2para">← Nia Command Center</a>
         <div className="topbar-brand"><strong>Dogra Unit</strong><span>Enterprise demand · live operations</span></div>
+        <a className="central-return" href="https://rafiqicentral.com/2para">← Nia Command Center</a>
       </div>
       <div className="current-view"><span>Current view</span><strong>{title}</strong></div>
       <div className="header-actions">

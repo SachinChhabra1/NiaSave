@@ -21,15 +21,11 @@
   ],
   "headers": [
     {
-      "source": "/ops.html",
+      "source": "/(.*).html",
       "headers": [{ "key": "Cache-Control", "value": "no-store, max-age=0" }]
     },
     {
-      "source": "/bison.html",
-      "headers": [{ "key": "Cache-Control", "value": "no-store, max-age=0" }]
-    },
-    {
-      "source": "/bison-data.html",
+      "source": "/tanot/(.*)",
       "headers": [{ "key": "Cache-Control", "value": "no-store, max-age=0" }]
     },
     {

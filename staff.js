@@ -16,9 +16,55 @@
   window.NIA_STAFF_READY = Promise.resolve({ id: "stf-open-desk", name: "2 Para desk", role: "open" });
 })();
 
-/* Keep every staff desk connected to the Rafiqi command center. Do not rewrite Polo / Bison / Tanot. */
+/* Keep every Unit on the approved public names and connected to Nia Command Center. */
 (function () {
   var commandCenterUrl = "https://rafiqicentral.com/2para";
+  var publicNames = { Polo: "Sikh Unit", "Operation Polo": "Sikh Unit", Bison: "Jat Unit", Tanot: "Dogra Unit", Madras: "Assam Unit" };
+  var unitLinks = [
+    { selector: 'a[href="/ops.html"]', href: "/ops.html", label: "Sikh Unit" },
+    { selector: 'a[href="/bison.html"]', href: "/bison.html", label: "Jat Unit" },
+    { selector: 'a[href="/tanot/"]', href: "/tanot/", label: "Dogra Unit" },
+    { selector: 'a[href*="para-2-madras.vercel.app"]', href: "https://para-2-madras.vercel.app/", label: "Assam Unit" }
+  ];
+
+  function applyPublicNames() {
+    document.querySelectorAll(".top h1, .rail-h, .rail-link, .narrow .kicker, .empty").forEach(function (element) {
+      var label = (element.textContent || "").trim();
+      if (publicNames[label]) element.textContent = publicNames[label];
+      if (label === "Could not load Operation Polo.") element.textContent = "Could not load Sikh Unit.";
+      if (element.classList.contains("rail-h") && label === "2 Para") element.textContent = "2 Para Units";
+    });
+    if (/^Bison(?:\s*[·|—-]|$)/i.test(document.title)) document.title = document.title.replace(/^Bison/i, "Jat Unit");
+    if (/^(?:Operation\s+)?Polo(?:\s*[·|—-]|$)/i.test(document.title)) document.title = document.title.replace(/^(?:Operation\s+)?Polo/i, "Sikh Unit");
+    var legacyBoard = document.querySelector('meta[name="nia-board"]');
+    if (legacyBoard) legacyBoard.remove();
+    var description = document.querySelector('meta[name="description"]');
+    if (description && /\b(?:Polo|Bison|Tanot|Madras)\b/i.test(description.content)) {
+      description.content = "Open Sikh, Jat, Dogra or Assam Unit from the Nia Command Center.";
+    }
+  }
+
+  function ensureUnitDirectory() {
+    var heading = Array.from(document.querySelectorAll(".rail-h")).find(function (element) {
+      return /^(?:2 Para|2 Para Units)$/.test((element.textContent || "").trim());
+    });
+    var block = heading && heading.closest(".rail-block");
+    if (!block) return;
+    heading.textContent = "2 Para Units";
+    var allProducts = Array.from(block.querySelectorAll("a")).find(function (link) {
+      return /All products/i.test(link.textContent || "");
+    });
+    unitLinks.forEach(function (item) {
+      var link = block.querySelector(item.selector);
+      if (!link) {
+        link = document.createElement("a");
+        link.className = "rail-link";
+        link.href = item.href;
+        block.insertBefore(link, allProducts || null);
+      }
+      link.textContent = item.label;
+    });
+  }
 
   function makeLink() {
     var link = document.createElement("a");
@@ -30,6 +76,8 @@
   }
 
   function addReturnLinks() {
+    applyPublicNames();
+    ensureUnitDirectory();
     var desktopMark = document.querySelector(".tower .top .mark");
     if (desktopMark && !desktopMark.querySelector(".command-center-return")) {
       desktopMark.appendChild(makeLink());
@@ -40,8 +88,13 @@
     }
   }
 
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", addReturnLinks);
-  else addReturnLinks();
+  function start() {
+    addReturnLinks();
+    new MutationObserver(applyPublicNames).observe(document.body, { childList: true, subtree: true });
+  }
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start);
+  else start();
 })();
 
 /* Every staff table can be sorted by any column, including tables rendered after API calls. */
@@ -133,7 +186,7 @@
   else start();
 })();
 
-/* Polo staff rail: highlight current desk and switch ops.html panes. */
+/* Sikh Unit staff rail: highlight current desk and switch ops.html panes. */
 (function () {
   function pane(name) {
     var tower = document.querySelector(".tower");

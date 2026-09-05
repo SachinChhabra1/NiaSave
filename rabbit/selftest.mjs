@@ -9,6 +9,7 @@ import {
   clipToPoloLock
 } from "./engine.mjs";
 import { handler } from "../api/server.mjs";
+import { asRuntimeValue } from "../lib/runtime-store.mjs";
 import { existsSync, readFileSync } from "fs";
 
 const fails = [];
@@ -297,6 +298,11 @@ function staffGet(path) {
     Promise.resolve(handler(req, res)).catch(reject);
   });
 }
+ok("asRuntimeValue keeps object", asRuntimeValue({ a: 1 }, { a: 0 }).a === 1);
+ok("asRuntimeValue parses json string", asRuntimeValue("{\"a\":2}", { a: 0 }).a === 2);
+ok("asRuntimeValue rejects garbage", asRuntimeValue("nope", { a: 3 }).a === 3);
+ok("asRuntimeValue rejects array", asRuntimeValue([1], { a: 4 }).a === 4);
+
 const skipBar = ["/api/orders", "/api/ledger", "/api/predict", "/api/biker", "/api/po", "/api/invoice", "/api/connectors", "/api/beat"];
 function notVercelMissing(got) {
   const err = got.body && got.body.error;
@@ -318,11 +324,14 @@ const getBikerLive = await staffGet("/api/biker");
 ok("GET /api/biker 30 shops S01-S30", getBikerLive.body.shops.length === 30 && getBikerLive.body.shops[0].stopId === "S01" && getBikerLive.body.shops[29].stopId === "S30" && !getBikerLive.body.shops.some(s => s.stopId === "S41" || s.stopId === "S42"));
 const getMemberLive = await staffGet("/api/member");
 ok("GET /api/member still 200", getMemberLive.status === 200 && getMemberLive.body.skip === true && notVercelMissing(getMemberLive));
+const getMember390 = await staffGet("/api/member?id=390");
+ok("GET /api/member?id=390 200", getMember390.status === 200 && getMember390.body.skip === true && notVercelMissing(getMember390));
 const getOrderLive = await staffGet("/api/order");
 ok("GET /api/order 200 skip", getOrderLive.status === 200 && getOrderLive.body.skip === true && Array.isArray(getOrderLive.body.orders) && notVercelMissing(getOrderLive));
 const getStockLive = await staffGet("/api/stock");
 ok("GET /api/stock keys frozen", ["beatDate","theatre","stopCount","opening","stock","remaining","movements","holding"].every(k => getStockLive.body[k] !== undefined) && notVercelMissing(getStockLive));
 ok("GET /api/stock stopCount 40", getStockLive.body.stopCount === 40);
+ok("GET /api/stock one theatre", getStockLive.body.theatre === THEATRE.name);
 
 const staffPages = [
   "ops.html","po.html","dispatch.html","invoice.html","pickup.html","recon.html",

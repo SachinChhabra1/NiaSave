@@ -531,13 +531,36 @@ function normalize(path) { return path.replace(/^\/living/, "/bison"); }
 async function runWithPersistentState(mutating, work) {
   if (!hasDurableStore()) return work();
   for (let attempt = 0; attempt < 3; attempt += 1) {
-    const loaded = await loadRuntimeState(RUNTIME_STATE_KEY, snapshotState()); restoreState(loaded.value, loaded.storage); const result = await work();
+    let loaded;
+    try {
+      loaded = await loadRuntimeState(RUNTIME_STATE_KEY, snapshotState());
+      restoreState(loaded.value, loaded.storage);
+    } catch (error) {
+      console.error("bison_state_load_failed", error);
+      return work();
+    }
+    const result = await work();
     if (!mutating || !result || result.status >= 400) return result;
-    const saved = await saveRuntimeState(RUNTIME_STATE_KEY, snapshotState(), loaded.version); if (saved.ok) return result;
+    try {
+      const saved = await saveRuntimeState(RUNTIME_STATE_KEY, snapshotState(), loaded.version);
+      if (saved.ok) return result;
+    } catch (error) {
+      console.error("bison_state_save_failed", error);
+      return result;
+    }
   }
   return { status: 409, body: { error: "state_conflict", message: "Please try again." } };
 }
-export async function bisonStorageStatus() { if (!hasDurableStore()) return { storage: "memory", connected: false, version: 0, product: "bison", schemaVersion: SCHEMA_VERSION }; const loaded = await loadRuntimeState(RUNTIME_STATE_KEY, snapshotState()); return { storage: loaded.storage, connected: true, version: loaded.version, product: "bison", schemaVersion: SCHEMA_VERSION }; }
+export async function bisonStorageStatus() {
+  if (!hasDurableStore()) return { storage: "memory", connected: false, version: 0, product: "bison", schemaVersion: SCHEMA_VERSION };
+  try {
+    const loaded = await loadRuntimeState(RUNTIME_STATE_KEY, snapshotState());
+    return { storage: loaded.storage, connected: loaded.storage === "postgres", version: loaded.version, product: "bison", schemaVersion: SCHEMA_VERSION };
+  } catch (error) {
+    console.error("bison_storage_status_failed", error);
+    return { storage: "memory", connected: false, version: 0, product: "bison", schemaVersion: SCHEMA_VERSION };
+  }
+}
 export function resetBison() { state = normalizeState(baseState(), hasDurableStore() ? "postgres" : "memory"); return state; }
 function done(result, fallback = 200) { if (result && result.error) return { status: result.status || 400, body: result }; return { status: fallback, body: result }; }
 async function handleOnce(req, path, body, url) {

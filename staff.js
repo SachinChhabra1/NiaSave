@@ -16,20 +16,9 @@
   window.NIA_STAFF_READY = Promise.resolve({ id: "stf-open-desk", name: "2 Para desk", role: "open" });
 })();
 
-/* Keep every Unit on the approved public names and connected to Nia Command Center. */
+/* Keep every staff desk connected to the Rafiqi command center. Do not rewrite Polo / Bison / Tanot. */
 (function () {
   var commandCenterUrl = "https://rafiqicentral.com/2para";
-  var publicNames = { Polo: "Sikh Unit", Bison: "Jat Unit", Tanot: "Dogra Unit", Madras: "Assam Unit" };
-
-  function applyPublicNames() {
-    document.querySelectorAll(".top h1, .rail-h, .rail-link, .narrow .kicker").forEach(function (element) {
-      var label = (element.textContent || "").trim();
-      if (publicNames[label]) element.textContent = publicNames[label];
-      if (element.classList.contains("rail-h") && label === "2 Para") element.textContent = "2 Para Units";
-    });
-    if (/^Bison(?:\s*[·|—-]|$)/i.test(document.title)) document.title = document.title.replace(/^Bison/i, "Jat Unit");
-    if (/^Polo(?:\s*[·|—-]|$)/i.test(document.title)) document.title = document.title.replace(/^Polo/i, "Sikh Unit");
-  }
 
   function makeLink() {
     var link = document.createElement("a");
@@ -41,7 +30,6 @@
   }
 
   function addReturnLinks() {
-    applyPublicNames();
     var desktopMark = document.querySelector(".tower .top .mark");
     if (desktopMark && !desktopMark.querySelector(".command-center-return")) {
       desktopMark.appendChild(makeLink());
@@ -145,7 +133,7 @@
   else start();
 })();
 
-/* Sikh Unit staff rail: highlight current desk and switch ops.html panes. */
+/* Polo staff rail: highlight current desk and switch ops.html panes. */
 (function () {
   function pane(name) {
     var tower = document.querySelector(".tower");

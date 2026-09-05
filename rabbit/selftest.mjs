@@ -326,7 +326,7 @@ const staffPages = [
 ];
 for (const file of staffPages) {
   const html = readFileSync(new URL("../" + file, import.meta.url), "utf8");
-  if (file === "ops.html") ok(file + " says Operation Polo", /Operation Polo/.test(html) && !/Sikh|Jat|Dogra|Assam/.test(html));
+  ok(file + " says Sikh Unit", /Sikh Unit/.test(html));
   ok(file + " has no Rabbit", !/Rabbit|RABBIT/.test(html));
   ok(file + " has no Jabali", !/Jabali|Jamali|JABALI|JAMALI/.test(html));
   ok(file + " has no Dummy", !/Dummy/.test(html));
@@ -341,13 +341,17 @@ const staffJs = readFileSync(new URL("../staff.js", import.meta.url), "utf8");
 const staffCss = readFileSync(new URL("../staff.css", import.meta.url), "utf8");
 const bisonCss = readFileSync(new URL("../bison.css", import.meta.url), "utf8");
 const bisonJs = readFileSync(new URL("../bison.js", import.meta.url), "utf8");
-ok("2 Para opens live Polo", /href="https:\/\/www\.niasave\.com\/ops\.html"/.test(deskHtml));
-ok("2 Para opens live Bison", /href="https:\/\/www\.niasave\.com\/bison\.html"/.test(deskHtml));
-ok("2 Para opens live Tanot", /href="https:\/\/www\.niasave\.com\/tanot\/"/.test(deskHtml));
-ok("2 Para preserves Madras id", /data-id="madras"/.test(deskHtml));
-ok("2 Para shows Polo Bison Tanot", /<strong>Polo<\/strong>[\s\S]*<strong>Bison<\/strong>[\s\S]*<strong>Tanot<\/strong>/.test(deskHtml));
-ok("2 Para shows Polo Bison Tanot actions", /Open Polo[\s\S]*Open Bison[\s\S]*Open Tanot/.test(deskHtml));
-ok("2 Para has no regiment Unit labels", !/Sikh Unit|Jat Unit|Dogra Unit|Assam Unit/.test(deskHtml));
+const tanotComponents = readFileSync(new URL("../tanot/src/components.jsx", import.meta.url), "utf8");
+const tanotCss = readFileSync(new URL("../tanot/src/styles.css", import.meta.url), "utf8");
+function visibleHtmlText(html) {
+  return html.replace(/<script\b[\s\S]*?<\/script>/gi, " ").replace(/<style\b[\s\S]*?<\/style>/gi, " ").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+}
+ok("2 Para opens live Sikh Unit", /href="https:\/\/www\.niasave\.com\/ops\.html"/.test(deskHtml));
+ok("2 Para opens live Jat Unit", /href="https:\/\/www\.niasave\.com\/bison\.html"/.test(deskHtml));
+ok("2 Para opens live Dogra Unit", /href="https:\/\/www\.niasave\.com\/tanot\/"/.test(deskHtml));
+ok("2 Para opens live Assam Unit", /href="https:\/\/para-2-madras\.vercel\.app"/.test(deskHtml));
+ok("2 Para shows approved unit names", /<strong>Sikh Unit<\/strong>[\s\S]*<strong>Jat Unit<\/strong>[\s\S]*<strong>Dogra Unit<\/strong>[\s\S]*<strong>Assam Unit<\/strong>/.test(deskHtml));
+ok("2 Para shows approved unit actions", /Open Sikh Unit[\s\S]*Open Jat Unit[\s\S]*Open Dogra Unit[\s\S]*Open Assam Unit/.test(deskHtml));
 ok("2 Para preserves technical identifiers", /data-id="polo"[\s\S]*data-id="bison"[\s\S]*data-id="tanot"[\s\S]*data-id="madras"/.test(deskHtml));
 ok("local Sikh redirects live", /location\.protocol === 'file:'[\s\S]*niasave\.com\/ops\.html/.test(opsHtml));
 ok("local Jat redirects live", /location\.protocol\s*===?\s*['"]file:['"][\s\S]*niasave\.com/.test(bisonHtml));
@@ -360,16 +364,17 @@ ok("Jat is split into work pages", bisonPages.every(file => readFileSync(new URL
 ok("Jat tables use page flow", !/studios-table/.test(bisonPages.map(file => readFileSync(new URL("../" + file, import.meta.url), "utf8")).join("\n")) && !/(?:max-height|overflow)\s*:\s*(?:auto|scroll)/.test(bisonCss));
 ok("Jat legacy sections route to pages", /#contracts[^\n]+bison-contracts\.html/.test(bisonHtml) && /#clocks[^\n]+bison-clocks\.html/.test(bisonHtml));
 ok("Jat reserved nests expose a persisted check-in action", /class=\\?"nest-checkin/.test(bisonJs) && /\/api\/bison\/checkin/.test(bisonJs));
-ok("Bison pages lock Polo Bison Tanot All products", bisonPages.every(file => {
-  const html = readFileSync(new URL("../" + file, import.meta.url), "utf8");
-  const pageRail = (html.split('class="rail"')[1] || "").split('class="pane"')[0];
-  return /<div class="kicker">Bison<\/div>/.test(html) && /href="\/ops.html">Polo</.test(pageRail) && /href="\/bison.html">Bison</.test(pageRail) && /href="\/tanot\/">Tanot</.test(pageRail) && /href="\/desk.html">All products</.test(pageRail) && !/Sikh|Jat|Dogra|Assam/.test(html);
-}));
-ok("bison.html uses Bison not Jat", /<title>Bison · Control<\/title>/.test(bisonHtml) && /<h1>Bison<\/h1>/.test(bisonHtml) && !/Sikh|Jat|Dogra|Assam/.test(bisonHtml));
-ok("staff.css has no IBM Plex", !/IBM Plex|Plex Sans|Plex Mono|fonts\.googleapis/.test(staffCss));
-ok("staff.css phone --font", /--font:-apple-system,"SF Pro Display","SF Pro Text","Helvetica Neue","Segoe UI",Arial,sans-serif/.test(staffCss));
-ok("staff.css phone --mono", /--mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace/.test(staffCss));
-ok("ops nia then Operation Polo", /class="nia-logo"[\s\S]{0,200}Operation Polo/.test(opsHtml));
+ok("Jat pages use approved display branding", bisonPages.every(file => /Jat Unit/.test(readFileSync(new URL("../" + file, import.meta.url), "utf8"))));
+ok("Jat pages expose no retired public names", bisonPages.every(file => !/\b(?:Bison|Polo|Tanot|Madras)\b/i.test(visibleHtmlText(readFileSync(new URL("../" + file, import.meta.url), "utf8")))));
+ok("Sikh page exposes no retired public names", !/\b(?:Bison|Polo|Tanot|Madras)\b/i.test(visibleHtmlText(opsHtml)));
+ok("Dogra directory uses approved Unit names", /2 Para Units/.test(tanotComponents) && /Sikh Unit/.test(tanotComponents) && /Jat Unit/.test(tanotComponents) && /Dogra Unit/.test(tanotComponents) && /Assam Unit/.test(tanotComponents));
+ok("Dogra uses Rafiqi tokens", /--canvas:\s*#0b0e14/.test(tanotCss) && /--surface:\s*#12161e/.test(tanotCss) && /--blue:\s*#0A84FF/.test(tanotCss) && /IBM Plex Sans/.test(tanotCss));
+ok("staff.css uses Rafiqi typography", /fonts\.googleapis\.com[\s\S]*IBM\+Plex\+Mono[\s\S]*IBM\+Plex\+Sans/.test(staffCss) && /--font:"IBM Plex Sans"/.test(staffCss) && /--mono:"IBM Plex Mono"/.test(staffCss));
+ok("staff.css uses Rafiqi dark tokens", /--bg:#0B0E14/.test(staffCss) && /--surface:#12161E/.test(staffCss) && /--raised:#181D27/.test(staffCss) && /--accent:#0A84FF/.test(staffCss));
+ok("staff.css uses compact Rafiqi shell", /width:240px;flex:0 0 240px/.test(staffCss) && /min-height:58px;padding:0 24px/.test(staffCss) && /\.rail-link\{[\s\S]*min-height:40px/.test(staffCss));
+ok("staff app remains available on mobile", /@media\(max-width:899px\)[\s\S]*\.shell\{display:block/.test(staffCss) && /\.tower\{display:block!important/.test(staffCss));
+ok("shared script enforces approved public names", /publicNames\s*=\s*\{\s*Polo:\s*"Sikh Unit",\s*Bison:\s*"Jat Unit",\s*Tanot:\s*"Dogra Unit",\s*Madras:\s*"Assam Unit"/.test(staffJs));
+ok("ops nia then Sikh Unit", /class="nia-logo"[\s\S]{0,200}Sikh Unit/.test(opsHtml));
 ok("ops has no polo-icon", !/polo-icon/.test(opsHtml));
 ok("ops job icons in source", /id="i-biker"/.test(opsHtml) && /id="i-po"/.test(opsHtml) && /id="i-dispatch"/.test(opsHtml));
 const rail = (opsHtml.split('class="rail"')[1] || "").split('class="pane"')[0];
@@ -378,12 +383,10 @@ ok("ops load has no 40 stops", !/40 stops/.test(opsHtml) && !/\+' stops/.test(op
 ok("ops sequence 1 to 5", /1<\/b> Member ordered[\s\S]*→[\s\S]*2<\/b> Hub loaded[\s\S]*→[\s\S]*3<\/b> Member collected or returned[\s\S]*→[\s\S]*4<\/b> Hub settled with officer[\s\S]*→[\s\S]*5<\/b> Nia paid vendor/.test(opsHtml));
 ok("ops vendor pay is last", opsHtml.indexOf("5</b> Nia paid vendor") > opsHtml.indexOf("4</b> Hub settled with officer") && opsHtml.indexOf("5</b> Nia paid vendor") > opsHtml.indexOf("2</b> Hub loaded"));
 ok("ops no bare Settled or Paid labels", !/<b>\d<\/b> Settled/.test(opsHtml) && !/<b>\d<\/b> Paid/.test(opsHtml) && !/'Settled'/.test(opsHtml) && !/'Paid'/.test(opsHtml));
-ok("ops h1 is Operation Polo once", (opsHtml.match(/<h1>Operation Polo<\/h1>/g) || []).length === 1);
-ok("ops title Operation Polo", /<title>Operation Polo<\/title>/.test(opsHtml));
-ok("ops stamps nia-board Operation Polo", /name="nia-board" content="Operation Polo"/.test(opsHtml));
-ok("ops not Sikh Unit", !/Sikh Unit/.test(opsHtml));
-ok("ops rail Polo not Sikh", /href="\/ops.html">Polo</.test(rail) && /href="\/bison.html">Bison</.test(rail) && /href="\/tanot\/">Tanot</.test(rail) && /href="\/desk.html">All products</.test(rail) && !/Sikh|Jat|Dogra|Assam/.test(rail));
-ok("ops empty state Operation Polo", /Could not load Operation Polo/.test(opsHtml));
+ok("ops h1 is Sikh Unit once", (opsHtml.match(/<h1>Sikh Unit<\/h1>/g) || []).length === 1);
+ok("ops title Sikh Unit", /<title>Sikh Unit<\/title>/.test(opsHtml));
+ok("ops rail uses approved unit names", /href="\/ops.html">Sikh Unit</.test(rail) && /href="\/bison.html">Jat Unit</.test(rail) && /href="\/tanot\/">Dogra Unit</.test(rail) && /para-2-madras\.vercel\.app">Assam Unit</.test(rail));
+ok("ops empty state Sikh Unit", /Could not load Sikh Unit/.test(opsHtml));
 ok("ops header has no brand kicker", !/<div class="brand">/.test(opsHtml));
 ok("ops rail Reports and Ops", /<h2 class="rail-h"[^>]*>Reports<\/h2>/.test(rail) && /<h2 class="rail-h"[^>]*>Ops<\/h2>/.test(rail));
 ok("inventory under Reports", rail.indexOf("Reports") < rail.indexOf(">Inventory<") && rail.indexOf(">Inventory<") < rail.indexOf(">Ops<"));
@@ -394,4 +397,4 @@ if (fails.length) {
   process.stderr.write("FAIL\n" + fails.join("\n") + "\n");
   process.exit(1);
 }
-process.stdout.write("polo selftest passed\n");
+process.stdout.write("Sikh Unit selftest passed\n");

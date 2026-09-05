@@ -25,3 +25,36 @@ body[data-bison-page="control"] .realities{display:grid;grid-template-columns:re
 .data-desk-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}.data-desk-grid .full{grid-column:1/-1}.data-note{padding:12px 14px;border-radius:10px;background:#fff8cc;color:#5c4b00;font-size:14px}.data-file{border:1px dashed var(--border);padding:18px;border-radius:12px}.data-result{white-space:pre-wrap;font-family:var(--mono);font-size:13px}.field-help{font-size:12px;color:var(--fg-muted);margin-top:4px}
 @media(max-width:1100px){.bison-grid,.bison-control-layout{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.form-grid .wide{grid-column:auto}.bison-table th,.bison-table td{padding:11px 10px;font-size:14px}}
 @media(max-width:900px){.data-desk-grid{grid-template-columns:1fr}.data-desk-grid .full{grid-column:auto}}
+
+/* Jat Unit uses the same compact component scale as Rafiqi Central. */
+.bison-grid{gap:12px;margin:12px 0 28px}
+.bison-card{border-color:var(--border);border-radius:17px;padding:20px;background:var(--surface)}
+.bison-card h2,.bison-card h3{font-size:13px;font-weight:500}
+.bison-card .sub{font-size:12px}
+.bison-page-intro{max-width:820px;margin:0 0 20px;color:var(--fg-muted);font-size:13px;line-height:1.55}
+.bison-section{margin-bottom:30px}
+.bison-filter{gap:10px;margin-bottom:18px}
+.bison-filter label{font-size:11px;font-weight:500}
+.bison-filter select{min-width:200px;padding:8px 11px;font-size:12px}
+.bison-table{margin-bottom:28px}
+.bison-table th,.bison-table td{padding:11px 12px;font-size:12px}
+.bison-table th{font-size:9px}
+.form-grid label{color:var(--fg-muted);font-size:10px}
+.form-grid input,.form-grid select{padding:8px 11px;font-size:12px}
+.compact-actions button{min-height:36px;padding:8px 12px;font-size:12px}
+.statusline,.recon{color:var(--fg-muted);font-size:11px}
+.tag{background:var(--raised);font-size:10px}
+.bison-worklist{border-color:var(--border)}
+.bison-worklist a{gap:20px;padding:16px 4px;border-color:var(--border)}
+.bison-worklist strong{font-size:14px;font-weight:500}
+.bison-worklist small{color:var(--fg-muted);font-size:11px}
+.bison-worklist .work-state{color:#64A9FF;font-size:11px;font-weight:500}
+.bison-control-layout{grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr);gap:28px;margin:22px 0}
+.bison-control-kpis .kpis{gap:12px}
+.bison-control-kpis .kpi{padding:16px}
+.bison-control-kpis .kpi .l{font-size:9px}
+.bison-control-kpis .kpi .n{font-size:24px}
+.data-note{background:rgba(255,159,10,.1);color:#FFBE55}
+.data-file{border-color:var(--border);background:var(--raised)}
+@media(max-width:1100px){.bison-grid,.bison-control-layout{grid-template-columns:1fr}}
+@media(max-width:560px){body[data-bison-page="control"] .realities{display:flex;overflow-x:auto}body[data-bison-page="control"] .reality{min-width:150px}}

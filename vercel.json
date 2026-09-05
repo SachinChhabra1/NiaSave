@@ -37,6 +37,22 @@
       "headers": [{ "key": "Cache-Control", "value": "no-store, max-age=0" }]
     },
     {
+      "source": "/staff.css",
+      "headers": [{ "key": "Cache-Control", "value": "no-store, max-age=0" }]
+    },
+    {
+      "source": "/staff.js",
+      "headers": [{ "key": "Cache-Control", "value": "no-store, max-age=0" }]
+    },
+    {
+      "source": "/bison.css",
+      "headers": [{ "key": "Cache-Control", "value": "no-store, max-age=0" }]
+    },
+    {
+      "source": "/bison.js",
+      "headers": [{ "key": "Cache-Control", "value": "no-store, max-age=0" }]
+    },
+    {
       "source": "/research/why-blue-collar-workers-quit",
       "headers": [
         { "key": "Content-Type", "value": "text/html; charset=utf-8" },

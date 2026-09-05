@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap");
+
 :root{
   --bg:#F6F8FB;
   --surface:#FFFFFF;
@@ -400,4 +402,151 @@ button.stop .stop-num{font-size:15px;color:var(--fg-muted);font-variant-numeric:
   .shop-list{grid-template-columns:1fr}
   .grid{grid-template-columns:1fr}
   .picture{grid-template-columns:1fr}
+}
+
+/* Rafiqi Central product system. Keep every Unit on one visual language. */
+:root{
+  --bg:#0B0E14;
+  --surface:#12161E;
+  --raised:#181D27;
+  --fg:#E8ECF1;
+  --fg-muted:#9AA3B2;
+  --fg-subtle:#6D7686;
+  --border:rgba(232,236,241,.12);
+  --accent:#0A84FF;
+  --accent-fg:#0B0E14;
+  --ok:#30D158;
+  --ok-fg:#102014;
+  --warn:#FF9F0A;
+  --warn-fg:#1C1408;
+  --danger:#FF453A;
+  --danger-fg:#1C0E0C;
+  --info:#64D2FF;
+  --info-fg:#0B0E14;
+  --chart:#0A84FF;
+  --chart-2:#30D158;
+  --chart-3:#FF9F0A;
+  --chart-4:#5E5CE6;
+  --funnel-1:#64D2FF;
+  --funnel-2:#409CFF;
+  --funnel-3:#0050C8;
+  --font:"IBM Plex Sans","Segoe UI",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  color-scheme:dark;
+}
+html,body{min-height:100%;background:var(--bg);color:var(--fg)}
+body{font-size:14px;line-height:1.5;letter-spacing:0}
+:focus-visible{outline:2px solid #8B9BB0;outline-offset:2px}
+.narrow{display:none!important}
+.tower{display:block!important;min-height:100vh;background:var(--bg)}
+.top{
+  position:sticky;top:0;z-index:30;
+  min-height:58px;padding:0 24px;
+  align-items:center;
+  border-bottom:1px solid var(--border);
+  background:rgba(11,14,20,.94);
+  backdrop-filter:blur(14px);
+}
+.mark{min-width:0;flex-direction:row;align-items:center;gap:10px}
+.nia-logo{
+  width:32px;height:32px;min-width:32px;padding:5px;
+  border:1px solid #34425A;border-radius:9px;
+  object-fit:contain;background:linear-gradient(145deg,#263853,#162132);
+  filter:invert(1);
+}
+.top h1{margin:0;color:var(--fg);font-size:14px;font-weight:500;letter-spacing:0}
+.top .meta{margin:0;color:var(--fg-subtle);font-size:10px;line-height:1.45;text-align:right}
+.command-center-return{
+  min-height:24px;margin:0 0 0 6px;padding:0 0 0 16px;
+  border:0;border-left:1px solid var(--border);border-radius:0;
+  color:#64A9FF;background:transparent;
+  font-size:10px;font-weight:500;
+}
+.command-center-return:hover{color:var(--fg);background:transparent}
+.shell{min-height:calc(100vh - 58px)}
+.rail{
+  width:240px;flex:0 0 240px;padding:18px 12px 28px;
+  border-right:1px solid var(--border);background:var(--surface);
+}
+.rail-block{margin:0 0 22px}
+.rail-h{margin:0 0 7px;padding:0 9px;color:var(--fg-subtle);font-size:9px;font-weight:500;letter-spacing:.09em}
+.rail-link{
+  min-height:40px;padding:10px 9px;border-radius:10px;
+  color:var(--fg-muted);font-size:13px;line-height:20px;font-weight:400;
+}
+.rail-link:hover{color:var(--fg);background:var(--raised)}
+.rail-link.on{color:var(--fg);background:var(--raised);font-weight:500}
+.rail-link.on::after{content:"";float:right;width:5px;height:5px;margin-top:8px;border-radius:50%;background:var(--accent)}
+.wrap{width:100%;max-width:1500px;padding:28px 32px 72px}
+.sub{margin-bottom:20px;color:var(--fg-muted);font-size:13px;line-height:1.55}
+h2{margin:30px 0 12px;color:var(--fg);font-size:13px;font-weight:500;letter-spacing:0;text-transform:none}
+.brand{color:var(--fg-subtle);font-size:9px;font-weight:500}
+.desk-icon,.job-icon,.card-icon{width:28px;height:28px;min-width:28px;min-height:28px;margin-bottom:8px}
+.h2-row{gap:10px;margin-bottom:10px}
+.kpis{gap:12px;margin:8px 0 24px}
+.kpi,.card,.row,.upload-card,.connectors-panel,.open,a.desk,button.job,button.stop{
+  border:1px solid var(--border);border-radius:17px;background:var(--surface);box-shadow:none;
+}
+.kpi{padding:20px}
+.kpi .l{color:var(--fg-muted);font-size:10px;font-weight:500;letter-spacing:.04em}
+.kpi .n{margin-top:12px;color:var(--fg);font-size:30px;font-weight:500}
+.grid,.desks,.jobs,.uploads,.picture{gap:12px}
+.card,.row,.upload-card{padding:20px}
+.card h3,.picture .card h3{color:var(--fg);font-size:13px;font-weight:500;letter-spacing:0;text-transform:none}
+a.desk,button.job{padding:20px}
+a.desk strong,button.job strong,.upload-card strong,.who{font-size:16px;font-weight:500}
+a.desk span,button.job .job-do,.upload-card .do,.why,.meta,.skus{color:var(--fg-muted);font-size:12px}
+.pill{padding:5px 9px;font-size:10px;background:rgba(10,132,255,.12)}
+table{border-color:var(--border);border-radius:15px;background:var(--surface);font-size:12px}
+th,td{padding:11px 12px;border-color:var(--border)}
+th{color:var(--fg-subtle);background:var(--raised);font-size:9px;font-weight:500}
+td.num,th.num{font-size:12px}
+tbody tr:hover{background:var(--raised)}
+input,select{
+  min-height:36px;padding:8px 11px;border-color:var(--border);border-radius:9px;
+  background:var(--raised);color:var(--fg);font-size:13px;
+}
+button,.file-btn{
+  min-height:36px;padding:8px 14px;border-radius:9px;
+  background:#007AFF;color:#fff;font-size:12px;font-weight:500;
+}
+button:hover,.file-btn:hover{background:var(--accent)}
+button.ghost{border-color:var(--border);background:var(--raised);color:var(--fg)}
+.realities{gap:7px;margin-bottom:20px}
+.reality{padding:8px 10px;border-color:var(--border);border-radius:9px;background:var(--surface);font-size:11px;font-weight:500}
+.reality-arrow{color:var(--fg-subtle);font-size:14px}
+.check{padding:12px 14px;border-color:var(--border);border-radius:10px;background:var(--raised)}
+.check .l{color:var(--fg-muted);font-size:9px}
+.check .n{font-size:20px;font-weight:500}
+.drop,.bar-track{border-color:var(--border);background:var(--raised)}
+.pin-map{border-color:var(--border);background:var(--raised)}
+.empty,.msg{color:var(--fg-muted);font-size:13px}
+code{background:var(--raised);font-size:11px}
+
+@media(max-width:899px){
+  .top{min-height:58px;padding:0 16px}
+  .top .meta{max-width:42vw}
+  .shell{display:block;min-height:calc(100vh - 58px)}
+  .rail{
+    position:sticky;top:58px;z-index:20;
+    display:flex;width:100%;height:54px;padding:7px 10px;gap:4px;
+    overflow-x:auto;overflow-y:hidden;
+    border-right:0;border-bottom:1px solid var(--border);
+  }
+  .rail-block{display:flex;align-items:center;gap:4px;min-width:max-content;margin:0}
+  .rail-h{display:none}
+  .rail-link{display:inline-flex;align-items:center;min-height:40px;white-space:nowrap}
+  .rail-link.on::after{margin:0 0 0 8px}
+  .wrap{padding:22px 16px 56px}
+  .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .desks,.jobs,.uploads,.stops,.shop-list,.grid,.picture{grid-template-columns:1fr}
+}
+@media(max-width:560px){
+  .nia-logo{width:30px;height:30px;min-width:30px}
+  .top .meta{display:none}
+  .command-center-return{margin-left:2px;padding-left:10px}
+  .kpi{min-height:112px;padding:16px}
+  .kpi .n{font-size:25px}
+  .realities{overflow-x:auto;flex-wrap:nowrap}
+  .reality{min-width:max-content}
 }

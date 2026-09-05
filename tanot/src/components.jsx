@@ -35,8 +35,8 @@ export function Sidebar({ items, active, onSelect }) {
           </button>
         ))}</div>)}
       </nav>
-      <div className="para-family" aria-label="2 Para Ops products">
-        <p>2 Para · Ops</p>
+      <div className="para-family" aria-label="2 Para Unit directory">
+        <p>2 Para Units</p>
         <a className="para-product" href="/ops.html"><span>Sikh Unit</span><small>Operations</small></a>
         <a className="para-product" href="/bison.html"><span>Jat Unit</span><small>Living</small></a>
         <div className="para-product active"><span>Dogra Unit</span><small>Enterprise demand</small></div>

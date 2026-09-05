@@ -402,10 +402,25 @@ function applyPoloLock(target) {
   return beforeIds !== clipped.studios.map(s => s.id).join(",") || beforeOrderStops !== clipped.orders.map(o => o.stopId).join(",");
 }
 
+function asStateObject(value, fallback = {}) {
+  return value && typeof value === "object" && !Array.isArray(value) ? value : fallback;
+}
+
+function sanitizeOrders(orders, fallback) {
+  if (!Array.isArray(orders)) return fallback;
+  return orders.filter(o => o && typeof o === "object").map(o => ({
+    ...o,
+    lines: Array.isArray(o.lines) ? o.lines : []
+  }));
+}
+
 function restoreState(value, storage = "memory") {
   const base = createState();
-  const restored = { ...base, ...(value || {}) };
-  restored.orders = Array.isArray(restored.orders) ? restored.orders : base.orders;
+  const incoming = asStateObject(value, {});
+  const restored = { ...base, ...incoming };
+  restored.beat = { ...base.beat, ...asStateObject(incoming.beat, {}) };
+  if (!asStateObject(restored.beat.opening, null)) restored.beat.opening = base.beat.opening;
+  restored.orders = sanitizeOrders(restored.orders, base.orders);
   restored.studios = Array.isArray(restored.studios) ? restored.studios : base.studios;
   restored.reservations = Array.isArray(restored.reservations) ? restored.reservations : base.reservations;
   restored.scans = Array.isArray(restored.scans) ? restored.scans : base.scans;
@@ -430,18 +445,37 @@ function restoreState(value, storage = "memory") {
   return clipped;
 }
 
+function skipDurableRead() {
+  return DUMMY_DATA && process.env.NIA_STAFF_STORE_GETS !== "1";
+}
+
 async function runWithPersistentState(mutating, work) {
-  if (!hasDurableStore()) return work();
+  if (!hasDurableStore() || (!mutating && skipDurableRead())) return work();
 
   for (let attempt = 0; attempt < 3; attempt++) {
-    const loaded = await loadRuntimeState(RUNTIME_STATE_KEY, snapshotState(createState()));
-    const clipped = restoreState(loaded.value, loaded.storage);
+    let loaded;
+    try {
+      loaded = await loadRuntimeState(RUNTIME_STATE_KEY, snapshotState(createState()));
+    } catch (error) {
+      console.error("staff_state_load_failed", error);
+      return work();
+    }
+    try {
+      restoreState(loaded.value, loaded.storage);
+    } catch (error) {
+      console.error("staff_state_restore_failed", error);
+      resetDummy();
+    }
     const result = await work();
-    if (!mutating && !clipped) return result;
-    if (!clipped && result && result.status >= 400) return result;
-
-    const saved = await saveRuntimeState(RUNTIME_STATE_KEY, snapshotState(), loaded.version);
-    if (saved.ok) return result;
+    if (!mutating) return result;
+    if (result && result.status >= 400) return result;
+    try {
+      const saved = await saveRuntimeState(RUNTIME_STATE_KEY, snapshotState(), loaded.version);
+      if (saved.ok) return result;
+    } catch (error) {
+      console.error("staff_state_save_failed", error);
+      return result;
+    }
   }
 
   return {
@@ -452,8 +486,13 @@ async function runWithPersistentState(mutating, work) {
 
 export async function staffStorageStatus() {
   if (!hasDurableStore()) return { storage: "memory", connected: false, version: 0 };
-  const loaded = await loadRuntimeState(RUNTIME_STATE_KEY, snapshotState(createState()));
-  return { storage: loaded.storage, connected: true, version: loaded.version };
+  try {
+    const loaded = await loadRuntimeState(RUNTIME_STATE_KEY, snapshotState(createState()));
+    return { storage: loaded.storage, connected: loaded.storage === "postgres", version: loaded.version };
+  } catch (error) {
+    console.error("staff_storage_status_failed", error);
+    return { storage: "memory", connected: false, version: 0 };
+  }
 }
 
 export function resetDummy() {
@@ -488,21 +527,23 @@ function liveStopCount() {
 
 function remainingOnCart() {
   const rem = emptySkuMap();
-  for (const sku of Object.keys(rem)) rem[sku] = state.beat.opening[sku] || 0;
-  for (const o of state.orders) {
+  const opening = asStateObject(state.beat && state.beat.opening, {});
+  for (const sku of Object.keys(rem)) rem[sku] = opening[sku] || 0;
+  for (const o of state.orders || []) {
     if (!["packed", "loaded", "at_stop", "collected"].includes(o.status)) continue;
-    for (const line of o.lines) rem[line.id] = (rem[line.id] || 0) - (Number(line.qty) || 1);
+    for (const line of o.lines || []) rem[line.id] = (rem[line.id] || 0) - (Number(line.qty) || 1);
   }
   return rem;
 }
 
 function movementsOf() {
   const out = {};
+  const opening = asStateObject(state.beat && state.beat.opening, {});
   for (const s of SKUS) {
-    out[s.id] = { inbound: state.beat.opening[s.id] || 0, packed: 0, loaded: 0, collected: 0, missed: 0, leftover: 0 };
+    out[s.id] = { inbound: opening[s.id] || 0, packed: 0, loaded: 0, collected: 0, missed: 0, leftover: 0 };
   }
-  for (const o of state.orders) {
-    for (const line of o.lines) {
+  for (const o of state.orders || []) {
+    for (const line of o.lines || []) {
       const q = Number(line.qty) || 1;
       const row = out[line.id];
       if (!row) continue;
@@ -513,7 +554,7 @@ function movementsOf() {
     }
   }
   for (const sku of Object.keys(out)) {
-    out[sku].leftover = (state.beat.opening[sku] || 0) - out[sku].collected;
+    out[sku].leftover = (opening[sku] || 0) - out[sku].collected;
   }
   return out;
 }
@@ -594,17 +635,18 @@ function stopProgress() {
 }
 
 export function ledgerOf(beatDate) {
-  const date = beatDate && beatDate !== "today" ? beatDate : state.beat.beatDate;
-  const opening = clone(state.beat.opening);
+  const beat = asStateObject(state.beat, {});
+  const date = beatDate && beatDate !== "today" ? beatDate : beat.beatDate;
+  const opening = clone(asStateObject(beat.opening, emptySkuMap()));
   const reserved = emptySkuMap();
   const collected = emptySkuMap();
   const missed = emptySkuMap();
   const leftover = emptySkuMap();
   let orderCount = 0;
-  for (const o of state.orders) {
+  for (const o of state.orders || []) {
     if (o.beatDate !== date) continue;
     orderCount += 1;
-    for (const line of o.lines) {
+    for (const line of o.lines || []) {
       const q = Number(line.qty) || 1;
       if (o.status === "collected") skuQty(collected, line.id, q);
       else if (o.status === "missed") skuQty(missed, line.id, q);
@@ -1000,8 +1042,8 @@ export function authMe() {
 
 export function memberPayload(query = {}) {
   const session = state.memberSession || { memberId: "ravi", phone: "ravi" };
-  const id = String(query.memberId || query.phone || session.memberId || "ravi");
-  const row = memberById.get(id) || memberById.get("ravi");
+  const id = String(query.memberId || query.phone || query.id || session.memberId || "ravi");
+  const row = memberById.get(id) || memberById.get("ravi") || { memberId: "ravi", name: "Ravi", studioId: "S01", nest: "", hub: THEATRE.hub, theatre: THEATRE.name, hasMira: false, friday_send: false, last_bag: "", last_mira: "" };
   return {
     memberId: row.memberId,
     name: row.name,

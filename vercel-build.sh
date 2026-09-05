@@ -6,16 +6,19 @@ test -f api/index.mjs
 test -f api/server.mjs
 test -f rabbit/engine.mjs
 # Product naming lock. Vercel Git production copies these files as-is.
-# Fail closed if a future rollback tries to ship the retired product names.
+# ops.html is Operation Polo. Regiment names on this board must fail the build.
+# Desk / bison / tanot unit labels stay as shipped on those pages.
 lock_fail() { echo "product rail lock: $1" >&2; exit 1; }
-echo "product naming lock: Nia Command Center / Sikh Unit / Jat Unit / Dogra Unit / Assam Unit"
+echo "product rail lock 0843 IST: ops.html Operation Polo / Polo"
 grep -q '<title>Nia Command Center</title>' desk.html || lock_fail "desk.html title must be Nia Command Center"
 for unit in 'Sikh Unit' 'Jat Unit' 'Dogra Unit' 'Assam Unit'; do
   grep -q "<strong>$unit</strong>" desk.html || lock_fail "desk.html must include $unit"
 done
-grep -q '<title>Sikh Unit</title>' ops.html || lock_fail "ops.html title must be Sikh Unit"
-grep -q '<h1>Sikh Unit</h1>' ops.html || lock_fail "ops.html heading must be Sikh Unit"
-grep -q 'href="/ops.html">Sikh Unit<' ops.html || lock_fail "ops.html rail must label Sikh Unit"
+grep -q '<title>Operation Polo</title>' ops.html || lock_fail "ops.html title must be Operation Polo"
+grep -q 'name="nia-board" content="Operation Polo"' ops.html || lock_fail "ops.html must stamp Operation Polo"
+grep -q '<h1>Operation Polo</h1>' ops.html || lock_fail "ops.html heading must be Operation Polo"
+grep -q 'href="/ops.html">Polo<' ops.html || lock_fail "ops.html rail must label Polo"
+grep -Eq 'Sikh|Jat|Dogra|Assam' ops.html && lock_fail "ops.html has regiment names"
 grep -q '<title>Jat Unit' bison.html || lock_fail "bison.html title must be Jat Unit"
 grep -q 'href="/bison.html">Jat Unit<' bison.html || lock_fail "bison.html rail must label Jat Unit"
 for f in bison-studios.html bison-contracts.html bison-clocks.html bison-collections.html bison-nests.html bison-data.html; do

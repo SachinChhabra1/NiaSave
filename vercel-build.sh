@@ -12,12 +12,13 @@ grep -q '<title>Nia Command Center</title>' desk.html || lock_fail "desk.html ti
 for unit in 'Sikh Unit' 'Jat Unit' 'Dogra Unit' 'Assam Unit'; do
   grep -q "<strong>$unit</strong>" desk.html || lock_fail "desk.html must include $unit"
 done
-grep -q '<title>Sikh Unit</title>' ops.html || lock_fail "ops.html title must be Sikh Unit"
-grep -q '<h1>Sikh Unit</h1>' ops.html || lock_fail "ops.html heading must be Sikh Unit"
-grep -q 'href="/ops.html">Sikh Unit<' ops.html || lock_fail "ops.html rail must label Sikh Unit"
-grep -q 'href="/bison.html">Jat Unit<' ops.html || lock_fail "ops.html rail must label Jat Unit"
-grep -q 'href="/tanot/">Dogra Unit<' ops.html || lock_fail "ops.html rail must label Dogra Unit"
-grep -q 'para-2-madras.vercel.app">Assam Unit<' ops.html || lock_fail "ops.html rail must label Assam Unit"
+grep -q '<title>Operation Polo</title>' ops.html || lock_fail "ops.html title must be Operation Polo"
+grep -q '<h1>Operation Polo</h1>' ops.html || lock_fail "ops.html heading must be Operation Polo"
+grep -q 'href="/ops.html">Polo<' ops.html || lock_fail "ops.html rail must label Polo"
+grep -q 'href="/bison.html">Bison<' ops.html || lock_fail "ops.html rail must label Bison"
+grep -q 'href="/tanot/">Tanot<' ops.html || lock_fail "ops.html rail must label Tanot"
+grep -q 'href="/desk.html">All products<' ops.html || lock_fail "ops.html rail must label All products"
+grep -Eq 'Sikh|Jat|Dogra|Assam' ops.html && lock_fail "ops.html has regiment names"
 grep -q '<title>Jat Unit' bison.html || lock_fail "bison.html title must be Jat Unit"
 for f in bison-studios.html bison-contracts.html bison-clocks.html bison-collections.html bison-nests.html bison-data.html; do
   grep -q 'Jat Unit' "$f" || lock_fail "$f must label Jat Unit"

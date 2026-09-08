@@ -54,5 +54,5 @@ export function mountMap(model,t) {
     const reset=()=>map.fitBounds(points,{padding:[35,35],maxZoom:15});reset();
     document.querySelector('#earn-map-reset')?.addEventListener('click',reset,{once:false});
   }).catch(()=>{if(!disposed&&container.isConnected)container.textContent=t('Map unavailable. Browse the jobs below.','नक्शा उपलब्ध नहीं है। नीचे नौकरियाँ देखें।');});
-  return ()=>{disposed=true;map?.remove();};
+  return ()=>{if(disposed)return;disposed=true;map?.remove();map=null;};
 }

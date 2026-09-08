@@ -28,11 +28,11 @@ The restricted residence/eligibility/jobs payload is the Earn projection, not th
 
 Implement the reverse server-to-server read endpoint and matching NiaSave adapter together. Use direction-specific signing, service authorization, stable authenticated member context and bounded freshness. No open operator browser tab is required. Specify read/write ownership, schema version, error behavior and invalidation per contract.
 
-## 4. Confirmed KYC owner: Living Unit under Para 1
+## 4. Confirmed KYC owner: Living Unit under Para 2
 
-Sachin has now confirmed: KYC is collected in the member enrolment form, which must be built in the Living Unit under Para 1. This supersedes the earlier unresolved-source assumption. Build that enrolment and review workflow in Central. Do not create a second authoritative KYC record in Assam or NiaSave.
+Sachin has now confirmed: KYC is collected in the member enrolment form, which must be built in the Living Unit under Para 2. This supersedes the earlier unresolved-source assumption. Build that enrolment and review workflow in Central. Do not create a second authoritative KYC record in Assam or NiaSave.
 
-Use one stable member ID across the enrolment record, KYC review, residence/check-in, bookings, orders, statements, applications and future plans. Assam / 2 Para acquisition links to this record; it does not certify KYC separately. Preserve the existing operations unit structure; the enrolment owner is specifically Living / Para 1, even where other Living commercial controls are exposed through 2 Para.
+Use one stable member ID across the enrolment record, KYC review, residence/check-in, bookings, orders, statements, applications and future plans. Assam / 2 Para acquisition links to this record; it does not certify KYC separately. Preserve the existing operations unit structure: Living / Jat under Para 2 owns the enrolment and KYC workflow.
 
 The form captures the approved enrolment fields and required KYC evidence, with purpose/consent and restricted document access. Build explicit draft, submitted, under_review, changes_requested, approved and rejected states, with authorized reviewer, decision timestamp, evidence reference and an audit trail. Form submission or a document upload must never automatically mean verified KYC. Keep access suspension/revocation separate from the historical review decision. Reuse existing member references and provide a duplicate/identity-resolution queue; do not match people by display name alone.
 

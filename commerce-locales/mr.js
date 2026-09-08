@@ -305,4 +305,9 @@ export default {
   "Check back for new openings around your Nest.": "तुमच्या नेस्टजवळच्या नव्या नोकऱ्यांसाठी पुन्हा पाहा.",
   "Open jobs are being connected": "उपलब्ध नोकऱ्या जोडल्या जात आहेत",
   "Your Nia team is connecting the latest Walk2Work openings.": "तुमची निया टीम Walk2Work मधील नव्या नोकऱ्या जोडत आहे.",
+  "Delivery": "डिलिव्हरी",
+  "Nothing to pay now.": "आत्ता पैसे द्यायचे नाहीत.",
+  "Pay by UPI at pickup.": "पिकअपच्या वेळी UPI ने पैसे द्या.",
+  "Pay by UPI on delivery.": "डिलिव्हरीच्या वेळी UPI ने पैसे द्या.",
+  "Where should we deliver?": "डिलिव्हरी कुठे करायची?",
 };

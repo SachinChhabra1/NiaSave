@@ -23,3 +23,6 @@
 @media(max-width:760px){.earn-layout{grid-template-columns:1fr;gap:24px}.earn-intro{display:block}.earn-intro>button{margin-bottom:20px}.earn-map-panel{position:relative;top:auto}.earn-map{height:320px}.earn-map-empty{min-height:270px;padding:24px}.earn-map-empty h2{font-size:23px}.earn-results h2{font-size:24px}.earn-map-heading{padding:14px}.save-categories .icon{width:22px;height:22px;padding:8px;border-radius:10px}.earn-map-key{gap:12px}.earn-job h3{font-size:20px}}
 
 .earn-map.leaflet-container .leaflet-marker-icon.earn-pin{display:grid;place-items:center}.earn-map.leaflet-container .leaflet-control-zoom a{width:44px;height:44px;line-height:44px}
+
+.fulfillment-choice{margin:20px 0}.fulfillment-choice>p:first-child{font-size:14px;margin:0 0 10px}.fulfillment-toggle{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;background:var(--raised);border:1px solid var(--line);border-radius:12px}.fulfillment-toggle button{border:1px solid transparent;background:transparent;min-height:44px;padding:8px 12px;font-size:14px;color:var(--muted);border-radius:8px}.fulfillment-toggle button[aria-pressed=true]{background:#fff;border-color:#a8b3bf;color:var(--fg);font-weight:600;box-shadow:0 1px 3px #1d293b10}.fulfillment-choice .bag-foot{margin:10px 0 0}
+@media(max-width:760px){.intro .eyebrow{display:block}}

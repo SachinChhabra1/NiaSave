@@ -305,4 +305,9 @@ export default {
   "Check back for new openings around your Nest.": "ನಿಮ್ಮ ನೆಸ್ಟ್ ಸುತ್ತಲಿನ ಹೊಸ ಉದ್ಯೋಗಗಳಿಗಾಗಿ ಮತ್ತೆ ನೋಡಿ.",
   "Open jobs are being connected": "ಲಭ್ಯವಿರುವ ಉದ್ಯೋಗಗಳನ್ನು ಸಂಪರ್ಕಿಸಲಾಗುತ್ತಿದೆ",
   "Your Nia team is connecting the latest Walk2Work openings.": "ನಿಮ್ಮ ನಿಯಾ ತಂಡವು ಹೊಸ Walk2Work ಉದ್ಯೋಗಗಳನ್ನು ಸಂಪರ್ಕಿಸುತ್ತಿದೆ.",
+  "Delivery": "ಡೆಲಿವರಿ",
+  "Nothing to pay now.": "ಈಗ ಹಣ ನೀಡಬೇಕಿಲ್ಲ.",
+  "Pay by UPI at pickup.": "ಪಿಕಪ್ ಸಮಯದಲ್ಲಿ UPI ಮೂಲಕ ಪಾವತಿಸಿ.",
+  "Pay by UPI on delivery.": "ಡೆಲಿವರಿ ಸಮಯದಲ್ಲಿ UPI ಮೂಲಕ ಪಾವತಿಸಿ.",
+  "Where should we deliver?": "ಎಲ್ಲಿಗೆ ತಲುಪಿಸಬೇಕು?",
 };

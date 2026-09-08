@@ -78,7 +78,7 @@ Primary navigation is now **Live, Earn, Save, Send — LESS · Less Spends**. Th
 | Header | Offering | Existing ownership / current connection |
 | --- | --- | --- |
 | Live | Nests | Jat Unit; writes the existing Bison Living bookings and contracts |
-| Earn | Work | Walk2Work; member listings/applications not yet connected |
+| Earn | Work | Walk2Work; Central publishes verified demand as jobs, member applications share the operations record |
 | Save | Essentials and insurance | Sikh Unit for essentials; medical and loss-of-pay insurance visible but purchase disabled pending insurer integration and policy terms |
 | Send | Send money home | Payments-bank partner, not a separate module; method shown, transfers disabled until integration is complete |
 
@@ -88,7 +88,7 @@ The preview implements move-in date selection, three illustrative studio offers,
 
 Live publication requires an authenticated admin `PUT /api/commerce/nests/config` with `verified: true` and `offers`. Each offer must identify `studioId`, actual unique `nestIds`, `name`, `address`, `rent` (first 30 days), `deposit`, `taxPct`, `holdHours` (1–168), `terms`, `details`, and `validUntil`. Seed state cannot be published. Expired offers disappear. The 30-day period and 30-day advance-booking window are provisional implementation choices that need pilot sign-off. Rates shown in preview are illustrative, not live offers or a tax determination. Live location photos are not supplied yet. Real member IDs must match the Living roster; there is no automatic historical identity merge by phone/name.
 
-Walk2Work is correctly identified but has no new applicant mutation or job feed in this build. Insurance has no premium, insurer promise, enrolment or claims integration. Send collects no recipient/account details and cannot transfer funds. These are visible, explicitly inactive service states.
+The Central revision below adds the Walk2Work job feed and application operations; production credentials and actual confirmed vacancies are still required. Insurance has no premium, insurer promise, enrolment or claims integration. Send collects no recipient/account details and cannot transfer funds. These are visible, explicitly inactive service states.
 
 Validation for this revision: 28 commerce tests pass, including shared Nest identity/records, idempotency, concurrency for the last Nest, future overlaps, price-change review, expiry/payment protection, catalogue publication and ownership. The 16 Living/staff-auth regressions pass. Browser validation covered member sign-in → Nest review → reservation reference, all LESS sections, disabled insurance/Send actions, and responsive layouts. No real bank, insurer, Walk2Work, OTP provider or production database was exercised. The local preview remains a review build, not a production release.
 
@@ -105,3 +105,40 @@ Validation: locale coverage check passed for all three new dictionaries; the pro
 Save now has one labelled icon navigation: All essentials, Food & snacks, Ration & cooking, Cleaning, Personal care, Clothing, Footwear and Insurance. This replaces the separate Everyday essentials/Insurance tabs and the old Cooking/Home care filter row. A shared taxonomy maps old Cooking and Home care records to Ration & cooking and Cleaning, and is used by both the member interface and canonical product configuration. Insurance remains outside goods checkout. Food & snacks covers prepared food/snacks; Ration & cooking covers cooking staples and oils; Personal care retains toiletries.
 
 All category labels and empty states are available in English, Hindi, Tamil, Kannada and Marathi. Categories with no approved products show an empty state, not fabricated goods, prices or stock. Clothing sizes and footwear variants still require governed SKU/stock data before real products are published. Icons supplement text, and selected categories expose their state accessibly. Browser checks verified the oil, cleaning and personal-care filters, empty Footwear, disabled insurance and 320px layout. All 29 commerce tests and the production build pass.
+
+
+## Central connection revision · 8 September 2026
+
+Implemented in the NiaSave and Rafiqi Central local branches. This is a connected preview, not a deployed production connection.
+
+| Member tab | Central surface | Shared record and behavior |
+|---|---|---|
+| Live | Living → NiaSave member operations → Live; Jat Unit card | Existing Living bookings/contracts. Central publishes a verified Nest catalogue against exact source site IDs. Member booking/cancellation appears with the same booking and contract IDs. Admins and assigned operators can read reservations; move-in/finance remain in the Jat desk. |
+| Earn | Walk2Work → NiaSave member operations → Earn | Central reads its `flow_demand` source. An operator confirms role, pay, shift, requirements and terms before publishing. Applications, consent, exact retry keys, frozen job details and member-visible status messages are stored once in the existing durable operations state. This is an application queue, not a wage ledger or a MAT placement assertion. |
+| Save | Essentials → NiaSave member operations → Save; Sikh Unit card | Existing Save order book, stock holds, UPI receipt and settlement. Central publishes catalogue names from exact source site/SKU mappings; its aggregated stock totals never overwrite bookable stock. Assigned operators prepare orders; admins verify receipts/reconcile through the same validated transitions. |
+| Send | NiaSave member operations → Send | Disabled payments-bank status only. No Send module, beneficiary capture, payment initiation or ledger added. |
+
+Medical and loss-of-pay insurance remain inactive. WhatsApp and online checkout payments remain off. Members keep one account and the existing grey brand/light theme. Earn and order history refresh while visible; quotes/reservations still recheck the authoritative operations state.
+
+### Connection contract
+
+Central authenticates a verified `@nia.one` session and resolves its existing reader/operator/admin lists on the server. The new gateway does **not** inherit the old auth-off production setting. It signs a short-lived, exact-body envelope with `CENTRAL_COMMERCE_KEY` and calls NiaSave `POST /api/central/commerce`. NiaSave verifies signature, timestamp, nonce replay, production storage mode and staff scope. Keys and staff authority never reach the member browser. Failed writes do not report confirmation.
+
+Central routes: `/member-commerce?line=live|earn|save|send` and same-origin `/api/member-commerce?line=...`. Nia member Earn routes: `/api/commerce/earn` and `/api/commerce/earn/applications`. Job/application writes use existing Save runtime serialization/CAS; no additional order ledger or second database copy is created in Central.
+
+Central configuration includes `sourceSiteCode` on each Live offer, and `sourceSiteCode` + `sourceSku` on each Save product. These must join exactly one current Central row. The server supplies published names and source provenance; the operator supplies verified pack/address/terms. Unit IDs remain unchanged. Prices still come from the existing Save SKU authority. Unmapped rows, ambiguous matches, stale/unavailable sources and preview-to-live publication fail closed.
+
+Save `staffLocations` maps Central actor IDs to existing Save locations; Live `staffStudios` maps them to canonical studio IDs. Central shows the actor ID for assignment. Earn operators manage only their published jobs/applicants; admins can manage all. Readers can inspect catalogues but cannot read member application/order/booking records or write operations.
+
+### Activation requirements and evidence
+
+Read-only production check on 8 September: NiaSave `/health` reported `demo: true`, memory storage and no connected Postgres for Save or Living. `/api/commerce/catalogue` returned 404. Central `/api/2para/v1` returned 200. Therefore this work cannot honestly be called connected to live commerce yet.
+
+Both apps need these reviewed changes deployed, a new shared server-only `CENTRAL_COMMERCE_KEY` of at least 32 characters, and Central's `TWO_PARA_NIASAVE_ORIGIN` pointing at the intended NiaSave deployment. `NIASAVE_STOREFRONT_ORIGIN` is optional when the public frontend and API use different origins; both must be HTTPS in production. Keep preview flags off in deployment. Central needs authenticated Nia users with configured access lists and live sheet credentials. NiaSave still needs its existing durable storage, dummy-off, staff authentication and member OTP/identity readiness gates satisfied.
+
+Actual source IDs must be mapped, bookable stock reconciled, and real pack sizes/prices/stay terms/job terms approved. No real applicant or order was submitted. One explicitly labelled local QA job was used for browser interaction; it did not come from a real current vacancy. The local Central snapshot has no demand rows, so publishing its empty job source remains disabled.
+
+Verification: 34 Nia commerce tests; 16 Living/staff-auth regression tests; 16 focused Central source/access/routing tests. Both production builds and Central typecheck pass. Browser checks verified the application → Central operator update → same member application reference/message loop and a 390px member layout with no horizontal overflow. Central's broader `npm test` is blocked by an existing migration-list assertion that expects three migrations while main now contains five; no migrations were added by this change. Real Postgres, live OTP, actual employers and operational handover remain untested.
+
+
+Production-output rendering was also attempted locally. Central's existing PGlite fallback crashes because `pglite.data` is absent from the built server output when no database is configured. The production build itself succeeds, but this fallback rendering check is blocked; it is not counted as a passing production integration test. The new commerce route requires authenticated access and the real storage/identity setup in production. The repository's bundled browser checker also assumes `/workspace` Linux paths, so desktop/mobile rendering and console checks used installed Chrome/Playwright on this Mac, alongside the in-app interaction checks.

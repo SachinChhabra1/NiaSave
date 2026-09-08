@@ -6,6 +6,7 @@
  * Not for rafiqicentral.com or harness.
  */
 import http from "node:http";
+import { centralCommerceHttp } from "../lib/commerce/central-http.mjs";
 import { commerceHttp } from "../lib/commerce/http.mjs";
 import { randomUUID, createHash, createHmac, timingSafeEqual } from "node:crypto";
 import { pathToFileURL } from "node:url";
@@ -138,6 +139,7 @@ export async function handler(req, res) {
   const rewrittenPath = url.searchParams.get("path");
   const path = rewrittenPath ? `/${rewrittenPath.replace(/^\/+/, "")}` : url.pathname;
   const commercePath = path.replace(/^\/api/, "");
+  if (commercePath === "/central/commerce") return centralCommerceHttp(req,res);
   if (commercePath.startsWith("/commerce/")) return commerceHttp(req, res, commercePath.slice(9), staffFromReq);
   // A live storefront must not expose the prototype's unauthenticated order/payment paths.
   if (process.env.COMMERCE_ENABLED === "1" && (/^\/(api\/)?(order|member|auth)(\/|$)/.test(path) || /^\/v1\/(save|orders|payments|members)(\/|$)/.test(path))) return json(res,410,{error:"use_member_storefront"});

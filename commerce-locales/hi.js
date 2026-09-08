@@ -40,5 +40,7 @@ export default {
   "Footwear": "जूते-चप्पल",
   "No essentials available yet": "अभी सामान उपलब्ध नहीं है",
   "No products in this category yet": "इस श्रेणी में अभी कोई उत्पाद नहीं है",
-  "Products will appear here when they are available to order.": "ऑर्डर के लिए उपलब्ध होने पर उत्पाद यहाँ दिखेंगे।"
+  "Products will appear here when they are available to order.": "ऑर्डर के लिए उपलब्ध होने पर उत्पाद यहाँ दिखेंगे।",
+  "month": "महीना",
+  "day": "दिन",
 };

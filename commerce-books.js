@@ -33,7 +33,19 @@ export function downloadBooks(data,month){
   const url=URL.createObjectURL(new Blob(['\uFEFF'+rows.map(r=>r.map(cell).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download=`NiaBooks-${m.month}${data.preview?'-example':''}.csv`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
 
+const entryPurposes={
+  earning:['Salary','Overtime pay','Bonus','Daily wages','Other money received'],
+  expense:['Food & groceries','Travel & transport','Rent outside Nia','Electricity & water','Mobile & internet','Medical expenses','Clothing & footwear','Personal care','Education','Loan repayment','Other expense'],
+  home:['Family support','Household expenses at home','Medical support at home','Education at home','Other money sent home']
+};
+export function entryPurposeOptions(kind,value,{t,esc}){
+  const choices=entryPurposes[kind]||entryPurposes.expense;
+  // Keep earlier free-text entries intact when members edit them.
+  const options=value&&!choices.includes(value)?[value,...choices]:choices;
+  return `<option value="" ${value?'':'selected'} disabled>${t('Choose a purpose')}</option>`+options.map(label=>`<option value="${esc(label)}" ${label===value?'selected':''}>${esc(t(label))}</option>`).join('');
+}
+
 export function personalEntryForm(entry,kind,{t,esc}){
   const today=new Date(Date.now()+19800000).toISOString().slice(0,10);
-  return `<form id="books-entry-form" class="stack"><input type="hidden" name="entryId" value="${esc(entry?.reference||'')}"><input type="hidden" name="revision" value="${entry?.revision||0}"><label>${t('Date')}<input type="date" name="date" min="2020-01-01" max="${today}" value="${esc(entry?.date||today)}" required></label><label>${t('Type')}<select name="kind">${[['earning',t('Money received')],['expense',t('An expense')],['home',t('Sent home')]].map(([id,label])=>`<option value="${id}" ${(entry?.kind||kind)===id?'selected':''}>${label}</option>`).join('')}</select></label><label>${t('Amount (INR)')}<input name="amount" type="number" inputmode="decimal" min="0.01" max="1000000" step="0.01" value="${entry?entry.amountPaise/100:''}" required></label><label>${t('What was it for?')}<input name="label" maxlength="100" value="${esc(entry?.label||'')}" placeholder="${t('Salary, bus fare, groceries...')}" required></label><p class="muted">${t('Add only what is missing. Live and Save payments already appear automatically.')}</p><div id="form-error" class="error-inline" role="alert"></div><button type="submit" class="primary">${t('Save entry')}</button>${entry?`<button type="button" data-action="books-remove" data-id="${esc(entry.reference)}">${t('Remove this entry')}</button>`:''}</form>`;
+  return `<form id="books-entry-form" class="stack"><input type="hidden" name="entryId" value="${esc(entry?.reference||'')}"><input type="hidden" name="revision" value="${entry?.revision||0}"><label>${t('Date')}<input type="date" name="date" min="2020-01-01" max="${today}" value="${esc(entry?.date||today)}" required></label><label>${t('Type')}<select name="kind">${[['earning',t('Money received')],['expense',t('An expense')],['home',t('Sent home')]].map(([id,label])=>`<option value="${id}" ${(entry?.kind||kind)===id?'selected':''}>${label}</option>`).join('')}</select></label><label>${t('Amount (INR)')}<input name="amount" type="number" inputmode="decimal" min="0.01" max="1000000" step="0.01" value="${entry?entry.amountPaise/100:''}" required></label><label>${t('What was it for?')}<select name="label" required>${entryPurposeOptions(entry?.kind||kind,entry?.label||'',{t,esc})}</select></label><p class="muted">${t('Add only what is missing. Live and Save payments already appear automatically.')}</p><div id="form-error" class="error-inline" role="alert"></div><button type="submit" class="primary">${t('Save entry')}</button>${entry?`<button type="button" data-action="books-remove" data-id="${esc(entry.reference)}">${t('Remove this entry')}</button>`:''}</form>`;
 }

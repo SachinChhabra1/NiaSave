@@ -8,6 +8,10 @@ Under **Send**, NiaBooks becomes the member’s financial statement: earnings re
 
 The long-term asset is a reliable, consented financial history across employment, accommodation, daily purchases and remittances. Its value depends on reconciliation, coverage, member trust, correction rights and useful partner services. A proprietary score alone does not establish defensibility or creditworthiness.
 
+## Latest dated-entry update
+
+See [NiaBooks dated-entry update](niabooks-dated-entries.md) for automatic canonical receipts and editable member notes, now implemented. It supersedes the original demo-only description below.
+
 ## What has been built
 
 - Member-authenticated `GET /api/commerce/books`; Central’s signed gateway supplies a **local-only synthetic projection** via `line=send, action=books-demo`.

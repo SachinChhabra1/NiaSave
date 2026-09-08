@@ -31,5 +31,14 @@ export default {
   "assigned": "सौंपा गया",
   "resolved": "हल हो गया",
   "10-digit mobile number": "10 अंकों का मोबाइल नंबर",
-  "Pack size to be confirmed": "पैक साइज़ की पुष्टि बाकी है"
+  "Pack size to be confirmed": "पैक साइज़ की पुष्टि बाकी है",
+  "All essentials": "सभी सामान",
+  "Food & snacks": "खाना और स्नैक्स",
+  "Ration & cooking": "राशन और खाना पकाना",
+  "Cleaning": "सफाई",
+  "Clothing": "कपड़े",
+  "Footwear": "जूते-चप्पल",
+  "No essentials available yet": "अभी सामान उपलब्ध नहीं है",
+  "No products in this category yet": "इस श्रेणी में अभी कोई उत्पाद नहीं है",
+  "Products will appear here when they are available to order.": "ऑर्डर के लिए उपलब्ध होने पर उत्पाद यहाँ दिखेंगे।"
 };

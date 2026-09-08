@@ -254,5 +254,14 @@ export default {
   "open": "ತೆರೆದಿದೆ",
   "assigned": "ನಿಯೋಜಿಸಲಾಗಿದೆ",
   "resolved": "ಪರಿಹರಿಸಲಾಗಿದೆ",
-  "10-digit mobile number": "10 ಅಂಕಿಗಳ ಮೊಬೈಲ್ ಸಂಖ್ಯೆ"
+  "10-digit mobile number": "10 ಅಂಕಿಗಳ ಮೊಬೈಲ್ ಸಂಖ್ಯೆ",
+  "All essentials": "ಎಲ್ಲ ಅಗತ್ಯ ವಸ್ತುಗಳು",
+  "Food & snacks": "ಆಹಾರ ಮತ್ತು ತಿಂಡಿಗಳು",
+  "Ration & cooking": "ದಿನಸಿ ಮತ್ತು ಅಡುಗೆ",
+  "Cleaning": "ಸ್ವಚ್ಛತೆ",
+  "Clothing": "ಬಟ್ಟೆಗಳು",
+  "Footwear": "ಪಾದರಕ್ಷೆಗಳು",
+  "No essentials available yet": "ಇನ್ನೂ ಅಗತ್ಯ ವಸ್ತುಗಳು ಲಭ್ಯವಿಲ್ಲ",
+  "No products in this category yet": "ಈ ವಿಭಾಗದಲ್ಲಿ ಇನ್ನೂ ವಸ್ತುಗಳಿಲ್ಲ",
+  "Products will appear here when they are available to order.": "ಆರ್ಡರ್ ಮಾಡಲು ಲಭ್ಯವಾದಾಗ ವಸ್ತುಗಳು ಇಲ್ಲಿ ಕಾಣುತ್ತವೆ."
 };

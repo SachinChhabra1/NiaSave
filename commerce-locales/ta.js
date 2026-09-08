@@ -254,5 +254,14 @@ export default {
   "open": "திறந்துள்ளது",
   "assigned": "ஒதுக்கப்பட்டது",
   "resolved": "தீர்க்கப்பட்டது",
-  "10-digit mobile number": "10 இலக்க கைபேசி எண்"
+  "10-digit mobile number": "10 இலக்க கைபேசி எண்",
+  "All essentials": "அனைத்துப் பொருட்கள்",
+  "Food & snacks": "உணவும் சிற்றுண்டியும்",
+  "Ration & cooking": "மளிகையும் சமையலும்",
+  "Cleaning": "சுத்தம் செய்ய",
+  "Clothing": "ஆடைகள்",
+  "Footwear": "காலணிகள்",
+  "No essentials available yet": "இன்னும் பொருட்கள் கிடைக்கவில்லை",
+  "No products in this category yet": "இந்த வகையில் இன்னும் பொருட்கள் இல்லை",
+  "Products will appear here when they are available to order.": "ஆர்டர் செய்யக் கிடைக்கும்போது பொருட்கள் இங்கே தோன்றும்."
 };

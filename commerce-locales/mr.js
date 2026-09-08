@@ -254,5 +254,14 @@ export default {
   "open": "सुरू",
   "assigned": "नेमून दिले",
   "resolved": "सोडवले",
-  "10-digit mobile number": "१० अंकी मोबाइल नंबर"
+  "10-digit mobile number": "१० अंकी मोबाइल नंबर",
+  "All essentials": "सर्व गरजेच्या वस्तू",
+  "Food & snacks": "खाद्यपदार्थ आणि खाऊ",
+  "Ration & cooking": "किराणा आणि स्वयंपाक",
+  "Cleaning": "साफसफाई",
+  "Clothing": "कपडे",
+  "Footwear": "बूट-चप्पल",
+  "No essentials available yet": "अजून वस्तू उपलब्ध नाहीत",
+  "No products in this category yet": "या प्रकारात अजून वस्तू नाहीत",
+  "Products will appear here when they are available to order.": "ऑर्डरसाठी उपलब्ध झाल्यावर वस्तू इथे दिसतील."
 };

@@ -173,5 +173,20 @@ export default {
   "shuttle": "शटल",
   "metro": "मेट्रो",
   "auto": "ऑटो",
-  "year": "वर्ष"
+  "year": "वर्ष",
+  "Your plan changed elsewhere. Reload it, check the amounts, then save again.": "आपकी योजना कहीं और बदल गई है। इसे फिर से लोड करें, रकमें जाँचें, फिर सहेजें।",
+  "Saving needs an active, verified membership. The calculator still works; nothing is saved.": "सहेजने के लिए सक्रिय, सत्यापित सदस्यता चाहिए। कैलकुलेटर अब भी काम करता है; कुछ सहेजा नहीं गया।",
+  "Account saving is not connected yet. The calculator still works; nothing is saved.": "खाते में सहेजना अभी जुड़ा नहीं है। कैलकुलेटर अब भी काम करता है; कुछ सहेजा नहीं गया।",
+  "Central could not be reached. Your typed amounts are still here; try again.": "सेंट्रल से संपर्क नहीं हो सका। आपकी लिखी रकमें यहीं हैं; फिर कोशिश करें।",
+  "That save request was already used with different amounts. Try again.": "यह सहेजने का अनुरोध पहले अलग रकमों के साथ इस्तेमाल हो चुका है। फिर कोशिश करें।",
+  "Checking your saved plan…": "आपकी सहेजी योजना देखी जा रही है…",
+  "Saving…": "सहेजा जा रहा है…",
+  "Saved to your account": "आपके खाते में सहेजा गया",
+  "Nothing saved yet for this month.": "इस महीने के लिए अभी कुछ सहेजा नहीं गया।",
+  "Not saved yet. Your typed amounts stay here until you save.": "अभी सहेजा नहीं गया। सहेजने तक आपकी लिखी रकमें यहीं रहेंगी।",
+  "Could not save. Your typed amounts are still here; try again.": "सहेजा नहीं जा सका। आपकी लिखी रकमें यहीं हैं; फिर कोशिश करें।",
+  "Reload saved plan": "सहेजी योजना फिर लोड करें",
+  "Save my plan": "मेरी योजना सहेजें",
+  "Blank amounts are unknown, not zero. A saved plan is a budget, not a transfer or a loan request.": "खाली रकम का मतलब अज्ञात है, शून्य नहीं। सहेजी योजना एक बजट है, पैसे भेजना या ऋण का अनुरोध नहीं।",
+  "Monthly budget": "मासिक बजट"
 };

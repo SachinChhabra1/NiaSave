@@ -173,5 +173,20 @@ export default {
   "shuttle": "பணியாளர் வாகனம்",
   "metro": "மெட்ரோ",
   "auto": "ஆட்டோ",
-  "year": "ஆண்டு"
+  "year": "ஆண்டு",
+  "Your plan changed elsewhere. Reload it, check the amounts, then save again.": "உங்கள் திட்டம் வேறு இடத்தில் மாறியுள்ளது. மீண்டும் ஏற்றி, தொகைகளைச் சரிபார்த்து, பின் சேமிக்கவும்.",
+  "Saving needs an active, verified membership. The calculator still works; nothing is saved.": "சேமிக்க செயலில் உள்ள, சரிபார்க்கப்பட்ட உறுப்பினர் நிலை தேவை. கணிப்பான் தொடர்ந்து வேலை செய்யும்; எதுவும் சேமிக்கப்படவில்லை.",
+  "Account saving is not connected yet. The calculator still works; nothing is saved.": "கணக்கில் சேமிப்பது இன்னும் இணைக்கப்படவில்லை. கணிப்பான் தொடர்ந்து வேலை செய்யும்; எதுவும் சேமிக்கப்படவில்லை.",
+  "Central could not be reached. Your typed amounts are still here; try again.": "சென்ட்ரலை அணுக முடியவில்லை. நீங்கள் உள்ளிட்ட தொகைகள் இங்கேயே உள்ளன; மீண்டும் முயற்சிக்கவும்.",
+  "That save request was already used with different amounts. Try again.": "இந்தச் சேமிப்புக் கோரிக்கை ஏற்கனவே வேறு தொகைகளுடன் பயன்படுத்தப்பட்டது. மீண்டும் முயற்சிக்கவும்.",
+  "Checking your saved plan…": "உங்கள் சேமித்த திட்டம் சரிபார்க்கப்படுகிறது…",
+  "Saving…": "சேமிக்கப்படுகிறது…",
+  "Saved to your account": "உங்கள் கணக்கில் சேமிக்கப்பட்டது",
+  "Nothing saved yet for this month.": "இந்த மாதத்திற்கு இன்னும் எதுவும் சேமிக்கப்படவில்லை.",
+  "Not saved yet. Your typed amounts stay here until you save.": "இன்னும் சேமிக்கப்படவில்லை. சேமிக்கும் வரை நீங்கள் உள்ளிட்ட தொகைகள் இங்கேயே இருக்கும்.",
+  "Could not save. Your typed amounts are still here; try again.": "சேமிக்க முடியவில்லை. நீங்கள் உள்ளிட்ட தொகைகள் இங்கேயே உள்ளன; மீண்டும் முயற்சிக்கவும்.",
+  "Reload saved plan": "சேமித்த திட்டத்தை மீண்டும் ஏற்று",
+  "Save my plan": "என் திட்டத்தைச் சேமி",
+  "Blank amounts are unknown, not zero. A saved plan is a budget, not a transfer or a loan request.": "காலியான தொகை என்பது தெரியாதது, பூஜ்ஜியம் அல்ல. சேமித்த திட்டம் ஒரு பட்ஜெட்; பணம் அனுப்புதலோ கடன் கோரிக்கையோ அல்ல.",
+  "Monthly budget": "மாத பட்ஜெட்"
 };

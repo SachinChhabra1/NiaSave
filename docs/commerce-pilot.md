@@ -2,6 +2,12 @@
 
 Status: working local preview, not a production release. No live site or production database was changed.
 
+## Member-facing revision · 8 September 2026
+
+The storefront has one public shopping experience. Separate enterprise/investor links, login choices, catalogue banners and alternate layouts have been removed. Visitors see the same products, prices and bag as members; member verification is still required to reserve. Existing server-side permission checks remain in place.
+
+The header uses the existing Nia logo asset. Purpose copy is adapted from https://www.nia.one/workers (“Helping workers keep more of what they earn”) and https://www.nia.one/ (“Make leaving home worth it”). No numeric savings claims were added. This supersedes the earlier requirement for a separate enterprise/investor entry point.
+
 ## Payment boundary
 
 The storefront reserves goods. The member scans the merchant's physical UPI QR at pickup or delivery to the configured member location. Staff enter the amount and 12-digit bank reference after checking receipt in the receiving account. Collection requires that verification and the correct collection code. Finance records statement reconciliation separately. Manual refunds can be recorded after they happen; this application does not initiate a payment or refund. No online gateway, wallet, cash collection or WhatsApp activation is included.

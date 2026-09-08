@@ -70,3 +70,24 @@ Keep the main-site switch off until the identity connection, clean canonical sta
 - Catalogue layout inspected at 320, 360, 390, 412, 768, 1024 and 1440 CSS pixels; no horizontal page overflow in those checks.
 
 Outstanding validation: real Postgres/restart/multi-worker integration, actual identity/SMS and role provisioning, full Hindi copy and recovery-flow review, low-brightness physical Android checks, 200% text scaling and screen-reader pass, and the PRD's throttled-network performance/retry gate. Existing database integration tests skipped because no test database was provided. Live merchant receipt and bank reconciliation must be exercised by operators in the physical pilot.
+
+## LESS revision · 8 September 2026
+
+Primary navigation is now **Live, Earn, Save, Send — LESS · Less Spends**. The same four headers appear on desktop and phone. Bag, Orders & stays and Account are secondary controls. The member site opens on Live and retains the Nia logo and light Central theme.
+
+| Header | Offering | Existing ownership / current connection |
+| --- | --- | --- |
+| Live | Nests | Jat Unit; writes the existing Bison Living bookings and contracts |
+| Earn | Work | Walk2Work; member listings/applications not yet connected |
+| Save | Essentials and insurance | Sikh Unit for essentials; medical and loss-of-pay insurance visible but purchase disabled pending insurer integration and policy terms |
+| Send | Send money home | Payments-bank partner, not a separate module; method shown, transfers disabled until integration is complete |
+
+Live uses the same `nia_commerce` member session and stable membership ID. Its new `/api/commerce/nests` routes authenticate against Save, then write only the canonical Living state under its existing runtime key. No nested cross-book transaction or duplicate goods order is created. Both books serialize local writers, retry Postgres version conflicts and fail closed on storage failures. Live mode no longer initializes seed Living bookings.
+
+The preview implements move-in date selection, three illustrative studio offers, server-priced first-30-day review, full-stay physical-Nest and studio-capacity checks, idempotent reservation, pending canonical contract, own-stay status and unpaid cancellation. A hold expires at the earlier of its configured duration or the end of move-in day (India time). Recorded payments or posted charges prevent automatic expiry/cancellation and need team review. Existing Jat booking, contract and collection views use the same records. Initial booking does not post a charge, sign the agreement, collect money or check a member in; the team completes the existing collection/move-in process. Finance and agreement handling are not a new automated Nest checkout.
+
+Live publication requires an authenticated admin `PUT /api/commerce/nests/config` with `verified: true` and `offers`. Each offer must identify `studioId`, actual unique `nestIds`, `name`, `address`, `rent` (first 30 days), `deposit`, `taxPct`, `holdHours` (1–168), `terms`, `details`, and `validUntil`. Seed state cannot be published. Expired offers disappear. The 30-day period and 30-day advance-booking window are provisional implementation choices that need pilot sign-off. Rates shown in preview are illustrative, not live offers or a tax determination. Live location photos are not supplied yet. Real member IDs must match the Living roster; there is no automatic historical identity merge by phone/name.
+
+Walk2Work is correctly identified but has no new applicant mutation or job feed in this build. Insurance has no premium, insurer promise, enrolment or claims integration. Send collects no recipient/account details and cannot transfer funds. These are visible, explicitly inactive service states.
+
+Validation for this revision: 28 commerce tests pass, including shared Nest identity/records, idempotency, concurrency for the last Nest, future overlaps, price-change review, expiry/payment protection, catalogue publication and ownership. The 16 Living/staff-auth regressions pass. Browser validation covered member sign-in → Nest review → reservation reference, all LESS sections, disabled insurance/Send actions, and responsive layouts. No real bank, insurer, Walk2Work, OTP provider or production database was exercised. The local preview remains a review build, not a production release.

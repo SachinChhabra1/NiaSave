@@ -1,3 +1,5 @@
+import { createStateRunner } from '../lib/commerce/transaction.mjs';
+import { expireNests } from '../lib/commerce/nests.mjs';
 /**
  * Bison Living control plane.
  * Theatre -> studio -> nest, member contracts, clocks and collections.
@@ -53,6 +55,7 @@ function seedJoinMonths() {
   ];
 }
 function baseState() {
+  if (!DUMMY_DATA) return liveBaselineState();
   return { schemaVersion: SCHEMA_VERSION, dummy: DUMMY_DATA, persist: hasDurableStore() ? "postgres" : "memory", asOf: today(), source: SOURCE, sites: seedSites(), studios: [], groups: seedGroups(), bookings: seedBookings(), members: [], contracts: [], receivables: [], collectionPayments: [], audits: [], ingest: [], joinMonths: seedJoinMonths(), assignments: [], clocks: [], auditLog: [], sheetProcessed: [], googleSheet: { url: "", spreadsheetId: "", enabled: false, lastSyncAt: null } };
 }
 function liveBaselineState(previous = {}) {
@@ -528,28 +531,15 @@ export async function syncGoogleSheet(body = {}) {
 export function bisonPath(pathname, rewrittenPath) { let path = rewrittenPath ? "/" + String(rewrittenPath).replace(/^\/+/, "") : pathname; path = (path || "/").replace(/\/+$/, "") || "/"; if (path.startsWith("/api/")) path = path.slice(4); return path; }
 export function isBisonPath(path) { return path === "/bison" || path.startsWith("/bison/") || path === "/living" || path.startsWith("/living/"); }
 function normalize(path) { return path.replace(/^\/living/, "/bison"); }
-async function runWithPersistentState(mutating, work) {
-  if (!hasDurableStore()) return work();
-  for (let attempt = 0; attempt < 3; attempt += 1) {
-    let loaded;
-    try {
-      loaded = await loadRuntimeState(RUNTIME_STATE_KEY, snapshotState());
-      restoreState(loaded.value, loaded.storage);
-    } catch (error) {
-      console.error("bison_state_load_failed", error);
-      return work();
-    }
-    const result = await work();
-    if (!mutating || !result || result.status >= 400) return result;
-    try {
-      const saved = await saveRuntimeState(RUNTIME_STATE_KEY, snapshotState(), loaded.version);
-      if (saved.ok) return result;
-    } catch (error) {
-      console.error("bison_state_save_failed", error);
-      return result;
-    }
-  }
-  return { status: 409, body: { error: "state_conflict", message: "Please try again." } };
+const runWithPersistentState = createStateRunner({
+  durable: hasDurableStore,
+  load: () => loadRuntimeState(RUNTIME_STATE_KEY, snapshotState()),
+  save: (value, version) => saveRuntimeState(RUNTIME_STATE_KEY, value, version),
+  snapshot: () => snapshotState(),
+  restore: (value, storage) => restoreState(value, storage || state.persist)
+});
+export function withLivingState(work) {
+  return runWithPersistentState(true, () => work(state), true);
 }
 export async function bisonStorageStatus() {
   if (!hasDurableStore()) return { storage: "memory", connected: false, version: 0, product: "bison", schemaVersion: SCHEMA_VERSION };
@@ -606,6 +596,6 @@ async function handleOnce(req, path, body, url) {
   if (method === "POST" && route === "/bison/vacate") return done(vacateNest(body || {}));
   return { status: 404, body: { error: "not_found", product: "bison" } };
 }
-export async function handleBison(req, res, path, body, url) { return runWithPersistentState(req.method === "POST" || req.method === "PUT", () => handleOnce(req, path, body, url)); }
+export async function handleBison(req, res, path, body, url) { return runWithPersistentState(true, () => { expireNests(state, Date.now()); return handleOnce(req, path, body, url); }); }
 
 export { SCHEMA_VERSION, STUDIO_COUNT };

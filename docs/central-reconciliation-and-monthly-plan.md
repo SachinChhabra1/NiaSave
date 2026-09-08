@@ -28,9 +28,17 @@ The restricted residence/eligibility/jobs payload is the Earn projection, not th
 
 Implement the reverse server-to-server read endpoint and matching NiaSave adapter together. Use direction-specific signing, service authorization, stable authenticated member context and bounded freshness. No open operator browser tab is required. Specify read/write ownership, schema version, error behavior and invalidation per contract.
 
-## 4. Access service: a bounded unresolved input
+## 4. Confirmed KYC owner: Living Unit under Para 1
 
-The authoritative KYC provider/record source has not been named. Do not invent one or treat Assam acquisition status as completed KYC. Define the adapter now: stable member ID, verified KYC decision, source reference/time, status, theatre and eligibility. Use clearly isolated fixtures for development. Production activation remains blocked until the owner confirms the source and enrolment/recovery policy. Central staff login is not member identity. Home-screen website authentication remains the separate passkey/access workstream.
+Sachin has now confirmed: KYC is collected in the member enrolment form, which must be built in the Living Unit under Para 1. This supersedes the earlier unresolved-source assumption. Build that enrolment and review workflow in Central. Do not create a second authoritative KYC record in Assam or NiaSave.
+
+Use one stable member ID across the enrolment record, KYC review, residence/check-in, bookings, orders, statements, applications and future plans. Assam / 2 Para acquisition links to this record; it does not certify KYC separately. Preserve the existing operations unit structure; the enrolment owner is specifically Living / Para 1, even where other Living commercial controls are exposed through 2 Para.
+
+The form captures the approved enrolment fields and required KYC evidence, with purpose/consent and restricted document access. Build explicit draft, submitted, under_review, changes_requested, approved and rejected states, with authorized reviewer, decision timestamp, evidence reference and an audit trail. Form submission or a document upload must never automatically mean verified KYC. Keep access suspension/revocation separate from the historical review decision. Reuse existing member references and provide a duplicate/identity-resolution queue; do not match people by display name alone.
+
+Publish a minimal access result through the authenticated member/service contract: stable member ID, enrolment reference, KYC decision and decision time, active/suspended status, eligibility and theatre. Do not expose raw KYC documents to the NiaSave browser, catalogue projection, partners or general operators. Credential enrolment is available only after the required approved KYC and active-member checks.
+
+Build changed-number and lost-device recovery against this same enrolment identity, with authorized review and audited credential/session revocation. The exact evidence acceptance/reviewer policy and passkey shared-phone/sync policy must be configured before production activation; no external KYC vendor should be invented. Central staff login remains separate from member identity. The home-screen website still needs the agreed authentication implementation.
 
 ## 5. PR D: real cases without premature referral claims
 

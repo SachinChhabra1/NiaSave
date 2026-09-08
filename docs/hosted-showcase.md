@@ -5,7 +5,7 @@ Built 8 September 2026 for internal testing and investor walkthroughs. This is n
 ## Deployment
 
 - Live showcase: https://www.niasave.com (niasave.com redirects here).
-- Main Vercel project: `niasave`; deployment `dpl_HkubFmaN7brd3M14hDyGagmxPYVU`.
+- Main Vercel project: `niasave`; deployment `dpl_14U777h6gNwsW7RPvKeCYbjWiVtU`.
 - Access is the existing HTTP Basic invitation, username `showcase`. No Vercel team login is required on this domain. Credentials remain outside Git.
 - Dedicated Neon test database: `niasave-showcase-db`, Singapore. The isolated showcase function also runs in Singapore. Existing operations database and environment settings were not replaced.
 - Legacy operations were preserved from production revision `40482eaf9a72b9ec9b0ac225a2f46ecaea8fe7ed`; 39 existing API/runtime/operations files were verified unchanged.
@@ -64,7 +64,7 @@ Rollback target (the previous operations release): `https://niasave-90b6q8ucb-sa
 
 ## Verification evidence
 
-- 61 commerce tests pass, including showcase configuration/auth checks; production build passes.
+- 62 commerce tests pass, including showcase configuration/auth checks; production build passes.
 - Real test Postgres: order retry creates one order, signed Central updates the same record, Nest and job application are visible through the gateway, dated expense and consent persist.
 - A fresh process reused the session and found the same order, booking, application status and dated entry.
 - Fictional Central handover/reconciliation creates exactly one automatic NiaBooks Save expense.
@@ -81,5 +81,9 @@ The standard build also now copies `commerce-plan.js` and nested locale update m
 - NiaSave `CENTRAL_ORIGIN` points to that isolated test environment. Central `CENTRAL_COMMERCE_KEY` is scoped to Preview / `test/showcase`, matching NiaSave `SHOWCASE_CENTRAL_KEY`. Secrets remain outside Git and handoff documents.
 - Access mapping: `preview-member` → `showcase-member-001`, active, KYC approved, revision 1; created by an authenticated Central admin. This is fictional test approval only.
 - A cookie-free unsigned service request returns Central's 401 `service_auth_required`; a signed plan read returns 200 with `canSave: true`. No Vercel bypass credential exists or is needed.
-- Keep `EARN_SOURCE` unset until PR C moves applications. The current showcase job operations use the existing signed operations gateway; this is not proof that the new production mandates/application source is complete.
+- `EARN_SOURCE=central` is enabled for the hosted showcase. Both the job list and all new application writes now use Central's signed service (`earn.projection`, `earn.applications`, `earn.apply`). Existing legacy applications remain visible as history; new applications are stored only in Central.
+- Central source is `test/showcase` at `be00bba` (PR #16 open against main). Migration 0008 owns applications, exact retry acknowledgements and audit records. Active/KYC access is rechecked; mandate closure/revision changes are checked atomically while writing.
+- The current member residence is an explicit operator record in Central. Its authoritative database read time is the map snapshot time. Roster-derived residences still use the real upstream board timestamp and fail stale after five minutes.
+- Four showcase vacancies were created and opened through authenticated Central forms. Tests confirmed NiaSave reads those exact mandate IDs; a browser application is visible in Central and an operator status update appears after NiaSave reload. Pausing a mandate removes it from Earn and rejects a stale application with 409. All four vacancies were reopened for the walkthrough.
+- Walk2Work's member operations entry opens the Central mandate/application desk. Central production remains unchanged pending PR #16 review; this hosted showcase already uses the connected test environment.
 - Previous protected showcase rollback: `https://niasave-f1hcnzctj-sachinchhabra37-8426s-projects.vercel.app`. It preserves the invitation gate but predates the Central planner adapter.

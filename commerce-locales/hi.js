@@ -1,5 +1,7 @@
+import memberUpdates from './member-updates/hi.js';
 // Member-interface translation draft; native-speaker review is required before pilot launch.
 export default {
+  ...memberUpdates,
   "Language": "भाषा",
   "Change language": "भाषा बदलें",
   "Choose your language": "अपनी भाषा चुनें",

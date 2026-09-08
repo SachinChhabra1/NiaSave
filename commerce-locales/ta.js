@@ -1,5 +1,7 @@
+import memberUpdates from './member-updates/ta.js';
 // Member-interface translation draft; native-speaker review is required before pilot launch.
 export default {
+  ...memberUpdates,
   "That Nest is no longer available for these dates. Choose another location or date.": "இந்தத் தேதிகளில் அந்த நெஸ்ட் கிடைக்கவில்லை. வேறு இடம் அல்லது தேதியைத் தேர்ந்தெடுக்கவும்.",
   "Choose a move-in date within the next 30 days.": "அடுத்த 30 நாட்களுக்குள் குடியேறும் தேதியைத் தேர்ந்தெடுக்கவும்.",
   "You already have a Nest for these dates. Open Orders & stays to review it.": "இந்தத் தேதிகளுக்கு உங்களிடம் ஏற்கனவே நெஸ்ட் உள்ளது. ஆர்டர்களும் தங்குமிடங்களும் பகுதியில் பார்க்கவும்.",

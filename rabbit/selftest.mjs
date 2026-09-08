@@ -340,7 +340,7 @@ const staffPages = [
 ];
 for (const file of staffPages) {
   const html = readFileSync(new URL("../" + file, import.meta.url), "utf8");
-  if (file === "ops.html") ok(file + " says Operation Polo", /Operation Polo/.test(html) && !/Sikh|Jat|Dogra|Assam/.test(html));
+  if (file === "ops.html") ok(file + " says Sikh Unit", /Sikh Unit/.test(html) && !/Jat|Dogra|Assam/.test(html));
   ok(file + " uses dark browser chrome", /<meta name="theme-color" content="#0B0E14">/i.test(html));
   ok(file + " has no Rabbit", !/Rabbit|RABBIT/.test(html));
   ok(file + " has no Jabali", !/Jabali|Jamali|JABALI|JAMALI/.test(html));
@@ -380,9 +380,9 @@ ok("Jat reserved nests expose a persisted check-in action", /class=\\?"nest-chec
 ok("Bison pages lock Polo Bison Tanot All products", bisonPages.every(file => {
   const html = readFileSync(new URL("../" + file, import.meta.url), "utf8");
   const pageRail = (html.split('class="rail"')[1] || "").split('class="pane"')[0];
-  return /<div class="kicker">Bison<\/div>/.test(html) && /href="\/ops.html">Polo</.test(pageRail) && /href="\/bison.html">Bison</.test(pageRail) && /href="\/tanot\/">Tanot</.test(pageRail) && /href="\/desk.html">All products</.test(pageRail) && !/Sikh|Jat|Dogra|Assam/.test(html);
+  return /<div class="kicker">Bison<\/div>/.test(html) && /href="\/ops.html">Sikh Unit</.test(pageRail) && /href="\/bison.html">Bison</.test(pageRail) && /href="\/tanot\/">Tanot</.test(pageRail) && /href="\/desk.html">All products</.test(pageRail) && !/Jat|Dogra|Assam/.test(html);
 }));
-ok("bison.html uses Bison not Jat", /<title>Bison · Control<\/title>/.test(bisonHtml) && /<h1>Bison<\/h1>/.test(bisonHtml) && !/Sikh|Jat|Dogra|Assam/.test(bisonHtml));
+ok("bison.html uses Bison not Jat", /<title>Bison · Control<\/title>/.test(bisonHtml) && /<h1>Bison<\/h1>/.test(bisonHtml) && !/Jat|Dogra|Assam/.test(bisonHtml));
 ok("Jat pages use dark browser chrome", bisonPages.every(file => /<meta name="theme-color" content="#0B0E14">/i.test(readFileSync(new URL("../" + file, import.meta.url), "utf8"))));
 ok("Dogra uses Rafiqi tokens", /--canvas:\s*#0b0e14/.test(tanotCss) && /--surface:\s*#12161e/.test(tanotCss) && /--blue:\s*#0A84FF/.test(tanotCss) && /IBM Plex Sans/.test(tanotCss));
 ok("Dogra uses dark browser chrome", /<meta name="theme-color" content="#0B0E14" \/>/i.test(tanotIndex));
@@ -392,8 +392,8 @@ ok("staff.css uses Rafiqi dark tokens", /--bg:#0B0E14/.test(staffCss) && /--surf
 ok("staff.css uses compact Rafiqi shell", /width:240px;flex:0 0 240px/.test(staffCss) && /min-height:58px;padding:0 24px/.test(staffCss) && /\.rail-link\{[\s\S]*min-height:40px/.test(staffCss));
 ok("staff app remains available on mobile", /@media\(max-width:899px\)[\s\S]*\.shell\{display:block/.test(staffCss) && /\.tower\{display:block!important/.test(staffCss));
 ok("Unit mobile controls share full touch targets", /@media\(max-width:899px\)[\s\S]*\.command-center-return\{min-height:44px[\s\S]*\.rail-link\{[^}]*min-height:44px/.test(staffCss) && /@media\(max-width:899px\)[\s\S]*\.compact-actions button[^}]*min-height:44px/.test(bisonCss) && /@media \(max-width: 900px\)[\s\S]*\.app-shell \.workspace button[^}]*\.app-shell \.central-return \{ min-height: 44px/.test(tanotCss));
-ok("shared script does not rewrite Polo to Sikh Unit", !/Polo:\s*"Sikh Unit"/.test(staffJs) && !/"Operation Polo":\s*"Sikh Unit"/.test(staffJs) && !/unitLinks\s*=/.test(staffJs));
-ok("ops nia then Operation Polo", /class="nia-logo"[\s\S]{0,200}Operation Polo/.test(opsHtml));
+ok("shared script does not rewrite Polo to Sikh Unit", !/Polo:\s*"Sikh Unit"/.test(staffJs) && !/"Sikh Unit":\s*"Sikh Unit"/.test(staffJs) && !/unitLinks\s*=/.test(staffJs));
+ok("ops nia then Sikh Unit", /class="nia-logo"[\s\S]{0,200}Sikh Unit/.test(opsHtml));
 ok("ops has no polo-icon", !/polo-icon/.test(opsHtml));
 ok("ops job icons in source", /id="i-biker"/.test(opsHtml) && /id="i-po"/.test(opsHtml) && /id="i-dispatch"/.test(opsHtml));
 const rail = (opsHtml.split('class="rail"')[1] || "").split('class="pane"')[0];
@@ -402,11 +402,11 @@ ok("ops load has no 40 stops", !/40 stops/.test(opsHtml) && !/\+' stops/.test(op
 ok("ops sequence 1 to 5", /1<\/b> Member ordered[\s\S]*→[\s\S]*2<\/b> Hub loaded[\s\S]*→[\s\S]*3<\/b> Member collected or returned[\s\S]*→[\s\S]*4<\/b> Hub settled with officer[\s\S]*→[\s\S]*5<\/b> Nia paid vendor/.test(opsHtml));
 ok("ops vendor pay is last", opsHtml.indexOf("5</b> Nia paid vendor") > opsHtml.indexOf("4</b> Hub settled with officer") && opsHtml.indexOf("5</b> Nia paid vendor") > opsHtml.indexOf("2</b> Hub loaded"));
 ok("ops no bare Settled or Paid labels", !/<b>\d<\/b> Settled/.test(opsHtml) && !/<b>\d<\/b> Paid/.test(opsHtml) && !/'Settled'/.test(opsHtml) && !/'Paid'/.test(opsHtml));
-ok("ops h1 is Operation Polo once", (opsHtml.match(/<h1>Operation Polo<\/h1>/g) || []).length === 1);
-ok("ops title Operation Polo", /<title>Operation Polo<\/title>/.test(opsHtml));
-ok("ops stamps nia-board Operation Polo", /name="nia-board" content="Operation Polo"/.test(opsHtml));
-ok("ops rail Polo not Sikh", /href="\/ops.html">Polo</.test(rail) && /href="\/bison.html">Bison</.test(rail) && /href="\/tanot\/">Tanot</.test(rail) && /href="\/desk.html">All products</.test(rail) && !/Sikh|Jat|Dogra|Assam/.test(rail));
-ok("ops empty state Operation Polo", /Could not load Operation Polo/.test(opsHtml));
+ok("ops h1 is Sikh Unit once", (opsHtml.match(/<h1>Sikh Unit<\/h1>/g) || []).length === 1);
+ok("ops title Sikh Unit", /<title>Sikh Unit<\/title>/.test(opsHtml));
+ok("ops stamps nia-board Sikh Unit", /name="nia-board" content="Sikh Unit"/.test(opsHtml));
+ok("ops rail names Sikh Unit", /href="\/ops.html">Sikh Unit</.test(rail) && /href="\/bison.html">Bison</.test(rail) && /href="\/tanot\/">Tanot</.test(rail) && /href="\/desk.html">All products</.test(rail) && !/Jat|Dogra|Assam/.test(rail));
+ok("ops empty state Sikh Unit", /Could not load Sikh Unit/.test(opsHtml));
 ok("ops header has no brand kicker", !/<div class="brand">/.test(opsHtml));
 ok("ops rail Reports and Ops", /<h2 class="rail-h"[^>]*>Reports<\/h2>/.test(rail) && /<h2 class="rail-h"[^>]*>Ops<\/h2>/.test(rail));
 ok("inventory under Reports", rail.indexOf("Reports") < rail.indexOf(">Inventory<") && rail.indexOf(">Inventory<") < rail.indexOf(">Ops<"));

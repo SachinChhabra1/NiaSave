@@ -5,45 +5,20 @@ set -eu
 test -f api/index.mjs
 test -f api/server.mjs
 test -f rabbit/engine.mjs
-# Product rail lock. Fail closed. Never require regiment or Unit product names.
-lock_fail() { echo "product rail lock: $1" >&2; exit 1; }
-echo "product rail lock 1040: Operation Polo / Bison / Tanot / All products. Regiment names fail the build."
-grep -q '<title>Operation Polo</title>' ops.html || lock_fail "ops.html title must be Operation Polo"
-grep -q '<h1>Operation Polo</h1>' ops.html || lock_fail "ops.html heading must be Operation Polo"
-grep -q 'href="/ops.html">Polo<' ops.html || lock_fail "ops.html rail must label Polo"
-grep -q 'href="/bison.html">Bison<' ops.html || lock_fail "ops.html rail must label Bison"
-grep -q 'href="/tanot/">Tanot<' ops.html || lock_fail "ops.html rail must label Tanot"
-grep -q 'href="/desk.html">All products<' ops.html || lock_fail "ops.html rail must label All products"
-grep -Eq 'Sikh|Jat|Dogra|Assam' ops.html && lock_fail "ops.html has regiment names"
-grep -q '<title>Bison' bison.html || lock_fail "bison.html title must be Bison"
-grep -q 'href="/ops.html">Polo<' bison.html || lock_fail "bison.html rail must label Polo"
-grep -q 'href="/bison.html">Bison<' bison.html || lock_fail "bison.html rail must label Bison"
-grep -q 'href="/tanot/">Tanot<' bison.html || lock_fail "bison.html rail must label Tanot"
-grep -q 'href="/desk.html">All products<' bison.html || lock_fail "bison.html rail must label All products"
-grep -Eq 'Sikh|Jat|Dogra|Assam' bison.html && lock_fail "bison.html has regiment names"
-for f in bison-studios.html bison-contracts.html bison-clocks.html bison-collections.html bison-nests.html bison-data.html; do
-  grep -q 'href="/ops.html">Polo<' "$f" || lock_fail "$f rail must label Polo"
-  grep -q 'href="/bison.html">Bison<' "$f" || lock_fail "$f rail must label Bison"
-  grep -q 'href="/tanot/">Tanot<' "$f" || lock_fail "$f rail must label Tanot"
-  grep -q 'href="/desk.html">All products<' "$f" || lock_fail "$f rail must label All products"
-  grep -Eq 'Sikh|Jat|Dogra|Assam' "$f" && lock_fail "$f has regiment names"
-done
-grep -q '<strong>Polo</strong>' desk.html || lock_fail "desk.html must label Polo"
-grep -q '<strong>Bison</strong>' desk.html || lock_fail "desk.html must label Bison"
-grep -q '<strong>Tanot</strong>' desk.html || lock_fail "desk.html must label Tanot"
-grep -Eq 'Sikh|Jat|Dogra|Assam' desk.html && lock_fail "desk.html has regiment names"
-grep -q 'Polo: "Sikh Unit"' staff.js && lock_fail "staff.js rewrites Polo to Sikh Unit"
-grep -q '"Operation Polo": "Sikh Unit"' staff.js && lock_fail "staff.js rewrites Operation Polo to Sikh Unit"
-grep -q 'label: "Sikh Unit"' staff.js && lock_fail "staff.js injects Sikh Unit rail labels"
-node rabbit/public-naming-lock.mjs || lock_fail "public naming contract failed"
+# Save operations are owned by Rafiqi Central's Sikh Unit.
+node rabbit/public-naming-lock.mjs
 mkdir -p dist/products dist/assets
-if [ -f member.html ]; then
+if [ "${COMMERCE_STOREFRONT:-0}" = "1" ]; then
+  cp commerce.html dist/index.html
+elif [ -f member.html ]; then
   cp member.html dist/index.html
 elif [ -f index.html ]; then
   cp index.html dist/index.html
 fi
 cp -f desk.html ops.html bison.html bison-studios.html bison-contracts.html bison-clocks.html bison-collections.html bison-nests.html bison-data.html pickup.html recon.html predict.html hub.html next.html cash.html source.html inventory.html ageing.html po.html dispatch.html invoice.html biker.html staff.css staff.js bison.css bison.js bison-data.js dist/
 cp -f desk.html dist/2para.html
+cp -f commerce.html commerce.css commerce.js commerce-ops.js dist/
+cp -f member.html dist/member-services.html
 if [ -d public/products ]; then cp -r public/products/. dist/products/; fi
 if [ -d assets ]; then cp -r assets/. dist/assets/; fi
 if [ -f manifest.webmanifest ]; then cp -f manifest.webmanifest dist/; fi

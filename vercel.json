@@ -3,8 +3,16 @@
   "buildCommand": "sh vercel-build.sh",
   "outputDirectory": "dist",
   "redirects": [
-    { "source": "/polo.html", "destination": "/ops.html", "permanent": false },
-    { "source": "/polo", "destination": "/ops.html", "permanent": false }
+    {
+      "source": "/polo.html",
+      "destination": "/ops.html",
+      "permanent": false
+    },
+    {
+      "source": "/polo",
+      "destination": "/ops.html",
+      "permanent": false
+    }
   ],
   "functions": {
     "api/index.mjs": {
@@ -13,62 +21,152 @@
     }
   },
   "rewrites": [
-    { "source": "/research/why-blue-collar-workers-quit", "destination": "/research/why-blue-collar-workers-quit.html" },
-    { "source": "/research/why-blue-collar-workers-quit/", "destination": "/research/why-blue-collar-workers-quit.html" },
-    { "source": "/health", "destination": "/api?path=health" },
-    { "source": "/v1/:path*", "destination": "/api?path=v1/:path*" },
-    { "source": "/api/:path*", "destination": "/api?path=:path*" }
+    {
+      "source": "/research/why-blue-collar-workers-quit",
+      "destination": "/research/why-blue-collar-workers-quit.html"
+    },
+    {
+      "source": "/research/why-blue-collar-workers-quit/",
+      "destination": "/research/why-blue-collar-workers-quit.html"
+    },
+    {
+      "source": "/health",
+      "destination": "/api?path=health"
+    },
+    {
+      "source": "/v1/:path*",
+      "destination": "/api?path=v1/:path*"
+    },
+    {
+      "source": "/api/:path*",
+      "destination": "/api?path=:path*"
+    }
   ],
   "headers": [
     {
       "source": "/(.*).html",
-      "headers": [{ "key": "Cache-Control", "value": "no-store, max-age=0" }]
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, max-age=0"
+        }
+      ]
     },
     {
       "source": "/tanot/(.*)",
-      "headers": [{ "key": "Cache-Control", "value": "no-store, max-age=0" }]
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, max-age=0"
+        }
+      ]
     },
     {
       "source": "/bison-data.js",
-      "headers": [{ "key": "Cache-Control", "value": "no-store, max-age=0" }]
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, max-age=0"
+        }
+      ]
     },
     {
       "source": "/staff.css",
-      "headers": [{ "key": "Cache-Control", "value": "no-store, max-age=0" }]
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, max-age=0"
+        }
+      ]
     },
     {
       "source": "/staff.js",
-      "headers": [{ "key": "Cache-Control", "value": "no-store, max-age=0" }]
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, max-age=0"
+        }
+      ]
     },
     {
       "source": "/bison.css",
-      "headers": [{ "key": "Cache-Control", "value": "no-store, max-age=0" }]
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, max-age=0"
+        }
+      ]
     },
     {
       "source": "/bison.js",
-      "headers": [{ "key": "Cache-Control", "value": "no-store, max-age=0" }]
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, max-age=0"
+        }
+      ]
     },
     {
       "source": "/research/why-blue-collar-workers-quit",
       "headers": [
-        { "key": "Content-Type", "value": "text/html; charset=utf-8" },
-        { "key": "Content-Disposition", "value": "inline" }
+        {
+          "key": "Content-Type",
+          "value": "text/html; charset=utf-8"
+        },
+        {
+          "key": "Content-Disposition",
+          "value": "inline"
+        }
       ]
     },
     {
       "source": "/research/why-blue-collar-workers-quit/",
       "headers": [
-        { "key": "Content-Type", "value": "text/html; charset=utf-8" },
-        { "key": "Content-Disposition", "value": "inline" }
+        {
+          "key": "Content-Type",
+          "value": "text/html; charset=utf-8"
+        },
+        {
+          "key": "Content-Disposition",
+          "value": "inline"
+        }
       ]
     },
     {
       "source": "/research/why-blue-collar-workers-quit.html",
       "headers": [
-        { "key": "Content-Type", "value": "text/html; charset=utf-8" },
-        { "key": "Content-Disposition", "value": "inline" }
+        {
+          "key": "Content-Type",
+          "value": "text/html; charset=utf-8"
+        },
+        {
+          "key": "Content-Disposition",
+          "value": "inline"
+        }
+      ]
+    },
+    {
+      "source": "/commerce(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, max-age=0"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "same-origin"
+        }
       ]
     }
   ],
-  "crons": [{ "path": "/api/bison/data/sync", "schedule": "*/15 * * * *" }]
+  "crons": [
+    {
+      "path": "/api/bison/data/sync",
+      "schedule": "*/15 * * * *"
+    }
+  ]
 }

@@ -13,7 +13,8 @@
     "test": "node rabbit/selftest.mjs",
     "test:storage": "node lib/runtime-store.test.mjs && node lib/polo-persistence.test.mjs",
     "test:bison": "node --test bison/engine.test.mjs api/staff-auth.test.mjs",
-    "test:tanot": "node --test tanot/insightEngine.test.mjs lib/dogra-store.test.mjs"
+    "test:tanot": "node --test tanot/insightEngine.test.mjs lib/dogra-store.test.mjs",
+    "test:commerce": "node --test lib/commerce/*.test.mjs"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",

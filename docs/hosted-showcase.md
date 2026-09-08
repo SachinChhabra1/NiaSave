@@ -5,7 +5,7 @@ Built 8 September 2026 for internal testing and investor walkthroughs. This is n
 ## Deployment
 
 - Dedicated Vercel project: `niasave-showcase` in `sachinchhabra37-8426s-projects`.
-- Active Preview: https://niasave-showcase-kj2njqh6r-sachinchhabra37-8426s-projects.vercel.app/commerce.html
+- Active Preview: https://niasave-showcase-edmhdvh4f-sachinchhabra37-8426s-projects.vercel.app/commerce.html
 - Dedicated Neon Free database: `niasave-showcase-db`, Singapore. Connected only to this project's Preview environment, with `SHOWCASE_` variable prefix. No production database was copied or connected.
 - Vercel team sign-in remains enabled. A second, application-level HTTP Basic invitation uses username `showcase` and a generated password stored privately in Vercel. Never put credentials or the Central signing key in this repository.
 - The initial deployment on this new project's default alias intentionally returns 503: production environments cannot activate showcase mode. Use the Preview URL above.

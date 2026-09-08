@@ -150,3 +150,11 @@ Added a data-contract-ready Earn map/list view and Central's Lucide icon set. Th
 The user clarified the NiaSave App is the website saved to a phone's home screen. A Central-enrolled passkey is the recommended SMS-free sign-in path. Passkeys and the complete Central KYC gate remain unimplemented; the existing request/verify identity adapter must not be described as an app-generated OTP solution.
 
 Validation: 38 commerce tests and production build pass. Desktop 1280×844 and mobile 390×844 tested on dev and built output; marker selection focuses its job card, refresh leaves one map, category selection works, and missing-data/failed-tile states retain usable content. Fixture map records exist only in the browser QA script. Existing production database/identity activation prerequisites still apply.
+
+### Connected local presentation demo
+
+At the user's request, Central now owns a synthetic HSR member-residence scenario and four Walk2Work mandates. Central's local Earn screen has **Load demo records**. This signed operation is rejected outside explicit local preview and requires the preview admin. Repeated loading preserves application history and operator closures. The demo residence references the existing HSR studio catalogue ID; the residence assignment, employers and workplace pins are fictional presentation data, not imported KYC or checked-in occupancy.
+
+`python3 scripts/load-connected-demo.py` uses local Central :8080 and NiaSave :8787 APIs to populate the shared demo plus one member application, one packed essentials order and one future Nest reservation. It checks preview mode before writing and verifies the same references in Central. No secrets are embedded. Sign in with **Continue as preview member** on the NiaSave page to see the member-scoped map. Local data is in memory; after an API restart rerun this loader. Send and insurance remain disabled. Real identity/KYC and production source integration remain unimplemented.
+
+Validation: 39 NiaSave commerce tests; 16 focused Central tests; Central typecheck and both builds pass. The connected demo is exercised through the real local APIs, without mocked browser responses.

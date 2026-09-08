@@ -101,9 +101,9 @@ The current NiaSave identity adapter still has a generic request/verify OTP cont
 
 ## Implementation already present in this branch
 
-- `commerce-earn-map.js`: lazy-loaded local Leaflet 1.9.4, current-studio marker, numbered job pins, accessible cards, nearest-first straight-line distances, reset/zoom controls, mobile layout and missing/stale/tile-failure states. No geolocation request, local source records or sample pins in the app.
+- `commerce-earn-map.js`: lazy-loaded local Leaflet 1.9.4, current-studio marker, numbered job pins, accessible cards, nearest-first straight-line distances, reset/zoom controls, mobile layout and missing/stale/tile-failure states. No geolocation request. Synthetic presentation records can now be loaded from Central under its explicit local preview guard; they do not substitute for the production source.
 - `commerce.js`: Earn map-and-list layout consuming the contract above.
-- `lib/commerce/earn.mjs`: explicitly reports `map.status: unavailable` until the Central projection is implemented. Existing preview publication/application behavior remains available for tests. The frontend alone is not the authorization layer.
+- `lib/commerce/earn.mjs`: reports `map.status: unavailable` in the absence of a member-scoped projection. The newly added local Central demo can supply a fictional HSR residence and four verified-for-demo workplace pins. Production projection remains unimplemented. The frontend alone is not the authorization layer.
 - `commerce-categories.js`: Lucide icons matching Central, with bundled license and no React payload for the static storefront.
 
 Current local branches are `codex/member-commerce-pilot` (NiaSave) and `codex/niasave-commerce-pilot` (Central). Integrate without overwriting other Central work. No production deployment was performed.
@@ -119,3 +119,7 @@ Current local branches are `codex/member-commerce-pilot` (NiaSave) and `codex/ni
 - Test at 390×844 and desktop: map keyboard controls, marker-to-card selection, overlap cases, pinch/scroll behavior, offline tiles, reduced motion and all pilot languages. Keep OpenStreetMap attribution visible; no tile prefetch/offline bulk download. Select a production tile provider if expected usage exceeds the public service's policy/capacity.
 
 Reference: [WebAuthn](https://www.w3.org/TR/webauthn-3/), [Leaflet](https://leafletjs.com/reference.html), [OpenStreetMap tile policy](https://operations.osmfoundation.org/policies/tiles/).
+
+## Connected demo added at user request
+
+Central now supplies local-only fixture mandates through `member-commerce-demo.server.ts` and an admin **Load demo records** action. The NiaSave signed gateway accepts that action only in explicit local preview. The demo member residence references the existing HSR catalogue studio; the residence assignment and workplace coordinates are synthetic. Seeded applications, goods orders and Nest reservations use the existing shared operation books. The full setup script is `NiaSave/scripts/load-connected-demo.py`. It verifies preview mode, is safe to rerun without duplicate records and touches only localhost. Demo state is in memory and must be repopulated after restarting the API. This does not implement production KYC, passkeys, live mandate sync, Send or insurance.

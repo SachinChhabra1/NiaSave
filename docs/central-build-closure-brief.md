@@ -86,3 +86,8 @@ Use real verified location photos before describing the video as showing actual 
 ## Investor-video readiness
 
 After the enabled functionality and backend integration pass the checks, prepare a repeatable walkthrough: verified member sign-in → Live with distinct Nest images → current Nest and nearby Walk2Work jobs → member application and Central status update → Save categories, Pickup/Delivery, reservation and Central fulfilment → member history with matching references. Show Send/insurance as forthcoming if still inactive. Record only after an uninterrupted rehearsal on the final build. Creating the video itself is a subsequent task.
+
+
+## NiaBooks follow-on
+
+Send now includes a Central-controlled financial-statement demo and optional experimental cash-flow indicator. Read [niabooks-central-brief.md](niabooks-central-brief.md) for the additional data contract, reconciliation, consent, validation and launch requirements. Production financial sources and scoring remain disabled.

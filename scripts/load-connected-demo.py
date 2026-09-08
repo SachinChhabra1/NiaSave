@@ -16,6 +16,7 @@ def nia(path,body=None,key=None):return call(NIA,'/api/commerce'+path,body,key)
 assert call(NIA,'/health').get('demo') is True
 assert central('earn')['operations']['preview'] is True
 central('earn',{'action':'demo','body':{}})
+central('send',{'action':'books-demo','body':{}})
 nia('/auth/preview',{'role':'member'})
 feed=nia('/earn');assert feed['preview'] and feed['map']['status']=='ready'
 job=feed['jobs'][0]

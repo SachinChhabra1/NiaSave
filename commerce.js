@@ -1,4 +1,4 @@
-import { booksMarkup, downloadBooks, personalEntryForm } from './commerce-books.js';
+import { booksMarkup, downloadBooks, personalEntryForm, healthSupportDialog } from './commerce-books.js';
 import { mapModel, mapMarkup, mountMap } from './commerce-earn-map.js';
 import { saveCategories, categoryId, categoryIcons } from './commerce-categories.js';
 import { languageOptions, validLanguage, loadLanguage, translate } from './commerce-i18n.js';
@@ -112,6 +112,8 @@ if(action==='fulfillment'){if(pending||busy||!['pickup','delivery'].includes(id)
 if(action==='category'){if(!categoryId(id))return;category=id;search='';render();return;}if(action==='clear-search'){search='';category='all';render();return;}
 if(action==='add'||action==='minus'){const p=cat.products.find(p=>p.id===id);if(!p)return;const q=Math.min(Math.min(10,p.available),(cart[id]||0)+(action==='add'?1:-1));if(q>0)cart[id]=q;else delete cart[id];save('nia-commerce-bag',cart);render();const focus=document.querySelector(`[data-action="${action==='minus'&&!cart[id]?'add':action}"][data-id="${id}"]`);focus?.focus({preventScroll:true});return;}
 if(action==='detail'){const p=cat.products.find(p=>p.id===id);return show(title(p),`${photo(p,'detail-photo')}<p>${esc(t(p.pack))}</p><p class="price">${money(p.price)}</p><p>${t('Pay at pickup or delivery. Final availability is checked when you reserve.','पिकअप या डिलीवरी पर भुगतान करें। बुकिंग के समय उपलब्धता जाँची जाती है।')}</p>${cat.preview?`<p class="info">${t('Illustrative image. Pack size and supplier details need confirmation before the pilot opens.','उदाहरण चित्र। पायलट शुरू होने से पहले पैक साइज़ और सप्लायर जानकारी की पुष्टि चाहिए।')}</p>`:''}`);}
+if(action==='books-loans')return show(t('Lower-cost loan pathway'),healthSupportDialog('loans',t));
+if(action==='books-harassment')return show(t('Help with lender harassment'),healthSupportDialog('harassment',t));
 if(action==='books-add'){if(booksRequest)return await submitBooks(booksRequest.body);return show(t('Add to NiaBooks'),personalEntryForm(null,id,{t,esc}));}
 if(action==='books-edit'){const entry=personalEntry(id);if(entry)return show(t('Edit your entry'),personalEntryForm(entry,entry.kind,{t,esc}));return;}
 if(action==='books-remove'){const entry=personalEntry(id);if(entry)return await submitBooks({id,revision:entry.revision,remove:true});return;}

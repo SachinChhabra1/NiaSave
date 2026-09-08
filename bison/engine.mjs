@@ -1,4 +1,5 @@
 import { createStateRunner } from '../lib/commerce/transaction.mjs';
+import { isShowcaseEntry } from '../lib/commerce/showcase-mode.mjs';
 import { expireNests } from '../lib/commerce/nests.mjs';
 /**
  * Bison Living control plane.
@@ -8,7 +9,7 @@ import { randomUUID, createSign, createHash } from "node:crypto";
 import { hasDurableStore, loadRuntimeState, saveRuntimeState } from "../lib/runtime-store.mjs";
 import { STUDIO_COUNT, buildStudioMaster, sourceStudioId, studioIdForSource } from "./catalog.mjs";
 
-const DUMMY_DATA = process.env.DUMMY_DATA !== "0";
+const DUMMY_DATA = isShowcaseEntry() || process.env.DUMMY_DATA !== "0";
 const RUNTIME_STATE_KEY = process.env.NIA_BISON_STATE_KEY || "operation-bison";
 const HOLD_FILL_RS = 2000;
 const TAX_PCT = 12;

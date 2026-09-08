@@ -8,6 +8,7 @@
 import http from "node:http";
 import { centralCommerceHttp } from "../lib/commerce/central-http.mjs";
 import { commerceHttp } from "../lib/commerce/http.mjs";
+import { isShowcaseEntry } from '../lib/commerce/showcase-mode.mjs';
 import { randomUUID, createHash, createHmac, timingSafeEqual } from "node:crypto";
 import { pathToFileURL } from "node:url";
 import { handleStaff, isStaffPath, staffPath, staffStorageStatus, DUMMY_DATA } from "../rabbit/engine.mjs";
@@ -134,7 +135,7 @@ function catalogPayload() { return { studioName: member.nestName, deliveryTime: 
 function nextHub(from) { const i = HUB_FLOW.indexOf(from); return i >= 0 && i < HUB_FLOW.length - 1 ? HUB_FLOW[i + 1] : from; }
 
 export async function handler(req, res) {
-  if (process.env.NIA_SHOWCASE === '1') return json(res,503,{error:'use_isolated_showcase_entry'});
+  if (isShowcaseEntry()) return json(res,503,{error:'use_isolated_showcase_entry'});
   if (req.method === "OPTIONS") return json(res, 204, {});
   const url = new URL(req.url, "http://localhost");
   const rewrittenPath = url.searchParams.get("path");

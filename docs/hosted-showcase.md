@@ -4,11 +4,13 @@ Built 8 September 2026 for internal testing and investor walkthroughs. This is n
 
 ## Deployment
 
-- Dedicated Vercel project: `niasave-showcase` in `sachinchhabra37-8426s-projects`.
-- Active Preview: https://niasave-showcase-edmhdvh4f-sachinchhabra37-8426s-projects.vercel.app/commerce.html
-- Dedicated Neon Free database: `niasave-showcase-db`, Singapore. Connected only to this project's Preview environment, with `SHOWCASE_` variable prefix. No production database was copied or connected.
-- Vercel team sign-in remains enabled. A second, application-level HTTP Basic invitation uses username `showcase` and a generated password stored privately in Vercel. Never put credentials or the Central signing key in this repository.
-- The initial deployment on this new project's default alias intentionally returns 503: production environments cannot activate showcase mode. Use the Preview URL above.
+- Live showcase: https://www.niasave.com (niasave.com redirects here).
+- Main Vercel project: `niasave`; deployment `dpl_5HYBtZrZ1fdzk2N3wSXK5EcSSim9`.
+- Access is the existing HTTP Basic invitation, username `showcase`. No Vercel team login is required on this domain. Credentials remain outside Git.
+- Dedicated Neon test database: `niasave-showcase-db`, Singapore. The isolated showcase function also runs in Singapore. Existing operations database and environment settings were not replaced.
+- Legacy operations were preserved from production revision `40482eaf9a72b9ec9b0ac225a2f46ecaea8fe7ed`; 39 existing API/runtime/operations files were verified unchanged.
+- The separate `niasave-showcase` Preview remains available with Vercel team protection; it is not the primary invitation link.
+- Hosting in Vercel Production is explicitly allowed only for the configured showcase project ID. This is still a test deployment, not member launch.
 
 ## What runs online
 
@@ -28,32 +30,37 @@ The signed gateway is deployed and verified against the same durable records. Th
 
 Connect a separately authenticated Central test environment using:
 
-- `TWO_PARA_NIASAVE_ORIGIN`: the Preview origin above.
+- `TWO_PARA_NIASAVE_ORIGIN`: `https://www.niasave.com`.
 - `NIASAVE_STOREFRONT_ORIGIN`: the same origin.
 - `CENTRAL_COMMERCE_KEY`: the private value of `SHOWCASE_CENTRAL_KEY`, copied server-to-server through environment configuration, never through a document or client bundle.
 - A deliberate hosted TEST mode in Central. Its existing `CENTRAL_COMMERCE_PREVIEW` remains local-only, and must not be widened into an auth bypass. Keep real operator login/roles and use only fictional source records.
-- Vercel's additional deployment protection still applies to the gateway. A server-to-server test connection needs authorized deployment-protection access as well as the Central signature. Do not remove SSO or distribute bypass credentials without owner approval.
+- The custom-domain gateway requires the Central signature, without Vercel SSO or page Basic credentials. Do not use a deployment-protection bypass for this connection.
 
 The gateway verifies the exact body signature, actor role, timestamp and one-use nonce, and checks operator ownership and state transitions. The page's Basic invitation is not a substitute for a Central signature. Gateway requests do not need the page's Basic credentials.
 
 Demo data retains expiry/freshness rules: statement health becomes unavailable after the fixture refresh is stale; jobs close after their fixture expiry and pickup windows expire. Refresh fixtures explicitly through the signed admin gateway (`send/books-demo`, `earn/demo`); seedDemo preserves closed jobs. Do not rewrite timestamps to imply a real operational sync. A fresh `SHOWCASE_INSTANCE` creates a separate demonstration dataset; old state remains intact. Do not reset the active instance while a walkthrough is in progress.
 
-## Rebuild
+## Rebuild the domain release
 
 From the member commerce pilot branch:
 
 ```sh
 npm run test:commerce
 npm run build:production
-node scripts/build-showcase.mjs ../niasave-showcase
-cd ../niasave-showcase
-npx vercel link --project niasave-showcase --scope sachinchhabra37-8426s-projects
-npx vercel deploy --target=preview
+node scripts/build-domain-showcase.mjs 40482eaf9a72b9ec9b0ac225a2f46ecaea8fe7ed ../niasave-domain
+cd ../niasave-domain
+npx vercel deploy --prod --skip-domain
+# Verify the resulting deployment before promoting its returned URL.
+npx vercel promote <verified-deployment-url> --yes
 ```
 
-The assembler copies the member front end, all five language files and their updates, planner, images, shared domain logic, and isolated API into a separate deployment directory. It never packages the broad legacy API entry. Environment/QA files are excluded. No cron jobs or live source syncs are deployed.
+The assembler overlays the storefront on the explicit existing production revision. It puts test logic in `showcase-runtime/` and a separate `api/showcase.mjs` function, retaining legacy operations and cron routes. The isolated handler uses module-local configuration, without changing legacy DUMMY_DATA, database selection or signing keys. Environment and QA files are excluded from deployment uploads.
 
-Required server settings: `NIA_SHOWCASE=1`, a `SHOWCASE_INSTANCE` matching `showcase-[a-z0-9-]{8,64}`, dedicated `SHOWCASE_DATABASE_URL`, `SHOWCASE_PASSWORD` of at least 24 characters, and `SHOWCASE_CENTRAL_KEY` of at least 32 characters. `NIA_SHOWCASE_ENTRY` is set internally by the isolated handler. Settings are Preview only.
+Server settings: `NIA_SHOWCASE=1`, a `SHOWCASE_INSTANCE` matching `showcase-[a-z0-9-]{8,64}`, dedicated `SHOWCASE_DATABASE_URL`, `SHOWCASE_PASSWORD` of at least 24 characters, and `SHOWCASE_CENTRAL_KEY` of at least 32 characters. Custom-domain production additionally requires `SHOWCASE_ALLOW_CUSTOM_DOMAIN=1` and `SHOWCASE_PROJECT_ID` equal to Vercel's system `VERCEL_PROJECT_ID`. These settings do not activate showcase mode in the legacy operations runtime.
+
+Do not replace this release with a normal main-branch deployment until the domain assembly and isolated routing have been incorporated. Claude's plan adapter must merge the latest pilot branch, including these domain changes, rather than assuming 6342d0f is still the latest base. The adapter reported in Claude's update has not been incorporated into this deployment.
+
+Rollback target (the previous operations release): `https://niasave-90b6q8ucb-sachinchhabra37-8426s-projects.vercel.app`. Promote that deployment to restore the prior domain content.
 
 ## Verification evidence
 
@@ -62,7 +69,7 @@ Required server settings: `NIA_SHOWCASE=1`, a `SHOWCASE_INSTANCE` matching `show
 - A fresh process reused the session and found the same order, booking, application status and dated entry.
 - Fictional Central handover/reconciliation creates exactly one automatic NiaBooks Save expense.
 - Hosted browser: all four tabs × five languages × desktop/mobile (40 combinations), no JS errors, missing assets or horizontal overflow. Planner, purpose dropdown and session reload checked.
-- Hosted page returns 401 with the Basic challenge when its invitation is missing. Vercel team access remains enabled.
+- Custom-domain page and member API return 401 with the Basic challenge when the invitation is missing. Authenticated domain checks passed for all four tabs, saved orders and session reload; the existing operations page remains available. The bare domain redirects to www.
 - Native-speaker review, real-device/network testing, production KYC/passkeys, durable monthly plans and production Central source integration remain outside this showcase verification.
 
 The standard build also now copies `commerce-plan.js` and nested locale update modules, which were missing from the earlier deployment packaging.

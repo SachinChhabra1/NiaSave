@@ -1,16 +1,14 @@
 import { showcaseAccess } from './access.mjs';
-import { showcaseReady } from '../lib/commerce/showcase-mode.mjs';
+import { showcaseReady, enableShowcaseEntry } from '../lib/commerce/showcase-mode.mjs';
 // Set before dynamic imports capture storage configuration. Never use the broad
 // legacy API entry here: only commerce and the signed Central gateway are exposed.
-process.env.NIA_SHOWCASE_ENTRY='isolated-v1';
-process.env.DUMMY_DATA='1';
-process.env.CENTRAL_COMMERCE_KEY=process.env.SHOWCASE_CENTRAL_KEY || '';
+enableShowcaseEntry();
 let runtime;
 export default async function handler(req,res) {
   const send=(status,body,headers={})=>{res.writeHead(status,{'content-type':'application/json','cache-control':'no-store','x-robots-tag':'noindex, nofollow',...headers});res.end(JSON.stringify(body));};
   if(!showcaseReady()) return send(503,{error:'showcase_not_configured'});
   const url=new URL(req.url,'https://'+req.headers.host);
-  const path=url.pathname==='/api' ? '/api/'+(url.searchParams.get('path')||'').replace(/^\/+/, '') : url.pathname;
+  const path=['/api','/api/showcase','/api/showcase.mjs'].includes(url.pathname) ? '/api/'+(url.searchParams.get('path')||'').replace(/^\/+/, '') : url.pathname;
   const central=path==='/api/central/commerce';
   if(!central && !showcaseAccess(req.headers.authorization)) return send(401,{error:'showcase_invitation_required'},{'www-authenticate':'Basic realm="NiaSave showcase"'});
   if(!central && !path.startsWith('/api/commerce/') && path!=='/api/showcase/health') return send(404,{error:'not_found'});

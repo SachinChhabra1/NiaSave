@@ -18,6 +18,7 @@ import {
 } from "./scale.mjs";
 import { SHOPS_30 } from "./shops-30.mjs";
 import { createStateRunner } from "../lib/commerce/transaction.mjs";
+import { isShowcaseEntry } from '../lib/commerce/showcase-mode.mjs';
 import { hasDurableStore, loadRuntimeState, saveRuntimeState } from "../lib/runtime-store.mjs";
 
 const SHOP_PIN = Object.fromEntries(SHOPS_30.shops.map(s => [s.stopId, s]));
@@ -28,7 +29,7 @@ function pinStudio(studio) {
   return { ...studio, lat: pin.lat, lng: pin.lng, seq: pin.seq, area: pin.area };
 }
 
-const DUMMY_DATA = process.env.DUMMY_DATA !== "0";
+const DUMMY_DATA = isShowcaseEntry() || process.env.DUMMY_DATA !== "0";
 
 export const WEEK_BEAT = "2026-08-31";
 export const NEXT_BEAT = "2026-09-01";

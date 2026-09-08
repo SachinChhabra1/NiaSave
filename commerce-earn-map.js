@@ -16,10 +16,24 @@ export function mapModel(data, now=Date.now()) {
   const jobs=(data.jobs||[]).filter(j=>j.mandateStatus==='open' && Number.isInteger(j.openPositions) && j.openPositions>0 && Date.parse(j.closesAt)>now && verifiedPoint(j.workplace)).map(j=>({...j,distanceKm:distanceKm(source.studio,j.workplace)})).sort((a,b)=>a.distanceKm-b.distanceKm);
   return {status:'ready',studio:source.studio,asOf:source.asOf,jobs};
 }
+const rupees=n=>new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR',maximumFractionDigits:0}).format(n);
+export function jobTravel(job,studio,now=Date.now()){
+  const c=job.commute;
+  if(c&&c.studioId===studio?.id&&c.jobRevision===job.revision&&['walk','bus','shuttle','metro','auto'].includes(c.mode)&&Number.isFinite(c.returnMin)&&Number.isFinite(c.returnMax)&&c.returnMin>=0&&c.returnMax>=c.returnMin&&Date.parse(c.validUntil)>now&&Date.parse(c.asOf)<=now&&now-Date.parse(c.asOf)<=86400000&&typeof c.source==='string'&&c.source.trim()&&c.routeVerified===true)return {min:c.returnMin,max:c.returnMax,mode:c.mode,example:false,source:c.source};
+  // Presentation assumptions only; never infer a live fare or walking route from aerial distance.
+  if(job.preview===true&&String(job.employer).startsWith('Demo \u00b7')&&Number.isFinite(job.distanceKm))return job.distanceKm<1?{min:0,max:0,mode:'walk',example:true,source:'Example walk budget; route not verified'}:{min:30,max:50,mode:'bus',example:true,source:'Example bus budget; route and fare not verified'};
+  return null;
+}
+export function mapJobDetails(job,index,studio,t){
+  const commute=jobTravel(job,studio),range=(a,b)=>a===b?rupees(a):rupees(a)+'\u2013'+rupees(b);
+  const pay=Number.isFinite(job.payMin)&&Number.isFinite(job.payMax)?`${range(job.payMin,job.payMax)} / ${job.payPeriod==='day'?t('day'):t('month')}`:t('Pay awaiting confirmation');
+  const ctc=job.compensation?.type==='ctc'&&job.compensation?.verified===true&&Number.isFinite(job.compensation.min)&&Number.isFinite(job.compensation.max)&&job.compensation.min>=0&&job.compensation.max>=job.compensation.min&&['month','year'].includes(job.compensation.period)?`${t('CTC')}: ${range(job.compensation.min,job.compensation.max)} / ${t(job.compensation.period)}`:t('CTC not confirmed');
+  return `<span class="map-job-company">${escape(job.employer)}</span><strong>${escape(job.title)}</strong><span>${t('Pay')}: ${escape(pay)}</span><small>${escape(ctc)}</small><span class="map-job-travel">${commute?`${escape(range(commute.min,commute.max))} ${t('return / workday')} \u00b7 ${escape(t(commute.mode))}`:t('Return fare awaiting route estimate')}</span>${commute?`<small>${commute.example?t('Example budget; route unverified'):t('Route-based estimate')}</small>`:''}`;
+}
 export function mapMarkup(model,t,icon) {
   const messages={studio_missing:['Your Nest location needs an update','आपके नेस्ट की जगह अपडेट करनी है'],stale:['Job locations need refreshing','नौकरियों की जगह ताज़ा करनी है'],unavailable:['Your neighbourhood map is being connected','आपके आसपास का नक्शा जोड़ा जा रहा है']};
   if(model.status!=='ready') {const m=messages[model.status]||messages.unavailable;return `<section class="earn-map-empty panel"><span class="earn-home-icon">${icon('live')}</span><h2>${t(...m)}</h2><p>${t('Your current Nest and nearby open jobs will appear here once their locations are verified.','जगहों की पुष्टि होने पर आपका मौजूदा नेस्ट और पास की खुली नौकरियाँ यहाँ दिखेंगी।')}</p><button data-action="help">${t('Ask your Nia team','अपनी निया टीम से पूछें')}</button></section>`;}
-  return `<section class="earn-map-panel" aria-label="${t('Jobs around your Nest','आपके नेस्ट के पास नौकरियाँ')}"><div class="earn-map-heading"><span class="earn-home-icon">${icon('live')}</span><div><small>${t('YOUR CURRENT NEST','आपका मौजूदा नेस्ट')}</small><h2>${escape(model.studio.name)}</h2></div><button type="button" id="earn-map-reset">${t('Show all','सभी दिखाएँ')}</button></div><div id="earn-map" class="earn-map" role="region" aria-label="${t('Map of your Nest and open jobs','आपके नेस्ट और खुली नौकरियों का नक्शा')}"></div><div class="earn-map-key"><span>◆ ${t('Your Nest','आपका नेस्ट')}</span><span>● ${t('Open jobs','खुली नौकरियाँ')} · ${model.jobs.length}</span></div><p id="earn-map-status" class="earn-map-note" role="status">${t('Distances are straight-line, not walking routes. Use + and − to zoom.','दूरी सीधी रेखा में है, पैदल रास्ते की नहीं। ज़ूम के लिए + और − दबाएँ।')}</p></section>`;
+  return `<section class="earn-map-panel" aria-label="${t('Jobs around your Nest','आपके नेस्ट के पास नौकरियाँ')}"><div class="earn-map-heading"><span class="earn-home-icon">${icon('live')}</span><div><small>${t('YOUR CURRENT NEST','आपका मौजूदा नेस्ट')}</small><h2>${escape(model.studio.name)}</h2></div><button type="button" id="earn-map-reset">${t('Show all','सभी दिखाएँ')}</button></div><div id="earn-map" class="earn-map" role="region" aria-label="${t('Map of your Nest and open jobs','आपके नेस्ट और खुली नौकरियों का नक्शा')}"></div><div class="earn-map-comparisons">${model.jobs.map((job,index)=>`<button type="button" class="map-job-compact" data-map-job="${index}"><span class="earn-job-number">${index+1}</span><span>${mapJobDetails(job,index,model.studio,t)}</span></button>`).join('')}</div><div class="earn-map-key"><span>◆ ${t('Your Nest','आपका नेस्ट')}</span><span>● ${t('Open jobs','खुली नौकरियाँ')} · ${model.jobs.length}</span></div><p id="earn-map-status" class="earn-map-note" role="status">${t('Distances are straight-line, not walking routes. Use + and − to zoom.','दूरी सीधी रेखा में है, पैदल रास्ते की नहीं। ज़ूम के लिए + और − दबाएँ।')}</p></section>`;
 }
 let library;
 function leaflet() {
@@ -47,11 +61,16 @@ export function mountMap(model,t) {
     model.jobs.forEach((job,index)=>{
       const point=[job.workplace.lat,job.workplace.lng];points.push(point);
       const marker=L.divIcon({className:'earn-pin earn-pin-job',html:`<span>${index+1}</span>`,iconSize:[38,38],iconAnchor:[19,19]});
-      const node=document.createElement('div');const title=document.createElement('strong');title.textContent=job.title;node.append(title,document.createElement('br'),document.createTextNode(job.employer));
-      const button=document.createElement('button');button.textContent=t('View job','नौकरी देखें');button.onclick=()=>{const card=document.getElementById('earn-job-'+job.id);card?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'center'});card?.focus({preventScroll:true});};node.append(document.createElement('br'),button);
-      L.marker(point,{icon:marker,title:`${index+1}. ${job.title} · ${job.employer}`,zIndexOffset:index}).addTo(map).bindPopup(node);
+      const node=document.createElement('div');node.className='map-job-popup';node.innerHTML=mapJobDetails(job,index,model.studio,t);
+      const travel=jobTravel(job,model.studio);
+      if(travel){const monthly=document.createElement('p');monthly.textContent=`${t('At 26 workdays')}: ${travel.min===travel.max?rupees(travel.min*26):rupees(travel.min*26)+'\u2013'+rupees(travel.max*26)} / ${t('month')}. ${t('Travel budget only; workdays may differ.')}`;node.append(monthly);}
+      const button=document.createElement('button');button.textContent=t('View job','नौकरी देखें');button.onclick=()=>{const card=document.getElementById('earn-job-'+job.id);card?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'center'});card?.focus({preventScroll:true});};node.append(button);
+      const pin=L.marker(point,{icon:marker,title:`${index+1}. ${job.title} \u00b7 ${job.employer}`,zIndexOffset:index}).addTo(map).bindPopup(node,{maxWidth:280});
+      pin.bindTooltip(mapJobDetails(job,index,model.studio,t),{permanent:true,interactive:true,direction:index%2?'right':'left',offset:[index===2?-100:index%2?24:-24,index===1?-55:0],className:'map-job-label',opacity:1});pin.getTooltip().on('click',()=>pin.openPopup());
+      document.querySelector(`[data-map-job="${index}"]`)?.addEventListener('click',()=>{pin.openPopup();container.scrollIntoView({behavior:'smooth',block:'center'});});
+
     });
-    const reset=()=>map.fitBounds(points,{padding:[35,35],maxZoom:15});reset();
+    const reset=()=>{const narrow=container.clientWidth<600;map.fitBounds(points,{paddingTopLeft:[narrow?90:220,120],paddingBottomRight:[narrow?90:220,115],maxZoom:15});};reset();
     document.querySelector('#earn-map-reset')?.addEventListener('click',reset,{once:false});
   }).catch(()=>{if(!disposed&&container.isConnected)container.textContent=t('Map unavailable. Browse the jobs below.','नक्शा उपलब्ध नहीं है। नीचे नौकरियाँ देखें।');});
   return ()=>{if(disposed)return;disposed=true;map?.remove();map=null;};

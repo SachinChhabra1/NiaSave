@@ -173,5 +173,20 @@ export default {
   "shuttle": "ಶಟಲ್",
   "metro": "ಮೆಟ್ರೋ",
   "auto": "ಆಟೋ",
-  "year": "ವರ್ಷ"
+  "year": "ವರ್ಷ",
+  "Your plan changed elsewhere. Reload it, check the amounts, then save again.": "ನಿಮ್ಮ ಯೋಜನೆ ಬೇರೆಡೆ ಬದಲಾಗಿದೆ. ಅದನ್ನು ಮತ್ತೆ ಲೋಡ್ ಮಾಡಿ, ಮೊತ್ತಗಳನ್ನು ಪರಿಶೀಲಿಸಿ, ನಂತರ ಉಳಿಸಿ.",
+  "Saving needs an active, verified membership. The calculator still works; nothing is saved.": "ಉಳಿಸಲು ಸಕ್ರಿಯ, ಪರಿಶೀಲಿತ ಸದಸ್ಯತ್ವ ಬೇಕು. ಕ್ಯಾಲ್ಕುಲೇಟರ್ ಈಗಲೂ ಕೆಲಸ ಮಾಡುತ್ತದೆ; ಏನೂ ಉಳಿಸಿಲ್ಲ.",
+  "Account saving is not connected yet. The calculator still works; nothing is saved.": "ಖಾತೆಗೆ ಉಳಿಸುವುದು ಇನ್ನೂ ಸಂಪರ್ಕವಾಗಿಲ್ಲ. ಕ್ಯಾಲ್ಕುಲೇಟರ್ ಈಗಲೂ ಕೆಲಸ ಮಾಡುತ್ತದೆ; ಏನೂ ಉಳಿಸಿಲ್ಲ.",
+  "Central could not be reached. Your typed amounts are still here; try again.": "ಸೆಂಟ್ರಲ್ ಅನ್ನು ತಲುಪಲು ಆಗಲಿಲ್ಲ. ನೀವು ನಮೂದಿಸಿದ ಮೊತ್ತಗಳು ಇಲ್ಲಿಯೇ ಇವೆ; ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
+  "That save request was already used with different amounts. Try again.": "ಈ ಉಳಿಸುವ ವಿನಂತಿ ಈಗಾಗಲೇ ಬೇರೆ ಮೊತ್ತಗಳೊಂದಿಗೆ ಬಳಸಲಾಗಿದೆ. ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
+  "Checking your saved plan…": "ನಿಮ್ಮ ಉಳಿಸಿದ ಯೋಜನೆಯನ್ನು ಪರಿಶೀಲಿಸಲಾಗುತ್ತಿದೆ…",
+  "Saving…": "ಉಳಿಸಲಾಗುತ್ತಿದೆ…",
+  "Saved to your account": "ನಿಮ್ಮ ಖಾತೆಗೆ ಉಳಿಸಲಾಗಿದೆ",
+  "Nothing saved yet for this month.": "ಈ ತಿಂಗಳಿಗೆ ಇನ್ನೂ ಏನೂ ಉಳಿಸಿಲ್ಲ.",
+  "Not saved yet. Your typed amounts stay here until you save.": "ಇನ್ನೂ ಉಳಿಸಿಲ್ಲ. ಉಳಿಸುವವರೆಗೆ ನೀವು ನಮೂದಿಸಿದ ಮೊತ್ತಗಳು ಇಲ್ಲಿಯೇ ಇರುತ್ತವೆ.",
+  "Could not save. Your typed amounts are still here; try again.": "ಉಳಿಸಲು ಆಗಲಿಲ್ಲ. ನೀವು ನಮೂದಿಸಿದ ಮೊತ್ತಗಳು ಇಲ್ಲಿಯೇ ಇವೆ; ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
+  "Reload saved plan": "ಉಳಿಸಿದ ಯೋಜನೆಯನ್ನು ಮತ್ತೆ ಲೋಡ್ ಮಾಡಿ",
+  "Save my plan": "ನನ್ನ ಯೋಜನೆಯನ್ನು ಉಳಿಸಿ",
+  "Blank amounts are unknown, not zero. A saved plan is a budget, not a transfer or a loan request.": "ಖಾಲಿ ಮೊತ್ತ ಎಂದರೆ ತಿಳಿದಿಲ್ಲ, ಸೊನ್ನೆ ಅಲ್ಲ. ಉಳಿಸಿದ ಯೋಜನೆ ಒಂದು ಬಜೆಟ್; ಹಣ ವರ್ಗಾವಣೆ ಅಥವಾ ಸಾಲದ ವಿನಂತಿ ಅಲ್ಲ.",
+  "Monthly budget": "ಮಾಸಿಕ ಬಜೆಟ್"
 };

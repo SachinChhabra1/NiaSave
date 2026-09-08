@@ -173,5 +173,20 @@ export default {
   "shuttle": "शटल",
   "metro": "मेट्रो",
   "auto": "रिक्षा",
-  "year": "वर्ष"
+  "year": "वर्ष",
+  "Your plan changed elsewhere. Reload it, check the amounts, then save again.": "तुमची योजना दुसरीकडे बदलली आहे. ती पुन्हा लोड करा, रकमा तपासा, मग जतन करा.",
+  "Saving needs an active, verified membership. The calculator still works; nothing is saved.": "जतन करण्यासाठी सक्रिय, पडताळलेले सदस्यत्व लागते. कॅल्क्युलेटर अजूनही चालतो; काहीही जतन झालेले नाही.",
+  "Account saving is not connected yet. The calculator still works; nothing is saved.": "खात्यात जतन करणे अजून जोडलेले नाही. कॅल्क्युलेटर अजूनही चालतो; काहीही जतन झालेले नाही.",
+  "Central could not be reached. Your typed amounts are still here; try again.": "सेंट्रलशी संपर्क होउ शकला नाही. तुम्ही लिहिलेल्या रकमा इथेच आहेत; पुन्हा प्रयत्न करा.",
+  "That save request was already used with different amounts. Try again.": "ही जतन विनंती आधीच वेगळ्या रकमांसह वापरली गेली आहे. पुन्हा प्रयत्न करा.",
+  "Checking your saved plan…": "तुमची जतन केलेली योजना तपासत आहोत…",
+  "Saving…": "जतन करत आहोत…",
+  "Saved to your account": "तुमच्या खात्यात जतन केले",
+  "Nothing saved yet for this month.": "या महिन्यासाठी अजून काही जतन केलेले नाही.",
+  "Not saved yet. Your typed amounts stay here until you save.": "अजून जतन केलेले नाही. जतन करेपर्यंत तुम्ही लिहिलेल्या रकमा इथेच राहतील.",
+  "Could not save. Your typed amounts are still here; try again.": "जतन करता आले नाही. तुम्ही लिहिलेल्या रकमा इथेच आहेत; पुन्हा प्रयत्न करा.",
+  "Reload saved plan": "जतन केलेली योजना पुन्हा लोड करा",
+  "Save my plan": "माझी योजना जतन करा",
+  "Blank amounts are unknown, not zero. A saved plan is a budget, not a transfer or a loan request.": "रिकामी रक्कम म्हणजे माहीत नाही, शून्य नाही. जतन केलेली योजना म्हणजे बजेट; पैसे पाठवणे किंवा कर्जाची विनंती नाही.",
+  "Monthly budget": "मासिक बजेट"
 };

@@ -22,6 +22,11 @@ await writeFile(resolve(out,'api/showcase.mjs'),"export { default } from '../sho
 await cp(resolve(root,'showcase/domain-middleware.js'),resolve(out,'middleware.js'));
 let build=await readFile(resolve(out,'vercel-build.sh'),'utf8');
 build+='\n# Protected member showcase; the operations build above remains intact.\ncp commerce.html dist/index.html\ncp '+front.filter(f=>f!=='commerce-locales').join(' ')+' dist/\nmkdir -p dist/commerce-locales\ncp -R commerce-locales/. dist/commerce-locales/\n';
+// Carry the reviewed member import check into this assembled release too.
+const memberBuild=await readFile(resolve(root,'vercel-build.sh'),'utf8');
+const importGuard=memberBuild.split('\n').find(line=>line.startsWith('for f in $(grep -o '));
+if(!importGuard)throw Error('Member module build guard is missing');
+build+='\n'+importGuard+'\n';
 await writeFile(resolve(out,'vercel-build.sh'),build);
 const config=JSON.parse(await readFile(resolve(out,'vercel.json'),'utf8'));
 config.functions['api/showcase.mjs']={includeFiles:'showcase-runtime/**',maxDuration:60,regions:['sin1']};

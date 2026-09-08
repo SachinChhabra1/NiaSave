@@ -21,7 +21,7 @@ export function fieldsFromValues(values){
   for(const key of planFields){const raw=String(values?.[key]??'').trim();if(raw===''){fields[centralKeys[key]]=null;continue;}if(!/^\d+(?:\.\d{1,2})?$/.test(raw))return null;const paise=Math.round(Number(raw)*100);if(!Number.isSafeInteger(paise)||paise>100000000)return null;fields[centralKeys[key]]=paise;}
   return fields;
 }
-export function sameFields(a,b){return JSON.stringify(a??null)===JSON.stringify(b??null);}
+export function sameFields(a,b){if(!a||!b)return a===b;return Object.values(centralKeys).every(key=>(a[key]??null)===(b[key]??null));}
 export function planResult(values,{t,money}){
   const r=calculatePlan(values);
   if(r.status!=='ready')return `<p>${r.status==='invalid'?t('Use amounts from 0 to 10,00,000, with up to two decimal places.'):t('Fill every amount to see your plan. Enter 0 where there is no cost.')}</p>`;

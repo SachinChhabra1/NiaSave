@@ -142,3 +142,11 @@ Verification: 34 Nia commerce tests; 16 Living/staff-auth regression tests; 16 f
 
 
 Production-output rendering was also attempted locally. Central's existing PGlite fallback crashes because `pglite.data` is absent from the built server output when no database is configured. The production build itself succeeds, but this fallback rendering check is blocked; it is not counted as a passing production integration test. The new commerce route requires authenticated access and the real storage/identity setup in production. The repository's bundled browser checker also assumes `/workspace` Linux paths, so desktop/mobile rendering and console checks used installed Chrome/Playwright on this Mac, alongside the in-app interaction checks.
+
+### 8 September: Earn geography and Central handoff
+
+Added a data-contract-ready Earn map/list view and Central's Lucide icon set. The map lazily loads bundled Leaflet and uses only fresh verified workplace/studio coordinates. It distinguishes a missing feed/current residence from a successful query with no open jobs. No production map feed or sample map pins have been added. See `docs/central-member-map-contract.md` for Claude's Central implementation provision, including current checked-in residence, open mandates, publication/revocation and member access.
+
+The user clarified the NiaSave App is the website saved to a phone's home screen. A Central-enrolled passkey is the recommended SMS-free sign-in path. Passkeys and the complete Central KYC gate remain unimplemented; the existing request/verify identity adapter must not be described as an app-generated OTP solution.
+
+Validation: 38 commerce tests and production build pass. Desktop 1280×844 and mobile 390×844 tested on dev and built output; marker selection focuses its job card, refresh leaves one map, category selection works, and missing-data/failed-tile states retain usable content. Fixture map records exist only in the browser QA script. Existing production database/identity activation prerequisites still apply.

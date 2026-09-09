@@ -19,11 +19,13 @@ Central’s companion branch adds migration 0014, staff invitation issuance and 
 
 ## Open gates
 
-1. Verified member → fulfilment location and delivery PIN projection. Passkey accounts currently grant no fulfilment locations, so ordering fails closed. Staff verification and an explicit source mapping are required before activation.
-2. Legacy identity reconciliation where a number recovery happened before the new stable history-owner mapping existed. Do not match people by name or phone and silently merge histories.
+1. Verify pilot member → fulfilment location/PIN records in Central’s new Member readiness form. The projection and enforcement are implemented: pickup-only grants cannot be used for delivery, and changed/expired/revoked mappings stop working on the next request.
+2. Review actual older identities in Central’s history-link form. The software bridge now reads original orders, Nest bookings, dated entries and source expenses using only Central-approved identifiers; it preserves original records and retry keys. Another member’s records remain private. Names or phone matches never create links automatically.
 3. Real-phone/PWA passkey setup, synced-key behaviour, cancellation, lost-phone replacement and recovery acceptance; native-speaker review of all five languages.
 4. Sikh stock/price/location verification; current Jat residence/Nest data; partner credentials and acceptance; operator handover/receipt/exception UAT; monitoring and tested backup/restore.
 
 ## Validation
 
-69 commerce tests and production build passed. Ten isolated browser WebAuthn checks covered registration, sign-in, replay, tampering, wrong origin, missing user verification, recovery and suspension. Navigation passed eight desktop/mobile checks. Passkey layouts passed ten language/viewport checks, plus Central’s staff form at two widths. These are engineering checks, not a claim of member acceptance or verified operational data.
+74 commerce tests and production build passed. Ten isolated browser WebAuthn checks covered registration, sign-in, replay, tampering, wrong origin, missing user verification, recovery and suspension. Navigation passed eight desktop/mobile checks. Passkey layouts passed ten language/viewport checks, plus Central’s staff form at two widths. These are engineering checks, not a claim of member acceptance or verified operational data.
+
+The readiness update is covered by five additional ownership/serviceability tests in NiaSave and three additional Central database scenarios. The form, schema and bridge are ready for operational data preparation; records have not been falsely marked verified.

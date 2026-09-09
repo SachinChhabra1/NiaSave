@@ -102,6 +102,7 @@ The durable store currently saves each runtime domain as a versioned JSON record
 - Exercise database backup restoration and document recovery time and recovery point targets.
 - Write incident, rollback and provider-outage runbooks.
 - Establish daily owner checks for order, inventory, cash/UPI and settlement exceptions.
+- Showcase-host edge headers, invite rotation, and the staff-auth default are recorded in [SECURITY-TONIGHT.md](SECURITY-TONIGHT.md).
 
 ### F. Voice and language acceptance
 

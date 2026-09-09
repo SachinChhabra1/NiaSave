@@ -1,6 +1,8 @@
 // Sikh Unit's member-order view: the existing Save order book, on the existing ops route.
 const active = new URLSearchParams(location.search).get('view') === 'commerce';
-if (active) {
+if (active && !['localhost','127.0.0.1','[::1]'].includes(location.hostname)) {
+  location.replace('https://rafiqicentral.com/member-commerce?line=save');
+} else if (active) {
   const css=document.createElement('link');css.rel='stylesheet';css.href='/commerce.css';document.head.append(css);
   const style=document.createElement('style');style.textContent='.tower,.narrow{display:none!important}#commerce-ops{max-width:1150px;margin:auto;padding:28px 20px 80px}.ops-top{margin-bottom:24px}.ops-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.ops-order{margin:0}.ops-order select{margin:12px 0}.ops-preview{margin:20px 0}@media(max-width:760px){.ops-grid{grid-template-columns:1fr}}';document.head.append(style);
   const root=document.createElement('section');root.id='commerce-ops';document.body.prepend(root);

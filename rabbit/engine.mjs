@@ -19,7 +19,7 @@ import {
 import { SHOPS_30 } from "./shops-30.mjs";
 import { createStateRunner } from "../lib/commerce/transaction.mjs";
 import { isShowcaseEntry } from '../lib/commerce/showcase-mode.mjs';
-import { hasDurableStore, loadRuntimeState, saveRuntimeState } from "../lib/runtime-store.mjs";
+import { hasDurableStore, loadRuntimeState, saveRuntimeState, storageStatus } from "../lib/runtime-store.mjs";
 
 const SHOP_PIN = Object.fromEntries(SHOPS_30.shops.map(s => [s.stopId, s]));
 
@@ -467,8 +467,8 @@ export function withSaveState(work) {
 export async function staffStorageStatus() {
   if (!hasDurableStore()) return { storage: "memory", connected: false, version: 0 };
   try {
-    const loaded = await loadRuntimeState(RUNTIME_STATE_KEY, snapshotState(createState()));
-    return { storage: loaded.storage, connected: loaded.storage === "postgres", version: loaded.version };
+    const status = await storageStatus(RUNTIME_STATE_KEY);
+    return { storage: status.storage, connected: status.connected, version: status.version };
   } catch (error) {
     console.error("staff_storage_status_failed", error);
     return { storage: "memory", connected: false, version: 0 };

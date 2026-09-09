@@ -12,6 +12,16 @@
       "source": "/polo",
       "destination": "/ops.html",
       "permanent": false
+    },
+    {
+      "source": "/member.html",
+      "destination": "/#account",
+      "permanent": false
+    },
+    {
+      "source": "/member-services.html",
+      "destination": "/#account",
+      "permanent": false
     }
   ],
   "functions": {
@@ -159,6 +169,19 @@
         {
           "key": "Referrer-Policy",
           "value": "same-origin"
+        }
+      ]
+    },
+    {
+      "source": "/",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        },
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
         }
       ]
     }

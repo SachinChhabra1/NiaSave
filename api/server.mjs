@@ -14,6 +14,7 @@ import { randomUUID, createHash, createHmac, timingSafeEqual } from "node:crypto
 import { pathToFileURL } from "node:url";
 import { handleStaff, isStaffPath, staffPath, staffStorageStatus, DUMMY_DATA } from "../rabbit/engine.mjs";
 import { handleBison, isBisonPath, bisonPath, bisonStorageStatus } from "../bison/engine.mjs";
+import { readCurrentPosition } from "../bison/current-position.mjs";
 import { hasDurableStore, loadRuntimeState, saveRuntimeState } from "../lib/runtime-store.mjs";
 import { readDograState, writeDograState } from "../lib/dogra-store.mjs";
 
@@ -182,6 +183,12 @@ export async function handler(req, res) {
       const body = (req.method === "POST" || req.method === "PUT") ? await readBody(req) : {};
       const staff = requireStaff(req, res, ["studio", "money", "living"]);
       if (!staff) return;
+      if (livingPath === '/bison/current-position') {
+        res.setHeader('Cache-Control', 'private, no-store');
+        if (req.method !== 'GET') return json(res, 405, { error: 'method_not_allowed' });
+        try { return json(res, 200, await readCurrentPosition()); }
+        catch { return json(res, 503, { error: 'occupancy_source_unavailable', source: 'UI_Occupancy' }); }
+      }
       body.actor = `${staff.name} · ${staff.email}`;
       const out = await handleBison(req, res, livingPath, body, url);
       if (out) return json(res, out.status, out.body);

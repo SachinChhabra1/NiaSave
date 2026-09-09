@@ -45,6 +45,7 @@ const catalog = [
 ];
 
 const staffSeed = [
+  { id: "stf-ajay-mahawar", email: "ajay.mahawar@nia.one", name: "Ajay Mahawar", role: "living", desks: ["living"] },
   { id: "stf-admin", email: "admin@nia.one", name: "Admin", role: "admin", desks: ["studio", "hub", "money", "pilot"] },
   { id: "stf-satish", email: "satish@nia.one", name: "Satish", role: "studio+hub", desks: ["studio", "hub"] },
   { id: "stf-ramesh", email: "ramesh@nia.one", name: "Ramesh", role: "hub", desks: ["hub"] },
@@ -120,7 +121,7 @@ function staffFromReq(req) {
   const header = String(req.headers.authorization || "");
   const raw = header.toLowerCase().startsWith("bearer ") ? header.slice(7).trim() : "";
   if (!raw) return null;
-  return verifyStaffToken(raw) || state.tokens.get(tokenHash(raw)) || null;
+  return verifyStaffToken(raw);
 }
 function requireStaff(req, res, desks) {
   const staff = staffFromReq(req) || (STAFF_AUTH_REQUIRED ? null : OPEN_DESK_STAFF);
@@ -177,7 +178,7 @@ export async function handler(req, res) {
     }
     if (livingRequest) {
       const body = (req.method === "POST" || req.method === "PUT") ? await readBody(req) : {};
-      const staff = requireStaff(req, res, ["studio", "money"]);
+      const staff = requireStaff(req, res, ["studio", "money", "living"]);
       if (!staff) return;
       body.actor = `${staff.name} · ${staff.email}`;
       const out = await handleBison(req, res, livingPath, body, url);

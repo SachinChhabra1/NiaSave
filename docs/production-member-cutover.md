@@ -34,10 +34,22 @@ NiaSave:
 - NIA_RUNTIME_STATE_KEY=operation-polo-production.
 - MEMBER_INVITE_GATE=1; MEMBER_INVITE_PASSWORD reuses the current invitation password; MEMBER_SITE_ORIGIN=https://www.niasave.com.
 
+## Jat operator handover
+
+Sachin named ajay.mahawar@nia.one as the Jat data-entry owner. The release grants this named operator Living access, without Sikh or Dogra desk permissions, and adds an email/password prompt on protected legacy desks. Desk data requests wait for sign-in; an expired session requires sign-in again without automatically replaying a write. Central's staff sign-in remains unchanged.
+
+Deliver the new legacy operator password privately to Sachin for handover to Ajay; do not email or message credentials without Sachin's explicit instruction. The invitation password does not replace this operator password. Ajay's entry point is https://www.niasave.com/bison-data.html (legacy technical path retained). Ajay signs in with his Nia email and the new operator password.
+
+Preflight passed: named-operator login, denied unauthenticated writes, denied other-unit access, and a dated booking entered in the browser, saved to an isolated UAT database book, then read after a full API restart and browser reload. The named-operator audit persisted too. Desktop and phone sign-in were checked with no browser runtime errors. The temporary test book was removed after verification. This is preflight evidence, not proof of a production save.
+
+After cutover, confirm Ajay's login and Living reads. For the production write check, have Ajay submit one legitimate scheduled data correction through the desk; record its audit reference, persisted book version and successful reload. Do not create a fictitious member, booking, charge or payment in the real Jat book for testing. The production write check remains pending until that legitimate update occurs; a GET, dry run or local test does not satisfy it.
+
+Keep the invitation gate on. Rotate its reused showcase password before member pilot invitations are distributed.
+
 ## Release and verification
 
 After approval: apply this configuration, redeploy Central, stage the complete NiaSave release, check production challenges and unauthenticated boundaries, merge the reviewed member work into NiaSave main, and verify the live domain. Registration on a real phone still needs its owner and a staff-issued setup code; no synthetic member will be inserted into production for a smoke test.
 
-Preflight checks passed: 79 commerce tests, the Sikh self-test, 17 Living/auth/cache tests, six Dogra tests and production build. Isolated UAT previously passed nine hosted WebAuthn checks. The added invitation tests cover direct API aliases, incomplete settings, canonical origin routing, and the signed Central gateway.
+Preflight checks passed: 79 commerce tests, the Sikh self-test, 18 Living/auth/cache tests, six Dogra tests and production build. Isolated UAT previously passed nine hosted WebAuthn checks. The added invitation tests cover direct API aliases, incomplete settings, canonical origin routing, and the signed Central gateway.
 
 Rollback is the previous immutable deployment with its captured environment; do not mix its demo runtime with the new production member configuration. Keep the new production Save book and any subsequently created records intact during rollback. No online payments, bank remittances or unavailable partner adapters are enabled by this switch.

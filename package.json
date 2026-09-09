@@ -12,7 +12,7 @@
     "preview": "vite preview",
     "test": "node rabbit/selftest.mjs",
     "test:storage": "node lib/runtime-store.test.mjs && node lib/polo-persistence.test.mjs",
-    "test:bison": "node --test bison/engine.test.mjs api/staff-auth.test.mjs lib/runtime-store-cache.test.mjs",
+    "test:bison": "node --test bison/engine.test.mjs api/staff-auth.test.mjs api/jat-staff-access.test.mjs lib/runtime-store-cache.test.mjs",
     "test:tanot": "node --test tanot/insightEngine.test.mjs lib/dogra-store.test.mjs",
     "test:commerce": "node --test lib/commerce/*.test.mjs"
   },

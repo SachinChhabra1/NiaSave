@@ -551,3 +551,13 @@ code{background:var(--raised);font-size:11px}
   .realities{overflow-x:auto;flex-wrap:nowrap}
   .reality{min-width:max-content}
 }
+
+.staff-signin{width:min(440px,calc(100vw - 32px));padding:28px;border:1px solid var(--border);border-radius:16px;background:var(--surface);color:var(--fg)}
+.staff-signin::backdrop{background:rgba(22,27,36,.55)}
+.staff-signin h1{font-size:26px;margin:0 0 12px}
+.staff-signin p{font-size:16px;color:var(--fg-muted)}
+.staff-signin label{display:block;font-size:16px;margin:20px 0 8px}
+.staff-signin input{width:100%;min-height:48px;padding:10px;border:1px solid var(--fg-subtle);border-radius:8px;font:inherit;background:var(--surface);color:var(--fg)}
+.staff-signin button{width:100%;min-height:48px;background:var(--fg);color:var(--surface);border:0;border-radius:8px;font:inherit;cursor:pointer}
+.staff-signin button:disabled{opacity:.6}
+.staff-signin .staff-signin-status{min-height:24px}

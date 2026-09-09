@@ -4,6 +4,7 @@ import {cp,mkdir,readFile,writeFile} from 'node:fs/promises';
 import {spawnSync} from 'node:child_process';
 import {resolve,dirname} from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {overlayRuntimeCache} from './overlay-runtime-cache.mjs';
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'..');
 const base=process.argv[2],out=resolve(process.argv[3]||resolve(root,'../niasave-domain'));
 if(!/^[a-f0-9]{40}$/.test(base||''))throw Error('Pass the verified full production Git revision');
@@ -28,6 +29,7 @@ await writeFile(demandSidebar,(await readFile(demandSidebar,'utf8')).replace('<s
 await cp(resolve(root,'rabbit/public-naming-lock.mjs'),resolve(out,'rabbit/public-naming-lock.mjs'));
 const livingEngine=resolve(out,'bison/engine.mjs');
 await writeFile(livingEngine,(await readFile(livingEngine,'utf8')).replace('const SOURCE = "Bison Living book"','const SOURCE = "Jat Unit · Living book"'));
+await overlayRuntimeCache(root,out);
 const front=['commerce.html','commerce.css','commerce.js','commerce-i18n.js','commerce-books.js','commerce-plan.js','commerce-earn-map.js','commerce-categories.js','commerce-locales'];
 for(const file of front)await cp(resolve(root,file),resolve(out,file),{recursive:true});
 await cp(resolve(root,'assets'),resolve(out,'assets'),{recursive:true});

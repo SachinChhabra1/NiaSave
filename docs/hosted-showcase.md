@@ -91,3 +91,9 @@ The standard build also now copies `commerce-plan.js` and nested locale update m
 ## Para 2 naming refresh
 
 See [para2-naming.md](para2-naming.md). The assembler now updates archived operations labels and replaces their obsolete name lock; routes, API identifiers, persisted state and auth stay compatible. Future releases must keep this step, otherwise the old Bison/Polo/Tanot/Madras labels will return.
+
+## Runtime transfer fix (9 September 2026)
+
+NiaSave PR #21 adds version-first cache reads and version-only Jat/Sikh health probes; Jat desk polling is once per minute. The domain assembler applies the same reviewed cache algorithm to the archived operations function via `scripts/overlay-runtime-cache.mjs`, preserving its `DATABASE_URL` and unprefixed state keys. The isolated showcase keeps its own database selector and prefixed keys. Both cache variants pass the fake-SQL retry, invalidation, clone and conflict test.
+
+The test's 480 bytes for 60 version reads is modeled payload size, not measured total HTTP/Postgres transfer. Cold instances and actual writes still transfer the document. This deployment reduces repeated downloads; it cannot lift an existing Neon quota suspension. Verify actual transfer after service is restored.

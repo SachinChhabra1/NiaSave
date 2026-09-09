@@ -116,7 +116,7 @@ async function go(next,{fromHistory=false}={}){
   if(version!==navigationVersion)return;
   render();window.scrollTo(0,0);
 }
-function syncLocation(){const setup=takePasskeySetup(location,history);if(setup){passkeySetupToken=setup;if(cat?.memberAuth==='passkey')login();}const next=pageFromLocation();if(next!==page||location.hash!=='#'+next)go(next,{fromHistory:true}).catch(e=>toast(e.message));}
+function syncLocation(){const setup=takePasskeySetup(location,history);if(setup)passkeySetupToken=setup;const next=pageFromLocation();if(setup||next!==page||location.hash!=='#'+next)go(next,{fromHistory:true}).then(()=>{if(setup&&cat?.memberAuth==='passkey')login();}).catch(e=>toast(e.message));}
 window.addEventListener('hashchange',syncLocation);
 window.addEventListener('popstate',syncLocation);
 async function finishPasskey(mode,setupToken){

@@ -1,22 +1,59 @@
-/* 2 Para desk access is open temporarily. Keep token forwarding for the future login screen. */
+/* Resolve desk access before any operational request. */
 (function () {
   var token = sessionStorage.getItem("niaOpsToken") || "";
   var rawFetch = window.fetch.bind(window);
-  window.fetch = function (input, init) {
-    var request = init ? Object.assign({}, init) : {};
-    var url = typeof input === "string" ? input : (input && input.url) || "";
-    var sameOrigin = !/^https?:/i.test(url) || url.indexOf(location.origin) === 0;
-    if (token && sameOrigin && (/^\/api\//.test(url) || /^\/v1\/staff\//.test(url))) {
-      var headers = new Headers((request && request.headers) || (input && input.headers) || {});
-      headers.set("Authorization", "Bearer " + token);
-      request.headers = headers;
+  var ready;
+  function authenticate() {
+    return rawFetch('/v1/staff/me', { headers: token ? { Authorization: 'Bearer ' + token } : {} }).then(function (response) {
+      if (response.ok) return response.json().then(function (body) { return body.staff; });
+      if (response.status !== 401) throw new Error('Desk access is unavailable. Please reload and try again.');
+      token = ''; sessionStorage.removeItem('niaOpsToken');
+      return new Promise(function (resolve) {
+        var dialog = document.createElement('dialog');
+        dialog.className = 'staff-signin';
+        dialog.setAttribute('aria-labelledby', 'staff-signin-title');
+        dialog.innerHTML = '<form><h1 id="staff-signin-title">Sign in to your desk</h1><p>Use your Nia email and operator password.</p><label for="staff-email">Nia email</label><input id="staff-email" name="email" type="email" autocomplete="username" required><label for="staff-password">Operator password</label><input id="staff-password" name="password" type="password" autocomplete="current-password" required><p role="status" class="staff-signin-status"></p><button type="submit">Continue</button></form>';
+        dialog.addEventListener('cancel', function (event) { event.preventDefault(); });
+        document.body.appendChild(dialog); dialog.showModal();
+        dialog.querySelector('form').onsubmit = async function (event) {
+          event.preventDefault();
+          var button = dialog.querySelector('button');
+          var status = dialog.querySelector('[role="status"]');
+          button.disabled = true; status.textContent = 'Signing in…';
+          try {
+            var response = await rawFetch('/v1/staff/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: dialog.querySelector('[name="email"]').value, password: dialog.querySelector('[name="password"]').value }) });
+            if (!response.ok) throw new Error(response.status === 401 ? 'Email or password is incorrect.' : 'Sign-in is unavailable. Please try again.');
+            var result = await response.json();
+            token = result.token; sessionStorage.setItem('niaOpsToken', token);
+            dialog.querySelector('[name="password"]').value = '';
+            dialog.close(); dialog.remove(); resolve(result.staff);
+          } catch (error) { status.textContent = error.message; button.disabled = false; }
+        };
+      });
+    });
+  }
+  ready = authenticate();
+  window.NIA_STAFF_READY = ready;
+  window.fetch = async function (input, init) {
+    var url = new URL(typeof input === 'string' ? input : input.url, location.href);
+    var deskRequest = url.origin === location.origin && (/^\/api\//.test(url.pathname) || /^\/v1\/staff\//.test(url.pathname));
+    if (!deskRequest) return rawFetch(input, init);
+    await ready;
+    var request = Object.assign({}, init || {});
+    var headers = new Headers(request.headers || (input && input.headers) || {});
+    if (token) headers.set('Authorization', 'Bearer ' + token);
+    request.headers = headers;
+    var response = await rawFetch(input, request);
+    if (response.status === 401 && token) {
+      token = ''; sessionStorage.removeItem('niaOpsToken');
+      ready = authenticate(); window.NIA_STAFF_READY = ready;
+      // Do not replay a write: retain the form and let the operator submit again.
     }
-    return rawFetch(input, request);
+    return response;
   };
-  window.NIA_STAFF_READY = Promise.resolve({ id: "stf-open-desk", name: "2 Para desk", role: "open" });
 })();
 
-/* Keep every staff desk connected to the Rafiqi command center. Do not rewrite Polo / Bison / Tanot. */
+/* Keep every staff desk connected to the Rafiqi command center. Use Sikh, Jat, Dogra and Assam Unit names; technical routes remain stable. */
 (function () {
   var commandCenterUrl = "https://rafiqicentral.com/2para";
 
@@ -133,7 +170,7 @@
   else start();
 })();
 
-/* Polo staff rail: highlight current desk and switch ops.html panes. */
+/* Sikh Unit staff rail: highlight current desk and switch ops.html panes. */
 (function () {
   function pane(name) {
     var tower = document.querySelector(".tower");

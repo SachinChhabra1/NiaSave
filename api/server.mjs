@@ -1,11 +1,14 @@
 /**
- * NiaSave P0 API. Operation Polo is Save. Operation Bison is Living.
+ * NiaSave P0 API. Sikh Unit owns Save. Jat Unit owns Living. Legacy API identifiers remain stable.
  * Demo member 9876541042 / NIA-1042 remains while OTP and payment are skipped.
  * Nest rupee 2200 interim. Send-home rail not configured.
  * Staff desk contract only. Member phone is owned elsewhere — do not rename tabs.
  * Not for rafiqicentral.com or harness.
  */
 import http from "node:http";
+import { centralCommerceHttp } from "../lib/commerce/central-http.mjs";
+import { commerceHttp } from "../lib/commerce/http.mjs";
+import { isShowcaseEntry } from '../lib/commerce/showcase-mode.mjs';
 import { randomUUID, createHash, createHmac, timingSafeEqual } from "node:crypto";
 import { pathToFileURL } from "node:url";
 import { handleStaff, isStaffPath, staffPath, staffStorageStatus, DUMMY_DATA } from "../rabbit/engine.mjs";
@@ -42,6 +45,7 @@ const catalog = [
 ];
 
 const staffSeed = [
+  { id: "stf-ajay-mahawar", email: "ajay.mahawar@nia.one", name: "Ajay Mahawar", role: "living", desks: ["living"] },
   { id: "stf-admin", email: "admin@nia.one", name: "Admin", role: "admin", desks: ["studio", "hub", "money", "pilot"] },
   { id: "stf-satish", email: "satish@nia.one", name: "Satish", role: "studio+hub", desks: ["studio", "hub"] },
   { id: "stf-ramesh", email: "ramesh@nia.one", name: "Ramesh", role: "hub", desks: ["hub"] },
@@ -117,7 +121,7 @@ function staffFromReq(req) {
   const header = String(req.headers.authorization || "");
   const raw = header.toLowerCase().startsWith("bearer ") ? header.slice(7).trim() : "";
   if (!raw) return null;
-  return verifyStaffToken(raw) || state.tokens.get(tokenHash(raw)) || null;
+  return verifyStaffToken(raw);
 }
 function requireStaff(req, res, desks) {
   const staff = staffFromReq(req) || (STAFF_AUTH_REQUIRED ? null : OPEN_DESK_STAFF);
@@ -132,10 +136,16 @@ function catalogPayload() { return { studioName: member.nestName, deliveryTime: 
 function nextHub(from) { const i = HUB_FLOW.indexOf(from); return i >= 0 && i < HUB_FLOW.length - 1 ? HUB_FLOW[i + 1] : from; }
 
 export async function handler(req, res) {
+  if (isShowcaseEntry()) return json(res,503,{error:'use_isolated_showcase_entry'});
   if (req.method === "OPTIONS") return json(res, 204, {});
   const url = new URL(req.url, "http://localhost");
   const rewrittenPath = url.searchParams.get("path");
   const path = rewrittenPath ? `/${rewrittenPath.replace(/^\/+/, "")}` : url.pathname;
+  const commercePath = path.replace(/^\/api/, "");
+  if (commercePath === "/central/commerce") return centralCommerceHttp(req,res);
+  if (commercePath.startsWith("/commerce/")) return commerceHttp(req, res, commercePath.slice(9), staffFromReq);
+  // A live storefront must not expose the prototype's unauthenticated order/payment paths.
+  if (process.env.COMMERCE_ENABLED === "1" && (/^\/(api\/)?(order|member|auth)(\/|$)/.test(path) || /^\/v1\/(save|orders|payments|members)(\/|$)/.test(path))) return json(res,410,{error:"use_member_storefront"});
   const key = req.headers["idempotency-key"];
   const rabbitPath = staffPath(path, rewrittenPath);
   const staffRequest = isStaffPath(rabbitPath);
@@ -168,7 +178,7 @@ export async function handler(req, res) {
     }
     if (livingRequest) {
       const body = (req.method === "POST" || req.method === "PUT") ? await readBody(req) : {};
-      const staff = requireStaff(req, res, ["studio", "money"]);
+      const staff = requireStaff(req, res, ["studio", "money", "living"]);
       if (!staff) return;
       body.actor = `${staff.name} · ${staff.email}`;
       const out = await handleBison(req, res, livingPath, body, url);
@@ -271,7 +281,8 @@ export async function handler(req, res) {
       const email = String(body.email || "").trim().toLowerCase();
       const password = String(body.password || "");
       const found = staffSeed.find(s => s.email === email);
-      if (!found || password !== STAFF_PASSWORD) return json(res, 401, { error: "bad_credentials" });
+      const expectedPassword = found?.id === "stf-ajay-mahawar" ? process.env.JAT_STAFF_PASSWORD : STAFF_PASSWORD;
+      if (!found || !expectedPassword || password !== expectedPassword) return json(res, 401, { error: "bad_credentials" });
       const token = issueStaffToken(found);
       const record = { ...found, tokenIssuedAt: now() };
       state.tokens.set(tokenHash(token), record);

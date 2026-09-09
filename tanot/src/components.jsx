@@ -37,11 +37,11 @@ export function Sidebar({ items, active, onSelect }) {
       </nav>
       <div className="para-family" aria-label="2 Para Unit directory">
         <p>2 Para Units</p>
-        <a className="para-product" href="/ops.html"><span>Sikh Unit</span><small>Operations</small></a>
+        <a className="para-product" href="/ops.html"><span>Sikh Unit</span><small>Save operations</small></a>
         <a className="para-product" href="/bison.html"><span>Jat Unit</span><small>Living</small></a>
         <div className="para-product active"><span>Dogra Unit</span><small>Enterprise demand</small></div>
         <a className="para-product" href="https://para-2-madras.vercel.app"><span>Assam Unit</span><small>Member acquisition</small></a>
-        <a className="para-product" href="/desk.html"><span>2 Para</span><small>All products</small></a>
+        <a className="para-product" href="/desk.html"><span>2 Para</span><small>All units</small></a>
       </div>
       <div className="profile"><span>Sep MTD · illustrative</span><small>Updated just now</small><a className="photo-credit" href="https://commons.wikimedia.org/wiki/File:Longewala_Post.jpg" target="_blank" rel="noreferrer">Longewala Post image · CC BY-SA 4.0</a></div>
     </aside>

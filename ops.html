@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#0B0E14">
-<title>Operation Polo</title>
-<meta name="nia-board" content="Operation Polo">
+<title>Sikh Unit</title>
+<meta name="nia-board" content="Sikh Unit">
 <script>
   if (location.protocol === 'file:') {
     location.replace('https://www.niasave.com/ops.html' + location.search + location.hash);
@@ -36,7 +36,7 @@
 </svg>
   <div class="narrow">
     <div class="narrow-card">
-      <div class="kicker">Operation Polo</div>
+      <div class="kicker">Sikh Unit</div>
       <h1>Open on a laptop</h1>
       <p>This board is a wide staff desk. It is not the member app.</p>
     </div>
@@ -46,7 +46,7 @@
     <header class="top">
       <div class="mark">
         <img class="nia-logo" src="/assets/nia-mark-square.png" alt="Nia">
-        <h1>Operation Polo</h1>
+        <h1>Sikh Unit</h1>
       </div>
       <div class="meta" id="topmeta">Rajputana Theatre · 40 studios<br>No live UPI</div>
     </header>
@@ -68,6 +68,7 @@
           <a class="rail-link" data-nav="dispatch" href="/dispatch.html">Dispatch</a>
           <a class="rail-link" data-nav="biker" href="/biker.html">Biker</a>
           <a class="rail-link" data-nav="invoice" href="/invoice.html">Invoice</a>
+          <a class="rail-link" href="/ops.html?view=commerce">Member orders / UPI receipts</a>
           <a class="rail-link" data-nav="pickup" href="/pickup.html">Pickup</a>
           <a class="rail-link" data-nav="recon" href="/recon.html">Recon</a>
           <a class="rail-link" data-nav="match" href="/recon.html">Statement match</a>
@@ -78,10 +79,10 @@
         </div>
         <div class="rail-block">
           <h2 class="rail-h">2 Para</h2>
-          <a class="rail-link on" href="/ops.html">Polo</a>
-          <a class="rail-link" href="/bison.html">Bison</a>
-          <a class="rail-link" href="/tanot/">Tanot</a>
-          <a class="rail-link" href="/desk.html">All products</a>
+          <a class="rail-link on" href="/ops.html">Sikh Unit</a>
+          <a class="rail-link" href="/bison.html">Jat Unit</a>
+          <a class="rail-link" href="/tanot/">Dogra Unit</a>
+          <a class="rail-link" href="/desk.html">All units</a>
         </div>
       </aside>
       <div class="pane">
@@ -173,6 +174,7 @@
     </div>
   </div>
 <script src="/staff.js"></script>
+<script type="module" src="/commerce-ops.js"></script>
 <script>
 var DATA=null;
 function num(n){ return n==null?0:n; }
@@ -479,7 +481,7 @@ function load(){
       return '<div class="check"><div class="l">'+labels[key]+'</div><div class="n">'+(row.num!=null?row.num:'-')+' / '+(row.den!=null?row.den:'-')+'</div><div class="l">'+(row.label||'')+'</div></div>';
     }).join('');
   }).catch(function(){
-    document.getElementById('jobs').innerHTML='<div class="empty">Could not load Operation Polo.</div>';
+    document.getElementById('jobs').innerHTML='<div class="empty">Could not load Sikh Unit.</div>';
   });
 }
 bindUploads();

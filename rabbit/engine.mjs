@@ -1,5 +1,5 @@
 /**
- * Operation Polo staff control plane (studio-cart only).
+ * Sikh Unit staff control plane (studio-cart only).
  * Go-live load: 1 theatre, 40 studios, 3000 members.
  * One evening beat, ~5 bags per stop (~200 orders). Not 10k. Not one cart.
  * Durable state uses Postgres when DATABASE_URL is configured; local development falls back to memory.
@@ -17,7 +17,9 @@ import {
   kindLetter
 } from "./scale.mjs";
 import { SHOPS_30 } from "./shops-30.mjs";
-import { hasDurableStore, loadRuntimeState, saveRuntimeState } from "../lib/runtime-store.mjs";
+import { createStateRunner } from "../lib/commerce/transaction.mjs";
+import { isShowcaseEntry } from '../lib/commerce/showcase-mode.mjs';
+import { hasDurableStore, loadRuntimeState, saveRuntimeState, storageStatus } from "../lib/runtime-store.mjs";
 
 const SHOP_PIN = Object.fromEntries(SHOPS_30.shops.map(s => [s.stopId, s]));
 
@@ -27,7 +29,7 @@ function pinStudio(studio) {
   return { ...studio, lat: pin.lat, lng: pin.lng, seq: pin.seq, area: pin.area };
 }
 
-const DUMMY_DATA = process.env.DUMMY_DATA !== "0";
+const DUMMY_DATA = isShowcaseEntry() || process.env.DUMMY_DATA !== "0";
 
 export const WEEK_BEAT = "2026-08-31";
 export const NEXT_BEAT = "2026-09-01";
@@ -308,9 +310,9 @@ function indexOrders(orders) {
 }
 
 function createState() {
-  const orders = seedOrders();
+  const orders = DUMMY_DATA ? seedOrders() : [];
   const settlements = seedSettlements(orders);
-  const statement = seedStatement();
+  const statement = DUMMY_DATA ? seedStatement() : [];
   matchStatement(settlements, statement);
   const idx = indexOrders(orders);
   return {
@@ -319,11 +321,11 @@ function createState() {
     blob: false,
     beat: {
       beatDate: WEEK_BEAT,
-      open: true,
+      open: DUMMY_DATA,
       openedAt: "2026-08-30T06:15:00.000Z",
       closed: false,
       closedAt: null,
-      opening: openingMap(),
+      opening: DUMMY_DATA ? openingMap() : emptySkuMap(),
       owner: OWNER,
       slot: SLOT,
       theatre: THEATRE.name,
@@ -449,46 +451,24 @@ function skipDurableRead() {
   return DUMMY_DATA && process.env.NIA_STAFF_STORE_GETS !== "1";
 }
 
-async function runWithPersistentState(mutating, work) {
-  if (!hasDurableStore() || (!mutating && skipDurableRead())) return work();
-
-  for (let attempt = 0; attempt < 3; attempt++) {
-    let loaded;
-    try {
-      loaded = await loadRuntimeState(RUNTIME_STATE_KEY, snapshotState(createState()));
-    } catch (error) {
-      console.error("staff_state_load_failed", error);
-      return work();
-    }
-    try {
-      restoreState(loaded.value, loaded.storage);
-    } catch (error) {
-      console.error("staff_state_restore_failed", error);
-      resetDummy();
-    }
-    const result = await work();
-    if (!mutating) return result;
-    if (result && result.status >= 400) return result;
-    try {
-      const saved = await saveRuntimeState(RUNTIME_STATE_KEY, snapshotState(), loaded.version);
-      if (saved.ok) return result;
-    } catch (error) {
-      console.error("staff_state_save_failed", error);
-      return result;
-    }
-  }
-
-  return {
-    status: 409,
-    body: { error: "state_conflict", message: "Please try again." }
-  };
+// Serialise local requests; Postgres CAS handles concurrent serverless workers.
+const runWithPersistentState = createStateRunner({
+  durable: hasDurableStore,
+  load: () => loadRuntimeState(RUNTIME_STATE_KEY, snapshotState(createState())),
+  save: (value, version) => saveRuntimeState(RUNTIME_STATE_KEY, value, version),
+  snapshot: () => snapshotState(),
+  restore: (value, storage) => restoreState(value, storage || state.persist),
+  skipRead: skipDurableRead
+});
+export function withSaveState(work) {
+  return runWithPersistentState(true, () => work(state), true);
 }
 
 export async function staffStorageStatus() {
   if (!hasDurableStore()) return { storage: "memory", connected: false, version: 0 };
   try {
-    const loaded = await loadRuntimeState(RUNTIME_STATE_KEY, snapshotState(createState()));
-    return { storage: loaded.storage, connected: loaded.storage === "postgres", version: loaded.version };
+    const status = await storageStatus(RUNTIME_STATE_KEY);
+    return { storage: status.storage, connected: status.connected, version: status.version };
   } catch (error) {
     console.error("staff_storage_status_failed", error);
     return { storage: "memory", connected: false, version: 0 };
@@ -530,7 +510,7 @@ function remainingOnCart() {
   const opening = asStateObject(state.beat && state.beat.opening, {});
   for (const sku of Object.keys(rem)) rem[sku] = opening[sku] || 0;
   for (const o of state.orders || []) {
-    if (!["packed", "loaded", "at_stop", "collected"].includes(o.status)) continue;
+    if (o.beatDate !== state.beat.beatDate || (!["packed", "loaded", "at_stop", "collected", "return_pending"].includes(o.status) && !(o.source === "commerce" && o.status === "reserved"))) continue;
     for (const line of o.lines || []) rem[line.id] = (rem[line.id] || 0) - (Number(line.qty) || 1);
   }
   return rem;
@@ -650,7 +630,7 @@ export function ledgerOf(beatDate) {
       const q = Number(line.qty) || 1;
       if (o.status === "collected") skuQty(collected, line.id, q);
       else if (o.status === "missed") skuQty(missed, line.id, q);
-      else if (o.status !== "returned") skuQty(reserved, line.id, q);
+      else if (!["returned", "expired", "cancelled"].includes(o.status)) skuQty(reserved, line.id, q);
     }
   }
   for (const sku of Object.keys(opening)) {
@@ -1207,6 +1187,7 @@ export function cashPayload(query = {}) {
 export function saveCash({ orderId, method, upiRef, amount }) {
   const order = state.ordersById.get(orderId);
   if (!order) return { error: "order_not_found", status: 404 };
+  if (order.source === "commerce") return { error: "use_commerce_handover", status: 409 };
   order.method = method === "upi" ? "upi" : "cash";
   order.upiRef = String(upiRef || "");
   if (amount != null) order.amount = Number(amount) || order.amount;
@@ -1413,6 +1394,8 @@ export function openBeat({ opening, beatDate, replace }) {
 }
 
 export function closeBeat({ closing, beatDate }) {
+  const unresolved = state.orders.filter(o => o.source === "commerce" && o.beatDate === (beatDate || state.beat.beatDate) && (!["expired","cancelled","returned","collected"].includes(o.status) || (o.status === "collected" && o.payStatus !== "reconciled") || (o.status === "returned" && o.payment && !o.refund?.reconciled)));
+  if (unresolved.length) return { error: "commerce_orders_unresolved", status: 409, count: unresolved.length };
   const led = ledgerOf(beatDate);
   const closeMap = closing && typeof closing === "object" ? closing : {};
   const mismatch = [];
@@ -1443,6 +1426,7 @@ function expectedFrom(status) {
 export function scanOrder({ type, orderId, pickupCode, actor }) {
   const order = (orderId && state.ordersById.get(orderId)) || (pickupCode && state.ordersByCode.get(String(pickupCode).trim().toUpperCase()));
   if (!order) return { error: "order_not_found", status: 404 };
+  if (order.source === "commerce") return { error: "use_commerce_handover", status: 409 };
   const kind = SCAN_TYPES[type];
   if (!kind) return { error: "bad_scan_type", status: 400 };
   if (kind === "collected" && order.status === "collected") {
@@ -2057,6 +2041,7 @@ export function isStaffPath(p) {
 async function handleStaffOnce(req, res, path, body, url) {
   const q = queryOf(url);
   const method = req.method;
+  if (method !== "GET" && ["/dispatch","/biker"].includes(path) && state.orders.some(o => o.source === "commerce" && !["cancelled","expired","returned"].includes(o.status))) return {status:409,body:{error:"use_commerce_handover"}};
 
   const done = (result, fallback = 200) => ({ status: result.status || fallback, body: result });
   if (method === "GET" && path === "/connectors") return { status: 200, body: connectorsPayload() };

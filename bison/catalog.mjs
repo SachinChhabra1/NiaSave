@@ -1,5 +1,5 @@
 /**
- * Stable Bison hierarchy metadata.
+ * Stable Jat Unit hierarchy metadata.
  *
  * The source studio ids come from the 30 Jun 2026 group master already loaded
  * into the production booking references. Keeping this small catalog separate
@@ -82,7 +82,7 @@ export function buildStudioMaster(sites, bookings, date, existing = []) {
     });
   }
 
-  // Keep studios added from the live Bison master Sheet. The static catalog is
+  // Keep studios added from the live Living master Sheet. The static catalog is
   // only the original baseline; it must not discard later operational studios
   // whenever durable state is normalised.
   const catalogIds = new Set(rows.map(row => String(row.sourceStudioId || "")));

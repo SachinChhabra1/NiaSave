@@ -1,0 +1,17 @@
+# NiaBooks: automatic receipts and dated member entries
+
+8 September 2026. This update supersedes the earlier demo-only statement description where noted.
+
+NiaBooks now offers Money received, An expense and Sent home. Each opens a guided form with date, amount and description. Entries are server-stored against the authenticated member; members can edit or remove their own entries. A current-month statement is available even when external sources are not connected. The records remain labelled Added by you, with self-reported status in the CSV.
+
+Save payments and refunds are projected directly from the canonical commerce order's verified payment/refund records. Reserved, packed and unpaid orders are excluded. A payment is read once using the stable order reference; it is not duplicated from the separate payment-event list. The isolated browser test completed the operator handover/payment flow and verified that the same amount appeared automatically in NiaBooks.
+
+Live rent/membership receipts come from the canonical Living collection book, joined by the member storefront booking's exact contract ID. They are labelled From Live and remain read-only. The existing collection receipt model does not contain independent bank-verification evidence, so these rows are not marked verified for scoring. Deposit receipts are excluded from ordinary spending; a separate deposit/asset statement still needs to be added. Legacy/group accommodation contracts without a verified member identity bridge are not guessed into the statement.
+
+Personal entries live separately from source receipts within the shared operations runtime. POST /api/commerce/books/entries requires a member session, same-origin request, valid date/amount/description, an idempotency key, and a revision when editing/removing. One member cannot edit another member's entry or a source payment. Removal is a soft deletion. Source corrections remain the responsibility of the operating team. No general operator-on-behalf entry route has been enabled; staff can guide the member through the dated form, and future delegated entry needs explicit permission and an audit policy.
+
+Reads combine the two source books outside retryable database callbacks. A Living read failure is reported as incomplete and blocks the health indicator. Current partial periods are not treated as complete financial histories. A period containing personal entries cannot qualify as independently verified for the experimental health score. Partial budgeting remains useful without a score.
+
+Production NiaBooks is additionally gated by COMMERCE_BOOKS_ENABLED=1, alongside the existing durable-store and identity configuration gates. Do not activate this before the KYC/passkey, source coverage, privacy and production checks in the earlier brief. External payroll/bank data remains unconnected. The local preview still uses temporary memory storage; the user approved restarting and reloading its fictional records for this update.
+
+Validation: 46 commerce tests pass; production build passes. Desktop (1280px) and phone (390px) browser checks passed creation, editing, removal, persistence across page reload, source-payment immutability and automatic Save population. The member-facing demo was restarted and reloaded with user approval; a fictional Save receipt was recorded through Central to demonstrate the connection. The existing Central built-preview packaging blocker is unchanged.

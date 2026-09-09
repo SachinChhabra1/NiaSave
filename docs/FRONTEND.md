@@ -2,16 +2,16 @@
 
 ## Member phone
 
-The production phone is `member.html`. `vercel-build.sh` publishes it as `/index.html`.
+The current protected showcase uses `commerce.html` at `/`, published by the domain assembler. `member.html` is the earlier member surface. See [hosted-showcase.md](hosted-showcase.md) for the current release process and [para2-naming.md](para2-naming.md) for Unit ownership.
 
 The member journeys are:
 
 - **Live**: Studio and everyday services
 - **Earn**: Extra work, gig shifts, referrals and salary history
-- **Save**: Essentials catalogue, bag and pickup flow
-- **Send**: Monthly planning and insurance information; no money movement
+- **Save**: Essentials catalogue, bag, pickup/delivery and insurance information
+- **Send**: NiaBooks and monthly planning; bank transfers await integration
 
-The interface is available in English, Hindi, Bangla, Tamil and Kannada. Nia voice support is embedded using the ElevenLabs conversational widget.
+The interface is available in English, Hindi, Tamil, Kannada and Marathi.
 
 ## Staff surface
 

@@ -1,0 +1,41 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import http from 'node:http';
+import { randomBytes } from 'node:crypto';
+process.env.STAFF_AUTH_REQUIRED = '1';
+process.env.STAFF_PASSWORD = randomBytes(32).toString('base64url');
+process.env.JAT_STAFF_PASSWORD = randomBytes(32).toString('base64url');
+process.env.STAFF_TOKEN_SECRET = randomBytes(32).toString('base64url');
+process.env.DUMMY_DATA = '0';
+process.env.DEMO = '0';
+delete process.env.DATABASE_URL;
+delete process.env.POSTGRES_URL;
+const { default: handler, issueStaffToken } = await import('./server.mjs');
+
+test('named Jat operator can write and read Living; unsigned, expired and other-unit access is denied', async t => {
+  const server = http.createServer(handler);
+  await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
+  t.after(() => server.close());
+  const base = `http://127.0.0.1:${server.address().port}`;
+  const call = async (path, body, token) => {
+    const r = await fetch(base + path, {method:body?'POST':'GET',headers:{'content-type':'application/json',...(token?{authorization:`Bearer ${token}`}:{})},body:body?JSON.stringify(body):undefined});
+    return {status:r.status, body:await r.json()};
+  };
+  assert.equal((await call('/api/bison/tower')).status,401);
+  assert.equal((await call('/api/bison/data/import',{table:'members',commit:true,rows:[{member_name:'Not saved'}]})).status,401);
+  assert.equal((await call('/v1/staff/login',{email:'ajay.mahawar@nia.one',password:'wrong'})).status,401);
+  const login = await call('/v1/staff/login',{email:'ajay.mahawar@nia.one',password:process.env.JAT_STAFF_PASSWORD});
+  assert.equal(login.status,200);
+  assert.deepEqual(login.body.staff.desks,['living']);
+  assert.equal((await call('/v1/staff/login',{email:'admin@nia.one',password:process.env.JAT_STAFF_PASSWORD})).status,401);
+  assert.equal((await call('/v1/staff/login',{email:'ajay.mahawar@nia.one',password:process.env.STAFF_PASSWORD})).status,401);
+  const token = login.body.token;
+  assert.equal((await call('/api/bison/data/import',{table:'members',commit:true,rows:[{member_name:'UAT · Jat entry'}]},token)).status,200);
+  const result = await call('/api/bison/tower',null,token);
+  assert.equal(result.status,200);
+  assert.equal(result.body.kpis.members,1);
+  assert.equal((await call('/api/tower',null,token)).status,403);
+  assert.equal((await call('/api/dogra/state',null,token)).status,403);
+  const expired = issueStaffToken(login.body.staff,Date.now()-13*60*60*1000);
+  assert.equal((await call('/api/bison/tower',null,expired)).status,401);
+});

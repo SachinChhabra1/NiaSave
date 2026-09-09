@@ -1,6 +1,9 @@
 import memberUpdates from './member-updates/mr.js';
 // Member-interface translation draft; native-speaker review is required before pilot launch.
 export default {
+  "Your Nia setup link is ready. Confirm this is your phone, then use its screen lock.": "तुमची निया सेटअप लिंक तयार आहे. हा तुमचा फोन असल्याची खात्री करा, मग त्याचा स्क्रीन लॉक वापरा.",
+  "Ask your Nia team for a setup link after they verify your membership. Open it on your own phone within 10 minutes. No code to type.": "सदस्यत्वाची पडताळणी झाल्यानंतर निया टीमकडून सेटअप लिंक घ्या. ती 10 मिनिटांत तुमच्या स्वतःच्या फोनवर उघडा. कोड टाइप करण्याची गरज नाही.",
+
 "Use your own phone’s screen lock to sign in. No SMS code is needed.": "साइन इन करण्यासाठी तुमच्या स्वतःच्या फोनचा स्क्रीन लॉक वापरा. SMS कोडची गरज नाही.",
 "Sign in with a passkey": "पासकीने साइन इन करा",
 "First time or a replacement phone?": "पहिल्यांदा की बदललेला फोन?",

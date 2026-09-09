@@ -1,13 +1,22 @@
 const decode=value=>Uint8Array.from(atob(value.replace(/-/g,'+').replace(/_/g,'/')),x=>x.charCodeAt(0));
 const encode=value=>btoa(String.fromCharCode(...new Uint8Array(value))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
-export function passkeyMarkup({t}) {
-  return `<div class="stack"><p>${t('Use your own phone’s screen lock to sign in. No SMS code is needed.')}</p>
-    <button class="primary" data-action="passkey-signin">${t('Sign in with a passkey')}</button>
-    <details><summary>${t('First time or a replacement phone?')}</summary><form id="passkey-setup-form" class="stack">
-    <p>${t('Ask your Nia team to verify your membership and give you a setup code. Use it on your own phone within 10 minutes.')}</p>
-    <label>${t('Setup code')}<input name="setupToken" autocomplete="off" autocapitalize="none" spellcheck="false" minlength="43" maxlength="43" required></label>
+// Setup secrets arrive in the fragment, never in server URLs. Keep them only
+// in memory and remove them from browser history before making any API call.
+export function takePasskeySetup(location,history) {
+  if(!location.hash.startsWith('#setup?'))return '';
+  const token=new URLSearchParams(location.hash.slice(7)).get('token')||'';
+  history.replaceState(null,'',location.pathname+location.search+'#account');
+  return /^[A-Za-z0-9_-]{43}$/.test(token)?token:'';
+}
+export function passkeyMarkup({t,setup=false}) {
+  const form=`<form id="passkey-setup-form" class="stack">
+    <p>${t('Your Nia setup link is ready. Confirm this is your phone, then use its screen lock.')}</p>
     <label><input type="checkbox" name="ownPhone" required> ${t('This is my own phone, not a shared phone.')}</label>
-    <button class="primary" type="submit">${t('Set up my passkey')}</button></form></details>
+    <button class="primary" type="submit">${t('Set up my passkey')}</button></form>`;
+  return `<div class="stack">${setup?form:`<p>${t('Use your own phone’s screen lock to sign in. No SMS code is needed.')}</p>
+    <button class="primary" data-action="passkey-signin">${t('Sign in with a passkey')}</button>
+    <details><summary>${t('First time or a replacement phone?')}</summary>
+    <p>${t('Ask your Nia team for a setup link after they verify your membership. Open it on your own phone within 10 minutes. No code to type.')}</p></details>`}
     <p>${t('Lost access? Your Nia team will check your identity before restoring access. Your history stays with your membership.')}</p>
     <button data-action="help">${t('Contact your Nia team')}</button><div id="form-error" class="error-inline" role="alert"></div></div>`;
 }

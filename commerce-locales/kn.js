@@ -1,6 +1,9 @@
 import memberUpdates from './member-updates/kn.js';
 // Member-interface translation draft; native-speaker review is required before pilot launch.
 export default {
+  "Your Nia setup link is ready. Confirm this is your phone, then use its screen lock.": "ನಿಮ್ಮ Nia ಸೆಟಪ್ ಲಿಂಕ್ ಸಿದ್ಧವಾಗಿದೆ. ಇದು ನಿಮ್ಮ ಫೋನ್ ಎಂದು ದೃಢಪಡಿಸಿ, ನಂತರ ಅದರ ಸ್ಕ್ರೀನ್ ಲಾಕ್ ಬಳಸಿ.",
+  "Ask your Nia team for a setup link after they verify your membership. Open it on your own phone within 10 minutes. No code to type.": "ಸದಸ್ಯತ್ವ ಪರಿಶೀಲನೆಯ ನಂತರ ನಿಮ್ಮ Nia ತಂಡದಿಂದ ಸೆಟಪ್ ಲಿಂಕ್ ಪಡೆಯಿರಿ. ಅದನ್ನು 10 ನಿಮಿಷಗಳೊಳಗೆ ನಿಮ್ಮ ಸ್ವಂತ ಫೋನ್‌ನಲ್ಲಿ ತೆರೆಯಿರಿ. ಕೋಡ್ ಟೈಪ್ ಮಾಡುವ ಅಗತ್ಯವಿಲ್ಲ.",
+
 "Use your own phone’s screen lock to sign in. No SMS code is needed.": "ಸೈನ್ ಇನ್ ಮಾಡಲು ನಿಮ್ಮ ಸ್ವಂತ ಫೋನಿನ ಸ್ಕ್ರೀನ್ ಲಾಕ್ ಬಳಸಿ. SMS ಕೋಡ್ ಅಗತ್ಯವಿಲ್ಲ.",
 "Sign in with a passkey": "ಪಾಸ್‌ಕೀ ಬಳಸಿ ಸೈನ್ ಇನ್ ಮಾಡಿ",
 "First time or a replacement phone?": "ಮೊದಲ ಬಾರಿಯೇ ಅಥವಾ ಬದಲಿ ಫೋನೇ?",

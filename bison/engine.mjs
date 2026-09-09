@@ -6,7 +6,7 @@ import { expireNests } from '../lib/commerce/nests.mjs';
  * Theatre -> studio -> nest, member contracts, clocks and collections.
  */
 import { randomUUID, createSign, createHash } from "node:crypto";
-import { hasDurableStore, loadRuntimeState, saveRuntimeState } from "../lib/runtime-store.mjs";
+import { hasDurableStore, loadRuntimeState, saveRuntimeState, storageStatus } from "../lib/runtime-store.mjs";
 import { STUDIO_COUNT, buildStudioMaster, sourceStudioId, studioIdForSource } from "./catalog.mjs";
 
 const DUMMY_DATA = isShowcaseEntry() || process.env.DUMMY_DATA !== "0";
@@ -545,8 +545,9 @@ export function withLivingState(work) {
 export async function bisonStorageStatus() {
   if (!hasDurableStore()) return { storage: "memory", connected: false, version: 0, product: "bison", schemaVersion: SCHEMA_VERSION };
   try {
-    const loaded = await loadRuntimeState(RUNTIME_STATE_KEY, snapshotState());
-    return { storage: loaded.storage, connected: loaded.storage === "postgres", version: loaded.version, product: "bison", schemaVersion: SCHEMA_VERSION };
+    // A health probe reads the version only; it never pulls the Living book itself.
+    const status = await storageStatus(RUNTIME_STATE_KEY);
+    return { storage: status.storage, connected: status.connected, version: status.version, product: "bison", schemaVersion: SCHEMA_VERSION };
   } catch (error) {
     console.error("bison_storage_status_failed", error);
     return { storage: "memory", connected: false, version: 0, product: "bison", schemaVersion: SCHEMA_VERSION };

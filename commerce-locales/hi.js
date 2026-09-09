@@ -1,6 +1,22 @@
 import memberUpdates from './member-updates/hi.js';
 // Member-interface translation draft; native-speaker review is required before pilot launch.
 export default {
+  "Member sign in": "सदस्य साइन इन",
+  "Contact your Nia team": "अपनी निया टीम से संपर्क करें",
+"Use your own phone’s screen lock to sign in. No SMS code is needed.": "साइन इन करने के लिए अपने फोन का स्क्रीन लॉक इस्तेमाल करें। SMS कोड की ज़रूरत नहीं है।",
+"Sign in with a passkey": "पासकी से साइन इन करें",
+"First time or a replacement phone?": "पहली बार या नया फोन?",
+"Ask your Nia team to verify your membership and give you a setup code. Use it on your own phone within 10 minutes.": "अपनी निया टीम से सदस्यता जाँचकर सेटअप कोड देने को कहें। 10 मिनट के भीतर अपने फोन पर इस्तेमाल करें।",
+"Setup code": "सेटअप कोड",
+"This is my own phone, not a shared phone.": "यह मेरा अपना फोन है, साझा फोन नहीं।",
+"Set up my passkey": "मेरी पासकी बनाएँ",
+"Lost access? Your Nia team will check your identity before restoring access. Your history stays with your membership.": "प्रवेश खो गया? दोबारा प्रवेश देने से पहले निया टीम आपकी पहचान जाँचेगी। आपका इतिहास आपकी सदस्यता के साथ रहेगा।",
+"Passkeys are unavailable on this device. Ask your Nia team for help.": "इस डिवाइस पर पासकी उपलब्ध नहीं है। निया टीम से मदद लें।",
+"Sign-in was cancelled. Tap again when you are ready.": "साइन इन रद्द हुआ। तैयार हों तो फिर टैप करें।",
+"This setup code expired or was used. Ask your Nia team for a new code.": "यह सेटअप कोड समाप्त हो गया या इस्तेमाल हो चुका है। निया टीम से नया कोड लें।",
+"Sign-in expired. Please try again.": "साइन इन की समय सीमा समाप्त हुई। फिर कोशिश करें।",
+"This passkey could not be accepted. Try again or ask your Nia team for help.": "यह पासकी स्वीकार नहीं हुई। फिर कोशिश करें या निया टीम से मदद लें।",
+
   ...memberUpdates,
   "Language": "भाषा",
   "Change language": "भाषा बदलें",

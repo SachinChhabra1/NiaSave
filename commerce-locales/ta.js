@@ -1,6 +1,20 @@
 import memberUpdates from './member-updates/ta.js';
 // Member-interface translation draft; native-speaker review is required before pilot launch.
 export default {
+"Use your own phone’s screen lock to sign in. No SMS code is needed.": "உங்கள் சொந்த ஃபோனின் திரைப் பூட்டைப் பயன்படுத்தி உள்நுழையுங்கள். SMS குறியீடு தேவையில்லை.",
+"Sign in with a passkey": "பாஸ்கீ மூலம் உள்நுழையுங்கள்",
+"First time or a replacement phone?": "முதல் முறையா அல்லது மாற்று ஃபோனா?",
+"Ask your Nia team to verify your membership and give you a setup code. Use it on your own phone within 10 minutes.": "உறுப்பினர் விவரங்களைச் சரிபார்த்து அமைப்புக் குறியீடு வழங்க உங்கள் நியா குழுவிடம் கேளுங்கள். 10 நிமிடங்களுக்குள் உங்கள் சொந்த ஃபோனில் பயன்படுத்துங்கள்.",
+"Setup code": "அமைப்புக் குறியீடு",
+"This is my own phone, not a shared phone.": "இது எனது சொந்த ஃபோன், பகிர்ந்து பயன்படுத்தும் ஃபோன் அல்ல.",
+"Set up my passkey": "எனது பாஸ்கீயை அமைக்கவும்",
+"Lost access? Your Nia team will check your identity before restoring access. Your history stays with your membership.": "அணுகலை இழந்துவிட்டீர்களா? மீண்டும் அணுகல் வழங்கும் முன் நியா குழு உங்கள் அடையாளத்தைச் சரிபார்க்கும். உங்கள் பதிவுகள் உறுப்பினர் கணக்குடன் இருக்கும்.",
+"Passkeys are unavailable on this device. Ask your Nia team for help.": "இந்தச் சாதனத்தில் பாஸ்கீ கிடைக்கவில்லை. நியா குழுவிடம் உதவி கேளுங்கள்.",
+"Sign-in was cancelled. Tap again when you are ready.": "உள்நுழைவு ரத்து செய்யப்பட்டது. தயாரானதும் மீண்டும் தட்டுங்கள்.",
+"This setup code expired or was used. Ask your Nia team for a new code.": "இந்த அமைப்புக் குறியீடு காலாவதியானது அல்லது பயன்படுத்தப்பட்டது. நியா குழுவிடம் புதிய குறியீடு கேளுங்கள்.",
+"Sign-in expired. Please try again.": "உள்நுழைவு நேரம் முடிந்தது. மீண்டும் முயற்சிக்கவும்.",
+"This passkey could not be accepted. Try again or ask your Nia team for help.": "இந்த பாஸ்கீயை ஏற்க முடியவில்லை. மீண்டும் முயற்சிக்கவும் அல்லது நியா குழுவிடம் உதவி கேளுங்கள்.",
+
   ...memberUpdates,
   "That Nest is no longer available for these dates. Choose another location or date.": "இந்தத் தேதிகளில் அந்த நெஸ்ட் கிடைக்கவில்லை. வேறு இடம் அல்லது தேதியைத் தேர்ந்தெடுக்கவும்.",
   "Choose a move-in date within the next 30 days.": "அடுத்த 30 நாட்களுக்குள் குடியேறும் தேதியைத் தேர்ந்தெடுக்கவும்.",

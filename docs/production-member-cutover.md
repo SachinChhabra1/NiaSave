@@ -30,7 +30,7 @@ NiaSave:
 - CENTRAL_ORIGIN=https://rafiqicentral.com; EARN_SOURCE=central.
 - COMMERCE_STOREFRONT=1; COMMERCE_ENABLED=1; COMMERCE_MEMBER_AUTH=passkey; COMMERCE_BOOKS_ENABLED=1.
 - DUMMY_DATA=0; DEMO=0; NIA_SHOWCASE=0.
-- STAFF_AUTH_REQUIRED=1; generate and store new strong STAFF_TOKEN_SECRET and STAFF_PASSWORD for the legacy operator gate. Central's signed operator path remains the primary control surface.
+- STAFF_AUTH_REQUIRED=1; generate and store new strong STAFF_TOKEN_SECRET and STAFF_PASSWORD for the legacy operator gate. Generate a separate JAT_STAFF_PASSWORD for the named Living operator, so his password cannot sign in as any legacy administrator. Central's signed operator path remains the primary control surface.
 - NIA_RUNTIME_STATE_KEY=operation-polo-production.
 - MEMBER_INVITE_GATE=1; MEMBER_INVITE_PASSWORD reuses the current invitation password; MEMBER_SITE_ORIGIN=https://www.niasave.com.
 
@@ -38,7 +38,7 @@ NiaSave:
 
 Sachin named ajay.mahawar@nia.one as the Jat data-entry owner. The release grants this named operator Living access, without Sikh or Dogra desk permissions, and adds an email/password prompt on protected legacy desks. Desk data requests wait for sign-in; an expired session requires sign-in again without automatically replaying a write. Central's staff sign-in remains unchanged.
 
-Deliver the new legacy operator password privately to Sachin for handover to Ajay; do not email or message credentials without Sachin's explicit instruction. The invitation password does not replace this operator password. Ajay's entry point is https://www.niasave.com/bison-data.html (legacy technical path retained). Ajay signs in with his Nia email and the new operator password.
+Deliver only the new JAT_STAFF_PASSWORD privately to Sachin for handover to Ajay; retain the separate legacy administrator STAFF_PASSWORD with Sachin. Do not email or message credentials without Sachin's explicit instruction. The invitation password does not replace this operator password. Ajay's entry point is https://www.niasave.com/bison-data.html (legacy technical path retained). Ajay signs in with his Nia email and the new operator password.
 
 Preflight passed: named-operator login, denied unauthenticated writes, denied other-unit access, and a dated booking entered in the browser, saved to an isolated UAT database book, then read after a full API restart and browser reload. The named-operator audit persisted too. Desktop and phone sign-in were checked with no browser runtime errors. The temporary test book was removed after verification. This is preflight evidence, not proof of a production save.
 

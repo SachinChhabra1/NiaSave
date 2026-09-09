@@ -281,7 +281,8 @@ export async function handler(req, res) {
       const email = String(body.email || "").trim().toLowerCase();
       const password = String(body.password || "");
       const found = staffSeed.find(s => s.email === email);
-      if (!found || password !== STAFF_PASSWORD) return json(res, 401, { error: "bad_credentials" });
+      const expectedPassword = found?.id === "stf-ajay-mahawar" ? process.env.JAT_STAFF_PASSWORD : STAFF_PASSWORD;
+      if (!found || !expectedPassword || password !== expectedPassword) return json(res, 401, { error: "bad_credentials" });
       const token = issueStaffToken(found);
       const record = { ...found, tokenIssuedAt: now() };
       state.tokens.set(tokenHash(token), record);

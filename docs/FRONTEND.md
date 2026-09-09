@@ -11,7 +11,7 @@ The member journeys are:
 - **Save**: Essentials catalogue, bag, pickup/delivery and insurance information
 - **Send**: NiaBooks and monthly planning; bank transfers await integration
 
-The interface is available in English, Hindi, Tamil, Kannada and Marathi. 
+The interface is available in English, Hindi, Tamil, Kannada and Marathi.
 
 ## Staff surface
 

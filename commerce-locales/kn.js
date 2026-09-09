@@ -1,6 +1,20 @@
 import memberUpdates from './member-updates/kn.js';
 // Member-interface translation draft; native-speaker review is required before pilot launch.
 export default {
+"Use your own phone’s screen lock to sign in. No SMS code is needed.": "ಸೈನ್ ಇನ್ ಮಾಡಲು ನಿಮ್ಮ ಸ್ವಂತ ಫೋನಿನ ಸ್ಕ್ರೀನ್ ಲಾಕ್ ಬಳಸಿ. SMS ಕೋಡ್ ಅಗತ್ಯವಿಲ್ಲ.",
+"Sign in with a passkey": "ಪಾಸ್‌ಕೀ ಬಳಸಿ ಸೈನ್ ಇನ್ ಮಾಡಿ",
+"First time or a replacement phone?": "ಮೊದಲ ಬಾರಿಯೇ ಅಥವಾ ಬದಲಿ ಫೋನೇ?",
+"Ask your Nia team to verify your membership and give you a setup code. Use it on your own phone within 10 minutes.": "ನಿಮ್ಮ ಸದಸ್ಯತ್ವ ಪರಿಶೀಲಿಸಿ ಸೆಟಪ್ ಕೋಡ್ ನೀಡಲು ನಿಯಾ ತಂಡವನ್ನು ಕೇಳಿ. 10 ನಿಮಿಷಗಳೊಳಗೆ ನಿಮ್ಮ ಸ್ವಂತ ಫೋನಿನಲ್ಲಿ ಬಳಸಿ.",
+"Setup code": "ಸೆಟಪ್ ಕೋಡ್",
+"This is my own phone, not a shared phone.": "ಇದು ನನ್ನ ಸ್ವಂತ ಫೋನ್, ಹಂಚಿಕೊಂಡ ಫೋನ್ ಅಲ್ಲ.",
+"Set up my passkey": "ನನ್ನ ಪಾಸ್‌ಕೀ ಹೊಂದಿಸಿ",
+"Lost access? Your Nia team will check your identity before restoring access. Your history stays with your membership.": "ಪ್ರವೇಶ ಕಳೆದುಕೊಂಡಿದ್ದೀರಾ? ಮರುಪ್ರವೇಶ ನೀಡುವ ಮೊದಲು ನಿಯಾ ತಂಡ ನಿಮ್ಮ ಗುರುತನ್ನು ಪರಿಶೀಲಿಸುತ್ತದೆ. ನಿಮ್ಮ ದಾಖಲೆಗಳು ಸದಸ್ಯತ್ವದೊಂದಿಗೆ ಉಳಿಯುತ್ತವೆ.",
+"Passkeys are unavailable on this device. Ask your Nia team for help.": "ಈ ಸಾಧನದಲ್ಲಿ ಪಾಸ್‌ಕೀ ಲಭ್ಯವಿಲ್ಲ. ನಿಯಾ ತಂಡದ ಸಹಾಯ ಕೇಳಿ.",
+"Sign-in was cancelled. Tap again when you are ready.": "ಸೈನ್ ಇನ್ ರದ್ದಾಗಿದೆ. ಸಿದ್ಧರಾದಾಗ ಮತ್ತೆ ಟ್ಯಾಪ್ ಮಾಡಿ.",
+"This setup code expired or was used. Ask your Nia team for a new code.": "ಈ ಸೆಟಪ್ ಕೋಡ್ ಅವಧಿ ಮುಗಿದಿದೆ ಅಥವಾ ಬಳಸಲಾಗಿದೆ. ಹೊಸ ಕೋಡ್‌ಗಾಗಿ ನಿಯಾ ತಂಡವನ್ನು ಕೇಳಿ.",
+"Sign-in expired. Please try again.": "ಸೈನ್ ಇನ್ ಅವಧಿ ಮುಗಿದಿದೆ. ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
+"This passkey could not be accepted. Try again or ask your Nia team for help.": "ಈ ಪಾಸ್‌ಕೀ ಸ್ವೀಕರಿಸಲಾಗಲಿಲ್ಲ. ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ ಅಥವಾ ನಿಯಾ ತಂಡದ ಸಹಾಯ ಕೇಳಿ.",
+
   ...memberUpdates,
   "That Nest is no longer available for these dates. Choose another location or date.": "ಈ ದಿನಾಂಕಗಳಿಗೆ ಆ ನೆಸ್ಟ್ ಲಭ್ಯವಿಲ್ಲ. ಬೇರೆ ಸ್ಥಳ ಅಥವಾ ದಿನಾಂಕ ಆರಿಸಿ.",
   "Choose a move-in date within the next 30 days.": "ಮುಂದಿನ 30 ದಿನಗಳೊಳಗಿನ ವಾಸ ಪ್ರಾರಂಭದ ದಿನಾಂಕ ಆರಿಸಿ.",

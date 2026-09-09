@@ -1,6 +1,20 @@
 import memberUpdates from './member-updates/mr.js';
 // Member-interface translation draft; native-speaker review is required before pilot launch.
 export default {
+"Use your own phone’s screen lock to sign in. No SMS code is needed.": "साइन इन करण्यासाठी तुमच्या स्वतःच्या फोनचा स्क्रीन लॉक वापरा. SMS कोडची गरज नाही.",
+"Sign in with a passkey": "पासकीने साइन इन करा",
+"First time or a replacement phone?": "पहिल्यांदा की बदललेला फोन?",
+"Ask your Nia team to verify your membership and give you a setup code. Use it on your own phone within 10 minutes.": "तुमचे सदस्यत्व तपासून सेटअप कोड देण्यास निया टीमला सांगा. 10 मिनिटांत तुमच्या स्वतःच्या फोनवर वापरा.",
+"Setup code": "सेटअप कोड",
+"This is my own phone, not a shared phone.": "हा माझा स्वतःचा फोन आहे, सामायिक फोन नाही.",
+"Set up my passkey": "माझी पासकी तयार करा",
+"Lost access? Your Nia team will check your identity before restoring access. Your history stays with your membership.": "प्रवेश गमावला? पुन्हा प्रवेश देण्यापूर्वी निया टीम तुमची ओळख तपासेल. तुमचा इतिहास सदस्यत्वासोबत राहील.",
+"Passkeys are unavailable on this device. Ask your Nia team for help.": "या उपकरणावर पासकी उपलब्ध नाही. निया टीमची मदत घ्या.",
+"Sign-in was cancelled. Tap again when you are ready.": "साइन इन रद्द झाले. तयार झाल्यावर पुन्हा टॅप करा.",
+"This setup code expired or was used. Ask your Nia team for a new code.": "हा सेटअप कोड कालबाह्य झाला किंवा वापरला गेला. निया टीमकडून नवीन कोड घ्या.",
+"Sign-in expired. Please try again.": "साइन इनची वेळ संपली. पुन्हा प्रयत्न करा.",
+"This passkey could not be accepted. Try again or ask your Nia team for help.": "ही पासकी स्वीकारता आली नाही. पुन्हा प्रयत्न करा किंवा निया टीमची मदत घ्या.",
+
   ...memberUpdates,
   "That Nest is no longer available for these dates. Choose another location or date.": "या तारखांसाठी ती नेस्ट उपलब्ध नाही. दुसरे ठिकाण किंवा तारीख निवडा.",
   "Choose a move-in date within the next 30 days.": "पुढील ३० दिवसांत राहायला येण्याची तारीख निवडा.",

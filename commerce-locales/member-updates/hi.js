@@ -1,5 +1,10 @@
 // Translation draft; native-speaker review is required before launch.
 export default {
+  "Previous applications": "पिछले आवेदन",
+  "Historical record": "पुराना रिकॉर्ड",
+  "Last recorded status": "अंतिम दर्ज स्थिति",
+  "Earlier records kept for reference. These are not current application updates.": "पुराने रिकॉर्ड संदर्भ के लिए रखे गए हैं। ये आवेदन की वर्तमान जानकारी नहीं हैं।",
+
   "Calculator · not saved": "कैलकुलेटर · सहेजा नहीं गया",
   "This draft stays only while this page is open. Account saving is not available yet.": "यह मसौदा पेज खुला रहने तक ही रहेगा। खाते में सहेजना अभी उपलब्ध नहीं है।",
   "What should I include?": "क्या शामिल करूँ?",

@@ -1,5 +1,10 @@
 // Translation draft; native-speaker review is required before launch.
 export default {
+  "Previous applications": "ಹಿಂದಿನ ಅರ್ಜಿಗಳು",
+  "Historical record": "ಹಳೆಯ ದಾಖಲೆ",
+  "Last recorded status": "ಕೊನೆಯದಾಗಿ ದಾಖಲಾದ ಸ್ಥಿತಿ",
+  "Earlier records kept for reference. These are not current application updates.": "ಹಿಂದಿನ ದಾಖಲೆಗಳನ್ನು ಉಲ್ಲೇಖಕ್ಕಾಗಿ ಉಳಿಸಲಾಗಿದೆ. ಇವು ಅರ್ಜಿಯ ಪ್ರಸ್ತುತ ಮಾಹಿತಿಯಲ್ಲ.",
+
   "Calculator · not saved": "ಲೆಕ್ಕಾಚಾರ · ಉಳಿಸಲಾಗಿಲ್ಲ",
   "This draft stays only while this page is open. Account saving is not available yet.": "ಈ ಪುಟ ತೆರೆದಿರುವವರೆಗೆ ಮಾತ್ರ ಕರಡು ಉಳಿಯುತ್ತದೆ. ಖಾತೆಯಲ್ಲಿ ಉಳಿಸುವುದು ಇನ್ನೂ ಲಭ್ಯವಿಲ್ಲ.",
   "What should I include?": "ಏನನ್ನು ಸೇರಿಸಬೇಕು?",

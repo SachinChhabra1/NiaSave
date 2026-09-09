@@ -1,5 +1,10 @@
 // Translation draft; native-speaker review is required before launch.
 export default {
+  "Previous applications": "முந்தைய விண்ணப்பங்கள்",
+  "Historical record": "முந்தைய பதிவு",
+  "Last recorded status": "கடைசியாகப் பதிவான நிலை",
+  "Earlier records kept for reference. These are not current application updates.": "முந்தைய பதிவுகள் குறிப்புக்காக வைக்கப்பட்டுள்ளன. இவை விண்ணப்பத்தின் தற்போதைய தகவல்கள் அல்ல.",
+
   "Calculator · not saved": "கணிப்பான் · சேமிக்கப்படவில்லை",
   "This draft stays only while this page is open. Account saving is not available yet.": "இந்தப் பக்கம் திறந்திருக்கும் வரை மட்டுமே வரைவு இருக்கும். கணக்கில் சேமிப்பது இன்னும் கிடைக்கவில்லை.",
   "What should I include?": "எதைச் சேர்க்க வேண்டும்?",

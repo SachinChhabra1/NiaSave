@@ -1,5 +1,10 @@
 // Translation draft; native-speaker review is required before launch.
 export default {
+  "Previous applications": "मागील अर्ज",
+  "Historical record": "जुनी नोंद",
+  "Last recorded status": "शेवटची नोंदवलेली स्थिती",
+  "Earlier records kept for reference. These are not current application updates.": "जुन्या नोंदी संदर्भासाठी ठेवल्या आहेत. या अर्जाच्या सध्याच्या स्थितीच्या नोंदी नाहीत.",
+
   "Calculator · not saved": "गणक · जतन केलेले नाही",
   "This draft stays only while this page is open. Account saving is not available yet.": "हे पान उघडे असेपर्यंतच हा मसुदा राहील. खात्यात जतन करणे अद्याप उपलब्ध नाही.",
   "What should I include?": "काय समाविष्ट करावे?",

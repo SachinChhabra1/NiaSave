@@ -1,5 +1,5 @@
 /**
- * NiaSave P0 API. Operation Polo is Save. Operation Bison is Living.
+ * NiaSave P0 API. Sikh Unit owns Save. Jat Unit owns Living. Legacy API identifiers remain stable.
  * Demo member 9876541042 / NIA-1042 remains while OTP and payment are skipped.
  * Nest rupee 2200 interim. Send-home rail not configured.
  * Staff desk contract only. Member phone is owned elsewhere — do not rename tabs.

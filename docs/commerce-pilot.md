@@ -64,8 +64,8 @@ Keep the main-site switch off until the identity connection, clean canonical sta
 
 - 21 commerce tests: server pricing, duplicate requests, concurrent last-unit competition, role and member isolation, origin checks, cancellation, expiry and physical return, independent UPI verification, refund/reconciliation records, recovery session revocation and production preview rejection.
 - Injectable storage tests cover failed load/save, compare-and-swap conflict replay, exhausted retries and local concurrency/rollback. These do not replace a real Postgres integration run.
-- Existing Save self-test and 16 Bison/staff-auth tests pass.
-- Production storefront build and naming checks pass. The pre-existing Tanot image resolution warning remains; the production build separately copies that asset.
+- Existing Save self-test and 16 Living/staff-auth tests pass.
+- Production storefront build and naming checks pass. The pre-existing Dogra Unit image resolution warning remains; the production build separately copies that asset.
 - Browser: member reservation, same-order operations fulfilment, unpaid handover rejection, simulated receipt verification and bank close, plus investor read-only access.
 - Catalogue layout inspected at 320, 360, 390, 412, 768, 1024 and 1440 CSS pixels; no horizontal page overflow in those checks.
 
@@ -77,7 +77,7 @@ Primary navigation is now **Live, Earn, Save, Send — LESS · Less Spends**. Th
 
 | Header | Offering | Existing ownership / current connection |
 | --- | --- | --- |
-| Live | Nests | Jat Unit; writes the existing Bison Living bookings and contracts |
+| Live | Nests | Jat Unit; writes the existing Jat Unit Living bookings and contracts |
 | Earn | Work | Walk2Work; Central publishes verified demand as jobs, member applications share the operations record |
 | Save | Essentials and insurance | Sikh Unit for essentials; medical and loss-of-pay insurance visible but purchase disabled pending insurer integration and policy terms |
 | Send | Send money home | Payments-bank partner, not a separate module; method shown, transfers disabled until integration is complete |

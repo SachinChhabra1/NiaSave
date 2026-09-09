@@ -1,5 +1,7 @@
 # NiaSave production handover
 
+Current naming and ownership: [Para 2 naming contract](para2-naming.md). This supersedes retired operation names and any conflicting KYC ownership below.
+
 As of 3 September 2026
 
 ## 1. Current system

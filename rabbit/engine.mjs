@@ -1,5 +1,5 @@
 /**
- * Operation Polo staff control plane (studio-cart only).
+ * Sikh Unit staff control plane (studio-cart only).
  * Go-live load: 1 theatre, 40 studios, 3000 members.
  * One evening beat, ~5 bags per stop (~200 orders). Not 10k. Not one cart.
  * Durable state uses Postgres when DATABASE_URL is configured; local development falls back to memory.

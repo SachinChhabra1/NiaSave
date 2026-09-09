@@ -1,5 +1,7 @@
 # Central → NiaSave: implementation handoff for Claude
 
+Current naming and ownership: [Para 2 naming contract](para2-naming.md). This supersedes retired operation names and any conflicting KYC ownership below.
+
 Status: 8 September 2026. Build requirements, not a claim of completed production integration.
 
 ## Product decision

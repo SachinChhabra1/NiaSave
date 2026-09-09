@@ -1,5 +1,7 @@
 # NiaBooks — Central integration and score brief
 
+Current naming and ownership: [Para 2 naming contract](para2-naming.md). This supersedes retired operation names and any conflicting KYC ownership below.
+
 8 September 2026 · Extension to the 2 Para / NiaSave build-closure brief
 
 ## Member outcome

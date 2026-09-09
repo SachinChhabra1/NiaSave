@@ -16,7 +16,7 @@
   window.NIA_STAFF_READY = Promise.resolve({ id: "stf-open-desk", name: "2 Para desk", role: "open" });
 })();
 
-/* Keep every staff desk connected to the Rafiqi command center. Do not rewrite Polo / Bison / Tanot. */
+/* Keep every staff desk connected to the Rafiqi command center. Use Sikh, Jat, Dogra and Assam Unit names; technical routes remain stable. */
 (function () {
   var commandCenterUrl = "https://rafiqicentral.com/2para";
 
@@ -133,7 +133,7 @@
   else start();
 })();
 
-/* Polo staff rail: highlight current desk and switch ops.html panes. */
+/* Sikh Unit staff rail: highlight current desk and switch ops.html panes. */
 (function () {
   function pane(name) {
     var tower = document.querySelector(".tower");

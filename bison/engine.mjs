@@ -2,7 +2,7 @@ import { createStateRunner } from '../lib/commerce/transaction.mjs';
 import { isShowcaseEntry } from '../lib/commerce/showcase-mode.mjs';
 import { expireNests } from '../lib/commerce/nests.mjs';
 /**
- * Bison Living control plane.
+ * Jat Unit Living control plane (legacy bison identifiers remain stable).
  * Theatre -> studio -> nest, member contracts, clocks and collections.
  */
 import { randomUUID, createSign, createHash } from "node:crypto";
@@ -14,7 +14,7 @@ const RUNTIME_STATE_KEY = process.env.NIA_BISON_STATE_KEY || "operation-bison";
 const HOLD_FILL_RS = 2000;
 const TAX_PCT = 12;
 const NEST_RATE = 2200;
-const SOURCE = "Bison Living book";
+const SOURCE = "Jat Unit · Living book";
 const OCC_TARGET = 78;
 const SCHEMA_VERSION = 2;
 

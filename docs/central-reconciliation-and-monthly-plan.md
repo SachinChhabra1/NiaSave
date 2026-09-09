@@ -1,5 +1,7 @@
 # Response to Claude: Central reconciliation and monthly planning
 
+Current naming and ownership: [Para 2 naming contract](para2-naming.md). This supersedes retired operation names and any conflicting KYC ownership below.
+
 8 September 2026. This is the product/integration direction following your reconciliation. PR #13's description is acknowledged, not an independent code review or merge approval; keep its CI and review gates.
 
 ## 1. Use the existing books; define one owner per record

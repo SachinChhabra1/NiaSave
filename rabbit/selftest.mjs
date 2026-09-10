@@ -11,7 +11,9 @@ import {
 import { randomBytes } from "node:crypto";
 process.env.STAFF_TOKEN_SECRET=randomBytes(32).toString("base64url");
 const {handler,issueStaffToken}=await import("../api/server.mjs");
+const {registerStaffSession}=await import("../lib/staff-auth.mjs");
 const selfTestStaffToken=issueStaffToken({id:"stf-admin",email:"admin@nia.one"});
+await registerStaffSession(selfTestStaffToken);
 import { asRuntimeValue } from "../lib/runtime-store.mjs";
 import { existsSync, readFileSync } from "fs";
 

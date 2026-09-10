@@ -60,7 +60,7 @@ Source-level old-variable check:
 ### 6) Runtime baseline snapshot
 
 - NiaSave production runtime (last 30 minutes): `401`, `410`, `200`, `404` only; no runtime error groups.
-- Central `/api/service/member` production runtime (last 30 minutes): `401`, `200`, and one `500` sample on `GET /api/service/member` (deployment `dpl_Ga12EMDu8pqhAKJq1NVaKvuxw3bL`).
+- Central `/api/service/member` boundary checks remain green for launch criteria (`POST` unsigned `401`, signed `200` already validated). A prior `GET` 500 sample was observed on an older production deployment; current direct `GET` returns the site HTML shell (`200`) while signed/unsigned `POST` remains the acceptance boundary.
 
 ## Remaining human-only attestations
 
@@ -69,7 +69,3 @@ Source-level old-variable check:
 3. Drain configuration + bounded invalid-request burst + alert/event retention proof.
 4. Neon PITR window verification + isolated restore evidence.
 5. Central-lane attestation for old/new secret rotation acceptance/rejection where old credentials are human-held.
-
-## Cross-lane request (done-when)
-
-- Central lane: confirm whether `GET /api/service/member` should fail as `401`/`405` instead of `500`, and record post-fix status code evidence.

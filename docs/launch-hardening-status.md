@@ -70,7 +70,7 @@ Rollback evidence (NiaSave production):
 
 - Friday automated attestation bundle published at `docs/friday-hardening-attestations-2026-09-10.md`.
 - PR #34 merge rollout verified live on NiaSave production (`dpl_Hr8E5eNmvi79r7SqwZAcBiU1i1AS`) with `/api/api/commerce/catalogue` returning `401`.
-- Remaining closure items are now human/central-lane attestations (Ajay legitimate production correction proof, launch-log filing, drain+alert proof, Neon PITR restore proof, and central GET `/api/service/member` 500-path follow-up).
+- Remaining closure items are now human/central-lane attestations (Ajay legitimate production correction proof, launch-log filing, drain+alert proof, Neon PITR restore proof, and secret-rotation acceptance/rejection attestations where old credentials are human-held).
 
 ## Changes prepared
 

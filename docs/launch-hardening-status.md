@@ -36,8 +36,10 @@ Thursday items 2-5 status:
 
 Friday hardening items started (payments excluded):
 - NiaSave production headers validated on live responses (`Strict-Transport-Security`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, strict CSP; invite and desk gates still enforce 401).
+- Staff cookie hardening spot-check passed: `POST /api/v1/staff/logout` returns `200` and clears `__Host-nia_staff_page` with `Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=0`.
 - UAT protection validated: direct unauthenticated requests to `niasave-access-uat.vercel.app` and `rafiqi-central-access-uat.vercel.app` redirect to Vercel SSO (`302` to `vercel.com/sso-api`).
 - NiaSave production health endpoints return `200` with `demo:false` and connected Postgres-backed stores.
+- Central and NiaSave runtime status baselines captured from Vercel logs for alert tuning (`/api/service/member` shows `401` and `200`; NiaSave shows expected `401` gate and `410` preview-login rejection traffic).
 
 Blocking follow-ups:
 - `rafiqi-central/docs/launch-log.md` heartbeat append is still blocked from this workspace because the central private repository path is not available here.

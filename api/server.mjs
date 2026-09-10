@@ -20,9 +20,11 @@ import { readDograState, writeDograState } from "../lib/dogra-store.mjs";
 
 const PORT = Number(process.env.PORT || 8787);
 const DEMO = process.env.DEMO !== "0";
-const STAFF_PASSWORD = process.env.STAFF_PASSWORD || "SaveDesk#29Aug";
-const STAFF_TOKEN_SECRET = process.env.STAFF_TOKEN_SECRET || process.env.SESSION_SECRET || STAFF_PASSWORD;
-const STAFF_AUTH_REQUIRED = process.env.STAFF_AUTH_REQUIRED === "1";
+const STAFF_PASSWORD = process.env.STAFF_PASSWORD || "";
+const STAFF_TOKEN_SECRET = process.env.STAFF_TOKEN_SECRET || "";
+// A missing or stale flag must never reopen hosted desks. Local demo access
+// requires an explicit opt-out and cannot apply to a real-data runtime.
+const STAFF_AUTH_REQUIRED = process.env.STAFF_AUTH_REQUIRED !== "0" || Boolean(process.env.VERCEL_ENV) || !DEMO || process.env.DUMMY_DATA === "0";
 const STAFF_TOKEN_TTL_SECONDS = 12 * 60 * 60;
 const now = () => new Date().toISOString();
 const NOT_NIA = "This phone is not with Nia.";
@@ -86,7 +88,7 @@ function nestCurrent() {
   return { memberId: member.id, nestId: "rajputana", name: "Rajputana Theatre", bed: "Bed 12", rupee: state.nestRupee, walk: "12 min to work", nextPay: "2026-09-01", included: [{ name: "Wi-Fi", status: "Working" }, { name: "Power", status: "Working" }, { name: "Water", status: "Working" }, { name: "Clean", status: "Today 11 AM" }, { name: "Gate", status: "24x7" }, { name: "Lock", status: "12" }, { name: "Bed", status: "In" }, { name: "Hall", status: "Till 10 PM" }], event: { id: "bada-khaana", title: "Bada Khaana this Sunday", when: "19:00", place: "Rajputana Theatre", attending: 46, mine: state.rsvp }, book: [{ id: "laundry", name: "Laundry", backBy: "18:00", price: 0 }, { id: "trim", name: "Trim", price: 80 }], issue: state.issues[0] || null };
 }
 function json(res, code, body) {
-  res.writeHead(code, { "content-type": "application/json; charset=utf-8", "access-control-allow-origin": "*", "access-control-allow-headers": "Content-Type, Idempotency-Key, Authorization", "access-control-allow-methods": "GET,POST,PUT,OPTIONS" });
+  res.writeHead(code, { "cache-control": "private, no-store", "x-content-type-options": "nosniff", "content-type": "application/json; charset=utf-8", "access-control-allow-origin": "*", "access-control-allow-headers": "Content-Type, Idempotency-Key, Authorization", "access-control-allow-methods": "GET,POST,PUT,OPTIONS" });
   res.end(JSON.stringify(body));
 }
 function readBody(req) {
@@ -104,10 +106,12 @@ function digits(phone) { return String(phone || "").replace(/\D/g, "").slice(-10
 function tokenHash(token) { return createHash("sha256").update(String(token)).digest("hex"); }
 function signTokenPart(part) { return createHmac("sha256", STAFF_TOKEN_SECRET).update(part).digest("base64url"); }
 export function issueStaffToken(staff, at = Date.now()) {
+  if (STAFF_TOKEN_SECRET.length < 32) throw new Error("staff_auth_not_configured");
   const payload = Buffer.from(JSON.stringify({ sub: staff.id, email: staff.email, iat: Math.floor(at / 1000), exp: Math.floor(at / 1000) + STAFF_TOKEN_TTL_SECONDS, nonce: randomUUID() })).toString("base64url");
   return `${payload}.${signTokenPart(payload)}`;
 }
 export function verifyStaffToken(raw, at = Date.now()) {
+  if (STAFF_TOKEN_SECRET.length < 32) return null;
   const [payload, signature, extra] = String(raw || "").split(".");
   if (!payload || !signature || extra) return null;
   const expected = signTokenPart(payload); const have = Buffer.from(signature); const want = Buffer.from(expected);
@@ -169,7 +173,7 @@ export async function handler(req, res) {
     if (staffRequest) {
       const body = (req.method === "POST" || req.method === "PUT") ? await readBody(req) : {};
       if (PROTECTED_DESK_PATHS.has(rabbitPath)) {
-        const skipOpenGet = DUMMY_DATA && req.method === "GET";
+        const skipOpenGet = !STAFF_AUTH_REQUIRED && DUMMY_DATA && req.method === "GET";
         if (!skipOpenGet) {
           const staff = requireStaff(req, res, ["studio", "hub", "money", "pilot"]);
           if (!staff) return;
@@ -286,6 +290,7 @@ export async function handler(req, res) {
     }
     if (req.method === "POST" && path === "/v1/home/transfers") return json(res, 501, { error: "send_home_rail_not_configured" });
     if (req.method === "POST" && path === "/v1/staff/login") {
+      if (STAFF_TOKEN_SECRET.length < 32) return json(res, 503, { error: "staff_auth_not_configured" });
       const body = await readBody(req);
       const email = String(body.email || "").trim().toLowerCase();
       const password = String(body.password || "");

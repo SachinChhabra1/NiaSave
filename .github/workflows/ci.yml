@@ -42,5 +42,12 @@ jobs:
       - name: Run storage tests
         run: npm run test:storage
 
+      - name: Verify member commerce
+        run: npm run test:commerce
+
+      - name: Verify security boundaries
+        run: npm run test:security
+
       - name: Build production artifact
         run: npm run build:production
+

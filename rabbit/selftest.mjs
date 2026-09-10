@@ -8,7 +8,10 @@ import {
   dispatchPayload, bikerPayload, mutateBiker, memberPayload, memberOrderGet, handleStaff,
   clipToPoloLock
 } from "./engine.mjs";
-import { handler } from "../api/server.mjs";
+import { randomBytes } from "node:crypto";
+process.env.STAFF_TOKEN_SECRET=randomBytes(32).toString("base64url");
+const {handler,issueStaffToken}=await import("../api/server.mjs");
+const selfTestStaffToken=issueStaffToken({id:"stf-admin",email:"admin@nia.one"});
 import { asRuntimeValue } from "../lib/runtime-store.mjs";
 import { existsSync, readFileSync } from "fs";
 
@@ -283,7 +286,7 @@ resetDummy();
 
 function staffGet(path) {
   return new Promise((resolve, reject) => {
-    const req = { method: "GET", url: path, headers: {} };
+    const req = { method: "GET", url: path, headers: {authorization:"Bearer "+selfTestStaffToken} };
     const res = {
       statusCode: 0,
       writeHead(code) { this.statusCode = code; },
@@ -418,3 +421,4 @@ if (fails.length) {
   process.exit(1);
 }
 process.stdout.write("polo selftest passed\n");
+

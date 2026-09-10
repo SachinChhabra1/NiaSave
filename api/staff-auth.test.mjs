@@ -1,7 +1,14 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import http from "node:http";
-import handler, { issueStaffToken, verifyStaffToken } from "./server.mjs";
+import { randomBytes } from "node:crypto";
+process.env.STAFF_AUTH_REQUIRED = "0";
+process.env.STAFF_TOKEN_SECRET = randomBytes(32).toString("base64url");
+process.env.DEMO = "1";
+process.env.DUMMY_DATA = "1";
+delete process.env.VERCEL_ENV;
+delete process.env.DATABASE_URL;
+const { default: handler, issueStaffToken, verifyStaffToken } = await import("./server.mjs");
 
 const admin = { id: "stf-admin", email: "admin@nia.one", name: "Admin", role: "admin", desks: ["studio", "hub", "money", "pilot"] };
 
@@ -37,3 +44,4 @@ test("Jat and Sikh desk APIs run through the temporary open 2 Para actor", async
   assert.equal(body.kpis.studios, 56);
   assert.equal(body.reconciliation.ok, true);
 });
+

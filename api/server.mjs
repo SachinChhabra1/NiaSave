@@ -139,7 +139,7 @@ export async function handler(req, res) {
         restoreMemberState(loaded.value);
         memberStateVersion = loaded.version;
       } catch (error) {
-        console.error("member_state_load_failed", { path, message: error.message });
+        console.error("member_state_load_failed");
       }
     }
     if (staffRequest) {
@@ -322,17 +322,17 @@ export async function handler(req, res) {
     }
     return json(res, 404, { error: "not_found" });
   } catch (err) {
-    if (err.message === "invalid_json") return json(res, 400, { error: "invalid_json" });
-    console.error("server_error", { path, method: req.method, message: err && err.message, stack: err && err.stack });
+    if (err?.message === "invalid_json") return json(res, 400, { error: "invalid_json" });
+    console.error("server_error");
     return json(res, 500, { error: "server_error" });
   } finally {
     const successfulMutation = memberStateVersion != null && (req.method === "POST" || req.method === "PUT") && res.statusCode < 400;
     if (successfulMutation) {
       try {
         const saved = await saveRuntimeState(MEMBER_RUNTIME_STATE_KEY, snapshotMemberState(), memberStateVersion);
-        if (!saved.ok) console.error("member_state_conflict", { path, version: memberStateVersion });
+        if (!saved.ok) console.error("member_state_conflict");
       } catch (error) {
-        console.error("member_state_save_failed", { path, message: error.message });
+        console.error("member_state_save_failed");
       }
     }
   }

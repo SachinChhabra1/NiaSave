@@ -73,3 +73,31 @@ Source-level old-variable check:
 3. Drain configuration + bounded invalid-request burst + alert/event retention proof.
 4. Neon PITR window verification + isolated restore evidence.
 5. Central-lane attestation for old/new secret rotation acceptance/rejection where old credentials are human-held.
+
+## One-hour hardening scope-cut checkpoint (2026-09-10 12:20 UTC)
+
+P0/P1 re-run evidence during production secret-rotation window:
+
+| Probe | Status |
+| --- | --- |
+| `POST https://rafiqicentral.com/api/service/member` (unsigned) | `401` |
+| `GET https://rafiqicentral.com/api/service/member` | `405` |
+| `GET https://www.niasave.com/` | `401` |
+| `GET https://www.niasave.com/ops.html` | `401` |
+| `GET https://www.niasave.com/desk.html` | `401` |
+| `GET https://www.niasave.com/bison-data.html` | `401` |
+| `GET https://www.niasave.com/dispatch.html` | `401` |
+| `POST https://www.niasave.com/api/auth/login` (preview-member probe) | `410` |
+| `GET https://www.niasave.com/api/order` | `410` |
+| `GET https://www.niasave.com/api/member` | `410` |
+| `GET https://www.niasave.com/api/stock` | `200` |
+| `GET https://www.niasave.com/api/api/commerce/catalogue` | `401` |
+
+Additional P0/P1 checks:
+- `npm run test:security` passed (`19/19`).
+- `node --test api/jat-staff-access.test.mjs lib/staff-pages.test.mjs api/staff-auth.test.mjs` passed (`7/7`).
+- Production headers remain present on protected surfaces (`Strict-Transport-Security`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, strict CSP).
+- `POST /api/v1/staff/logout` returns `200` and clears `__Host-nia_staff_page` with `Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=0`.
+
+Scope-cut action:
+- P2 and P3 workstreams are intentionally parked for this one-hour window; no payment/OTP/UPI/send/insurance scope has been started.

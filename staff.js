@@ -3,6 +3,7 @@
   var token = sessionStorage.getItem("niaOpsToken") || "";
   var rawFetch = window.fetch.bind(window);
   var ready;
+  if (!document.getElementById('staff-entry-status')) sessionStorage.removeItem('niaStaffEntryRetry');
   function authenticate() {
     return rawFetch('/v1/staff/me', { headers: token ? { Authorization: 'Bearer ' + token } : {} }).then(function (response) {
       if (response.ok) return response.json().then(function (body) { return body.staff; });

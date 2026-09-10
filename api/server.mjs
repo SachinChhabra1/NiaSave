@@ -10,7 +10,9 @@ import { centralCommerceHttp } from "../lib/commerce/central-http.mjs";
 import { commerceHttp } from "../lib/commerce/http.mjs";
 import { ownerViewHttp } from "../lib/commerce/owner-view.mjs";
 import { isShowcaseEntry } from '../lib/commerce/showcase-mode.mjs';
-import { randomUUID, createHash, createHmac, timingSafeEqual } from "node:crypto";
+import { randomUUID, createHash } from "node:crypto";
+import {issueStaffToken, verifyStaffToken, namedStaff, staffPageCookie, staffTokenFromHeader, validCronToken} from "../lib/staff-auth.mjs";
+export {issueStaffToken, verifyStaffToken} from "../lib/staff-auth.mjs";
 import { pathToFileURL } from "node:url";
 import { handleStaff, isStaffPath, staffPath, staffStorageStatus, DUMMY_DATA } from "../rabbit/engine.mjs";
 import { handleBison, isBisonPath, bisonPath, bisonStorageStatus } from "../bison/engine.mjs";
@@ -25,7 +27,6 @@ const STAFF_TOKEN_SECRET = process.env.STAFF_TOKEN_SECRET || "";
 // A missing or stale flag must never reopen hosted desks. Local demo access
 // requires an explicit opt-out and cannot apply to a real-data runtime.
 const STAFF_AUTH_REQUIRED = process.env.STAFF_AUTH_REQUIRED !== "0" || Boolean(process.env.VERCEL_ENV) || !DEMO || process.env.DUMMY_DATA === "0";
-const STAFF_TOKEN_TTL_SECONDS = 12 * 60 * 60;
 const now = () => new Date().toISOString();
 const NOT_NIA = "This phone is not with Nia.";
 const HUB_FLOW = ["pack", "count", "leave", "sell", "return", "close"];
@@ -47,16 +48,6 @@ const catalog = [
   { id: "soap", name: "Nia Soap", hindi: "sabun", size: "30 gms", price: 10, mrp: 12, keep: 2, image: "/products/nia-soap.png", searchTerms: ["soap", "sabun"], outOfStock: false },
   { id: "navratna", name: "Navratna Cool Oil", hindi: "thanda tel", size: "100 ml", price: 70, mrp: 82, keep: 12, image: "/products/navratna-oil.png", searchTerms: ["navratna", "tel"], outOfStock: false }
 ];
-
-const staffSeed = [
-  { id: "stf-ajay-mahawar", email: "ajay.mahawar@nia.one", name: "Ajay Mahawar", role: "living", desks: ["living"] },
-  { id: "stf-admin", email: "admin@nia.one", name: "Admin", role: "admin", desks: ["studio", "hub", "money", "pilot"] },
-  { id: "stf-satish", email: "satish@nia.one", name: "Satish", role: "studio+hub", desks: ["studio", "hub"] },
-  { id: "stf-ramesh", email: "ramesh@nia.one", name: "Ramesh", role: "hub", desks: ["hub"] },
-  { id: "stf-kavita", email: "kavita@nia.one", name: "Kavita", role: "money", desks: ["money"] },
-  { id: "stf-pilot", email: "pilot@nia.one", name: "Pilot", role: "pilot", desks: ["pilot"] }
-];
-if (process.env.STAFF_QA_EMAIL) staffSeed.push({ id: "stf-qa", email: String(process.env.STAFF_QA_EMAIL).toLowerCase(), name: "QA", role: "admin", desks: ["studio", "hub", "money", "pilot"] });
 
 const state = {
   extra: { id: "extra-tonight", status: "open" }, rsvp: false, issues: [],
@@ -104,25 +95,6 @@ function readBody(req) {
 }
 function digits(phone) { return String(phone || "").replace(/\D/g, "").slice(-10); }
 function tokenHash(token) { return createHash("sha256").update(String(token)).digest("hex"); }
-function signTokenPart(part) { return createHmac("sha256", STAFF_TOKEN_SECRET).update(part).digest("base64url"); }
-export function issueStaffToken(staff, at = Date.now()) {
-  if (STAFF_TOKEN_SECRET.length < 32) throw new Error("staff_auth_not_configured");
-  const payload = Buffer.from(JSON.stringify({ sub: staff.id, email: staff.email, iat: Math.floor(at / 1000), exp: Math.floor(at / 1000) + STAFF_TOKEN_TTL_SECONDS, nonce: randomUUID() })).toString("base64url");
-  return `${payload}.${signTokenPart(payload)}`;
-}
-export function verifyStaffToken(raw, at = Date.now()) {
-  if (STAFF_TOKEN_SECRET.length < 32) return null;
-  const [payload, signature, extra] = String(raw || "").split(".");
-  if (!payload || !signature || extra) return null;
-  const expected = signTokenPart(payload); const have = Buffer.from(signature); const want = Buffer.from(expected);
-  if (have.length !== want.length || !timingSafeEqual(have, want)) return null;
-  try {
-    const claims = JSON.parse(Buffer.from(payload, "base64url").toString("utf8"));
-    if (!claims.exp || claims.exp <= Math.floor(at / 1000)) return null;
-    const staff = staffSeed.find(row => row.id === claims.sub && row.email === claims.email);
-    return staff ? { ...staff, tokenIssuedAt: new Date(claims.iat * 1000).toISOString(), tokenExpiresAt: new Date(claims.exp * 1000).toISOString() } : null;
-  } catch { return null; }
-}
 function staffFromReq(req) {
   const header = String(req.headers.authorization || "");
   const raw = header.toLowerCase().startsWith("bearer ") ? header.slice(7).trim() : "";
@@ -185,7 +157,8 @@ export async function handler(req, res) {
     }
     if (livingRequest) {
       const body = (req.method === "POST" || req.method === "PUT") ? await readBody(req) : {};
-      const staff = requireStaff(req, res, ["studio", "money", "living"]);
+      const cronSync = livingPath === '/bison/data/sync' && req.method === 'GET' && validCronToken(staffTokenFromHeader(req.headers));
+      const staff = cronSync ? {name:'Scheduled Living sync', email:'scheduler'} : requireStaff(req, res, ["studio", "money", "living"]);
       if (!staff) return;
       if (livingPath === '/bison/current-position') {
         res.setHeader('Cache-Control', 'private, no-store');
@@ -290,14 +263,19 @@ export async function handler(req, res) {
     }
     if (req.method === "POST" && path === "/v1/home/transfers") return json(res, 501, { error: "send_home_rail_not_configured" });
     if (req.method === "POST" && path === "/v1/staff/login") {
+      if (req.headers.origin) {
+        try { if (new URL(req.headers.origin).host !== req.headers.host) return json(res, 403, {error:"origin_mismatch"}); }
+        catch { return json(res, 403, {error:"origin_mismatch"}); }
+      }
       if (STAFF_TOKEN_SECRET.length < 32) return json(res, 503, { error: "staff_auth_not_configured" });
       const body = await readBody(req);
       const email = String(body.email || "").trim().toLowerCase();
       const password = String(body.password || "");
-      const found = staffSeed.find(s => s.email === email);
+      const found = namedStaff(email);
       const expectedPassword = found?.id === "stf-ajay-mahawar" ? process.env.JAT_STAFF_PASSWORD : STAFF_PASSWORD;
       if (!found || !expectedPassword || password !== expectedPassword) return json(res, 401, { error: "bad_credentials" });
       const token = issueStaffToken(found);
+      res.setHeader("Set-Cookie", staffPageCookie(token));
       const record = { ...found, tokenIssuedAt: now() };
       state.tokens.set(tokenHash(token), record);
       return json(res, 200, { token, staff: { id: found.id, email: found.email, name: found.name, role: found.role, desks: found.desks } });
@@ -305,12 +283,15 @@ export async function handler(req, res) {
     if (req.method === "GET" && path === "/v1/staff/me") {
       const staff = requireStaff(req, res);
       if (!staff) return;
+      const raw = staffTokenFromHeader(req.headers);
+      if (raw) res.setHeader("Set-Cookie", staffPageCookie(raw));
       return json(res, 200, { staff: { id: staff.id, email: staff.email, name: staff.name, role: staff.role, desks: staff.desks } });
     }
     if (req.method === "POST" && path === "/v1/staff/logout") {
       const header = String(req.headers.authorization || "");
       const raw = header.toLowerCase().startsWith("bearer ") ? header.slice(7).trim() : "";
       if (raw) state.tokens.delete(tokenHash(raw));
+      res.setHeader("Set-Cookie", staffPageCookie(""));
       return json(res, 200, { ok: true });
     }
     if (req.method === "GET" && path === "/v1/staff/hub/day") {

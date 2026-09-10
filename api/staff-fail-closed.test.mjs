@@ -23,6 +23,17 @@ function check(extra, expectedLoginStatus) {
       const login=await fetch(base+'/v1/staff/login',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({email:'admin@nia.one',password:'not-a-credential'})});
       assert.equal(login.status,${expectedLoginStatus});
       assert.equal(verifyStaffToken('invalid.signature'),null);
+      const cronPath=base+'/api/bison/data/sync';
+      assert.equal((await fetch(cronPath)).status,401);
+      assert.equal((await fetch(cronPath,{headers:{authorization:'Bearer deliberately-invalid'}})).status,401);
+      if(process.env.CRON_SECRET) {
+        const allowed=await fetch(cronPath,{headers:{authorization:'Bearer '+process.env.CRON_SECRET}});
+        // No source/database exists in this process. Reaching this source
+        // precondition proves the scheduler cleared only its intended gate.
+        assert.equal(allowed.status,400);
+        assert.deepEqual(await allowed.json(),{error:'google_sheet_missing',status:400});
+        assert.equal((await fetch(base+'/api/bison/tower',{headers:{authorization:'Bearer '+process.env.CRON_SECRET}})).status,401);
+      }
     } finally { await new Promise(r=>server.close(r)); }
   `;
   const result=spawnSync(process.execPath,['--input-type=module','-e',source],{
@@ -36,3 +47,4 @@ test('missing staff configuration denies every staff API and cannot issue a sess
 test('hosted preview cannot bypass staff auth through the demo GET shortcut',()=>check({VERCEL_ENV:'preview',STAFF_AUTH_REQUIRED:'0',STAFF_TOKEN_SECRET:randomBytes(32).toString('base64url')},401));
 test('production ignores a stale opt-out even if dummy mode was accidentally left on',()=>check({VERCEL_ENV:'production',STAFF_AUTH_REQUIRED:'0',STAFF_TOKEN_SECRET:randomBytes(32).toString('base64url')},401));
 test('real-data runtime never permits the local opt-out',()=>check({DEMO:'0',DUMMY_DATA:'0',STAFF_AUTH_REQUIRED:'0',STAFF_TOKEN_SECRET:randomBytes(32).toString('base64url')},401));
+test('scheduler secret grants only the exact Living sync GET, never other desk APIs',()=>check({DEMO:'0',DUMMY_DATA:'0',VERCEL_ENV:'production',STAFF_TOKEN_SECRET:randomBytes(32).toString('base64url'),CRON_SECRET:randomBytes(32).toString('base64url')},401));

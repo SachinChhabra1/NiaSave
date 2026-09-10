@@ -17,13 +17,15 @@ PR #30 predates production cutover and says to keep demo/dummy mode on for www.n
 - Dummy GET shortcuts no longer bypass an enabled staff gate. Staff JSON responses prohibit caching and MIME sniffing.
 - Vercel headers add HSTS (one year, current host only), MIME protection, referrer policy, device restrictions and denied framing. Member entry points use same-origin scripts without inline or eval execution. Global legacy policy retains inline execution for existing desk handlers and the existing unpkg dependency; this is a compatibility allowance, not full XSS remediation. Validate the deployed member and staff flows before promotion.
 - Existing passkey cookies are host-only, HttpOnly, Secure, SameSite=Strict, scoped to /api/commerce. Ceremony lifetime is five minutes; member session lifetime is twelve hours. Tests pin these bounds. Legacy staff auth currently returns a twelve-hour bearer token to the existing desk client; it is not an HttpOnly cookie session.
+- Static desks now challenge with 401 and the existing sign-in UI before returning desk contents. Signed staff page cookies use Secure, HttpOnly, SameSite=Strict, host-only scope and the remaining signed token lifetime. Ajay's page access is limited to Living; Sikh/Dogra return 403. The existing bearer API contract is retained; page cookies do not authorize data APIs.
+- NiaSave's exact Living cron GET accepts its verified CRON_SECRET before the general staff gate; the secret cannot access another desk API. Missing/invalid secrets still fail. This changes no Central cron code.
 - CI now includes commerce and security boundary tests.
 
 ## Still required before acceptance
 
 | Item | Evidence needed |
 | --- | --- |
-| Static desk gate | Current middleware only protects member routes. /ops.html, the other static desks and direct aliases must return 401 without a staff token while preserving a usable staff login. API 401 proofs alone do not satisfy this. |
+| Static desk gate | Implemented and locally tested for desk pages, clean aliases, tampering, expiry and unit permissions. Hosted browser login, navigation from Central, cookie delivery and unauthenticated domain checks remain required. The Cloud Browser rejected the isolated local URL with ERR_BLOCKED_BY_CLIENT, so no visual/browser sign-in proof is claimed. |
 | Production boundary | Central service: unsigned 401 service_auth_required, correctly signed 200. NiaSave: invite gate, real member sign-in, rejection of preview-member login, unauthenticated desk/API rejection. |
 | Staff handover | Ajay's own login, Living read, Sikh/Dogra denial; his one legitimate correction with audit reference, persisted book version and reload. No fabricated records. |
 | Role lists and old variables | Named people per environment; preserve the documented Preview-only Sachin mailbox exception until the intended mailbox works. Retired shared-login variables absent everywhere; real sign-in/action/cron still work. |
@@ -41,3 +43,7 @@ Grok owns Central OTP outcome and cron-success event instrumentation. Request th
 Once the drain is configured, send a bounded burst of 12 deliberately invalid service requests (no real member identifiers, no database mutations), wait for the configured window, and record the alert/event ID, time, count, project, deployment and receiver retention proof. Do not run the burst before an alert can be observed. A test runner printing an alert or a log line is not a proven live alert.
 
 Saturday 12 September: publish actual evidence at 08:00 IST; freeze at 09:00 IST, only P0 fixes after. General member invitations remain out of scope.
+
+## Validation at this revision
+
+90 commerce tests, 26 Living/auth/cache tests, 19 security checks, six Dogra tests and the Sikh self-test pass. The member production build passes. Real database integration tests skipped because no DATABASE_URL is available. The local source checkout excludes binary artwork; an image-path build warning does not establish a missing production asset. Hosted visual validation remains pending.

@@ -66,6 +66,12 @@ Rollback evidence (NiaSave production):
 - Current deployment: `dpl_9GNDaMz7dE5YFXyQvWBbXjp6BKFK` (main merge commit `9240463`).
 - Previous immutable deployment candidate: `dpl_4CQb2scBRzMGvdu7q6hf5dY1dfic` (main commit `5548178`).
 
+## Codex execution update - 10 September 2026 08:24 UTC
+
+- Friday automated attestation bundle published at `docs/friday-hardening-attestations-2026-09-10.md`.
+- PR #34 merge rollout verified live on NiaSave production (`dpl_Hr8E5eNmvi79r7SqwZAcBiU1i1AS`) with `/api/api/commerce/catalogue` returning `401`.
+- Remaining closure items are now human/central-lane attestations (Ajay legitimate production correction proof, launch-log filing, drain+alert proof, Neon PITR restore proof, and central GET `/api/service/member` 500-path follow-up).
+
 ## Changes prepared
 
 - Staff API authentication defaults on, including on hosted Preview. STAFF_AUTH_REQUIRED=0 opens desks only in an explicitly local demo; it cannot open a hosted or real-data runtime.

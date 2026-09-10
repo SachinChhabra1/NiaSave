@@ -11,6 +11,7 @@ import { commerceHttp } from "../lib/commerce/http.mjs";
 import { ownerViewHttp } from "../lib/commerce/owner-view.mjs";
 import { isShowcaseEntry } from '../lib/commerce/showcase-mode.mjs';
 import { randomUUID } from "node:crypto";
+import {consumeStaffLogin} from '../lib/staff-login-limit.mjs';
 import {issueStaffToken, verifyStaffToken, verifyActiveStaffToken, registerStaffSession, revokeStaffSession, namedStaff, staffPageCookie, staffTokenFromHeader, validCronToken, STAFF_PAGE_COOKIE} from "../lib/staff-auth.mjs";
 export {issueStaffToken, verifyStaffToken} from "../lib/staff-auth.mjs";
 import { pathToFileURL } from "node:url";
@@ -32,10 +33,6 @@ const NOT_NIA = "This phone is not with Nia.";
 const HUB_FLOW = ["pack", "count", "leave", "sell", "return", "close"];
 const PROTECTED_DESK_PATHS = new Set(["/connectors", "/connectors/upload", "/predict", "/ledger", "/inventory", "/ageing", "/orders", "/beat", "/beat/open", "/beat/close", "/scan", "/recon", "/next", "/source", "/cash", "/settlements", "/tower", "/stops", "/po", "/dispatch", "/invoice", "/biker"]);
 const OPEN_DESK_STAFF = { id: "stf-open-desk", email: "2para@nia.one", name: "2 Para desk", role: "open", desks: ["studio", "hub", "money", "pilot"] };
-const STAFF_LOGIN_WINDOW_MS = Math.max(60_000, Number(process.env.STAFF_LOGIN_WINDOW_MS || 900_000));
-const STAFF_LOGIN_MAX_PER_IP = Math.max(1, Number(process.env.STAFF_LOGIN_MAX_PER_IP || 30));
-const STAFF_LOGIN_MAX_PER_IDENTITY = Math.max(1, Number(process.env.STAFF_LOGIN_MAX_PER_IDENTITY || 8));
-const staffLoginAttempts = new Map();
 
 const member = {
   id: "NIA-1042", name: "Ravi K", phone: "9876541042", job: "Warehouse picker",
@@ -98,16 +95,9 @@ function readBody(req) {
   });
 }
 function digits(phone) { return String(phone || "").replace(/\D/g, "").slice(-10); }
-const safeCode = value => {
-  const code = String(value || "").trim();
-  return /^[a-z0-9_]{2,80}$/i.test(code) ? code : "unclassified";
-};
-function logApiEvent(event, detail = {}) {
-  console.error(event, {
-    path: String(detail.path || "").slice(0, 180),
-    method: String(detail.method || "").slice(0, 10),
-    code: safeCode(detail.code)
-  });
+function logApiEvent(event) {
+  // Call sites supply fixed event names, never request data or exception text.
+  console.error(event);
 }
 function tokenFromCookie(req) {
   const cookies = String(req.headers.cookie || "").split(";").map(part => part.trim());
@@ -119,17 +109,11 @@ function staffTokenFromReq(req) {
   return bearer || tokenFromCookie(req);
 }
 function clientIp(req) {
+  // Vercel supplies this trusted edge header. Never use a client-supplied XFF
+  // value on hosted requests if that platform header is absent.
+  if (process.env.VERCEL || process.env.VERCEL_ENV) return String(req.headers['x-vercel-forwarded-for'] || 'unknown').split(',')[0].trim();
   const forwarded = String(req.headers["x-forwarded-for"] || "").split(",")[0].trim();
   return forwarded || req.socket?.remoteAddress || "unknown";
-}
-function consumeLimit(key, max, at = Date.now()) {
-  const row = staffLoginAttempts.get(key);
-  if (!row || at - row.start > STAFF_LOGIN_WINDOW_MS) {
-    staffLoginAttempts.set(key, { start: at, count: 1 });
-    return true;
-  }
-  row.count += 1;
-  return row.count <= max;
 }
 async function staffFromReq(req) {
   const raw = staffTokenFromReq(req);
@@ -174,7 +158,7 @@ export async function handler(req, res) {
         restoreMemberState(loaded.value);
         memberStateVersion = loaded.version;
       } catch {
-        logApiEvent("member_state_load_failed", { path, method: req.method, code: "runtime_store_unavailable" });
+        logApiEvent("member_state_load_failed");
       }
     }
     if (staffRequest) {
@@ -307,11 +291,10 @@ export async function handler(req, res) {
       const email = String(body.email || "").trim().toLowerCase();
       const password = String(body.password || "");
       const ip = clientIp(req);
-      const limitIp = consumeLimit(`staff-login-ip:${ip}`, STAFF_LOGIN_MAX_PER_IP);
-      const limitIdentity = consumeLimit(`staff-login-id:${ip}:${email || "unknown"}`, STAFF_LOGIN_MAX_PER_IDENTITY);
-      if (!limitIp || !limitIdentity) {
-        res.setHeader("Retry-After", String(Math.ceil(STAFF_LOGIN_WINDOW_MS / 1000)));
-        return json(res, 429, { error: "too_many_attempts" });
+      const limit = await consumeStaffLogin(ip, email);
+      if (!limit.allowed) {
+        res.setHeader("Retry-After", String(limit.retryAfter));
+        return json(res, limit.unavailable ? 503 : 429, { error: limit.unavailable ? "staff_login_unavailable" : "too_many_attempts" });
       }
       const found = namedStaff(email);
       const expectedPassword = found?.id === "stf-ajay-mahawar" ? process.env.JAT_STAFF_PASSWORD : STAFF_PASSWORD;
@@ -319,7 +302,7 @@ export async function handler(req, res) {
       const token = issueStaffToken(found);
       const activated = await registerStaffSession(token);
       if (!activated.ok) {
-        logApiEvent("staff_session_register_failed", { path, method: req.method, code: activated.error });
+        logApiEvent("staff_session_register_failed");
         return json(res, 503, { error: "staff_session_unavailable" });
       }
       res.setHeader("Set-Cookie", staffPageCookie(token));
@@ -339,7 +322,7 @@ export async function handler(req, res) {
       if (headerToken) results.push(await revokeStaffSession(headerToken));
       if (cookieToken && cookieToken !== headerToken) results.push(await revokeStaffSession(cookieToken));
       if (results.some(result => !result.ok)) {
-        logApiEvent("staff_session_revoke_failed", { path, method: req.method, code: "staff_session_unavailable" });
+        logApiEvent("staff_session_revoke_failed");
         return json(res, 503, { error: "staff_session_unavailable" });
       }
       res.setHeader("Set-Cookie", staffPageCookie(""));
@@ -373,17 +356,17 @@ export async function handler(req, res) {
     }
     return json(res, 404, { error: "not_found" });
   } catch (err) {
-    if (err.message === "invalid_json") return json(res, 400, { error: "invalid_json" });
-    logApiEvent("server_error", { path, method: req.method, code: err && err.message });
+    if (err?.message === "invalid_json") return json(res, 400, { error: "invalid_json" });
+    logApiEvent("server_error");
     return json(res, 500, { error: "server_error" });
   } finally {
     const successfulMutation = memberStateVersion != null && (req.method === "POST" || req.method === "PUT") && res.statusCode < 400;
     if (successfulMutation) {
       try {
         const saved = await saveRuntimeState(MEMBER_RUNTIME_STATE_KEY, snapshotMemberState(), memberStateVersion);
-        if (!saved.ok) logApiEvent("member_state_conflict", { path, method: req.method, code: "state_conflict" });
+        if (!saved.ok) logApiEvent("member_state_conflict");
       } catch {
-        logApiEvent("member_state_save_failed", { path, method: req.method, code: "runtime_store_unavailable" });
+        logApiEvent("member_state_save_failed");
       }
     }
   }

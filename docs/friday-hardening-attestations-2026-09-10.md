@@ -15,7 +15,11 @@ Explicitly excluded: payments, SMS OTP purchase, Send money rails, insurance.
 | `GET https://www.niasave.com/ops.html` | `401` |
 | `GET https://www.niasave.com/desk.html` | `401` |
 | `POST https://www.niasave.com/api/auth/login` (preview-member probe) | `410` |
+| `GET https://www.niasave.com/api/order` | `410` |
+| `GET https://www.niasave.com/api/member` | `410` |
+| `GET https://www.niasave.com/api/stock` | `200` |
 | `GET https://www.niasave.com/api/api/commerce/catalogue` | `401` |
+| `GET https://rafiqicentral.com/api/service/member` | `405` |
 
 Signed path note: Founder/Owen already validated signed `POST /api/service/member` returns `200`.
 
@@ -60,7 +64,7 @@ Source-level old-variable check:
 ### 6) Runtime baseline snapshot
 
 - NiaSave production runtime (last 30 minutes): `401`, `410`, `200`, `404` only; no runtime error groups.
-- Central `/api/service/member` boundary checks remain green for launch criteria (`POST` unsigned `401`, signed `200` already validated). A prior `GET` 500 sample was observed on an older production deployment; current direct `GET` returns the site HTML shell (`200`) while signed/unsigned `POST` remains the acceptance boundary.
+- Central `/api/service/member` boundary checks remain green for launch criteria (`POST` unsigned `401`, signed `200` already validated). A prior `GET` 500 sample was observed on an older production deployment; latest direct `GET` probe now returns `405`.
 
 ## Remaining human-only attestations
 

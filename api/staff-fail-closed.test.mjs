@@ -22,6 +22,10 @@ function check(extra, expectedLoginStatus) {
       }
       const login=await fetch(base+'/v1/staff/login',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({email:'admin@nia.one',password:'not-a-credential'})});
       assert.equal(login.status,${expectedLoginStatus});
+      if (process.env.VERCEL_ENV) {
+        assert.deepEqual(await login.json(), {error:'staff_login_unavailable'});
+        assert.equal(login.headers.get('set-cookie'), null);
+      }
       assert.equal(verifyStaffToken('invalid.signature'),null);
       const cronPath=base+'/api/bison/data/sync';
       assert.equal((await fetch(cronPath)).status,401);
@@ -44,7 +48,7 @@ function check(extra, expectedLoginStatus) {
 }
 
 test('missing staff configuration denies every staff API and cannot issue a session',()=>check({},503));
-test('hosted preview cannot bypass staff auth through the demo GET shortcut',()=>check({VERCEL_ENV:'preview',STAFF_AUTH_REQUIRED:'0',STAFF_TOKEN_SECRET:randomBytes(32).toString('base64url')},401));
-test('production ignores a stale opt-out even if dummy mode was accidentally left on',()=>check({VERCEL_ENV:'production',STAFF_AUTH_REQUIRED:'0',STAFF_TOKEN_SECRET:randomBytes(32).toString('base64url')},401));
+test('hosted preview cannot bypass staff auth through the demo GET shortcut',()=>check({VERCEL_ENV:'preview',STAFF_AUTH_REQUIRED:'0',STAFF_TOKEN_SECRET:randomBytes(32).toString('base64url')},503));
+test('production ignores a stale opt-out even if dummy mode was accidentally left on',()=>check({VERCEL_ENV:'production',STAFF_AUTH_REQUIRED:'0',STAFF_TOKEN_SECRET:randomBytes(32).toString('base64url')},503));
 test('real-data runtime never permits the local opt-out',()=>check({DEMO:'0',DUMMY_DATA:'0',STAFF_AUTH_REQUIRED:'0',STAFF_TOKEN_SECRET:randomBytes(32).toString('base64url')},401));
-test('scheduler secret grants only the exact Living sync GET, never other desk APIs',()=>check({DEMO:'0',DUMMY_DATA:'0',VERCEL_ENV:'production',STAFF_TOKEN_SECRET:randomBytes(32).toString('base64url'),CRON_SECRET:randomBytes(32).toString('base64url')},401));
+test('scheduler secret grants only the exact Living sync GET, never other desk APIs',()=>check({DEMO:'0',DUMMY_DATA:'0',VERCEL_ENV:'production',STAFF_TOKEN_SECRET:randomBytes(32).toString('base64url'),CRON_SECRET:randomBytes(32).toString('base64url')},503));

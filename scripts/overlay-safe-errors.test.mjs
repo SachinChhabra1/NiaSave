@@ -29,3 +29,4 @@ test('archived API overlay changes only error handling and rejects an unknown la
   await assert.rejects(overlaySafeErrors(out), /Archived error log changed/);
   assert.equal(await readFile(file, 'utf8'), before);
 });
+

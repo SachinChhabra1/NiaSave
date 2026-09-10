@@ -15,3 +15,4 @@ export async function overlaySafeErrors(out) {
   source = source.replace('if (err.message === "invalid_json")', 'if (err?.message === "invalid_json")');
   await writeFile(file, source);
 }
+

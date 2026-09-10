@@ -10,8 +10,9 @@ import { centralCommerceHttp } from "../lib/commerce/central-http.mjs";
 import { commerceHttp } from "../lib/commerce/http.mjs";
 import { ownerViewHttp } from "../lib/commerce/owner-view.mjs";
 import { isShowcaseEntry } from '../lib/commerce/showcase-mode.mjs';
-import { randomUUID, createHash } from "node:crypto";
-import {issueStaffToken, verifyStaffToken, namedStaff, staffPageCookie, staffTokenFromHeader, validCronToken} from "../lib/staff-auth.mjs";
+import { randomUUID } from "node:crypto";
+import {consumeStaffLogin} from '../lib/staff-login-limit.mjs';
+import {issueStaffToken, verifyStaffToken, verifyActiveStaffToken, registerStaffSession, revokeStaffSession, namedStaff, staffPageCookie, staffTokenFromHeader, validCronToken, STAFF_PAGE_COOKIE} from "../lib/staff-auth.mjs";
 export {issueStaffToken, verifyStaffToken} from "../lib/staff-auth.mjs";
 import { pathToFileURL } from "node:url";
 import { handleStaff, isStaffPath, staffPath, staffStorageStatus, DUMMY_DATA } from "../rabbit/engine.mjs";
@@ -51,7 +52,7 @@ const catalog = [
 
 const state = {
   extra: { id: "extra-tonight", status: "open" }, rsvp: false, issues: [],
-  payments: new Map(), orders: new Map(), bags: new Map(), idem: new Map(), tokens: new Map(),
+  payments: new Map(), orders: new Map(), bags: new Map(), idem: new Map(),
   bagKeep: 126, bagSpend: 812, payMonth: 16500, nestRupee: 2200, food: 2800, other: 700, sent: 0,
   hubDay: { date: "2026-08-29", stage: "pack", packBy: null, counts: [], leaveBy: null, sellBy: null, returnBy: null, closeBy: null, carts: [] }
 };
@@ -94,15 +95,33 @@ function readBody(req) {
   });
 }
 function digits(phone) { return String(phone || "").replace(/\D/g, "").slice(-10); }
-function tokenHash(token) { return createHash("sha256").update(String(token)).digest("hex"); }
-function staffFromReq(req) {
-  const header = String(req.headers.authorization || "");
-  const raw = header.toLowerCase().startsWith("bearer ") ? header.slice(7).trim() : "";
-  if (!raw) return null;
-  return verifyStaffToken(raw);
+function logApiEvent(event) {
+  // Call sites supply fixed event names, never request data or exception text.
+  console.error(event);
 }
-function requireStaff(req, res, desks) {
-  const staff = staffFromReq(req) || (STAFF_AUTH_REQUIRED ? null : OPEN_DESK_STAFF);
+function tokenFromCookie(req) {
+  const cookies = String(req.headers.cookie || "").split(";").map(part => part.trim());
+  const pair = cookies.find(item => item.startsWith(STAFF_PAGE_COOKIE + "="));
+  return pair ? pair.slice(STAFF_PAGE_COOKIE.length + 1) : "";
+}
+function staffTokenFromReq(req) {
+  const bearer = staffTokenFromHeader(req.headers);
+  return bearer || tokenFromCookie(req);
+}
+function clientIp(req) {
+  // Vercel supplies this trusted edge header. Never use a client-supplied XFF
+  // value on hosted requests if that platform header is absent.
+  if (process.env.VERCEL || process.env.VERCEL_ENV) return String(req.headers['x-vercel-forwarded-for'] || 'unknown').split(',')[0].trim();
+  const forwarded = String(req.headers["x-forwarded-for"] || "").split(",")[0].trim();
+  return forwarded || req.socket?.remoteAddress || "unknown";
+}
+async function staffFromReq(req) {
+  const raw = staffTokenFromReq(req);
+  if (!raw) return null;
+  return verifyActiveStaffToken(raw);
+}
+async function requireStaff(req, res, desks) {
+  const staff = await staffFromReq(req) || (STAFF_AUTH_REQUIRED ? null : OPEN_DESK_STAFF);
   if (!staff) { json(res, 401, { error: "staff_required" }); return null; }
   if (desks && desks.length && !staff.desks.some(d => desks.includes(d)) && staff.role !== "admin") {
     json(res, 403, { error: "desk_forbidden", staff: { id: staff.id, role: staff.role } }); return null;
@@ -138,8 +157,8 @@ export async function handler(req, res) {
         const loaded = await loadRuntimeState(MEMBER_RUNTIME_STATE_KEY, snapshotMemberState());
         restoreMemberState(loaded.value);
         memberStateVersion = loaded.version;
-      } catch (error) {
-        console.error("member_state_load_failed");
+      } catch {
+        logApiEvent("member_state_load_failed");
       }
     }
     if (staffRequest) {
@@ -147,7 +166,7 @@ export async function handler(req, res) {
       if (PROTECTED_DESK_PATHS.has(rabbitPath)) {
         const skipOpenGet = !STAFF_AUTH_REQUIRED && DUMMY_DATA && req.method === "GET";
         if (!skipOpenGet) {
-          const staff = requireStaff(req, res, ["studio", "hub", "money", "pilot"]);
+          const staff = await requireStaff(req, res, ["studio", "hub", "money", "pilot"]);
           if (!staff) return;
           body.actor = `${staff.name} · ${staff.email}`;
         }
@@ -158,7 +177,7 @@ export async function handler(req, res) {
     if (livingRequest) {
       const body = (req.method === "POST" || req.method === "PUT") ? await readBody(req) : {};
       const cronSync = livingPath === '/bison/data/sync' && req.method === 'GET' && validCronToken(staffTokenFromHeader(req.headers));
-      const staff = cronSync ? {name:'Scheduled Living sync', email:'scheduler'} : requireStaff(req, res, ["studio", "money", "living"]);
+      const staff = cronSync ? {name:'Scheduled Living sync', email:'scheduler'} : await requireStaff(req, res, ["studio", "money", "living"]);
       if (!staff) return;
       if (livingPath === '/bison/current-position') {
         res.setHeader('Cache-Control', 'private, no-store');
@@ -171,7 +190,7 @@ export async function handler(req, res) {
       if (out) return json(res, out.status, out.body);
     }
     if (dograRequest) {
-      const staff = requireStaff(req, res, ["studio", "money", "pilot"]);
+      const staff = await requireStaff(req, res, ["studio", "money", "pilot"]);
       if (!staff) return;
       if (req.method === "GET") return json(res, 200, await readDograState());
       if (req.method === "PUT") {
@@ -271,36 +290,51 @@ export async function handler(req, res) {
       const body = await readBody(req);
       const email = String(body.email || "").trim().toLowerCase();
       const password = String(body.password || "");
+      const ip = clientIp(req);
+      const limit = await consumeStaffLogin(ip, email);
+      if (!limit.allowed) {
+        res.setHeader("Retry-After", String(limit.retryAfter));
+        return json(res, limit.unavailable ? 503 : 429, { error: limit.unavailable ? "staff_login_unavailable" : "too_many_attempts" });
+      }
       const found = namedStaff(email);
       const expectedPassword = found?.id === "stf-ajay-mahawar" ? process.env.JAT_STAFF_PASSWORD : STAFF_PASSWORD;
       if (!found || !expectedPassword || password !== expectedPassword) return json(res, 401, { error: "bad_credentials" });
       const token = issueStaffToken(found);
+      const activated = await registerStaffSession(token);
+      if (!activated.ok) {
+        logApiEvent("staff_session_register_failed");
+        return json(res, 503, { error: "staff_session_unavailable" });
+      }
       res.setHeader("Set-Cookie", staffPageCookie(token));
-      const record = { ...found, tokenIssuedAt: now() };
-      state.tokens.set(tokenHash(token), record);
       return json(res, 200, { token, staff: { id: found.id, email: found.email, name: found.name, role: found.role, desks: found.desks } });
     }
     if (req.method === "GET" && path === "/v1/staff/me") {
-      const staff = requireStaff(req, res);
+      const staff = await requireStaff(req, res);
       if (!staff) return;
-      const raw = staffTokenFromHeader(req.headers);
+      const raw = staffTokenFromReq(req);
       if (raw) res.setHeader("Set-Cookie", staffPageCookie(raw));
       return json(res, 200, { staff: { id: staff.id, email: staff.email, name: staff.name, role: staff.role, desks: staff.desks } });
     }
     if (req.method === "POST" && path === "/v1/staff/logout") {
-      const header = String(req.headers.authorization || "");
-      const raw = header.toLowerCase().startsWith("bearer ") ? header.slice(7).trim() : "";
-      if (raw) state.tokens.delete(tokenHash(raw));
+      const headerToken = staffTokenFromHeader(req.headers);
+      const cookieToken = tokenFromCookie(req);
+      const results = [];
+      if (headerToken) results.push(await revokeStaffSession(headerToken));
+      if (cookieToken && cookieToken !== headerToken) results.push(await revokeStaffSession(cookieToken));
+      if (results.some(result => !result.ok)) {
+        logApiEvent("staff_session_revoke_failed");
+        return json(res, 503, { error: "staff_session_unavailable" });
+      }
       res.setHeader("Set-Cookie", staffPageCookie(""));
       return json(res, 200, { ok: true });
     }
     if (req.method === "GET" && path === "/v1/staff/hub/day") {
-      const staff = requireStaff(req, res, ["hub", "studio", "pilot"]);
+      const staff = await requireStaff(req, res, ["hub", "studio", "pilot"]);
       if (!staff) return;
       return json(res, 200, { day: state.hubDay, flow: HUB_FLOW });
     }
     if (req.method === "POST" && path === "/v1/staff/hub/advance") {
-      const staff = requireStaff(req, res, ["hub", "studio"]);
+      const staff = await requireStaff(req, res, ["hub", "studio"]);
       if (!staff) return;
       const body = await readBody(req);
       const want = String(body.stage || nextHub(state.hubDay.stage));
@@ -323,16 +357,16 @@ export async function handler(req, res) {
     return json(res, 404, { error: "not_found" });
   } catch (err) {
     if (err?.message === "invalid_json") return json(res, 400, { error: "invalid_json" });
-    console.error("server_error");
+    logApiEvent("server_error");
     return json(res, 500, { error: "server_error" });
   } finally {
     const successfulMutation = memberStateVersion != null && (req.method === "POST" || req.method === "PUT") && res.statusCode < 400;
     if (successfulMutation) {
       try {
         const saved = await saveRuntimeState(MEMBER_RUNTIME_STATE_KEY, snapshotMemberState(), memberStateVersion);
-        if (!saved.ok) console.error("member_state_conflict");
-      } catch (error) {
-        console.error("member_state_save_failed");
+        if (!saved.ok) logApiEvent("member_state_conflict");
+      } catch {
+        logApiEvent("member_state_save_failed");
       }
     }
   }

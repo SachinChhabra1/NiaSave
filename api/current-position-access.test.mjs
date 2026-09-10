@@ -7,10 +7,13 @@ process.env.STAFF_TOKEN_SECRET=randomBytes(32).toString('base64url');
 process.env.DUMMY_DATA='0';
 delete process.env.DATABASE_URL;delete process.env.POSTGRES_URL;delete process.env.BISON_GOOGLE_SERVICE_ACCOUNT_JSON;
 const {default:handler,issueStaffToken}=await import('./server.mjs');
+const {registerStaffSession}=await import('../lib/staff-auth.mjs');
 test('reporting route keeps staff desk guards and fails closed without source credentials',async t=>{
   const server=http.createServer(handler);await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));t.after(()=>server.close());
   const url=`http://127.0.0.1:${server.address().port}/api/bison/current-position`;
   const admin=issueStaffToken({id:'stf-admin',email:'admin@nia.one'}),hub=issueStaffToken({id:'stf-ramesh',email:'ramesh@nia.one'});
+  assert.equal((await registerStaffSession(admin)).ok,true);
+  assert.equal((await registerStaffSession(hub)).ok,true);
   assert.equal((await fetch(url)).status,401);
   assert.equal((await fetch(url,{headers:{authorization:'Bearer '+hub}})).status,403);
   const result=await fetch(url,{headers:{authorization:'Bearer '+admin}});

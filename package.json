@@ -15,7 +15,7 @@
     "test:bison": "node --test bison/engine.test.mjs bison/current-position*.test.mjs api/current-position-access.test.mjs api/staff-auth.test.mjs api/jat-staff-access.test.mjs lib/runtime-store-cache.test.mjs",
     "test:tanot": "node --test tanot/insightEngine.test.mjs lib/dogra-store.test.mjs",
     "test:commerce": "node --test lib/commerce/*.test.mjs",
-    "test:security": "node --test api/staff-fail-closed.test.mjs lib/security-headers.test.mjs lib/staff-pages.test.mjs lib/commerce/member-invitation.test.mjs lib/commerce/passkeys.test.mjs lib/safe-errors.test.mjs scripts/overlay-safe-errors.test.mjs"
+    "test:security": "node --test api/staff-fail-closed.test.mjs api/staff-login-throttle.test.mjs lib/staff-login-limit.test.mjs lib/staff-session-durable.test.mjs lib/security-headers.test.mjs lib/staff-pages.test.mjs lib/commerce/member-invitation.test.mjs lib/commerce/passkeys.test.mjs lib/safe-errors.test.mjs lib/runtime-store-sanitization.test.mjs scripts/overlay-safe-errors.test.mjs"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",

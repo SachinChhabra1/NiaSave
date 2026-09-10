@@ -60,6 +60,7 @@ Friday rotation/admin evidence added (status codes only):
 - Vercel protection old/stale rejection: stale `_vercel_share` probes on `niasave-access-uat` and `rafiqi-central-access-uat` return `302` to SSO challenge.
 - Vercel protection new acceptance: fresh share URLs generated in-session for both UAT projects return `307` on first hop and `200` when followed.
 - Admin/role boundary regression (`api/jat-staff-access.test.mjs`, `lib/staff-pages.test.mjs`) passes `5/5`, including Ajay Living-only page access and Sikh/Dogra denial.
+- Fresh runtime health baseline after production merge: NiaSave last-5-min status counts show `401`/`410`/`200` only, and `get_runtime_errors` reports no production error groups in the last hour.
 
 Rollback evidence (NiaSave production):
 - Current deployment: `dpl_9GNDaMz7dE5YFXyQvWBbXjp6BKFK` (main merge commit `9240463`).

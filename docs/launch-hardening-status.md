@@ -6,7 +6,7 @@ This is a code review and handoff record, not production acceptance.
 
 The production-member-release branch is already contained in main (checked against 3c57be0a0f69817d9582d86e3f582070221864cb; zero commits ahead, eight behind). Do not merge an obsolete branch or infer a deployment from this. Apply docs/production-member-cutover.md to the reviewed current artifact once Sachin confirms the five-secret bundle. His 10 September instruction pre-approves unattended cutover and member-release merge after that confirmation; a second discretionary approval is not required.
 
-The connected Vercel team listed zero projects and direct lookup of niasave returned 404 on 10 September. No live environment, protection, deployment or Neon setting was changed in this review. Environment access and secret confirmation remain blockers.
+Early 10 September access checks initially returned zero projects/404. Access was later restored for this lane; live Vercel protection and deployment checks are now running against `rafiqi-central`, `niasave`, and both access-UAT projects.
 
 PR #30 predates production cutover and says to keep demo/dummy mode on for www.niasave.com. Do not apply those instructions to the member production release. The new production book is operation-polo-production; retain the old demo and Living books as the cutover runbook requires.
 
@@ -47,6 +47,23 @@ Blocking follow-ups:
 - `rafiqi-central/docs/launch-log.md` heartbeat append is still blocked from this workspace because the central private repository path is not available here.
 - **Request for Owen (done-when):** append this lane heartbeat in `rafiqi-central/docs/launch-log.md` with current UTC time, Completion A status (`A green`), and NiaSave/Vercel hardening state (`items in progress as listed here`).
 - Ajay's legitimate production correction proof, drain/alert live-fire proof, and Neon PITR restore proof remain pending human or central-lane execution.
+
+## Codex execution update - 10 September 2026 06:22 UTC
+
+Production promotion and post-merge verification:
+- PR #33 merged to `main`; merge commit `924046394f037354103e2cb8043f015d27c24559`.
+- NiaSave production deployment `dpl_9GNDaMz7dE5YFXyQvWBbXjp6BKFK` is Ready on `www.niasave.com`.
+- The hardened alias now matches the expected auth boundary on production: `GET https://www.niasave.com/api/api/commerce/catalogue` returns `401` (no longer `503`).
+
+Friday rotation/admin evidence added (status codes only):
+- Invitation old/stale rejection: `GET https://www.niasave.com/` without auth returns `401`; with a stale probe Basic credential also returns `401`.
+- Vercel protection old/stale rejection: stale `_vercel_share` probes on `niasave-access-uat` and `rafiqi-central-access-uat` return `302` to SSO challenge.
+- Vercel protection new acceptance: fresh share URLs generated in-session for both UAT projects return `307` on first hop and `200` when followed.
+- Admin/role boundary regression (`api/jat-staff-access.test.mjs`, `lib/staff-pages.test.mjs`) passes `5/5`, including Ajay Living-only page access and Sikh/Dogra denial.
+
+Rollback evidence (NiaSave production):
+- Current deployment: `dpl_9GNDaMz7dE5YFXyQvWBbXjp6BKFK` (main merge commit `9240463`).
+- Previous immutable deployment candidate: `dpl_4CQb2scBRzMGvdu7q6hf5dY1dfic` (main commit `5548178`).
 
 ## Changes prepared
 

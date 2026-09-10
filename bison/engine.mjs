@@ -427,7 +427,7 @@ export function importBisonData(body = {}) {
       }
       else if (table === "payments") result = recordCollectionPayment({ receivableId: importCell(row, "receivable_id"), amount: importCell(row, "amount"), reference: importCell(row, "reference"), method: importCell(row, "method") || "upi", actor });
       else if (table === "clocks") result = clearClock({ studioId: importCell(row, "studio_id", "studio_code"), countedNests: importCell(row, "counted_nests"), vacantNests: importCell(row, "vacant_nests"), evidence: importCell(row, "evidence"), checks: { physicalCount: String(importCell(row, "physical_count")).toLowerCase() === "true", vacantVerified: String(importCell(row, "vacant_verified")).toLowerCase() === "true", collectionsReviewed: String(importCell(row, "collections_reviewed")).toLowerCase() === "true" }, actor });
-    } catch (error) { result = { error: "row_failed", message: error.message, status: 400 }; }
+    } catch { result = { error: "row_failed", status: 400 }; }
     if (!result || result.error) errors.push({ row: index + 2, error: result && result.error || "row_failed", message: result && result.message || "Invalid row" }); else results.push({ row: index + 2, id: (result.member || result.contract || result.booking || result.receivable || result.payment || result.event || result.studio || {}).id || null });
   });
   if (dryRun || errors.length) restoreState(before, before.persist);
@@ -526,7 +526,10 @@ export async function syncGoogleSheet(body = {}) {
       pending.forEach(item=>processed.add(item.key)); summary[config.tab]=pending.length;
     }
     state.sheetProcessed=Array.from(processed).slice(-20000); state.dummy=false; state.googleSheet={ ...(state.googleSheet||{}), url:`https://docs.google.com/spreadsheets/d/${spreadsheetId}/edit`, spreadsheetId, enabled:true, lastSyncAt:now(), lastSyncStatus:"ok", lastSyncSummary:summary }; log("Google Sheet sync",replacing?"baseline_replaced":"sheet_synced",spreadsheetId,JSON.stringify(summary)); return { ok:true, replaced:replacing, spreadsheetId, syncedAt:state.googleSheet.lastSyncAt, summary };
-  } catch (error) { state.googleSheet={ ...(state.googleSheet||{}), lastSyncAt:now(), lastSyncStatus:"error", lastSyncError:text(error.message,240) }; return { error:"google_sheet_sync_failed", message:error.message, status:502 }; }
+  } catch {
+    state.googleSheet={ ...(state.googleSheet||{}), lastSyncAt:now(), lastSyncStatus:"error", lastSyncError:"google_sheet_sync_failed" };
+    return { error:"google_sheet_sync_failed", status:502 };
+  }
 }
 
 export function bisonPath(pathname, rewrittenPath) { let path = rewrittenPath ? "/" + String(rewrittenPath).replace(/^\/+/, "") : pathname; path = (path || "/").replace(/\/+$/, "") || "/"; if (path.startsWith("/api/")) path = path.slice(4); return path; }
@@ -548,8 +551,8 @@ export async function bisonStorageStatus() {
     // A health probe reads the version only; it never pulls the Living book itself.
     const status = await storageStatus(RUNTIME_STATE_KEY);
     return { storage: status.storage, connected: status.connected, version: status.version, product: "bison", schemaVersion: SCHEMA_VERSION };
-  } catch (error) {
-    console.error("bison_storage_status_failed", error);
+  } catch {
+    console.error("bison_storage_status_failed", { stateKey: RUNTIME_STATE_KEY });
     return { storage: "memory", connected: false, version: 0, product: "bison", schemaVersion: SCHEMA_VERSION };
   }
 }

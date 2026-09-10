@@ -469,8 +469,8 @@ export async function staffStorageStatus() {
   try {
     const status = await storageStatus(RUNTIME_STATE_KEY);
     return { storage: status.storage, connected: status.connected, version: status.version };
-  } catch (error) {
-    console.error("staff_storage_status_failed", error);
+  } catch {
+    console.error("staff_storage_status_failed", { stateKey: RUNTIME_STATE_KEY });
     return { storage: "memory", connected: false, version: 0 };
   }
 }

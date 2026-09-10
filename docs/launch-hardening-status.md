@@ -10,6 +10,44 @@ The connected Vercel team listed zero projects and direct lookup of niasave retu
 
 PR #30 predates production cutover and says to keep demo/dummy mode on for www.niasave.com. Do not apply those instructions to the member production release. The new production book is operation-polo-production; retain the old demo and Living books as the cutover runbook requires.
 
+## Codex execution update - 10 September 2026 06:05 UTC
+
+Completion A boundary was rechecked live from this lane (status codes only):
+
+| Probe | Result |
+| --- | --- |
+| `POST https://rafiqicentral.com/api/service/member` (unsigned) | `401` |
+| `GET https://www.niasave.com/` | `401` |
+| `POST https://www.niasave.com/api/auth/login` (preview-member probe) | `410` |
+| `GET https://www.niasave.com/ops.html` | `401` |
+| `GET https://www.niasave.com/desk.html` | `401` |
+| `GET https://www.niasave.com/bison-data.html` | `401` |
+| `GET https://www.niasave.com/dispatch.html` | `401` |
+
+Signed-path evidence without exposing keys:
+- Founder/Owen validated signed `POST /api/service/member` returns `200` with the production key pair.
+- Vercel production runtime logs for `rafiqi-central` on `/api/service/member` in the latest window show both `401` and `200` responses after redeploy.
+
+Thursday items 2-5 status:
+1. **SSO decision - done:** keep Vercel Authentication enabled on Preview for `niasave` and `rafiqi-central`, and on all deployments for `niasave-access-uat` and `rafiqi-central-access-uat`.
+2. **Rotation verify - in progress:** current boundary checks pass (unsigned failure + signed success), but old-value rejection proof for invitation/bypass rotations still needs human-operated evidence.
+3. **Delete dead login vars - in progress:** no runtime code references remain for `RAFIQI_LOGIN_EMAIL`, `RAFIQI_LOGIN_PASSWORD`, `RAFIQI_ROLE_ASSIGNMENTS`, or `RAFIQI_SESSION_SECRET`; environment-level deletion evidence remains pending.
+4. **Admin lists - in progress:** NiaSave named staff roles still scope Ajay to Living only; central-side list confirmation remains in the central lane.
+
+Friday hardening items started (payments excluded):
+- NiaSave production headers validated on live responses (`Strict-Transport-Security`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, strict CSP; invite and desk gates still enforce 401).
+- Staff cookie hardening spot-check passed: `POST /api/v1/staff/logout` returns `200` and clears `__Host-nia_staff_page` with `Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=0`.
+- UAT protection validated: direct unauthenticated requests to `niasave-access-uat.vercel.app` and `rafiqi-central-access-uat.vercel.app` redirect to Vercel SSO (`302` to `vercel.com/sso-api`).
+- NiaSave production health endpoints return `200` with `demo:false` and connected Postgres-backed stores.
+- Central and NiaSave runtime status baselines captured from Vercel logs for alert tuning (`/api/service/member` shows `401` and `200`; NiaSave shows expected `401` gate and `410` preview-login rejection traffic).
+- Member API alias hardening fix prepared in NiaSave: `/api/api/commerce/*` is now treated as a member API alias by the invitation middleware, preventing unauthenticated alias bypass to a `503` path; this is covered by an added regression case in `member-invitation.test.mjs`.
+- Production-grade verification rerun after the alias fix: `test:security` (`19/19` pass), `test:commerce` (`90/90` pass), and `build:production` pass (existing `tanot-longewala-post.jpg` unresolved-at-build warning unchanged).
+
+Blocking follow-ups:
+- `rafiqi-central/docs/launch-log.md` heartbeat append is still blocked from this workspace because the central private repository path is not available here.
+- **Request for Owen (done-when):** append this lane heartbeat in `rafiqi-central/docs/launch-log.md` with current UTC time, Completion A status (`A green`), and NiaSave/Vercel hardening state (`items in progress as listed here`).
+- Ajay's legitimate production correction proof, drain/alert live-fire proof, and Neon PITR restore proof remain pending human or central-lane execution.
+
 ## Changes prepared
 
 - Staff API authentication defaults on, including on hosted Preview. STAFF_AUTH_REQUIRED=0 opens desks only in an explicitly local demo; it cannot open a hosted or real-data runtime.

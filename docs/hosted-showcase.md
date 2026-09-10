@@ -1,5 +1,7 @@
 # Hosted NiaSave test backend
 
+**10 September hardening update:** the historical no-bypass verification below predates Central preview protection being enabled. Follow [P0 connection recovery](hardening-p0-release.md) for the temporary server-only transport credential, paired rotation, repeatable acceptance, and eventual canonical-origin cutover. Hosted recovery is pending; do not interpret older acceptance results as verification of the current deployment.
+
 Built 8 September 2026 for internal testing and investor walkthroughs. This is not member launch.
 
 ## Deployment

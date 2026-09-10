@@ -31,3 +31,7 @@
 ## Codex — 2026-09-10 22:59 UTC — close-out
 
 - done tonight | merged in-scope harden/evidence PRs (#37, #39, #40, #41) and re-verified production gates | still open human-only: workbook/data uploads, Ajay legit production proof, Neon PITR human attestation, founder-only secret rotation attestations, central launch-log filing.
+
+## Codex — 2026-09-10 23:30 UTC — final close (30-min finish)
+
+- done tonight | final gate recurl pass (`www/ops 401`, commerce alias `401`, preview login + order `410`, stock `200`, Central unsigned `POST 401`, Central `GET 405`), no open stale drafts, stale hardening PR #30 closed | still open human-only: workbook/data uploads, Ajay legit production proof, Neon PITR human attestation, founder-only secret rotation attestations, central launch-log filing.

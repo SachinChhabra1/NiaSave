@@ -40,6 +40,8 @@ Friday hardening items started (payments excluded):
 - UAT protection validated: direct unauthenticated requests to `niasave-access-uat.vercel.app` and `rafiqi-central-access-uat.vercel.app` redirect to Vercel SSO (`302` to `vercel.com/sso-api`).
 - NiaSave production health endpoints return `200` with `demo:false` and connected Postgres-backed stores.
 - Central and NiaSave runtime status baselines captured from Vercel logs for alert tuning (`/api/service/member` shows `401` and `200`; NiaSave shows expected `401` gate and `410` preview-login rejection traffic).
+- Member API alias hardening fix prepared in NiaSave: `/api/api/commerce/*` is now treated as a member API alias by the invitation middleware, preventing unauthenticated alias bypass to a `503` path; this is covered by an added regression case in `member-invitation.test.mjs`.
+- Production-grade verification rerun after the alias fix: `test:security` (`19/19` pass), `test:commerce` (`90/90` pass), and `build:production` pass (existing `tanot-longewala-post.jpg` unresolved-at-build warning unchanged).
 
 Blocking follow-ups:
 - `rafiqi-central/docs/launch-log.md` heartbeat append is still blocked from this workspace because the central private repository path is not available here.

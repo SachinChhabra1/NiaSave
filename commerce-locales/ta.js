@@ -329,4 +329,5 @@ export default {
   "Pay by UPI at pickup.": "பொருட்களைப் பெறும் இடத்தில் UPI மூலம் செலுத்தவும்.",
   "Pay by UPI on delivery.": "டெலிவரி பெறும்போது UPI மூலம் செலுத்தவும்.",
   "Where should we deliver?": "எங்கே டெலிவரி செய்ய வேண்டும்?",
+  "Loading…": "ஏற்றப்படுகிறது…",
 };

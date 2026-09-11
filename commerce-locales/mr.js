@@ -329,4 +329,5 @@ export default {
   "Pay by UPI at pickup.": "पिकअपच्या वेळी UPI ने पैसे द्या.",
   "Pay by UPI on delivery.": "डिलिव्हरीच्या वेळी UPI ने पैसे द्या.",
   "Where should we deliver?": "डिलिव्हरी कुठे करायची?",
+  "Loading…": "लोड होत आहे…",
 };

@@ -64,4 +64,5 @@ export default {
   "Products will appear here when they are available to order.": "ऑर्डर के लिए उपलब्ध होने पर उत्पाद यहाँ दिखेंगे।",
   "month": "महीना",
   "day": "दिन",
+  "Loading…": "लोड हो रहा है…",
 };

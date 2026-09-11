@@ -1,5 +1,11 @@
 # Production member storefront cutover
 
+## Entry correction approved 11 September 2026
+
+Sachin clarified the required first visit: the public-only homepage is blurred beneath a persistent member sign-in card, with no separate invitation-password screen. This supersedes the shared HTTP Basic invitation requirements below. MEMBER_INVITE_GATE and MEMBER_INVITE_PASSWORD no longer control the production passkey entry; they do not grant member access. Canonical HTTPS origin validation, Central passkey membership checks, staff desk authorization and service signatures remain enforced. No member invitations or general rollout are authorized by this correction.
+
+Member sign-in bootstrap and passkey ceremonies require the Central connection, real-data mode and durable attempt limits, independently of legacy store administrator credentials. Ordering retains its existing configuration checks. Verify a fresh browser reaches the blurred homepage and sign-in card directly, signed-out private APIs deny access, and a real approved member completes sign-in on their own device. Missing store configuration must not replace the login card with an invitation prompt.
+
 Prepared 9 September 2026. Sachin selected production Central records and passkey sign-in, with general member rollout still closed. Automatic approval review requires an additional explicit approval for the configuration bundle below before applying it.
 
 ## Result

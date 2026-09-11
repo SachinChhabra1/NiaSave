@@ -49,3 +49,7 @@
 ## Codex — 2026-09-11 15:33 UTC — final DONE close
 
 - done tonight | merged PR #44 to `main` (commit `03577e6`), production deploy ready (`dpl_FTzNmXq74n6jvbNVKmUKzKRAF9FW`), live recurl now `GET /` => `200 text/html` with HTML doctype; staff gates remain (`/ops.html` `401`), Central boundaries unchanged (`unsigned POST /api/service/member` `401`, `GET /api/service/member` `405`); no open in-scope harden/home PRs (only legacy open PRs #4-#7, none drafts) | remains founder-only: T04/T05/T16 attestations, Ajay legitimate production correction proof, signed-200 attestation custody.
+
+## Codex — 2026-09-11 15:33 UTC — lane finish DONE
+
+- done | closed in-scope cutover/hardening/home stream with merged PRs #33 (`9240463`), #43 (`c634e1e`), #44 (`03577e6`), #45 (`1d17871`); no open in-scope PRs left from this lane (open #4-#7 are legacy Polo items, out of scope) | parked founder-only: T04/T05/T16 attestations, Ajay legitimate production correction proof, signed-200 attestation custody | live probes: `GET https://www.niasave.com/` => `200 text/html` + doctype, `/ops.html` => `401`, unsigned central `POST /api/service/member` => `401`, central `GET /api/service/member` => `405`.

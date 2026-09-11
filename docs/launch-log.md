@@ -35,3 +35,13 @@
 ## Codex — 2026-09-10 23:30 UTC — final close (30-min finish)
 
 - done tonight | final gate recurl pass (`www/ops 401`, commerce alias `401`, preview login + order `410`, stock `200`, Central unsigned `POST 401`, Central `GET 405`), no open stale drafts, stale hardening PR #30 closed | still open human-only: workbook/data uploads, Ajay legit production proof, Neon PITR human attestation, founder-only secret rotation attestations, central launch-log filing.
+
+## Codex — 2026-09-11 00:16 UTC — home/invite + login-overlay conflict closure
+
+- done | Root cause confirmed: `memberInvitation()` challenged `GET /` with a plain-text `401` before `commerce.html` and the PR #43 sign-in overlay could render.
+- done | Preserved invite gate and staff protections while replacing member-entry unauth response with an HTML invite shell (`401` + `WWW-Authenticate`) so invite handling and overlay intent coexist.
+- done | Kept member API invite boundary intact (`/api/commerce*` and aliases still challenge without invite credentials); `/ops`/`desk`/`bison`/`dispatch` stay under staff gate.
+- done | Regression coverage added for HTML invite response on member entry routes and non-HTML invite challenge on member APIs.
+- done | Verification: local security suite `34/34` pass (`npm run test:security`); live pre-fix `GET https://www.niasave.com/` was `401 text/plain` with bare invite text.
+- done | PR preview verification (deployment `dpl_E8TJmuX7xVFpYqppQ1Z9pQPFJVw2`): member entry request resolves to HTML (`content-type: text/html`) rather than bare plain-text invite wall.
+- blocked | one founder tap | Merge PR #44 to promote this behavior on production `www.niasave.com`.

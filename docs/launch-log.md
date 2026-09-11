@@ -45,3 +45,7 @@
 - done | Verification: local security suite `34/34` pass (`npm run test:security`); live pre-fix `GET https://www.niasave.com/` was `401 text/plain` with bare invite text.
 - done | PR preview verification (deployment `dpl_E8TJmuX7xVFpYqppQ1Z9pQPFJVw2`): member entry request resolves to HTML (`content-type: text/html`) rather than bare plain-text invite wall.
 - blocked | one founder tap | Merge PR #44 to promote this behavior on production `www.niasave.com`.
+
+## Codex — 2026-09-11 15:33 UTC — final DONE close
+
+- done tonight | merged PR #44 to `main` (commit `03577e6`), production deploy ready (`dpl_FTzNmXq74n6jvbNVKmUKzKRAF9FW`), live recurl now `GET /` => `200 text/html` with HTML doctype; staff gates remain (`/ops.html` `401`), Central boundaries unchanged (`unsigned POST /api/service/member` `401`, `GET /api/service/member` `405`); no open in-scope harden/home PRs (only legacy open PRs #4-#7, none drafts) | remains founder-only: T04/T05/T16 attestations, Ajay legitimate production correction proof, signed-200 attestation custody.

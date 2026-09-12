@@ -376,4 +376,7 @@ export default {
   "Options listed": "காட்டப்பட்ட தேர்வுகள்",
   "Ready now": "இப்போது கிடைக்கும்",
   "Move-in total from": "குடியேறும் மொத்தம் தொடக்கம்",
+  "A verification code could not be sent. Try again or sign in with your password if you already have one.": "உறுதிப்படுத்தும் குறியீட்டை அனுப்ப முடியவில்லை. மீண்டும் முயலவும் அல்லது கடவுச்சொல் இருந்தால் அதனால் உள்நுழையவும்.",
+  "Central member lookup unavailable — try again or use password if offered.": "Central உறுப்பினர் சரிபார்ப்பு இல்லை — மீண்டும் முயலவும் அல்லது கடவுச்சொல் வழங்கப்பட்டால் பயன்படுத்தவும்.",
+  "Password setup is not available yet. Ask your Nia team.": "கடவுச்சொல் அமைப்பு இன்னும் இல்லை. Nia குழுவிடம் கேட்கவும்.",
 };

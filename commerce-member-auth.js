@@ -1,9 +1,24 @@
+const API_PREFIX = '/api/commerce';
 const PHONE_AUTH_MODES = new Set([
   'phone', 'otp', 'phone_otp', 'legacy', 'phone_password',
   'set_password', 'member_phone', 'phone_otp_password'
 ]);
 const SET_PASSWORD_NEXT = new Set(['set_password', 'password', 'set-password', 'update_password']);
-const RETRY_SET_PASSWORD = new Set(['not_found', 'use_password_access', 'method_not_allowed']);
+const RETRY_MISSING_PATH = new Set(['not_found', 'use_password_access', 'method_not_allowed']);
+const RETRY_SET_PASSWORD = new Set([...RETRY_MISSING_PATH, 'setup_expired']);
+
+export function memberAuthCapabilities(cat) {
+  return cat?.memberAuthCapabilities && typeof cat.memberAuthCapabilities === 'object'
+    ? cat.memberAuthCapabilities
+    : {};
+}
+
+export function commerceAuthPath(value, fallback = '') {
+  const raw = typeof value === 'string' ? value.trim() : '';
+  if (!raw) return fallback;
+  const path = raw.startsWith(API_PREFIX + '/') ? raw.slice(API_PREFIX.length) : raw;
+  return path.startsWith('/auth/') ? path : fallback;
+}
 
 export function usesPhoneAuth(cat) {
   if (!cat || cat.memberAuth === 'passkey') return false;
@@ -17,8 +32,41 @@ export function usesPhoneAuth(cat) {
   );
 }
 
+export function hasPhoneOtpCapabilities(cat) {
+  const caps = memberAuthCapabilities(cat);
+  return Boolean(
+    caps.otpRequestPath || caps.otpVerifyPath || caps.setPasswordPath ||
+    caps.registeredPhoneOnly || caps.mode === 'password_otp' ||
+    (Array.isArray(caps.setPasswordAliases) && caps.setPasswordAliases.length)
+  );
+}
+
+export function usesPhoneOtpFlow(cat) {
+  return usesPhoneAuth(cat) || hasPhoneOtpCapabilities(cat);
+}
+
 export function usesPasswordAuth(cat) {
-  return cat?.memberAuth === 'password' || Boolean(cat?.capabilities?.password || cat?.auth?.password);
+  return cat?.memberAuth === 'password' || Boolean(cat?.capabilities?.password || cat?.auth?.password || memberAuthCapabilities(cat).loginPath);
+}
+
+export function otpRequestPaths(cat) {
+  return [...new Set([
+    commerceAuthPath(memberAuthCapabilities(cat).otpRequestPath, ''),
+    '/auth/request',
+    '/auth/password/request'
+  ].filter(Boolean))];
+}
+
+export function otpVerifyPaths(cat) {
+  return [...new Set([
+    commerceAuthPath(memberAuthCapabilities(cat).otpVerifyPath, ''),
+    '/auth/verify',
+    '/auth/password/verify'
+  ].filter(Boolean))];
+}
+
+export function loginPath(cat) {
+  return commerceAuthPath(memberAuthCapabilities(cat).loginPath, '/auth/login');
 }
 
 export function nationalMobile(value) {
@@ -53,7 +101,10 @@ export function authErrorText(code, t) {
     member_password_not_configured: t('Password sign-in is not available yet. Ask your Nia team.', 'पासवर्ड साइन इन अभी उपलब्ध नहीं है। निया टीम से पूछें।'),
     password_required: t('Set a password to stay signed in on this phone.', 'इस फोन पर साइन इन रहने के लिए पासवर्ड बनाएँ।'),
     set_password_required: t('Set a password to stay signed in on this phone.', 'इस फोन पर साइन इन रहने के लिए पासवर्ड बनाएँ।'),
-    password_not_set: t('Set a password to stay signed in on this phone.', 'इस फोन पर साइन इन रहने के लिए पासवर्ड बनाएँ।')
+    password_not_set: t('Set a password to stay signed in on this phone.', 'इस फोन पर साइन इन रहने के लिए पासवर्ड बनाएँ।'),
+    otp_unavailable: t('A verification code could not be sent. Try again or sign in with your password if you already have one.', 'पुष्टि कोड नहीं भेजा जा सका। फिर कोशिश करें या पासवर्ड से साइन इन करें।'),
+    central_member_lookup_unavailable: t('Central member lookup unavailable — try again or use password if offered.', 'सेंट्रल सदस्य जाँच उपलब्ध नहीं है — फिर कोशिश करें या पासवर्ड इस्तेमाल करें।'),
+    member_setup_not_configured: t('Password setup is not available yet. Ask your Nia team.', 'पासवर्ड बनाना अभी उपलब्ध नहीं है। निया टीम से पूछें।')
   })[code];
 }
 
@@ -78,15 +129,24 @@ function setPasswordSignal(result) {
 export function needsSetPassword(result, cat) {
   if (setPasswordSignal(result)) return true;
   if (result?.account) return false;
-  return usesPhoneAuth(cat);
+  return usesPhoneOtpFlow(cat);
 }
 
 export function setPasswordPaths(result, cat) {
+  const caps = memberAuthCapabilities(cat);
   const named = [
     result?.passwordPath, result?.setPasswordPath, result?.nextPath,
+    caps.setPasswordPath,
+    ...(Array.isArray(caps.setPasswordAliases) ? caps.setPasswordAliases : []),
     cat?.auth?.passwordPath, cat?.auth?.setPasswordPath, cat?.capabilities?.passwordPath
-  ].filter(path => typeof path === 'string' && path.startsWith('/auth/'));
-  return [...new Set([...named, '/auth/password', '/auth/set-password', '/auth/password/set', '/auth/update-password'])];
+  ].map(path => commerceAuthPath(path, '')).filter(Boolean);
+  return [...new Set([
+    ...named,
+    '/auth/password',
+    '/auth/password/set',
+    '/auth/set-password',
+    '/auth/update-password'
+  ])];
 }
 
 export function passwordBody(fields, {phone, challenge, token, remember} = {}) {
@@ -112,18 +172,21 @@ export function setPasswordIssue(fields) {
   return '';
 }
 
-export async function submitSetPassword(api, body, cat, result) {
-  const paths = setPasswordPaths(result, cat);
+export async function submitAuthPaths(api, paths, body, retryCodes = RETRY_MISSING_PATH) {
   let last;
   for (const path of paths) {
     try { return await api(path, body, 'POST'); }
     catch (e) {
       last = e;
-      if (e.status === 404 || e.status === 405 || RETRY_SET_PASSWORD.has(e.code)) continue;
+      if (e.status === 404 || e.status === 405 || retryCodes.has(e.code)) continue;
       throw e;
     }
   }
   throw last || {code: 'not_found'};
+}
+
+export async function submitSetPassword(api, body, cat, result) {
+  return submitAuthPaths(api, setPasswordPaths(result, cat), body, RETRY_SET_PASSWORD);
 }
 
 function steps(t, current) {

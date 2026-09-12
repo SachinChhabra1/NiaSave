@@ -1,6 +1,6 @@
 import {owner,ownerActions,ownerControls,ownerRequest,restoreOwner,signInOwner,exitOwner,ownerLoginMarkup,ownerAccountMarkup,ownerEarnMarkup,ownerSendMarkup} from './commerce-owner.js';
 import {passkeyMarkup,usePasskey,takePasskeySetup} from './commerce-passkeys.js';
-import {usesPhoneAuth,usesPasswordAuth,e164In,rememberOn,authErrorText,needsSetPassword,setPasswordToken,passwordBody,setPasswordIssue,submitSetPassword,phoneFormMarkup,verifyFormMarkup,setPasswordFormMarkup,rememberFormMarkup,passwordFormMarkup} from './commerce-member-auth.js';
+import {usesPhoneOtpFlow,usesPasswordAuth,e164In,rememberOn,authErrorText,needsSetPassword,setPasswordToken,passwordBody,setPasswordIssue,submitSetPassword,submitAuthPaths,otpRequestPaths,otpVerifyPaths,loginPath,phoneFormMarkup,verifyFormMarkup,setPasswordFormMarkup,rememberFormMarkup,passwordFormMarkup} from './commerce-member-auth.js';
 import {membershipMarkup,partnerListMarkup,partnerConsentMarkup,partnerState} from './commerce-services.js';
 import { planForm, planResult, planStatus, fieldsFromValues, valuesFromFields, sameFields } from './commerce-plan.js';
 import { booksMarkup, downloadBooks, personalEntryForm, healthSupportDialog, entryPurposeOptions } from './commerce-books.js';
@@ -144,7 +144,7 @@ function login(){
   if(cat.memberAuth==='passkey')return show(t('Member sign in'),passkeyMarkup({t,setup:Boolean(passkeySetupToken)})+entryLanguage());
   if(cat.preview)return show(t('Sign in to Niasave','नियासेव में साइन इन करें'),`<div class="stack"><p class="info">${t('Preview access — no real OTP, orders or payment.','प्रीव्यू प्रवेश — असली OTP, ऑर्डर या भुगतान नहीं।')}</p><button class="primary" data-action="preview-login" data-id="member">${t('Continue as preview member','प्रीव्यू सदस्य के रूप में जारी रखें')}</button></div>`);
   if(authStep==='password'&&usesPasswordAuth(cat))return showPasswordLogin();
-  if(usesPhoneAuth(cat)||authStep==='phone')return showPhoneLogin();
+  if(usesPhoneOtpFlow(cat)||authStep==='phone')return showPhoneLogin();
   if(cat.memberAuth==='password')return showPasswordLogin();
   return showPhoneLogin();
 }
@@ -261,18 +261,19 @@ if(form.id==='nest-search-form'){nestStart=fields.start;await loadNests();render
 if(form.id==='earn-form'){if(!earnPending)earnPending={accountId:account.id,key:crypto.randomUUID(),body:{jobId:fields.jobId,revision:fields.revision,consent:fields.consent==='on'}};save('nia-earn-pending',earnPending);await confirmJob();}
 if(form.id==='login-form'){
   if(form.dataset.authStep==='password-login'||(cat.memberAuth==='password'&&!fields.phone)){
-    await api('/auth/login',passwordBody(fields,{phone:authPhone||undefined}));
+    await api(loginPath(cat),passwordBody(fields,{phone:authPhone||undefined}));
     $('#dialog').close();await refresh();return;
   }
   const phone=e164In(fields.phone);
   if(!phone)throw {code:'invalid_phone',message:errorText('invalid_phone')};
   authPhone=phone;
-  const result=await api('/auth/request',{phone});
+  const result=await submitAuthPaths(api,otpRequestPaths(cat),{phone});
   challenge=typeof result.challenge==='string'?result.challenge:'';
   show(t('Enter your code','अपना कोड डालें'),verifyFormMarkup({t,esc,phone:authPhone})+entryLanguage());
 }
 if(form.id==='verify-form'){
-  const result=await api('/auth/verify',{challenge,code:fields.code,...(authPhone?{phone:authPhone}:{})});
+  if(!authPhone)throw {code:'invalid_phone',message:errorText('invalid_phone')};
+  const result=await submitAuthPaths(api,otpVerifyPaths(cat),{challenge,code:fields.code,phone:authPhone});
   passwordToken=setPasswordToken(result);
   if(needsSetPassword(result,cat)){show(t('Set your password','अपना पासवर्ड बनाएँ'),setPasswordFormMarkup({t})+entryLanguage());return;}
   if(result.account){$('#dialog').close();await refresh();return;}
@@ -288,7 +289,7 @@ if(form.id==='set-password-form'){
 }
 if(form.id==='remember-form'){
   if(!pendingPassword)throw {message:t('Set a password to stay signed in on this phone.','इस फोन पर साइन इन रहने के लिए पासवर्ड बनाएँ।')};
-  await api('/auth/login',passwordBody({password:pendingPassword,remember:rememberOn(fields)},{phone:authPhone}));
+  await api(loginPath(cat),passwordBody({password:pendingPassword,remember:rememberOn(fields)},{phone:authPhone}));
   pendingPassword='';
   $('#dialog').close();await refresh();
 }

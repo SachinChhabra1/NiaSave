@@ -376,4 +376,7 @@ export default {
   "Options listed": "ಪಟ್ಟಿಯಲ್ಲಿರುವ ಆಯ್ಕೆಗಳು",
   "Ready now": "ಈಗ ಸಿದ್ಧ",
   "Move-in total from": "ಪ್ರವೇಶ ಒಟ್ಟು ಮೊತ್ತ ಆರಂಭ",
+  "A verification code could not be sent. Try again or sign in with your password if you already have one.": "ಪರಿಶೀಲನೆ ಕೋಡ್ ಕಳುಹಿಸಲಾಗಲಿಲ್ಲ. ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ ಅಥವಾ ಪಾಸ್‌ವರ್ಡ್ ಇದ್ದರೆ ಅದರಿಂದ ಸೈನ್ ಇನ್ ಮಾಡಿ.",
+  "Central member lookup unavailable — try again or use password if offered.": "Central ಸದಸ್ಯ ಪರಿಶೀಲನೆ ಲಭ್ಯವಿಲ್ಲ — ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ ಅಥವಾ ಪಾಸ್‌ವರ್ಡ್ ನೀಡಿದ್ದರೆ ಬಳಸಿ.",
+  "Password setup is not available yet. Ask your Nia team.": "ಪಾಸ್‌ವರ್ಡ್ ಹೊಂದಿಸುವಿಕೆ ಇನ್ನೂ ಲಭ್ಯವಿಲ್ಲ. Nia ತಂಡವನ್ನು ಕೇಳಿ.",
 };

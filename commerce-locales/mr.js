@@ -376,4 +376,7 @@ export default {
   "Options listed": "दाखवलेले पर्याय",
   "Ready now": "आत्ता उपलब्ध",
   "Move-in total from": "राहायला येताना एकूण रक्कम सुरू",
+  "A verification code could not be sent. Try again or sign in with your password if you already have one.": "पडताळणी कोड पाठवता आला नाही. पुन्हा प्रयत्न करा किंवा पासवर्ड असल्यास त्यातून साइन इन करा.",
+  "Central member lookup unavailable — try again or use password if offered.": "Central सदस्य तपासणी उपलब्ध नाही — पुन्हा प्रयत्न करा किंवा पासवर्ड दिला असल्यास वापरा.",
+  "Password setup is not available yet. Ask your Nia team.": "पासवर्ड सेट करणे अजून उपलब्ध नाही. Nia टीमला विचारा.",
 };

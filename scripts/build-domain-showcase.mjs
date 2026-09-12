@@ -32,7 +32,7 @@ const livingEngine=resolve(out,'bison/engine.mjs');
 await writeFile(livingEngine,(await readFile(livingEngine,'utf8')).replace('const SOURCE = "Bison Living book"','const SOURCE = "Jat Unit · Living book"'));
 await overlayRuntimeCache(root,out);
 await overlaySafeErrors(out);
-const front=['commerce.html','commerce.css','commerce.js','commerce-passkeys.js','commerce-i18n.js','commerce-books.js','commerce-services.js','commerce-plan.js','commerce-earn-map.js','commerce-categories.js','commerce-locales'];
+const front=['commerce.html','commerce.css','commerce.js','commerce-passkeys.js','commerce-member-auth.js','commerce-i18n.js','commerce-books.js','commerce-services.js','commerce-plan.js','commerce-earn-map.js','commerce-categories.js','commerce-locales'];
 for(const file of front)await cp(resolve(root,file),resolve(out,file),{recursive:true});
 await cp(resolve(root,'assets'),resolve(out,'assets'),{recursive:true});
 const runtime=resolve(out,'showcase-runtime');await mkdir(runtime,{recursive:true});

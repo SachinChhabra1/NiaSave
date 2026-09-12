@@ -7,7 +7,7 @@ const root=resolve(dirname(fileURLToPath(import.meta.url)),'..');
 const out=resolve(process.argv[2]||resolve(root,'../niasave-access-uat'));
 if(out===root||out.startsWith(root+'/'))throw Error('Use a separate deployment directory');
 await mkdir(resolve(out,'public'),{recursive:true});
-for(const name of ['commerce.html','commerce.css','commerce.js','commerce-i18n.js','commerce-books.js','commerce-plan.js','commerce-passkeys.js','commerce-services.js','commerce-earn-map.js','commerce-categories.js','commerce-locales','assets'])await cp(resolve(root,name),resolve(out,'public',name),{recursive:true});
+for(const name of ['commerce.html','commerce.css','commerce.js','commerce-i18n.js','commerce-books.js','commerce-plan.js','commerce-passkeys.js','commerce-member-auth.js','commerce-services.js','commerce-earn-map.js','commerce-categories.js','commerce-locales','assets'])await cp(resolve(root,name),resolve(out,'public',name),{recursive:true});
 await cp(resolve(root,'public/products'),resolve(out,'public/products'),{recursive:true});
 await cp(resolve(root,'commerce.html'),resolve(out,'public/index.html'));
 // Fail packaging before deployment if a member module's static import is missing.

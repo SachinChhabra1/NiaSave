@@ -62,3 +62,29 @@
 /* The homepage remains visible behind a persistent, accessible sign-in dialog. */
 .entry-hero{display:grid;grid-template-columns:1fr 1.15fr;align-items:center;gap:64px;margin:20px 0 42px}.entry-hero h1{max-width:570px;font-size:clamp(36px,4.3vw,64px);line-height:1.07;letter-spacing:-2px}.entry-hero p{max-width:420px;margin:24px 0 0;font-size:18px;color:var(--muted)}.entry-hero img{width:100%;height:360px;object-fit:cover;border-radius:18px}.entry-services{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}.entry-services article{padding:26px;background:var(--surface);border:1px solid var(--line);border-radius:12px}.entry-services .icon{color:var(--accent);margin-bottom:22px;width:28px;height:28px}.entry-services h2{margin-bottom:12px}.entry-services p{font-size:14px;color:var(--muted);margin:0}.signin-open{overflow:hidden}.signin-dialog{width:min(460px,calc(100% - 32px));padding:32px;border:1px solid #e2e6ec;border-radius:20px;box-shadow:0 24px 80px #17233433;max-height:calc(100dvh - 40px);overscroll-behavior:contain}.signin-dialog::backdrop{background:rgba(32,43,58,.38);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}.signin-dialog .dialog-head{display:block;margin-bottom:22px;text-align:center}.signin-dialog .dialog-head::before{content:"";display:block;width:44px;height:44px;margin:0 auto 18px;background:url('/assets/nia-logo-transparent.png') center/contain no-repeat}.signin-dialog .dialog-head h2{font-size:28px;letter-spacing:-.7px}.signin-dialog .dialog-head .icon-button{display:none}.signin-dialog .stack{gap:18px}.signin-dialog p{margin:0;color:var(--muted);font-size:14px;line-height:1.55}.signin-dialog .primary{min-height:52px;font-size:16px;border-radius:10px}.signin-dialog details{font-size:13px;border-top:1px solid var(--line);padding-top:16px;line-height:1.5}.signin-dialog summary{cursor:pointer;min-height:28px;font-weight:500}.signin-dialog details p{margin-top:10px;font-size:13px}.signin-dialog .entry-language{padding-top:20px;margin-top:22px;border-top:1px solid var(--line)}.signin-dialog .entry-language select{min-height:44px;font-size:14px}.signin-dialog .entry-language label{font-size:12px}.signin-dialog .error-inline{color:#9c251d}.signin-dialog .check{font-size:14px}
 @media(max-width:760px){.entry-hero{grid-template-columns:1fr;gap:24px;margin:8px 0 24px}.entry-hero h1{font-size:38px;letter-spacing:-1.2px}.entry-hero p{font-size:16px;margin-top:16px}.entry-hero img{height:230px}.entry-services{grid-template-columns:1fr 1fr;gap:12px}.entry-services article{padding:18px}.entry-services h2{font-size:20px}.signin-dialog{padding:26px 24px;border-radius:18px;max-height:calc(100dvh - 24px)}.signin-dialog .dialog-head h2{font-size:26px}.signin-dialog .dialog-head::before{width:36px;height:36px;margin-bottom:14px}.signin-dialog .stack{gap:16px}}
+
+/* Member phone refresh for Live/Earn/Send only; Save stays untouched. */
+.les-screen{display:grid;gap:20px}
+.les-hero-card{max-width:none;padding:22px 22px 20px;border:1px solid #1f4374;border-radius:18px;background:linear-gradient(155deg,#0c1f39 0%,#12396f 58%,#1f4f8d 100%);color:#fff;box-shadow:0 12px 34px #1026402e}
+.les-hero-card .eyebrow{color:#d2e4ff}
+.les-hero-card h1,.les-hero-card h2{color:#fff}
+.les-hero-card p{color:#e3eeff}
+.les-stat-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:14px}
+.les-stat{border:1px solid #8fb4e355;border-radius:12px;background:#ffffff17;padding:10px 11px;display:grid;gap:5px;min-width:0}
+.les-stat small{font-size:11px;color:#cfe2ff;line-height:1.3;margin:0}
+.les-stat strong{font-size:18px;line-height:1.25;color:#fff;overflow-wrap:anywhere}
+.les-surface-card{margin-bottom:0;border-radius:16px;box-shadow:0 5px 18px #0f1f3420}
+.les-hero-row{align-items:stretch}
+.les-refresh{align-self:flex-end;min-height:46px;border-radius:12px;border-color:#1f4f8d;color:#0f325d;background:#eef5ff}
+.les-refresh:hover:not(:disabled){background:#ddefff}
+.les-send-strip{margin:0;display:grid;gap:16px;border-radius:18px;border-color:#d3def0;background:#f7faff}
+.les-send-strip h2{font-size:26px;letter-spacing:-.4px}
+.les-send-strip p{font-size:14px;color:var(--muted);margin:8px 0 0}
+.les-send-strip-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.les-send-strip-stats .les-stat{background:#fff;border-color:#d7e2f3}
+.les-send-strip-stats .les-stat small{color:#5f6f84}
+.les-send-strip-stats .les-stat strong{color:#122640}
+.les-send-screen .service-intro{max-width:none}
+.les-send-screen .books-toolbar,.les-send-screen .books-dashboard,.les-send-screen .books-transfer{margin-top:0}
+@media(max-width:1000px){.les-hero-row{display:grid;gap:12px}.les-refresh{justify-self:start}}
+@media(max-width:760px){.les-screen{gap:16px}.les-hero-card{padding:16px;border-radius:16px}.les-hero-card h1{font-size:31px;letter-spacing:-.8px}.les-hero-card h2{font-size:24px}.les-hero-card p{font-size:14px;line-height:1.55}.les-stat-grid{grid-template-columns:1fr 1fr;gap:8px}.les-stat{padding:9px}.les-stat small{font-size:10px}.les-stat strong{font-size:16px}.les-send-strip{gap:12px;padding:16px;border-radius:16px}.les-send-strip h2{font-size:23px}.les-send-strip-stats{grid-template-columns:1fr 1fr;gap:8px}.les-refresh{width:100%;text-align:center}}

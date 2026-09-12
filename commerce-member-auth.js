@@ -140,10 +140,11 @@ export function setPasswordPaths(result, cat) {
     ...(Array.isArray(caps.setPasswordAliases) ? caps.setPasswordAliases : []),
     cat?.auth?.passwordPath, cat?.auth?.setPasswordPath, cat?.capabilities?.passwordPath
   ].map(path => commerceAuthPath(path, '')).filter(Boolean);
+  // Live #47 setup cookie is Path=/api/commerce/auth/password and is not sent to /auth/set-password.
   return [...new Set([
-    ...named,
     '/auth/password',
     '/auth/password/set',
+    ...named,
     '/auth/set-password',
     '/auth/update-password'
   ])];

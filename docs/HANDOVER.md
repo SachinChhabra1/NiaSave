@@ -52,7 +52,8 @@ Current code reads:
 - `DUMMY_DATA`
 - `STAFF_PASSWORD`
 - `STAFF_TOKEN_SECRET`
-- `SESSION_SECRET` signs 2 Para staff tokens when `STAFF_TOKEN_SECRET` is not set; it is not yet used by the current public member-session implementation
+- `MEMBER_PASSWORD`
+- `SESSION_SECRET` signs the member stay-signed-in cookie. It also remains the documented fallback for 2 Para staff tokens when `STAFF_TOKEN_SECRET` is not set; live staff auth still requires `STAFF_TOKEN_SECRET`. `MEMBER_PASSWORD` (length ≥ 8) plus `SESSION_SECRET` (length ≥ 16) enables password sign-in. Values stay in Vercel only.
 
 Before a real-data launch, explicitly set `DEMO=0` and `DUMMY_DATA=0` only after OTP, payments, staff access, source data and operational checks pass. Do not use those switches as a substitute for implementing the missing integrations.
 

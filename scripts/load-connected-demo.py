@@ -1,4 +1,5 @@
 # Uses the running local Central and NiaSave APIs; never touches deployed hosts.
+raise SystemExit('410: Demo operating writes are disabled; use the Central build and its gate evidence.')
 import json,urllib.request,uuid
 from datetime import datetime,timezone,timedelta
 NIA='http://127.0.0.1:8787'; CENTRAL='http://127.0.0.1:8080'; cookie=''

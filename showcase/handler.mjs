@@ -1,10 +1,15 @@
 import { showcaseAccess } from './access.mjs';
+import { enforceP0 } from '../lib/p0-boundary.mjs';
 import { showcaseReady, enableShowcaseEntry } from '../lib/commerce/showcase-mode.mjs';
 // Set before dynamic imports capture storage configuration. Never use the broad
 // legacy API entry here: only commerce and the signed Central gateway are exposed.
 enableShowcaseEntry();
 let runtime;
 export default async function handler(req,res) {
+  if (enforceP0(req, res)) return;
+  res.writeHead(410, {'content-type':'application/json','cache-control':'no-store'});
+  res.end(JSON.stringify({error:'demo_operating_book_retired'}));
+  return;
   const send=(status,body,headers={})=>{res.writeHead(status,{'content-type':'application/json','cache-control':'no-store','x-robots-tag':'noindex, nofollow',...headers});res.end(JSON.stringify(body));};
   if(!showcaseReady()) return send(503,{error:'showcase_not_configured'});
   const url=new URL(req.url,'https://'+req.headers.host);

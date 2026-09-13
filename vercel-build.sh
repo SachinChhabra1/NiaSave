@@ -23,7 +23,9 @@ mkdir -p dist/commerce-locales
 cp -R commerce-locales/. dist/commerce-locales/
 # Every module commerce.html imports must exist in dist, or the member UI fails to load in production.
 for f in $(grep -o "from '\./[a-z-]*\.js'" commerce.js commerce-books.js commerce-services.js commerce-plan.js commerce-i18n.js | sed "s/.*from '\.\///; s/'//" | sort -u); do test -f "dist/$f" || { echo "missing dist/$f"; exit 1; }; done
+cp -f member.html dist/member.html
 cp -f member.html dist/member-services.html
+cp -f polo.html dist/polo.html
 if [ -d public/products ]; then cp -r public/products/. dist/products/; fi
 if [ -d assets ]; then cp -r assets/. dist/assets/; fi
 if [ -f manifest.webmanifest ]; then cp -f manifest.webmanifest dist/; fi

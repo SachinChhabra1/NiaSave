@@ -18,19 +18,24 @@ await writeFile(resolve(out,'public/robots.txt'),'User-agent: *\nDisallow: /\n')
 for(const name of ['lib','rabbit','bison','commerce-categories.js','commerce-earn-map.js'])await cp(resolve(root,name),resolve(out,name),{recursive:true,filter:p=>!p.endsWith('.test.mjs')});
 await mkdir(resolve(out,'api'),{recursive:true});
 await writeFile(resolve(out,'api/index.mjs'),`import {commerceHttp} from '../lib/commerce/http.mjs';
+import { enforceP0 } from '../lib/p0-boundary.mjs';
+import { withP0Request } from '../lib/p0-request-context.mjs';
 import {centralCommerceHttp} from '../lib/commerce/central-http.mjs';
 export default async function handler(req,res){
+ if (enforceP0(req, res)) return;
  const fail=(status,error)=>{res.writeHead(status,{'content-type':'application/json','cache-control':'no-store'});res.end(JSON.stringify({error}));};
  if(process.env.ACCESS_UAT_ENABLED!=='1'||process.env.NIA_SHOWCASE==='1'||process.env.COMMERCE_MEMBER_AUTH!=='passkey')return fail(503,'access_test_not_configured');
  const url=new URL(req.url,'https://'+req.headers.host),path='/'+(url.searchParams.get('path')||url.pathname.replace(/^\\/api\\/?/,''));
  if(path==='/central/commerce')return centralCommerceHttp(req,res);
  if(!path.startsWith('/commerce/'))return fail(404,'not_found');
- return commerceHttp(req,res,path.slice('/commerce'.length),()=>null);
+ return withP0Request(req,()=>commerceHttp(req,res,path.slice('/commerce'.length),()=>null));
 }
 `);
-await writeFile(resolve(out,'middleware.js'),`import {timingSafeEqual} from 'node:crypto';
+await writeFile(resolve(out,'middleware.js'),`import {p0WebResponse} from './lib/p0-boundary.mjs';
+import {timingSafeEqual} from 'node:crypto';
 export const config={runtime:'nodejs',matcher:'/:path*'};
 export default function middleware(request){
+ const retired=p0WebResponse(request);if(retired)return retired;
  const headers={'cache-control':'no-store','x-robots-tag':'noindex, nofollow, noarchive'};
  if(process.env.ACCESS_UAT_ENABLED!=='1'||(process.env.ACCESS_UAT_PASSWORD||'').length<24)return new Response('Access testing is not configured.',{status:503,headers});
  const url=new URL(request.url),origin=process.env.ACCESS_UAT_ORIGIN;

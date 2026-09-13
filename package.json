@@ -10,12 +10,17 @@
     "build:tanot": "vite build tanot --base=/tanot/ --outDir=../dist/tanot --emptyOutDir=false",
     "build:production": "sh vercel-build.sh",
     "preview": "vite preview",
-    "test": "node rabbit/selftest.mjs",
+    "test": "node scripts/run-tests.mjs",
     "test:storage": "node lib/runtime-store.test.mjs && node lib/polo-persistence.test.mjs",
     "test:bison": "node --test bison/engine.test.mjs bison/current-position*.test.mjs api/current-position-access.test.mjs api/staff-auth.test.mjs api/jat-staff-access.test.mjs lib/runtime-store-cache.test.mjs",
     "test:tanot": "node --test tanot/insightEngine.test.mjs lib/dogra-store.test.mjs",
     "test:commerce": "node --test lib/commerce/*.test.mjs",
-    "test:security": "node --test api/staff-fail-closed.test.mjs api/staff-login-throttle.test.mjs lib/staff-login-limit.test.mjs lib/staff-session-durable.test.mjs lib/security-headers.test.mjs lib/staff-pages.test.mjs lib/commerce/member-invitation.test.mjs lib/commerce/member-password.test.mjs lib/commerce/passkeys.test.mjs lib/safe-errors.test.mjs lib/runtime-store-sanitization.test.mjs scripts/overlay-safe-errors.test.mjs"
+    "test:security": "node --test api/staff-fail-closed.test.mjs api/staff-login-throttle.test.mjs lib/staff-login-limit.test.mjs lib/staff-session-durable.test.mjs lib/security-headers.test.mjs lib/staff-pages.test.mjs lib/commerce/member-invitation.test.mjs lib/commerce/member-password.test.mjs lib/commerce/passkeys.test.mjs lib/safe-errors.test.mjs lib/runtime-store-sanitization.test.mjs scripts/overlay-safe-errors.test.mjs",
+    "test:p0": "node --test --test-reporter=tap scripts/route-audit.test.mjs scripts/build-gates.test.mjs scripts/legacy-selftest.test.mjs api/p0-disabled-routes.test.mjs",
+    "test:p0:ci": "node --test --test-reporter=tap scripts/route-audit.test.mjs scripts/build-gates.test.mjs scripts/legacy-selftest.test.mjs api/p0-disabled-routes.test.mjs",
+    "audit:routes": "node scripts/route-audit.mjs",
+    "audit:locales": "node scripts/locale-check.mjs",
+    "audit:bundle": "node scripts/bundle-budget.mjs"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",

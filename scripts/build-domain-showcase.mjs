@@ -1,3 +1,4 @@
+throw new Error('P0: archived deployments may reopen operating writes; assemble only the reviewed production branch.');
 // Assemble a storefront release over an explicit live-site revision, preserving
 // legacy operations contracts, refreshing Para 2 labels, and isolating the test API.
 import {cp,mkdir,readFile,writeFile} from 'node:fs/promises';

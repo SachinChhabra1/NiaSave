@@ -6,6 +6,8 @@
  * Not for rafiqicentral.com or harness.
  */
 import http from "node:http";
+import { enforceP0 } from '../lib/p0-boundary.mjs';
+import { withP0Request } from '../lib/p0-request-context.mjs';
 import { centralCommerceHttp } from "../lib/commerce/central-http.mjs";
 import { commerceHttp } from "../lib/commerce/http.mjs";
 import { ownerViewHttp } from "../lib/commerce/owner-view.mjs";
@@ -133,6 +135,11 @@ function catalogPayload() { return { studioName: member.nestName, deliveryTime: 
 function nextHub(from) { const i = HUB_FLOW.indexOf(from); return i >= 0 && i < HUB_FLOW.length - 1 ? HUB_FLOW[i + 1] : from; }
 
 export async function handler(req, res) {
+  if (enforceP0(req, res)) return;
+  return withP0Request(req, () => dispatchLegacyRequest(req, res));
+}
+
+async function dispatchLegacyRequest(req, res) {
   if (isShowcaseEntry()) return json(res,503,{error:'use_isolated_showcase_entry'});
   if (req.method === "OPTIONS") return json(res, 204, {});
   const url = new URL(req.url, "http://localhost");

@@ -53,3 +53,66 @@
 ## Codex — 2026-09-11 15:33 UTC — lane finish DONE
 
 - done | closed in-scope cutover/hardening/home stream with merged PRs #33 (`9240463`), #43 (`c634e1e`), #44 (`03577e6`), #45 (`1d17871`); no open in-scope PRs left from this lane (open #4-#7 are legacy Polo items, out of scope) | parked founder-only: T04/T05/T16 attestations, Ajay legitimate production correction proof, signed-200 attestation custody | live probes: `GET https://www.niasave.com/` => `200 text/html` + doctype, `/ops.html` => `401`, unsigned central `POST /api/service/member` => `401`, central `GET /api/service/member` => `405`.
+
+## 2026-09-13 — P0 Central guardrails
+
+Prior P0/P1 labels above belong to the September 10 hardening lane; they are not PASS evidence for the September 13 G1–G12 build ledger.
+
+decision: The explicit request puts all four scripts in P0, despite the older Gate A parentheticals saying P1.
+decision: P0 transport denies all new operating writes by default; existing session and personal-book endpoints remain until their cutover.
+decision: A read-only request scope prevents hidden GET writes without implementing a Central business rule.
+decision: Archived deployment assembly and demo seeds are disabled because they can reopen the removed writer.
+decision: Legacy staff addresses keep their destinations in the same change.
+decision: Locale audit recognises English source keys and existing inline Hindi; this proves key coverage only, not the five-language browser gate.
+decision: Bundle audit measures the actual production files, selected-language import closure, inline JS and shared assets once; any external unmeasured script fails.
+decision: All existing tests remain unchanged and run; conflicting legacy expectations are reported as failures. No gate is claimed.
+
+BLOCKED P1 · G1/G2/G12 · reviewed production success/failure and fixed contract evidence missing
+what I tried: read the PRD and all twelve ledger blocks; each is PENDING
+what unblocks it: Central supplies the ledger evidence for human review; moving to: P2
+
+BLOCKED P2 · G3/G4/G8/G9/G12 · reviewed production success/failure and fixed contract evidence missing
+what I tried: read the PRD and all twelve ledger blocks; each is PENDING
+what unblocks it: Central supplies the ledger evidence for human review; moving to: P3
+
+BLOCKED P3 · G4/G7/G8/G12 · reviewed production success/failure and fixed contract evidence missing
+what I tried: read the PRD and all twelve ledger blocks; each is PENDING
+what unblocks it: Central supplies the ledger evidence for human review; moving to: P4
+
+BLOCKED P4 · G5/G7/G8/G12 · reviewed production success/failure and fixed contract evidence missing
+what I tried: read the PRD and all twelve ledger blocks; each is PENDING
+what unblocks it: Central supplies the ledger evidence for human review; moving to: P5
+
+BLOCKED P5 · G6/G7/G8/G12 · reviewed production success/failure and fixed contract evidence missing
+what I tried: read the PRD and all twelve ledger blocks; each is PENDING
+what unblocks it: Central supplies the ledger evidence for human review; moving to: P6
+
+BLOCKED P6 · G8/G12 · reviewed production success/failure and fixed contract evidence missing
+what I tried: read the PRD and all twelve ledger blocks; each is PENDING
+what unblocks it: Central supplies the ledger evidence for human review; moving to: P7
+
+BLOCKED P7 · G9/G12 · reviewed production success/failure and fixed contract evidence missing
+what I tried: read the PRD and all twelve ledger blocks; each is PENDING
+what unblocks it: Central supplies the ledger evidence for human review; moving to: P8
+
+BLOCKED P8 · G9/G12 · reviewed production success/failure and fixed contract evidence missing
+what I tried: read the PRD and all twelve ledger blocks; each is PENDING
+what unblocks it: Central supplies the ledger evidence for human review; moving to: P9
+
+BLOCKED P9 · G10/G12 · reviewed production success/failure and fixed contract evidence missing
+what I tried: read the PRD and all twelve ledger blocks; each is PENDING
+what unblocks it: Central supplies the ledger evidence for human review; moving to: P10
+
+BLOCKED P10 · G11/G7/G8/G12 · reviewed production success/failure and fixed contract evidence missing
+what I tried: read the PRD and all twelve ledger blocks; each is PENDING
+what unblocks it: Central supplies the ledger evidence for human review; moving to: P0 verification
+
+NEEDS SACHIN: none triggered for local P0 implementation; no production, money, real-member or partner action attempted.
+
+decision: Keep P0 undeclared: 29 retained legacy tests fail under the shutdown, and the external voice SDK prevents a complete bundle measurement.
+
+2026-09-13
+declared: none; P0 is an undeclared review draft
+merged: none
+blocked: P0 declaration — legacy test conflicts, incomplete external JS budget, Gate B/C unrun; P1–P10 — PENDING Central gates
+decisions: P0 transport shutdown, read-only request scope, retired staff destinations, no screen preparation; detailed decisions above

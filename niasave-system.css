@@ -1,0 +1,64 @@
+/* NiaSave Apple-grade system — PRD v1.1 PR X0. Presentation only. */
+:root{
+  --nia-ground-dark:#0B0B0C;
+  --nia-ground-light:#F4F2EE;
+  --nia-ink:#111112;
+  --nia-ink-on-dark:#FFFFFF;
+  --nia-muted:#6B6B70;
+  --nia-muted-on-dark:#A6A6AD;
+  --nia-accent:#0056B8;
+  --nia-accent-text:#FFFFFF;
+  --nia-keep:#1B7A4A;
+  --nia-radius:24px;
+  --nia-gutter:20px;
+  --nia-space-block:48px;
+  --nia-type-display:42px;
+  --nia-type-section:30px;
+  --nia-type-card:21px;
+  --nia-type-body:17px;
+  --nia-type-support:14px;
+  --nia-type-eyebrow:12px;
+  --nia-touch:52px;
+}
+.nia-eyebrow{font-size:var(--nia-type-eyebrow);font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--nia-muted)}
+.nia-display{font-size:var(--nia-type-display);font-weight:700;letter-spacing:-.02em;line-height:1.05;margin:0}
+.nia-section{font-size:var(--nia-type-section);font-weight:700;letter-spacing:-.02em;line-height:1.1;margin:0}
+.nia-card-title{font-size:var(--nia-type-card);font-weight:600;line-height:1.2;margin:0}
+.nia-body{font-size:var(--nia-type-body);font-weight:400;line-height:1.5}
+.nia-support{font-size:var(--nia-type-support);color:var(--nia-muted);line-height:1.45}
+.nia-keep{color:var(--nia-keep);font-weight:700}
+.nia-btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  min-height:var(--nia-touch);padding:0 22px;border-radius:999px;border:0;
+  font-size:var(--nia-type-body);font-weight:600;text-decoration:none
+}
+.nia-btn-primary{background:var(--nia-accent);color:var(--nia-accent-text)}
+.nia-btn-secondary{background:transparent;color:var(--nia-accent);box-shadow:inset 0 0 0 1.5px var(--nia-accent)}
+.nia-btn:active{transform:scale(.98)}
+.nia-skel{display:grid;gap:12px}
+.nia-skel-line,.nia-skel-card{
+  background:linear-gradient(90deg,#eceae6 0%,#f7f5f1 50%,#eceae6 100%);
+  background-size:200% 100%;animation:nia-skel 1.2s ease-in-out infinite;
+  border-radius:12px
+}
+.nia-skel-line{height:14px}
+.nia-skel-card{min-height:120px;border-radius:var(--nia-radius)}
+.nia-state{padding:24px var(--nia-gutter);font-size:var(--nia-type-body);line-height:1.5}
+.nia-state-stale{opacity:.7}
+.nia-help{
+  position:fixed;right:max(16px,env(safe-area-inset-right));
+  bottom:calc(84px + env(safe-area-inset-bottom));
+  z-index:30;min-height:var(--nia-touch);padding:0 16px;
+  border:0;border-radius:999px;background:var(--nia-ground-dark);color:#fff;
+  font-size:15px;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.2)
+}
+@keyframes nia-skel{0%{background-position:100% 0}100%{background-position:-100% 0}}
+@keyframes nia-rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.nia-rise{animation:nia-rise .35s ease-out both}
+@media (prefers-reduced-motion:reduce){
+  .nia-skel-line,.nia-skel-card,.nia-rise,.nia-btn:active{animation:none;transform:none}
+}
+@media (min-width:761px){
+  :root{--nia-type-display:52px;--nia-space-block:80px;--nia-gutter:24px}
+  .nia-help{bottom:24px}
+}

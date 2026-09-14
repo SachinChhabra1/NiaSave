@@ -55,6 +55,7 @@ Current code reads:
 - `MEMBER_PASSWORD`
 - `SESSION_SECRET` signs the member stay-signed-in cookie. It also remains the documented fallback for 2 Para staff tokens when `STAFF_TOKEN_SECRET` is not set; live staff auth still requires `STAFF_TOKEN_SECRET`. `MEMBER_PASSWORD` (length ≥ 8) plus `SESSION_SECRET` (length ≥ 16) enables password sign-in. Values stay in Vercel only.
 - `COMMERCE_REQUIRE_CENTRAL_MEMBER` — when `true`, `/api/commerce/auth/request` and `/auth/verify` fail closed with `not_registered` unless Central `member.lookupByPhone` finds the number. Unset or any other value skips that hard stop so testers can request OTP without Central enrolment. Does not invent Central members. Re-enable: set `true` and redeploy.
+- `COMMERCE_PUBLIC_BROWSE` — unset or any value other than `false` lets unsigned `GET /catalogue` return published Save SKUs (no account, no orders). Set `false` and redeploy to restore the empty `sign_in_required` catalogue wall. Does not invent members or open checkout.
 
 Before a real-data launch, explicitly set `DEMO=0` and `DUMMY_DATA=0` only after OTP, payments, staff access, source data and operational checks pass. Do not use those switches as a substitute for implementing the missing integrations.
 

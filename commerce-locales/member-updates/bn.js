@@ -1,0 +1,30 @@
+// Translation draft; native-speaker review is required before launch.
+// English keys remain as fallback for screens outside this Mesha pass.
+export default {
+  "First step": "প্রথম ধাপ",
+  "Choose your language": "আপনার ভাষা বেছে নিন",
+  "We'll keep this for every screen. Change it anytime.": "এই ভাষা সব স্ক্রিনে থাকবে। যেকোনো সময় বদলাতে পারবেন।",
+  "No sign-in yet. Browse first. Phone only when you check out.": "এখনো সাইন ইন নয়। আগে দেখুন। ফোন শুধু চেকআউটে।",
+  "A bed near work.": "কাজের কাছে একটি বিছানা।",
+  "Move in with Nia. Roof, rest, and a short walk to the shift.": "নিয়ার সঙ্গে থাকুন। ছাদ, বিশ্রাম, আর শিফট পর্যন্ত সামান্য হাঁটা।",
+  "See Nest": "নেস্ট দেখুন",
+  "See nearby Nests, hold a bed, and pay at move-in. Browse first. Phone only when you check out.": "কাছের নেস্ট দেখুন, বিছানা ধরে রাখুন, আর আসার সময় টাকা দিন। আগে দেখুন। ফোন শুধু চেকআউটে।",
+  "Extra shifts": "বাড়তি শিফট",
+  "Shop less": "কম কিনুন",
+  "Keep more.": "আরও রাখুন।",
+  "Oil, soap, detergent — member price. Browse free. Phone only at checkout.": "তেল, সাবান, ডিটারজেন্ট — সদস্য দাম। বিনামূল্যে দেখুন। ফোন শুধু চেকআউটে।",
+  "Shop oils": "তেল কিনুন",
+  "How it works": "কীভাবে কাজ করে",
+  "Continue": "চালিয়ে যান",
+  "Live": "থাকুন",
+  "Earn": "আয়",
+  "Save": "বাঁচান",
+  "Send": "পাঠান",
+  "You keep": "আপনার কাছে",
+  "Change language": "ভাষা বদলান",
+  "Language": "ভাষা",
+  "See Nests": "নেস্ট দেখুন",
+  "Groundnut oil": "চিনাবাদামের তেল",
+  "Mustard oil": "সরিষার তেল",
+  "Laundry detergent": "কাপড় কাচার পাউডার"
+};

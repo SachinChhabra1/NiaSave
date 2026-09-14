@@ -24,14 +24,12 @@
   body.mesha-dark #desktop-nav button small{display:none}
   body.mesha-dark .mobile-nav,
   body.mesha-lang-open .mobile-nav{display:none}
-  body.mesha-dark main,
+  body.mesha-dark main{max-width:none;margin:0;padding:0 0 80px}
   body.mesha-lang-open main{max-width:none;margin:0;padding:0 0 80px}
-  body.mesha-dark .header-tools .mesha-chip,
-  body.mesha-dark .signin,
+  body.mesha-dark .header-tools .mesha-chip,body.mesha-dark .signin,
   body.mesha-lang-open .signin{
-    min-height:28px;height:28px;font-size:12px;padding:0 12px;gap:6px
+    min-height:28px;height:28px;font-size:12px;padding:0 12px
   }
-  body.mesha-dark .signin .icon{width:14px;height:14px}
 
   body.mesha-lang-open{background:#000}
   body.mesha-lang-open .mesha-lang{
@@ -41,46 +39,29 @@
   body.mesha-lang-open .mesha-lang-hero{min-height:100%;border-radius:0}
   body.mesha-lang-open .mesha-lang-sheet{padding:48px 40px;display:flex;flex-direction:column;justify-content:center}
 
-  .apple-home{gap:12px;background:#fff;color:#1d1d1f;min-height:0;padding:12px 12px 24px}
-  .apple-home .apple-live-unit{
-    position:relative;min-height:86vh;align-items:flex-start;justify-content:flex-start;
-    text-align:center;border-radius:0;overflow:hidden
+  .apple-home{gap:12px;background:#fff;color:#1d1d1f;min-height:0;padding-bottom:12px}
+  .apple-home .apple-unit{
+    min-height:70vh;align-items:flex-start;justify-content:flex-start;text-align:center
   }
-  .apple-home .apple-live-unit img{object-position:72% 22%}
-  .apple-home .apple-live-unit .mesha-desire-copy{
-    text-align:center;padding:72px 24px 28px;width:100%;color:#fff
-  }
-  .apple-home .mesha-desire-copy h1{
-    font-size:56px;max-width:16ch;margin:8px auto 10px;letter-spacing:-.03em;color:#fff
-  }
+  .apple-home .mesha-desire-copy{text-align:center;padding:64px 24px 24px;width:100%}
+  .apple-home .mesha-desire-copy h1{font-size:56px;max-width:16ch;margin:8px auto 10px;letter-spacing:-.03em}
   .apple-home .mesha-desire-copy>p:not(.mesha-kicker){
-    max-width:34ch;margin:0 auto 22px;font-size:21px;line-height:1.25;color:#f5f5f7
+    max-width:36ch;margin:0 auto 22px;font-size:21px;line-height:1.2;color:#d2d2d7
   }
-  .apple-home .mesha-kicker{letter-spacing:.12em;color:#d2d2d7}
+  .apple-home .mesha-kicker{letter-spacing:.12em;color:#a1a1a6}
   .apple-home .mesha-desire-cta{justify-content:center}
   .apple-home .mesha-pill-solid{background:#0071e3;color:#fff}
   .apple-home .mesha-pill-solid:hover:not(:disabled){background:#0077ed}
-  .apple-home .mesha-pill-ghost{border:1px solid #2997ff;color:#2997ff;background:transparent}
-
-  .apple-save-unit{
-    position:relative;display:flex;align-items:flex-start;min-height:78vh;color:#fff;
-    background:#000 url('/assets/oils-editorial-sheet.png') 50% 28% / cover no-repeat
+  .apple-home .mesha-pill-ghost{border-color:#2997ff;color:#2997ff}
+  .apple-home .mesha-rail-photo.save{background-image:url('/assets/oils-editorial-sheet.png')}
+  .apple-rail{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:0 12px;flex:none}
+  .apple-rail .mesha-rail-card{
+    min-height:280px;padding:32px 16px 24px;border-radius:0;background:#f5f5f7;color:#1d1d1f;
+    align-items:center;justify-content:flex-start
   }
-  .apple-save-unit:before{
-    content:"";position:absolute;inset:0;
-    background:linear-gradient(180deg,rgba(0,0,0,.35) 0%,rgba(0,0,0,.08) 42%,rgba(0,0,0,.55) 100%)
-  }
-  .apple-save-unit .mesha-desire-copy{position:relative;z-index:1;text-align:center;padding:72px 24px 28px;width:100%}
-
-  .apple-pair{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0;flex:none}
-  .apple-pair .mesha-rail-card{
-    min-height:560px;padding:48px 24px 32px;border-radius:0;background:#f5f5f7;color:#1d1d1f;
-    align-items:center;justify-content:flex-start;gap:18px
-  }
-  .apple-pair .mesha-rail-card:hover:not(:disabled){background:#ececec}
-  .apple-pair .mesha-rail-photo{max-width:280px;width:58%;border-radius:22px;aspect-ratio:1;order:2;margin-top:auto}
-  .apple-pair .mesha-rail-name{font-size:40px;letter-spacing:-.03em;color:#1d1d1f;order:0}
-  .apple-pair .mesha-rail-d{font-size:19px;color:#6e6e73;order:1}
-
+  .apple-rail .mesha-rail-card:hover:not(:disabled){background:#f5f5f7}
+  .apple-rail .mesha-rail-photo{max-width:160px;width:70%;border-radius:18px;aspect-ratio:1}
+  .apple-rail .mesha-rail-name{font-size:24px;letter-spacing:-.03em;color:#1d1d1f}
+  .apple-rail .mesha-rail-d{font-size:15px;color:#6e6e73}
   .mesha-bag-chip{bottom:24px;left:auto;right:24px;transform:none;width:auto;min-width:220px}
 }

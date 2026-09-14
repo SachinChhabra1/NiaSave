@@ -228,33 +228,15 @@ body.mesha-lang-open .mobile-nav,
 body.mesha-lang-open .notice,
 body.mesha-lang-open #desktop-nav{display:none !important}
 body.mesha-lang-open main{max-width:430px;margin:0 auto;padding:0}
-body.mesha-dark .header{
-  position:fixed;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;
-  height:64px;padding:0 18px;background:transparent;border:0;z-index:6;
-}
 body.mesha-dark .header .brand,
-body.mesha-dark .header .brand:visited{font-size:17px;font-weight:500;letter-spacing:-.02em;color:#fff;gap:0}
-body.mesha-dark .brand-logo{display:none}
-body.mesha-dark #desktop-nav{display:none}
+body.mesha-dark .header .brand:visited{font-weight:500;letter-spacing:-.02em;color:#fff}
 body.mesha-dark .header-tools{margin-left:auto;gap:8px}
 body.mesha-dark .notice{display:none}
 body.mesha-dark .notice.error{display:block;background:#1a0d08;color:#ffd4c4;border:0;padding:10px 18px}
-body.mesha-dark main{max-width:430px;margin:0 auto;padding:0 0 120px}
 body.mesha-dark .footer{display:none}
 body.mesha-dark .store-head{display:none}
-body.mesha-dark .mobile-nav{
-  display:grid;grid-template-columns:repeat(4,1fr);max-width:430px;left:50%;right:auto;transform:translateX(-50%);
-  width:100%;background:#000;border:0;padding:8px 8px calc(10px + env(safe-area-inset-bottom));
-}
-body.mesha-dark .mobile-nav button{
-  background:transparent;border:0;color:#8a8a8a;min-height:64px;gap:6px;padding:8px 4px;
-}
-body.mesha-dark .mobile-nav button .icon{
-  width:22px;height:22px;padding:9px;border-radius:50%;border:1.5px solid #3a3a3a;box-sizing:content-box;color:#fff;
-}
-body.mesha-dark .mobile-nav button[aria-current=page]{color:#fff;background:transparent}
-body.mesha-dark .mobile-nav button[aria-current=page] .icon{background:#fff;color:#000;border-color:#fff}
-body.mesha-dark .mobile-nav button>span{font-size:11px;font-weight:500}
+body.mesha-dark #desktop-nav button{color:#b8b8b8;border-bottom-color:transparent;background:transparent}
+body.mesha-dark #desktop-nav button[aria-current=page]{color:#fff;border-bottom-color:#fff;background:transparent}
 .mesha-chip{
   border:1px solid #fff;background:transparent;color:#fff;border-radius:999px;min-height:34px;padding:0 14px;font-size:13px;font-weight:500;
 }
@@ -312,22 +294,122 @@ body.mesha-dark .mobile-nav button>span{font-size:11px;font-weight:500}
 .mesha-save-hero>*{position:relative;z-index:1}
 .mesha-save-title{display:block;font-size:44px;font-weight:600;letter-spacing:-.045em;line-height:1;margin:10px 0 12px}
 .mesha-save-sub{display:block;font-size:16px;line-height:1.4;color:#d6d6d6;max-width:26ch;margin:0 0 20px}
-.mesha-save-rail{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding:0 16px 22px}
+.mesha-save-rail{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:0 16px 22px}
 .mesha-save-card{min-width:0;background:#1c1c1e;border-radius:22px;padding:12px 10px 16px;color:#fff}
 .mesha-save-card .photo-button{display:block;width:100%;padding:0;border:0;min-height:0;background:transparent;border-radius:16px}
 .mesha-save-card .photo{display:block;width:100%;aspect-ratio:1;border-radius:16px;background-color:#2a2a2c}
 .mesha-save-card h3{font-size:14px;font-weight:600;margin:10px 0 4px;color:#fff}
 .mesha-save-card p{margin:0;font-size:12px;color:#9a9a9a}
-body.mesha-dark .save-categories{padding:0 16px;margin-bottom:16px}
-body.mesha-dark .save-categories button{background:#1c1c1e;color:#fff}
+.save-categories.save-pills{
+  display:flex;flex-wrap:nowrap;overflow-x:auto;gap:8px;margin:0 0 16px;padding:0 16px 4px;
+  grid-template-columns:none;scrollbar-width:none;-webkit-overflow-scrolling:touch;
+}
+.save-categories.save-pills::-webkit-scrollbar{display:none}
+.save-categories.save-pills button{
+  flex:0 0 auto;flex-direction:row;align-items:center;justify-content:center;
+  min-width:0;min-height:36px;padding:0 14px;border:0;border-radius:999px;
+  background:#f5f5f7;color:var(--fg);font-size:13px;font-weight:500;line-height:1;
+}
+.save-categories.save-pills button[aria-pressed=true]{background:#1d1d1f;color:#fff;box-shadow:none;border:0}
+body.mesha-dark .save-categories.save-pills,
+body.mesha-dark .save-categories{display:flex;flex-wrap:nowrap;overflow-x:auto;grid-template-columns:none;padding:0 16px 16px;margin-bottom:0}
+body.mesha-dark .save-categories button{background:#1c1c1e;color:#fff;min-height:36px}
 body.mesha-dark .save-categories button[aria-pressed=true]{background:#fff;color:#111}
 body.mesha-dark .save-categories button[aria-pressed=true] .icon{color:#111}
+body.mesha-dark .products{padding:0 16px 28px;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 12px}
 body.mesha-dark .product h3,body.mesha-dark .store-keep strong{color:#fff}
 body.mesha-dark .add,body.mesha-dark .stepper{background:#1c1c1e;color:#fff}
-body.mesha-dark .mobile-bag{bottom:calc(84px + env(safe-area-inset-bottom))}
-@media(max-width:760px){
+body.mesha-dark .mobile-bag{display:none}
+.mesha-bag-chip{
+  position:fixed;left:50%;transform:translateX(-50%);width:min(398px,calc(100% - 32px));
+  bottom:calc(84px + env(safe-area-inset-bottom));z-index:8;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  min-height:52px;padding:0 20px;border:0;border-radius:999px;
+  background:#fff;color:#111;font-size:15px;font-weight:500;box-shadow:0 10px 28px #0005;
+}
+.mesha-bag-chip:hover:not(:disabled){background:#f2f2f2}
+.mesha-bag-layer{position:fixed;inset:0;z-index:40;display:flex;align-items:flex-end;justify-content:center}
+.mesha-bag-backdrop{position:absolute;inset:0;margin:0;border:0;border-radius:0;padding:0;min-height:0;background:#0008;cursor:pointer}
+.mesha-bag-backdrop:hover{background:#0008}
+.mesha-bag{
+  position:relative;z-index:1;width:100%;max-width:430px;max-height:min(88dvh,760px);overflow:auto;
+  background:#1c1c1e;color:#fff;border:0;border-radius:28px 28px 0 0;
+  padding:18px 20px calc(22px + env(safe-area-inset-bottom));
+}
+.mesha-bag-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+.mesha-bag-head h2{margin:0;font-size:22px;font-weight:600;letter-spacing:-.03em;color:#fff}
+.mesha-bag-head .icon-button{color:#fff;width:40px;min-height:40px}
+.mesha-bag-line{display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:12px;align-items:center;padding:14px 0;border-bottom:1px solid #2a2a2c}
+.mesha-bag-thumb{padding:0;border:0;min-height:0;background:transparent;border-radius:12px;overflow:hidden;width:64px}
+.mesha-bag-thumb .photo{width:64px;height:64px;aspect-ratio:1;border-radius:12px;background-color:#2a2a2c}
+.mesha-bag-copy{min-width:0}
+.mesha-bag-copy strong{display:block;font-size:15px;font-weight:600;color:#fff}
+.mesha-bag-copy small{display:block;margin:4px 0 8px;color:#9a9a9a;font-size:12px}
+.mesha-bag-copy .stepper{background:#2a2a2c;border:0;border-radius:999px;min-height:36px;width:fit-content}
+.mesha-bag-copy .stepper button{min-height:36px;width:34px;color:#fff;background:transparent}
+.mesha-bag-copy .stepper span{color:#fff}
+.mesha-bag-price{font-size:15px;font-weight:600;white-space:nowrap}
+.mesha-bag-empty{text-align:center;padding:48px 12px 28px}
+.mesha-bag-empty h2{font-size:26px;letter-spacing:-.03em;margin:0 0 10px;color:#fff}
+.mesha-bag-empty p{margin:0;color:#9a9a9a;font-size:15px;line-height:1.45}
+.mesha-bag-total{display:flex;align-items:center;justify-content:space-between;padding:22px 0 8px;font-size:16px}
+.mesha-bag-total strong{font-size:22px;letter-spacing:-.03em}
+.mesha-bag-quiet,.mesha-bag-note{margin:0 0 16px;color:#8a8a8a;font-size:13px;line-height:1.4;text-align:center}
+.mesha-bag-quiet{text-align:left;margin-bottom:18px}
+.mesha-bag .mesha-pill-solid{width:100%}
+body.mesha-bag-open{overflow:hidden}
+dialog.mesha-checkout{
+  width:min(430px,100%);margin:auto auto 0;border:0;border-radius:28px 28px 0 0;
+  background:#1c1c1e;color:#fff;padding:26px 22px calc(22px + env(safe-area-inset-bottom));
+}
+dialog.mesha-checkout::backdrop{background:#000c}
+dialog.mesha-checkout .dialog-head{margin-bottom:12px}
+dialog.mesha-checkout .dialog-head h2{color:#fff;font-size:28px;letter-spacing:-.03em}
+dialog.mesha-checkout .icon-button{color:#fff}
+dialog.mesha-checkout p{color:#c8c8c8}
+.mesha-checkout-ghost{margin:0 0 8px;color:#6e6e73;font-size:20px;letter-spacing:.02em}
+.mesha-checkout-foot{margin:14px 0 0;text-align:center;color:#8a8a8a;font-size:13px}
+dialog.mesha-checkout .phone-field{display:flex;align-items:center;border-radius:999px;overflow:hidden;background:#111;border:1px solid #3a3a3c}
+dialog.mesha-checkout .phone-prefix{background:#111;color:#fff;padding:0 12px}
+dialog.mesha-checkout input{border:0;background:#111;color:#fff}
+dialog.mesha-checkout .mesha-pill-solid{width:100%;margin-top:8px}
+@media (min-width: 761px) {
+  body.mesha-dark .header{
+    position:relative;top:auto;left:auto;transform:none;width:100%;max-width:none;
+    height:76px;padding:0 40px;background:#000;border-bottom:1px solid #2a2a2a;z-index:6;
+  }
+  body.mesha-dark #desktop-nav{display:flex}
+  body.mesha-dark .mobile-nav{display:none}
+  body.mesha-dark main{max-width:1500px;margin:0 auto;padding:24px 40px 70px}
+  .mesha-bag-layer{align-items:stretch;justify-content:flex-end}
+  .mesha-bag{max-width:400px;max-height:none;height:100%;border-radius:0;padding:24px}
+  .mesha-bag-chip{bottom:24px}
+  dialog.mesha-checkout{margin:auto;border-radius:28px}
+}
+@media (max-width: 760px) {
+  .save-categories.save-pills{grid-template-columns:none}
+  .save-categories.save-pills button{min-height:36px;padding:0 14px;font-size:13px}
+  body.mesha-dark .header{
+    position:fixed;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;
+    height:64px;padding:0 18px;background:transparent;border:0;z-index:6;
+  }
   body.mesha-dark .header .brand{font-size:17px;color:#fff;letter-spacing:-.02em}
-  body.mesha-dark main{padding:0 0 120px;max-width:430px}
+  body.mesha-dark .brand-logo{display:none}
+  body.mesha-dark #desktop-nav{display:none}
+  body.mesha-dark main{max-width:430px;margin:0 auto;padding:0 0 120px}
+  body.mesha-dark .mobile-nav{
+    display:grid;grid-template-columns:repeat(4,1fr);max-width:430px;left:50%;right:auto;transform:translateX(-50%);
+    width:100%;background:#000;border:0;padding:8px 8px calc(10px + env(safe-area-inset-bottom));
+  }
+  body.mesha-dark .mobile-nav button{
+    background:transparent;border:0;color:#8a8a8a;min-height:64px;gap:6px;padding:8px 4px;
+  }
+  body.mesha-dark .mobile-nav button .icon{
+    width:22px;height:22px;padding:9px;border-radius:50%;border:1.5px solid #3a3a3a;box-sizing:content-box;color:#fff;
+  }
+  body.mesha-dark .mobile-nav button[aria-current=page]{color:#fff;background:transparent}
+  body.mesha-dark .mobile-nav button[aria-current=page] .icon{background:#fff;color:#000;border-color:#fff}
+  body.mesha-dark .mobile-nav button>span{font-size:11px;font-weight:500}
   .mesha-desire-copy h1,.mesha-save-title{font-size:40px}
 }
 @media(min-width:431px){

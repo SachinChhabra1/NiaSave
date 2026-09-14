@@ -1,4 +1,52 @@
-/* Apple.com first-paint overlay. Loaded after commerce.css. Desktop only. */
+/* Apple-grade chrome. Desktop overlay + Home hero lock. Loaded after commerce.css. */
+
+/* Beat commerce.css: .mesha-desire img is absolute + :after gradient. That is the ladder overlay. */
+.nia-home-hero.mesha-desire{
+  display:flex;flex-direction:column;position:relative;
+  min-height:0;align-items:stretch;justify-content:flex-start;
+  text-align:left;flex:none;
+}
+.nia-home-hero.mesha-desire:after{display:none;content:none;background:none}
+.nia-home-hero .nia-home-photo,
+.nia-home-hero.mesha-desire img.nia-home-photo{
+  position:relative!important;inset:auto;display:block;
+  width:100%;height:46vh;min-height:240px;max-height:420px;
+  object-fit:cover;object-position:12% 16%;z-index:0;
+}
+.nia-home-copy{
+  position:relative;z-index:1;width:100%;box-sizing:border-box;
+  padding:22px var(--nia-gutter,20px) 28px;background:#0B0B0C;text-align:left;
+}
+.nia-home-copy h1{
+  font-size:clamp(32px,8vw,48px);line-height:1.06;letter-spacing:-.03em;
+  max-width:14ch;margin:6px 0 10px;color:#fff;
+}
+.nia-home-sub{max-width:34ch;margin:0 0 18px;font-size:17px;line-height:1.4;color:#d2d2d7}
+.nia-home-eyebrow{letter-spacing:.14em;color:#a1a1a6}
+.nia-home-cta{display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-start}
+.nia-home-cta .mesha-pill{min-height:52px}
+
+.nia-home-promises{display:grid;grid-template-columns:1fr;gap:12px;padding:12px;background:#fff}
+.nia-home-card{
+  position:relative;display:flex;flex-direction:column;justify-content:flex-end;
+  min-height:220px;height:auto;padding:0;overflow:hidden;border:0;
+  border-radius:24px;background:#111;color:#fff;text-align:left;
+}
+.nia-home-card .mesha-rail-photo{
+  position:absolute;inset:0;width:100%;max-width:none;height:100%;
+  border-radius:0;aspect-ratio:auto;background-size:cover;background-repeat:no-repeat;
+}
+.nia-home-card .mesha-rail-photo.earn{background-image:url('/assets/earn-extra-hours-v2.jpg');background-position:50% 30%}
+.nia-home-card .mesha-rail-photo.save{background-image:url('/assets/oils-editorial-sheet.png');background-size:cover;background-position:50% 40%}
+.nia-home-card .mesha-rail-photo.send{background-image:url('/assets/send-purpose-family.jpg');background-position:50% 20%}
+.nia-home-card-copy{
+  position:relative;z-index:1;display:flex;flex-direction:column;gap:2px;
+  padding:72px 18px 18px;
+  background:linear-gradient(180deg,transparent 0%,rgba(11,11,12,.88) 100%);
+}
+.nia-home-card .mesha-rail-name{font-size:22px;font-weight:600;letter-spacing:-.03em;color:#fff}
+.nia-home-card .mesha-rail-d{font-size:15px;color:#d2d2d7}
+
 @media (min-width: 761px) {
   body.mesha-dark .header{
     position:sticky;top:0;left:auto;transform:none;width:100%;max-width:none;
@@ -22,29 +70,54 @@
   body.mesha-dark .header-tools .mesha-chip,body.mesha-dark .signin{
     min-height:28px;height:28px;font-size:12px;padding:0 12px
   }
+
   .apple-home{gap:12px;background:#fff;color:#1d1d1f;min-height:0;padding-bottom:12px}
   .apple-home .apple-unit{
-    min-height:70vh;align-items:flex-start;justify-content:flex-start;text-align:center
+    min-height:0;align-items:stretch;justify-content:flex-start;text-align:center
   }
-  .apple-home .mesha-desire-copy{text-align:center;padding:64px 24px 24px;width:100%}
-  .apple-home .mesha-desire-copy h1{font-size:56px;max-width:16ch;margin:8px auto 10px;letter-spacing:-.03em}
-  .apple-home .mesha-desire-copy>p:not(.mesha-kicker){
-    max-width:36ch;margin:0 auto 22px;font-size:21px;line-height:1.2;color:#d2d2d7
+
+  /* Reserved copy band on top. Photo is its own unit. No overlay on the ladder. */
+  .nia-home-hero{
+    display:flex;flex-direction:column;min-height:0;
+  }
+  .nia-home-copy{
+    order:-1;text-align:center;padding:56px 24px 32px;width:100%;
+    background:#0B0B0C;
+  }
+  .nia-home-hero .nia-home-photo,
+  .nia-home-hero.mesha-desire img.nia-home-photo{
+    position:relative!important;inset:auto;
+    height:min(62vh,720px);max-height:none;min-height:420px;
+    object-position:12% 14%;
+  }
+  .apple-home .mesha-desire-copy h1,.nia-home-copy h1{
+    font-size:56px;max-width:16ch;margin:8px auto 10px;letter-spacing:-.03em
+  }
+  .apple-home .mesha-desire-copy>p:not(.mesha-kicker),
+  .nia-home-sub{
+    max-width:36ch;margin:0 auto 22px;font-size:21px;line-height:1.25;color:#d2d2d7
   }
   .apple-home .mesha-kicker{letter-spacing:.12em;color:#a1a1a6}
-  .apple-home .mesha-desire-cta{justify-content:center}
-  .apple-home .mesha-pill-solid{background:#0071e3;color:#fff}
-  .apple-home .mesha-pill-solid:hover:not(:disabled){background:#0077ed}
+  .apple-home .mesha-desire-cta,.nia-home-cta{justify-content:center}
+  .apple-home .mesha-pill-solid{background:#0056B8;color:#fff}
+  .apple-home .mesha-pill-solid:hover:not(:disabled){background:#0a62c9}
   .apple-home .mesha-pill-ghost{border-color:#2997ff;color:#2997ff}
-  .apple-home .mesha-rail-photo.save{background-image:url('/assets/oils-editorial-sheet.png')}
-  .apple-rail{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:0 12px;flex:none}
-  .apple-rail .mesha-rail-card{
-    min-height:280px;padding:32px 16px 24px;border-radius:0;background:#f5f5f7;color:#1d1d1f;
-    align-items:center;justify-content:flex-start
+
+  .apple-home .mesha-rail-photo.save,
+  .nia-home-card .mesha-rail-photo.save{background-image:url('/assets/oils-editorial-sheet.png')}
+  .apple-rail.nia-home-promises{
+    display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;
+    padding:0 12px;flex:none;align-items:stretch
   }
-  .apple-rail .mesha-rail-card:hover:not(:disabled){background:#f5f5f7}
-  .apple-rail .mesha-rail-photo{max-width:160px;width:70%;border-radius:18px;aspect-ratio:1}
-  .apple-rail .mesha-rail-name{font-size:24px;letter-spacing:-.03em;color:#1d1d1f}
-  .apple-rail .mesha-rail-d{font-size:15px;color:#6e6e73}
+  .apple-rail .mesha-rail-card.nia-home-card{
+    min-height:340px;height:100%;padding:0;border-radius:24px;
+    background:#111;color:#fff;align-items:stretch;justify-content:flex-end
+  }
+  .apple-rail .nia-home-card .mesha-rail-photo{
+    max-width:none;width:100%;height:100%;border-radius:0;aspect-ratio:auto
+  }
+  .apple-rail .nia-home-card .mesha-rail-name{font-size:24px;letter-spacing:-.03em;color:#fff}
+  .apple-rail .nia-home-card .mesha-rail-d{font-size:15px;color:#d2d2d7}
   .mesha-bag-chip{bottom:24px;left:auto;right:24px;transform:none;width:auto;min-width:220px}
+  body.mesha-lang-open main{max-width:none;padding:48px 24px 80px}
 }

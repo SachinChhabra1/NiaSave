@@ -259,7 +259,7 @@
   }
   .mark{flex:0 0 auto;height:24px;width:auto;min-width:0;border-radius:0;background:transparent;display:flex;align-items:center;justify-content:flex-start;overflow:visible;margin-top:2px}
   .mark img{display:block;height:24px;width:auto;max-width:56px;object-fit:contain;filter:none;-webkit-filter:none;transform:none}
-  .who{display:flex;align-items:center;line-height:1;min-width:0;flex:1 1 auto;overflow:hidden;height:28px}
+  .who{display:none}
   .who .n{font-size:12.5px;font-weight:650;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .who .id-line{font-size:10px;font-weight:500;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
   .who .s{display:none!important}
@@ -1059,7 +1059,98 @@
   .reached{font-size:13px;font-weight:600;color:var(--navy);margin-top:8px;text-align:center}
   .honest{font-size:12.5px;color:var(--mute);line-height:1.45;margin-top:10px}
 
+  /* Clarity pattern: large photos, whitespace, sparse type. No Apple marks. */
+  .screen{background:#fff}
+  .pad{padding:12px 22px 44px}
+  .h1{font-size:34px;font-weight:600;letter-spacing:-.042em;margin:20px 0 22px}
+  .home-month-banner{display:none}
+  .globe-btn{
+    flex:0 0 auto;height:44px;min-width:44px;margin-left:auto;padding:0 8px;border:0;border-radius:12px;
+    background:transparent;color:var(--navy);display:flex;align-items:center;justify-content:center;gap:4px;
+    cursor:pointer;font-family:var(--font);font-size:11px;font-weight:700;letter-spacing:.06em;
+  }
+  .globe-btn svg{display:block;width:20px;height:20px}
+  .globe-lab{line-height:1}
+  .globe-pop{
+    position:absolute;top:48px;right:0;background:#fff;border:1px solid var(--hair2);border-radius:16px;
+    padding:6px;min-width:176px;box-shadow:0 12px 34px -10px rgba(20,25,35,.26);display:none;z-index:91;
+  }
+  .globe-pop.on{display:block}
+  .globe-pop button{
+    display:flex;width:100%;align-items:center;gap:10px;border:0;background:transparent;padding:12px 14px;border-radius:10px;
+    cursor:pointer;font-family:var(--font);font-size:15px;font-weight:500;color:var(--ink);text-align:left;
+  }
+  .globe-pop button:hover{background:#F3EEE6}
+  .globe-pop button.sel{color:var(--navy);font-weight:600}
+  .globe-pop button .en{margin-left:auto;color:var(--mute2);font-size:11px}
+  .globe-wrap{position:relative;flex:0 0 auto;z-index:81}
+  .top .voice-btn{margin-left:0}
+  .mark{cursor:pointer}
+  .phone.save-mode .top{display:flex!important;justify-content:flex-end;align-items:center;gap:0;background:linear-gradient(180deg,rgba(255,255,255,.96) 0%,rgba(255,255,255,0) 100%)}
+  .phone.save-mode .globe-wrap,.phone.save-mode .burger-wrap{pointer-events:auto}
 
+  .home-store{padding:10px 22px 44px}
+  .home-hello{font-size:34px;font-weight:600;letter-spacing:-.045em;line-height:1.05;margin:18px 0 8px;color:var(--ink)}
+  .home-line{font-size:15px;color:var(--mute);margin:0 0 28px;line-height:1.4;max-width:24ch}
+  .home-go-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .home-go{
+    display:flex;flex-direction:column;min-width:0;border:0;border-radius:22px;overflow:hidden;
+    background:#F5F5F7;padding:0;text-align:left;cursor:pointer;font-family:var(--font);color:var(--ink);
+  }
+  .home-go:active{transform:scale(.994)}
+  .home-go-photo{display:block;width:100%;aspect-ratio:1/1;background-color:#E9E6E1;background-size:cover;background-position:center}
+  .home-go-copy{padding:14px 14px 16px}
+  .home-go-name{display:block;font-size:17px;font-weight:650;letter-spacing:-.03em}
+  .home-go-d{display:block;font-size:12px;color:var(--mute);margin-top:4px;line-height:1.3}
+  .home-go-cta{display:inline-block;margin-top:10px;font-size:13px;font-weight:650;color:var(--navy)}
+
+  .shop-hero{
+    display:block;width:100%;min-height:280px;margin:4px 0 28px;padding:22px;border:0;border-radius:28px;
+    overflow:hidden;position:relative;color:#fff;text-align:left;cursor:pointer;font-family:var(--font);
+    background-color:#31373B;background-size:cover;background-position:center;
+  }
+  .shop-hero:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,13,18,0) 28%,rgba(7,13,18,.82) 100%);pointer-events:none}
+  .shop-hero > *{position:relative;z-index:1}
+  .shop-hero-k{display:block;font-size:12px;font-weight:650;letter-spacing:.04em;opacity:.82;margin-top:148px}
+  .shop-hero-t{display:block;font-size:28px;font-weight:650;letter-spacing:-.04em;line-height:1.1;margin-top:6px}
+  .shop-hero-cta{display:inline-flex;margin-top:14px;height:36px;padding:0 16px;align-items:center;border-radius:999px;background:#fff;color:var(--ink);font-size:13px;font-weight:650}
+  .commerce{padding:12px 20px 44px}
+  .commerce-title{font-size:34px;font-weight:600;letter-spacing:-.042em}
+  .commerce-section{margin-top:40px}
+  .commerce-sectionhead h2{font-size:22px;font-weight:600;letter-spacing:-.03em}
+  .commerce-search{height:48px;border-radius:14px;background:#F5F5F7;margin-bottom:8px}
+  .fulfill-toggle{margin:10px 0 6px}
+  .shop-grid{gap:22px 14px}
+  .shop-card,.category-card,.live-service-tile{
+    border:0;border-radius:0;background:transparent;box-shadow:none;
+  }
+  .shop-card:hover,.category-card:hover,.live-service-tile:hover{transform:none;box-shadow:none;border-color:transparent}
+  .shop-photo{aspect-ratio:1/1;border-radius:22px;background-color:#F5F5F7}
+  .shop-copy{padding:12px 2px 0}
+  .shop-card .cert-badge,.shop-card .in-stock,.shop-card .swap-hint,.shop-card .shop-meta{display:none}
+  .shop-name{font-size:15px;font-weight:600;letter-spacing:-.02em}
+  .shop-price{border-top:0;padding-top:8px;margin-top:8px;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .shop-saving small,.shop-buy small,.live-tile-values small,.category-card-discount small{font-size:10px;font-weight:600;color:var(--mute);text-transform:none;letter-spacing:0}
+  .shop-saving strong{font-size:16px;color:var(--navy)}
+  .category-card-photo,.live-tile-photo{aspect-ratio:1/1;min-height:150px;border-radius:22px}
+  .category-card-copy,.live-tile-copy{min-height:92px;padding:12px 2px 0;background:transparent}
+  .category-card-name,.live-tile-name{font-size:15px;font-weight:600;white-space:normal}
+  .category-card-arrow{display:none}
+  .live-studio-hero{min-height:320px;border-radius:28px;margin-bottom:22px}
+  .live-studio-content{min-height:320px;padding:22px}
+  .live-studio-name{font-size:28px;font-weight:600;max-width:12ch}
+  .live-studio-save{align-items:flex-start;text-align:left}
+  .live-studio-save strong{font-size:23px}
+  .live-studio-price{align-items:flex-end;text-align:right}
+  .live-studio-price strong{font-size:17px}
+  .insurance-intro{display:none}
+  .live-service-grid{gap:18px 14px}
+  .send-purpose{aspect-ratio:4/3;border-radius:24px;margin:4px 0 28px;filter:none;-webkit-filter:none}
+  .send-planner{background:#F5F5F7;border-radius:24px;padding:22px}
+  .send-planner h2{font-size:22px;font-weight:600}
+  .insurance-section{margin-top:36px}
+  .salary-history-card{border:0;background:#F5F5F7;border-radius:16px}
+  .earn-wage-note{display:none}
 
 </style>
 <style id="save-sheets"></style>
@@ -1080,11 +1171,24 @@
       <div class="line" id="ln3" data-i="intro3" style="margin-top:26px;font-size:16px;color:#B7C8D9;font-weight:500">Everything here is measured one way. What reaches home.</div>
     </div>
 
-    <!-- top bar: Name · Studio · Theatre · Jabali Officer · burger -->
+    <!-- top bar: mark · name · globe · voice · burger -->
     <div class="top">
-      <div class="mark"><img src="assets/nia-mark-square.png" alt="Nia"></div>
+      <div class="mark" id="homeMark" role="button" tabindex="0" aria-label="Home"><img src="assets/nia-mark-square.png" alt="Nia"></div>
       <div class="who">
         <div class="n" id="topname">Ravi Singh, Studio 1, Rajputana.</div>
+      </div>
+      <div class="globe-wrap">
+        <button type="button" class="globe-btn" id="globeBtn" aria-label="Language" aria-expanded="false" aria-controls="globePop">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.6 2.4 4 5.6 4 9s-1.4 6.6-4 9c-2.6-2.4-4-5.6-4-9s1.4-6.6 4-9Z"/></svg>
+          <span class="globe-lab" id="globeLab">EN</span>
+        </button>
+        <div class="globe-pop" id="globePop" hidden>
+          <button type="button" data-lang="en" class="sel">English <span class="en">EN</span></button>
+          <button type="button" data-lang="hi">हिन्दी <span class="en">Hindi</span></button>
+          <button type="button" data-lang="bn">বাংলা <span class="en">Bangla</span></button>
+          <button type="button" data-lang="ta">தமிழ் <span class="en">Tamil</span></button>
+          <button type="button" data-lang="kn">ಕನ್ನಡ <span class="en">Kannada</span></button>
+        </div>
       </div>
       <button type="button" class="voice-btn" id="voiceBtn" aria-label="Ask Nia">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3M9 21h6"/></svg>
@@ -1177,7 +1281,7 @@ var HOME = 9988;                 // Pay 16,500 − Nest 2,200 − Bag 812 − Fo
 /* ---------- GO-LIVE LOAD (locked) ----------
    1 theatre · 40 studios · 3,000 members.
    This phone = one member month for that load: browse Save, bag, pickup.
-   Members paid monthly. No live OTP / WhatsApp product / live UPI. Save look frozen.
+   Members paid monthly. No live OTP / WhatsApp product / live UPI. Save look unfrozen — shop, photo-first.
    Do not invent leftover rupees. Do not edit Rabbit/ops.
 */
 var GO_LIVE = { theatres:1, studios:40, members:3000 };
@@ -1332,6 +1436,18 @@ var bag = {};   // id -> qty
 var T = {
   en:{
     skip:'Skip',
+    hello_morning:'Good morning',
+    hello_afternoon:'Good afternoon',
+    hello_evening:'Good evening',
+    home_line:'Live, Earn, Save, Send.',
+    home_open:'Open',
+    home_live_d:'Near work.',
+    home_earn_d:'Extra pay.',
+    home_save_d:'Shop for less.',
+    home_send_d:'Money home.',
+    shop_hero_k:'Keep more',
+    shop_hero_t:'Cooking oil',
+    shop_hero_cta:'Shop',
     intro1:'You did not leave home for yourself.',
     intro2:'You left so more could reach it.',
     intro3:'Everything here is measured one way. What reaches home.',
@@ -1641,6 +1757,18 @@ var T = {
   },
   hi:{
     skip:'छोड़ें',
+    hello_morning:'सुप्रभात',
+    hello_afternoon:'नमस्ते',
+    hello_evening:'शुभ संध्या',
+    home_line:'रहना, कमाई, बचत, भेजें।',
+    home_open:'खोलें',
+    home_live_d:'काम के पास।',
+    home_earn_d:'अधिक कमाई।',
+    home_save_d:'सस्ता सामान।',
+    home_send_d:'घर पैसे।',
+    shop_hero_k:'और रखें',
+    shop_hero_t:'खाना पकाने का तेल',
+    shop_hero_cta:'दुकान',
     intro1:'तुम अपने लिए घर नहीं छोड़े।',
     intro2:'तुम इसलिए निकले कि घर तक ज़्यादा पहुँचे।',
     intro3:'यहाँ हर चीज़ एक ही तरह नापी जाती है. घर तक क्या पहुँचा।',
@@ -1843,6 +1971,18 @@ var T = {
   },
   bn:{
     skip:'বাদ দিন',
+    hello_morning:'শুভ সকাল',
+    hello_afternoon:'শুভ দুপুর',
+    hello_evening:'শুভ সন্ধ্যা',
+    home_line:'থাকা, রোজগার, সঞ্চয়, পাঠান।',
+    home_open:'খুলুন',
+    home_live_d:'কাজের কাছে।',
+    home_earn_d:'বাড়তি আয়।',
+    home_save_d:'কম দামে কেনাকাটা।',
+    home_send_d:'বাড়ি টাকা।',
+    shop_hero_k:'আরও রাখুন',
+    shop_hero_t:'রান্নার তেল',
+    shop_hero_cta:'দোকান',
     intro1:'তুমি নিজের জন্য বাড়ি ছাড়োনি।',
     intro2:'ছেড়েছ যাতে বাড়িতে বেশি পৌঁছায়।',
     intro3:'এখানে সব একভাবেই মাপা হয়. বাড়িতে কতটা পৌঁছাল।',
@@ -1984,6 +2124,18 @@ var T = {
   },
   ta:{
     skip:'தவிர்',
+    hello_morning:'காலை வணக்கம்',
+    hello_afternoon:'மதிய வணக்கம்',
+    hello_evening:'மாலை வணக்கம்',
+    home_line:'வாழ், சம்பாதி, சேமி, அனுப்பு.',
+    home_open:'திற',
+    home_live_d:'வேலை அருகில்.',
+    home_earn_d:'கூடுதல் ஊதியம்.',
+    home_save_d:'குறைந்த விலை.',
+    home_send_d:'வீட்டுக்கு பணம்.',
+    shop_hero_k:'மேலும் வை',
+    shop_hero_t:'சமையல் எண்ணெய்',
+    shop_hero_cta:'கடை',
     intro1:'உனக்காக நீ ஊரை விட்டு வரவில்லை.',
     intro2:'ஊருக்கு அதிகம் சேர வேண்டும் என்றே வந்தாய்.',
     intro3:'இங்கே எல்லாம் ஒரே அளவில். ஊருக்கு எவ்வளவு சேர்ந்தது.',
@@ -2125,6 +2277,18 @@ var T = {
   },
   kn:{
     skip:'ಬಿಡಿ',
+    hello_morning:'ಶುಭೋದಯ',
+    hello_afternoon:'ಶುಭ ಮಧ್ಯಾಹ್ನ',
+    hello_evening:'ಶುಭ ಸಂಜೆ',
+    home_line:'ವಾಸ, ಸಂಪಾದನೆ, ಉಳಿತಾಯ, ಕಳುಹಿಸಿ.',
+    home_open:'ತೆರೆ',
+    home_live_d:'ಕೆಲಸದ ಹತ್ತಿರ.',
+    home_earn_d:'ಹೆಚ್ಚುವರಿ ಸಂಪಾದನೆ.',
+    home_save_d:'ಕಡಿಮೆ ಬೆಲೆ.',
+    home_send_d:'ಮನೆಗೆ ಹಣ.',
+    shop_hero_k:'ಇನ್ನಷ್ಟು ಇರಿಸಿ',
+    shop_hero_t:'ಅಡುಗೆ ಎಣ್ಣೆ',
+    shop_hero_cta:'ಅಂಗಡಿ',
     intro1:'ನೀನು ನಿನಗಾಗಿ ಊರು ಬಿಟ್ಟಿಲ್ಲ.',
     intro2:'ಊರಿಗೆ ಹೆಚ್ಚು ತಲುಪಲಿ ಎಂದೇ ಬಂದೆ.',
     intro3:'ಇಲ್ಲಿ ಎಲ್ಲವೂ ಒಂದೇ ಅಳತೆಯಲ್ಲಿ. ಊರಿಗೆ ಎಷ್ಟು ತಲುಪಿತು.',
@@ -2266,7 +2430,7 @@ var T = {
   }
 };
 
-var lang='en', tab='live', introDone=true;
+var lang='en', tab='home', introDone=true;
 var commerceView='home', selectedProduct='groundnut_oil', selectedCategory='oils', swapChoice={};
 var liveView='home', liveCard=null, earnView='home', earnCard=null, sendView='home', sendCard=null;
 var pickedLive={};
@@ -2734,7 +2898,7 @@ function sendPlanner(){
   var buffer=p.buffer>0?('<div class="send-plan-row"><span>Buffer</span><strong>'+money(p.buffer)+'</strong></div>'):'';
   return '<section class="send-planner" aria-label="Plan money for home">'
     +'<div class="send-planner-k">Ask Nia</div>'
-    +'<h2>How can I send '+money(p.target)+' home?</h2>'
+    +'<h2>Send '+money(p.target)+'</h2>'
     +'<select class="send-plan-select" aria-label="Amount to send home" onchange="setSendPlanTarget(this.value)">'+opts+'</select>'
     +'<p class="send-plan-caption">'+(p.estimated?'Example using ₹18,000 pay. Add salary to make it yours.':'Built from your saved salary.')+'</p>'
     +'<div class="send-plan-ledger">'
@@ -2750,12 +2914,36 @@ function sendPlanner(){
     +'</div><button type="button" class="send-plan-action" onclick="openPlanSalary()">'+(p.estimated?'Add salary':'Update salary')+'</button>'
     +'</section>';
 }
+function homeHello(){
+  var h=new Date().getHours();
+  return t(h<12?'hello_morning':h<17?'hello_afternoon':'hello_evening');
+}
+function screenHome(){
+  var tiles=[
+    ['live','story-studio',t('tab_live'),t('home_live_d')],
+    ['earn','story-friday',t('tab_earn'),t('home_earn_d')],
+    ['save','oil-photo groundnut',t('tab_save'),t('home_save_d')],
+    ['send','story-sent',t('tab_send'),t('home_send_d')]
+  ];
+  var grid=tiles.map(function(item){
+    var photo=item[1].indexOf('oil-')===0?item[1]:('story-photo '+item[1]);
+    return '<button type="button" class="home-go" onclick="go(\''+item[0]+'\')">'
+      + '<span class="home-go-photo '+photo+'" aria-hidden="true"></span>'
+      + '<span class="home-go-copy"><span class="home-go-name">'+item[2]+'</span>'
+      + '<span class="home-go-d">'+item[3]+'</span>'
+      + '<span class="home-go-cta">'+t('home_open')+' →</span></span></button>';
+  }).join('');
+  return '<div class="home-store fadein">'
+    + '<div class="home-hello">'+homeHello()+'</div>'
+    + '<p class="home-line">'+t('home_line')+'</p>'
+    + '<div class="home-go-grid">'+grid+'</div></div>';
+}
 function screenSend(){
   if(sendView==='aisle' && sendCard) return sendAisle();
   var head = '<div class="h1">'+t('send_t')+'</div>';
-  var purpose = '<img class="send-purpose" src="assets/send-purpose-family.jpg" alt="Mother with her two sons">';
+  var purpose = '<img class="send-purpose" src="assets/send-purpose-family.jpg" alt="">';
   var body = purpose+sendPlanner()
-    + '<section class="insurance-section"><div class="insurance-head"><h2>'+t('send_ins_title')+'</h2><p class="insurance-intro">'+t('send_ins_intro')+'</p></div>'
+    + '<section class="insurance-section"><div class="insurance-head"><h2>'+t('send_ins_title')+'</h2></div>'
     + '<div class="insurance-cards">'+insuranceCards()+'</div>'+insuranceDisclaimer()+'</section>';
   return '<div class="pad fadein">'+head+body+'</div>';
 }
@@ -2763,15 +2951,13 @@ function screenLive(){
   if(liveView==='aisle' && liveCard) return liveAisle();
   var head = '<div class="h1">'+t('live_t')+'</div>';
   var body = '<div class="live-card-layout">'+liveCards()+'</div>';
-  return '<div class="pad fadein">'+head+homeMonthBanner()+body+'</div>';
+  return '<div class="pad fadein">'+head+body+'</div>';
 }
 function screenEarn(){
   if(earnView==='aisle' && earnCard) return earnAisle();
   var head = '<div class="h1">'+t('earn_t')+'</div>';
-  var trends = salaryHistoryCard();
   var cards = '<div class="live-service-grid earn-service-grid">'+earnCards()+'</div>';
-  var wageNote = '<div class="earn-wage-note"><strong>Income guide.</strong> Uses the official ₹556–₹827 daily wage bands. Exact pay depends on work and location. <a href="https://clc.gov.in/clc/sites/default/files/mygov_17748804861.pdf" target="_blank" rel="noopener">Source</a></div>';
-  return '<div class="pad fadein">'+head+homeMonthBanner()+trends+wageNote+cards+'</div>';
+  return '<div class="pad fadein">'+head+salaryHistoryCard()+cards+'</div>';
 }
 function nearbyCard(job){
   var taken=!!takenJobs[job.id];
@@ -3000,7 +3186,7 @@ function contractorPanel(){
 }
 
 var SWAP_COPY={
-  en:{hero_k:'This month',hero_t:'This shop keeps more for home.',hero_d:'',hero_cta:'Use the lower-cost oil →',shopcat:'What do you need?',homecare:'Cleaning essentials',homecare_m:'Detergent, dishwash and floor cleaner',personal:'Bath essentials',personal_m:'Soap, shampoo and everyday care',oils:'Cooking oil',oils_m:'Regular oils. 1 L packs',essentials:'Daily ration',essentials_m:'Atta, rice, dal and salt',snacks:'Biscuits & snacks',snacks_m:'Biscuits and namkeen',tea_sugar:'Chai essentials',tea_sugar_m:'Tea and sugar',tshirts:'T-shirts',tshirts_m:'Basic cotton T-shirts',innerwear:'Innerwear',innerwear_m:'Vests and trunks',all:'All',cleaning:'Cleaning',ownlabel:'Nia own label',bath:'Bath & body',checked:'Price checked',save_more:'Save more',save:'Save',add:'Add',added:'Added',swap_k:'A lower-price match',more_home:'more to home',switch:'Switch and save',switched:'Switched',keep_original:'Keep my original choice',food_t:'Food stays the brand you trust',food_d:'We do not substitute food. Taste, safety and trust come first.',reg_t:'A regulated item. we keep the brand',reg_d:'Recognised personal-care brands stay unchanged.',own_t:'Already the lowest price',own_d:'This is our label, so there is no lower-price swap to show.',proof_t:'Price check',proof_d:'Nia vs kirana.',add_choice:'Add my choice',keep_week:'Save {n} this month.',aisle_keep_oil:'Save {n} this month',aisle_keep:'Save {n} this month',kirana_at:'at kirana',also_take:'People also take',in_stock:'In stock',search_hits:'Matches',bag_pickup:'Pre-order · Studio cart after 5',bag_vs:'Save'},
+  en:{hero_k:'This month',hero_t:'This shop keeps more for home.',hero_d:'',hero_cta:'Use the lower-cost oil →',shopcat:'Shop',homecare:'Cleaning',homecare_m:'Detergent, dishwash and floor cleaner',personal:'Bath essentials',personal_m:'Soap, shampoo and everyday care',oils:'Cooking oil',oils_m:'Regular oils. 1 L packs',essentials:'Daily ration',essentials_m:'Atta, rice, dal and salt',snacks:'Biscuits & snacks',snacks_m:'Biscuits and namkeen',tea_sugar:'Chai essentials',tea_sugar_m:'Tea and sugar',tshirts:'T-shirts',tshirts_m:'Basic cotton T-shirts',innerwear:'Innerwear',innerwear_m:'Vests and trunks',all:'All',cleaning:'Cleaning',ownlabel:'Nia own label',bath:'Bath & body',checked:'Price checked',save_more:'Save more',save:'Save',add:'Add',added:'Added',swap_k:'A lower-price match',more_home:'more to home',switch:'Switch and save',switched:'Switched',keep_original:'Keep my original choice',food_t:'Food stays the brand you trust',food_d:'We do not substitute food. Taste, safety and trust come first.',reg_t:'A regulated item. we keep the brand',reg_d:'Recognised personal-care brands stay unchanged.',own_t:'Already the lowest price',own_d:'This is our label, so there is no lower-price swap to show.',proof_t:'Price check',proof_d:'Nia vs kirana.',add_choice:'Add my choice',keep_week:'Save {n} this month.',aisle_keep_oil:'Save {n} this month',aisle_keep:'Save {n} this month',kirana_at:'at kirana',also_take:'People also take',in_stock:'In stock',search_hits:'Matches',bag_pickup:'Pre-order · Studio cart after 5',bag_vs:'Save'},
   hi:{hero_k:'इस हफ़्ते',hero_t:'यह दुकान घर के लिए और रखती है।',hero_d:'',hero_cta:'कम कीमत का तेल लें →',shopcat:'क्या चाहिए?',homecare:'सफाई का सामान',homecare_m:'सर्फ, बर्तन और फर्श की सफाई',personal:'साबुन/शैम्पू',personal_m:'नहाने और रोज़ की देखभाल का सामान',oils:'खाना पकाने का तेल',oils_m:'सरसों, मूंगफली और दूसरे तेल',essentials:'राशन',essentials_m:'आटा, चावल, दाल और नमक',all:'सभी',cleaning:'सफ़ाई',ownlabel:'Nia का अपना',bath:'नहाना और शरीर',checked:'कीमत जाँची',save_more:'और बचाएँ',save:'बचत',add:'जोड़ें',added:'जुड़ गया',swap_k:'कम कीमत का समान विकल्प',more_home:'और घर',switch:'बदलें और बचाएँ',switched:'बदल दिया',keep_original:'अपनी पहली पसंद रखें',food_t:'खाने में भरोसे का ब्रांड रहता है',food_d:'हम खाने का सामान नहीं बदलते। स्वाद, सुरक्षा और भरोसा पहले आते हैं।',reg_t:'नियमित वस्तु. ब्रांड वही रहता है',reg_d:'पहचाना हुआ निजी-देखभाल ब्रांड नहीं बदला जाता।',own_t:'पहले से सबसे कम कीमत',own_d:'यह हमारा अपना लेबल है, इसलिए इससे कम कीमत का विकल्प नहीं है।',proof_t:'आपके हफ़्ते की कीमत',proof_d:'वही पैक। Nia कीमत vs किराना।',add_choice:'अपनी पसंद जोड़ें',keep_week:'इस हफ़्ते किराना घटौती: {n}।',aisle_keep_oil:'इस हफ़्ते तेल किराना घटौती: {n}',aisle_keep:'इस हफ़्ते किराना घटौती: {n}',kirana_at:'किराना पर',also_take:'और लोग ये लेते हैं',in_stock:'स्टॉक में',search_hits:'मिलान',bag_pickup:'शाम 5 बजे के बाद उठाएँ',bag_vs:'किराना घटौती'},
   bn:{hero_k:'এই সপ্তাহে',hero_t:'এই দোকান বাড়ির জন্য আরও রাখে।',hero_d:'',hero_cta:'সস্তা তেল নিন →',shopcat:'কী দরকার?',homecare:'পরিষ্কারের জিনিস',homecare_m:'কাপড়, বাসন আর মেঝে পরিষ্কার',personal:'সাবান/শ্যাম্পু',personal_m:'স্নান আর রোজকার যত্ন',oils:'রান্নার তেল',oils_m:'সর্ষে, বাদাম আর অন্য তেল',essentials:'রেশন',essentials_m:'চাল, আটা, ডাল আর নুন',save:'বাঁচাও',add:'যোগ',proof_t:'দাম',proof_d:'একই প্যাক। Nia দাম vs কিরাণা।',add_choice:'আমার পছন্দ যোগ',keep_week:'এই সপ্তাহে কিরাণা বিয়োগ: {n}।',aisle_keep_oil:'এই সপ্তাহে তেল কিরাণা বিয়োগ: {n}',aisle_keep:'এই সপ্তাহে কিরাণা বিয়োগ: {n}',kirana_at:'কিরাণায়'},
   ta:{hero_k:'இந்த வாரம்',hero_t:'இந்த கடை வீட்டிற்கு மேலும் வைக்கும்.',hero_d:'',hero_cta:'மலிவு எண்ணெய் எடு →',shopcat:'என்ன வேண்டும்?',homecare:'சுத்தம் செய்யும் பொருட்கள்',homecare_m:'டிடர்ஜெண்ட், பாத்திரம் மற்றும் தரை சுத்தம்',personal:'சோப்பு/ஷாம்பு',personal_m:'குளியல் மற்றும் தினசரி பயன்பாடு',oils:'சமையல் எண்ணெய்',oils_m:'கடுகு, நிலக்கடலை மற்றும் பிற எண்ணெய்கள்',essentials:'மளிகை',essentials_m:'அரிசி, மாவு, பருப்பு மற்றும் உப்பு',all:'அனைத்தும்',cleaning:'சுத்தம்',ownlabel:'Nia சொந்த லேபல்',bath:'குளியல் மற்றும் உடல்',checked:'விலை சரிபார்க்கப்பட்டது',save_more:'மேலும் சேமிக்கவும்',save:'சேமிப்பு',add:'சேர்',added:'சேர்க்கப்பட்டது',swap_k:'குறைந்த விலை பொருத்தம்',more_home:'மேலும் வீட்டிற்கு',switch:'மாற்றி சேமிக்கவும்',switched:'மாற்றப்பட்டது',keep_original:'முதல் தேர்வை வைத்திரு',food_t:'உணவில் நம்பகமான பிராண்டே இருக்கும்',food_d:'உணவுப் பொருளை மாற்றமாட்டோம். சுவை, பாதுகாப்பு, நம்பிக்கை முதலில்.',reg_t:'ஒழுங்குபடுத்தப்பட்ட பொருள். பிராண்டை வைத்திருப்போம்',reg_d:'அறிமுகமான தனிப்பட்ட பராமரிப்பு பிராண்டு மாறாது.',own_t:'ஏற்கனவே குறைந்த விலை',own_d:'இது எங்கள் சொந்த லேபல்; இன்னொரு குறைந்த விலை மாற்று இல்லை.',proof_t:'உங்கள் வாரத்திற்கான விலை',proof_d:'அதே பேக். Nia விலை vs கிரானா.',add_choice:'என் தேர்வை சேர்',keep_week:'இந்த வாரம் கிரானா கழிவு: {n}.',aisle_keep_oil:'இந்த வாரம் எண்ணெய் கிரானா கழிவு: {n}',aisle_keep:'இந்த வாரம் கிரானா கழிவு: {n}',kirana_at:'கிரானாவில்'},
@@ -3098,13 +3284,11 @@ function refreshStock(){
   }).catch(function(){ return null; });
 }
 function commerceCard(p){
-  var meta=(p.hi[lang]||p.hi.en), swap=substituteFor(p), saving=productSaving(p);
+  var saving=productSaving(p);
   return '<article class="shop-card">'
-    + '<div class="shop-photo '+productPhotoClass(p)+'" onclick="openProduct(&quot;'+p.id+'&quot;)" role="button" tabindex="0" aria-label="Open '+p.brand+'"><span class="cert-badge">'+IC.shield+' '+(p.category==='own_label'?sw('ownlabel'):sw('checked'))+'</span></div>'
-    + '<div class="shop-copy"><button class="shop-name" onclick="openProduct(&quot;'+p.id+'&quot;)">'+p.brand+'</button><div class="shop-meta">'+meta+'</div>'
-    + '<div class="in-stock">'+stockLabel(p.id)+'</div>'
-    + (swap?'<div class="swap-hint">'+sw('save_more')+'</div>':'')
-    + '<div class="shop-price"><span class="shop-saving"><small>Save</small><strong>'+money(saving)+' off</strong></span><span class="shop-buy"><small>MRP '+money(p.mrp)+'</small><strong>Buy for '+money(p.price)+'</strong></span></div>'
+    + '<div class="shop-photo '+productPhotoClass(p)+'" onclick="openProduct(&quot;'+p.id+'&quot;)" role="button" tabindex="0" aria-label="'+p.brand+'"></div>'
+    + '<div class="shop-copy"><button class="shop-name" onclick="openProduct(&quot;'+p.id+'&quot;)">'+p.brand+'</button>'
+    + '<div class="shop-price"><span class="shop-saving"><small>You keep</small><strong>'+money(saving)+'</strong></span><span class="shop-buy"><small>Nia</small><strong>'+money(p.price)+'</strong></span></div>'
     + '<div class="shop-action">'+qtyControl(p.id,'card')+'</div></div></article>';
 }
 
@@ -3131,7 +3315,7 @@ function productSaving(p){
 }
 function categoryCard(id,photo,name,meta){
   var discount=categoryDiscountLabel(id);
-  return '<button class="category-card" onclick="openCategory(\''+id+'\')"><span class="category-card-photo '+photo+'"></span><span class="category-card-copy"><span class="category-card-body"><span class="category-card-name">'+name+'</span><span class="category-card-values"><span class="category-card-discount"><small>Save</small><strong>'+discount+'</strong></span><span class="category-card-arrow">'+IC.chev+'</span></span></span></span></button>';
+  return '<button class="category-card" onclick="openCategory(\''+id+'\')"><span class="category-card-photo '+photo+'"></span><span class="category-card-copy"><span class="category-card-body"><span class="category-card-name">'+name+'</span><span class="category-card-values"><span class="category-card-discount"><small>You keep</small><strong>'+discount+'</strong></span></span></span></span></button>';
 }
 function liveTabCopy(id, part){
   var ids=['studio','wash','hubfood','cooler','cycle','raincape','dontmiss','akka','group','dropin','recreation','thrift','grievance'];
@@ -3431,8 +3615,8 @@ function liveStudioHero(model,photoClass){
   return '<article class="live-studio-hero story-photo '+photoClass+'" role="button" tabindex="0" onclick="openStoryCard(\'live\',\'studio\')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openStoryCard(\'live\',\'studio\');}" aria-label="'+aria+'">'
     + '<span class="live-studio-content"><span class="live-studio-name">'+name+'</span>'
     + complimentaryStrip()
-    + '<span class="live-studio-foot"><span class="live-studio-price"><small>Monthly price</small><strong>'+money(model.nia)+'</strong></span>'
-    + '<span class="live-studio-save"><small>You save</small><strong>'+money(model.amount)+'/month</strong></span></span></span>'
+    + '<span class="live-studio-foot"><span class="live-studio-save"><small>You keep</small><strong>'+money(model.amount)+'</strong></span>'
+    + '<span class="live-studio-price"><small>Nia</small><strong>'+money(model.nia)+'</strong></span></span></span>'
     + liveCardStepper(id,name,true)+'</article>';
 }
 function liveServiceTile(id,name,photoClass,model){
@@ -3441,8 +3625,8 @@ function liveServiceTile(id,name,photoClass,model){
   return '<article class="live-service-tile" role="button" tabindex="0" onclick="openStoryCard(\'live\',\''+id+'\')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openStoryCard(\'live\',\''+id+'\');}" aria-label="'+aria+'">'
     + '<span class="live-tile-photo story-photo '+photoClass+'">'+liveCardStepper(id,name,false)+'</span>'
     + '<span class="live-tile-copy"><span class="live-tile-name">'+name+'</span>'
-    + '<span class="live-tile-values"><span class="live-tile-save"><small>Save</small><strong>'+money(model.amount)+'</strong></span>'
-    + '<span class="live-tile-price"><small>Price</small><strong>'+niaText+'</strong></span></span></span></article>';
+    + '<span class="live-tile-values"><span class="live-tile-save"><small>You keep</small><strong>'+money(model.amount)+'</strong></span>'
+    + '<span class="live-tile-price"><small>Nia</small><strong>'+niaText+'</strong></span></span></span></article>';
 }
 function earnCards(){
   var cards=earnPhotoCard('ot',t('earn_card_ot_n'),t('earn_card_ot_m'),'story-friday');
@@ -3491,21 +3675,22 @@ function commerceHome(){
     + '<header class="commerce-head">'
     + '<h1 class="commerce-title">'+t('save_t')+'</h1>'
     + '<div class="fulfill-toggle" role="tablist" aria-label="Pickup or delivery">'
-    + '<button type="button" class="fulfill-seg'+(hubOn?' on':'')+'" role="tab" aria-selected="'+(hubOn?'true':'false')+'" onclick="setSaveFulfillment(&quot;hub_collect&quot;)">Hub pick up</button>'
-    + '<button type="button" class="fulfill-seg'+(!hubOn?' on':'')+'" role="tab" aria-selected="'+(!hubOn?'true':'false')+'" onclick="setSaveFulfillment(&quot;studio_stop&quot;)">Studio Delivery</button>'
-    + '</div>'
-    + '<div class="commerce-sub-row">'
-    + '<div class="commerce-sub">'+fulfillmentSub()+'</div>'
+    + '<button type="button" class="fulfill-seg'+(hubOn?' on':'')+'" role="tab" aria-selected="'+(hubOn?'true':'false')+'" onclick="setSaveFulfillment(&quot;hub_collect&quot;)">Pick up</button>'
+    + '<button type="button" class="fulfill-seg'+(!hubOn?' on':'')+'" role="tab" aria-selected="'+(!hubOn?'true':'false')+'" onclick="setSaveFulfillment(&quot;studio_stop&quot;)">Studio</button>'
     + '</div>'
     + '</header>'
-    + '<label class="commerce-search">'+IC.search+'<input id="shopSearch" aria-label="Search products" placeholder="Search biscuits, tea, T-shirts" value="'+String(shopQuery||'').replace(/"/g,'&quot;')+'" oninput="onShopSearch(this)"></label>'
+    + '<button type="button" class="shop-hero oil-photo groundnut" onclick="openCategory(&quot;oils&quot;)">'
+    + '<span class="shop-hero-k">'+t('shop_hero_k')+'</span>'
+    + '<span class="shop-hero-t">'+t('shop_hero_t')+'</span>'
+    + '<span class="shop-hero-cta">'+t('shop_hero_cta')+'</span></button>'
+    + '<label class="commerce-search">'+IC.search+'<input id="shopSearch" aria-label="Search" placeholder="Oil, soap, tea" value="'+String(shopQuery||'').replace(/"/g,'&quot;')+'" oninput="onShopSearch(this)"></label>'
     + (function(){
         var hits=searchHitProducts();
         if(!hits.length) return '';
         return '<div class="search-hits"><div class="kick">'+sw('search_hits')+'</div><div class="shop-grid">'+hits.map(commerceCard).join('')+'</div></div>';
       })()
     + '<section class="commerce-section"><div class="commerce-sectionhead"><h2>'+sw('shopcat')+'</h2></div><div class="category-cards">'+cats+'</div></section>'
-    + '<section class="commerce-section"><div class="commerce-sectionhead"><div><h2>Everyday products</h2><div class="pricing-audit">Provisional prices. Confirm supplier MRP.</div></div></div><div class="shop-grid">'+nonOilListingProducts().map(commerceCard).join('')+'</div></section>'
+    + '<section class="commerce-section"><div class="commerce-sectionhead"><h2>More</h2></div><div class="shop-grid">'+nonOilListingProducts().map(commerceCard).join('')+'</div></section>'
     + '</div>';
 }
 function categoryConfig(){
@@ -3658,8 +3843,8 @@ function render(){
   try{ clearBlockingOverlays(); }catch(e0){}
   var isSave=(tab==='save');
   try{
-    if(isSave) ensureSaveSheets();
-    if(tab==='live'||tab==='earn'||tab==='send') ensureStorySheets();
+    if(isSave||tab==='home') ensureSaveSheets();
+    if(tab==='live'||tab==='earn'||tab==='send'||tab==='home') ensureStorySheets();
     var phone=document.getElementById('phone');
     if(phone){
       phone.classList.toggle('save-mode', isSave);
@@ -3667,7 +3852,8 @@ function render(){
       phone.classList.remove('aisle-mode');
     }
     var html='';
-    if(!DUMMY_DATA && !isSave && !authenticated) html=screenAuth();
+    if(!DUMMY_DATA && !isSave && tab!=='home' && !authenticated) html=screenAuth();
+    else if(tab==='home') html=screenHome();
     else if(tab==='send') html=screenSend();
     else if(tab==='live') html=screenLive();
     else if(tab==='earn') html=screenEarn();
@@ -3708,6 +3894,7 @@ function go(x){
   if(x!=='live'){ liveView='home'; liveCard=null; }
   if(x!=='earn'){ earnView='home'; earnCard=null; }
   if(x!=='send'){ sendView='home'; sendCard=null; }
+  if(x==='home'){ commerceView='home'; }
   if(x==='save'){
     markShopSeen();
     authStep='phone';
@@ -3809,10 +3996,27 @@ function applyLang(){
     if(sk) sk.textContent='Skip login';
   }
   document.documentElement.lang=lang;
-  document.querySelectorAll('#langmenu button').forEach(function(b){ b.classList.toggle('sel', b.dataset.lang===lang); });
+  document.querySelectorAll('#langmenu button, #globePop button').forEach(function(b){ b.classList.toggle('sel', b.dataset.lang===lang); });
+  var lab=document.getElementById('globeLab');
+  if(lab) lab.textContent=(lang||'en').toUpperCase();
   render();
   var sheet=document.getElementById('sheet');
   if(sheet && sheet.classList.contains('on')) renderBag();
+}
+function closeGlobe(){
+  var pop=document.getElementById('globePop');
+  var btn=document.getElementById('globeBtn');
+  if(pop){ pop.classList.remove('on'); pop.hidden=true; }
+  if(btn) btn.setAttribute('aria-expanded','false');
+}
+function toggleGlobe(){
+  var pop=document.getElementById('globePop');
+  var btn=document.getElementById('globeBtn');
+  if(!pop) return;
+  var open=!pop.classList.contains('on');
+  closeBurger();
+  if(open){ pop.classList.add('on'); pop.hidden=false; if(btn) btn.setAttribute('aria-expanded','true'); }
+  else closeGlobe();
 }
 
 /* ---------- bag ---------- */
@@ -4320,15 +4524,27 @@ document.getElementById('talkScrim').addEventListener('click', closeTalk);
     var about=menu.querySelector('a.about-last');
     if(about) about.addEventListener('click', function(){ closeBurger(); });
   }
-  document.querySelectorAll('#langmenu button[data-lang]').forEach(function(b){
+  document.querySelectorAll('#langmenu button[data-lang], #globePop button[data-lang]').forEach(function(b){
     b.addEventListener('click', function(){
       lang=b.dataset.lang;
       closeBurger();
+      closeGlobe();
       applyLang();
     });
   });
+  var globe=document.getElementById('globeBtn');
+  if(globe) globe.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); toggleGlobe(); });
+  var mark=document.getElementById('homeMark');
+  if(mark){
+    mark.addEventListener('click', function(){ go('home'); });
+    mark.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); go('home'); } });
+  }
 })();
-document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeBurger(); });
+document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeBurger(); closeGlobe(); } });
+document.addEventListener('click', function(e){
+  var wrap=document.querySelector('.globe-wrap');
+  if(wrap && !wrap.contains(e.target)) closeGlobe();
+});
 
 function pickPayslip(){
   if(tab!=='earn') go('earn');
@@ -4428,7 +4644,11 @@ if('serviceWorker' in navigator){
   try{
     var q=new URLSearchParams(location.search);
     var t=q.get('tab');
-    if(t==='save'||t==='live'||t==='earn'||t==='send') tab=t;
+    if(t==='home'||t==='save'||t==='live'||t==='earn'||t==='send') tab=t;
+    var view=q.get('view');
+    if(view==='aisle'||view==='detail') commerceView=view;
+    var cat=q.get('cat');
+    if(cat) selectedCategory=cat;
   }catch(e){}
   /* tabs open freely; home ₹ typed on Send */
 

@@ -65,4 +65,5 @@ export default {
   "month": "महीना",
   "day": "दिन",
   "Loading…": "लोड हो रहा है…",
+  "UPI at pickup or delivery": "पिकअप या डिलीवरी पर UPI",
 };

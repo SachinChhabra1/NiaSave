@@ -228,9 +228,6 @@ body.mesha-lang-open .mobile-nav,
 body.mesha-lang-open .notice,
 body.mesha-lang-open #desktop-nav{display:none !important}
 body.mesha-lang-open main{max-width:430px;margin:0 auto;padding:0}
-body.mesha-dark .header{
-  background:#000;border-bottom:1px solid #2a2a2a;z-index:6;
-}
 body.mesha-dark .header .brand,
 body.mesha-dark .header .brand:visited{font-weight:500;letter-spacing:-.02em;color:#fff}
 body.mesha-dark .header-tools{margin-left:auto;gap:8px}
@@ -376,10 +373,10 @@ dialog.mesha-checkout .phone-field{display:flex;align-items:center;border-radius
 dialog.mesha-checkout .phone-prefix{background:#111;color:#fff;padding:0 12px}
 dialog.mesha-checkout input{border:0;background:#111;color:#fff}
 dialog.mesha-checkout .mesha-pill-solid{width:100%;margin-top:8px}
-@media(min-width:761px){
+@media (min-width: 761px) {
   body.mesha-dark .header{
     position:relative;top:auto;left:auto;transform:none;width:100%;max-width:none;
-    height:76px;padding:0 40px;background:#000;border-bottom:1px solid #2a2a2a;
+    height:76px;padding:0 40px;background:#000;border-bottom:1px solid #2a2a2a;z-index:6;
   }
   body.mesha-dark #desktop-nav{display:flex}
   body.mesha-dark .mobile-nav{display:none}
@@ -389,7 +386,7 @@ dialog.mesha-checkout .mesha-pill-solid{width:100%;margin-top:8px}
   .mesha-bag-chip{bottom:24px}
   dialog.mesha-checkout{margin:auto;border-radius:28px}
 }
-@media(max-width:760px){
+@media (max-width: 760px) {
   .save-categories.save-pills{grid-template-columns:none}
   .save-categories.save-pills button{min-height:36px;padding:0 14px;font-size:13px}
   body.mesha-dark .header{

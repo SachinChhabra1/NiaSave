@@ -1,18 +1,18 @@
 export const languageOptions = [
   {id:'en', label:'English'},
   {id:'hi', label:'हिन्दी'},
+  {id:'bn', label:'বাংলা'},
   {id:'ta', label:'தமிழ்'},
-  {id:'kn', label:'ಕನ್ನಡ'},
-  {id:'mr', label:'मराठी'}
+  {id:'kn', label:'ಕನ್ನಡ'}
 ];
 export const validLanguage = value => languageOptions.some(l => l.id === value);
 const dictionaries = {};
 const pending = {};
 const loaders = {
   hi: () => import('./commerce-locales/hi.js'),
+  bn: () => import('./commerce-locales/bn.js'),
   ta: () => import('./commerce-locales/ta.js'),
-  kn: () => import('./commerce-locales/kn.js'),
-  mr: () => import('./commerce-locales/mr.js')
+  kn: () => import('./commerce-locales/kn.js')
 };
 // Load only the selected language; English never downloads other dictionaries.
 export async function loadLanguage(lang) {

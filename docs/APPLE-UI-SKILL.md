@@ -18,6 +18,7 @@ Not an Apple clone. The first-paint *rules*:
 8. Presentation only. No connector, env, signing, or migration edits in a UI PR.
 9. Call for help on every member screen.
 10. Sachin merges.
+11. The living product is **Nest**. Never call it a bed in member copy.
 
 ## Before you write
 
@@ -28,18 +29,20 @@ Check content in the snippet / PRD. If the line is not already on the page, do n
 | Slot | Copy |
 | --- | --- |
 | Eyebrow | Nia |
-| Hero | A bed near work. |
+| Hero | A Nest near work. |
 | Sub | Move in with Nia. Roof, rest, and a short walk to the shift. |
 | Hero CTAs | See Nest · How it works |
 | Earn | Extra shifts |
 | Save | Shop less |
 | Send | Money home. |
 
+Hard no on Home: bed, बिस्तर, বিছানা.
+
 ### Home — locked photos
 
 | Slot | Asset | Crop |
 | --- | --- | --- |
-| Hero | `studio-bunk-lockers.jpg` | `object-position: 12% 14%` — top bunk + pillow. Never the ladder. |
+| Hero | `studio-bunk-lockers.jpg` | `object-position: 12% 14%` — Nest (top bunk + pillow). Never the ladder. |
 | Earn | `earn-extra-hours-v2.jpg` | Time clock as the product. |
 | Save | `oils-editorial-sheet.png` | Bottle in frame. |
 | Send | `send-purpose-family.jpg` | Faces in frame. Never necks-only. |
@@ -77,6 +80,7 @@ Fail if any of these are true:
 - Tiles are shorter than they are wide.
 - A new sentence appeared that is not in the locked table.
 - Desktop is a phone floating on wallpaper.
+- The living product is called a bed.
 
 ## Proof
 

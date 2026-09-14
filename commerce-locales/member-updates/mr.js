@@ -113,7 +113,7 @@ export default {
   "First step": "पहिलं पाऊल",
   "We'll keep this for every screen. Change it anytime.": "ही भाषा प्रत्येक स्क्रीनवर राहील. केव्हाही बदला.",
   "No sign-in yet. Browse first. Phone only when you check out.": "अजून साइन इन नाही. आधी पाहा. फोन फक्त चेकआउटवर.",
-  "A bed near work.": "कामाजवळ एक पलंग.",
+  "A Nest near work.": "कामाजवळ एक नेस्ट.",
   "Move in with Nia. Roof, rest, and a short walk to the shift.": "नियासोबत रहा. छप्पर, विश्रांती आणि शिफ्टपर्यंत थोडी चाल.",
   "See Nest": "नेस्ट पाहा",
   "See nearby Nests, hold a bed, and pay at move-in. Browse first. Phone only when you check out.": "जवळचे नेस्ट पाहा, पलंग राखून ठेवा आणि येताना पैसे द्या. आधी पाहा. फोन फक्त चेकआउटवर.",

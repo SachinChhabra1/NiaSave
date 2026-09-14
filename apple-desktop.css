@@ -36,20 +36,15 @@
   .apple-home .mesha-pill-solid{background:#0071e3;color:#fff}
   .apple-home .mesha-pill-solid:hover:not(:disabled){background:#0077ed}
   .apple-home .mesha-pill-ghost{border-color:#2997ff;color:#2997ff}
-  .apple-save-unit{
-    position:relative;display:flex;align-items:flex-start;min-height:70vh;color:#fff;
-    background:#000 url('/assets/oils-editorial-sheet.png') 50% 30% / cover no-repeat
-  }
-  .apple-save-unit:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.25) 0%,rgba(0,0,0,.08) 40%,rgba(0,0,0,.55) 100%)}
-  .apple-save-unit .mesha-desire-copy{position:relative;z-index:1}
-  .apple-pair{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 12px;flex:none}
-  .apple-pair .mesha-rail-card{
-    min-height:520px;padding:48px 24px 28px;border-radius:0;background:#f5f5f7;color:#1d1d1f;
+  .apple-home .mesha-rail-photo.save{background-image:url('/assets/oils-editorial-sheet.png')}
+  .apple-rail{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:0 12px;flex:none}
+  .apple-rail .mesha-rail-card{
+    min-height:280px;padding:32px 16px 24px;border-radius:0;background:#f5f5f7;color:#1d1d1f;
     align-items:center;justify-content:flex-start
   }
-  .apple-pair .mesha-rail-card:hover:not(:disabled){background:#f5f5f7}
-  .apple-pair .mesha-rail-photo{max-width:280px;width:70%;border-radius:18px;aspect-ratio:1}
-  .apple-pair .mesha-rail-name{font-size:32px;letter-spacing:-.03em;color:#1d1d1f}
-  .apple-pair .mesha-rail-d{font-size:17px;color:#6e6e73}
+  .apple-rail .mesha-rail-card:hover:not(:disabled){background:#f5f5f7}
+  .apple-rail .mesha-rail-photo{max-width:160px;width:70%;border-radius:18px;aspect-ratio:1}
+  .apple-rail .mesha-rail-name{font-size:24px;letter-spacing:-.03em;color:#1d1d1f}
+  .apple-rail .mesha-rail-d{font-size:15px;color:#6e6e73}
   .mesha-bag-chip{bottom:24px;left:auto;right:24px;transform:none;width:auto;min-width:220px}
 }

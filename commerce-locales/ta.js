@@ -404,4 +404,10 @@ export default {
   "See Nests": "நெஸ்ட்களைப் பார்",
   "No Nests yet": "இன்னும் நெஸ்ட் இல்லை",
   "Places to stay will appear here.": "தங்கும் இடங்கள் இங்கே தோன்றும்.",
+  "No data yet": "இன்னும் தரவு இல்லை",
+  "Vacant Nests are not connected from Central yet.": "காலியான நெஸ்ட்கள் இன்னும் சென்ட்ரலில் இருந்து இணைக்கப்படவில்லை.",
+  "Sign in to see open jobs from Central.": "சென்ட்ரல் திறந்த வேலைகளைப் பார்க்க உள்நுழையவும்.",
+  "Walk2Work openings come from Central after you sign in. No roles are invented here.": "உள்நுழைந்த பிறகு Walk2Work வேலைகள் சென்ட்ரலில் இருந்து வரும். இங்கே பதவிகள் உருவாக்கப்படுவதில்லை.",
+  "Open roles are unavailable until Central confirms them.": "சென்ட்ரல் உறுதிப்படுத்தும் வரை திறந்த பதவிகள் இல்லை.",
+  "Your Nia team will show open jobs once Central confirms them.": "சென்ட்ரல் உறுதிசெய்த பிறகு நியா குழு திறந்த வேலைகளைக் காட்டும்.",
 };

@@ -404,4 +404,10 @@ export default {
   "See Nests": "ನೆಸ್ಟ್‌ಗಳನ್ನು ನೋಡಿ",
   "No Nests yet": "ಇನ್ನೂ ನೆಸ್ಟ್ ಇಲ್ಲ",
   "Places to stay will appear here.": "ವಾಸದ ಸ್ಥಳಗಳು ಇಲ್ಲಿ ಕಾಣಿಸುತ್ತವೆ.",
+  "No data yet": "ಇನ್ನೂ ಡೇಟಾ ಇಲ್ಲ",
+  "Vacant Nests are not connected from Central yet.": "ಖಾಲಿ ನೆಸ್ಟ್‌ಗಳು ಇನ್ನೂ ಸೆಂಟ್ರಲ್‌ನಿಂದ ಸಂಪರ್ಕಗೊಂಡಿಲ್ಲ.",
+  "Sign in to see open jobs from Central.": "ಸೆಂಟ್ರಲ್ ತೆರೆದ ಉದ್ಯೋಗಗಳನ್ನು ನೋಡಲು ಸೈನ್ ಇನ್ ಮಾಡಿ.",
+  "Walk2Work openings come from Central after you sign in. No roles are invented here.": "ಸೈನ್ ಇನ್ ನಂತರ Walk2Work ಉದ್ಯೋಗಗಳು ಸೆಂಟ್ರಲ್‌ನಿಂದ ಬರುತ್ತವೆ. ಇಲ್ಲಿ ಪಾತ್ರಗಳನ್ನು ರಚಿಸಲಾಗುವುದಿಲ್ಲ.",
+  "Open roles are unavailable until Central confirms them.": "ಸೆಂಟ್ರಲ್ ದೃಢಪಡಿಸುವವರೆಗೆ ತೆರೆದ ಪಾತ್ರಗಳು ಲಭ್ಯವಿಲ್ಲ.",
+  "Your Nia team will show open jobs once Central confirms them.": "ಸೆಂಟ್ರಲ್ ದೃಢಪಡಿಸಿದ ನಂತರ ನಿಯಾ ತಂಡ ತೆರೆದ ಉದ್ಯೋಗಗಳನ್ನು ತೋರಿಸುತ್ತದೆ.",
 };

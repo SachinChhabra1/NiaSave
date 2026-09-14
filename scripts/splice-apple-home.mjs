@@ -28,7 +28,8 @@ if (s.indexOf('function entryHomepage', a + 1) !== -1 && s.indexOf('function ent
 }
 
 const out = s.slice(0, a) + snippet + s.slice(b);
-if (!out.includes('class="mesha-home apple-home"') || !out.includes('class="mesha-desire apple-unit"') || !out.includes('mesha-rail')) {
+const hasClassToken = token => new RegExp(`class="[^"]*\\b${token}\\b[^"]*"`).test(out);
+if (!hasClassToken('apple-home') || !hasClassToken('apple-unit') || !hasClassToken('apple-rail')) {
   throw new Error('splice failed to land one Live Apple hero + secondary rail');
 }
 if (out.includes('apple-save-unit')) {

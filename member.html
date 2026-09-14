@@ -259,7 +259,7 @@
   }
   .mark{flex:0 0 auto;height:24px;width:auto;min-width:0;border-radius:0;background:transparent;display:flex;align-items:center;justify-content:flex-start;overflow:visible;margin-top:2px}
   .mark img{display:block;height:24px;width:auto;max-width:56px;object-fit:contain;filter:none;-webkit-filter:none;transform:none}
-  .who{display:flex;align-items:center;line-height:1;min-width:0;flex:1 1 auto;overflow:hidden;height:28px}
+  .who{display:none}
   .who .n{font-size:12.5px;font-weight:650;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .who .id-line{font-size:10px;font-weight:500;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
   .who .s{display:none!important}
@@ -1109,7 +1109,7 @@
     overflow:hidden;position:relative;color:#fff;text-align:left;cursor:pointer;font-family:var(--font);
     background-color:#31373B;background-size:cover;background-position:center;
   }
-  .shop-hero:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,13,18,.08) 20%,rgba(7,13,18,.72) 100%);pointer-events:none}
+  .shop-hero:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,13,18,0) 28%,rgba(7,13,18,.82) 100%);pointer-events:none}
   .shop-hero > *{position:relative;z-index:1}
   .shop-hero-k{display:block;font-size:12px;font-weight:650;letter-spacing:.04em;opacity:.82;margin-top:148px}
   .shop-hero-t{display:block;font-size:28px;font-weight:650;letter-spacing:-.04em;line-height:1.1;margin-top:6px}
@@ -4644,7 +4644,11 @@ if('serviceWorker' in navigator){
   try{
     var q=new URLSearchParams(location.search);
     var t=q.get('tab');
-    if(t==='save'||t==='live'||t==='earn'||t==='send') tab=t;
+    if(t==='home'||t==='save'||t==='live'||t==='earn'||t==='send') tab=t;
+    var view=q.get('view');
+    if(view==='aisle'||view==='detail') commerceView=view;
+    var cat=q.get('cat');
+    if(cat) selectedCategory=cat;
   }catch(e){}
   /* tabs open freely; home ₹ typed on Send */
 

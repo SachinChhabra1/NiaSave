@@ -104,3 +104,110 @@
 .les-send-screen .books-toolbar,.les-send-screen .books-dashboard,.les-send-screen .books-transfer{margin-top:0}
 @media(max-width:1000px){.les-hero-row{display:grid;gap:12px}.les-refresh{justify-self:start}}
 @media(max-width:760px){.les-screen{gap:16px}.les-hero-card{padding:16px;border-radius:16px}.les-hero-card h1{font-size:31px;letter-spacing:-.8px}.les-hero-card h2{font-size:24px}.les-hero-card p{font-size:14px;line-height:1.55}.les-stat-grid{grid-template-columns:1fr 1fr;gap:8px}.les-stat{padding:9px}.les-stat small{font-size:10px}.les-stat strong{font-size:16px}.les-send-strip{gap:12px;padding:16px;border-radius:16px}.les-send-strip h2{font-size:23px}.les-send-strip-stats{grid-template-columns:1fr 1fr;gap:8px}.les-refresh{width:100%;text-align:center}}
+
+/* Clarity pattern: large photos, whitespace, sparse type. No Apple marks. */
+:root{--bg:#f5f5f7;--surface:#fff;--fg:#1d1d1f;--muted:#6e6e73;--line:#d2d2d7;--accent:#1d1d1f}
+body{background:var(--bg);color:var(--fg)}
+.header{background:#fff;border-bottom-color:transparent}
+.brand{color:#1d1d1f}
+.notice{background:#f5f5f7;border-color:transparent;color:var(--muted)}
+.store-hello{font-size:34px;font-weight:600;letter-spacing:-.045em;line-height:1.05;margin:8px 0 8px;color:var(--fg)}
+.store-line{font-size:15px;color:var(--muted);margin:0 0 28px;line-height:1.4;max-width:24ch}
+.store-go-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.store-go{display:flex;flex-direction:column;min-width:0;border:0;border-radius:22px;overflow:hidden;background:#fff;padding:0;text-align:left;cursor:pointer;color:var(--fg);min-height:0}
+.store-go:hover:not(:disabled){background:#fff;filter:none}
+.store-go:active{transform:scale(.994)}
+.store-go-photo{display:block;width:100%;aspect-ratio:1/1;background-color:#e8e6e1;background-size:cover;background-position:center}
+.store-go-photo.live{background-image:url('/assets/studio-bunk-lockers.jpg')}
+.store-go-photo.earn{background-image:url('/assets/earn-ot-editorial-v4.jpg')}
+.store-go-photo.save{background-image:url('/assets/oils-mass-market-sheet.jpg');background-size:200% 200%;background-position:0 0}
+.store-go-photo.send{background-image:url('/assets/send-purpose-family.jpg')}
+.store-go-copy{padding:14px 14px 16px}
+.store-go-name{display:block;font-size:17px;font-weight:650;letter-spacing:-.03em}
+.store-go-d{display:block;font-size:12px;color:var(--muted);margin-top:4px;line-height:1.3}
+.store-go-cta{display:inline-block;margin-top:10px;font-size:13px;font-weight:650;color:var(--fg)}
+.store-head{margin:0 0 18px}
+.store-head h1{font-size:34px;font-weight:600;letter-spacing:-.042em}
+.store-head p,.store-kicker{display:none}
+.shop-hero{display:block;width:100%;min-height:280px;margin:4px 0 22px;padding:22px;border:0;border-radius:28px;overflow:hidden;position:relative;color:#fff;text-align:left;cursor:pointer;background-color:#31373b;background-image:url('/assets/oils-mass-market-sheet.jpg');background-size:200% 200%;background-position:0 0}
+.shop-hero:hover:not(:disabled){background-color:#31373b;filter:brightness(1.03)}
+.shop-hero:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,13,18,0) 28%,rgba(7,13,18,.82) 100%);pointer-events:none}
+.shop-hero>*{position:relative;z-index:1}
+.shop-hero-k{display:block;font-size:12px;font-weight:650;letter-spacing:.04em;opacity:.82;margin-top:148px}
+.shop-hero-t{display:block;font-size:28px;font-weight:650;letter-spacing:-.04em;line-height:1.1;margin-top:6px}
+.shop-hero-cta{display:inline-flex;margin-top:14px;height:36px;padding:0 16px;align-items:center;border-radius:999px;background:#fff;color:#1d1d1f;font-size:13px;font-weight:650}
+.store-price{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;margin-top:8px;padding-top:8px}
+.store-keep,.store-nia{display:flex;flex-direction:column;min-width:0}
+.store-keep{align-items:flex-start}
+.store-nia{align-items:flex-end;text-align:right}
+.store-keep small,.store-nia small{font-size:10px;font-weight:600;color:var(--muted);letter-spacing:0}
+.store-keep strong{font-size:16px;font-weight:650;letter-spacing:-.02em;color:#1d1d1f}
+.store-nia strong{font-size:15px;font-weight:600;letter-spacing:-.02em;color:var(--muted)}
+.product{border:0;background:transparent;border-radius:0;overflow:visible}
+.product .photo{aspect-ratio:1/1;border-radius:22px;background-color:#f5f5f7}
+.product-content{padding:12px 2px 0;gap:4px}
+.product h3{font-size:15px;font-weight:600;letter-spacing:-.02em;min-height:0}
+.product .pack,.product .stock{display:none}
+.buy-row{padding-top:6px;align-items:flex-end}
+.buy-row .price{display:none}
+.add{border:0;background:#f5f5f7;min-width:72px;border-radius:999px;color:var(--fg)}
+.stepper{border-color:transparent;background:#f5f5f7;border-radius:999px}
+.save-categories{gap:8px;margin-bottom:18px}
+.save-categories button{border:0;background:#f5f5f7;border-radius:16px;min-height:72px;font-size:12px;font-weight:600}
+.save-categories button[aria-pressed=true]{background:#1d1d1f;color:#fff;border:0;box-shadow:none}
+.save-categories button[aria-pressed=true] .icon{background:transparent;color:#fff}
+.save-categories .icon{background:transparent;padding:0;width:20px;height:20px}
+.intro .eyebrow,.intro .purpose,.payment-note,.results-line{display:none}
+.intro h1{font-size:34px;font-weight:600;letter-spacing:-.042em}
+.store-date{display:flex;gap:10px;align-items:end;margin:0 0 22px;padding:0;background:transparent;border:0}
+.store-date label{flex:1}
+.store-nest{border:0;border-radius:0;background:transparent;overflow:visible}
+.store-nest .nest-image img,.store-nest .nest-placeholder{aspect-ratio:1/1;border-radius:22px;object-fit:cover}
+.store-nest .nest-image span,.store-nest .eyebrow,.store-nest .muted,.store-nest .stock,.store-nest .row,.store-nest small.block{display:none}
+.store-nest>.stack{padding:12px 2px 0}
+.store-nest h2{font-size:17px;font-weight:600;letter-spacing:-.03em}
+.store-nest .price{font-size:15px;font-weight:600}
+.store-purpose{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:24px;margin:4px 0 22px}
+.les-hero-card,.les-send-strip{background:#fff;border:0;color:var(--fg);box-shadow:none;padding:0;border-radius:0}
+.les-hero-card .eyebrow,.les-send-strip .eyebrow,.les-hero-card p,.les-send-strip p,.les-stat-grid,.les-send-strip-stats,.les-refresh{display:none}
+.les-hero-card h1,.les-send-strip h2{color:var(--fg);font-size:34px;font-weight:600;letter-spacing:-.042em}
+.earn-job{border:0;background:#f5f5f7;border-radius:18px;padding:18px}
+.earn-job .earn-job-details>summary{font-weight:600}
+.service-intro p,.earn-results>div>p,.service-foot,.earn-results .eyebrow{display:none}
+.earn-results h2{font-size:22px;font-weight:600;letter-spacing:-.03em}
+.fulfillment-choice>p:first-child,.fulfillment-choice .bag-foot{display:none}
+.fulfillment-toggle{background:#f5f5f7;border:0;border-radius:999px;padding:3px}
+.fulfillment-toggle button[aria-pressed=true]{background:#fff;border-color:transparent;box-shadow:none}
+@media(max-width:760px){
+  :root{background:#f5f5f7}
+  .header{height:56px;padding:0 16px;border-bottom:0}
+  .header .brand{font-size:0;letter-spacing:0;gap:0;color:transparent}
+  .header .brand-logo{width:34px;height:34px;filter:none}
+  .header-tools .signin{border:0;background:transparent;width:44px;min-height:44px;padding:0}
+  main{padding:18px 18px 150px;max-width:430px}
+  h1{font-size:34px;letter-spacing:-.042em}
+  .intro{margin-bottom:10px}
+  .intro h1{font-size:34px}
+  .products{grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 14px}
+  .product-content{padding:12px 2px 0}
+  .save-categories{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+  .save-categories button{min-height:68px;padding:8px 4px;font-size:11px}
+  .mobile-nav{border-top-color:#e8e8ed;background:#fff}
+  .mobile-nav button[aria-current=page]{color:#1d1d1f;background:transparent}
+  .store-hello{font-size:32px;margin-top:6px}
+  .shop-hero{min-height:260px;border-radius:24px}
+  .shop-hero-k{margin-top:128px}
+  .shop-hero-t{font-size:26px}
+  .les-hero-card h1,.les-send-strip h2,.store-head h1{font-size:32px}
+  .nest-grid{gap:22px}
+  .entry-hero,.entry-services{display:none}
+  .signin-dialog{border-radius:20px}
+}
+@media(min-width:761px){
+  .store-go-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .store-hello{font-size:48px}
+  .shop-hero{min-height:360px}
+  .shop-hero-k{margin-top:200px}
+  .products{gap:24px 18px}
+  .entry-hero{display:none}
+}

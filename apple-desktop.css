@@ -1,0 +1,55 @@
+/* Apple.com first-paint overlay. Loaded after commerce.css. Desktop only. */
+@media (min-width: 761px) {
+  body.mesha-dark .header{
+    position:sticky;top:0;left:auto;transform:none;width:100%;max-width:none;
+    height:48px;padding:0 22px;z-index:20;
+    background:rgba(22,22,23,.8);
+    backdrop-filter:saturate(180%) blur(20px);
+    -webkit-backdrop-filter:saturate(180%) blur(20px);
+    border-bottom:1px solid rgba(255,255,255,.08);
+  }
+  body.mesha-dark .header .brand{font-size:17px;font-weight:400;color:#f5f5f7}
+  body.mesha-dark .brand-logo{display:block;width:18px;height:18px;filter:brightness(0) invert(1)}
+  body.mesha-dark #desktop-nav{display:flex;margin:0 auto;gap:8px}
+  body.mesha-dark #desktop-nav button{
+    min-width:auto;border:0;border-bottom:0;font-size:12px;font-weight:400;
+    color:#f5f5f7;padding:0 14px;min-height:48px;background:transparent
+  }
+  body.mesha-dark #desktop-nav button[aria-current=page]{color:#fff;border:0}
+  body.mesha-dark #desktop-nav button small{display:none}
+  body.mesha-dark .mobile-nav{display:none}
+  body.mesha-dark main{max-width:none;margin:0;padding:0 0 80px}
+  body.mesha-dark .header-tools .mesha-chip,body.mesha-dark .signin{
+    min-height:28px;height:28px;font-size:12px;padding:0 12px
+  }
+  .apple-home{gap:12px;background:#fff;color:#1d1d1f;min-height:0;padding-bottom:12px}
+  .apple-home .apple-unit{
+    min-height:70vh;align-items:flex-start;justify-content:flex-start;text-align:center
+  }
+  .apple-home .mesha-desire-copy{text-align:center;padding:64px 24px 24px;width:100%}
+  .apple-home .mesha-desire-copy h1{font-size:56px;max-width:16ch;margin:8px auto 10px;letter-spacing:-.03em}
+  .apple-home .mesha-desire-copy>p:not(.mesha-kicker){
+    max-width:36ch;margin:0 auto 22px;font-size:21px;line-height:1.2;color:#d2d2d7
+  }
+  .apple-home .mesha-kicker{letter-spacing:.12em;color:#a1a1a6}
+  .apple-home .mesha-desire-cta{justify-content:center}
+  .apple-home .mesha-pill-solid{background:#0071e3;color:#fff}
+  .apple-home .mesha-pill-solid:hover:not(:disabled){background:#0077ed}
+  .apple-home .mesha-pill-ghost{border-color:#2997ff;color:#2997ff}
+  .apple-save-unit{
+    position:relative;display:flex;align-items:flex-start;min-height:70vh;color:#fff;
+    background:#000 url('/assets/oils-editorial-sheet.png') 50% 30% / cover no-repeat
+  }
+  .apple-save-unit:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.25) 0%,rgba(0,0,0,.08) 40%,rgba(0,0,0,.55) 100%)}
+  .apple-save-unit .mesha-desire-copy{position:relative;z-index:1}
+  .apple-pair{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 12px;flex:none}
+  .apple-pair .mesha-rail-card{
+    min-height:520px;padding:48px 24px 28px;border-radius:0;background:#f5f5f7;color:#1d1d1f;
+    align-items:center;justify-content:flex-start
+  }
+  .apple-pair .mesha-rail-card:hover:not(:disabled){background:#f5f5f7}
+  .apple-pair .mesha-rail-photo{max-width:280px;width:70%;border-radius:18px;aspect-ratio:1}
+  .apple-pair .mesha-rail-name{font-size:32px;letter-spacing:-.03em;color:#1d1d1f}
+  .apple-pair .mesha-rail-d{font-size:17px;color:#6e6e73}
+  .mesha-bag-chip{bottom:24px;left:auto;right:24px;transform:none;width:auto;min-width:220px}
+}

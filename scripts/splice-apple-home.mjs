@@ -3,11 +3,14 @@ import fs from 'node:fs';
 const srcPath = 'commerce.js';
 const snippet = fs.readFileSync('lib/commerce/apple-home.snippet.js', 'utf8').trim() + '\n';
 
-const required = ['function entryHomepage', 'apple-home', 'apple-unit', 'apple-rail', 'mesha-rail', 'studio-bunk-lockers.jpg', "data-action=\"live\"", "['shop','save'", "A Nest near work.", "Extra shifts", "Money home."];
+const required = ['function entryHomepage', 'apple-home', 'apple-unit', 'apple-rail', 'mesha-rail', 'studio-bunk-lockers.jpg', "data-action=\"live\"", "['shop','save'", "A Nest near work.", "An upskilled job.", "Shop at wholesale rates.", "Money home."];
 for (const token of required) {
   if (!snippet.includes(token)) throw new Error(`apple-home snippet missing ${token}`);
 }
 if (snippet.includes('apple-save-unit')) throw new Error('homepage must not emit a Save co-hero');
+if (snippet.includes('Shop less')) throw new Error('Save is wholesale rates, not Shop less');
+if (snippet.includes('Extra shifts')) throw new Error('Earn is an upskilled job, not Extra shifts');
+if (snippet.includes('A bed near work.')) throw new Error('homepage must not call it a bed');
 if ((snippet.match(/apple-unit/g) || []).length !== 1) throw new Error('homepage must have exactly one Live apple-unit');
 
 const forbidden = /\d+\s*nests|vacanc|open roles|\bUPI\b|pay online|\bwallet\b|Series A|fundraise|OTP|pre-seed|localStorage\.setItem\('nia-language'/i;

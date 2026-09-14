@@ -38,7 +38,7 @@
 }
 .nia-home-card .mesha-rail-photo.earn{background-image:url('/assets/earn-extra-hours-v2.jpg');background-position:50% 30%}
 .nia-home-card .mesha-rail-photo.save{background-image:url('/assets/oils-editorial-sheet.png');background-size:cover;background-position:50% 40%}
-.nia-home-card .mesha-rail-photo.send{background-image:url('/assets/send-purpose-family.jpg');background-position:50% 20%}
+.nia-home-card .mesha-rail-photo.send{background-image:url('/assets/send-village-home.jpg');background-position:50% 40%}
 .nia-home-card-copy{
   position:relative;z-index:1;display:flex;flex-direction:column;gap:2px;
   padding:72px 18px 18px;
@@ -76,7 +76,6 @@
     min-height:0;align-items:stretch;justify-content:flex-start;text-align:center
   }
 
-  /* Reserved copy band on top. Photo is its own unit. No overlay on the ladder. */
   .nia-home-hero{
     display:flex;flex-direction:column;min-height:0;
   }

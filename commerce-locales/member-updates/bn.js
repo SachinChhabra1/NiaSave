@@ -5,7 +5,7 @@ export default {
   "Choose your language": "আপনার ভাষা বেছে নিন",
   "We'll keep this for every screen. Change it anytime.": "এই ভাষা সব স্ক্রিনে থাকবে। যেকোনো সময় বদলাতে পারবেন।",
   "No sign-in yet. Browse first. Phone only when you check out.": "এখনো সাইন ইন নয়। আগে দেখুন। ফোন শুধু চেকআউটে।",
-  "A bed near work.": "কাজের কাছে একটি বিছানা।",
+  "A Nest near work.": "কাজের কাছে একটি নেস্ট।",
   "Move in with Nia. Roof, rest, and a short walk to the shift.": "নিয়ার সঙ্গে থাকুন। ছাদ, বিশ্রাম, আর শিফট পর্যন্ত সামান্য হাঁটা।",
   "See Nest": "নেস্ট দেখুন",
   "See nearby Nests, hold a bed, and pay at move-in. Browse first. Phone only when you check out.": "কাছের নেস্ট দেখুন, বিছানা ধরে রাখুন, আর আসার সময় টাকা দিন। আগে দেখুন। ফোন শুধু চেকআউটে।",

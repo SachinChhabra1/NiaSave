@@ -3,7 +3,7 @@ import fs from 'node:fs';
 const srcPath = 'commerce.js';
 const snippet = fs.readFileSync('lib/commerce/apple-home.snippet.js', 'utf8').trim() + '\n';
 
-const required = ['function entryHomepage', 'apple-home', 'apple-unit', 'apple-rail', 'mesha-rail', 'studio-bunk-lockers.jpg', "data-action=\"live\"", "['shop','save'", "A bed near work.", "Extra shifts", "Money home."];
+const required = ['function entryHomepage', 'apple-home', 'apple-unit', 'apple-rail', 'mesha-rail', 'studio-bunk-lockers.jpg', "data-action=\"live\"", "['shop','save'", "A Nest near work.", "Extra shifts", "Money home."];
 for (const token of required) {
   if (!snippet.includes(token)) throw new Error(`apple-home snippet missing ${token}`);
 }

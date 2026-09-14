@@ -113,7 +113,7 @@ export default {
   "First step": "முதல் படி",
   "We'll keep this for every screen. Change it anytime.": "இந்த மொழி எல்லா திரைகளிலும் இருக்கும். எப்போதும் மாற்றலாம்.",
   "No sign-in yet. Browse first. Phone only when you check out.": "இன்னும் உள்நுழைய வேண்டாம். முதலில் பாருங்கள். போன் செக்அவுட்டில் மட்டும்.",
-  "A bed near work.": "வேலைக்கு அருகில் ஒரு படுக்கை.",
+  "A Nest near work.": "வேலைக்கு அருகில் ஒரு நெஸ்ட்.",
   "Move in with Nia. Roof, rest, and a short walk to the shift.": "நியாவுடன் தங்குங்கள். கூரை, ஓய்வு, ஷிப்டுக்கு சிறிது நடை.",
   "See Nest": "நெஸ்ட் பார்",
   "See nearby Nests, hold a bed, and pay at move-in. Browse first. Phone only when you check out.": "அருகிலுள்ள நெஸ்ட்களைப் பாருங்கள், படுக்கையை முன்பதிவு செய்து, வரும்போது பணம் செலுத்துங்கள். முதலில் பாருங்கள். போன் செக்அவுட்டில் மட்டும்.",

@@ -113,7 +113,7 @@ export default {
   "First step": "ಮೊದಲ ಹೆಜ್ಜೆ",
   "We'll keep this for every screen. Change it anytime.": "ಈ ಭಾಷೆ ಪ್ರತಿ ಪರದೆಯಲ್ಲಿಯೂ ಇರುತ್ತದೆ. ಯಾವಾಗ ಬೇಕಾದರೂ ಬದಲಿಸಿ.",
   "No sign-in yet. Browse first. Phone only when you check out.": "ಇನ್ನೂ ಸೈನ್ ಇನ್ ಬೇಡ. ಮೊದಲು ನೋಡಿ. ಫೋನ್ ಚೆಕ್‌ಔಟ್‌ನಲ್ಲಿ ಮಾತ್ರ.",
-  "A bed near work.": "ಕೆಲಸದ ಹತ್ತಿರ ಒಂದು ಹಾಸಿಗೆ.",
+  "A Nest near work.": "ಕೆಲಸದ ಹತ್ತಿರ ಒಂದು ನೆಸ್ಟ್.",
   "Move in with Nia. Roof, rest, and a short walk to the shift.": "Nia ಜೊತೆ ವಾಸ. ಛಾವಣಿ, ವಿಶ್ರಾಂತಿ, ಪಾಳಿಗೆ ಸಣ್ಣ ನಡಿಗೆ.",
   "See Nest": "ನೆಸ್ಟ್ ನೋಡಿ",
   "See nearby Nests, hold a bed, and pay at move-in. Browse first. Phone only when you check out.": "ಹತ್ತಿರದ ನೆಸ್ಟ್‌ಗಳನ್ನು ನೋಡಿ, ಹಾಸಿಗೆ ಕಾಯ್ದಿರಿಸಿ, ಬಂದಾಗ ಪಾವತಿಸಿ. ಮೊದಲು ನೋಡಿ. ಫೋನ್ ಚೆಕ್‌ಔಟ್‌ನಲ್ಲಿ ಮಾತ್ರ.",

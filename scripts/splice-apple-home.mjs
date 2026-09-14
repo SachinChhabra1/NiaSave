@@ -3,12 +3,11 @@ import fs from 'node:fs';
 const srcPath = 'commerce.js';
 const snippet = fs.readFileSync('lib/commerce/apple-home.snippet.js', 'utf8').trim() + '\n';
 
-const required = ['function entryHomepage', 'apple-home', 'apple-unit', 'apple-rail', 'mesha-rail', 'studio-bunk-lockers.jpg', "data-action=\"live\"", "['shop','save'", "A bed near work.", "Extra shifts", "Money home."];
+const required = ['function entryHomepage', 'apple-home', 'apple-unit', 'apple-live-unit', 'apple-save-unit', 'apple-pair', 'studio-bunk-lockers.jpg', "data-action=\"live\"", "data-action=\"shop\"", "A bed near work.", "Keep more."];
 for (const token of required) {
   if (!snippet.includes(token)) throw new Error(`apple-home snippet missing ${token}`);
 }
-if (snippet.includes('apple-save-unit')) throw new Error('homepage must not emit a Save co-hero');
-if ((snippet.match(/apple-unit/g) || []).length !== 1) throw new Error('homepage must have exactly one Live apple-unit');
+if (snippet.includes("[\'shop','save'")) throw new Error('Save belongs in its own unit, not the rail');
 
 const forbidden = /\d+\s*nests|vacanc|open roles|\bUPI\b|pay online|\bwallet\b|Series A|fundraise|OTP|pre-seed|localStorage\.setItem\('nia-language'/i;
 if (forbidden.test(snippet)) throw new Error('apple-home snippet contains forbidden homepage copy');
@@ -27,12 +26,16 @@ if (s.indexOf('function entryHomepage', a + 1) !== -1 && s.indexOf('function ent
   throw new Error('multiple entryHomepage functions in splice window');
 }
 
-const out = s.slice(0, a) + snippet + s.slice(b);
-if (!out.includes('class="mesha-home apple-home"') || !out.includes('class="mesha-desire apple-unit"') || !out.includes('mesha-rail')) {
-  throw new Error('splice failed to land one Live Apple hero + secondary rail');
+let out = s.slice(0, a) + snippet + s.slice(b);
+const langNeedle = "pickingLang=!languageSticky()&&!owner.active";
+const langWide = "pickingLang=!languageSticky()&&!owner.active&&window.matchMedia('(max-width: 760px)').matches";
+if (out.includes(langNeedle) && !out.includes(langWide)) {
+  out = out.replaceAll(langNeedle, langWide);
 }
-if (out.includes('apple-save-unit')) {
-  throw new Error('splice must not land a Save co-hero on home');
+if (!out.includes(langWide)) throw new Error('desktop must skip the language wall');
+
+if (!out.includes('class=\"mesha-home apple-home\"') || !out.includes('apple-save-unit') || !out.includes('apple-pair')) {
+  throw new Error('splice failed to land Live / Save / Earn-Send units');
 }
 if ((out.match(/function entryHomepage/g) || []).length !== 1) {
   throw new Error('splice must leave exactly one entryHomepage');

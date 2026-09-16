@@ -106,7 +106,7 @@
               <svg class="desk-icon" viewBox="0 0 40 40" width="40" height="40" aria-hidden="true"><use href="#i-connectors"/></svg>
               <h2>Connectors</h2>
             </div>
-            <p class="do">Staff inbound files. File upload is an action. Recon unmatched uses the UPI statement. Source and predict use the procure sheet. No live UPI. No Razorpay. No Google sign-in.</p>
+            <p class="do">Staff inbound files. File upload is an action and lands in the NiaSave book. Recon unmatched uses the UPI statement. Source, predict and the Nia margin gate use the procure sheet. Ledger and member files are kept as inbound snapshots. No live UPI. No Razorpay. No Google sign-in.</p>
             <div class="pills" id="connectors-pills"></div>
             <div class="uploads">
               <div class="upload-card" data-kind="upi_statement">
@@ -136,7 +136,36 @@
                 <div class="drop" data-kind="vendors" id="drop-vendors">Drop vendors CSV here</div>
                 <div class="file-meta" id="meta-vendors">No file yet</div>
               </div>
+              <div class="upload-card" data-kind="ledger">
+                <div class="job-kicker">Ledger</div>
+                <strong>Book export</strong>
+                <p class="do">Optional. Save book CSV kept as the inbound snapshot. The beat ledger stays counted from scans.</p>
+                <label class="file-btn" for="file-ledger">Choose file</label>
+                <input type="file" accept=".csv,text/csv" id="file-ledger" data-kind="ledger">
+                <div class="drop" data-kind="ledger" id="drop-ledger">Drop ledger CSV here</div>
+                <div class="file-meta" id="meta-ledger">No file yet</div>
+              </div>
+              <div class="upload-card" data-kind="members">
+                <div class="job-kicker">Members</div>
+                <strong>Member sheet</strong>
+                <p class="do">Optional. Member roster CSV kept as the inbound snapshot. The member book is not rewritten by a file.</p>
+                <label class="file-btn" for="file-members">Choose file</label>
+                <input type="file" accept=".csv,text/csv" id="file-members" data-kind="members">
+                <div class="drop" data-kind="members" id="drop-members">Drop members CSV here</div>
+                <div class="file-meta" id="meta-members">No file yet</div>
+              </div>
             </div>
+            <div class="h2-row" style="margin-top:22px">
+              <h2>Published projection</h2>
+            </div>
+            <p class="do">Read only. Central reads this; NiaSave never writes Central's database. A SKU is working only when member saving and Nia margin both pass on collected bags. A missing source stays blank, not zero. Reserved, packed and catalogue rows do not pass.</p>
+            <div class="pills" id="publish-pills"></div>
+            <h3 style="margin:14px 0 6px">Savings gate</h3>
+            <div class="studios-table" id="publish-savings"></div>
+            <h3 style="margin:14px 0 6px">Stock · CONNECTOR_ESSENTIALS_STOCK</h3>
+            <div class="studios-table" id="publish-stock"></div>
+            <p class="do" id="publish-note"></p>
+            <a class="desk-link" href="#connectors" id="download-stock" download="CONNECTOR_ESSENTIALS_STOCK.csv">Download CONNECTOR_ESSENTIALS_STOCK.csv</a>
           </section>
         </div>
         <div class="wrap pane-reports">
@@ -184,11 +213,16 @@ function srcOf(c, id){
   return {};
 }
 function fileMeta(s){
-  if(!s || !s.id || s.status==='empty' || !s.rows){
+  if(!s || !s.id || s.status==='empty' || !s.rows || !s.filename){
     return 'No file yet';
   }
   var when=s.uploadedAt ? String(s.uploadedAt).replace('T',' ').replace('Z',' UTC') : '';
   return (s.filename||'file')+' · '+s.rows+' rows'+(when?' · '+when:'');
+}
+function esc(v){
+  return String(v==null?'':v).replace(/[&<>"']/g, function(ch){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch];
+  });
 }
 function connectorsPills(c){
   function pill(id, label){
@@ -196,12 +230,63 @@ function connectorsPills(c){
     var empty=!s.id || s.status==='empty' || !s.rows;
     return '<span class="pill '+(empty?'warn':'ok')+'">'+(empty?label+' · no file yet':label+' · '+s.rows+' rows')+'</span>';
   }
+  function snapshot(id, label){
+    var s=srcOf(c, id);
+    return s.filename ? '<span class="pill ok">'+label+' file · '+s.rows+' rows</span>' : '';
+  }
   var ledger=srcOf(c,'ledger');
   var ledOk=ledger.status==='ok';
-  return '<span class="pill '+(ledOk?'ok':'warn')+'">'+(ledOk?'ledger ok':'ledger down')+'</span>'
+  var persist=c&&c.persist==='postgres';
+  return '<span class="pill '+(persist?'ok':'warn')+'">'+(persist?'book · postgres':'book · memory only')+'</span>'
+    +'<span class="pill '+(ledOk?'ok':'warn')+'">'+(ledOk?'ledger ok':'ledger down')+'</span>'
     +pill('procure','procure')
     +pill('upi_statement','UPI statement')
-    +pill('vendors','vendors');
+    +pill('vendors','vendors')
+    +snapshot('ledger','ledger')
+    +snapshot('members','members');
+}
+function blank(v, suffix){
+  return v==null ? '<span class="muted">—</span>' : esc(v)+(suffix||'');
+}
+function csvCell(v){
+  if(v==null) return '';
+  var t=String(v);
+  return /[",\n]/.test(t) ? '"'+t.replace(/"/g,'""')+'"' : t;
+}
+function stockCsv(stock){
+  var cols=(stock&&stock.columns)||[];
+  var rows=(stock&&stock.rows)||[];
+  return [cols.join(',')].concat(rows.map(function(r){
+    return cols.map(function(k){ return csvCell(r[k]); }).join(',');
+  })).join('\n')+'\n';
+}
+function paintPublish(c){
+  var pub=(c&&c.publish)||{};
+  var sav=pub.savings||{};
+  var stock=pub.stock||{};
+  var savRows=sav.rows||[];
+  var stockRows=stock.rows||[];
+  document.getElementById('publish-pills').innerHTML=
+    '<span class="pill '+(sav.working?'ok':'warn')+'">working '+num(sav.working)+' / '+savRows.length+'</span>'
+    +'<span class="pill '+(sav.marginSource?'ok':'warn')+'">Nia margin from '+(sav.marginSource?esc(sav.marginSource):'no procure file')+'</span>'
+    +'<span class="pill '+(stock.sheetConfigured?'ok':'warn')+'">sheet id '+(stock.sheetConfigured?'set':'not set')+' · writer none</span>';
+  document.getElementById('publish-savings').innerHTML='<table><thead><tr><th>SKU</th><th>Service</th><th>Collected uses</th><th>Members</th><th>Revenue</th><th>Member save</th><th>Nia margin</th><th>Status</th></tr></thead><tbody>'
+    +(savRows.map(function(r){
+      return '<tr><td>'+esc(r.service_id)+'</td><td class="left">'+esc(r.service)+'</td><td class="num">'+num(r.monthly_uses)+'</td><td class="num">'+num(r.unique_members)+'</td><td class="num">'+num(r.product_revenue_inr)+'</td><td class="num">'+blank(r.member_save_inr)+'</td><td class="num">'+blank(r.nia_margin_inr)+'</td><td class="left">'+(r.working?'<span class="pill ok">working</span>':'<span class="pill warn">'+esc(r.status)+'</span>')+'</td></tr>';
+    }).join('')||'<tr><td colspan="8">No SKUs.</td></tr>')
+    +'</tbody></table>';
+  var cols=stock.columns||[];
+  document.getElementById('publish-stock').innerHTML='<table><thead><tr>'+cols.map(function(k){ return '<th>'+esc(k)+'</th>'; }).join('')+'</tr></thead><tbody>'
+    +(stockRows.map(function(r){
+      return '<tr>'+cols.map(function(k){ return '<td class="'+(typeof r[k]==='number'?'num':'left')+'">'+blank(r[k])+'</td>'; }).join('')+'</tr>';
+    }).join('')||'<tr><td colspan="'+(cols.length||1)+'">No stock rows.</td></tr>')
+    +'</tbody></table>';
+  document.getElementById('publish-note').textContent='Beat '+(stock.beatDate||'-')+' · site '+((stockRows[0]&&stockRows[0].site_code)||'-')+' · keys '+((stock.keys||[]).join(' + ')||'-')+' · paste into the '+(stock.tab||'CONNECTOR_ESSENTIALS_STOCK')+' tab. Central keeps reading the sheet.';
+  var link=document.getElementById('download-stock');
+  if(link){
+    if(link.href && link.href.indexOf('blob:')===0){ try{ URL.revokeObjectURL(link.href); }catch(e){} }
+    try{ link.href=URL.createObjectURL(new Blob([stockCsv(stock)],{type:'text/csv'})); }catch(e){ link.removeAttribute('href'); }
+  }
 }
 function icon(name){
   return '<svg class="job-icon" viewBox="0 0 40 40" width="40" height="40" aria-hidden="true"><use href="#i-'+name+'"/></svg>';
@@ -227,7 +312,10 @@ function paintFiles(c){
   document.getElementById('meta-upi').textContent=fileMeta(srcOf(c,'upi_statement'));
   document.getElementById('meta-procure').textContent=fileMeta(srcOf(c,'procure'));
   document.getElementById('meta-vendors').textContent=fileMeta(srcOf(c,'vendors'));
+  document.getElementById('meta-ledger').textContent=fileMeta(srcOf(c,'ledger'));
+  document.getElementById('meta-members').textContent=fileMeta(srcOf(c,'members'));
   document.getElementById('connectors-pills').innerHTML=connectorsPills(c);
+  paintPublish(c);
 }
 function paintPicture(){
   var t=DATA.tower||{};
@@ -443,7 +531,7 @@ function sendCsv(kind, file){
   reader.readAsText(file);
 }
 function bindUploads(){
-  ['file-upi','file-procure','file-vendors'].forEach(function(id){
+  ['file-upi','file-procure','file-vendors','file-ledger','file-members'].forEach(function(id){
     var el=document.getElementById(id);
     if(!el) return;
     el.addEventListener('change', function(){

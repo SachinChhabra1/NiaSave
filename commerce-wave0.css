@@ -1,0 +1,71 @@
+/* Wave 0 Save shop. Payment stays off. Type off the oil still. */
+body.mesha-dark .header{
+  position:relative !important;
+  top:auto !important;
+  left:auto !important;
+  transform:none !important;
+  width:100% !important;
+  max-width:none !important;
+  background:#000 !important;
+  pointer-events:none;
+}
+body.mesha-dark .header .brand,
+body.mesha-dark .header-tools,
+body.mesha-dark .header button,
+body.mesha-dark .header select,
+body.mesha-dark #desktop-nav{
+  pointer-events:auto;
+}
+body.mesha-dark .mesha-save-hero{
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  min-height:0;
+  padding:0;
+  background:#000;
+  cursor:pointer;
+}
+body.mesha-dark .mesha-save-hero:before{
+  display:none;
+}
+body.mesha-dark .mesha-save-hero:after{
+  content:"";
+  order:-1;
+  display:block;
+  width:100%;
+  height:42dvh;
+  min-height:220px;
+  background:#111 url('/assets/oils-editorial-sheet.png') 8% 12% / cover no-repeat;
+  pointer-events:none;
+}
+body.mesha-dark .mesha-save-hero > *{
+  position:relative;
+  z-index:1;
+  background:#000;
+  padding-left:22px;
+  padding-right:22px;
+}
+body.mesha-dark .mesha-save-hero > :first-child{padding-top:18px;}
+body.mesha-dark .mesha-save-hero > :last-child{padding-bottom:22px;margin-bottom:18px;}
+.save-search-label{
+  display:block;
+  margin:0 18px 14px;
+}
+.save-search-label input{
+  width:100%;
+  min-height:44px;
+  border:1px solid #2a2a2a;
+  border-radius:12px;
+  background:#111;
+  color:#fff;
+  padding:0 14px;
+  font:inherit;
+}
+.visually-hidden{
+  position:absolute;
+  width:1px;
+  height:1px;
+  overflow:hidden;
+  clip:rect(0,0,0,0);
+  white-space:nowrap;
+}

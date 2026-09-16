@@ -6,9 +6,10 @@ import {
   placeMemberOrder, authOtp, authVerify, authMe, saveMemberFlags, ageingPayload, inventoryPayload,
   mutatePo, poPayload, mutateDispatch, mutateInvoice, invoicePayload,
   dispatchPayload, bikerPayload, mutateBiker, memberPayload, memberOrderGet, handleStaff,
-  clipToPoloLock
+  clipToPoloLock, savingsProjection, stockProjection, savingsGate, CONNECTOR_ROWS_MAX
 } from "./engine.mjs";
 import { randomBytes } from "node:crypto";
+import { spawnSync } from "node:child_process";
 process.env.STAFF_TOKEN_SECRET=randomBytes(32).toString("base64url");
 const {handler,issueStaffToken}=await import("../api/server.mjs");
 const {registerStaffSession}=await import("../lib/staff-auth.mjs");
@@ -169,6 +170,83 @@ const vendUp = uploadConnector({
 });
 ok("upload vendors", vendUp.ok === true && vendUp.rows === 1 && connectorsPayload().sources.find(s => s.id === "vendors").status === "ok");
 ok("upload bad kind rejected", uploadConnector({ kind: "razorpay", csv: "a,b\n1,2\n" }).status === 400);
+
+// Save connectors: five kinds land in the NiaSave book; ledger and members are snapshots only.
+ok("connector kinds are five", connectorsPayload().kinds.join(",") === "ledger,procure,members,vendors,upi_statement");
+ok("connectors say where the book lives", ["memory", "postgres"].includes(connectorsPayload().persist));
+const ledUp = uploadConnector({ kind: "ledger", filename: "book.csv", csv: "sku,opening,collected\ngroundnut_oil,80,19\n" });
+ok("upload ledger snapshot", ledUp.ok === true && ledUp.rows === 1 && connectorsPayload().sources.find(s => s.id === "ledger").filename === "book.csv");
+const memUp = uploadConnector({ kind: "members", filename: "members.csv", csv: "member_id,name\nm1,A\nm2,B\n" });
+ok("upload members snapshot", memUp.ok === true && memUp.rows === 2 && connectorsPayload().sources.find(s => s.id === "members").rows === 2);
+ok("members book not rewritten by snapshot", MEMBERS.length === 3000 && predictPayload().memberCount === 3000 && connectorsPayload().memberCount === 3000);
+ok("upload header only rejected", uploadConnector({ kind: "vendors", csv: "a,b\n" }).error === "no_rows");
+ok("upload row cap", uploadConnector({ kind: "vendors", csv: "a\n" + "1\n".repeat(CONNECTOR_ROWS_MAX + 1) }).status === 413);
+
+// Published projection: read only, exact sheet contract, dual gate on the emit.
+const pub = connectorsPayload().publish;
+ok("publish is read-only projection", pub.mode === "read_only_projection" && pub.stock.writer === "none");
+ok("stock tab contract", pub.stock.tab === "CONNECTOR_ESSENTIALS_STOCK" && pub.stock.keys.join("+") === "sku+site_code" && pub.stock.columns.join(",") === "sku,item,category,site_code,on_hand,days_cover,reorder_point,status");
+ok("stock row per SKU", pub.stock.rows.length === SKUS.length && pub.stock.rows.every(r => pub.stock.columns.every(k => k in r) && r.site_code === THEATRE.id && ["in_stock", "reorder", "out_of_stock"].includes(r.status)));
+ok("savings row columns", pub.savings.columns.join(",") === "service_id,service,member_savings_ok,nia_margin_ok,working,status,owner_role,monthly_uses,product_revenue_inr,unique_members,sales_month,member_save_inr,nia_margin_inr");
+ok("savings row per SKU", pub.savings.rows.length === SKUS.length && pub.savings.rows.every(r => pub.savings.columns.every(k => k in r)));
+const gnZero = pub.savings.rows.find(r => r.service_id === "groundnut_oil");
+ok("nia margin zero does not pass", gnZero.nia_margin_inr === 0 && gnZero.nia_margin_ok === false && gnZero.working === false && /Nia margin not passed/.test(gnZero.status));
+ok("missing procure row is null not zero", pub.savings.rows.filter(r => r.service_id !== "groundnut_oil").every(r => r.nia_margin_inr === null && r.nia_margin_ok === false && r.working === false));
+const procUp2 = uploadConnector({
+  kind: "procure",
+  filename: "procure2.csv",
+  csv: "sku,name,vendor,buy_inr\ngroundnut_oil,Groundnut oil,Tumkur,150\nmustard_oil,Mustard oil,Raichur,155\nsunflower_oil,Sunflower oil,Hubli,200\n"
+});
+ok("second procure replaces the first", procUp2.ok === true && procUp2.rows === 3 && sourcePayload().from === "procure2.csv");
+const sav = savingsProjection();
+const gn = sav.rows.find(r => r.service_id === "groundnut_oil");
+ok("working needs both gates on collected bags", gn.working === true && gn.member_savings_ok === true && gn.nia_margin_ok === true && gn.member_save_inr > 0 && gn.nia_margin_inr > 0 && gn.status === "working" && gn.monthly_uses > 0 && gn.unique_members > 0 && gn.service === "Groundnut oil" && gn.owner_role === "hub");
+const ms = sav.rows.find(r => r.service_id === "mustard_oil");
+ok("member saving alone does not pass", ms.member_savings_ok === true && ms.nia_margin_ok === false && ms.working === false && ms.status === "Nia margin not passed");
+const sf = sav.rows.find(r => r.service_id === "sunflower_oil");
+ok("negative margin does not pass", sf.nia_margin_ok === false && sf.working === false);
+ok("every failing row stays not working", sav.rows.every(r => r.working === (r.member_save_inr > 0 && r.nia_margin_inr > 0)));
+ok("working count is honest", sav.working === sav.rows.filter(r => r.working).length && sav.working + sav.notPassed === SKUS.length && sav.marginSource === "procure2.csv");
+ok("gate is pure", savingsGate({ member_save_inr: 0, nia_margin_inr: 5 }).working === false && savingsGate({ member_save_inr: 5, nia_margin_inr: null }).working === false && savingsGate({ member_save_inr: 5, nia_margin_inr: 0 }).working === false && savingsGate({ member_save_inr: 1, nia_margin_inr: 1 }).working === true);
+ok("gate names both failures", savingsGate({ member_save_inr: null, nia_margin_inr: null }).status === "Member saving not passed · Nia margin not passed");
+ok("sales month from beat", sav.rows.every(r => r.sales_month === WEEK_BEAT.slice(0, 7)));
+ok("stock item uses procure name", stockProjection().rows.find(r => r.sku === "groundnut_oil").item === "Groundnut oil");
+ok("stock days cover blank without collected", stockProjection().rows.every(r => r.days_cover === null || r.days_cover >= 0));
+noDummyWord("publish", connectorsPayload().publish);
+
+// Restart keeps the rows: a fresh process on the Postgres protocol uploads, cold-starts, then lists.
+const durableSource = `
+  import assert from "node:assert/strict";
+  const store = await import("./lib/runtime-store.mjs");
+  const rows = new Map();
+  store.useSqlClientForTests(async (strings, ...values) => {
+    const q = strings.join("$"); const key = values[0];
+    if (/CREATE TABLE/.test(q)) return [];
+    if (/SELECT version/.test(q)) return rows.has(key) ? [{ version: rows.get(key).version }] : [];
+    if (/INSERT INTO/.test(q)) { if (rows.has(key)) return []; rows.set(key, { state_value: JSON.parse(values[1]), version: 1 }); return [structuredClone(rows.get(key))]; }
+    if (/SELECT state_value/.test(q)) return rows.has(key) ? [structuredClone(rows.get(key))] : [];
+    if (/UPDATE nia_runtime_state/.test(q)) { const row = rows.get(values[1]); if (!row || row.version !== Number(values[2])) return []; row.state_value = JSON.parse(values[0]); row.version++; return [{ version: row.version }]; }
+    throw new Error("unexpected_sql");
+  });
+  const { handleStaff, resetDummy } = await import("./rabbit/engine.mjs");
+  const url = new URL("http://local/api/connectors");
+  const up = await handleStaff({ method: "POST" }, {}, "/connectors/upload", { kind: "procure", filename: "durable.csv", csv: "sku,buy_inr\\ngroundnut_oil,150\\n" }, url);
+  assert.equal(up.status, 200); assert.equal(up.body.persist, "postgres");
+  const bad = await handleStaff({ method: "POST" }, {}, "/connectors/upload", { kind: "nope", csv: "a\\n1\\n" }, url);
+  assert.equal(bad.status, 400);
+  resetDummy();
+  const listed = await handleStaff({ method: "GET" }, {}, "/connectors", {}, url);
+  assert.equal(listed.status, 200);
+  assert.equal(listed.body.persist, "postgres");
+  assert.equal(listed.body.sources.find(s => s.id === "procure").filename, "durable.csv");
+  assert.equal(listed.body.publish.savings.rows.find(r => r.service_id === "groundnut_oil").working, true);
+  assert.equal(rows.get("selftest-connectors").version, 2);
+`;
+const durable = spawnSync(process.execPath, ["--input-type=module", "-e", durableSource], {
+  cwd: new URL("../", import.meta.url), encoding: "utf8", timeout: 20000,
+  env: { PATH: process.env.PATH, DEMO: "1", DUMMY_DATA: "1", DATABASE_URL: "postgres://selftest-connectors.invalid/test", NIA_RUNTIME_STATE_KEY: "selftest-connectors", NIA_STAFF_STORE_GETS: "1" }
+});
+ok("connector upload survives restart on the Postgres protocol", durable.status === 0, durable.stderr);
 noDummyWord("connectors after upload", connectorsPayload());
 noDummyWord("source after upload", sourcePayload());
 resetDummy();

@@ -38,17 +38,36 @@ export const OWNER = "hub";
 export { THEATRE, STUDIO_COUNT, MEMBER_COUNT, MEMBERS_PER_STUDIO, BEAT_BAGS_PER_STOP };
 
 export const SKUS = [
-  { id: "groundnut_oil", nia: 185, kirana: 255, keep: 75, opening: 80, vendor: "Cold-press Tumkur", lead_days: 3, last_buy: "2026-08-18" },
-  { id: "mustard_oil", nia: 155, kirana: 225, keep: 70, opening: 80, vendor: "Ghani · Raichur", lead_days: null, last_buy: "" },
-  { id: "sunflower_oil", nia: 128, kirana: 177, keep: 50, opening: 80, vendor: "Refinery Hubli", lead_days: 2, last_buy: "2026-08-20" },
-  { id: "coconut_oil", nia: 205, kirana: 285, keep: 80, opening: 80, vendor: "Copra press · Tiptur", lead_days: null, last_buy: "" },
-  { id: "detergent_pick", nia: 95, kirana: 125, keep: 30, opening: 80, vendor: "Local packer · Peenya", lead_days: null, last_buy: "" },
-  { id: "nia_detergent", nia: 78, kirana: 108, keep: 32, opening: 80, vendor: "Local packer Peenya", lead_days: 5, last_buy: "2026-08-15" },
-  { id: "bathsoap_pick", nia: 70, kirana: 96, keep: 26, opening: 80, vendor: "Soap works · Mysore", lead_days: null, last_buy: "" },
-  { id: "nia_bathsoap", nia: 52, kirana: 72, keep: 32, opening: 80, vendor: "Soap works Mysore", lead_days: 4, last_buy: "2026-08-22" },
-  { id: "toothpaste_pick", nia: 48, kirana: 62, keep: 14, opening: 80, vendor: "Trade pack · City", lead_days: null, last_buy: "" },
-  { id: "essentials_pick", nia: 320, kirana: 442, keep: 70, opening: 80, vendor: "Ration desk Hub", lead_days: 7, last_buy: "2026-08-10" }
+  { id: "groundnut_oil", category: "oil", nia: 185, kirana: 255, keep: 75, opening: 80, vendor: "Cold-press Tumkur", lead_days: 3, last_buy: "2026-08-18" },
+  { id: "mustard_oil", category: "oil", nia: 155, kirana: 225, keep: 70, opening: 80, vendor: "Ghani · Raichur", lead_days: null, last_buy: "" },
+  { id: "sunflower_oil", category: "oil", nia: 128, kirana: 177, keep: 50, opening: 80, vendor: "Refinery Hubli", lead_days: 2, last_buy: "2026-08-20" },
+  { id: "coconut_oil", category: "oil", nia: 205, kirana: 285, keep: 80, opening: 80, vendor: "Copra press · Tiptur", lead_days: null, last_buy: "" },
+  { id: "detergent_pick", category: "detergent", nia: 95, kirana: 125, keep: 30, opening: 80, vendor: "Local packer · Peenya", lead_days: null, last_buy: "" },
+  { id: "nia_detergent", category: "detergent", nia: 78, kirana: 108, keep: 32, opening: 80, vendor: "Local packer Peenya", lead_days: 5, last_buy: "2026-08-15" },
+  { id: "bathsoap_pick", category: "soap", nia: 70, kirana: 96, keep: 26, opening: 80, vendor: "Soap works · Mysore", lead_days: null, last_buy: "" },
+  { id: "nia_bathsoap", category: "soap", nia: 52, kirana: 72, keep: 32, opening: 80, vendor: "Soap works Mysore", lead_days: 4, last_buy: "2026-08-22" },
+  { id: "toothpaste_pick", category: "toothpaste", nia: 48, kirana: 62, keep: 14, opening: 80, vendor: "Trade pack · City", lead_days: null, last_buy: "" },
+  { id: "essentials_pick", category: "essentials", nia: 320, kirana: 442, keep: 70, opening: 80, vendor: "Ration desk Hub", lead_days: 7, last_buy: "2026-08-10" }
 ];
+
+// Save connectors. Staff file -> NiaSave book (this Postgres) -> read-only projection.
+// Central reads the projection; NiaSave never writes Central's database.
+export const CONNECTOR_KINDS = ["ledger", "procure", "members", "vendors", "upi_statement"];
+export const CONNECTOR_ROWS_MAX = 20000;
+export const CONNECTOR_CSV_BYTES_MAX = 2000000;
+export const ESSENTIALS_STOCK_TAB = "CONNECTOR_ESSENTIALS_STOCK";
+export const ESSENTIALS_STOCK_KEYS = ["sku", "site_code"];
+export const ESSENTIALS_STOCK_COLUMNS = ["sku", "item", "category", "site_code", "on_hand", "days_cover", "reorder_point", "status"];
+export const SAVINGS_ROW_COLUMNS = [
+  "service_id", "service", "member_savings_ok", "nia_margin_ok", "working",
+  "status", "owner_role", "monthly_uses", "product_revenue_inr", "unique_members",
+  "sales_month", "member_save_inr", "nia_margin_inr"
+];
+function emptyUploads() {
+  const m = {};
+  for (const k of CONNECTOR_KINDS) m[k] = null;
+  return m;
+}
 
 const SKU_BY_ID = Object.fromEntries(SKUS.map(s => [s.id, s]));
 
@@ -349,7 +368,7 @@ function createState() {
     statement,
     cash: {},
     studios: STUDIOS.map(s => ({ ...s })),
-    uploads: { upi_statement: null, procure: null, vendors: null },
+    uploads: emptyUploads(),
     memberFlags: {},
     memberAnswers: [],
     memberFlagsById: {},
@@ -430,6 +449,7 @@ function restoreState(value, storage = "memory") {
   restored.settlements = Array.isArray(restored.settlements) ? restored.settlements : base.settlements;
   restored.exceptions = Array.isArray(restored.exceptions) ? restored.exceptions : base.exceptions;
   restored.statement = Array.isArray(restored.statement) ? restored.statement : base.statement;
+  restored.uploads = { ...emptyUploads(), ...asStateObject(incoming.uploads, {}) };
   restored.pos = Array.isArray(restored.pos) ? restored.pos : [];
   restored.invoices = Array.isArray(restored.invoices) ? restored.invoices : [];
   restored.dispatches = Array.isArray(restored.dispatches) ? restored.dispatches : [];
@@ -741,9 +761,140 @@ function uploadMeta(id) {
   return { status: "ok", rows: u.rowCount, filename: u.filename, uploadedAt: u.at };
 }
 
+function procureRowsOf() {
+  const rows = state.uploads && state.uploads.procure && state.uploads.procure.rows;
+  return Array.isArray(rows) ? rows : [];
+}
+
+function procureRowFor(sku) {
+  return procureRowsOf().find(r => r.sku === sku) || null;
+}
+
+function finite(value) {
+  if (value === "" || value == null) return null;
+  const n = Number(value);
+  return Number.isFinite(n) ? n : null;
+}
+
+function itemLabel(sku) {
+  const row = procureRowFor(sku);
+  if (row && row.name) return row.name;
+  return sku.replace(/_/g, " ");
+}
+
+/**
+ * Dual gate on the emit. Central codes the same two flags on READ; this only
+ * reports them honestly. null means the source is missing, never zero.
+ */
+export function savingsGate({ member_save_inr, nia_margin_inr }) {
+  const memberOk = Number.isFinite(member_save_inr) && member_save_inr > 0;
+  const marginOk = Number.isFinite(nia_margin_inr) && nia_margin_inr > 0;
+  const reasons = [];
+  if (!memberOk) reasons.push("Member saving not passed");
+  if (!marginOk) reasons.push("Nia margin not passed");
+  return {
+    member_savings_ok: memberOk,
+    nia_margin_ok: marginOk,
+    working: memberOk && marginOk,
+    status: reasons.length ? reasons.join(" · ") : "working"
+  };
+}
+
+/** SavingsRow projection. Only collected bags count; reserved, packed or catalogue rows never pass. */
+export function savingsProjection() {
+  const led = ledgerOf();
+  const salesMonth = String(led.beatDate || "").slice(0, 7);
+  const bySku = new Map();
+  for (const s of SKUS) {
+    bySku.set(s.id, { uses: 0, units: 0, revenue: 0, save: 0, saveKnown: true, members: new Set() });
+  }
+  for (const o of state.orders || []) {
+    if (o.beatDate !== led.beatDate || o.status !== "collected") continue;
+    const seen = new Set();
+    for (const line of o.lines || []) {
+      const acc = bySku.get(line.id);
+      if (!acc) continue;
+      const qty = Number(line.qty) || 1;
+      const nia = finite(line.nia);
+      const kirana = finite(line.kirana);
+      acc.units += qty;
+      acc.revenue += (nia || 0) * qty;
+      if (nia == null || kirana == null) acc.saveKnown = false;
+      else acc.save += (kirana - nia) * qty;
+      acc.members.add(o.memberId);
+      if (!seen.has(line.id)) { acc.uses += 1; seen.add(line.id); }
+    }
+  }
+  const rows = SKUS.map(sku => {
+    const acc = bySku.get(sku.id);
+    const procure = procureRowFor(sku.id);
+    const buy = procure ? finite(procure.buy_inr) : null;
+    const member_save_inr = acc.saveKnown ? acc.save : null;
+    const margin = buy == null || buy <= 0 ? null : (sku.nia - buy) * acc.units;
+    const nia_margin_inr = margin === 0 ? 0 : margin;
+    const gate = savingsGate({ member_save_inr, nia_margin_inr });
+    return {
+      service_id: sku.id,
+      service: itemLabel(sku.id),
+      member_savings_ok: gate.member_savings_ok,
+      nia_margin_ok: gate.nia_margin_ok,
+      working: gate.working,
+      status: gate.status,
+      owner_role: OWNER,
+      monthly_uses: acc.uses,
+      product_revenue_inr: acc.revenue,
+      unique_members: acc.members.size,
+      sales_month: salesMonth,
+      member_save_inr,
+      nia_margin_inr
+    };
+  });
+  return {
+    columns: SAVINGS_ROW_COLUMNS,
+    rows,
+    working: rows.filter(r => r.working).length,
+    notPassed: rows.filter(r => !r.working).length,
+    marginSource: state.uploads && state.uploads.procure ? state.uploads.procure.filename : null
+  };
+}
+
+/** CONNECTOR_ESSENTIALS_STOCK projection. Keys sku + site_code. Column names are the sheet contract. */
+export function stockProjection() {
+  const led = ledgerOf();
+  const pred = predictFromLedger(led);
+  const loadBySku = Object.fromEntries(pred.load.map(l => [l.sku, l.tomorrow_qty]));
+  const rows = SKUS.map(sku => {
+    const onHand = led.leftover[sku.id] || 0;
+    const collected = led.collected[sku.id] || 0;
+    const reorder = loadBySku[sku.id] || 0;
+    const status = onHand <= 0 ? "out_of_stock" : onHand < reorder ? "reorder" : "in_stock";
+    return {
+      sku: sku.id,
+      item: itemLabel(sku.id),
+      category: sku.category || "essentials",
+      site_code: THEATRE.id,
+      on_hand: onHand,
+      days_cover: collected > 0 ? Math.round((onHand / collected) * 10) / 10 : null,
+      reorder_point: reorder,
+      status
+    };
+  });
+  return {
+    tab: ESSENTIALS_STOCK_TAB,
+    keys: ESSENTIALS_STOCK_KEYS,
+    columns: ESSENTIALS_STOCK_COLUMNS,
+    sheetConfigured: Boolean(process.env.GOOGLE_ESSENTIALS_SOURCE_SHEET_ID),
+    writer: "none",
+    beatDate: led.beatDate,
+    rows
+  };
+}
+
 export function connectorsPayload() {
   const led = ledgerOf();
+  const ledgerFile = uploadMeta("ledger");
   const procure = uploadMeta("procure");
+  const membersFile = uploadMeta("members");
   const vendors = uploadMeta("vendors");
   const upi = uploadMeta("upi_statement");
   return {
@@ -753,28 +904,39 @@ export function connectorsPayload() {
     theatre: THEATRE.name,
     stopCount: liveStopCount(),
     memberCount: MEMBER_COUNT,
+    persist: state.persist,
+    kinds: CONNECTOR_KINDS,
+    rowsMax: CONNECTOR_ROWS_MAX,
     sources: [
-      { id: "ledger", kind: "api", status: "ok", rows: led.rows.length },
+      { id: "ledger", kind: "api", status: "ok", rows: ledgerFile.status === "ok" ? ledgerFile.rows : led.rows.length, filename: ledgerFile.filename, uploadedAt: ledgerFile.uploadedAt },
       { id: "procure", kind: "csv", status: procure.status, rows: procure.rows, filename: procure.filename, uploadedAt: procure.uploadedAt },
-      { id: "members", kind: "sheet", status: "ok", rows: MEMBER_COUNT },
+      { id: "members", kind: "sheet", status: "ok", rows: membersFile.status === "ok" ? membersFile.rows : MEMBER_COUNT, filename: membersFile.filename, uploadedAt: membersFile.uploadedAt },
       { id: "vendors", kind: "csv", status: vendors.status, rows: vendors.rows, filename: vendors.filename, uploadedAt: vendors.uploadedAt },
       { id: "upi_statement", kind: "csv", status: upi.status, rows: upi.rows, filename: upi.filename, uploadedAt: upi.uploadedAt }
-    ]
+    ],
+    publish: {
+      mode: "read_only_projection",
+      stock: stockProjection(),
+      savings: savingsProjection()
+    }
   };
 }
 
 export function uploadConnector({ kind, csv, filename }) {
   const k = String(kind || "");
-  if (!["upi_statement", "procure", "vendors"].includes(k)) {
-    return { error: "bad_kind", status: 400 };
+  if (!CONNECTOR_KINDS.includes(k)) {
+    return { error: "bad_kind", status: 400, kinds: CONNECTOR_KINDS };
   }
   const raw = String(csv == null ? "" : csv);
   if (!raw.trim()) return { error: "empty_csv", status: 400 };
+  if (raw.length > CONNECTOR_CSV_BYTES_MAX) return { error: "csv_too_large", status: 413, max: CONNECTOR_CSV_BYTES_MAX };
   const parsed = parseCsv(raw);
+  if (!parsed.rows.length) return { error: "no_rows", status: 400 };
+  if (parsed.rows.length > CONNECTOR_ROWS_MAX) return { error: "too_many_rows", status: 413, max: CONNECTOR_ROWS_MAX, rows: parsed.rows.length };
   const at = now();
-  const name = String(filename || "upload.csv");
-  if (!state.uploads) state.uploads = { upi_statement: null, procure: null, vendors: null };
-  state.uploads[k] = { kind: k, filename: name, at, rows: parsed.rows, rowCount: parsed.rows.length };
+  const name = String(filename || "upload.csv").slice(0, 160);
+  if (!state.uploads) state.uploads = emptyUploads();
+  state.uploads[k] = { kind: k, filename: name, at, headers: parsed.headers, rows: parsed.rows, rowCount: parsed.rows.length };
   if (k === "upi_statement") {
     state.statement = parsed.rows.map((r, i) => ({
       id: "stmt-up-" + (i + 1),

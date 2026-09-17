@@ -3,18 +3,19 @@ import fs from 'node:fs';
 const srcPath = 'commerce.js';
 const snippet = fs.readFileSync('lib/commerce/apple-home.snippet.js', 'utf8').trim() + '\n';
 
-const required = ['function entryHomepage', 'apple-home', 'apple-unit', 'apple-rail', 'mesha-rail', 'studio-bunk-lockers.jpg', "data-action=\"live\"", "['shop','save'", "A Nest near work.", "Extra shifts", "Shop less", "Money home."];
+const required = ['function entryHomepage', 'apple-home', 'apple-unit', 'apple-rail', 'mesha-rail', 'studio-bunk-lockers.jpg', "data-action=\"live\"", "['shop','save'", "A Nest near work.", "An upskilled job.", "Shop at wholesale rates.", "Money home."];
 for (const token of required) {
   if (!snippet.includes(token)) throw new Error(`apple-home snippet missing ${token}`);
 }
 if (snippet.includes('apple-save-unit')) throw new Error('homepage must not emit a Save co-hero');
 if ((snippet.match(/apple-unit/g) || []).length !== 1) throw new Error('homepage must have exactly one Live apple-unit');
-if (/An upskilled job\.|Shop at wholesale rates\./.test(snippet)) throw new Error('homepage must not use upskilled/wholesale copy');
+// upskilled/wholesale copy is required; Extra shifts / Shop less are forbidden
+if (/Extra shifts|Shop less/.test(snippet)) throw new Error('homepage must not use Extra shifts / Shop less');
 
 const forbidden = /\d+\s*nests|vacanc|open roles|\bUPI\b|pay online|\bwallet\b|Series A|fundraise|OTP|pre-seed|localStorage\.setItem\('nia-language'/i;
 if (forbidden.test(snippet)) throw new Error('apple-home snippet contains forbidden homepage copy');
 
-const actions = [...snippet.matchAll(/data-action="([^\"]+)"/g)].map(m => m[1]);
+const actions = [...snippet.matchAll(/data-action="([^"]+)"/g)].map(m => m[1]);
 const allowed = new Set(['live', 'how-live', 'shop', '${action}']);
 for (const action of actions) {
   if (!allowed.has(action)) throw new Error(`homepage action not allowed: ${action}`);

@@ -35,7 +35,7 @@ function packLine(product) {
 }
 
 function decorateProducts(root) {
-  root.querySelectorAll('[data-id], .product, article.product').forEach(card => {
+  root.querySelectorAll('article.product, .mesha-save-card').forEach(card => {
     if (card.querySelector('.pack-line')) return;
     const host = card.querySelector('.product-copy, .copy, figcaption, .meta') || card;
     const line = document.createElement('div');
@@ -73,7 +73,7 @@ function sendCard() {
       </select></label>
       <button type="submit">Save this plan</button>
     </form>
-    <p class="send-plan-status" id="send-plan-status">Nothing is sent from this screen.</p>
+    <p class="send-plan-status" id="send-plan-status">Nothing is sent from this phone. Money does not move.</p>
   </section>`;
 }
 

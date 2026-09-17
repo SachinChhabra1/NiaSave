@@ -69,3 +69,27 @@ body.mesha-dark .mesha-save-hero > :last-child{padding-bottom:22px;margin-bottom
   clip:rect(0,0,0,0);
   white-space:nowrap;
 }
+/* Product buy sheet: white card, dark ink. Do not inherit mesha-dark --fg. */
+body.mesha-dark dialog:not(.mesha-checkout),
+body.mesha-dark #dialog:not(.mesha-checkout){
+  color:#161b24;
+  background:#fff;
+}
+body.mesha-dark dialog:not(.mesha-checkout) .dialog-head h2,
+body.mesha-dark dialog:not(.mesha-checkout) .icon-button,
+body.mesha-dark dialog:not(.mesha-checkout) .price,
+body.mesha-dark dialog:not(.mesha-checkout) p,
+body.mesha-dark dialog:not(.mesha-checkout) .store-keep strong,
+body.mesha-dark dialog:not(.mesha-checkout) .store-nia strong,
+body.mesha-dark #dialog:not(.mesha-checkout) .dialog-head h2,
+body.mesha-dark #dialog:not(.mesha-checkout) .icon-button,
+body.mesha-dark #dialog:not(.mesha-checkout) p,
+body.mesha-dark #dialog:not(.mesha-checkout) strong{
+  color:#161b24;
+}
+body.mesha-dark dialog:not(.mesha-checkout) .pack,
+body.mesha-dark dialog:not(.mesha-checkout) .store-keep small,
+body.mesha-dark dialog:not(.mesha-checkout) .store-nia small{
+  color:#5b6574;
+}
+#dialog-body .buy-sheet .buy-row{justify-content:flex-start;}

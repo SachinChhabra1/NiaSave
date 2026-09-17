@@ -611,6 +611,8 @@ export default {
   "Cooking oil": "Cooking oil",
   "Shop": "Shop",
   "Near work.": "Near work.",
+  "An upskilled job.": "দক্ষতার কাজ।",
+  "Shop at wholesale rates.": "পাইকারি দরে কিনুন।",
   "Extra pay.": "Extra pay.",
   "Shop for less.": "Shop for less.",
   "Money home.": "Money home.",

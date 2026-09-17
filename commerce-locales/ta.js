@@ -388,6 +388,8 @@ export default {
   "Cooking oil": "சமையல் எண்ணெய்",
   "Shop": "வாங்கு",
   "Near work.": "வேலைக்கு அருகில்.",
+  "An upskilled job.": "திறன் மேம்பட்ட வேலை.",
+  "Shop at wholesale rates.": "மொத்த விலையில் வாங்குங்கள்.",
   "Extra pay.": "கூடுதல் ஊதியம்.",
   "Shop for less.": "குறைந்த விலையில் வாங்கு.",
   "Money home.": "வீட்டுக்கு பணம்.",

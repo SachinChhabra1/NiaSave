@@ -20,7 +20,7 @@ cp -f desk.html ops.html bison.html bison-studios.html bison-contracts.html biso
 cp -f desk.html dist/2para.html
 cp -f staff-entry.js dist/
 cp -f apple-desktop.css niasave-system.css niasave-ui.js dist/
-cp -f commerce.html commerce.css commerce.js commerce-owner.js commerce-passkeys.js commerce-member-auth.js commerce-i18n.js commerce-books.js commerce-services.js commerce-plan.js commerce-earn-map.js commerce-categories.js commerce-ops.js dist/
+cp -f commerce.html commerce.css commerce.js commerce-owner.js commerce-passkeys.js commerce-member-auth.js commerce-i18n.js commerce-books.js commerce-services.js commerce-plan.js commerce-earn-map.js commerce-categories.js commerce-ops.js commerce-wave0.css commerce-wave0.js commerce-waves.css commerce-waves.js dist/
 mkdir -p dist/commerce-locales
 cp -R commerce-locales/. dist/commerce-locales/
 # Every module commerce.html imports must exist in dist, or the member UI fails to load in production.

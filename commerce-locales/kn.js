@@ -388,6 +388,8 @@ export default {
   "Cooking oil": "ಅಡುಗೆ ಎಣ್ಣೆ",
   "Shop": "ಖರೀದಿ",
   "Near work.": "ಕೆಲಸದ ಹತ್ತಿರ.",
+  "An upskilled job.": "ಕೌಶಲ್ಯ ಹೆಚ್ಚುವ ಕೆಲಸ.",
+  "Shop at wholesale rates.": "ಮೂಲೆದರದಲ್ಲಿ ಖರೀದಿಸಿ.",
   "Extra pay.": "ಹೆಚ್ಚುವರಿ ಸಂಬಳ.",
   "Shop for less.": "ಕಡಿಮೆ ಬೆಲೆಗೆ ಖರೀದಿಸಿ.",
   "Money home.": "ಮನೆಗೆ ಹಣ.",

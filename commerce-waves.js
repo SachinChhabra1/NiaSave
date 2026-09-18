@@ -144,7 +144,12 @@ function bindSendForm() {
   });
 }
 
+function langOpen() {
+  return document.body.classList.contains('mesha-lang-open') || Boolean(document.querySelector('.mesha-lang'));
+}
+
 function paint() {
+  if (langOpen()) return;
   const current = page();
   const main = document.querySelector('#content');
   if (!main) return;

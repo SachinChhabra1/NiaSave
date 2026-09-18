@@ -257,6 +257,7 @@ export default {
   "Your Nia team": "உங்கள் Nia குழு",
   "Help with a changed phone number": "தொலைபேசி எண் மாற்றத்திற்கான உதவி",
   "Pay at pickup or delivery. Final availability is checked when you reserve.": "பெறும் இடத்தில் அல்லது டெலிவரியின்போது செலுத்தவும். முன்பதிவின்போது இறுதி இருப்பு சரிபார்க்கப்படும்.",
+  "Pay at pickup. Final availability is checked when you reserve.": "பெறும் இடத்தில் செலுத்தவும். முன்பதிவின்போது இறுதி இருப்பு சரிபார்க்கப்படும்.",
   "Illustrative image. Pack size and supplier details need confirmation before the pilot opens.": "மாதிரிப் படம். பைலட் தொடங்கும் முன் பொதி அளவும் வழங்குநர் விவரங்களும் உறுதிசெய்யப்பட வேண்டும்.",
   "Cancel this reservation?": "இந்த முன்பதிவை ரத்து செய்யவா?",
   "Nothing has been paid. Your reserved stock will be released.": "பணம் செலுத்தப்படவில்லை. ஒதுக்கிய பொருட்கள் விடுவிக்கப்படும்.",

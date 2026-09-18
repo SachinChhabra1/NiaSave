@@ -257,6 +257,7 @@ export default {
   "Your Nia team": "ನಿಮ್ಮ Nia ತಂಡ",
   "Help with a changed phone number": "ಫೋನ್ ಸಂಖ್ಯೆ ಬದಲಾವಣೆ ಕುರಿತು ಸಹಾಯ",
   "Pay at pickup or delivery. Final availability is checked when you reserve.": "ಪಡೆಯುವ ಸ್ಥಳದಲ್ಲಿ ಅಥವಾ ಡೆಲಿವರಿಯಲ್ಲಿ ಪಾವತಿಸಿ. ಕಾಯ್ದಿರಿಸುವಾಗ ಅಂತಿಮ ಲಭ್ಯತೆ ಪರಿಶೀಲಿಸಲಾಗುತ್ತದೆ.",
+  "Pay at pickup. Final availability is checked when you reserve.": "ಪಡೆಯುವ ಸ್ಥಳದಲ್ಲಿ ಪಾವತಿಸಿ. ಕಾಯ್ದಿರಿಸುವಾಗ ಅಂತಿಮ ಲಭ್ಯತೆ ಪರಿಶೀಲಿಸಲಾಗುತ್ತದೆ.",
   "Illustrative image. Pack size and supplier details need confirmation before the pilot opens.": "ಮಾದರಿ ಚಿತ್ರ. ಪೈಲಟ್ ಆರಂಭಕ್ಕೂ ಮೊದಲು ಪ್ಯಾಕ್ ಗಾತ್ರ ಮತ್ತು ಪೂರೈಕೆದಾರರ ವಿವರಗಳ ದೃಢೀಕರಣ ಅಗತ್ಯ.",
   "Cancel this reservation?": "ಈ ಕಾಯ್ದಿರಿಸುವಿಕೆಯನ್ನು ರದ್ದುಮಾಡಬೇಕೇ?",
   "Nothing has been paid. Your reserved stock will be released.": "ಯಾವುದೇ ಪಾವತಿ ಆಗಿಲ್ಲ. ಕಾಯ್ದಿರಿಸಿದ ವಸ್ತುಗಳು ಬಿಡುಗಡೆಗೊಳ್ಳುತ್ತವೆ.",

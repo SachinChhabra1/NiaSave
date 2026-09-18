@@ -487,6 +487,7 @@ export default {
   "Your Nia team": "Your Nia team",
   "Help with a changed phone number": "Help with a changed phone number",
   "Pay at pickup or delivery. Final availability is checked when you reserve.": "Pay at pickup or delivery. Final availability is checked when you reserve.",
+  "Pay at pickup. Final availability is checked when you reserve.": "পিকআপের সময় টাকা দিন। রিজার্ভ করার সময় শেষবারের মতো উপলভ্যতা যাচাই করা হয়।",
   "Illustrative image. Pack size and supplier details need confirmation before the pilot opens.": "Illustrative image. Pack size and supplier details need confirmation before the pilot opens.",
   "Cancel this reservation?": "Cancel this reservation?",
   "Nothing has been paid. Your reserved stock will be released.": "Nothing has been paid. Your reserved stock will be released.",

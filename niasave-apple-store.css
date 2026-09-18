@@ -68,24 +68,29 @@ body.mesha-dark .signin.mesha-avatar span{
   position:static;width:auto;height:auto;clip:auto;overflow:visible;color:var(--nia-accent);
 }
 
-/* Language splash — light canvas, contained bunk still. */
+/* Language splash — flat white canvas, no photo. */
 body.mesha-lang-open{background:var(--nia-canvas);color:var(--nia-ink)}
-body.mesha-lang-open main{max-width:430px;margin:0 auto;padding:24px 16px 40px}
+body.mesha-lang-open main,
+body.mesha-lang-open #content{
+  max-width:430px;margin:0 auto;padding:24px 16px 40px;
+  background:var(--nia-canvas);background-image:none;
+}
 .mesha-lang{
   min-height:100dvh;background:var(--nia-canvas);color:var(--nia-ink);
   display:flex;flex-direction:column;gap:0;
 }
-.mesha-lang-hero{
-  position:relative;flex:0 0 auto;min-height:0;background:var(--nia-band);
-  margin:8px 8px 0;border-radius:var(--nia-radius);overflow:hidden;
-}
+.mesha-lang-hero,
 .mesha-lang-hero img{
-  position:relative;inset:auto;width:100%;height:auto;max-height:42vh;
-  object-fit:cover;object-position:12% 14%;display:block;
+  display:none!important;
+  background:none!important;
+  background-image:none!important;
 }
-.mesha-wordmark{position:relative;z-index:1;margin:0;padding:14px 18px;font-size:15px;font-weight:600;color:var(--nia-ink)}
+.mesha-wordmark{
+  position:relative;z-index:1;margin:0;padding:48px 20px 8px;
+  font-size:17px;font-weight:600;color:var(--nia-ink);text-align:center;letter-spacing:-.02em;
+}
 .mesha-lang-sheet{
-  background:var(--nia-canvas);padding:28px 20px calc(24px + env(safe-area-inset-bottom));
+  background:var(--nia-canvas);padding:12px 20px calc(24px + env(safe-area-inset-bottom));
   border-radius:0;margin-top:0;color:var(--nia-ink);
 }
 .mesha-lang-sheet h1{font-size:34px;font-weight:600;letter-spacing:-.03em;line-height:1.08;margin:8px 0 10px;color:var(--nia-ink)}
@@ -212,21 +217,54 @@ body.mesha-dark .primary, body.mesha-dark button.primary{
 }
 body.mesha-dark button.quiet{color:var(--nia-accent);background:transparent;border:0}
 
-/* Save aisle — contained oils still, light chips. */
+/* Leftover Mesha wallpapers — never full-bleed photos or dark sheets. */
+.shop-hero{
+  background:var(--nia-card)!important;
+  background-image:none!important;
+  color:var(--nia-ink);
+}
+.shop-hero:before{display:none!important;content:none;background:none!important}
+.save-collect-card,
+.send-plan-card{
+  background:var(--nia-card);color:var(--nia-ink);
+  border:1px solid var(--nia-line);border-radius:var(--nia-radius);
+  box-shadow:0 2px 12px rgba(0,0,0,.04);
+}
+.save-collect-card h2,
+.send-plan-card h2{color:var(--nia-ink)}
+.save-collect-card p,
+.send-plan-card p,
+.send-plan-status,
+.product .pack-line,
+.product .source-line{color:var(--nia-muted)}
+#save-collect-map{background:var(--nia-band)}
+.send-plan-card input,
+.send-plan-card select,
+.save-search-label input{
+  background:#ffffff;color:#1d1d1f;border:1px solid var(--nia-line);
+}
+.send-plan-card button{background:var(--nia-accent);color:#fff;border:0}
+
+/* Save aisle — typography on white, oils still contained in a rounded card. */
 body.mesha-dark .mesha-save-hero{
   display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
   min-height:0;margin:8px 16px 18px;padding:24px 20px 20px;border-radius:var(--nia-radius);
-  background:var(--nia-canvas);color:var(--nia-ink);text-align:center;cursor:pointer;
+  background:var(--nia-canvas);background-image:none;color:var(--nia-ink);text-align:center;cursor:pointer;
 }
-body.mesha-dark .mesha-save-hero:before,body.mesha-dark .mesha-save-hero:after{
-  display:block;content:"";order:2;width:100%;height:min(36vh,280px);
-  margin-top:18px;border-radius:12px;
-  background:var(--nia-band) url('/assets/oils-editorial-sheet.png') 50% 40% / cover no-repeat;
-  pointer-events:none;
+body.mesha-dark .mesha-save-hero:before,
+body.mesha-dark .mesha-save-hero:after{
+  display:none!important;content:none;background:none!important;background-image:none!important;
 }
-body.mesha-dark .mesha-save-hero:before{display:none}
 body.mesha-dark .mesha-save-hero > *{
   position:relative;z-index:1;background:transparent;padding:0;color:var(--nia-ink);order:1;
+}
+body.mesha-dark .mesha-save-still{
+  display:block;order:2;width:100%;margin-top:18px;padding:10px;box-sizing:border-box;
+  background:var(--nia-band);border-radius:12px;
+}
+body.mesha-dark .mesha-save-still img{
+  display:block;width:100%;height:auto;max-height:min(36vh,280px);
+  object-fit:cover;object-position:50% 40%;border-radius:10px;
 }
 body.mesha-dark .mesha-save-title{font-size:34px;font-weight:600;letter-spacing:-.03em;color:var(--nia-ink);margin:8px 0 10px}
 body.mesha-dark .mesha-save-sub{color:var(--nia-muted);max-width:28ch;margin:0 auto 16px}

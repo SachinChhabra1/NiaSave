@@ -56,10 +56,15 @@ function collectCard() {
   </section>`;
 }
 
-function sendCard() {
+function sendCard(hasPrimarySendView = false) {
   const plan = loadPlan();
   const selected = value => plan.schedule === value ? 'selected' : '';
   return `<section class="send-plan-card">
+    ${hasPrimarySendView ? '' : `<header class="store-head send-safety-fallback">
+      <h1>Send</h1>
+      <p class="nia-transfer-status" role="status"><span class="badge">Transfers not active</span></p>
+      <p>This is a money statement and a plan to send home. Saving a plan does not move money.</p>
+    </header>`}
     <h2>Plan money home</h2>
     <p>An estimate, not a transfer. Money does not move.</p>
     <form id="send-plan-form">
@@ -149,7 +154,9 @@ function paint() {
     mountCollectMap();
   }
   if (current === 'send') {
-    if (!document.querySelector('.send-plan-card')) main.insertAdjacentHTML('beforeend', sendCard());
+    const hasPrimarySendView = Boolean(main.querySelector('.store-send'));
+    if (!document.querySelector('.send-plan-card')) main.insertAdjacentHTML('beforeend', sendCard(hasPrimarySendView));
+    if (hasPrimarySendView) document.querySelector('.send-safety-fallback')?.remove();
     bindSendForm();
   }
 }

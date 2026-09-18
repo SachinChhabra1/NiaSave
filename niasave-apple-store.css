@@ -451,3 +451,60 @@ body.mesha-dark .nest-search{
 @media (prefers-reduced-motion:reduce){
   .nia-rise,.mesha-pill:active{animation:none;transform:none}
 }
+
+/* Live nest tiles: identical 4:3 stills in rounded cards on a flat canvas. */
+body.mesha-dark .store-live{
+  background:var(--nia-canvas);
+}
+body.mesha-dark .store-live .nest-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:22px;
+  padding:8px 20px 32px;
+  background:var(--nia-canvas);
+}
+body.mesha-dark .store-nest,
+body.mesha-dark .nest-card.store-nest{
+  background:var(--nia-card);
+  border:1px solid var(--nia-line);
+  border-radius:var(--nia-radius);
+  overflow:hidden;
+  box-shadow:0 2px 12px rgba(0,0,0,.04);
+}
+body.mesha-dark .store-nest .nest-image,
+body.mesha-dark .nest-card .nest-image{
+  background:var(--nia-card);
+  padding:10px 10px 0;
+}
+body.mesha-dark .store-nest .nest-image img,
+body.mesha-dark .store-nest .nest-placeholder,
+body.mesha-dark .nest-card .nest-image img{
+  aspect-ratio:4/3!important;
+  width:100%;
+  height:auto;
+  object-fit:cover;
+  object-position:center;
+  border-radius:12px;
+  display:block;
+  background:var(--nia-band);
+}
+body.mesha-dark .store-nest>.stack,
+body.mesha-dark .nest-card.store-nest>.stack{
+  padding:14px 16px 18px;
+  background:var(--nia-card);
+}
+body.mesha-dark .nest-test-flag{
+  margin:0;
+  font-size:13px;
+  color:var(--nia-muted);
+}
+@media (max-width:1000px){
+  body.mesha-dark .store-live .nest-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:760px){
+  body.mesha-dark .store-live .nest-grid{
+    grid-template-columns:1fr;
+    padding:8px 16px 28px;
+    gap:18px;
+  }
+}

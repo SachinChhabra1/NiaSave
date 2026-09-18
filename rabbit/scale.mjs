@@ -15,7 +15,7 @@ export const MEMBER_COUNT = 3000;
 export const MEMBERS_PER_STUDIO = MEMBER_COUNT / STUDIO_COUNT;
 export const BEAT_BAGS_PER_STOP = 5;
 
-const STUDIO_NAMES = [
+export const STUDIO_NAMES = [
   "Ompal", "Shiv Kumar", "Ram Bhatari", "Jaswant Singh", "Vansh",
   "Kamala Devi", "Rekha Yadav", "Pradip Yadav", "Bal Kishan 01", "Binu",
   "Kaushlya", "Praveen", "Azad Singh", "Parul Yadav", "Bala Devi",

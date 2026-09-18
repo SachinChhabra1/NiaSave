@@ -8,3 +8,6 @@ npm-debug.log*
 .agents/
 skills-lock.json
 .vercel
+# Preview-only TEST studio stills. Do not ship generated photos as real.
+assets/studio-media/test/*.webp
+assets/studio-media/test/manifest.json

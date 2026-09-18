@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host 0.0.0.0 --port 8080",
     "dev:api": "node api/server.mjs",
     "build": "vite build",
     "build:tanot": "vite build tanot --base=/tanot/ --outDir=../dist/tanot --emptyOutDir=false",

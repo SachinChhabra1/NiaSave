@@ -18,6 +18,9 @@ export default defineConfig({
   ],
   server: {
     host: "0.0.0.0",
+    port: 8080,
+    strictPort: true,
+    allowedHosts: true,
     proxy: {
       "/health": "http://127.0.0.1:8787",
       "/v1": "http://127.0.0.1:8787",

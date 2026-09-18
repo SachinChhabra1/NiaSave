@@ -62,3 +62,30 @@
   :root{--nia-type-display:52px;--nia-space-block:80px;--nia-gutter:24px}
   .nia-help{bottom:24px}
 }
+/* Phase 2–4 redesign: recovery, money, pack gate, a11y, responsive. Tokens unchanged. */
+.nia-help:focus-visible,.header .signin:focus-visible,.mobile-nav button:focus-visible,
+.primary:focus-visible,button.add:focus-visible,dialog button:focus-visible{
+  outline:3px solid var(--nia-accent);outline-offset:2px
+}
+[data-state="loading"],[data-state="network"],[data-state="expired"],[data-state="empty"]{
+  background:var(--nia-ground-light);color:var(--nia-ink);border-radius:var(--nia-radius);padding:24px var(--nia-gutter)
+}
+[data-state] h2{font-size:var(--nia-type-section);margin:0 0 8px}
+[data-state] p{font-size:var(--nia-type-body);color:var(--nia-muted);margin:0 0 16px}
+.pack-blocked{color:var(--nia-muted);font-size:var(--nia-type-support);margin:8px 0 0}
+.nia-transfer-status{margin:8px 0 12px}
+.store-send .badge,.books-transfer .badge,.nia-transfer-status .badge{background:#E8E8ED;color:var(--nia-ink);font-size:var(--nia-type-support);padding:4px 10px;border-radius:999px;font-weight:600}
+button.add:disabled,button.primary:disabled{opacity:.45}
+@media (max-width:320px){
+  :root{--nia-gutter:12px;--nia-type-display:32px;--nia-type-section:24px}
+  .nia-help{right:8px;padding:0 12px}
+}
+@media (min-width:768px){
+  .header{min-height:48px}
+}
+@media (min-width:1280px){
+  :root{--nia-gutter:32px;--nia-space-block:80px}
+}
+@media (prefers-contrast:more){
+  :root{--nia-ink:#000;--nia-accent:#003D82}
+}

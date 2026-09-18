@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0B0E14">
+<title>Sikh Unit · Vendor payout</title>
+<link rel="icon" href="/assets/nia-favicon-64.png" type="image/png">
+<link rel="apple-touch-icon" href="/assets/nia-touch-icon.png">
+<link rel="stylesheet" href="/staff.css">
+</head>
+<body>
+  <div class="narrow">
+    <div class="narrow-card">
+      <div class="kicker">Sikh Unit</div>
+      <h1>Open on a laptop</h1>
+      <p>Vendor payout is a wide staff desk. It is not the member app.</p>
+    </div>
+  </div>
+  <div class="tower">
+    <header class="top">
+      <div class="mark">
+        <img class="nia-logo" src="/assets/nia-mark-square.png" alt="Nia">
+        <div class="brand">Sikh Unit</div>
+        <div class="desk-head">
+          <svg class="desk-icon" viewBox="0 0 40 40" width="40" height="40" aria-hidden="true"><rect x="8" y="12" width="24" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 20h16M16 16v8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <h1>Pay the vendor</h1>
+        </div>
+      </div>
+      <div class="meta"><a href="/ops.html">Ops</a> · <a href="/recon.html">Recon</a> · <a href="/vendors.html">Vendors</a></div>
+    </header>
+    <div class="shell">
+      <aside class="rail">
+        <div class="rail-block">
+          <h2 class="rail-h">Ops</h2>
+          <a class="rail-link" href="/po.html">Purchase order</a>
+          <a class="rail-link" href="/source.html">Source</a>
+          <a class="rail-link" href="/vendors.html">Vendors</a>
+          <a class="rail-link" href="/recon.html">Recon</a>
+          <a class="rail-link on" href="/payout.html">Payout</a>
+        </div>
+      </aside>
+      <div class="pane">
+        <div class="wrap">
+          <p class="sub">Principal model. Member collection stays UPI at handover. Vendor pay_terms is cash same day. Pay only matched lines at buy_inr. Dummy seed is not live GMV.</p>
+          <p class="sub" id="beat">Beat …</p>
+          <div class="pills" id="watches"></div>
+          <div class="msg" id="msg"></div>
+          <h2>Vendors</h2>
+          <div id="vendors">Loading…</div>
+          <h2>Recon</h2>
+          <div id="recons"></div>
+          <h2>Payouts</h2>
+          <div id="payouts"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+<script src="/staff.js"></script>
+<script>
+function num(n){ return n==null?0:n; }
+function load(){
+  fetch('/api/payouts').then(function(r){ return r.json(); }).then(function(d){
+    document.getElementById('beat').textContent=(d.theatre||'Rajputana Theatre')+' · Beat '+(d.beatDate||'-')+' · '+(d.dummy?'dummy seed':'live book')+' · member rail '+(d.memberRail||'upi_at_handover');
+    var w=d.watches||[];
+    document.getElementById('watches').innerHTML=w.length
+      ? w.map(function(x){ return '<span class="pill warn">'+(x.kind||x)+'</span>'; }).join('')
+      : '<span class="pill ok">no open watches</span>';
+    var vendors=d.vendors||[];
+    document.getElementById('vendors').innerHTML=vendors.length
+      ? '<table><thead><tr><th>Vendor</th><th>Terms</th><th>Status</th><th>Last buy</th><th></th></tr></thead><tbody>'
+        +vendors.map(function(v){
+          return '<tr><td class="left">'+(v.name||v.id)+'</td><td>'+(v.payTerms||'')+'</td><td>'+v.status+'</td><td>'+(v.lastBuy||'-')+'</td><td><button type="button" onclick="pay('+JSON.stringify(v.id)+')">Pay matched</button></td></tr>';
+        }).join('')+'</tbody></table>'
+      : '<div class="empty">No vendor yet.</div>';
+    var rec=d.recons||[];
+    document.getElementById('recons').innerHTML=rec.length
+      ? '<table><thead><tr><th>Recon</th><th>Bag</th><th>Result</th><th>Listed</th><th>Payable</th></tr></thead><tbody>'
+        +rec.map(function(r){
+          var pay=(r.lines||[]).reduce(function(n,l){ return n+num(l.payable); },0);
+          return '<tr><td>'+r.id+'</td><td>'+r.bagId+'</td><td>'+r.result+'</td><td class="num">Rs '+num(r.listedTotal)+'</td><td class="num">Rs '+pay+'</td></tr>';
+        }).join('')+'</tbody></table>'
+      : '<div class="empty">No collection recon yet.</div>';
+    var pays=d.payouts||[];
+    document.getElementById('payouts').innerHTML=pays.length
+      ? '<table><thead><tr><th>Payout</th><th>Vendor</th><th>Amount</th><th>Margin</th><th>Status</th></tr></thead><tbody>'
+        +pays.map(function(p){
+          return '<tr><td>'+p.id+'</td><td>'+p.vendorId+'</td><td class="num">Rs '+num(p.amount)+'</td><td class="num">Rs '+num(p.margin)+'</td><td>'+p.status+'</td></tr>';
+        }).join('')+'</tbody></table>'
+      : '<div class="empty">No payout posted.</div>';
+  }).catch(function(){ document.getElementById('vendors').textContent='Could not load payouts.'; });
+}
+function pay(id){
+  fetch('/api/payouts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({vendorId:id})})
+    .then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); })
+    .then(function(res){
+      document.getElementById('msg').textContent=res.ok?('Posted '+(res.j.payout&&res.j.payout.id)):((res.j&&res.j.error)||'Pay failed');
+      load();
+    });
+}
+load();
+</script>
+</body>
+</html>

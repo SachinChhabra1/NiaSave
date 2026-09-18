@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f5f5f7">
+<title>Live studio bulk upload · TEST preview</title>
+<link rel="icon" href="/assets/nia-favicon-64.png">
+<style>
+:root{
+  --nia-canvas:#ffffff;
+  --nia-band:#f5f5f7;
+  --nia-ink:#1d1d1f;
+  --nia-muted:#6e6e73;
+  --nia-accent:#0066cc;
+  --nia-line:#d2d2d7;
+  --nia-card:#ffffff;
+  --nia-radius:18px;
+  --nia-font:-apple-system,BlinkMacSystemFont,'SF Pro Text','SF Pro Display','Segoe UI',system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--nia-canvas);color:var(--nia-ink);font-family:var(--nia-font)}
+body{min-height:100dvh}
+main{max-width:980px;margin:0 auto;padding:48px 24px 80px}
+h1{font-size:40px;letter-spacing:-.04em;margin:0 0 8px;font-weight:600}
+.lede{font-size:19px;line-height:1.45;color:var(--nia-muted);max-width:42ch;margin:0 0 28px}
+.card{
+  background:var(--nia-card);border:1px solid var(--nia-line);border-radius:var(--nia-radius);
+  padding:22px;margin:0 0 18px;box-shadow:0 2px 12px rgba(0,0,0,.04);
+}
+.card h2{margin:0 0 8px;font-size:21px;letter-spacing:-.03em}
+.card p,.hint{color:var(--nia-muted);font-size:15px;line-height:1.45;margin:0 0 16px}
+label{display:grid;gap:8px;font-size:13px;font-weight:600;margin:0 0 14px}
+input[type=file]{font:inherit;color:var(--nia-ink)}
+.row{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
+button,a.btn{
+  appearance:none;border:1px solid var(--nia-accent);background:transparent;color:var(--nia-accent);
+  min-height:44px;padding:10px 16px;border-radius:999px;font:inherit;font-weight:600;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;
+}
+button.primary{background:var(--nia-accent);color:#fff}
+button:disabled{opacity:.45;cursor:not-allowed}
+.status{min-height:1.4em;font-size:14px;color:var(--nia-muted);white-space:pre-wrap}
+.status.error{color:#813510}
+.spec{font-variant-numeric:tabular-nums;font-size:14px;color:var(--nia-ink)}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.tile{background:var(--nia-card);border:1px solid var(--nia-line);border-radius:var(--nia-radius);overflow:hidden}
+.tile .frame{padding:10px 10px 0;background:var(--nia-card)}
+.tile img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;object-position:center;border-radius:12px;background:var(--nia-band)}
+.tile .copy{padding:12px 16px 16px}
+.tile h3{margin:0 0 4px;font-size:17px;letter-spacing:-.03em}
+.tile p{margin:0;font-size:13px;color:var(--nia-muted)}
+@media(max-width:760px){
+  main{padding:28px 16px 64px}
+  h1{font-size:32px}
+  .grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<main>
+  <p class="lede" style="font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--nia-muted);margin-bottom:10px">Central-owned · TEST preview</p>
+  <h1>Live studio bulk upload</h1>
+  <p class="lede">Ingest TEST studios for the member Live grid. Every still is normalized to 1200×900, 4:3, WebP quality 80, cover-attention crop. Not a production desk. Payments stay off.</p>
+
+  <section class="card">
+    <h2>Sheet</h2>
+    <p>Columns: site_code, name, theatre, city, address, picture, active. site_code must be TEST-… Name and theatre start with Test. Address must say it is illustrative and not a real Nest. Polo stops S01–S40 are refused.</p>
+    <div class="row">
+      <a class="btn" href="/api/commerce/studios/bulk/template">Download CSV template</a>
+      <a class="btn" href="/#live">Open Live grid</a>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Upload</h2>
+    <form id="bulk-form">
+      <label>CSV file
+        <input id="csv" name="csv" type="file" accept=".csv,text/csv" required>
+      </label>
+      <label>Pictures — one file per row, names matching the picture column
+        <input id="pictures" name="pictures" type="file" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp" multiple required>
+      </label>
+      <div class="row">
+        <button class="primary" type="submit">Normalize and publish TEST studios</button>
+      </div>
+    </form>
+    <p class="status" id="status" role="status">Ready.</p>
+    <p class="spec" id="spec"></p>
+  </section>
+
+  <section class="card">
+    <h2>Normalized tiles</h2>
+    <p class="hint">Each photo sits in a rounded card on a flat white canvas. Tiles must match in size and framing.</p>
+    <div class="grid" id="grid"></div>
+  </section>
+</main>
+<script>
+const $ = id => document.getElementById(id);
+function specLine(spec, count){
+  if (!spec) return '';
+  return 'Output spec: ' + spec.width + '×' + spec.height + ' px · ' + spec.aspect + ' · ' + spec.format + ' · quality ' + spec.quality + ' · ' + spec.crop + (count != null ? ' · ' + count + ' studios' : '');
+}
+function render(rows, spec){
+  $('spec').textContent = specLine(spec, rows.length);
+  $('grid').innerHTML = rows.map(row => {
+    const src = row.media?.url || '';
+    return '<article class="tile"><div class="frame"><img src="' + src + '" width="1200" height="900" alt="' + row.name + ' · illustrative test still"></div><div class="copy"><h3>' + row.name + '</h3><p>' + row.theatre + ' · ' + row.city + '</p><p>' + row.site_code + ' · TEST · not a real Nest</p></div></article>';
+  }).join('') || '<p class="hint">No TEST studios uploaded yet.</p>';
+}
+async function loadList(){
+  const r = await fetch('/api/commerce/studios/bulk', {credentials:'same-origin'});
+  const body = await r.json();
+  if (!r.ok) { $('status').textContent = body.error || 'unavailable'; $('status').classList.add('error'); return; }
+  render(body.rows || [], body.spec);
+}
+$('bulk-form').addEventListener('submit', async event => {
+  event.preventDefault();
+  const csv = $('csv').files[0];
+  const files = [...$('pictures').files];
+  if (!csv || !files.length) return;
+  const data = new FormData();
+  data.append('csv', csv, csv.name);
+  for (const file of files) data.append('picture', file, file.name);
+  $('status').classList.remove('error');
+  $('status').textContent = 'Normalizing stills…';
+  const r = await fetch('/api/commerce/studios/bulk', {method:'POST', body:data, credentials:'same-origin'});
+  const body = await r.json().catch(() => ({error:'invalid_body'}));
+  if (!r.ok) {
+    $('status').classList.add('error');
+    $('status').textContent = body.error + (body.errors ? '\n' + JSON.stringify(body.errors, null, 2) : '');
+    return;
+  }
+  $('status').textContent = 'Published ' + body.count + ' TEST studios. Live grid uses these stills.';
+  render(body.rows || [], body.spec);
+});
+loadList().catch(err => { $('status').textContent = String(err.message || err); $('status').classList.add('error'); });
+</script>
+</body>
+</html>

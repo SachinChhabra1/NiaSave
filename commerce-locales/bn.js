@@ -665,5 +665,7 @@ export default {
   "Local mills in this theatre": "এই থিয়েটারের স্থানীয় মিল",
   "Rajputana Theatre": "রাজপুতানা থিয়েটার",
   "Price when packs confirm": "প্যাক নিশ্চিত হলে দাম",
-
+  'Illustrative test studio. Not a real Nest.': 'Illustrative test studio. Not a real Nest.',
+  'View still': 'View still',
+  'Layout only. No reservation. No online payment.': 'Layout only. No reservation. No online payment.'
 };

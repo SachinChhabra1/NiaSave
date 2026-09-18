@@ -1,0 +1,344 @@
+/* Apple Store light canvas. Loaded last. Design pass only. Payments stay off. */
+:root{
+  --nia-canvas:#ffffff;
+  --nia-band:#f5f5f7;
+  --nia-ink:#1d1d1f;
+  --nia-muted:#6e6e73;
+  --nia-accent:#0066cc;
+  --nia-line:#d2d2d7;
+  --nia-card:#ffffff;
+  --nia-radius:18px;
+  --nia-nav-h:48px;
+  --nia-font:-apple-system,BlinkMacSystemFont,'SF Pro Text','SF Pro Display','Segoe UI',system-ui,sans-serif;
+}
+html,body{
+  background:var(--nia-canvas);
+  color:var(--nia-ink);
+  font-family:var(--nia-font);
+}
+body.mesha-lang-open,body.mesha-dark{
+  background:var(--nia-canvas);
+  color:var(--nia-ink);
+  --bg:var(--nia-canvas);
+  --fg:var(--nia-ink);
+  --muted:var(--nia-muted);
+  --line:var(--nia-line);
+  --surface:var(--nia-card);
+  --accent:var(--nia-accent);
+  font-family:var(--nia-font);
+}
+@media(min-width:431px){
+  body.mesha-lang-open,body.mesha-dark{background:var(--nia-band)}
+}
+
+/* Shared 48px frosted header — one chrome for every destination. */
+body.mesha-dark .header,
+body.mesha-dark .header.header{
+  position:sticky;top:0;left:auto;transform:none;
+  width:100%;max-width:none;height:var(--nia-nav-h);min-height:var(--nia-nav-h);
+  padding:0 18px;z-index:40;
+  background:rgba(255,255,255,.72)!important;
+  backdrop-filter:saturate(180%) blur(20px);
+  -webkit-backdrop-filter:saturate(180%) blur(20px);
+  border-bottom:1px solid rgba(0,0,0,.08);
+  pointer-events:auto;
+}
+body.mesha-dark .header .brand,
+body.mesha-dark .header .brand:visited{
+  font-size:17px;font-weight:600;letter-spacing:-.02em;color:var(--nia-ink);
+}
+body.mesha-dark .brand-logo{
+  display:block;width:18px;height:18px;filter:none;
+}
+body.mesha-dark #desktop-nav button,
+body.mesha-dark #desktop-nav button small{
+  color:var(--nia-ink);border:0;background:transparent;font-weight:400;
+}
+body.mesha-dark #desktop-nav button[aria-current=page]{color:var(--nia-accent);font-weight:600}
+body.mesha-dark .header-tools .mesha-chip{
+  border:1px solid var(--nia-line);color:var(--nia-ink);background:transparent;border-radius:999px;
+}
+body.mesha-dark .signin,
+body.mesha-dark .signin.mesha-avatar{
+  width:auto;height:32px;min-height:32px;padding:0 12px;border-radius:999px;
+  border:1px solid var(--nia-accent);background:transparent;color:var(--nia-accent);
+}
+body.mesha-dark .signin.mesha-avatar .icon,
+body.mesha-dark .signin.mesha-avatar span{
+  position:static;width:auto;height:auto;clip:auto;overflow:visible;color:var(--nia-accent);
+}
+
+/* Language splash — light canvas, contained bunk still. */
+body.mesha-lang-open{background:var(--nia-canvas);color:var(--nia-ink)}
+body.mesha-lang-open main{max-width:430px;margin:0 auto;padding:24px 16px 40px}
+.mesha-lang{
+  min-height:100dvh;background:var(--nia-canvas);color:var(--nia-ink);
+  display:flex;flex-direction:column;gap:0;
+}
+.mesha-lang-hero{
+  position:relative;flex:0 0 auto;min-height:0;background:var(--nia-band);
+  margin:8px 8px 0;border-radius:var(--nia-radius);overflow:hidden;
+}
+.mesha-lang-hero img{
+  position:relative;inset:auto;width:100%;height:auto;max-height:42vh;
+  object-fit:cover;object-position:12% 14%;display:block;
+}
+.mesha-wordmark{position:relative;z-index:1;margin:0;padding:14px 18px;font-size:15px;font-weight:600;color:var(--nia-ink)}
+.mesha-lang-sheet{
+  background:var(--nia-canvas);padding:28px 20px calc(24px + env(safe-area-inset-bottom));
+  border-radius:0;margin-top:0;color:var(--nia-ink);
+}
+.mesha-lang-sheet h1{font-size:34px;font-weight:600;letter-spacing:-.03em;line-height:1.08;margin:8px 0 10px;color:var(--nia-ink)}
+.mesha-kicker{color:var(--nia-muted);letter-spacing:.12em}
+.mesha-lang-keep{color:var(--nia-muted);margin:0 0 18px}
+.mesha-lang-btn{
+  background:var(--nia-band);color:var(--nia-ink);border-radius:999px;
+}
+.mesha-lang-foot{color:var(--nia-muted);text-align:center}
+
+/* Home — light hero, copy first, contained still, Apple Store cards. */
+.mesha-home, .apple-home, .nia-home{
+  background:var(--nia-canvas);color:var(--nia-ink);
+  min-height:100dvh;display:flex;flex-direction:column;
+  padding:12px 0 calc(88px + env(safe-area-inset-bottom));
+}
+.nia-home-hero.mesha-desire,
+.mesha-desire.apple-unit{
+  display:flex;flex-direction:column;position:relative;
+  min-height:0;align-items:center;justify-content:flex-start;
+  text-align:center;flex:none;color:var(--nia-ink);background:var(--nia-canvas);
+}
+.nia-home-hero.mesha-desire:after,
+.mesha-desire:after{display:none;content:none;background:none}
+.nia-home-copy, .mesha-desire-copy.nia-home-copy{
+  position:relative;z-index:1;width:100%;box-sizing:border-box;
+  padding:28px 24px 12px;background:var(--nia-canvas);text-align:center;color:var(--nia-ink);
+}
+.nia-home-copy h1, .mesha-desire-copy h1{
+  font-size:clamp(32px,8vw,48px);font-weight:600;line-height:1.06;letter-spacing:-.03em;
+  max-width:16ch;margin:8px auto 10px;color:var(--nia-ink);
+}
+.nia-home-sub, .mesha-desire-copy>p:not(.mesha-kicker){
+  max-width:36ch;margin:0 auto 22px;font-size:17px;font-weight:400;line-height:1.35;color:var(--nia-muted);
+}
+.nia-home-eyebrow, .apple-home .mesha-kicker{color:var(--nia-muted);letter-spacing:.12em}
+.nia-home-cta, .mesha-desire-cta{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.mesha-pill{border-radius:999px;min-height:44px;padding:0 20px;font-size:15px;font-weight:600;border:0}
+.mesha-pill-solid{background:var(--nia-accent);color:#fff}
+.mesha-pill-solid:hover:not(:disabled){background:#0077ed;color:#fff}
+.mesha-pill-ghost{background:transparent;color:var(--nia-accent);box-shadow:inset 0 0 0 1.5px var(--nia-accent);border:0}
+.mesha-pill-ghost:hover:not(:disabled){background:rgba(0,102,204,.06)}
+.nia-home-photo-frame{
+  width:min(920px,calc(100% - 32px));margin:8px auto 28px;padding:10px;
+  background:var(--nia-band);border-radius:var(--nia-radius);box-sizing:border-box;
+}
+.nia-home-hero .nia-home-photo,
+.nia-home-hero.mesha-desire img.nia-home-photo,
+.nia-home-photo-frame .nia-home-photo{
+  position:relative!important;inset:auto;display:block;
+  width:100%;height:auto;min-height:180px;max-height:min(52vh,560px);
+  object-fit:cover;object-position:12% 14%;border-radius:12px;
+}
+
+/* Rail cards: white on light, image contained, dark type, blue link. */
+.nia-home-promises, .apple-rail.nia-home-promises, .mesha-rail{
+  display:grid;grid-template-columns:1fr;gap:16px;
+  padding:8px 16px 24px;background:var(--nia-band);flex:none;
+}
+.nia-home-card, .mesha-rail-card.nia-home-card{
+  position:relative;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;
+  min-height:0;padding:14px 14px 20px;overflow:hidden;border:0;text-align:left;
+  border-radius:var(--nia-radius);background:var(--nia-card);color:var(--nia-ink);
+  box-shadow:0 2px 12px rgba(0,0,0,.04);
+}
+.nia-home-card:hover:not(:disabled){background:var(--nia-card)}
+.nia-home-card-media{
+  display:block;background:var(--nia-band);border-radius:12px;padding:10px;margin:0 0 14px;
+}
+.nia-home-card .mesha-rail-photo{
+  position:relative!important;inset:auto;display:block;
+  width:100%;max-width:none;height:auto;min-height:160px;
+  aspect-ratio:4/3;border-radius:10px;flex:none;
+  background-color:var(--nia-band);background-size:cover;background-repeat:no-repeat;background-position:center;
+}
+.nia-home-card-copy{display:flex;flex-direction:column;gap:6px;padding:0 4px;background:transparent}
+.nia-home-card .mesha-rail-name{
+  font-size:24px;font-weight:600;letter-spacing:-.03em;color:var(--nia-ink);line-height:1.15;text-align:left;
+}
+.nia-home-card .mesha-rail-d{
+  font-size:15px;font-weight:400;letter-spacing:-.01em;color:var(--nia-muted);line-height:1.35;text-align:left;
+}
+.nia-home-card-link{
+  display:inline-block;margin-top:8px;font-size:15px;font-weight:600;color:var(--nia-accent);
+}
+.nia-home-card-link:after{content:" ›"}
+
+/* Destination screens share the light canvas. */
+body.mesha-dark main{
+  background:var(--nia-canvas);color:var(--nia-ink);
+}
+body.mesha-dark .store-head{
+  display:block;padding:18px 20px 8px;text-align:center;background:var(--nia-canvas);
+}
+body.mesha-dark .store-head h1{
+  font-size:34px;font-weight:600;letter-spacing:-.03em;color:var(--nia-ink);margin:0 0 8px;
+}
+body.mesha-dark .store-head p,
+body.mesha-dark .nia-transfer-status{
+  color:var(--nia-muted);font-size:17px;display:block;margin:0 auto 12px;max-width:40ch;
+}
+body.mesha-dark .store-purpose{
+  display:block;width:min(920px,calc(100% - 32px));margin:8px auto 24px;
+  aspect-ratio:4/3;object-fit:cover;border-radius:12px;
+  background:var(--nia-band);padding:0;box-shadow:0 0 0 10px var(--nia-band);
+}
+body.mesha-dark .panel,body.mesha-dark .order,body.mesha-dark .earn-job{
+  background:var(--nia-card);color:var(--nia-ink);border:0;border-radius:var(--nia-radius);
+  box-shadow:0 2px 12px rgba(0,0,0,.04);
+}
+body.mesha-dark .panel h2,body.mesha-dark .panel h3,body.mesha-dark .earn-job h3{
+  color:var(--nia-ink);
+}
+body.mesha-dark .footer{
+  display:flex;color:var(--nia-muted);border-top:1px solid var(--nia-line);
+  margin:28px 16px 0;padding:18px 4px 8px;
+}
+body.mesha-dark .footer a,body.mesha-dark .footer button{color:var(--nia-accent)}
+body.mesha-dark .badge{
+  background:var(--nia-band);color:var(--nia-ink);border:0;border-radius:999px;
+}
+body.mesha-dark .primary, body.mesha-dark button.primary{
+  background:var(--nia-accent);color:#fff;border:0;border-radius:999px;
+}
+body.mesha-dark button.quiet{color:var(--nia-accent);background:transparent;border:0}
+
+/* Save aisle — contained oils still, light chips. */
+body.mesha-dark .mesha-save-hero{
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
+  min-height:0;margin:8px 16px 18px;padding:24px 20px 20px;border-radius:var(--nia-radius);
+  background:var(--nia-canvas);color:var(--nia-ink);text-align:center;cursor:pointer;
+}
+body.mesha-dark .mesha-save-hero:before,body.mesha-dark .mesha-save-hero:after{
+  display:block;content:"";order:2;width:100%;height:min(36vh,280px);
+  margin-top:18px;border-radius:12px;
+  background:var(--nia-band) url('/assets/oils-editorial-sheet.png') 50% 40% / cover no-repeat;
+  pointer-events:none;
+}
+body.mesha-dark .mesha-save-hero:before{display:none}
+body.mesha-dark .mesha-save-hero > *{
+  position:relative;z-index:1;background:transparent;padding:0;color:var(--nia-ink);order:1;
+}
+body.mesha-dark .mesha-save-title{font-size:34px;font-weight:600;letter-spacing:-.03em;color:var(--nia-ink);margin:8px 0 10px}
+body.mesha-dark .mesha-save-sub{color:var(--nia-muted);max-width:28ch;margin:0 auto 16px}
+body.mesha-dark .mesha-save-rail{padding:0 16px 18px;gap:12px}
+body.mesha-dark .mesha-save-card{
+  background:var(--nia-card);color:var(--nia-ink);border-radius:var(--nia-radius);padding:12px;
+  box-shadow:0 2px 12px rgba(0,0,0,.04);
+}
+body.mesha-dark .mesha-save-card h3{color:var(--nia-ink)}
+body.mesha-dark .mesha-save-card p{color:var(--nia-muted)}
+body.mesha-dark .mesha-save-card .photo{background-color:var(--nia-band);border-radius:12px}
+
+/* Save chips: filled blue / outline blue. */
+body.mesha-dark .save-categories.save-pills,
+body.mesha-dark .save-categories{
+  display:flex;flex-wrap:nowrap;overflow-x:auto;gap:8px;
+  padding:4px 16px 16px;margin:0;background:transparent;
+}
+body.mesha-dark .save-categories.save-pills button,
+body.mesha-dark .save-categories button{
+  flex:0 0 auto;min-height:36px;padding:0 16px;border-radius:999px;border:1.5px solid var(--nia-accent);
+  background:transparent;color:var(--nia-accent);font-size:13px;font-weight:600;
+}
+body.mesha-dark .save-categories.save-pills button[aria-pressed=true],
+body.mesha-dark .save-categories button[aria-pressed=true]{
+  background:var(--nia-accent);color:#fff;border-color:var(--nia-accent);
+}
+body.mesha-dark .products{padding:0 16px 28px}
+body.mesha-dark .product{background:var(--nia-card);border-radius:var(--nia-radius);padding:12px;color:var(--nia-ink)}
+body.mesha-dark .product h3,body.mesha-dark .store-keep strong{color:var(--nia-ink)}
+body.mesha-dark .add,body.mesha-dark .stepper{
+  background:var(--nia-band);color:var(--nia-ink);border-radius:999px;border:0;
+}
+body.mesha-dark .product .photo{background-color:var(--nia-band);border-radius:12px}
+
+/* Bag + checkout: light sheets. */
+.mesha-bag{
+  background:var(--nia-card);color:var(--nia-ink);
+  border-radius:28px 28px 0 0;
+}
+.mesha-bag-head h2,.mesha-bag-copy strong,.mesha-bag-empty h2,.mesha-bag-price{color:var(--nia-ink)}
+.mesha-bag-copy small,.mesha-bag-empty p,.mesha-bag-quiet,.mesha-bag-note{color:var(--nia-muted)}
+.mesha-bag-line{border-bottom:1px solid var(--nia-line)}
+dialog.mesha-checkout{
+  background:var(--nia-card);color:var(--nia-ink);
+}
+dialog.mesha-checkout .dialog-head h2{color:var(--nia-ink)}
+dialog.mesha-checkout p{color:var(--nia-muted)}
+dialog.mesha-checkout .phone-field,dialog.mesha-checkout input,dialog.mesha-checkout .phone-prefix{
+  background:var(--nia-band);color:var(--nia-ink);border-color:var(--nia-line);
+}
+
+/* Bottom nav — light, dark SF text. */
+body.mesha-dark .mobile-nav{
+  background:rgba(255,255,255,.92);
+  backdrop-filter:saturate(180%) blur(16px);
+  -webkit-backdrop-filter:saturate(180%) blur(16px);
+  border-top:1px solid rgba(0,0,0,.08);
+  color:var(--nia-ink);
+}
+body.mesha-dark .mobile-nav button{color:var(--nia-muted);background:transparent}
+body.mesha-dark .mobile-nav button .icon{
+  border:1.5px solid var(--nia-line);color:var(--nia-ink);background:transparent;
+}
+body.mesha-dark .mobile-nav button[aria-current=page]{color:var(--nia-accent)}
+body.mesha-dark .mobile-nav button[aria-current=page] .icon{
+  background:var(--nia-accent);color:#fff;border-color:var(--nia-accent);
+}
+body.mesha-dark .mobile-nav button>span{font-size:11px;font-weight:500}
+
+.nia-help{
+  background:var(--nia-accent);color:#fff;border-radius:999px;
+}
+
+body.mesha-dark .notice.error{background:#fff2e9;color:#813510;border:0}
+
+@media (max-width: 760px) {
+  body.mesha-dark .header{
+    position:sticky;top:0;left:auto;transform:none;width:100%;max-width:none;
+    height:var(--nia-nav-h);padding:0 16px;
+    background:rgba(255,255,255,.72)!important;
+  }
+  body.mesha-dark .header .brand{font-size:17px;color:var(--nia-ink)}
+  body.mesha-dark .brand-logo{display:block}
+  body.mesha-dark main{max-width:430px;margin:0 auto;padding:0 0 120px;background:var(--nia-canvas)}
+  body.mesha-dark .mobile-nav{
+    display:grid;grid-template-columns:repeat(4,1fr);
+    max-width:430px;left:50%;right:auto;transform:translateX(-50%);width:100%;
+  }
+}
+
+@media (min-width: 761px) {
+  body.mesha-dark .header{
+    height:48px;padding:0 22px;
+    background:rgba(255,255,255,.72)!important;
+  }
+  body.mesha-dark #desktop-nav{display:flex;margin:0 auto;gap:8px}
+  body.mesha-dark .mobile-nav{display:none}
+  body.mesha-dark main{max-width:none;margin:0;padding:0 0 80px}
+  .apple-home{gap:12px;background:var(--nia-canvas);color:var(--nia-ink)}
+  .nia-home-copy{padding:48px 24px 16px}
+  .nia-home-copy h1{font-size:56px}
+  .nia-home-sub{font-size:21px}
+  .nia-home-promises, .apple-rail.nia-home-promises{
+    grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;padding:12px 24px 40px;
+  }
+  .nia-home-card .mesha-rail-name{font-size:28px}
+  .nia-home-card .mesha-rail-d{font-size:17px}
+  .nia-home-photo-frame{width:min(980px,calc(100% - 48px))}
+  body.mesha-lang-open main{max-width:480px;padding:48px 24px 80px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .nia-rise,.mesha-pill:active{animation:none;transform:none}
+}

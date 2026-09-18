@@ -426,5 +426,8 @@ export default {
   "Explore actual openings and next steps.": "உண்மையான காலிப் பதவிகளையும் அடுத்த அடிக்கையும் பாருங்கள்.",
   "Recorded home amount": "வீட்டுக்கு அனுப்பிய பதிவுத் தொகை",
   "Find a place near work.": "வேலைக்கு அருகில் தங்கும் இடம் பாருங்கள்.",
+  "See jobs": "வேலைகளைப் பாருங்கள்",
+  "Shop now": "இப்போது வாங்குங்கள்",
+  "See plan": "திட்டத்தைப் பாருங்கள்",
 
 };

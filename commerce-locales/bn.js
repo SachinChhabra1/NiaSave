@@ -648,5 +648,8 @@ export default {
   "Explore actual openings and next steps.": "আসল খালি পদ এবং পরের ধাপ দেখুন।",
   "Recorded home amount": "বাড়ি পাঠানোর নথিভুক্ত টাকা",
   "Find a place near work.": "কাজের কাছে থাকার জায়গা খুঁজুন।",
+  "See jobs": "কাজ দেখুন",
+  "Shop now": "এখন কিনুন",
+  "See plan": "প্ল্যান দেখুন",
 
 };

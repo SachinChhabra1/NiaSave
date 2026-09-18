@@ -257,6 +257,52 @@ body.mesha-dark .save-categories button[aria-pressed=true]{
 body.mesha-dark .products{padding:0 16px 28px}
 body.mesha-dark .product{background:var(--nia-card);border-radius:var(--nia-radius);padding:12px;color:var(--nia-ink)}
 body.mesha-dark .product h3,body.mesha-dark .store-keep strong{color:var(--nia-ink)}
+
+/* Save shop = category tiles, then local manufacturers. */
+.save-aisle-grid{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;
+  padding:0 16px 28px;
+}
+.save-aisle-tile{
+  display:flex;flex-direction:column;align-items:stretch;text-align:left;
+  background:var(--nia-card);color:var(--nia-ink);border:0;border-radius:var(--nia-radius);
+  padding:12px;box-shadow:0 2px 12px rgba(0,0,0,.04);min-height:52px;cursor:pointer;
+}
+.save-aisle-tile .photo{aspect-ratio:1;border-radius:12px;background-color:var(--nia-band)}
+.save-aisle-copy{padding:10px 4px 4px}
+.save-aisle-copy strong{display:block;font-size:17px;font-weight:600;letter-spacing:-.02em;color:var(--nia-ink)}
+.save-aisle-copy small{display:block;margin-top:4px;color:var(--nia-muted);font-size:13px;font-weight:500}
+.save-makers{padding:0 16px 40px;max-width:640px;margin-inline:auto}
+.save-makers-back{min-height:44px;padding:0;margin:0 0 4px}
+.save-makers-head h2{font-size:28px;font-weight:600;letter-spacing:-.03em;color:var(--nia-ink);margin:8px 0 6px}
+.save-makers-head p{color:var(--nia-muted);font-size:15px;margin:0 0 16px;line-height:1.4}
+.save-maker-card{
+  background:var(--nia-card);color:var(--nia-ink);border:1px solid var(--nia-line);
+  border-radius:var(--nia-radius);padding:16px;margin:0 0 12px;
+}
+.save-maker-card.is-cheapest{
+  border:2px solid var(--nia-accent);
+  box-shadow:0 0 0 4px rgba(0,102,204,.12);
+}
+.save-maker-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.save-maker-top h3{margin:0;font-size:17px;font-weight:600;letter-spacing:-.02em;color:var(--nia-ink)}
+.save-maker-badge{
+  flex:0 0 auto;background:var(--nia-accent);color:#fff;border-radius:999px;
+  font-size:12px;font-weight:600;padding:4px 10px;line-height:1.3;
+}
+.save-maker-pack{margin:8px 0 0;color:var(--nia-muted);font-size:15px}
+.save-maker-wait{margin:12px 0 0;color:var(--nia-muted);font-size:15px}
+.save-maker-price{display:flex;flex-wrap:wrap;align-items:baseline;gap:12px 16px;margin-top:12px}
+.save-maker-kirana{color:var(--nia-muted);text-decoration:line-through;font-size:13px}
+.save-maker-nia small,.save-maker-save small{display:block;font-size:12px;font-weight:600;letter-spacing:.02em;color:var(--nia-muted)}
+.save-maker-nia strong{display:block;font-size:22px;font-weight:600;letter-spacing:-.02em;color:var(--nia-ink)}
+.save-maker-save{color:var(--nia-keep,#1B7A4A)}
+.save-maker-save small{color:var(--nia-keep,#1B7A4A)}
+.save-maker-save strong{display:block;font-size:22px;font-weight:600;letter-spacing:-.02em;color:var(--nia-keep,#1B7A4A)}
+@media(min-width:761px){
+  .save-aisle-grid{grid-template-columns:repeat(3,minmax(0,1fr));padding:0 24px 40px;gap:16px}
+  .save-makers{padding:0 24px 48px}
+}
 body.mesha-dark .add,body.mesha-dark .stepper{
   background:var(--nia-band);color:var(--nia-ink);border-radius:999px;border:0;
 }
@@ -298,7 +344,7 @@ body.mesha-dark .mobile-nav button[aria-current=page] .icon{
 body.mesha-dark .mobile-nav button>span{font-size:11px;font-weight:500}
 
 .nia-help{
-  background:var(--nia-accent);color:#fff;border-radius:999px;
+  display:none!important;
 }
 
 body.mesha-dark .notice.error{background:#fff2e9;color:#813510;border:0}

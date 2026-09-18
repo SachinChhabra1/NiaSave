@@ -1,9 +1,8 @@
 export const languageOptions = [
   {id:'en', label:'English'},
   {id:'hi', label:'हिन्दी'},
-  {id:'bn', label:'বাংলা'},
   {id:'ta', label:'தமிழ்'},
-  {id:'kn', label:'ಕನ್ನಡ'}
+  {id:'bn', label:'বাংলা'}
 ];
 export const validLanguage = value => languageOptions.some(l => l.id === value);
 const dictionaries = {};

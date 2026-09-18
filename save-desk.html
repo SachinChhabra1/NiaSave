@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#F6F8FB">
+<title>Sikh Unit · Save desk</title>
+<link rel="icon" href="/assets/nia-favicon-64.png" type="image/png">
+<link rel="stylesheet" href="/staff.css">
+<link rel="stylesheet" href="/commerce.css">
+<style>
+  .desk-wrap{max-width:1100px;margin:0 auto;padding:24px 16px 80px}
+  .desk-grid{display:grid;grid-template-columns:1fr;gap:16px}
+  @media(min-width:860px){.desk-grid{grid-template-columns:1fr 1fr}}
+  .desk-order{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:18px}
+  .desk-order h2{margin:0;font-size:22px;letter-spacing:.08em}
+  .desk-order .row{display:flex;justify-content:space-between;gap:12px;align-items:center}
+  .desk-order form{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+  .desk-order label{display:flex;flex-direction:column;gap:6px;font-size:14px;color:var(--fg-muted)}
+  .desk-order input,.desk-order select,.desk-order textarea{font:inherit;padding:10px 12px;border-radius:10px;border:1px solid var(--border)}
+  .check{flex-direction:row !important;align-items:center}
+  .test-flag{display:inline-block;background:#FFF7EA;color:#9A5B00;border-radius:999px;padding:2px 8px;font-size:12px;font-weight:600}
+  .utr{font-family:var(--mono);font-size:15px}
+  .recon-box{margin-top:28px}
+</style>
+</head>
+<body>
+<div class="desk-wrap">
+  <header class="ops-top">
+    <div class="eyebrow">RAFIQI CENTRAL / 2 PARA / SAVE DESK</div>
+    <h1>Save order desk</h1>
+    <p>Reserve → pack → ready at Nia Nest Ompal → UPI at handover. No online payment.</p>
+    <div class="row"><a href="/ops.html">← Save overview</a> · <a href="/commerce.html#shop">Member Save</a> · <a href="/recon.html">Recon</a> · <button type="button" data-ops="refresh">Refresh</button></div>
+  </header>
+  <p id="ops-message" role="status" class="error-inline"></p>
+  <div id="desk-root"><p>Loading desk…</p></div>
+</div>
+<script type="module">
+const root=document.getElementById('desk-root');
+const msg=document.getElementById('ops-message');
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&','<':'<','>':'>','"':'"',"'":'&#39;'}[c]));
+const money=n=>'₹'+Number(n||0).toLocaleString('en-IN');
+const transition={reserved:['packed','cancelled'],packed:['loaded','return_pending'],loaded:['at_stop','return_pending'],at_stop:['verify_payment','collected','return_pending'],collected:['reconcile','return_pending'],return_pending:['record_refund','reconcile','returned']};
+const labels={packed:'Pack bag',loaded:'Load cart',at_stop:'Mark ready at Nia Nest Ompal',verify_payment:'Record UPI at handover (UTR)',collected:'Hand over & close',reconcile:'Match bank statement',cancelled:'Cancel reservation',return_pending:'Start return',record_refund:'Record refund',returned:'Return to stock'};
+let data=null;
+async function api(path,body,method='POST'){
+  const token=sessionStorage.getItem('niaOpsToken');
+  const response=await fetch('/api/commerce/staff/'+path,{method:body===undefined?'GET':method,credentials:'same-origin',headers:{...(body===undefined?{}:{'content-type':'application/json'}),...(token?{authorization:'Bearer '+token}:{})},...(body===undefined?{}:{body:JSON.stringify(body)})});
+  const result=await response.json();if(!response.ok)throw Error(result.error||'Request failed');return result;
+}
+function isTest(o){return o.test===true||(o.lines||[]).some(l=>l.id==='test_groundnut_oil'||l.test);}
+function render(){
+  const orders=data.orders||[];
+  const recon=(data.orders||[]).filter(o=>o.payment);
+  root.innerHTML=`<div class="desk-grid">${orders.length?orders.map(o=>`<article class="desk-order" data-order-card="${esc(o.id)}">
+    <div class="row"><h2>${esc(o.pickupCode)}</h2><span class="badge">${esc(o.status)}</span></div>
+    <p>${esc(o.member||o.memberId)} · ${esc(o.memberId)}${isTest(o)?' <span class="test-flag">TEST</span>':''}<br>${esc(o.location?.name||'')} · ${esc(o.fulfillment)}</p>
+    <ul>${(o.lines||[]).map(l=>`<li>${esc(l.name)} × ${l.qty}${l.pack?` · ${esc(l.pack)}`:''}</li>`).join('')}</ul>
+    <p><strong>${money(o.amount)}</strong> · ${esc(o.payStatus)}${o.payment?`<br><span class="utr">UTR ${esc(o.payment.reference)}</span>`:''}</p>
+    ${transition[o.status]?.length?`<form data-order="${esc(o.id)}">
+      <label>Next action<select name="action">${transition[o.status].filter(a=>(a!=='verify_payment'||!o.payment)&&(a!=='record_refund'||(o.payment&&!o.refund))&&(a!=='reconcile'||(o.refund?!o.refund.reconciled:o.payStatus==='verified'))).map(a=>`<option value="${a}">${esc(labels[a]||a)}</option>`).join('')}</select></label>
+      <label>Collection code / 12-digit UTR / statement note<input name="reference" autocomplete="off"></label>
+      <label>Amount on the receipt<input name="amount" type="number" min="0" step="0.01" inputmode="decimal" value="${o.amount||''}"></label>
+      <label class="check"><input type="checkbox" name="verified">I verified the UPI receipt, statement or returned stock.</label>
+      <button class="primary" type="submit">Record action</button>
+    </form>`:''}
+  </article>`).join(''):'<div class="desk-order"><h2>No member orders yet</h2><p>A test-flagged reservation appears here the moment a member places it. Nothing to pay online.</p></div>'}</div>
+  <section class="desk-order recon-box" id="recon-box"><h2>Closed orders · UPI UTR</h2>
+    ${recon.length?`<table><thead><tr><th>Code</th><th>UTR</th><th>Rs</th><th>Pay</th><th>Order</th></tr></thead><tbody>${recon.map(o=>`<tr><td>${esc(o.pickupCode)}</td><td class="utr">${esc(o.payment?.reference||'')}</td><td>${money(o.amount)}</td><td>${esc(o.payStatus)}</td><td>${esc(o.status)}</td></tr>`).join('')}</tbody></table>`:'<p>No UTR captured yet. Record UPI at handover when the bag is ready at Nia Nest Ompal.</p>'}
+    <p><a href="/recon.html">Open beat recon →</a></p>
+  </section>`;
+}
+async function refresh(){
+  try{data=await api('state');msg.textContent='';render();}
+  catch(e){root.innerHTML=`<form id="staff-login" class="desk-order"><h2>Sikh Unit</h2><p>Sign in to manage member orders.</p><label>Staff email<input type="email" name="email" required autocomplete="username"></label><label>Password<input type="password" name="password" required autocomplete="current-password"></label><button class="primary">Sign in</button></form>`;msg.textContent=e.message.replaceAll('_',' ');}
+}
+document.body.addEventListener('click',e=>{if(e.target.closest('[data-ops="refresh"]'))refresh();});
+document.body.addEventListener('submit',async e=>{
+  e.preventDefault();
+  const form=e.target,fields=Object.fromEntries(new FormData(form)),button=form.querySelector('button');
+  if(button)button.disabled=true;
+  try{
+    if(form.id==='staff-login'){
+      const r=await fetch('/v1/staff/login',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(fields)});
+      const result=await r.json();if(!r.ok)throw Error('Staff sign-in failed');sessionStorage.setItem('niaOpsToken',result.token);
+    }else{
+      const o=data.orders.find(row=>row.id===form.dataset.order);
+      await api('action',{orderId:o.id,action:fields.action,reference:fields.reference,amount:fields.amount===''?undefined:Number(fields.amount),pickupCode:fields.reference,note:fields.reference,receiptVerified:fields.verified==='on',statementVerified:fields.verified==='on',stockInspected:fields.verified==='on'});
+    }
+    await refresh();
+  }catch(error){msg.textContent=error.message.replaceAll('_',' ');msg.scrollIntoView({block:'center'});}
+  finally{if(button)button.disabled=false;}
+});
+refresh();
+</script>
+</body>
+</html>

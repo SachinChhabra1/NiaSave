@@ -303,6 +303,31 @@ body.mesha-dark .mobile-nav button>span{font-size:11px;font-weight:500}
 
 body.mesha-dark .notice.error{background:#fff2e9;color:#813510;border:0}
 
+/* Forms inherit dark-shell leftovers; force dark ink on light fields. */
+body.mesha-dark input,
+body.mesha-dark select,
+body.mesha-dark textarea,
+body.mesha-dark .store-date input,
+body.mesha-dark .nest-search input,
+body.mesha-dark .phone-field,
+body.mesha-dark .phone-prefix{
+  background:#ffffff;
+  color:#1d1d1f;
+  border:1px solid var(--nia-line);
+  caret-color:#1d1d1f;
+}
+body.mesha-dark label,
+body.mesha-dark .store-date,
+body.mesha-dark .nest-search{
+  color:#1d1d1f;
+}
+body.mesha-dark .store-date,
+body.mesha-dark .nest-search{
+  background:var(--nia-card);
+  border:1px solid var(--nia-line);
+  border-radius:var(--nia-radius);
+}
+
 @media (max-width: 760px) {
   body.mesha-dark .header{
     position:sticky;top:0;left:auto;transform:none;width:100%;max-width:none;

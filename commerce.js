@@ -200,7 +200,7 @@ const applicationStatus = value => ({interested:t('Application received','आव
 function earnHistory(){
   const current=applications.filter(a=>!a.historical), previous=applications.filter(a=>a.historical);
   const card=a=>`<article class="order"><div class="row"><h3>${esc(t(a.job.title))}</h3><span class="badge">${a.historical?t('Historical record'):esc(applicationStatus(a.status))}</span></div><p>${esc(a.job.employer)} · ${esc(a.job.city)}</p>${a.historical?`<p>${t('Last recorded status')}: ${esc(applicationStatus(a.status))}</p>`:''}${a.message?`<p class="info">${esc(a.message)}</p>`:''}<small>${esc(a.id)} · ${esc(date(a.updatedAt))}</small></article>`;
-  return `${earnError?`<p class="info" role="status">${esc(earnError)}</p>`:''}${applications.length?`<section class="stack"><h2>${t('Your job applications','आपके नौकरी के आवेदन')}</h2>${current.map(card).join('')}${previous.length?`<details class="panel stack earn-previous"><summary>${t('Previous applications')} (${previous.length})</summary><p>${t('Earlier records kept for reference. These are not current application updates.')}</p>${previous.map(card).join('')}</details>`:''}</section>`:''}`;
+  return `${applications.length?`<section class="stack"><h2>${t('Your job applications','आपके नौकरी के आवेदन')}</h2>${current.map(card).join('')}${previous.length?`<details class="panel stack earn-previous"><summary>${t('Previous applications')} (${previous.length})</summary><p>${t('Earlier records kept for reference. These are not current application updates.')}</p>${previous.map(card).join('')}</details>`:''}</section>`:''}`;
 }
 function earnErrorPanel(){
   const raw=String(earnError||'');

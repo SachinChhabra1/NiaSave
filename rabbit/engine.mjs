@@ -20,6 +20,8 @@ import { SHOPS_30 } from "./shops-30.mjs";
 import { createStateRunner } from "../lib/commerce/transaction.mjs";
 import { isShowcaseEntry } from '../lib/commerce/showcase-mode.mjs';
 import { hasDurableStore, loadRuntimeState, saveRuntimeState, storageStatus } from "../lib/runtime-store.mjs";
+import * as vendorLoop from "../lib/commerce/vendor-loop.mjs";
+import { staffOrderView } from "../lib/commerce/member-fulfillment.mjs";
 
 const SHOP_PIN = Object.fromEntries(SHOPS_30.shops.map(s => [s.stopId, s]));
 
@@ -377,7 +379,8 @@ function createState() {
     pos: [],
     invoices: [],
     dispatches: [],
-    bikerRuns: []
+    bikerRuns: [],
+    vendorLoop: { ...vendorLoop.emptyState(), dummy: DUMMY_DATA }
   };
 }
 
@@ -454,6 +457,10 @@ function restoreState(value, storage = "memory") {
   restored.invoices = Array.isArray(restored.invoices) ? restored.invoices : [];
   restored.dispatches = Array.isArray(restored.dispatches) ? restored.dispatches : [];
   restored.bikerRuns = Array.isArray(restored.bikerRuns) ? restored.bikerRuns : [];
+  const loop = asStateObject(incoming.vendorLoop, null);
+  restored.vendorLoop = loop
+    ? { ...vendorLoop.emptyState(), ...loop, dummy: loop.dummy === true }
+    : { ...vendorLoop.emptyState(), dummy: DUMMY_DATA };
   restored.memberFlagsById = restored.memberFlagsById && typeof restored.memberFlagsById === "object"
     ? restored.memberFlagsById
     : { ravi: restored.memberFlags || {} };
@@ -2196,8 +2203,9 @@ export function isStaffPath(p) {
     "/connectors", "/connectors/upload", "/predict", "/ledger", "/stock", "/inventory", "/ageing",
     "/orders", "/order", "/member", "/member/answer", "/auth/me", "/auth/otp", "/auth/verify",
     "/beat", "/beat/open", "/beat/close", "/scan", "/recon", "/next", "/source",
-    "/cash", "/settlements", "/tower", "/stops", "/po", "/dispatch", "/invoice", "/biker"
-  ].includes(p);
+    "/cash", "/settlements", "/tower", "/stops", "/po", "/dispatch", "/invoice", "/biker",
+    "/vendors", "/vendor-recon", "/payouts"
+  ].includes(p) || /^\/orders\/ord-[a-zA-Z0-9-]+$/.test(p);
 }
 
 async function handleStaffOnce(req, res, path, body, url) {
@@ -2214,6 +2222,20 @@ async function handleStaffOnce(req, res, path, body, url) {
   if (method === "GET" && path === "/inventory") return { status: 200, body: inventoryPayload() };
   if (method === "GET" && path === "/ageing") return { status: 200, body: ageingPayload() };
   if (method === "GET" && path === "/orders") return { status: 200, body: ordersPayload(q) };
+  if (method === "GET" && /^\/orders\/ord-[a-zA-Z0-9-]+$/.test(path)) {
+    const id = path.slice("/orders/".length);
+    const o = state.orders.find(row => row.id === id);
+    if (!o) return { status: 404, body: { error: "order_not_found" } };
+    return {
+      status: 200,
+      body: {
+        ...staffOrderView(o),
+        storage: state.persist || (hasDurableStore() ? "postgres" : "memory"),
+        dummy: state.dummy === true,
+        paymentsEnabled: false
+      }
+    };
+  }
   if (method === "GET" && path === "/order") return { status: 200, body: memberOrderGet(q) };
   if (method === "POST" && path === "/order") return done(placeMemberOrder(body || {}));
   if (method === "GET" && path === "/member") return { status: 200, body: memberPayload(q) };
@@ -2247,6 +2269,62 @@ async function handleStaffOnce(req, res, path, body, url) {
   if (method === "GET" && path === "/biker") return { status: 200, body: bikerPayload() };
   if (method === "POST" && path === "/biker") return done(mutateBiker(body || {}));
   if (method === "GET" && path === "/tower") return { status: 200, body: towerPayload() };
+  const loop = () => {
+    if (!state.vendorLoop) state.vendorLoop = { ...vendorLoop.emptyState(), dummy: DUMMY_DATA };
+    return state.vendorLoop;
+  };
+  const vendorFail = e => ({ status: e.message === "seed_forbidden_on_live" ? 409 : 400, body: { error: e.message || "vendor_error" } });
+  if (path === "/vendors" && method === "GET") {
+    const book = loop();
+    return { status: 200, body: { theatre: THEATRE.name, dummy: book.dummy === true, vendors: book.vendors, list: book.list, paymentsEnabled: false } };
+  }
+  if (path === "/vendors" && method === "POST") {
+    try {
+      const book = loop();
+      const action = String(body.action || "register");
+      if (action === "seed") return { status: 200, body: { vendor: vendorLoop.seedHubKirana(book), dummy: book.dummy === true } };
+      if (action === "upload") return { status: 200, body: { upload: vendorLoop.uploadCatalog(book, body.vendorId, body.rows || []) } };
+      if (action === "publish") return { status: 200, body: { list: vendorLoop.publishList(book, body.uploadId, body.listPrices || {}) } };
+      const vendor = vendorLoop.registerVendor(book, body);
+      return { status: 200, body: { vendor, dummy: book.dummy === true } };
+    } catch (e) { return vendorFail(e); }
+  }
+  if (path === "/vendor-recon" && method === "GET") {
+    const book = loop();
+    return { status: 200, body: { dummy: book.dummy === true, recons: book.recons, bags: book.bags, watches: vendorLoop.watches(book) } };
+  }
+  if (path === "/vendor-recon" && method === "POST") {
+    try {
+      const book = loop();
+      const bag = vendorLoop.recordCollectedBag(book, body.bag || body);
+      const recon = vendorLoop.reconcileBag(book, bag.id);
+      return { status: 200, body: { bag, recon, dummy: book.dummy === true } };
+    } catch (e) { return vendorFail(e); }
+  }
+  if (path === "/payouts" && method === "GET") {
+    const book = loop();
+    return {
+      status: 200,
+      body: {
+        theatre: THEATRE.name,
+        beatDate: state.beat.beatDate,
+        dummy: book.dummy === true,
+        memberRail: "upi_at_handover",
+        vendors: book.vendors,
+        recons: book.recons,
+        payouts: book.payouts,
+        watches: vendorLoop.watches(book),
+        paymentsEnabled: false
+      }
+    };
+  }
+  if (path === "/payouts" && method === "POST") {
+    try {
+      const book = loop();
+      const payout = vendorLoop.postPayout(book, body.vendorId);
+      return { status: 200, body: { payout, dummy: book.dummy === true } };
+    } catch (e) { return vendorFail(e); }
+  }
   if ((path === "/beat/open" || path === "/beat/close" || path === "/scan") && method === "GET") {
     return { status: 405, body: { error: "Use POST" } };
   }

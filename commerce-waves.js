@@ -51,7 +51,7 @@ function decorateProducts(root) {
 function collectCard() {
   return `<section class="save-collect-card" data-collect-stop="S01">
     <h2>Collect at ${COLLECT.name}</h2>
-    <p>Pickup window at ${COLLECT.area}. This is a collect point, not a 10-minute doorstep delivery.</p>
+    <p>Pick up your bag at ${COLLECT.area}. No home delivery.</p>
     <div id="save-collect-map" role="region" aria-label="Collect map for Nia Nest Ompal"></div>
   </section>`;
 }
@@ -66,7 +66,7 @@ function sendCard(hasPrimarySendView = false) {
       <p>This is a money statement and a plan to send home. Saving a plan does not move money.</p>
     </header>`}
     <h2>Plan money home</h2>
-    <p>An estimate, not a transfer. Money does not move.</p>
+    <p>Money does not move.</p>
     <form id="send-plan-form">
       <label>Beneficiary name<input name="beneficiaryName" maxlength="80" value="${plan.beneficiaryName || ''}" autocomplete="name"></label>
       <label>Relation<input name="relation" maxlength="40" value="${plan.relation || ''}" placeholder="Mother, father, spouse"></label>

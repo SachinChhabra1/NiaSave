@@ -429,5 +429,13 @@ export default {
   "See jobs": "வேலைகளைப் பாருங்கள்",
   "Shop now": "இப்போது வாங்குங்கள்",
   "See plan": "திட்டத்தைப் பாருங்கள்",
+  "Detergent": "சலவைப் பொடி",
+  "You save": "நீங்கள் சேமிப்பது",
+  "Lowest in this theatre": "இந்த அரங்கில் மலிவானது",
+  "3 manufacturers": "3 உற்பத்தியாளர்கள்",
+  "Kirana": "கிரானா",
+  "Local mills in this theatre": "இந்த அரங்கின் உள்ளூர் ஆலைகள்",
+  "Rajputana Theatre": "ராஜபுதானா அரங்கு",
+  "Price when packs confirm": "பொதி உறுதிப்பட்டால் விலை",
 
 };

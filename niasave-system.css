@@ -46,6 +46,7 @@
 .nia-state{padding:24px var(--nia-gutter);font-size:var(--nia-type-body);line-height:1.5}
 .nia-state-stale{opacity:.7}
 .nia-help{
+  display:none!important;
   position:fixed;right:max(16px,env(safe-area-inset-right));
   bottom:calc(84px + env(safe-area-inset-bottom));
   z-index:30;min-height:var(--nia-touch);padding:0 16px;

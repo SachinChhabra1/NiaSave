@@ -409,7 +409,6 @@ export default {
   "Checking places…": "தங்கும் இடங்கள் பார்க்கப்படுகின்றன…",
   "Please sign in again to continue.": "தொடர மீண்டும் உள்நுழையவும்.",
   "Sign in to view your accommodation details.": "தங்கும் விவரங்களைக் காண உள்நுழையவும்.",
-  "My money": "என் பணம்",
   "Collect your order from this Nia point. Pay at pickup.": "இந்த Nia இடத்தில் ஆர்டரைப் பெறுங்கள். பெறும்போது பணம் செலுத்துங்கள்.",
   "Check availability": "கிடைக்குமா எனப் பார்க்கவும்",
   "Pack details unavailable — ask Nia": "பொதி விவரம் இல்லை — Nia-விடம் கேளுங்கள்",

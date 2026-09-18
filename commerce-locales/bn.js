@@ -631,7 +631,6 @@ export default {
   "Checking places…": "থাকার জায়গা দেখা হচ্ছে…",
   "Please sign in again to continue.": "চালিয়ে যেতে আবার সাইন ইন করুন।",
   "Sign in to view your accommodation details.": "আপনার থাকার তথ্য দেখতে সাইন ইন করুন।",
-  "My money": "My money",
   "Collect your order from this Nia point. Pay at pickup.": "এই নিয়া পয়েন্ট থেকে অর্ডার নিন। পিকআপে টাকা দিন।",
   "Check availability": "উপলব্ধতা দেখুন",
   "Pack details unavailable — ask Nia": "প্যাকের তথ্য নেই — নিয়াকে জিজ্ঞাসা করুন",

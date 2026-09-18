@@ -32,7 +32,10 @@ const STAFF_AUTH_REQUIRED = process.env.STAFF_AUTH_REQUIRED !== "0" || Boolean(p
 const now = () => new Date().toISOString();
 const NOT_NIA = "This phone is not with Nia.";
 const HUB_FLOW = ["pack", "count", "leave", "sell", "return", "close"];
-const PROTECTED_DESK_PATHS = new Set(["/connectors", "/connectors/upload", "/predict", "/ledger", "/inventory", "/ageing", "/orders", "/beat", "/beat/open", "/beat/close", "/scan", "/recon", "/next", "/source", "/cash", "/settlements", "/tower", "/stops", "/po", "/dispatch", "/invoice", "/biker"]);
+const PROTECTED_DESK_PATHS = new Set(["/connectors", "/connectors/upload", "/predict", "/ledger", "/inventory", "/ageing", "/orders", "/beat", "/beat/open", "/beat/close", "/scan", "/recon", "/next", "/source", "/cash", "/settlements", "/tower", "/stops", "/po", "/dispatch", "/invoice", "/biker", "/vendors", "/vendor-recon", "/payouts"]);
+function isProtectedDesk(p) {
+  return PROTECTED_DESK_PATHS.has(p) || /^\/orders\/ord-/.test(p);
+}
 const OPEN_DESK_STAFF = { id: "stf-open-desk", email: "2para@nia.one", name: "2 Para desk", role: "open", desks: ["studio", "hub", "money", "pilot"] };
 
 const member = {
@@ -81,7 +84,13 @@ function nestCurrent() {
   return { memberId: member.id, nestId: "rajputana", name: "Rajputana Theatre", bed: "Bed 12", rupee: state.nestRupee, walk: "12 min to work", nextPay: "2026-09-01", included: [{ name: "Wi-Fi", status: "Working" }, { name: "Power", status: "Working" }, { name: "Water", status: "Working" }, { name: "Clean", status: "Today 11 AM" }, { name: "Gate", status: "24x7" }, { name: "Lock", status: "12" }, { name: "Bed", status: "In" }, { name: "Hall", status: "Till 10 PM" }], event: { id: "bada-khaana", title: "Bada Khaana this Sunday", when: "19:00", place: "Rajputana Theatre", attending: 46, mine: state.rsvp }, book: [{ id: "laundry", name: "Laundry", backBy: "18:00", price: 0 }, { id: "trim", name: "Trim", price: 80 }], issue: state.issues[0] || null };
 }
 function json(res, code, body) {
-  res.writeHead(code, { "cache-control": "private, no-store", "x-content-type-options": "nosniff", "content-type": "application/json; charset=utf-8", "access-control-allow-origin": "*", "access-control-allow-headers": "Content-Type, Idempotency-Key, Authorization", "access-control-allow-methods": "GET,POST,PUT,OPTIONS" });
+  const headers = { "cache-control": "private, no-store", "x-content-type-options": "nosniff", "content-type": "application/json; charset=utf-8", "access-control-allow-origin": "*", "access-control-allow-headers": "Content-Type, Idempotency-Key, Authorization", "access-control-allow-methods": "GET,POST,PUT,OPTIONS" };
+  const get = typeof res.getHeader === "function" ? name => res.getHeader(name) : () => undefined;
+  const cookie = get("Set-Cookie");
+  if (cookie) headers["Set-Cookie"] = cookie;
+  const retry = get("Retry-After");
+  if (retry) headers["Retry-After"] = retry;
+  res.writeHead(code, headers);
   res.end(JSON.stringify(body));
 }
 function readBody(req) {
@@ -165,7 +174,7 @@ export async function handler(req, res) {
     }
     if (staffRequest) {
       const body = (req.method === "POST" || req.method === "PUT") ? await readBody(req) : {};
-      if (PROTECTED_DESK_PATHS.has(rabbitPath)) {
+      if (isProtectedDesk(rabbitPath)) {
         const skipOpenGet = !STAFF_AUTH_REQUIRED && DUMMY_DATA && req.method === "GET";
         if (!skipOpenGet) {
           const staff = await requireStaff(req, res, ["studio", "hub", "money", "pilot"]);

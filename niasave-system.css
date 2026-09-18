@@ -1,15 +1,15 @@
-/* NiaSave Apple-grade system — PRD v1.1 PR X0. Presentation only. */
+/* NiaSave Apple Store system — light canvas. Presentation only. */
 :root{
-  --nia-ground-dark:#0B0B0C;
-  --nia-ground-light:#F4F2EE;
-  --nia-ink:#111112;
+  --nia-ground-dark:#1d1d1f;
+  --nia-ground-light:#f5f5f7;
+  --nia-ink:#1d1d1f;
   --nia-ink-on-dark:#FFFFFF;
-  --nia-muted:#6B6B70;
+  --nia-muted:#6e6e73;
   --nia-muted-on-dark:#A6A6AD;
-  --nia-accent:#0056B8;
+  --nia-accent:#0066cc;
   --nia-accent-text:#FFFFFF;
   --nia-keep:#1B7A4A;
-  --nia-radius:24px;
+  --nia-radius:18px;
   --nia-gutter:20px;
   --nia-space-block:48px;
   --nia-type-display:42px;
@@ -21,8 +21,8 @@
   --nia-touch:52px;
 }
 .nia-eyebrow{font-size:var(--nia-type-eyebrow);font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--nia-muted)}
-.nia-display{font-size:var(--nia-type-display);font-weight:700;letter-spacing:-.02em;line-height:1.05;margin:0}
-.nia-section{font-size:var(--nia-type-section);font-weight:700;letter-spacing:-.02em;line-height:1.1;margin:0}
+.nia-display{font-size:var(--nia-type-display);font-weight:600;letter-spacing:-.02em;line-height:1.05;margin:0}
+.nia-section{font-size:var(--nia-type-section);font-weight:600;letter-spacing:-.02em;line-height:1.1;margin:0}
 .nia-card-title{font-size:var(--nia-type-card);font-weight:600;line-height:1.2;margin:0}
 .nia-body{font-size:var(--nia-type-body);font-weight:400;line-height:1.5}
 .nia-support{font-size:var(--nia-type-support);color:var(--nia-muted);line-height:1.45}
@@ -49,8 +49,8 @@
   position:fixed;right:max(16px,env(safe-area-inset-right));
   bottom:calc(84px + env(safe-area-inset-bottom));
   z-index:30;min-height:var(--nia-touch);padding:0 16px;
-  border:0;border-radius:999px;background:var(--nia-ground-dark);color:#fff;
-  font-size:15px;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.2)
+  border:0;border-radius:999px;background:var(--nia-accent);color:#fff;
+  font-size:15px;font-weight:600;box-shadow:0 8px 24px rgba(0,102,204,.25)
 }
 @keyframes nia-skel{0%{background-position:100% 0}100%{background-position:-100% 0}}
 @keyframes nia-rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}

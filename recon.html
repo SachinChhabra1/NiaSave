@@ -110,7 +110,7 @@ function load(){
     document.getElementById('stmt').innerHTML=
       '<p class="sub">Night match. Unmatched first. Trigger collected. Settlements '+(s.count!=null?s.count:0)+' · unmatched settlements '+(s.unmatchedSettlements!=null?s.unmatchedSettlements:sets.length)+' · unmatched statement '+(s.unmatchedStatement!=null?s.unmatchedStatement:st.length)+' · matched '+(s.matched||0)+'</p>'
       + '<table><thead><tr><th>Kind</th><th>Ref</th><th>Rs</th><th>Status</th></tr></thead><tbody>'
-      + (sets.length?sets.map(function(x){ return '<tr><td>settlement</td><td>'+(x.pickupCode||x.id)+'</td><td>'+x.amount+'</td><td>unmatched</td></tr>'; }).join(''):'<tr><td colspan="4">No unmatched settlements.</td></tr>')
+      + (sets.length?sets.map(function(x){ return '<tr><td>settlement</td><td>'+(x.utr||x.pickupCode||x.id||'-')+'</td><td>'+x.amount+'</td><td>'+(x.matched?'matched':'unmatched')+(x.trigger?(' · '+x.trigger):'')+'</td></tr>'; }).join(''):'<tr><td colspan="4">No unmatched settlements.</td></tr>')
       + (st.length?st.map(function(x){ return '<tr><td>statement</td><td>'+(x.utr||x.id||'-')+'</td><td>'+x.amount+'</td><td>unmatched</td></tr>'; }).join(''):'<tr><td colspan="4">No unmatched statement lines.</td></tr>')
       + '</tbody></table>';
   }).catch(function(){ document.getElementById('wrap').textContent='Could not load ledger.'; });

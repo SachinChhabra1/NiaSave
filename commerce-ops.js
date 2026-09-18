@@ -1,6 +1,7 @@
 // Sikh Unit's member-order view: the existing Save order book, on the existing ops route.
 const active = new URLSearchParams(location.search).get('view') === 'commerce';
-if (active && !['localhost','127.0.0.1','[::1]'].includes(location.hostname)) {
+const PRODUCTION_HOSTS = new Set(['www.niasave.com','niasave.com','niasave.vercel.app']);
+if (active && PRODUCTION_HOSTS.has(location.hostname)) {
   location.replace('https://rafiqicentral.com/member-commerce?line=save');
 } else if (active) {
   const css=document.createElement('link');css.rel='stylesheet';css.href='/commerce.css';document.head.append(css);

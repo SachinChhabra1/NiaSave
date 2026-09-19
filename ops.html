@@ -127,6 +127,15 @@
                 <div class="drop" data-kind="procure" id="drop-procure">Drop procure CSV here</div>
                 <div class="file-meta" id="meta-procure">No file yet</div>
               </div>
+              <div class="upload-card" data-kind="catalogue">
+                <div class="job-kicker">Catalogue</div>
+                <strong>Pack sheet</strong>
+                <p class="do">Columns: sku_id, item_name, category, pack_size, unit, nia_price_inr, kirana_price_inr, you_keep_inr, source_site_code, source_sku, studio_site_code, status. active → shop. test → TEST lane. hold → hidden.</p>
+                <label class="file-btn" for="file-catalogue">Choose file</label>
+                <input type="file" accept=".csv,text/csv" id="file-catalogue" data-kind="catalogue">
+                <div class="drop" data-kind="catalogue" id="drop-catalogue">Drop catalogue CSV here</div>
+                <div class="file-meta" id="meta-catalogue">No file yet</div>
+              </div>
               <div class="upload-card" data-kind="vendors">
                 <div class="job-kicker">Vendors</div>
                 <strong>Vendor list</strong>
@@ -240,6 +249,7 @@ function connectorsPills(c){
   return '<span class="pill '+(persist?'ok':'warn')+'">'+(persist?'book · postgres':'book · memory only')+'</span>'
     +'<span class="pill '+(ledOk?'ok':'warn')+'">'+(ledOk?'ledger ok':'ledger down')+'</span>'
     +pill('procure','procure')
+    +pill('catalogue','catalogue')
     +pill('upi_statement','UPI statement')
     +pill('vendors','vendors')
     +snapshot('ledger','ledger')
@@ -311,6 +321,8 @@ function checks(rows){
 function paintFiles(c){
   document.getElementById('meta-upi').textContent=fileMeta(srcOf(c,'upi_statement'));
   document.getElementById('meta-procure').textContent=fileMeta(srcOf(c,'procure'));
+  const catMeta=document.getElementById('meta-catalogue');
+  if(catMeta) catMeta.textContent=fileMeta(srcOf(c,'catalogue'));
   document.getElementById('meta-vendors').textContent=fileMeta(srcOf(c,'vendors'));
   document.getElementById('meta-ledger').textContent=fileMeta(srcOf(c,'ledger'));
   document.getElementById('meta-members').textContent=fileMeta(srcOf(c,'members'));

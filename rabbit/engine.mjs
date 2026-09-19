@@ -54,7 +54,7 @@ export const SKUS = [
 
 // Save connectors. Staff file -> NiaSave book (this Postgres) -> read-only projection.
 // Central reads the projection; NiaSave never writes Central's database.
-export const CONNECTOR_KINDS = ["ledger", "procure", "members", "vendors", "upi_statement"];
+export const CONNECTOR_KINDS = ["ledger", "procure", "members", "vendors", "upi_statement", "catalogue"];
 export const CONNECTOR_ROWS_MAX = 20000;
 export const CONNECTOR_CSV_BYTES_MAX = 2000000;
 export const ESSENTIALS_STOCK_TAB = "CONNECTOR_ESSENTIALS_STOCK";
@@ -904,6 +904,7 @@ export function connectorsPayload() {
   const membersFile = uploadMeta("members");
   const vendors = uploadMeta("vendors");
   const upi = uploadMeta("upi_statement");
+  const catalogue = uploadMeta("catalogue");
   return {
     product: "polo",
     skip: DUMMY_DATA,
@@ -919,7 +920,8 @@ export function connectorsPayload() {
       { id: "procure", kind: "csv", status: procure.status, rows: procure.rows, filename: procure.filename, uploadedAt: procure.uploadedAt },
       { id: "members", kind: "sheet", status: "ok", rows: membersFile.status === "ok" ? membersFile.rows : MEMBER_COUNT, filename: membersFile.filename, uploadedAt: membersFile.uploadedAt },
       { id: "vendors", kind: "csv", status: vendors.status, rows: vendors.rows, filename: vendors.filename, uploadedAt: vendors.uploadedAt },
-      { id: "upi_statement", kind: "csv", status: upi.status, rows: upi.rows, filename: upi.filename, uploadedAt: upi.uploadedAt }
+      { id: "upi_statement", kind: "csv", status: upi.status, rows: upi.rows, filename: upi.filename, uploadedAt: upi.uploadedAt },
+      { id: "catalogue", kind: "csv", status: catalogue.status, rows: catalogue.rows, filename: catalogue.filename, uploadedAt: catalogue.uploadedAt }
     ],
     publish: {
       mode: "read_only_projection",

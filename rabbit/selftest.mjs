@@ -67,7 +67,7 @@ ok("night unmatched first", night.unmatchedFirst === true && night.settlements.l
 ok("night unmatched statement lines", (night.unmatchedStatementLines || []).length === night.unmatchedStatement);
 
 const conn = connectorsPayload();
-ok("connectors", (conn.sources || []).map(s => s.id).join(",") === "ledger,procure,members,vendors,upi_statement");
+ok("connectors", (conn.sources || []).map(s => s.id).join(",") === "ledger,procure,members,vendors,upi_statement,catalogue");
 ok("members sheet is 3000", conn.sources.find(s => s.id === "members").rows === 3000);
 ok("upi empty until upload", conn.sources.find(s => s.id === "upi_statement").status === "empty" && conn.sources.find(s => s.id === "upi_statement").rows === 0);
 ok("procure empty until upload", conn.sources.find(s => s.id === "procure").status === "empty" && conn.sources.find(s => s.id === "procure").rows === 0);
@@ -172,12 +172,18 @@ ok("upload vendors", vendUp.ok === true && vendUp.rows === 1 && connectorsPayloa
 ok("upload bad kind rejected", uploadConnector({ kind: "razorpay", csv: "a,b\n1,2\n" }).status === 400);
 
 // Save connectors: five kinds land in the NiaSave book; ledger and members are snapshots only.
-ok("connector kinds are five", connectorsPayload().kinds.join(",") === "ledger,procure,members,vendors,upi_statement");
+ok("connector kinds include catalogue", connectorsPayload().kinds.join(",") === "ledger,procure,members,vendors,upi_statement,catalogue");
 ok("connectors say where the book lives", ["memory", "postgres"].includes(connectorsPayload().persist));
 const ledUp = uploadConnector({ kind: "ledger", filename: "book.csv", csv: "sku,opening,collected\ngroundnut_oil,80,19\n" });
 ok("upload ledger snapshot", ledUp.ok === true && ledUp.rows === 1 && connectorsPayload().sources.find(s => s.id === "ledger").filename === "book.csv");
 const memUp = uploadConnector({ kind: "members", filename: "members.csv", csv: "member_id,name\nm1,A\nm2,B\n" });
 ok("upload members snapshot", memUp.ok === true && memUp.rows === 2 && connectorsPayload().sources.find(s => s.id === "members").rows === 2);
+const catUp = uploadConnector({
+  kind: "catalogue",
+  filename: "catalogue.csv",
+  csv: "sku_id,item_name,category,pack_size,unit,nia_price_inr,kirana_price_inr,you_keep_inr,source_site_code,source_sku,studio_site_code,status\ngroundnut_oil,Groundnut oil,oil,1 L,bottle,185,255,75,S01,groundnut_oil,S01,test\n"
+});
+ok("upload catalogue sheet", catUp.ok === true && catUp.rows === 1 && connectorsPayload().sources.find(s => s.id === "catalogue").filename === "catalogue.csv");
 ok("members book not rewritten by snapshot", MEMBERS.length === 3000 && predictPayload().memberCount === 3000 && connectorsPayload().memberCount === 3000);
 ok("upload header only rejected", uploadConnector({ kind: "vendors", csv: "a,b\n" }).error === "no_rows");
 ok("upload row cap", uploadConnector({ kind: "vendors", csv: "a\n" + "1\n".repeat(CONNECTOR_ROWS_MAX + 1) }).status === 413);

@@ -57,6 +57,15 @@ Current code reads:
 - `COMMERCE_REQUIRE_CENTRAL_MEMBER` — when `true`, `/api/commerce/auth/request` and `/auth/verify` fail closed with `not_registered` unless Central `member.lookupByPhone` finds the number. Unset or any other value skips that hard stop so testers can request OTP without Central enrolment. Does not invent Central members. Re-enable: set `true` and redeploy.
 - `COMMERCE_PUBLIC_BROWSE` — unset or any value other than `false` lets unsigned `GET /catalogue` return published Save SKUs (no account, no orders). Set `false` and redeploy to restore the empty `sign_in_required` catalogue wall. Does not invent members or open checkout.
 
+TEST prove (live, payments still off, real members still need phone sign-in):
+
+- `GET /api/commerce/test/session` issues a labelled `TEST member` auto-session cookie (`test:true`, id `nia-test-member`). No OTP.
+- `GET /api/commerce/test/place-one` places **one** unpaid Save order through the same `core.reserve` path as `POST /api/commerce/orders`, persists it to Neon, and returns a signed read URL. A second call returns the same order.
+- `GET /api/commerce/test/orders/:id?sig=` returns that TEST order's full state (memberId, status, storage) with no member or staff credentials. Signatures are HMAC of the order id with `SESSION_SECRET`. Real member orders are never returned.
+- Unsigned `POST /api/commerce/orders` stays `sign_in_required`. Guest catalogue packs stay pending. Dummy rows stay dummy.
+- The bag appears on Sikh Unit Save desk (`/save-desk.html`) for `admin@nia.one`.
+
+
 Before a real-data launch, explicitly set `DEMO=0` and `DUMMY_DATA=0` only after OTP, payments, staff access, source data and operational checks pass. Do not use those switches as a substitute for implementing the missing integrations.
 
 ## 4. Critical blockers before real member data or money

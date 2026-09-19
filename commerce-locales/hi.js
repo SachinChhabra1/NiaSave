@@ -28,6 +28,8 @@ export default {
   "Ask Nia": "निया से पूछें",
   "Pay when you collect.": "लेते समय पैसे दें।",
   "Ask Nia about this pack.": "इस पैक के बारे में निया से पूछें।",
+  "TEST": "परीक्षण",
+  "TEST pack. Pay when you collect.": "परीक्षण पैक। लेते समय पैसे दें।",
   "Pay when you collect": "लेते समय पैसे दें",
   "Pay by UPI when you collect your bag. Nothing online.": "बैग लेते समय UPI से पैसे दें। ऑनलाइन कुछ नहीं।",
   "Check price": "कीमत देखें",

@@ -84,3 +84,22 @@ export function manufacturersFor(category, theatre = SHOP_THEATRE.id, {includePr
   const visible = includePrices ? rows.map(r => ({...r})) : rows.map(stripPrices);
   return markCheapest(visible);
 }
+
+export const MILL_SKU_IDS = Object.freeze({
+  groundnut_oil: ['groundnut_oil'],
+  mustard_oil: ['mustard_oil'],
+  sunflower_oil: ['sunflower_oil'],
+  coconut_oil: ['coconut_oil'],
+  detergent: ['detergent_pick', 'nia_detergent'],
+  bathsoap: ['bathsoap_pick', 'nia_bathsoap'],
+  toothpaste: ['toothpaste_pick']
+});
+
+/** Map a mill row to a catalogue product only when the pack already matches. No invented SKUs. */
+export function millOrderProduct(row, products = []) {
+  const ids = MILL_SKU_IDS[row?.category];
+  if (!ids) return null;
+  const pack = typeof row.pack === 'string' ? row.pack.trim() : '';
+  if (!pack) return null;
+  return (products || []).find(p => ids.includes(p.id) && typeof p.pack === 'string' && p.pack.trim() === pack) || null;
+}

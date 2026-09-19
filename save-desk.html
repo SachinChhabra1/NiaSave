@@ -74,7 +74,7 @@ function load(){
           else if(o.status==='at_stop' && o.payStatus==='unpaid') next='<label>UTR <input id="utr-'+o.id+'" maxlength="12" inputmode="numeric"></label><button type="button" onclick="pay(\''+o.id+'\','+o.amount+')">Record UPI</button>';
           else if(o.status==='at_stop') next='<button type="button" onclick="collect(\''+o.id+'\',\''+esc(o.pickupCode)+'\')">Close bag</button>';
           else if(o.status==='collected' && o.payStatus==='verified') next='<button type="button" onclick="recon(\''+o.id+'\')">Recon</button>';
-          return '<tr><td>'+esc(o.id)+'<br><small>'+esc(o.pickupCode)+'</small></td><td class="left">'+esc(o.memberId)+'</td><td>'+esc(o.status)+'</td><td>'+esc(o.payStatus)+' · Rs '+esc(o.amount)+'</td><td class="left">'+lines(o)+'</td><td>'+next+'</td></tr>';
+          return '<tr><td>'+esc(o.id)+'<br><small>'+esc(o.pickupCode)+'</small></td><td class="left">'+esc(o.memberId)+(o.test?'<br><small>TEST</small>':'')+'</td><td>'+esc(o.status)+'</td><td>'+esc(o.payStatus)+' · Rs '+esc(o.amount)+'</td><td class="left">'+lines(o)+'</td><td>'+next+'</td></tr>';
         }).join('')+'</tbody></table>'
       : '<div class="empty">No Save bags yet.</div>';
   }).catch(function(){ document.getElementById('orders').textContent='Could not load Save desk.'; });

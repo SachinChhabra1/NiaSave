@@ -62,3 +62,13 @@
   margin-top: 10px;
   color: #6e6e73;
 }
+
+/* Home hero crop lock: bunk + pillow, phone and desktop. Do not use 8% 10% (lockers/ladder). */
+.nia-home-hero .nia-home-photo,
+.nia-home-hero.mesha-desire img.nia-home-photo,
+.nia-home-photo-frame .nia-home-photo{
+  object-position:12% 14%!important;
+  object-fit:cover!important;
+  height:auto!important;
+  max-height:none!important;
+}

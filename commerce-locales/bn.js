@@ -11,6 +11,8 @@ export default {
   "Ask Nia about this pack.": "Ask Nia about this pack.",
   "TEST": "TEST",
   "TEST pack. Pay when you collect.": "TEST pack. Pay when you collect.",
+  "Search essentials": "প্রয়োজনীয় জিনিস খুঁজুন",
+  "Search oils, soap…": "তেল, সাবান খুঁজুন…",
   "Checking jobs…": "কাজ খোঁজা হচ্ছে…",
   "Sign in to see jobs near your Nest": "নেস্টের কাছের কাজ দেখতে সাইন ইন করুন।",
   "Sign in to view places to stay": "থাকার জায়গা দেখতে সাইন ইন করুন।",

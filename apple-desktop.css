@@ -73,7 +73,8 @@
   body.mesha-dark .mobile-nav{display:none}
   body.mesha-dark main{max-width:none;margin:0;padding:0 0 80px}
   body.mesha-dark .header-tools .mesha-chip,body.mesha-dark .signin{
-    min-height:28px;height:28px;padding:0 12px;font-size:12px
+    display:inline-flex;align-items:center;gap:6px;
+    min-height:44px;height:44px;padding:0 14px 0 12px;font-size:14px
   }
 
   .apple-home{gap:12px;background:#ffffff;color:#1d1d1f;min-height:0;padding-bottom:12px}

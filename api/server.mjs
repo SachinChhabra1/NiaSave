@@ -153,8 +153,9 @@ export async function handler(req, res) {
   if (commercePath === "/central/commerce") return centralCommerceHttp(req,res);
   if (commercePath.startsWith("/commerce/studios/bulk")) return studioBulkHttp(req, res, commercePath.slice(9));
   if (commercePath.startsWith("/commerce/")) return commerceHttp(req, res, commercePath.slice(9), staffFromReq);
-  // A live storefront must not expose the prototype's unauthenticated order/payment paths.
-  if (process.env.COMMERCE_ENABLED === "1" && (/^\/(api\/)?(order|member|auth)(\/|$)/.test(path) || /^\/v1\/(save|orders|payments|members)(\/|$)/.test(path))) return json(res,410,{error:"use_member_storefront"});
+  // A live storefront must not expose the prototype's unauthenticated order/payment paths
+  // or the branded P0 catalog (Tata Salt / Fortune / invented weekly savings).
+  if ((process.env.COMMERCE_ENABLED === "1" || process.env.VERCEL) && (/^\/(api\/)?(order|member|auth)(\/|$)/.test(path) || /^\/v1\/(save|orders|payments|members|catalog)(\/|$)/.test(path))) return json(res,410,{error:"use_member_storefront"});
   const key = req.headers["idempotency-key"];
   const rabbitPath = staffPath(path, rewrittenPath);
   const staffRequest = isStaffPath(rabbitPath);

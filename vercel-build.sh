@@ -9,7 +9,9 @@ test -f rabbit/engine.mjs
 node rabbit/public-naming-lock.mjs
 node scripts/splice-apple-home.mjs
 mkdir -p dist/products dist/assets
-if [ "${COMMERCE_STOREFRONT:-0}" = "1" ]; then
+# Production member home is commerce.html (generic SKUs). The React P0 catalog
+# (Tata Salt / Fortune / invented weekly savings) must never be dist/index.html.
+if [ "${VERCEL_ENV:-}" = "production" ] || [ "${COMMERCE_STOREFRONT:-0}" = "1" ]; then
   cp commerce.html dist/index.html
 elif [ -f member.html ]; then
   cp member.html dist/index.html

@@ -7,7 +7,6 @@ export default defineConfig({
     {
       name: "commerce-storefront-index",
       configureServer(server) {
-        if (process.env.COMMERCE_STOREFRONT !== "1") return;
         server.middlewares.use((req, _res, next) => {
           const url = req.url && req.url.split("?")[0];
           if (url === "/" || url === "/index.html") req.url = "/commerce.html";

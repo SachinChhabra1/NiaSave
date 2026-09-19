@@ -429,8 +429,12 @@ const staffPages = [
 ];
 for (const file of staffPages) {
   const html = readFileSync(new URL("../" + file, import.meta.url), "utf8");
-  if (file === "ops.html") ok(file + " says Sikh Unit", /Sikh Unit/.test(html) && !/Bison|Polo|Tanot|Madras/.test(html));
-  ok(file + " uses dark browser chrome", /<meta name="theme-color" content="#0B0E14">/i.test(html));
+  if (file === "ops.html") {
+    ok(file + " says Sikh Unit", /Sikh Unit/.test(html) && !/Bison|Polo|Tanot|Madras/.test(html));
+    ok(file + " uses Central light chrome", /<meta name="theme-color" content="#F4F6FA">/i.test(html) && /--bg:#F4F6FA/.test(html) && /--accent:#1668C9/.test(html));
+  } else {
+    ok(file + " uses dark browser chrome", /<meta name="theme-color" content="#0B0E14">/i.test(html));
+  }
   ok(file + " has no Rabbit", !/Rabbit|RABBIT/.test(html));
   ok(file + " has no Jabali", !/Jabali|Jamali|JABALI|JAMALI/.test(html));
   ok(file + " has no Dummy", !/Dummy/.test(html));
@@ -486,20 +490,20 @@ ok("ops nia then Sikh Unit", /class="nia-logo"[\s\S]{0,200}Sikh Unit/.test(opsHt
 ok("ops has no polo-icon", !/polo-icon/.test(opsHtml));
 ok("ops job icons in source", /id="i-biker"/.test(opsHtml) && /id="i-po"/.test(opsHtml) && /id="i-dispatch"/.test(opsHtml));
 const rail = (opsHtml.split('class="rail"')[1] || "").split('class="pane"')[0];
-ok("ops load says 40 studios", /40 studios/.test(opsHtml) && /One theatre\. 40 studios\. 3000 members/.test(opsHtml));
+ok("ops load says 40 collection points", /40 collection points/.test(opsHtml) && /3000 members/.test(opsHtml));
 ok("ops load has no 40 stops", !/40 stops/.test(opsHtml) && !/\+' stops/.test(opsHtml) && !/\['Stops'/.test(opsHtml));
-ok("ops sequence 1 to 5", /1<\/b> Member ordered[\s\S]*→[\s\S]*2<\/b> Hub loaded[\s\S]*→[\s\S]*3<\/b> Member collected or returned[\s\S]*→[\s\S]*4<\/b> Hub settled with officer[\s\S]*→[\s\S]*5<\/b> Nia paid vendor/.test(opsHtml));
-ok("ops vendor pay is last", opsHtml.indexOf("5</b> Nia paid vendor") > opsHtml.indexOf("4</b> Hub settled with officer") && opsHtml.indexOf("5</b> Nia paid vendor") > opsHtml.indexOf("2</b> Hub loaded"));
+ok("ops sequence 1 to 5", /1<\/b> Member ordered[\s\S]*→[\s\S]*2<\/b> Hub loaded the bike[\s\S]*→[\s\S]*3<\/b> Member collected, or the bag came back[\s\S]*→[\s\S]*4<\/b> Hub settled with the officer[\s\S]*→[\s\S]*5<\/b> Nia paid the vendor/.test(opsHtml));
+ok("ops vendor pay is last", opsHtml.indexOf("5</b> Nia paid the vendor") > opsHtml.indexOf("4</b> Hub settled with the officer") && opsHtml.indexOf("5</b> Nia paid the vendor") > opsHtml.indexOf("2</b> Hub loaded the bike"));
 ok("ops no bare Settled or Paid labels", !/<b>\d<\/b> Settled/.test(opsHtml) && !/<b>\d<\/b> Paid/.test(opsHtml) && !/'Settled'/.test(opsHtml) && !/'Paid'/.test(opsHtml));
 ok("ops h1 is Sikh Unit once", (opsHtml.match(/<h1>Sikh Unit<\/h1>/g) || []).length === 1);
-ok("ops title Sikh Unit", /<title>Sikh Unit<\/title>/.test(opsHtml));
+ok("ops title Sikh Unit", /<title>Sikh Unit · Save desk<\/title>/.test(opsHtml));
 ok("ops stamps nia-board Sikh Unit", /name="nia-board" content="Sikh Unit"/.test(opsHtml));
 ok("ops rail names Sikh Unit", /href="\/ops.html">Sikh Unit</.test(rail) && /href="\/bison.html">Jat Unit</.test(rail) && /href="\/tanot\/">Dogra Unit</.test(rail) && /href="\/desk.html">All units</.test(rail) && !/Bison|Polo|Tanot|Madras/.test(rail));
 ok("ops empty state Sikh Unit", /Could not load Sikh Unit/.test(opsHtml));
 ok("ops header has no brand kicker", !/<div class="brand">/.test(opsHtml));
-ok("ops rail Reports and Ops", /<h2 class="rail-h"[^>]*>Reports<\/h2>/.test(rail) && /<h2 class="rail-h"[^>]*>Ops<\/h2>/.test(rail));
-ok("inventory under Reports", rail.indexOf("Reports") < rail.indexOf(">Inventory<") && rail.indexOf(">Inventory<") < rail.indexOf(">Ops<"));
-ok("biker po dispatch under Ops", rail.indexOf(">Ops<") < rail.indexOf(">Biker<") && rail.indexOf(">Ops<") < rail.indexOf(">Purchase order<") && rail.indexOf(">Ops<") < rail.indexOf(">Dispatch<"));
+ok("ops rail Reports and today's work", /<h2 class="rail-h"[^>]*>Reports<\/h2>/.test(rail) && /<h2 class="rail-h"[^>]*>Today's work<\/h2>/.test(rail));
+ok("inventory under Reports", rail.indexOf("Reports") < rail.indexOf(">What we have<") && rail.indexOf(">What we have<") < rail.indexOf(">Today's work<"));
+ok("biker po dispatch under today's work", rail.indexOf(">Today's work<") < rail.indexOf(">Shop run<") && rail.indexOf(">Today's work<") < rail.indexOf(">Buy from vendor<") && rail.indexOf(">Today's work<") < rail.indexOf(">Load the bike<"));
 ok("biker desk exists", /Book biker/.test(readFileSync(new URL("../biker.html", import.meta.url), "utf8")));
 
 if (fails.length) {

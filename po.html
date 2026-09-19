@@ -3,11 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#0B0E14">
+<meta name="theme-color" content="#F4F6FA">
 <title>Sikh Unit · Purchase orders</title>
 <link rel="icon" href="/assets/nia-favicon-64.png" type="image/png">
 <link rel="apple-touch-icon" href="/assets/nia-touch-icon.png">
 <link rel="stylesheet" href="/staff.css">
+<link rel="stylesheet" href="/nia-operator.css">
 </head>
 <body>
   <div class="narrow">
@@ -58,17 +59,17 @@
       </aside>
       <div class="pane">
     <div class="wrap">
-      <p class="sub">Officer places the order. Draft from procure plus tomorrow load. Create PO, mark sent, mark received. Received posts inbound. Not an editable quantity. Skip on. No live UPI.</p>
+      <p class="sub">Place the buy order here. Start from tomorrow's load. Create it, mark it sent, then mark it received. Received adds stock. Do not type a new quantity. Online payment is not on yet.</p>
       <p class="sub" id="beat">Beat …</p>
       <div class="pills" id="counts"></div>
       <div class="msg" id="msg"></div>
-      <h2>Draft from tomorrow load</h2>
+      <h2>Draft from tomorrow's load</h2>
       <div id="draft">Loading…</div>
       <div class="actions">
-        <button type="button" id="createBtn" onclick="createPo()">Create PO</button>
-        <button type="button" class="ghost" onclick="load()">Refresh</button>
+        <button type="button" id="createBtn" onclick="createPo()">Create the purchase order</button>
+        <button type="button" class="ghost" onclick="load()">Refresh this list</button>
       </div>
-      <h2 id="orders">Open / sent / received / cancelled</h2>
+      <h2 id="orders">Open, sent, received, cancelled</h2>
       <div id="list"></div>
     </div>
       </div>

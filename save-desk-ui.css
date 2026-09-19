@@ -173,7 +173,13 @@ tbody tr:hover{background:#E8EFF9}
   border-radius:24px;font:600 14px/20px var(--font);cursor:pointer;
 }
 .staff-signin button:disabled{opacity:.6}
-.staff-signin .staff-signin-status{min-height:20px;color:#C8322A;font-size:14px}
+.staff-signin-page{
+  max-width:440px;margin:12vh auto;padding:28px;
+  background:#FFFFFF;border:1px solid #E3E8EF;border-radius:16px;
+  box-shadow:var(--shadow);
+}
+.staff-signin-page h1{font-size:24px;font-weight:600;margin:0 0 8px;color:#101828;letter-spacing:-0.4px}
+.staff-signin-page p{font-size:14px;line-height:20px;color:#6E7787;margin:0}
 @media(max-width:899px){
   .shell{display:block}
   .rail{

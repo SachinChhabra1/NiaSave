@@ -2,6 +2,10 @@
 
 Status: 19 September 2026. **Handoff spec, not live wiring.** Do not flip `COMMERCE_MEMBER_AUTH`, `COMMERCE_REQUIRE_CENTRAL_MEMBER`, `COMMERCE_REQUIRE_CENTRAL_IDENTITY`, `DEMO`, `DUMMY_DATA`, or any payment flag. Do not send a real or fake OTP from NiaSave. Payments stay off.
 
+**Done test (unfakeable):** a real non-TEST Indian mobile, typed into Sign in on niasave.com, receives a WhatsApp AUTHENTICATION code from the existing Nia Cloud API number, the member enters that code, and lands in a member session keyed to Central’s member id. `otp_unavailable` is gone for that number. TEST `+917000000001` is not this test. In-memory / fake Graph / labelled dummy is not this test.
+
+Today that test **fails**: real phones still get `otp_unavailable`. TEST phone still bypasses locally.
+
 v1 is **WhatsApp login on the existing Nia Cloud API number** (direct Graph, same WABA, not a BSP, not a new number). Nothing else.
 
 **Out of v1 (do not spec, stub, or start):** SMS, MSG91, DLT, WebAuthn passkeys. Number-change / recovery is owned by **Ajay Mahawar**, not this build.

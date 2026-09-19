@@ -119,6 +119,15 @@
       ]
     },
     {
+      "source": "/nia-operator.css",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, max-age=0"
+        }
+      ]
+    },
+    {
       "source": "/save-desk-ui.css",
       "headers": [
         {

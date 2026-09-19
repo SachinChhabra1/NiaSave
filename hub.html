@@ -3,11 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#0B0E14">
+<meta name="theme-color" content="#F4F6FA">
 <title>Sikh Unit · Hub load</title>
 <link rel="icon" href="/assets/nia-favicon-64.png" type="image/png">
 <link rel="apple-touch-icon" href="/assets/nia-touch-icon.png">
 <link rel="stylesheet" href="/staff.css">
+<link rel="stylesheet" href="/nia-operator.css">
 </head>
 <body>
   <div class="narrow">
@@ -58,7 +59,7 @@
       </aside>
       <div class="pane">
     <div class="wrap">
-      <p class="sub">Hub operator · inventory as movements · leftover is left now · next-day load from ledger · a new studio is a row, not a rewrite</p>
+      <p class="sub">This is the hub board. We count movements, not sitting stock. Leftover is what is left now. Tomorrow's load comes from the count. A new collection point is a new row, not a rewrite.</p>
       <p class="sub" id="beat">Beat …</p>
       <button type="button" onclick="load()">Refresh</button>
       <button type="button" id="signBtn" onclick="signOpen()">Sign opening</button>
@@ -69,7 +70,7 @@
       <h2>Today opening</h2>
       <div id="wrap">Loading…</div>
       <h2>Studio cart · pack / load / arrive</h2>
-      <p class="sub">Hub only. Officer pickup is stop, bag, collect. Last unit: one reservation wins.</p>
+      <p class="sub">Hub only. The officer tap is stop, then bag, then collect. The last pack: only one reservation can win.</p>
       <button type="button" onclick="loadCart()">Refresh cart</button>
       <div id="cartstops" class="stops"></div>
       <div id="cartdesk"><div class="empty">Tap a stop to pack, load, or mark arrived.</div></div>

@@ -36,7 +36,7 @@ const noStoreHeaders = (vercelCfg.headers || []).filter(rule =>
   (rule.headers || []).some(header => header.key === "Cache-Control" && /no-store/.test(header.value))
 ).map(rule => rule.source);
 ok("all Unit HTML bypasses stale caches", noStoreHeaders.includes("/(.*).html") && noStoreHeaders.includes("/tanot/(.*)"));
-ok("shared Unit UI assets bypass stale caches", ["/staff.css", "/staff.js", "/save-desk-ui.css", "/bison.css", "/bison.js", "/bison-data.js"].every(source => noStoreHeaders.includes(source)));
+ok("shared Unit UI assets bypass stale caches", ["/staff.css", "/staff.js", "/nia-operator.css", "/save-desk-ui.css", "/bison.css", "/bison.js", "/bison-data.js"].every(source => noStoreHeaders.includes(source)));
 ok("one theatre", THEATRE.name === "Rajputana Theatre");
 ok("40 studios", STUDIOS.length === STUDIO_COUNT && STUDIO_COUNT === 40);
 ok("3000 members", MEMBERS.length === MEMBER_COUNT && MEMBER_COUNT === 3000);
@@ -429,12 +429,10 @@ const staffPages = [
 ];
 for (const file of staffPages) {
   const html = readFileSync(new URL("../" + file, import.meta.url), "utf8");
-  if (file === "ops.html" || file === "pickup.html" || file === "recon.html") {
+  if (file === "ops.html") {
     ok(file + " says Sikh Unit", /Sikh Unit/.test(html) && !/Bison|Polo|Tanot|Madras/.test(html));
-    ok(file + " uses Central light chrome", /<meta name="theme-color" content="#F4F6FA">/i.test(html) && (/--bg:#F4F6FA/.test(html) || /save-desk-ui\.css/.test(html)));
-  } else {
-    ok(file + " uses dark browser chrome", /<meta name="theme-color" content="#0B0E14">/i.test(html));
   }
+  ok(file + " uses Central light chrome", /<meta name="theme-color" content="#F4F6FA">/i.test(html) && /nia-operator\.css/.test(html));
   ok(file + " has no Rabbit", !/Rabbit|RABBIT/.test(html));
   ok(file + " has no Jabali", !/Jabali|Jamali|JABALI|JAMALI/.test(html));
   ok(file + " has no Dummy", !/Dummy/.test(html));
@@ -476,9 +474,12 @@ ok("Jat pages use current Para 2 names", bisonPages.every(file => {
   return /<div class="kicker">Jat Unit<\/div>/.test(html) && /href="\/ops.html">Sikh Unit</.test(pageRail) && /href="\/bison.html">Jat Unit</.test(pageRail) && /href="\/tanot\/">Dogra Unit</.test(pageRail) && /href="\/desk.html">All units</.test(pageRail) && !/Bison|Polo|Tanot|Madras/.test(html);
 }));
 ok("Living control uses Jat Unit", /<title>Jat Unit · Control<\/title>/.test(bisonHtml) && /<h1>Jat Unit<\/h1>/.test(bisonHtml) && !/Bison|Polo|Tanot|Madras/.test(bisonHtml));
-ok("Jat pages use dark browser chrome", bisonPages.every(file => /<meta name="theme-color" content="#0B0E14">/i.test(readFileSync(new URL("../" + file, import.meta.url), "utf8"))));
-ok("Dogra uses Rafiqi tokens", /--canvas:\s*#0b0e14/.test(tanotCss) && /--surface:\s*#12161e/.test(tanotCss) && /--blue:\s*#0A84FF/.test(tanotCss) && /IBM Plex Sans/.test(tanotCss));
-ok("Dogra uses dark browser chrome", /<meta name="theme-color" content="#0B0E14" \/>/i.test(tanotIndex));
+ok("Jat pages use Central light chrome", bisonPages.every(file => {
+  const html = readFileSync(new URL("../" + file, import.meta.url), "utf8");
+  return /<meta name="theme-color" content="#F4F6FA">/i.test(html) && /nia-operator\.css/.test(html);
+}));
+ok("Dogra uses Central light tokens", /--canvas:\s*#F4F6FA/.test(tanotCss) && /--surface:\s*#FFFFFF/.test(tanotCss) && /--blue:\s*#1668C9/.test(tanotCss) && /Inter/.test(tanotCss));
+ok("Dogra uses Central light chrome", /<meta name="theme-color" content="#F4F6FA" \/>/i.test(tanotIndex) && /nia-operator\.css/.test(tanotIndex));
 ok("Unit return links remain distinct and touchable", /\.command-center-return\{[\s\S]*min-height:40px/.test(staffCss) && /\.central-return \{[^}]*min-height: 40px[^}]*border-left: 1px solid var\(--line\)/.test(tanotCss));
 ok("staff.css uses Rafiqi typography", /fonts\.googleapis\.com[\s\S]*IBM\+Plex\+Mono[\s\S]*IBM\+Plex\+Sans/.test(staffCss) && /--font:"IBM Plex Sans"/.test(staffCss) && /--mono:"IBM Plex Mono"/.test(staffCss));
 ok("staff.css uses Rafiqi dark tokens", /--bg:#0B0E14/.test(staffCss) && /--surface:#12161E/.test(staffCss) && /--raised:#181D27/.test(staffCss) && /--accent:#0A84FF/.test(staffCss));

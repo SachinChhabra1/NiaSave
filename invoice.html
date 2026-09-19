@@ -3,11 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#0B0E14">
+<meta name="theme-color" content="#F4F6FA">
 <title>Sikh Unit · Invoicing</title>
 <link rel="icon" href="/assets/nia-favicon-64.png" type="image/png">
 <link rel="apple-touch-icon" href="/assets/nia-touch-icon.png">
 <link rel="stylesheet" href="/staff.css">
+<link rel="stylesheet" href="/nia-operator.css">
 </head>
 <body>
   <div class="narrow">
@@ -58,15 +59,15 @@
       </aside>
       <div class="pane">
     <div class="wrap">
-      <p class="sub">Member receipt on collected scan. Vendor bill versus PO. Skip on. No live UPI. No Razorpay. GSTIN this phone if a GSTIN is missing.</p>
+      <p class="sub">Give the member a receipt when they collect. Check the vendor bill against the purchase order. If the vendor bill has no GST number, add it from your phone. Online payment is not on yet.</p>
       <p class="sub" id="beat">Beat …</p>
       <div class="msg" id="msg"></div>
       <button type="button" onclick="load()">Refresh</button>
       <h2>Member receipts due</h2>
-      <p class="sub">Trigger collected. Not pack. Not pay capture.</p>
+      <p class="sub">This starts when a bag is collected. Not when it is packed. Not when you type a UPI number.</p>
       <div id="receipts">Loading…</div>
       <h2>Vendor bills due</h2>
-      <p class="sub">Bill versus a received PO.</p>
+      <p class="sub">Check the bill against a received purchase order.</p>
       <div id="bills"></div>
       <h2>Issued</h2>
       <div id="issued"></div>

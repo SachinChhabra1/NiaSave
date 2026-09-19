@@ -32,7 +32,7 @@ const STAFF_AUTH_REQUIRED = process.env.STAFF_AUTH_REQUIRED !== "0" || Boolean(p
 const now = () => new Date().toISOString();
 const NOT_NIA = "This phone is not with Nia.";
 const HUB_FLOW = ["pack", "count", "leave", "sell", "return", "close"];
-const PROTECTED_DESK_PATHS = new Set(["/connectors", "/connectors/upload", "/predict", "/ledger", "/inventory", "/ageing", "/orders", "/beat", "/beat/open", "/beat/close", "/scan", "/recon", "/next", "/source", "/cash", "/settlements", "/tower", "/stops", "/po", "/dispatch", "/invoice", "/biker", "/vendors", "/vendor-recon", "/payouts"]);
+const PROTECTED_DESK_PATHS = new Set(["/connectors", "/connectors/upload", "/connectors/sync-catalogue", "/predict", "/ledger", "/inventory", "/ageing", "/orders", "/beat", "/beat/open", "/beat/close", "/scan", "/recon", "/next", "/source", "/cash", "/settlements", "/tower", "/stops", "/po", "/dispatch", "/invoice", "/biker", "/vendors", "/vendor-recon", "/payouts"]);
 function isProtectedDesk(p) {
   return PROTECTED_DESK_PATHS.has(p) || /^\/orders\/ord-/.test(p);
 }

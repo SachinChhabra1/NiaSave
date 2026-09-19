@@ -13,7 +13,7 @@ import { ownerViewHttp } from "../lib/commerce/owner-view.mjs";
 import { isShowcaseEntry } from '../lib/commerce/showcase-mode.mjs';
 import { randomUUID } from "node:crypto";
 import {consumeStaffLogin} from '../lib/staff-login-limit.mjs';
-import {issueStaffToken, verifyStaffToken, verifyActiveStaffToken, registerStaffSession, revokeStaffSession, namedStaff, staffPageCookie, staffTokenFromHeader, validCronToken, STAFF_PAGE_COOKIE} from "../lib/staff-auth.mjs";
+import {issueStaffToken, verifyStaffToken, verifyActiveStaffToken, registerStaffSession, revokeStaffSession, namedStaff, staffPageCookie, staffTokenFromHeader, validCronToken, STAFF_PAGE_COOKIE, loginStaffWithPassword, verifyStaffPassword, saveStaffPassword, STAFF_PERSONAL_PASSWORD_MIN} from "../lib/staff-auth.mjs";
 export {issueStaffToken, verifyStaffToken} from "../lib/staff-auth.mjs";
 import { pathToFileURL } from "node:url";
 import { handleStaff, isStaffPath, staffPath, staffStorageStatus, DUMMY_DATA } from "../rabbit/engine.mjs";
@@ -308,16 +308,24 @@ export async function handler(req, res) {
         return json(res, limit.unavailable ? 503 : 429, { error: limit.unavailable ? "staff_login_unavailable" : "too_many_attempts" });
       }
       const found = namedStaff(email);
-      const expectedPassword = found?.id === "stf-ajay-mahawar" ? process.env.JAT_STAFF_PASSWORD : STAFF_PASSWORD;
-      if (!found || !expectedPassword || password !== expectedPassword) return json(res, 401, { error: "bad_credentials" });
-      const token = issueStaffToken(found);
-      const activated = await registerStaffSession(token);
-      if (!activated.ok) {
-        logApiEvent("staff_session_register_failed");
-        return json(res, 503, { error: "staff_session_unavailable" });
-      }
-      res.setHeader("Set-Cookie", staffPageCookie(token));
-      return json(res, 200, { token, staff: { id: found.id, email: found.email, name: found.name, role: found.role, desks: found.desks } });
+      if (!found) return json(res, 401, { error: "bad_credentials" });
+      const authed = await loginStaffWithPassword(email, password);
+      if (!authed.ok) return json(res, authed.status || 401, { error: authed.error || "bad_credentials" });
+      res.setHeader("Set-Cookie", staffPageCookie(authed.token));
+      return json(res, 200, { token: authed.token, staff: { id: authed.staff.id, email: authed.staff.email, name: authed.staff.name, role: authed.staff.role, desks: authed.staff.desks, ...(authed.staff.test ? { test: true } : {}) } });
+    }
+    if (req.method === "POST" && path === "/v1/staff/set-password") {
+      const staff = await requireStaff(req, res);
+      if (!staff) return;
+      const body = await readBody(req);
+      const currentPassword = String(body.currentPassword || "");
+      const nextPassword = String(body.newPassword || body.password || "");
+      if (nextPassword.length < STAFF_PERSONAL_PASSWORD_MIN || nextPassword.length > 120) return json(res, 400, { error: "weak_password" });
+      const checked = await verifyStaffPassword(staff.email, currentPassword);
+      if (!checked.ok) return json(res, 401, { error: "bad_credentials" });
+      const saved = await saveStaffPassword(staff.id, staff.email, nextPassword);
+      if (!saved.ok) return json(res, saved.error === "weak_password" ? 400 : 503, { error: saved.error || "staff_password_unavailable" });
+      return json(res, 200, { ok: true, email: staff.email, personalPassword: true });
     }
     if (req.method === "GET" && path === "/v1/staff/me") {
       const staff = await requireStaff(req, res);

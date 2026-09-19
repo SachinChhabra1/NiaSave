@@ -3,18 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#0B0E14">
-<title>Sikh Unit · Tonight cart</title>
+<meta name="theme-color" content="#F4F6FA">
+<title>Sikh Unit · Collect at the stop</title>
 <link rel="icon" href="/assets/nia-favicon-64.png" type="image/png">
 <link rel="apple-touch-icon" href="/assets/nia-touch-icon.png">
 <link rel="stylesheet" href="/staff.css">
+<link rel="stylesheet" href="/save-desk-ui.css">
 </head>
 <body>
   <div class="narrow">
     <div class="narrow-card">
       <div class="kicker">Sikh Unit</div>
-      <h1>Open on a laptop</h1>
-      <p>Pickup is a wide staff desk. It is not the member app.</p>
+      <h1>Collect at the stop</h1>
+      <p>This is the staff board for handing bags to members. It is not the member app.</p>
     </div>
   </div>
   <div class="tower">
@@ -24,41 +25,27 @@
         <div class="brand">Sikh Unit</div>
         <div class="desk-head">
           <svg class="desk-icon" viewBox="0 0 40 40" width="40" height="40" aria-hidden="true"><path d="M10 16h20l-1.5 16H11.5L10 16z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M15 16V12a5 5 0 0110 0v4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 24l3 3 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <h1>Tonight studio cart</h1>
+          <h1>Collect at the stop</h1>
         </div>
       </div>
-      <div class="meta"><a href="/ops.html">Ops</a> · <a href="/recon.html">Recon</a></div>
+      <div class="meta"><a href="/ops.html">Ops board</a> · <a href="/save-desk.html">Save desk</a></div>
     </header>
     <div class="shell">
       <aside class="rail">
         <div class="rail-block">
-          <h2 class="rail-h">Reports</h2>
-          <a class="rail-link" data-nav="inventory" href="/inventory.html">Inventory</a>
-          <a class="rail-link" data-nav="ageing" href="/ageing.html">Ageing</a>
-          <a class="rail-link" data-nav="funnel" href="/ops.html#funnel">Funnel</a>
-          <a class="rail-link" data-nav="gates" href="/ops.html#gates">Gates (proposed)</a>
-          <a class="rail-link" data-nav="predict" href="/predict.html">Predict</a>
-          <a class="rail-link" data-nav="studios" href="/ops.html#studios">Studios</a>
-        </div>
-        <div class="rail-block">
-          <h2 class="rail-h">Ops</h2>
-          <a class="rail-link" data-nav="po" href="/po.html">Purchase order</a>
-          <a class="rail-link" data-nav="order" href="/po.html#orders">Order</a>
-          <a class="rail-link" data-nav="dispatch" href="/dispatch.html">Dispatch</a>
-          <a class="rail-link" data-nav="biker" href="/biker.html">Biker</a>
-          <a class="rail-link" data-nav="invoice" href="/invoice.html">Invoice</a>
-          <a class="rail-link" data-nav="pickup" href="/pickup.html">Pickup</a>
-          <a class="rail-link" data-nav="recon" href="/recon.html">Recon</a>
-          <a class="rail-link" data-nav="match" href="/recon.html">Statement match</a>
-          <a class="rail-link" data-nav="source" href="/source.html">Source</a>
-          <a class="rail-link" data-nav="hub" href="/hub.html">Hub / tomorrow load</a>
-          <a class="rail-link" data-nav="connectors" href="/ops.html#connectors">Connectors</a>
-          <a class="rail-link" data-nav="close" href="/recon.html">Beat close</a>
+          <h2 class="rail-h">Today's work</h2>
+          <a class="rail-link" href="/save-desk.html">Save desk</a>
+          <a class="rail-link on" href="/pickup.html">Collect at the stop</a>
+          <a class="rail-link" href="/recon.html">Count the stock</a>
+          <a class="rail-link" href="/vendors.html">Vendors</a>
+          <a class="rail-link" href="/payout.html">Pay the vendor</a>
         </div>
       </aside>
       <div class="pane">
     <div class="wrap">
-      <p class="sub">Production. Skip on. Three taps after the member is identified: tap the stop, tap the bag, collect by code. Miss if they do not come. Pack, load, and arrived stay on hub. Last unit: one reservation wins. No live UPI.</p>
+      <p class="eyebrow">Save · collect</p>
+      <h1 class="page-title">Hand the bag to the member</h1>
+      <p class="sub">After you know who the member is, tap the stop, tap the bag, then type the collect code. Mark as missed if they do not come. Packing and loading stay on the hub. Online payment is not on yet.</p>
       <p class="sub" id="beat">Beat …</p>
       <button type="button" onclick="loadStops()">Refresh stops</button>
       <div id="stops" class="stops"></div>
@@ -85,18 +72,18 @@ function scan(orderId, type, pickupCode){
   .then(function(res){
     if(!res.ok){
       var err=res.j && res.j.error;
-      if(err==='last_unit_taken') alert('Last unit already taken for '+(res.j.sku||'this SKU')+'. One reservation wins.');
-      else alert(err || ('scan '+res.status));
+      if(err==='last_unit_taken') alert('The last pack of '+(res.j.sku||'this item')+' is already taken. Only one reservation can win.');
+      else alert(err || ('Could not scan. Status '+res.status));
       return;
     }
     BAG='';
     loadStop(STOP);
-  }).catch(function(){ alert('Could not scan'); });
+  }).catch(function(){ alert('Could not scan. Try again.'); });
 }
 function collectWithCode(orderId, inputId){
   var el=document.getElementById(inputId);
   var code=el ? el.value : '';
-  if(!code){ alert('Enter pickup code'); return; }
+  if(!code){ alert('Type the collect code first.'); return; }
   scan(orderId, 'collected', code);
 }
 function bagRow(o, open){
@@ -107,7 +94,7 @@ function bagRow(o, open){
     + '<div class="job-kicker">'+(o.stopId||'-')+' · '+(o.slot||'17:00')+'</div>'
     + '<strong>'+phone+'</strong>'
     + '<div class="job-do">'+lineText(o.lines)+'</div>'
-    + '<div class="job-num">'+(done?st:'tap bag · then collect by code')+'</div>'
+    + '<div class="job-num">'+(done?st:'Tap this bag, then collect with the code')+'</div>'
     + '</button>';
 }
 function bagDesk(o){
@@ -115,20 +102,20 @@ function bagDesk(o){
   var inputId='code_'+String(o.id||'').replace(/[^a-zA-Z0-9]/g,'_').slice(0,40);
   var st=o.status||'reserved';
   if(st==='collected'||st==='missed'||st==='returned'){
-    return '<div class="open show"><h2>Bag</h2><p class="do">Already '+st+'.</p></div>';
+    return '<div class="open show"><h2>Bag</h2><p class="do">This bag is already '+st+'.</p></div>';
   }
-  return '<div class="open show"><h2>Collect by code</h2>'
-    + '<p class="do">Member identified. Enter the pickup code. Miss if they do not come. Pack, load, and arrived are on hub.</p>'
+  return '<div class="open show"><h2>Collect with the code</h2>'
+    + '<p class="do">You know the member. Type the collect code. Mark as missed if they do not come. Packing, loading and arrived stay on the hub.</p>'
     + '<div class="code">'+(o.pickupCode||'-')+'</div>'
     + '<div class="actions"><input class="code-in" id="'+inputId+'" placeholder="CODE" maxlength="8" autocomplete="off">'
-    + '<button type="button" onclick=\'collectWithCode('+id+','+JSON.stringify(inputId)+')\'>Collect</button>'
-    + '<button type="button" class="ghost" onclick=\'scan('+id+',"missed")\'>Miss</button></div></div>';
+    + '<button type="button" onclick=\'collectWithCode('+id+','+JSON.stringify(inputId)+')\'>Mark as collected</button>'
+    + '<button type="button" class="ghost" onclick=\'scan('+id+',"missed")\'>Mark as missed</button></div></div>';
 }
 function stopBtn(s, on){
   return '<button type="button" class="stop'+(on?' on':'')+'" data-stop="'+s.stopId+'">'
     + '<div class="stop-id">'+s.stopId+'</div>'
     + '<strong>'+(s.name||s.stopId)+'</strong>'
-    + '<div class="stop-num">'+s.bags+' bags · '+s.collected+' collected · '+s.open+' open</div>'
+    + '<div class="stop-num">'+s.bags+' bags · '+s.collected+' collected · '+s.open+' still open</div>'
     + '</button>';
 }
 function faceStops(d){
@@ -158,10 +145,10 @@ function loadStop(stop){
     orders.forEach(function(o){ if(o.id===BAG) chosen=o; });
     desk.innerHTML='<button type="button" class="ghost back" onclick="pickStop('+JSON.stringify(stop)+')">Back to stops</button>'
       + '<h2>'+(d.stopName||stop)+' · '+orders.length+' bags</h2>'
-      + '<p class="sub">Tap a bag. Then collect by code or mark miss.</p>'
-      + (last.length?'<p class="sub">Last unit on cart: '+last.join(', ')+'. One reservation wins.</p>':'')
-      + '<div class="jobs">'+(orders.length ? orders.map(function(o){ return bagRow(o, o.id===BAG); }).join('') : '<div class="empty">No bags at this stop.</div>')+'</div>'
-      + (chosen?bagDesk(chosen):'<div class="empty">Tap a bag.</div>');
+      + '<p class="sub">Tap a bag. Then collect with the code, or mark as missed.</p>'
+      + (last.length?'<p class="sub">Last pack on the cart: '+last.join(', ')+'. Only one reservation can win.</p>':'')
+      + '<div class="jobs">'+(orders.length ? orders.map(function(o){ return bagRow(o, o.id===BAG); }).join('') : '<div class="empty">No bags at this stop yet.</div>')+'</div>'
+      + (chosen?bagDesk(chosen):'<div class="empty">Tap a bag to collect it.</div>');
     desk.querySelectorAll('button[data-bag]').forEach(function(el){
       el.addEventListener('click', function(){
         BAG = BAG===el.getAttribute('data-bag') ? '' : el.getAttribute('data-bag');
@@ -176,13 +163,13 @@ function loadStops(){
   fetch('/api/orders?pickup=today').then(function(r){ return r.json(); }).then(function(d){
     window.__stops=d;
     var beatLine=(d.theatre||'Rajputana Theatre')+' · Beat '+(d.beatDate||'-');
-    beatLine+=' · '+(d.stopCount||40)+' studios · '+(d.memberCount||3000)+' members · '+(d.orderCount||0)+' bags tonight';
+    beatLine+=' · '+(d.stopCount||40)+' collection points · '+(d.memberCount||3000)+' members · '+(d.orderCount||0)+' bags tonight';
     document.getElementById('beat').textContent=beatLine;
     faceStops(d);
     if(STOP) loadStop(STOP);
-    else document.getElementById('desk').innerHTML='<div class="empty">Tap a stop. Then tap a bag. Collect by code.</div>';
+    else document.getElementById('desk').innerHTML='<div class="empty">Tap a stop. Then tap a bag. Collect with the code.</div>';
   }).catch(function(){
-    document.getElementById('stops').innerHTML='<div class="empty">Could not load stops.</div>';
+    document.getElementById('stops').innerHTML='<div class="empty">Could not load stops. Refresh this page.</div>';
   });
 }
 loadStops();

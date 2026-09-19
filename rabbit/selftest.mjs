@@ -429,9 +429,9 @@ const staffPages = [
 ];
 for (const file of staffPages) {
   const html = readFileSync(new URL("../" + file, import.meta.url), "utf8");
-  if (file === "ops.html") {
+  if (file === "ops.html" || file === "pickup.html" || file === "recon.html") {
     ok(file + " says Sikh Unit", /Sikh Unit/.test(html) && !/Bison|Polo|Tanot|Madras/.test(html));
-    ok(file + " uses Central light chrome", /<meta name="theme-color" content="#F4F6FA">/i.test(html) && /--bg:#F4F6FA/.test(html) && /--accent:#1668C9/.test(html));
+    ok(file + " uses Central light chrome", /<meta name="theme-color" content="#F4F6FA">/i.test(html) && (/--bg:#F4F6FA/.test(html) || /save-desk-ui\.css/.test(html)));
   } else {
     ok(file + " uses dark browser chrome", /<meta name="theme-color" content="#0B0E14">/i.test(html));
   }

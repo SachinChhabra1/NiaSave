@@ -3,18 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#0B0E14">
+<meta name="theme-color" content="#F4F6FA">
 <title>Sikh Unit · Vendors</title>
 <link rel="icon" href="/assets/nia-favicon-64.png" type="image/png">
 <link rel="apple-touch-icon" href="/assets/nia-touch-icon.png">
 <link rel="stylesheet" href="/staff.css">
+<link rel="stylesheet" href="/save-desk-ui.css">
 </head>
 <body>
   <div class="narrow">
     <div class="narrow-card">
       <div class="kicker">Sikh Unit</div>
-      <h1>Open on a laptop</h1>
-      <p>Vendors is a wide staff desk. It is not the member app.</p>
+      <h1>Vendors</h1>
+      <p>This is the staff board for who we buy from. It is not the member app.</p>
     </div>
   </div>
   <div class="tower">
@@ -23,35 +24,37 @@
         <img class="nia-logo" src="/assets/nia-mark-square.png" alt="Nia">
         <div class="brand">Sikh Unit</div>
         <div class="desk-head">
-          <h1>Vendor book</h1>
+          <h1>Vendors</h1>
         </div>
       </div>
-      <div class="meta"><a href="/ops.html">Ops</a> · <a href="/payout.html">Payout</a> · <a href="/save-desk.html">Save desk</a></div>
+      <div class="meta"><a href="/ops.html">Ops board</a> · <a href="/payout.html">Pay the vendor</a> · <a href="/save-desk.html">Save desk</a></div>
     </header>
     <div class="shell">
       <aside class="rail">
         <div class="rail-block">
-          <h2 class="rail-h">Ops</h2>
-          <a class="rail-link on" href="/vendors.html">Vendors</a>
-          <a class="rail-link" href="/source.html">Source</a>
-          <a class="rail-link" href="/po.html">Purchase order</a>
-          <a class="rail-link" href="/payout.html">Payout</a>
+          <h2 class="rail-h">Today's work</h2>
           <a class="rail-link" href="/save-desk.html">Save desk</a>
+          <a class="rail-link" href="/pickup.html">Collect at the stop</a>
+          <a class="rail-link" href="/recon.html">Count the stock</a>
+          <a class="rail-link on" href="/vendors.html">Vendors</a>
+          <a class="rail-link" href="/payout.html">Pay the vendor</a>
         </div>
       </aside>
       <div class="pane">
         <div class="wrap">
-          <p class="sub">Register the counterparty. Catalog upload and list publish stay on this desk. Payout stays on Payout. Dummy Hub kirana is design data.</p>
+          <p class="eyebrow">Save · vendors</p>
+          <h1 class="page-title">Who we buy from</h1>
+          <p class="sub">Add the shop we buy from. The pack list stays on this desk. Paying the vendor is on Pay the vendor. Hub kirana here is sample design data, not a live shop.</p>
           <p class="sub" id="beat">Beat …</p>
           <div class="msg" id="msg"></div>
           <label class="sub">Name <input id="name" value="Hub kirana"></label>
           <label class="sub">Pay terms <input id="terms" value="cash_same_day"></label>
-          <label class="sub">Payout rail <input id="rail" value="cash_desk"></label>
+          <label class="sub">How we pay <input id="rail" value="cash_desk"></label>
           <div class="actions">
-            <button type="button" onclick="reg()">Register</button>
-            <button type="button" class="ghost" onclick="load()">Refresh</button>
+            <button type="button" onclick="reg()">Add this vendor</button>
+            <button type="button" class="ghost" onclick="load()">Refresh this list</button>
           </div>
-          <div id="list">Loading…</div>
+          <div id="list">Loading vendors…</div>
         </div>
       </div>
     </div>
@@ -60,14 +63,14 @@
 <script>
 function load(){
   fetch('/api/vendors').then(function(r){ return r.json(); }).then(function(d){
-    document.getElementById('beat').textContent=(d.theatre||'')+' · '+(d.dummy?'dummy seed':'live book')+' · list '+(d.list||[]).length+' SKUs';
+    document.getElementById('beat').textContent=(d.theatre||'')+' · '+(d.dummy?'sample book':'live book')+' · list '+(d.list||[]).length+' packs';
     var rows=d.vendors||[];
     document.getElementById('list').innerHTML=rows.length
-      ? '<table><thead><tr><th>Vendor</th><th>Status</th><th>Terms</th><th>Last buy</th></tr></thead><tbody>'
+      ? '<table><thead><tr><th>Vendor</th><th>Where it is</th><th>Pay terms</th><th>Last buy</th></tr></thead><tbody>'
         +rows.map(function(v){ return '<tr><td class="left">'+(v.name||v.id)+'</td><td>'+v.status+'</td><td>'+(v.payTerms||'')+'</td><td>'+(v.lastBuy||'-')+'</td></tr>'; }).join('')
         +'</tbody></table>'
-      : '<div class="empty">No vendor yet.</div>';
-  }).catch(function(){ document.getElementById('list').textContent='Could not load vendors.'; });
+      : '<div class="empty">No vendor yet. Add a name, then tap Add this vendor.</div>';
+  }).catch(function(){ document.getElementById('list').textContent='Could not load vendors. Refresh this page.'; });
 }
 function reg(){
   fetch('/api/vendors',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
@@ -77,7 +80,7 @@ function reg(){
     payoutRail:document.getElementById('rail').value
   })}).then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); })
     .then(function(res){
-      document.getElementById('msg').textContent=res.ok?('Registered '+(res.j.vendor&&res.j.vendor.name)):((res.j&&res.j.error)||'Register failed');
+      document.getElementById('msg').textContent=res.ok?('Added '+(res.j.vendor&&res.j.vendor.name)):((res.j&&res.j.error)||'Could not add this vendor. Try again.');
       load();
     });
 }

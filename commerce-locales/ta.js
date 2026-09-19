@@ -452,6 +452,7 @@ export default {
   "See plan": "திட்டத்தைப் பாருங்கள்",
   "Detergent": "சலவைப் பொடி",
   "You save": "நீங்கள் சேமிப்பது",
+  "Check": "பார்க்கவும்",
   "Lowest in this theatre": "இந்த அரங்கில் மலிவானது",
   "3 manufacturers": "3 உற்பத்தியாளர்கள்",
   "Kirana": "கிரானா",

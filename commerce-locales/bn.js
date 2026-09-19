@@ -680,6 +680,7 @@ export default {
   "Toothpaste": "টুথপেস্ট",
   "Detergent": "ডিটারজেন্ট",
   "You save": "আপনি বাঁচান",
+  "Check": "দেখুন",
   "Lowest in this theatre": "এই থিয়েটারে সবচেয়ে সস্তা",
   "3 manufacturers": "৩ নির্মাতা",
   "Kirana": "কিরানা",

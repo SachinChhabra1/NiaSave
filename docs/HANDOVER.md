@@ -62,6 +62,8 @@ TEST prove (live, payments still off, real members still need phone sign-in):
 - `GET /api/commerce/test/session` issues a labelled `TEST member` auto-session cookie (`test:true`, id `nia-test-member`). No OTP.
 - `GET /api/commerce/test/place-one` places **one** unpaid Save order through the same `core.reserve` path as `POST /api/commerce/orders`, persists it to Neon, and returns a signed read URL. A second call returns the same order.
 - `GET /api/commerce/test/orders/:id?sig=` returns that TEST order's full state (memberId, status, storage) with no member or staff credentials. Signatures are HMAC of the order id with `SESSION_SECRET`. Real member orders are never returned.
+- `GET /api/commerce/test/member-login` runs the real member phone path for labelled TEST phone `+917000000001` (`POST /auth/request` → `/auth/verify` → `/auth/set-password`) with a local HMAC OTP. No SMS. Real phones still call the identity provider (live today: `otp_unavailable`).
+- `GET /api/commerce/test/staff/login` runs the real `POST /v1/staff/login` password check as labelled `test.desk@nia.one` and returns proof without exposing a token. Named desk staff: `admin@nia.one`, `satish@nia.one`, `ramesh@nia.one`, `kavita@nia.one`, `pilot@nia.one`, `ajay.mahawar@nia.one`. After first shared-password login they can `POST /v1/staff/set-password`. `admin@nia.one` still uses Vercel `STAFF_PASSWORD` until they set a personal one.
 - Unsigned `POST /api/commerce/orders` stays `sign_in_required`. Guest catalogue packs stay pending. Dummy rows stay dummy.
 - The bag appears on Sikh Unit Save desk (`/save-desk.html`) for `admin@nia.one`.
 

@@ -55,6 +55,7 @@ Current code reads:
 - `MEMBER_PASSWORD`
 - `SESSION_SECRET` signs the member stay-signed-in cookie. It also remains the documented fallback for 2 Para staff tokens when `STAFF_TOKEN_SECRET` is not set; live staff auth still requires `STAFF_TOKEN_SECRET`. `MEMBER_PASSWORD` (length ≥ 8) plus `SESSION_SECRET` (length ≥ 16) enables password sign-in. Values stay in Vercel only.
 - `COMMERCE_REQUIRE_CENTRAL_MEMBER` — when `true`, `/api/commerce/auth/request` and `/auth/verify` fail closed with `not_registered` unless Central `member.lookupByPhone` finds the number. Unset or any other value skips that hard stop so testers can request OTP without Central enrolment. Does not invent Central members. Re-enable: set `true` and redeploy.
+- `COMMERCE_REQUIRE_CENTRAL_IDENTITY` — when `true`, `GET /api/commerce/identity` fails closed unless Central answers `member.identity` with one `{member, studio, JCO}` record. Unset: unknown_request and missing enrolment return `status: unavailable` with nulls, never a guessed studio or JCO. NiaSave never copies that record into `nia_runtime_state`. TEST members skip Central. Re-enable: set `true` and redeploy after the Central kind is live.
 - `COMMERCE_PUBLIC_BROWSE` — unset or any value other than `false` lets unsigned `GET /catalogue` return published Save SKUs (no account, no orders). Set `false` and redeploy to restore the empty `sign_in_required` catalogue wall. Does not invent members or open checkout.
 
 TEST prove (live, payments still off, real members still need phone sign-in):
@@ -64,6 +65,7 @@ TEST prove (live, payments still off, real members still need phone sign-in):
 - `GET /api/commerce/test/orders/:id?sig=` returns that TEST order's full state (memberId, status, storage) with no member or staff credentials. Signatures are HMAC of the order id with `SESSION_SECRET`. Real member orders are never returned.
 - `GET /api/commerce/test/member-login` runs the real member phone path for labelled TEST phone `+917000000001` (`POST /auth/request` → `/auth/verify` → `/auth/set-password`) with a local HMAC OTP. No SMS. Real phones still call the identity provider (live today: `otp_unavailable`).
 - `GET /api/commerce/test/staff/login` runs the real `POST /v1/staff/login` password check as labelled `test.desk@nia.one` and returns proof without exposing a token. Named desk staff: `admin@nia.one`, `satish@nia.one`, `ramesh@nia.one`, `kavita@nia.one`, `pilot@nia.one`, `ajay.mahawar@nia.one`. After first shared-password login they can `POST /v1/staff/set-password`. `admin@nia.one` still uses Vercel `STAFF_PASSWORD` until they set a personal one.
+- `GET /api/commerce/test/identity` returns the labelled TEST `{member, studio, JCO}` record without calling Central and without writing to Neon. Signed-in real members use `GET /api/commerce/identity`, which reads Central `member.identity`.
 - Unsigned `POST /api/commerce/orders` stays `sign_in_required`. Guest catalogue packs stay pending. Dummy rows stay dummy.
 - The bag appears on Sikh Unit Save desk (`/save-desk.html`) for `admin@nia.one`.
 

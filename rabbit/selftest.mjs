@@ -496,7 +496,7 @@ ok("ops sequence 1 to 5", /1<\/b> Member ordered[\s\S]*→[\s\S]*2<\/b> Hub load
 ok("ops vendor pay is last", opsHtml.indexOf("5</b> Nia paid the vendor") > opsHtml.indexOf("4</b> Hub settled with the officer") && opsHtml.indexOf("5</b> Nia paid the vendor") > opsHtml.indexOf("2</b> Hub loaded the bike"));
 ok("ops no bare Settled or Paid labels", !/<b>\d<\/b> Settled/.test(opsHtml) && !/<b>\d<\/b> Paid/.test(opsHtml) && !/'Settled'/.test(opsHtml) && !/'Paid'/.test(opsHtml));
 ok("ops h1 is Sikh Unit once", (opsHtml.match(/<h1>Sikh Unit<\/h1>/g) || []).length === 1);
-ok("ops title Sikh Unit", /<title>Sikh Unit · Save desk<\/title>/.test(opsHtml));
+ok("ops title Sikh Unit", /<title>Sikh Unit<\/title>/.test(opsHtml));
 ok("ops stamps nia-board Sikh Unit", /name="nia-board" content="Sikh Unit"/.test(opsHtml));
 ok("ops rail names Sikh Unit", /href="\/ops.html">Sikh Unit</.test(rail) && /href="\/bison.html">Jat Unit</.test(rail) && /href="\/tanot\/">Dogra Unit</.test(rail) && /href="\/desk.html">All units</.test(rail) && !/Bison|Polo|Tanot|Madras/.test(rail));
 ok("ops empty state Sikh Unit", /Could not load Sikh Unit/.test(opsHtml));

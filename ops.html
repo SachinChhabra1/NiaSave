@@ -135,6 +135,7 @@
                 <input type="file" accept=".csv,text/csv" id="file-catalogue" data-kind="catalogue">
                 <div class="drop" data-kind="catalogue" id="drop-catalogue">Drop catalogue CSV here</div>
                 <div class="file-meta" id="meta-catalogue">No file yet</div>
+                <button type="button" class="file-btn" id="sync-catalogue">Sync Catalogue tab from Google Sheet</button>
               </div>
               <div class="upload-card" data-kind="vendors">
                 <div class="job-kicker">Vendors</div>
@@ -543,7 +544,7 @@ function sendCsv(kind, file){
   reader.readAsText(file);
 }
 function bindUploads(){
-  ['file-upi','file-procure','file-vendors','file-ledger','file-members'].forEach(function(id){
+  ['file-upi','file-procure','file-vendors','file-ledger','file-members','file-catalogue'].forEach(function(id){
     var el=document.getElementById(id);
     if(!el) return;
     el.addEventListener('change', function(){
@@ -561,6 +562,19 @@ function bindUploads(){
       sendCsv(zone.getAttribute('data-kind'), file);
     });
   });
+  var sync=document.getElementById('sync-catalogue');
+  if(sync){
+    sync.addEventListener('click', function(){
+      fetch('/api/connectors/sync-catalogue',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'})
+        .then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); })
+        .then(function(res){
+          if(!res.ok){ alert((res.j&&res.j.error)||'Sheet sync failed'); return; }
+          DATA.conn=res.j.connectors||res.j;
+          if(DATA.tower) DATA.tower.connectors=DATA.conn;
+          face();
+        }).catch(function(){ alert('Could not sync Catalogue tab'); });
+    });
+  }
 }
 function load(){
   Promise.all([

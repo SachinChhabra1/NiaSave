@@ -22,6 +22,7 @@ import { isShowcaseEntry } from '../lib/commerce/showcase-mode.mjs';
 import { hasDurableStore, loadRuntimeState, saveRuntimeState, storageStatus } from "../lib/runtime-store.mjs";
 import * as vendorLoop from "../lib/commerce/vendor-loop.mjs";
 import { staffOrderView } from "../lib/commerce/member-fulfillment.mjs";
+import { pullCatalogueSheet, CATALOGUE_KIND } from "../lib/commerce/catalogue-connector.mjs";
 
 const SHOP_PIN = Object.fromEntries(SHOPS_30.shops.map(s => [s.stopId, s]));
 
@@ -967,6 +968,28 @@ export function uploadConnector({ kind, csv, filename }) {
     persist: state.persist,
     connectors: connectorsPayload()
   };
+}
+
+export async function syncCatalogueSheet() {
+  try {
+    const pulled = await pullCatalogueSheet();
+    if (!state.uploads) state.uploads = emptyUploads();
+    state.uploads.catalogue = pulled;
+    return {
+      ok: true,
+      kind: CATALOGUE_KIND,
+      filename: pulled.filename,
+      rows: pulled.rowCount,
+      spreadsheetId: pulled.spreadsheetId,
+      tab: pulled.tab,
+      persist: state.persist,
+      paymentsEnabled: false,
+      connectors: connectorsPayload()
+    };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'google_sheet_read_failed';
+    return { error: message, status: message === 'google_service_account_missing' ? 503 : 502 };
+  }
 }
 
 export function sourcePayload() {
@@ -2202,7 +2225,7 @@ export function staffPath(pathname, rewrittenPath) {
 
 export function isStaffPath(p) {
   return [
-    "/connectors", "/connectors/upload", "/predict", "/ledger", "/stock", "/inventory", "/ageing",
+    "/connectors", "/connectors/upload", "/connectors/sync-catalogue", "/predict", "/ledger", "/stock", "/inventory", "/ageing",
     "/orders", "/order", "/member", "/member/answer", "/auth/me", "/auth/otp", "/auth/verify",
     "/beat", "/beat/open", "/beat/close", "/scan", "/recon", "/next", "/source",
     "/cash", "/settlements", "/tower", "/stops", "/po", "/dispatch", "/invoice", "/biker",
@@ -2218,6 +2241,7 @@ async function handleStaffOnce(req, res, path, body, url) {
   const done = (result, fallback = 200) => ({ status: result.status || fallback, body: result });
   if (method === "GET" && path === "/connectors") return { status: 200, body: connectorsPayload() };
   if (method === "POST" && path === "/connectors/upload") return done(uploadConnector(body || {}));
+  if (method === "POST" && path === "/connectors/sync-catalogue") return done(await syncCatalogueSheet());
   if (method === "GET" && path === "/predict") return { status: 200, body: predictPayload() };
   if (method === "GET" && path === "/ledger") return { status: 200, body: ledgerOf(q.beat) };
   if (method === "GET" && path === "/stock") return { status: 200, body: stockPayload() };

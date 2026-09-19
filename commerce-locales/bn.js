@@ -9,6 +9,8 @@ export default {
   "Ask Nia": "Ask Nia",
   "Pay when you collect.": "Pay when you collect.",
   "Ask Nia about this pack.": "Ask Nia about this pack.",
+  "TEST": "TEST",
+  "TEST pack. Pay when you collect.": "TEST pack. Pay when you collect.",
   "Pay when you collect": "Pay when you collect",
   "Pay by UPI when you collect your bag. Nothing online.": "Pay by UPI when you collect your bag. Nothing online.",
   "Check price": "Check price",

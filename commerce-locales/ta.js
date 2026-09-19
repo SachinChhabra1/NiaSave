@@ -26,6 +26,8 @@ export default {
   "Ask Nia": "Nia-விடம் கேளுங்கள்",
   "Pay when you collect.": "பெறும்போது பணம் செலுத்துங்கள்.",
   "Ask Nia about this pack.": "இந்தப் பொதியைப் பற்றி Nia-விடம் கேளுங்கள்.",
+  "TEST": "TEST",
+  "TEST pack. Pay when you collect.": "TEST பொதி. பெறும்போது பணம் செலுத்துங்கள்.",
   "Pay when you collect": "பெறும்போது பணம் செலுத்துங்கள்",
   "Pay by UPI when you collect your bag. Nothing online.": "பையைப் பெறும்போது UPI மூலம் பணம் செலுத்துங்கள். ஆன்லைனில் இல்லை.",
   "Check price": "விலையைப் பாருங்கள்",

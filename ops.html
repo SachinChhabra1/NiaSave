@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#0B0E14">
-<title>Sikh Unit</title>
+<meta name="theme-color" content="#F4F6FA">
+<title>Save desk</title>
 <meta name="nia-board" content="Sikh Unit">
 <script>
   if (location.protocol === 'file:') {
@@ -13,7 +13,182 @@
 </script>
 <link rel="icon" href="/assets/nia-favicon-64.png" type="image/png">
 <link rel="apple-touch-icon" href="/assets/nia-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="/staff.css">
+<style>
+/* Central light language. Scoped to this board only. */
+:root{
+  --bg:#F4F6FA;--surface:#FFFFFF;--raised:#FFFFFF;
+  --fg:#101828;--fg-muted:#6E7787;--fg-subtle:#6E7787;--border:#E3E8EF;
+  --accent:#1668C9;--accent-fg:#FFFFFF;
+  --ok:#1668C9;--ok-fg:#EEF3FB;--warn:#1668C9;--warn-fg:#EEF3FB;
+  --danger:#1668C9;--danger-fg:#EEF3FB;--info:#1668C9;--info-fg:#EEF3FB;
+  --chart:#1668C9;--chart-2:#4A8ED4;--chart-3:#0E4E96;--chart-4:#1668C9;
+  --funnel-1:#B7D2F0;--funnel-2:#4A8ED4;--funnel-3:#1668C9;
+  --font:Inter,-apple-system,system-ui,"Segoe UI",sans-serif;
+  --mono:Inter,-apple-system,system-ui,"Segoe UI",sans-serif;
+  color-scheme:light;
+}
+html,body{background:#F4F6FA;color:#101828;font-family:var(--font);font-size:14px;line-height:20px;letter-spacing:0;min-height:100%}
+body{background:#F4F6FA}
+.narrow{display:none!important}
+.tower{display:block!important;min-height:100vh;background:#F4F6FA}
+.top{
+  position:sticky;top:0;z-index:30;min-height:64px;padding:0 24px;
+  border-bottom:1px solid #E3E8EF;background:#FFFFFF;
+  backdrop-filter:none;box-shadow:none;
+}
+.mark{align-items:center;gap:12px}
+.nia-logo{
+  width:32px;height:32px;min-width:32px;padding:4px;
+  border:1px solid #E3E8EF;border-radius:10px;background:#FFFFFF;
+  object-fit:contain;filter:none;
+}
+.top h1{margin:0;color:#101828;font-size:16px;font-weight:600;letter-spacing:-0.2px}
+.top .meta{margin:0;color:#6E7787;font-size:12px;line-height:16px;text-align:right;font-weight:500}
+.shell{min-height:calc(100vh - 64px);background:#F4F6FA}
+.rail{
+  width:220px;flex:0 0 220px;padding:24px 16px 40px;
+  border-right:1px solid #E3E8EF;background:#F4F6FA;
+}
+.rail-block{margin:0 0 28px}
+.rail-h{
+  margin:0 0 8px;padding:0 10px;color:#6E7787;
+  font-size:12px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;
+}
+.rail-link{
+  min-height:40px;padding:10px 10px;border-radius:12px;
+  color:#6E7787;font-size:14px;line-height:20px;font-weight:500;
+}
+.rail-link:hover{color:#101828;background:#FFFFFF;text-decoration:none}
+.rail-link.on{color:#1668C9;background:#EEF3FB;font-weight:600}
+.rail-link.on::after{display:none}
+.wrap{width:100%;max-width:1120px;padding:32px 28px 80px}
+.eyebrow{
+  margin:0 0 8px;color:#6E7787;font-size:12px;font-weight:600;
+  letter-spacing:1.2px;text-transform:uppercase;
+}
+.page-title{
+  margin:0 0 12px;color:#101828;font-size:36px;font-weight:600;
+  letter-spacing:-0.9px;line-height:40px;
+}
+.sub,.do{margin:0 0 20px;color:#6E7787;font-size:14px;line-height:20px}
+h2{margin:0;color:#101828;font-size:18px;font-weight:600;letter-spacing:-0.3px;text-transform:none}
+h3{margin:0 0 8px;color:#101828;font-size:16px;font-weight:600}
+.desk-icon,.job-icon,.card-icon{width:28px;height:28px;color:#1668C9}
+.h2-row{gap:10px;margin:0 0 8px;align-items:center}
+.jobs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin:8px 0 28px;grid-auto-rows:1fr}
+button.job{
+  display:flex;flex-direction:column;align-items:flex-start;height:100%;
+  background:#FFFFFF;color:#101828;border:1px solid #E3E8EF;border-radius:18px;
+  padding:24px;box-shadow:0 1px 2px rgba(16,24,40,.06);text-align:left;cursor:pointer;
+}
+button.job:hover{border-color:#1668C9;box-shadow:0 4px 12px rgba(22,104,201,.08)}
+button.job.on{border-color:#1668C9;box-shadow:0 0 0 3px #EEF3FB}
+button.job .job-kicker{
+  font-size:12px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;
+  color:#6E7787;margin:0 0 8px;font-family:var(--font);
+}
+button.job strong{display:block;font-size:18px;font-weight:600;letter-spacing:-0.3px;margin:0 0 8px;color:#101828}
+button.job .job-do{font-size:14px;line-height:20px;color:#6E7787;margin:0 0 16px;flex:1}
+button.job .job-num{font-size:14px;line-height:20px;color:#1668C9;font-weight:500;font-family:var(--font)}
+.kpi,.card,.row,.upload-card,.connectors-panel,.open,a.desk,button.stop{
+  background:#FFFFFF;border:1px solid #E3E8EF;border-radius:18px;
+  box-shadow:0 1px 2px rgba(16,24,40,.06);
+}
+.kpi{padding:20px 24px}
+.kpi .l{color:#6E7787;font-size:12px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase}
+.kpi .n{margin-top:8px;color:#101828;font-size:28px;font-weight:600;letter-spacing:-0.6px}
+.card,.row,.upload-card,.connectors-panel{padding:24px}
+.uploads{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.open{display:none;padding:24px;margin-bottom:24px}
+.open.show{display:block}
+.open h2{margin:0 0 8px}
+.open .do{color:#6E7787}
+.checks{display:flex;flex-wrap:wrap;gap:12px;margin:0 0 20px}
+.check{background:#EEF3FB;border:1px solid #E3E8EF;border-radius:16px;padding:16px 18px;min-width:120px}
+.check .l{font-size:12px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:#6E7787}
+.check .n{font-size:22px;font-weight:600;color:#101828;margin-top:4px}
+.realities{display:flex;flex-wrap:wrap;align-items:stretch;gap:10px;margin:0 0 24px}
+.reality{
+  background:#EEF3FB;color:#101828;border:1px solid #E3E8EF;border-radius:16px;
+  padding:10px 14px;font-size:14px;font-weight:500;white-space:normal;
+}
+.reality b{color:#1668C9;margin-right:6px}
+.reality-arrow{color:#6E7787;font-size:16px;font-weight:600}
+.pill{
+  display:inline-flex;align-items:center;min-height:32px;padding:6px 14px;
+  border-radius:24px;border:1px solid #E3E8EF;background:#EEF3FB;color:#1668C9;
+  font-size:12px;font-weight:600;
+}
+.pill.ok,.pill.warn{background:#EEF3FB;color:#1668C9;border-color:#E3E8EF}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
+button,.file-btn{
+  min-height:44px;padding:10px 18px;border:0;border-radius:24px;
+  background:#1668C9;color:#FFFFFF;font-size:14px;font-weight:600;
+  font-family:var(--font);cursor:pointer;
+}
+button:hover,.file-btn:hover{background:#1258AB;color:#fff}
+button.ghost{background:#FFFFFF;color:#1668C9;border:1px solid #E3E8EF}
+input,select{
+  min-height:44px;padding:10px 16px;border:1px solid #E3E8EF;border-radius:24px;
+  background:#FFFFFF;color:#101828;font-size:14px;font-family:var(--font);
+}
+.drop{
+  margin-top:10px;padding:16px;border:1px dashed #E3E8EF;border-radius:16px;
+  background:#F4F6FA;color:#6E7787;font-size:14px;line-height:20px;
+}
+.drop.over{border-color:#1668C9;background:#EEF3FB}
+.file-meta{margin-top:8px;color:#6E7787;font-size:12px;line-height:16px}
+a.desk-link{
+  display:inline-flex;align-items:center;min-height:44px;padding:10px 18px;
+  border-radius:24px;background:#1668C9;color:#FFFFFF;font-size:14px;font-weight:600;
+}
+a.desk-link:hover{background:#1258AB;color:#fff;text-decoration:none}
+table{width:100%;border:1px solid #E3E8EF;border-radius:16px;background:#FFFFFF;border-collapse:separate;border-spacing:0;overflow:hidden;font-size:14px}
+th,td{padding:12px 14px;border-bottom:1px solid #E3E8EF;color:#101828}
+th{color:#6E7787;background:#F4F6FA;font-size:12px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;text-align:left}
+tbody tr:hover{background:#EEF3FB}
+.muted{color:#6E7787}
+.empty,.msg{color:#6E7787;font-size:14px;line-height:20px}
+.picture{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin:0 0 24px}
+.kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:8px 0 24px}
+.bar-track{height:8px;border-radius:24px;background:#EEF3FB;overflow:hidden}
+.bar{height:8px;border-radius:24px;background:#1668C9}
+.bar.open,.bar.hand,.bar.age{background:#1668C9}
+.funnel-board{display:flex;align-items:flex-end;gap:16px;min-height:160px}
+.funnel-board .col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:8px}
+.funnel-board .col b{display:block;width:100%;background:#1668C9;border-radius:12px 12px 4px 4px;min-height:8px}
+.funnel-board .col span{color:#6E7787;font-size:12px;line-height:16px;text-align:center}
+.info-callout{
+  display:flex;gap:12px;align-items:flex-start;
+  background:#EEF3FB;border:1px solid #E3E8EF;border-radius:18px;
+  padding:16px 18px;margin:0 0 24px;color:#101828;font-size:14px;line-height:20px;
+}
+.info-callout .info-mark{
+  flex:0 0 28px;width:28px;height:28px;border-radius:999px;background:#1668C9;color:#fff;
+  display:flex;align-items:center;justify-content:center;font-weight:600;font-size:14px;
+}
+@media(max-width:899px){
+  .shell{display:block}
+  .rail{
+    position:sticky;top:64px;z-index:20;display:flex;width:100%;height:auto;
+    padding:8px 12px;gap:4px;overflow-x:auto;border-right:0;border-bottom:1px solid #E3E8EF;background:#FFFFFF;
+  }
+  .rail-block{display:flex;align-items:center;gap:4px;min-width:max-content;margin:0}
+  .rail-h{display:none}
+  .rail-link{display:inline-flex;align-items:center;min-height:44px;white-space:nowrap}
+  .wrap{padding:24px 16px 64px}
+  .page-title{font-size:28px;line-height:32px;letter-spacing:-0.6px}
+  .jobs,.uploads,.picture,.kpis{grid-template-columns:1fr}
+  .top .meta{max-width:46vw}
+}
+@media(max-width:560px){
+  .top .meta{display:none}
+}
+</style>
 </head>
 <body>
 <svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
@@ -36,9 +211,9 @@
 </svg>
   <div class="narrow">
     <div class="narrow-card">
-      <div class="kicker">Sikh Unit</div>
-      <h1>Open on a laptop</h1>
-      <p>This board is a wide staff desk. It is not the member app.</p>
+      <div class="kicker">Save desk</div>
+      <h1>Open this board on a bigger screen if the layout feels tight</h1>
+      <p>This is the staff Save board. It is not the member app.</p>
     </div>
   </div>
 
@@ -46,167 +221,172 @@
     <header class="top">
       <div class="mark">
         <img class="nia-logo" src="/assets/nia-mark-square.png" alt="Nia">
-        <h1>Sikh Unit</h1>
+        <h1>Save desk</h1>
       </div>
-      <div class="meta" id="topmeta">Rajputana Theatre · 40 studios<br>No live UPI</div>
+      <div class="meta" id="topmeta">Rajputana Theatre · 40 collection points<br>Online payment is not on yet</div>
     </header>
     <div class="shell">
       <aside class="rail">
         <div class="rail-block">
           <h2 class="rail-h" data-pane="reports">Reports</h2>
-          <a class="rail-link" data-nav="inventory" href="/inventory.html">Inventory</a>
-          <a class="rail-link" data-nav="ageing" href="/ageing.html">Ageing</a>
-          <a class="rail-link" data-nav="funnel" data-pane="reports" href="#funnel">Funnel</a>
-          <a class="rail-link" data-nav="gates" data-pane="reports" href="#gates">Gates (proposed)</a>
-          <a class="rail-link" data-nav="predict" href="/predict.html">Predict</a>
-          <a class="rail-link" data-nav="studios" data-pane="reports" href="#studios">Studios</a>
+          <a class="rail-link" data-nav="inventory" href="/inventory.html">What we have</a>
+          <a class="rail-link" data-nav="ageing" href="/ageing.html">How long it sat</a>
+          <a class="rail-link" data-nav="funnel" data-pane="reports" href="#funnel">Bags today</a>
+          <a class="rail-link" data-nav="gates" data-pane="reports" href="#gates">Health checks</a>
+          <a class="rail-link" data-nav="predict" href="/predict.html">Tomorrow's load</a>
+          <a class="rail-link" data-nav="studios" data-pane="reports" href="#studios">Collection points</a>
         </div>
         <div class="rail-block">
-          <h2 class="rail-h" data-pane="ops">Ops</h2>
-          <a class="rail-link" data-nav="po" href="/po.html">Purchase order</a>
-          <a class="rail-link" data-nav="order" href="/po.html#orders">Order</a>
-          <a class="rail-link" data-nav="dispatch" href="/dispatch.html">Dispatch</a>
-          <a class="rail-link" data-nav="biker" href="/biker.html">Biker</a>
-          <a class="rail-link" data-nav="invoice" href="/invoice.html">Invoice</a>
-          <a class="rail-link" href="https://rafiqicentral.com/member-commerce?line=save">Member orders / UPI receipts</a>
-          <a class="rail-link" data-nav="pickup" href="/pickup.html">Pickup</a>
-          <a class="rail-link" data-nav="recon" href="/recon.html">Recon</a>
-          <a class="rail-link" data-nav="match" href="/recon.html">Statement match</a>
-          <a class="rail-link" data-nav="source" href="/source.html">Source</a>
-          <a class="rail-link" data-nav="hub" href="/hub.html">Hub / tomorrow load</a>
-          <a class="rail-link" data-nav="connectors" data-pane="ops" href="#connectors">Connectors</a>
-          <a class="rail-link" data-nav="close" href="/recon.html">Beat close</a>
+          <h2 class="rail-h" data-pane="ops">Today's work</h2>
+          <a class="rail-link" data-nav="po" href="/po.html">Buy from vendor</a>
+          <a class="rail-link" data-nav="order" href="/po.html#orders">Place the order</a>
+          <a class="rail-link" data-nav="dispatch" href="/dispatch.html">Load the bike</a>
+          <a class="rail-link" data-nav="biker" href="/biker.html">Shop run</a>
+          <a class="rail-link" data-nav="invoice" href="/invoice.html">Bills</a>
+          <a class="rail-link" href="https://rafiqicentral.com/member-commerce?line=save">Member bags</a>
+          <a class="rail-link" data-nav="pickup" href="/pickup.html">Collect at the stop</a>
+          <a class="rail-link" data-nav="recon" href="/recon.html">Count the stock</a>
+          <a class="rail-link" data-nav="match" href="/recon.html">Match the bank file</a>
+          <a class="rail-link" data-nav="source" href="/source.html">What we buy</a>
+          <a class="rail-link" data-nav="hub" href="/hub.html">Hub for tomorrow</a>
+          <a class="rail-link" data-nav="connectors" data-pane="ops" href="#connectors">Upload files</a>
+          <a class="rail-link" data-nav="close" href="/recon.html">Close the day</a>
         </div>
         <div class="rail-block">
-          <h2 class="rail-h">2 Para</h2>
-          <a class="rail-link on" href="/ops.html">Sikh Unit</a>
-          <a class="rail-link" href="/bison.html">Jat Unit</a>
-          <a class="rail-link" href="/tanot/">Dogra Unit</a>
-          <a class="rail-link" href="/desk.html">All units</a>
+          <h2 class="rail-h">Other units</h2>
+          <a class="rail-link on" href="/ops.html">Save</a>
+          <a class="rail-link" href="/bison.html">Living</a>
+          <a class="rail-link" href="/tanot/">Demand</a>
+          <a class="rail-link" href="/desk.html">All desks</a>
         </div>
       </aside>
       <div class="pane">
         <div class="wrap pane-ops">
-          <p class="sub">Production. Skip on. One theatre. 40 studios. 3000 members. Stock is not today's flow. Inventory is movements. Settlement on collected. No live UPI.</p>
+          <p class="eyebrow">Sikh unit · Save</p>
+          <h1 class="page-title">Today's Save work</h1>
+          <p class="sub">This is the live board. We count what moved today, not what is sitting in stock. Money is settled only after a member collects the bag. Online payment is not on yet.</p>
+          <div class="info-callout"><span class="info-mark" aria-hidden="true">i</span><span>Follow the five steps in order: the member orders, the hub loads the bike, the member collects or we bring the bag back, the hub settles with the officer, then Nia pays the vendor.</span></div>
           <div class="realities" id="realities">
             <span class="reality"><b>1</b> Member ordered</span>
             <span class="reality-arrow" aria-hidden="true">→</span>
-            <span class="reality"><b>2</b> Hub loaded</span>
+            <span class="reality"><b>2</b> Hub loaded the bike</span>
             <span class="reality-arrow" aria-hidden="true">→</span>
-            <span class="reality"><b>3</b> Member collected or returned</span>
+            <span class="reality"><b>3</b> Member collected, or the bag came back</span>
             <span class="reality-arrow" aria-hidden="true">→</span>
-            <span class="reality"><b>4</b> Hub settled with officer</span>
+            <span class="reality"><b>4</b> Hub settled with the officer</span>
             <span class="reality-arrow" aria-hidden="true">→</span>
-            <span class="reality"><b>5</b> Nia paid vendor</span>
+            <span class="reality"><b>5</b> Nia paid the vendor</span>
           </div>
           <div class="jobs" id="jobs"></div>
           <div class="open" id="open"></div>
           <section class="connectors-panel" id="connectors">
             <div class="h2-row">
               <svg class="desk-icon" viewBox="0 0 40 40" width="40" height="40" aria-hidden="true"><use href="#i-connectors"/></svg>
-              <h2>Connectors</h2>
+              <h2>Upload files</h2>
             </div>
-            <p class="do">Staff inbound files. File upload is an action and lands in the NiaSave book. Recon unmatched uses the UPI statement. Source, predict and the Nia margin gate use the procure sheet. Ledger and member files are kept as inbound snapshots. No live UPI. No Razorpay. No Google sign-in.</p>
+            <p class="do">Add today's files here. Each file is saved in the NiaSave book. Use the bank file to match money after a bag is collected. Use the buy sheet for what we should purchase. The ledger and member files are kept as copies. Online payment is not on yet. There is no Razorpay and no Google sign-in.</p>
             <div class="pills" id="connectors-pills"></div>
             <div class="uploads">
               <div class="upload-card" data-kind="upi_statement">
-                <div class="job-kicker">UPI statement</div>
-                <strong>Bank CSV</strong>
-                <p class="do">Columns: date, utr, amount, note. Trigger collected. Not a member pay rail.</p>
-                <label class="file-btn" for="file-upi">Choose file</label>
+                <div class="job-kicker">Bank file</div>
+                <strong>UPI statement</strong>
+                <p class="do">Need columns named date, utr, amount and note. Use this to mark a bag as collected against a bank line. This is not a member pay button.</p>
+                <label class="file-btn" for="file-upi">Choose a file</label>
                 <input type="file" accept=".csv,text/csv" id="file-upi" data-kind="upi_statement">
-                <div class="drop" data-kind="upi_statement" id="drop-upi">Drop UPI statement CSV here</div>
-                <div class="file-meta" id="meta-upi">No file yet</div>
+                <div class="drop" data-kind="upi_statement" id="drop-upi">Drop the bank CSV here</div>
+                <div class="file-meta" id="meta-upi">No file yet. Choose a file to add it.</div>
               </div>
               <div class="upload-card" data-kind="procure">
-                <div class="job-kicker">Procure</div>
-                <strong>Buy sheet</strong>
-                <p class="do">Columns: sku, name, vendor, buy_inr, keep_qty, lead_days, last_buy, status.</p>
-                <label class="file-btn" for="file-procure">Choose file</label>
+                <div class="job-kicker">Buy sheet</div>
+                <strong>What we buy</strong>
+                <p class="do">Need columns named sku, name, vendor, buy_inr, keep_qty, lead_days, last_buy and status.</p>
+                <label class="file-btn" for="file-procure">Choose a file</label>
                 <input type="file" accept=".csv,text/csv" id="file-procure" data-kind="procure">
-                <div class="drop" data-kind="procure" id="drop-procure">Drop procure CSV here</div>
-                <div class="file-meta" id="meta-procure">No file yet</div>
+                <div class="drop" data-kind="procure" id="drop-procure">Drop the buy CSV here</div>
+                <div class="file-meta" id="meta-procure">No file yet. Choose a file to add it.</div>
               </div>
               <div class="upload-card" data-kind="catalogue">
-                <div class="job-kicker">Catalogue</div>
-                <strong>Pack sheet</strong>
-                <p class="do">Columns: sku_id, item_name, category, pack_size, unit, nia_price_inr, kirana_price_inr, you_keep_inr, source_site_code, source_sku, studio_site_code, status. active → shop. test → TEST lane. hold → hidden.</p>
-                <label class="file-btn" for="file-catalogue">Choose file</label>
+                <div class="job-kicker">Pack sheet</div>
+                <strong>Catalogue</strong>
+                <p class="do">Need columns named sku_id, item_name, category, pack_size, unit, nia_price_inr, kirana_price_inr, you_keep_inr, source_site_code, source_sku, studio_site_code and status. status=active shows in the shop. status=test is TEST only. status=hold stays hidden.</p>
+                <label class="file-btn" for="file-catalogue">Choose a file</label>
                 <input type="file" accept=".csv,text/csv" id="file-catalogue" data-kind="catalogue">
-                <div class="drop" data-kind="catalogue" id="drop-catalogue">Drop catalogue CSV here</div>
-                <div class="file-meta" id="meta-catalogue">No file yet</div>
-                <button type="button" class="file-btn" id="sync-catalogue">Sync Catalogue tab from Google Sheet</button>
+                <div class="drop" data-kind="catalogue" id="drop-catalogue">Drop the catalogue CSV here</div>
+                <div class="file-meta" id="meta-catalogue">No file yet. Choose a file or sync the sheet.</div>
+                <button type="button" class="file-btn" id="sync-catalogue">Read Catalogue from the Google Sheet</button>
               </div>
               <div class="upload-card" data-kind="vendors">
                 <div class="job-kicker">Vendors</div>
-                <strong>Vendor list</strong>
-                <p class="do">Optional. Vendor rows for the source desk.</p>
-                <label class="file-btn" for="file-vendors">Choose file</label>
+                <strong>Who we buy from</strong>
+                <p class="do">Optional. A list of vendors for the buy desk.</p>
+                <label class="file-btn" for="file-vendors">Choose a file</label>
                 <input type="file" accept=".csv,text/csv" id="file-vendors" data-kind="vendors">
-                <div class="drop" data-kind="vendors" id="drop-vendors">Drop vendors CSV here</div>
-                <div class="file-meta" id="meta-vendors">No file yet</div>
+                <div class="drop" data-kind="vendors" id="drop-vendors">Drop the vendor CSV here</div>
+                <div class="file-meta" id="meta-vendors">No file yet. Choose a file to add it.</div>
               </div>
               <div class="upload-card" data-kind="ledger">
-                <div class="job-kicker">Ledger</div>
-                <strong>Book export</strong>
-                <p class="do">Optional. Save book CSV kept as the inbound snapshot. The beat ledger stays counted from scans.</p>
-                <label class="file-btn" for="file-ledger">Choose file</label>
+                <div class="job-kicker">Book copy</div>
+                <strong>Ledger file</strong>
+                <p class="do">Optional. A copy of the Save book. Today's count still comes from the scans, not this file.</p>
+                <label class="file-btn" for="file-ledger">Choose a file</label>
                 <input type="file" accept=".csv,text/csv" id="file-ledger" data-kind="ledger">
-                <div class="drop" data-kind="ledger" id="drop-ledger">Drop ledger CSV here</div>
-                <div class="file-meta" id="meta-ledger">No file yet</div>
+                <div class="drop" data-kind="ledger" id="drop-ledger">Drop the ledger CSV here</div>
+                <div class="file-meta" id="meta-ledger">No file yet. Choose a file to add it.</div>
               </div>
               <div class="upload-card" data-kind="members">
                 <div class="job-kicker">Members</div>
-                <strong>Member sheet</strong>
-                <p class="do">Optional. Member roster CSV kept as the inbound snapshot. The member book is not rewritten by a file.</p>
-                <label class="file-btn" for="file-members">Choose file</label>
+                <strong>Member list</strong>
+                <p class="do">Optional. A copy of the member list. Uploading it does not rewrite the member book.</p>
+                <label class="file-btn" for="file-members">Choose a file</label>
                 <input type="file" accept=".csv,text/csv" id="file-members" data-kind="members">
-                <div class="drop" data-kind="members" id="drop-members">Drop members CSV here</div>
-                <div class="file-meta" id="meta-members">No file yet</div>
+                <div class="drop" data-kind="members" id="drop-members">Drop the member CSV here</div>
+                <div class="file-meta" id="meta-members">No file yet. Choose a file to add it.</div>
               </div>
             </div>
             <div class="h2-row" style="margin-top:22px">
-              <h2>Published projection</h2>
+              <h2>What Central can read</h2>
             </div>
-            <p class="do">Read only. Central reads this; NiaSave never writes Central's database. A SKU is working only when member saving and Nia margin both pass on collected bags. A missing source stays blank, not zero. Reserved, packed and catalogue rows do not pass.</p>
+            <p class="do">Read only. Central can read this. NiaSave never writes Central's database. A pack is working only when the member saved money and Nia kept a margin on bags that were collected. A missing source stays blank, not zero. Reserved bags, packed bags and catalogue rows do not count as collected.</p>
             <div class="pills" id="publish-pills"></div>
-            <h3 style="margin:14px 0 6px">Savings gate</h3>
+            <h3 style="margin:14px 0 6px">Did the member save money?</h3>
             <div class="studios-table" id="publish-savings"></div>
-            <h3 style="margin:14px 0 6px">Stock · CONNECTOR_ESSENTIALS_STOCK</h3>
+            <h3 style="margin:14px 0 6px">Stock on the sheet</h3>
             <div class="studios-table" id="publish-stock"></div>
             <p class="do" id="publish-note"></p>
-            <a class="desk-link" href="#connectors" id="download-stock" download="CONNECTOR_ESSENTIALS_STOCK.csv">Download CONNECTOR_ESSENTIALS_STOCK.csv</a>
+            <a class="desk-link" href="#connectors" id="download-stock" download="CONNECTOR_ESSENTIALS_STOCK.csv">Download the stock CSV</a>
           </section>
         </div>
         <div class="wrap pane-reports">
-          <p class="sub">Reports. Inventory, ageing, funnel, gates, and studios. Not the purchase-order buttons.</p>
+          <p class="eyebrow">Reports</p>
+          <h1 class="page-title">How the day looks</h1>
+          <p class="sub">These numbers are reports. They do not place a purchase order. Open a card when you want the next action.</p>
           <div class="kpis" id="kpis"></div>
           <div class="picture">
             <div class="card" id="inventory">
               <svg class="card-icon" viewBox="0 0 40 40" width="40" height="40" aria-hidden="true"><use href="#i-inventory"/></svg>
-              <h3>Inventory</h3>
-              <p class="sub">On-hand vs opening by SKU. Stock is not today's flow. Hub owns the lot.</p>
+              <h3>What we have</h3>
+              <p class="sub">How many packs we still hold, next to how many we opened with. This is not today's movement. The hub owns the lot.</p>
               <div id="invchart"></div>
-              <a class="desk-link" href="/inventory.html">Open inventory desk</a>
+              <a class="desk-link" href="/inventory.html">Open the stock desk</a>
             </div>
             <div class="card" id="ageing">
               <svg class="card-icon" viewBox="0 0 40 40" width="40" height="40" aria-hidden="true"><use href="#i-ageing"/></svg>
-              <h3>Ageing</h3>
-              <p class="sub">Days sitting / 90. Leftover age and miss that did not move. Thresholds proposed.</p>
+              <h3>How long it sat</h3>
+              <p class="sub">Days sitting out of 90. Leftover age, and misses that never moved. The bars are a proposal, not a lock.</p>
               <div id="agechart"></div>
-              <a class="desk-link" href="/ageing.html">Open ageing desk</a>
+              <a class="desk-link" href="/ageing.html">Open the sitting desk</a>
             </div>
           </div>
           <div class="card" id="funnel-card" style="margin-bottom:18px">
-            <h3>Funnel</h3>
-            <p class="sub">Reserved to packed or loaded to collected. Leftover and miss sit on the right.</p>
+            <h3>Bags today</h3>
+            <p class="sub">From reserved, to packed or loaded, to collected. Leftover and miss sit on the right.</p>
             <div class="funnel-board" id="funnel"></div>
           </div>
-          <h2 id="studios-h">Studios</h2>
-          <p class="sub">One theatre. A new studio is a row. Not a rewrite.</p>
+          <h2 id="studios-h">Collection points</h2>
+          <p class="sub">One theatre. A new collection point is a new row. Do not rewrite the list.</p>
           <div class="studios-table" id="studios"></div>
-          <h2 id="gates-h">Gates (proposed)</h2>
-          <p class="sub">Report only. Proposed bars stay as written: participation 30 or more in 100, sell-through 80 or more in 100, pre-order fill 95 or more in 100, member saving 3 or more in 100, inventory loss under 1 in 200, contribution 3 or more in 100. This board shows numerator and denominator only.</p>
+          <h2 id="gates-h">Health checks</h2>
+          <p class="sub">Report only. The proposed bars stay as written: 30 or more in 100 members join, 80 or more in 100 packs sell, 95 or more in 100 pre-orders fill, members save 3 or more in 100, stock loss stays under 1 in 200, contribution is 3 or more in 100. This board shows the top number and the bottom number only.</p>
           <div id="gates" class="empty"></div>
         </div>
       </div>
@@ -224,7 +404,7 @@ function srcOf(c, id){
 }
 function fileMeta(s){
   if(!s || !s.id || s.status==='empty' || !s.rows || !s.filename){
-    return 'No file yet';
+    return 'No file yet. Choose a file to add it.';
   }
   var when=s.uploadedAt ? String(s.uploadedAt).replace('T',' ').replace('Z',' UTC') : '';
   return (s.filename||'file')+' · '+s.rows+' rows'+(when?' · '+when:'');
@@ -238,23 +418,23 @@ function connectorsPills(c){
   function pill(id, label){
     var s=srcOf(c, id);
     var empty=!s.id || s.status==='empty' || !s.rows;
-    return '<span class="pill '+(empty?'warn':'ok')+'">'+(empty?label+' · no file yet':label+' · '+s.rows+' rows')+'</span>';
+    return '<span class="pill">'+(empty?label+' · no file yet. Choose a file.':label+' · '+s.rows+' rows')+'</span>';
   }
   function snapshot(id, label){
     var s=srcOf(c, id);
-    return s.filename ? '<span class="pill ok">'+label+' file · '+s.rows+' rows</span>' : '';
+    return s.filename ? '<span class="pill">'+label+' file · '+s.rows+' rows</span>' : '';
   }
   var ledger=srcOf(c,'ledger');
   var ledOk=ledger.status==='ok';
   var persist=c&&c.persist==='postgres';
-  return '<span class="pill '+(persist?'ok':'warn')+'">'+(persist?'book · postgres':'book · memory only')+'</span>'
-    +'<span class="pill '+(ledOk?'ok':'warn')+'">'+(ledOk?'ledger ok':'ledger down')+'</span>'
-    +pill('procure','procure')
-    +pill('catalogue','catalogue')
-    +pill('upi_statement','UPI statement')
-    +pill('vendors','vendors')
-    +snapshot('ledger','ledger')
-    +snapshot('members','members');
+  return '<span class="pill">'+(persist?'Saved in the database':'Saved only on this computer')+'</span>'
+    +'<span class="pill">'+(ledOk?'Ledger is up':'Ledger is down')+'</span>'
+    +pill('procure','Buy sheet')
+    +pill('catalogue','Catalogue')
+    +pill('upi_statement','Bank file')
+    +pill('vendors','Vendors')
+    +snapshot('ledger','Ledger')
+    +snapshot('members','Members');
 }
 function blank(v, suffix){
   return v==null ? '<span class="muted">—</span>' : esc(v)+(suffix||'');
@@ -278,19 +458,19 @@ function paintPublish(c){
   var savRows=sav.rows||[];
   var stockRows=stock.rows||[];
   document.getElementById('publish-pills').innerHTML=
-    '<span class="pill '+(sav.working?'ok':'warn')+'">working '+num(sav.working)+' / '+savRows.length+'</span>'
-    +'<span class="pill '+(sav.marginSource?'ok':'warn')+'">Nia margin from '+(sav.marginSource?esc(sav.marginSource):'no procure file')+'</span>'
-    +'<span class="pill '+(stock.sheetConfigured?'ok':'warn')+'">sheet id '+(stock.sheetConfigured?'set':'not set')+' · writer none</span>';
-  document.getElementById('publish-savings').innerHTML='<table><thead><tr><th>SKU</th><th>Service</th><th>Collected uses</th><th>Members</th><th>Revenue</th><th>Member save</th><th>Nia margin</th><th>Status</th></tr></thead><tbody>'
+    '<span class="pill">Working packs '+num(sav.working)+' of '+savRows.length+'</span>'
+    +'<span class="pill">Nia margin from '+(sav.marginSource?esc(sav.marginSource):'no buy file yet')+'</span>'
+    +'<span class="pill">Sheet id '+(stock.sheetConfigured?'set':'not set')+' · writer none</span>';
+  document.getElementById('publish-savings').innerHTML='<table><thead><tr><th>Pack id</th><th>Name</th><th>Times collected</th><th>Members</th><th>Money taken in</th><th>Member saved</th><th>Nia kept</th><th>Status</th></tr></thead><tbody>'
     +(savRows.map(function(r){
-      return '<tr><td>'+esc(r.service_id)+'</td><td class="left">'+esc(r.service)+'</td><td class="num">'+num(r.monthly_uses)+'</td><td class="num">'+num(r.unique_members)+'</td><td class="num">'+num(r.product_revenue_inr)+'</td><td class="num">'+blank(r.member_save_inr)+'</td><td class="num">'+blank(r.nia_margin_inr)+'</td><td class="left">'+(r.working?'<span class="pill ok">working</span>':'<span class="pill warn">'+esc(r.status)+'</span>')+'</td></tr>';
-    }).join('')||'<tr><td colspan="8">No SKUs.</td></tr>')
+      return '<tr><td>'+esc(r.service_id)+'</td><td class="left">'+esc(r.service)+'</td><td class="num">'+num(r.monthly_uses)+'</td><td class="num">'+num(r.unique_members)+'</td><td class="num">'+num(r.product_revenue_inr)+'</td><td class="num">'+blank(r.member_save_inr)+'</td><td class="num">'+blank(r.nia_margin_inr)+'</td><td class="left">'+(r.working?'<span class="pill">Working</span>':'<span class="pill">'+esc(r.status)+'</span>')+'</td></tr>';
+    }).join('')||'<tr><td colspan="8">No packs yet. Add a catalogue row, then collect a bag.</td></tr>')
     +'</tbody></table>';
   var cols=stock.columns||[];
   document.getElementById('publish-stock').innerHTML='<table><thead><tr>'+cols.map(function(k){ return '<th>'+esc(k)+'</th>'; }).join('')+'</tr></thead><tbody>'
     +(stockRows.map(function(r){
       return '<tr>'+cols.map(function(k){ return '<td class="'+(typeof r[k]==='number'?'num':'left')+'">'+blank(r[k])+'</td>'; }).join('')+'</tr>';
-    }).join('')||'<tr><td colspan="'+(cols.length||1)+'">No stock rows.</td></tr>')
+    }).join('')||'<tr><td colspan="'+(cols.length||1)+'">No stock rows yet. Read the Catalogue sheet, then download this file.</td></tr>')
     +'</tbody></table>';
   document.getElementById('publish-note').textContent='Beat '+(stock.beatDate||'-')+' · site '+((stockRows[0]&&stockRows[0].site_code)||'-')+' · keys '+((stock.keys||[]).join(' + ')||'-')+' · paste into the '+(stock.tab||'CONNECTOR_ESSENTIALS_STOCK')+' tab. Central keeps reading the sheet.';
   var link=document.getElementById('download-stock');
@@ -342,12 +522,12 @@ function paintPicture(){
   var maxOpen=1;
   skus.forEach(function(sku){ if(num(opening[sku])>maxOpen) maxOpen=num(opening[sku]); });
   document.getElementById('kpis').innerHTML=[
-    ['Opening', num(k.opening)],
-    ['On-hand', num(k.onHand!=null?k.onHand:k.leftover)],
-    ['Collected', num(k.collected)],
-    ['Leftover', num(k.leftover)],
-    ['Miss', num(k.missed)],
-    ['Days of stock', (k.daysOfStock&&k.daysOfStock.num!=null?k.daysOfStock.num:'-')+' / '+(k.daysOfStock&&k.daysOfStock.den!=null?k.daysOfStock.den:'-')]
+    ['Packs we opened with', num(k.opening)],
+    ['Packs still here', num(k.onHand!=null?k.onHand:k.leftover)],
+    ['Bags collected', num(k.collected)],
+    ['Packs left over', num(k.leftover)],
+    ['Missed bags', num(k.missed)],
+    ['Days of stock left', (k.daysOfStock&&k.daysOfStock.num!=null?k.daysOfStock.num:'-')+' / '+(k.daysOfStock&&k.daysOfStock.den!=null?k.daysOfStock.den:'-')]
   ].map(function(r){ return '<div class="kpi"><div class="l">'+r[0]+'</div><div class="n">'+r[1]+'</div></div>'; }).join('');
   document.getElementById('invchart').innerHTML=skus.map(function(sku){
     var o=num(opening[sku]), h=num(leftover[sku]);
@@ -355,7 +535,7 @@ function paintPicture(){
       + '<div class="bar-track"><div class="bar open" style="width:'+Math.round(o/maxOpen*100)+'%"></div></div>'
       + '<div class="bar-track"><div class="bar hand" style="width:'+Math.round(h/maxOpen*100)+'%"></div></div>'
       + '</div><div class="chart-nums">'+h+' / '+o+'</div></div>';
-  }).join('') || '<div class="empty">No opening.</div>';
+  }).join('') || '<div class="empty">No opening count yet. Open the stock desk after the hub signs in.</div>';
   var rows=age.rows||[];
   document.getElementById('agechart').innerHTML=(rows.length?rows.map(function(r){
     var d=num(r.daysSitting);
@@ -366,13 +546,13 @@ function paintPicture(){
   }).join('')+'<div class="checks" style="margin-top:10px">'
     + '<div class="check"><div class="l">'+(age.sitting&&age.sitting.label||'sitting')+'</div><div class="n">'+(age.sitting?age.sitting.num+' / '+age.sitting.den:'-')+'</div></div>'
     + '<div class="check"><div class="l">'+(age.missStuck&&age.missStuck.label||'miss')+'</div><div class="n">'+(age.missStuck?age.missStuck.num+' / '+age.missStuck.den:'-')+'</div></div>'
-    + '</div>':'<div class="empty">No ageing rows.</div>');
+    + '</div>':'<div class="empty">No sitting rows yet. Open the sitting desk after leftover is counted.</div>');
   var packed=num(f.packed)+num(f.loaded)+num(f.at_stop);
   var stages=[
-    ['Reserved', num(f.reserved)],
-    ['Packed / loaded', packed],
-    ['Collected', num(f.collected)],
-    ['Leftover / miss', num(k.leftover)+' / '+num(f.missed)]
+    ['Reserved bags', num(f.reserved)],
+    ['Packed or loaded bags', packed],
+    ['Collected bags', num(f.collected)],
+    ['Leftover / missed', num(k.leftover)+' / '+num(f.missed)]
   ];
   var maxF=1;
   [num(f.reserved), packed, num(f.collected), num(k.leftover)+num(f.missed)].forEach(function(n){ if(n>maxF) maxF=n; });
@@ -382,10 +562,10 @@ function paintPicture(){
     return '<div class="col"><b style="height:'+h+'%"></b><span>'+s[0]+'<br>'+s[1]+'</span></div>';
   }).join('');
   var stops=t.stopProgress||[];
-  document.getElementById('studios').innerHTML='<table><thead><tr><th>Stop</th><th>Name</th><th>Bags</th><th>Open</th><th>Collected</th><th>Miss</th></tr></thead><tbody>'
+  document.getElementById('studios').innerHTML='<table><thead><tr><th>Stop</th><th>Name</th><th>Bags</th><th>Still open</th><th>Collected</th><th>Missed</th></tr></thead><tbody>'
     +(stops.map(function(s){
       return '<tr><td>'+s.stopId+'</td><td class="left">'+(s.name||s.stopId)+'</td><td class="num">'+num(s.bags)+'</td><td class="num">'+num(s.open)+'</td><td class="num">'+num(s.collected)+'</td><td class="num">'+num(s.missed)+'</td></tr>';
-    }).join('')||'<tr><td colspan="6">No studios.</td></tr>')
+    }).join('')||'<tr><td colspan="6">No collection points yet.</td></tr>')
     +'</tbody></table>';
 }
 function face(){
@@ -401,37 +581,37 @@ function face(){
   var upi=srcOf(conn,'upi_statement');
   var procure=srcOf(conn,'procure');
   document.getElementById('realities').innerHTML=[
-    'Member ordered','Hub loaded','Member collected or returned','Hub settled with officer','Nia paid vendor'
+    'Member ordered','Hub loaded the bike','Member collected, or the bag came back','Hub settled with the officer','Nia paid the vendor'
   ].map(function(x,i){
     return (i?'<span class="reality-arrow" aria-hidden="true">→</span>':'')
       + '<span class="reality"><b>'+(i+1)+'</b> '+x+'</span>';
   }).join('');
   var ops=t.ops||{};
   document.getElementById('jobs').innerHTML=[
-    jobBtn('po','Buy','Purchase order','Create a PO from procure plus tomorrow load. Mark sent. Mark received.',
-      num(ops.poOpen)+' open · '+num(ops.poSent)+' sent · '+num(ops.poReceived)+' received', open==='po'),
-    jobBtn('order','Buy','Order','Officer places the order. Open, sent, received, cancelled on the PO desk.',
-      num(ops.poOpen)+' open · '+num(ops.poSent)+' sent', open==='order'),
-    jobBtn('dispatch','Hub','Dispatch','Pack remaining. Load. Dispatch to the studio stop at 17:00. Unpacked cannot go loaded.',
-      num(ops.dispatchNotes)+' notes · '+num(f.packed)+' packed · '+num(f.loaded)+' loaded', open==='dispatch'),
-    jobBtn('biker','Hub','Shop run','One bike. Hub to 30 shop pins. Member collects at the shop. No home door.',
-      num(ops.bikerRuns)+' runs · S01 to S30', open==='biker'),
-    jobBtn('invoice','Night','Invoice','Member receipt on collected. Vendor bill versus PO. GSTIN this phone if missing.',
-      num(ops.invoices)+' issued · trigger collected', open==='invoice'),
-    jobBtn('pickup','After 5','Pickup','Tap the stop. Tap the bag. Collect by code or mark miss.',
-      num(f.reserved)+' reserved · '+num(f.collected)+' collected · '+num(f.missed)+' miss', open==='pickup'),
-    jobBtn('connectors','Inbound','Connectors','Choose file stays on this board. UPI statement and procure CSV.',
-      (upi.rows||0)+' statement rows · '+(procure.rows||0)+' procure rows', open==='connectors'),
-    jobBtn('recon','Night','Recon','Ledger count. Opening minus collected minus leftover must be 0.',
-      'open '+num(k.opening)+' · collected '+num(k.collected)+' · leftover '+num(k.leftover), open==='recon'),
-    jobBtn('match','Night','Statement match','Staff recon. Bank lines vs settlements after collected scan. Not live member UPI.',
-      (s.matched||0)+' matched · '+(s.unmatchedStatement||0)+' statement open', open==='match'),
-    jobBtn('source','Inbound','Source','Buy only where Nia cost is under kirana.',
-      src.length+' SKUs on the procure sheet', open==='source'),
-    jobBtn('close','Night','Beat close','Night close never plugs. Wrong leftover is rejected.',
-      'balanced '+(k.balanced?'yes':'no')+' · miss '+num(k.missed), open==='close'),
-    jobBtn('hub','Hub','Hub / tomorrow load','Sign inbound. Movements only. Hub load from collected plus what is still holding.',
-      num(f.loaded)+' loaded · '+load.length+' SKUs tomorrow', open==='hub')
+    jobBtn('po','Buy','Buy from the vendor','Open the buy desk. Make a purchase order from what we need tomorrow. Mark it sent, then mark it received.',
+      num(ops.poOpen)+' still open. '+num(ops.poSent)+' already sent. '+num(ops.poReceived)+' already received.', open==='po'),
+    jobBtn('order','Buy','Place the order','Open the order desk. Start the buy, send it, then tick received when the stock arrives.',
+      num(ops.poOpen)+' still open. '+num(ops.poSent)+' already sent.', open==='order'),
+    jobBtn('dispatch','Hub','Load the bike','Pack a bag before you load it on the bike. Load the packed bags, then send them to the shop by 5 pm.',
+      num(ops.dispatchNotes)+' notes. '+num(f.packed)+' packed. '+num(f.loaded)+' loaded.', open==='dispatch'),
+    jobBtn('biker','Hub','Shop run','One bike. One evening. Hub to 30 shop pins. The member collects at the shop. We do not take bags to a home door.',
+      num(ops.bikerRuns)+' runs. Stops S01 to S30.', open==='biker'),
+    jobBtn('invoice','Night','Bills','Write the member receipt after they collect. Match the vendor bill to the purchase order. If the vendor bill has no GST number, add it from your phone.',
+      num(ops.invoices)+' bills issued. Write a bill only after collected.', open==='invoice'),
+    jobBtn('pickup','After 5','Collect at the stop','Tap the stop, tap the bag, then collect by the code. Mark as missed if they do not come.',
+      num(f.reserved)+' reserved. '+num(f.collected)+' collected. '+num(f.missed)+' missed.', open==='pickup'),
+    jobBtn('connectors','Files','Upload files','Add the bank file and the buy sheet on this board. Choose a file, or drop it on the card.',
+      (upi.rows||0)+' bank rows. '+(procure.rows||0)+' buy-sheet rows.', open==='connectors'),
+    jobBtn('recon','Night','Count the stock','Count opening, collected and leftover. Opening minus collected minus leftover must be 0.',
+      num(k.opening)+' opened. '+num(k.collected)+' collected. '+num(k.leftover)+' leftover.', open==='recon'),
+    jobBtn('match','Night','Match the bank file','Match bank lines to bags after a member collects. This is a staff file, not a live member payment.',
+      (s.matched||0)+' matched. '+(s.unmatchedStatement||0)+' bank lines still open.', open==='match'),
+    jobBtn('source','Buy','What we buy','Keep a pack only when Nia pays less than the kirana price.',
+      src.length+' packs on the buy sheet.', open==='source'),
+    jobBtn('close','Night','Close the day','Do not plug a gap. If leftover is wrong, the day stays open.',
+      'Balanced: '+(k.balanced?'yes':'no')+'. Missed bags: '+num(k.missed)+'.', open==='close'),
+    jobBtn('hub','Hub','Hub for tomorrow','Sign the stock that arrived. Count movements only. Tomorrow\'s load is collected bags plus what is still holding.',
+      num(f.loaded)+' loaded. '+load.length+' packs for tomorrow.', open==='hub')
   ].join('');
   document.querySelectorAll('button.job').forEach(function(el){
     el.addEventListener('click', function(){ pick(el.getAttribute('data-job')); });
@@ -458,65 +638,65 @@ function pick(id){
   var pred=t.predict||{};
   var html='';
   if(id==='po' || id==='order'){
-    html=titleRow(id, id==='order'?'Order':'Purchase order')+'<p class="do">Create a PO from procure plus tomorrow load. Officer marks sent, then received. Received posts inbound. Not an editable quantity.</p>'
-      +checks([['Open',num((t.ops||{}).poOpen)],['Sent',num((t.ops||{}).poSent)],['Received',num((t.ops||{}).poReceived)]])
-      +'<a class="desk-link" href="/po.html'+(id==='order'?'#orders':'')+'">Open '+(id==='order'?'order':'PO')+' desk</a>';
+    html=titleRow(id, id==='order'?'Place the order':'Buy from the vendor')+'<p class="do">Make a purchase order from the buy sheet plus tomorrow\'s load. Mark it sent, then mark it received. When you mark it received, the stock is added to the hub. You cannot type a new quantity here.</p>'
+      +checks([['Still open',num((t.ops||{}).poOpen)],['Already sent',num((t.ops||{}).poSent)],['Already received',num((t.ops||{}).poReceived)]])
+      +'<a class="desk-link" href="/po.html'+(id==='order'?'#orders':'')+'">Open the '+(id==='order'?'order':'buy')+' desk</a>';
   } else if(id==='dispatch'){
-    html=titleRow('dispatch','Dispatch')+'<p class="do">Packed list before the cart leaves. Unpacked cannot go loaded. Dispatch to a studio stop at 17:00. Biker to shop pin. Member collects at shop. No home door.</p>'
-      +checks([['Notes',num((t.ops||{}).dispatchNotes)],['Packed',num(f.packed)],['Loaded',num(f.loaded)]])
-      +'<a class="desk-link" href="/dispatch.html">Open dispatch desk</a>';
+    html=titleRow('dispatch','Load the bike')+'<p class="do">Pack a bag before you load it on the bike. Send packed bags to the shop by 5 pm. The member collects at the shop. We do not take bags to a home door.</p>'
+      +checks([['Notes',num((t.ops||{}).dispatchNotes)],['Packed bags',num(f.packed)],['Loaded bags',num(f.loaded)]])
+      +'<a class="desk-link" href="/dispatch.html">Open the load desk</a>';
   } else if(id==='biker'){
-    html=titleRow('biker','Shop run')+'<p class="do">One bike. One evening beat. Hub to 30 shop pins. Member collects at the shop. No home door. No live GPS.</p>'
-      +checks([['Runs',num((t.ops||{}).bikerRuns)],['Pins','30'],['Slot','17:00']])
-      +'<a class="desk-link" href="/biker.html">Open biker desk</a>';
+    html=titleRow('biker','Shop run')+'<p class="do">One bike. One evening. Hub to 30 shop pins. The member collects at the shop. We do not take bags to a home door. Live GPS is not on.</p>'
+      +checks([['Runs',num((t.ops||{}).bikerRuns)],['Shop pins','30'],['Slot','17:00']])
+      +'<a class="desk-link" href="/biker.html">Open the shop-run desk</a>';
   } else if(id==='invoice'){
-    html=titleRow('invoice','Invoice')+'<p class="do">Member receipt on collected. Vendor bill versus PO. GSTIN this phone if missing. No live UPI.</p>'
-      +checks([['Issued',num((t.ops||{}).invoices)],['Trigger','collected']])
-      +'<a class="desk-link" href="/invoice.html">Open invoice desk</a>';
+    html=titleRow('invoice','Bills')+'<p class="do">Write the member receipt after they collect. Match the vendor bill to the purchase order. If the vendor bill has no GST number, add it from your phone. Online payment is not on yet.</p>'
+      +checks([['Bills issued',num((t.ops||{}).invoices)],['Write a bill after','collected']])
+      +'<a class="desk-link" href="/invoice.html">Open the bills desk</a>';
   } else if(id==='pickup'){
-    html=titleRow('pickup','Pickup')+'<p class="do">Three taps after the member is identified: tap the stop, tap the bag, collect by code. Miss if they do not come. Pack, load, and arrived stay on hub.</p>'
-      +checks([['Reserved',num(f.reserved)],['Collected',num(f.collected)],['Miss',num(f.missed)]])
-      +'<a class="desk-link" href="/pickup.html">Open pickup desk</a>';
+    html=titleRow('pickup','Collect at the stop')+'<p class="do">After the member is known: tap the stop, tap the bag, then collect by the code. Mark as missed if they do not come. Pack, load and arrived stay on the hub.</p>'
+      +checks([['Reserved bags',num(f.reserved)],['Collected bags',num(f.collected)],['Missed bags',num(f.missed)]])
+      +'<a class="desk-link" href="/pickup.html">Open the collect desk</a>';
   } else if(id==='inventory'){
-    html=titleRow('inventory','Inventory')+'<p class="do">Lots and movements. On-hand is leftover. Owner is hub. Not an editable quantity field. A new studio is a row.</p>'
-      +checks([['On-hand',num(k.onHand!=null?k.onHand:k.leftover)],['Opening',num(k.opening)],['Collected',num(k.collected)],['Leftover',num(k.leftover)]])
-      +'<a class="desk-link" href="/inventory.html">Open inventory desk</a>';
+    html=titleRow('inventory','What we have')+'<p class="do">Lots and movements. Packs still here are leftover. The hub owns the lot. You cannot type a new quantity. A new collection point is a new row.</p>'
+      +checks([['Packs still here',num(k.onHand!=null?k.onHand:k.leftover)],['Opened with',num(k.opening)],['Collected bags',num(k.collected)],['Leftover packs',num(k.leftover)]])
+      +'<a class="desk-link" href="/inventory.html">Open the stock desk</a>';
   } else if(id==='ageing'){
     var ag=t.ageing||{};
-    html=titleRow('ageing','Ageing')+'<p class="do">Days sitting per SKU. Leftover age. Miss that did not move. Thresholds stay proposed as numerator and denominator.</p>'
-      +checks([['Sitting 7+',(ag.sitting?ag.sitting.num+' / '+ag.sitting.den:'-')],['Leftover age',(ag.leftoverAge?ag.leftoverAge.num+' / '+ag.leftoverAge.den:'-')],['Miss stuck',(ag.missStuck?ag.missStuck.num+' / '+ag.missStuck.den:'-')]])
-      +'<a class="desk-link" href="/ageing.html">Open ageing desk</a>';
+    html=titleRow('ageing','How long it sat')+'<p class="do">Days each pack has sat. Leftover age. Misses that never moved. The bars stay a proposal: top number over bottom number.</p>'
+      +checks([['Sitting 7+ days',(ag.sitting?ag.sitting.num+' / '+ag.sitting.den:'-')],['Leftover age',(ag.leftoverAge?ag.leftoverAge.num+' / '+ag.leftoverAge.den:'-')],['Missed and stuck',(ag.missStuck?ag.missStuck.num+' / '+ag.missStuck.den:'-')]])
+      +'<a class="desk-link" href="/ageing.html">Open the sitting desk</a>';
   } else if(id==='recon'){
-    html=titleRow('recon','Recon')+'<p class="do">Night count. Opening minus collected minus leftover = 0. If it does not, the beat does not close.</p>'
-      +checks([['Opening',num(k.opening)],['Collected',num(k.collected)],['Leftover',num(k.leftover)],['Balanced',k.balanced?'yes':'no']])
-      +'<a class="desk-link" href="/recon.html">Open recon desk</a>';
+    html=titleRow('recon','Count the stock')+'<p class="do">Night count. Opening minus collected minus leftover must be 0. If it is not, the day does not close.</p>'
+      +checks([['Opened with',num(k.opening)],['Collected bags',num(k.collected)],['Leftover packs',num(k.leftover)],['Balanced',k.balanced?'yes':'no']])
+      +'<a class="desk-link" href="/recon.html">Open the count desk</a>';
   } else if(id==='match'){
-    html=titleRow('match','Statement match')+'<p class="do">Settlement starts on collected scan. Not pack. Not pay. Not a UPI screenshot. Staff bank CSV only. No live member UPI.</p>'
-      +checks([['Settlements',s.count||0],['Matched',s.matched||0],['Statement open',s.unmatchedStatement||0],['Unmatched take',s.unmatchedSettlements||0]])
-      +'<a class="desk-link" href="/recon.html">Open statement match</a>';
+    html=titleRow('match','Match the bank file')+'<p class="do">Money matching starts when a bag is collected. Not at pack. Not at pay. Not from a UPI screenshot. Staff bank file only. Online payment is not on yet.</p>'
+      +checks([['Settlements',s.count||0],['Matched',s.matched||0],['Bank lines still open',s.unmatchedStatement||0],['Unmatched takes',s.unmatchedSettlements||0]])
+      +'<a class="desk-link" href="/recon.html">Open bank matching</a>';
   } else if(id==='source'){
     var n=((DATA.source&&DATA.source.sources)||[]).length;
-    html=titleRow('source','Source')+'<p class="do">Read the procure and vendor sheets. Keep a SKU only when Nia cost is under kirana.</p>'
-      +checks([['SKUs',n],['From', n ? 'inbound file' : 'No file yet']])
-      +'<a class="desk-link" href="/source.html">Open source desk</a>';
+    html=titleRow('source','What we buy')+'<p class="do">Read the buy sheet and the vendor list. Keep a pack only when Nia pays less than the kirana price.</p>'
+      +checks([['Packs',n],['From', n ? 'uploaded buy sheet' : 'No file yet. Choose a file.']])
+      +'<a class="desk-link" href="/source.html">Open the buy-source desk</a>';
   } else if(id==='predict'){
-    html=titleRow('predict','Predict')+'<p class="do">Use opening, collected, and miss. Do not invent a load. Chase bags still on the beat.</p>'
-      +checks([['Miss rate',(k.miss_rate!=null?k.miss_rate+'%':'0%')],['Chase',num(pred.chaseCount||k.chase)],['Members',num(k.members||t.memberCount)],['Studios',num(k.stops||t.stopCount)]])
-      +'<a class="desk-link" href="/predict.html">Open predict desk</a>';
+    html=titleRow('predict','Tomorrow\'s load')+'<p class="do">Use opening, collected and miss. Do not invent a load. Chase bags still on today\'s run.</p>'
+      +checks([['Miss rate',(k.miss_rate!=null?k.miss_rate+'%':'0%')],['Bags to chase',num(pred.chaseCount||k.chase)],['Members',num(k.members||t.memberCount)],['Collection points',num(k.stops||t.stopCount)]])
+      +'<a class="desk-link" href="/predict.html">Open tomorrow\'s load</a>';
   } else if(id==='close'){
-    html=titleRow('close','Beat close')+'<p class="do">Night close never plugs a gap. Opening minus collected minus leftover must be 0 or the beat stays open.</p>'
-      +checks([['Opening',num(k.opening)],['Collected',num(k.collected)],['Miss',num(k.missed)],['Balanced',k.balanced?'yes':'no']])
-      +'<a class="desk-link" href="/recon.html">Open beat close</a>';
+    html=titleRow('close','Close the day')+'<p class="do">Night close never plugs a gap. Opening minus collected minus leftover must be 0, or the day stays open.</p>'
+      +checks([['Opened with',num(k.opening)],['Collected bags',num(k.collected)],['Missed bags',num(k.missed)],['Balanced',k.balanced?'yes':'no']])
+      +'<a class="desk-link" href="/recon.html">Open close-the-day</a>';
   } else if(id==='next'){
     var rec=((pred.load)||[]).filter(function(r){ return r.tomorrow_qty>0; });
     var qty=rec.reduce(function(a,r){ return a+num(r.tomorrow_qty); },0);
-    html=titleRow('next','Tomorrow load')+'<p class="do">Hub load from the ledger. Collected plus what is still holding, cut by miss rate. Not discretion.</p>'
-      +checks([['SKUs to load',rec.length],['Units',qty],['Miss rate',(k.miss_rate!=null?k.miss_rate+'%':'0%')]])
-      +'<a class="desk-link" href="/hub.html">Open hub load</a>';
+    html=titleRow('next','Tomorrow\'s load')+'<p class="do">Hub load from the book. Collected plus what is still holding, cut by the miss rate. Not a guess.</p>'
+      +checks([['Packs to load',rec.length],['Units',qty],['Miss rate',(k.miss_rate!=null?k.miss_rate+'%':'0%')]])
+      +'<a class="desk-link" href="/hub.html">Open the hub load</a>';
   } else if(id==='hub'){
-    html=titleRow('hub','Hub load')+'<p class="do">Inventory is movements. Sign opening posts inbound. A new studio is a row. Do not rewrite the beat.</p>'
-      +checks([['Loaded',num(f.loaded)],['Studios',num(t.stopCount||40)],['Members',num(t.memberCount||3000)]])
-      +'<a class="desk-link" href="/hub.html">Open hub desk</a>';
+    html=titleRow('hub','Hub for tomorrow')+'<p class="do">Stock is movements. Signing the opening count adds arrived stock. A new collection point is a new row. Do not rewrite the day.</p>'
+      +checks([['Loaded bags',num(f.loaded)],['Collection points',num(t.stopCount||40)],['Members',num(t.memberCount||3000)]])
+      +'<a class="desk-link" href="/hub.html">Open the hub desk</a>';
   }
   box.className='open show';
   box.innerHTML=html;
@@ -531,7 +711,7 @@ function sendCsv(kind, file){
       body:JSON.stringify({ kind:kind, csv:String(reader.result||''), filename:file.name })
     }).then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); })
       .then(function(res){
-        if(!res.ok){ alert((res.j&&res.j.error)||'Upload failed'); return; }
+        if(!res.ok){ alert((res.j&&res.j.error)||'Could not add that file. Try again.'); return; }
         DATA.conn=res.j.connectors||res.j;
         if(DATA.tower) DATA.tower.connectors=DATA.conn;
         fetch('/api/source').then(function(r){ return r.json(); }).then(function(src){
@@ -539,7 +719,7 @@ function sendCsv(kind, file){
           face();
         }).catch(function(){ face(); });
         fetch('/api/settlements?beat=today&unmatched=1').then(function(r){ return r.json(); }).then(function(set){ DATA.set=set; face(); });
-      }).catch(function(){ alert('Could not upload'); });
+      }).catch(function(){ alert('Could not add that file. Try again.'); });
   };
   reader.readAsText(file);
 }
@@ -568,11 +748,11 @@ function bindUploads(){
       fetch('/api/connectors/sync-catalogue',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'})
         .then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); })
         .then(function(res){
-          if(!res.ok){ alert((res.j&&res.j.error)||'Sheet sync failed'); return; }
+          if(!res.ok){ alert((res.j&&res.j.error)||'Could not read the Catalogue sheet. Try again.'); return; }
           DATA.conn=res.j.connectors||res.j;
           if(DATA.tower) DATA.tower.connectors=DATA.conn;
           face();
-        }).catch(function(){ alert('Could not sync Catalogue tab'); });
+        }).catch(function(){ alert('Could not read the Catalogue sheet. Try again.'); });
     });
   }
 }
@@ -585,17 +765,17 @@ function load(){
   ]).then(function(all){
     DATA={ tower:all[0], set:all[1], source:all[2], conn:all[3], openJob:'' };
     var t=all[0]||{};
-    document.getElementById('topmeta').innerHTML=(t.theatre||'Rajputana Theatre')+' · '+(t.stopCount||40)+' studios · '+(t.memberCount||3000)+' members<br>Beat '+(t.beatDate||'-')+' · '+(t.bagsTonight||0)+' bags tonight · no live UPI';
+    document.getElementById('topmeta').innerHTML=(t.theatre||'Rajputana Theatre')+' · '+(t.stopCount||40)+' collection points · '+(t.memberCount||3000)+' members<br>Beat '+(t.beatDate||'-')+' · '+(t.bagsTonight||0)+' bags tonight · online payment is not on yet';
     face();
     var g=t.gates||{};
     var keys=['participation','sellThrough','preorderFill','memberSaving','inventoryLoss','contribution'];
-    var labels={participation:'Participation (proposed 30/100)',sellThrough:'Sell-through (proposed 80/100)',preorderFill:'Pre-order fill (proposed 95/100)',memberSaving:'Member saving (proposed 3/100)',inventoryLoss:'Inventory loss (proposed under 1/200)',contribution:'Contribution (proposed 3/100)'};
+    var labels={participation:'Members who joined (aim 30 of 100)',sellThrough:'Packs that sold (aim 80 of 100)',preorderFill:'Pre-orders filled (aim 95 of 100)',memberSaving:'Money members saved (aim 3 of 100)',inventoryLoss:'Stock lost (keep under 1 of 200)',contribution:'Contribution (aim 3 of 100)'};
     document.getElementById('gates').innerHTML=keys.map(function(key){
       var row=g[key]||{};
       return '<div class="check"><div class="l">'+labels[key]+'</div><div class="n">'+(row.num!=null?row.num:'-')+' / '+(row.den!=null?row.den:'-')+'</div><div class="l">'+(row.label||'')+'</div></div>';
     }).join('');
   }).catch(function(){
-    document.getElementById('jobs').innerHTML='<div class="empty">Could not load Sikh Unit.</div>';
+    document.getElementById('jobs').innerHTML='<div class="empty">Could not load the Save board. Refresh the page, then try again.</div>';
   });
 }
 bindUploads();

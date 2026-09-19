@@ -11,7 +11,7 @@
 .nia-home-hero.mesha-desire img.nia-home-photo{
   position:relative!important;inset:auto;display:block;
   width:100%;height:auto;min-height:180px;max-height:420px;
-  object-fit:cover;object-position:8% 10%;z-index:0;border-radius:12px;
+  object-fit:cover;object-position:12% 14%!important;z-index:0;border-radius:12px;
 }
 .nia-home-copy{
   position:relative;z-index:1;width:100%;box-sizing:border-box;
@@ -92,8 +92,8 @@
   .nia-home-hero .nia-home-photo,
   .nia-home-hero.mesha-desire img.nia-home-photo{
     position:relative!important;inset:auto;
-    height:min(52vh,560px);max-height:none;min-height:280px;
-    object-position:12% 14%;
+    width:100%;height:auto;min-height:280px;max-height:none;
+    object-fit:cover;object-position:12% 14%!important;
   }
   .apple-home .mesha-desire-copy h1,.nia-home-copy h1{
     font-size:56px;max-width:16ch;margin:8px auto 10px;letter-spacing:-.03em;color:#1d1d1f

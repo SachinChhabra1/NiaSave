@@ -745,3 +745,8 @@ body.mesha-dark main,
 body.mesha-dark .store-screen{
   background:var(--nia-canvas);color:var(--nia-ink);
 }
+.save-search{margin:0 16px 12px}
+.save-search input[type="search"]{
+  width:100%;min-height:44px;padding:10px 14px;border:1px solid var(--nia-line);
+  border-radius:12px;background:var(--nia-band);color:var(--nia-ink);
+}

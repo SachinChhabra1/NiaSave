@@ -26,10 +26,10 @@ export function bagHasUnconfirmedPack(products = [], cart = {}) {
   return (products || []).some(product => cart[product.id] && !packReady(product));
 }
 
-export function stayErrorKind(error) {
+export function stayErrorKind(error, {signedIn=false}={}) {
   const message = String(error || '');
   if (!message) return 'empty';
-  if (/sign_in_required|please sign in again|bag is still/i.test(message)) return 'expired';
+  if (/sign_in_required|please sign in again|bag is still|^signed_out$/i.test(message)) return signedIn ? 'expired' : 'signedOut';
   if (/network|offline|failed to fetch|unavailable|timeout/i.test(message)) return 'network';
   return 'failed';
 }

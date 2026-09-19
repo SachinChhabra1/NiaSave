@@ -546,26 +546,26 @@ body { background: var(--canvas); color: var(--ink); font-family: inherit; lette
   .metric { min-height: 116px; padding: 16px !important; }
 }
 
-/* RafiQi Central shared product system */
+/* Nia operator UI — Central light (shared with nia-operator.css) */
 :root {
-  color-scheme: dark;
-  font-family: "IBM Plex Sans", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --canvas: #0b0e14;
-  --surface: #12161e;
-  --surface-raised: #181d27;
-  --surface-hover: #1d2330;
-  --ink: #e8ecf1;
-  --muted: #9aa3b2;
-  --subtle: #6d7686;
-  --line: #242a35;
-  --soft: #181d27;
-  --blue: #0A84FF;
-  --blue-2: #007AFF;
-  --positive: #58b98c;
-  --danger: #ef6b73;
-  --saffron: #efad62;
-  --earth: #c19a6b;
-  --card-shadow: none;
+  color-scheme: light;
+  font-family: Inter, -apple-system, system-ui, "Segoe UI", sans-serif;
+  --canvas: #F4F6FA;
+  --surface: #FFFFFF;
+  --surface-raised: #FFFFFF;
+  --surface-hover: #E8EFF9;
+  --ink: #101828;
+  --muted: #6E7787;
+  --subtle: #5A6472;
+  --line: #E3E8EF;
+  --soft: #EEF2F7;
+  --blue: #1668C9;
+  --blue-2: #1F5FA8;
+  --positive: #1668C9;
+  --danger: #C8322A;
+  --saffron: #1668C9;
+  --earth: #5A6472;
+  --card-shadow: 0 1px 2px rgba(16,24,40,0.04);
 }
 
 html, body, #root { background: var(--canvas); color: var(--ink); }
@@ -583,8 +583,8 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline-color:
   color: var(--muted);
 }
 .product-brand { min-height: 44px; margin: 0 4px 20px; display: flex; align-items: center; gap: 10px; }
-.product-mark { flex: 0 0 32px; width: 32px; height: 32px; border: 1px solid #34425a; border-radius: 9px; display: grid; place-items: center; background: linear-gradient(145deg, #263853, #162132); color: #fff; font: 600 14px "IBM Plex Mono", monospace; }
-.product-mark img { display: block; width: 22px; height: 22px; object-fit: contain; filter: invert(1); }
+.product-mark { flex: 0 0 32px; width: 32px; height: 32px; border: 1px solid #E3E8EF; border-radius: 9px; display: grid; place-items: center; background: #FFFFFF; color: #1668C9; font: 600 14px Inter, sans-serif; }
+.product-mark img { display: block; width: 22px; height: 22px; object-fit: contain; filter: none; }
 .product-brand > span:last-child { min-width: 0; }
 .product-brand strong, .product-brand small { display: block; }
 .product-brand strong { color: var(--ink); font-size: 14px; font-weight: 500; }
@@ -624,7 +624,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline-color:
   grid-template-columns: minmax(180px, auto) minmax(150px, 1fr) auto;
   gap: 24px;
   border-bottom: 1px solid var(--line);
-  background: rgba(11, 14, 20, .94);
+  background: rgba(255, 255, 255, .94);
   backdrop-filter: blur(14px);
 }
 .suite-mark {

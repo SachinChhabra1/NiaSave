@@ -81,3 +81,14 @@ Out: `{ schemaVersion: 1, source: "central", status: "ready", member, studio, jc
 - Do not copy identity into NiaSave Neon.
 
 Done when a real non-TEST number on niasave.com (after the NiaSave remap is merged) receives `nia_member_login` from the Nia number, enters the code, and gets a session keyed to Central `member_id`.
+
+
+## Live session revalidation (22 September)
+
+OTP delivery requests have a bounded 30-second Central timeout; ordinary signed reads remain at eight seconds.
+Central confirm must return `account.authVersion` (64 lowercase hex), plus its governed `locationIds`, `locationModes` and `locationPinCodes`.
+NiaSave binds these values and the verified phone to its signed password-setup cookie, password profile and member session.
+Before setup, successful password login or an authenticated commerce request, NiaSave calls `member.identity` with signed `{phone, authVersion}`.
+Central checks current phone, KYC/access and identity revision, then returns the current governed account projection. Missing/mismatched identity or revision fails closed; an outage never reuses stale grants.
+WhatsApp sessions enforce the Central fulfilment mode and delivery PIN grants. An empty assignment does not acquire a default Studio.
+Existing explicit legacy/TEST flows keep their own markers.

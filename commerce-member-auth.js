@@ -90,7 +90,7 @@ export function authErrorText(code, t) {
     not_registered: t('This number is not registered for NiaSave. Ask your Nia team if you need access.', 'यह नंबर नियासेव के लिए पंजीकृत नहीं है। प्रवेश चाहिए तो निया टीम से पूछें।'),
     access_not_granted: t('This number is not registered for NiaSave. Ask your Nia team if you need access.', 'यह नंबर नियासेव के लिए पंजीकृत नहीं है। प्रवेश चाहिए तो निया टीम से पूछें।'),
     bad_otp: t('That code is not correct. Try again.', 'कोड सही नहीं है। फिर कोशिश करें।'),
-    invalid_code: t('Enter the 4 to 8 digit code from your SMS.', 'SMS में आया 4 से 8 अंकों का कोड डालें।'),
+    invalid_code: t('Enter the 4 to 8 digit code from WhatsApp.', 'WhatsApp में आया 4 से 8 अंकों का कोड डालें।'),
     weak_password: t('Choose a stronger password. Use at least 8 characters.', 'मज़बूत पासवर्ड चुनें। कम से कम 8 अक्षर हों।'),
     invalid_phone: t('Enter a 10-digit Indian mobile number starting with 6–9.', '6–9 से शुरू 10 अंकों का भारतीय मोबाइल नंबर डालें।'),
     password_mismatch: t('The passwords do not match.', 'पासवर्ड मेल नहीं खाते।'),
@@ -211,7 +211,7 @@ export function phoneFormMarkup({t, esc, phone = '', passwordLink = false}) {
 
 export function verifyFormMarkup({t, esc, phone = ''}) {
   const shown = e164In(phone) || phone;
-  return `<form id="verify-form" class="stack" data-auth-step="code">${steps(t, 'code')}<p>${t('If this number is registered with Nia, a code will arrive by SMS.', 'यदि यह नंबर निया में पंजीकृत है, तो SMS पर कोड आएगा।')}</p>${shown ? `<p class="auth-phone">${esc(shown)}</p>` : ''}<label>${t('Verification code', 'पुष्टि कोड')}<input name="code" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{4,8}" maxlength="8" required></label>${fieldError()}<button class="primary" type="submit">${t('Verify & continue', 'पुष्टि करके आगे बढ़ें')}</button><button type="button" data-action="login">${t('Use another number / resend', 'दूसरा नंबर / फिर भेजें')}</button></form>`;
+  return `<form id="verify-form" class="stack" data-auth-step="code">${steps(t, 'code')}<p>${t('If this number is registered with Nia, a code will arrive on WhatsApp.', 'यदि यह नंबर निया में पंजीकृत है, तो WhatsApp पर कोड आएगा।')}</p>${shown ? `<p class="auth-phone">${esc(shown)}</p>` : ''}<label>${t('Verification code', 'पुष्टि कोड')}<input name="code" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{4,8}" maxlength="8" required></label>${fieldError()}<button class="primary" type="submit">${t('Verify & continue', 'पुष्टि करके आगे बढ़ें')}</button><button type="button" data-action="login">${t('Use another number / resend', 'दूसरा नंबर / फिर भेजें')}</button></form>`;
 }
 
 export function setPasswordFormMarkup({t}) {

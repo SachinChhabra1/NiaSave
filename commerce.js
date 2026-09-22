@@ -353,7 +353,7 @@ if(form.id==='login-form'){
   const phone=e164In(fields.phone);
   if(!phone)throw {code:'invalid_phone',message:errorText('invalid_phone')};
   authPhone=phone;
-  if(usesPasswordAuth(cat) && cat.memberAuth==='password'){
+  if(usesPasswordAuth(cat) && cat.memberAuth==='password' && !usesPhoneOtpFlow(cat)){
     showPasswordLogin();
     $('#dialog').classList.add('mesha-checkout');
     return;

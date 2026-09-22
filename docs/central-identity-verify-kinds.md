@@ -30,7 +30,7 @@ Route the three kinds next to `member.lookupByPhone`. NiaSave never talks to Gra
 
 ### `identity.verify.request`
 
-In: `{ phone, channel: "whatsapp" }`. Other `channel` → 400.
+In: `{ phone, channel: "whatsapp", clientIp }`. `clientIp` is derived server-side from the trusted Vercel edge header (or the direct socket locally), never from browser JSON. Other `channel` → 400.
 
 Do:
 
@@ -41,10 +41,11 @@ Do:
 
 ### `identity.verify.confirm`
 
-In: `{ challenge, code }` 4–8 digits.
+In: `{ challenge, code, phone }` 4–8 digits.
 
 **Fail-closed on confirm** means:
 
+- The normalized phone must match the phone bound to the challenge. A changed or missing phone fails with the same 401.
 - Wrong, expired, or missing challenge → **401**, body `{ error: "bad_otp" }`. Same body for every failure. No “not registered”, no member id, no studio.
 - Code matches **and** the phone on that challenge is KYC-approved as above **and** `member_id` exists → **200**:
 

@@ -19,5 +19,5 @@ test('reporting route keeps staff desk guards and fails closed without source cr
   const result=await fetch(url,{headers:{authorization:'Bearer '+admin}});
   assert.equal(result.status,503);assert.equal(result.headers.get('cache-control'),'private, no-store');
   assert.deepEqual(await result.json(),{error:'occupancy_source_unavailable',source:'UI_Occupancy'});
-  assert.equal((await fetch(url,{method:'POST',headers:{authorization:'Bearer '+admin}})).status,405);
+  assert.equal((await fetch(url,{method:'POST',headers:{authorization:'Bearer '+admin}})).status,503);
 });

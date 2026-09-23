@@ -6,6 +6,7 @@
  * Not for rafiqicentral.com or harness.
  */
 import http from "node:http";
+import {frozenRoute,freezeResponse} from "../lib/commerce/write-freeze.mjs";
 import { centralCommerceHttp } from "../lib/commerce/central-http.mjs";
 import { commerceHttp } from "../lib/commerce/http.mjs";
 import { studioBulkHttp } from "../lib/commerce/studio-bulk-http.mjs";
@@ -149,6 +150,7 @@ export async function handler(req, res) {
   const rewrittenPath = url.searchParams.get("path");
   const path = rewrittenPath ? `/${rewrittenPath.replace(/^\/+/, "")}` : url.pathname;
   const commercePath = path.replace(/^\/api/, "");
+  if(frozenRoute(req.method,commercePath)){const r=freezeResponse();return json(res,r.status,r.body);}
   if (commercePath.startsWith('/v1/staff/storefront/')) return ownerViewHttp(req,res,commercePath.slice('/v1/staff/storefront'.length),staffFromReq);
   if (commercePath === "/central/commerce") return centralCommerceHttp(req,res);
   if (commercePath.startsWith("/commerce/studios/bulk")) return studioBulkHttp(req, res, commercePath.slice(9));

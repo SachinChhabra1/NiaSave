@@ -28,14 +28,13 @@ function check(extra, expectedLoginStatus) {
       }
       assert.equal(verifyStaffToken('invalid.signature'),null);
       const cronPath=base+'/api/bison/data/sync';
-      assert.equal((await fetch(cronPath)).status,401);
-      assert.equal((await fetch(cronPath,{headers:{authorization:'Bearer deliberately-invalid'}})).status,401);
+      assert.equal((await fetch(cronPath)).status,503);
+      assert.equal((await fetch(cronPath,{headers:{authorization:'Bearer deliberately-invalid'}})).status,503);
       if(process.env.CRON_SECRET) {
         const allowed=await fetch(cronPath,{headers:{authorization:'Bearer '+process.env.CRON_SECRET}});
-        // No source/database exists in this process. Reaching this source
-        // precondition proves the scheduler cleared only its intended gate.
-        assert.equal(allowed.status,400);
-        assert.deepEqual(await allowed.json(),{error:'google_sheet_missing',status:400});
+        // M0 refuses the read-shaped sync write even with a valid scheduler credential.
+        assert.equal(allowed.status,503);
+        assert.equal((await allowed.json()).error,'pilot_commitments_paused');
         assert.equal((await fetch(base+'/api/bison/tower',{headers:{authorization:'Bearer '+process.env.CRON_SECRET}})).status,401);
       }
     } finally { await new Promise(r=>server.close(r)); }

@@ -12,7 +12,7 @@ delete process.env.DATABASE_URL;
 delete process.env.POSTGRES_URL;
 const { default: handler, issueStaffToken } = await import('./server.mjs');
 
-test('named Jat operator can write and read Living; unsigned, expired and other-unit access is denied', async t => {
+test('M0 freezes Jat writes while named staff login and read access remain unchanged', async t => {
   const server = http.createServer(handler);
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
   t.after(() => server.close());
@@ -22,7 +22,7 @@ test('named Jat operator can write and read Living; unsigned, expired and other-
     return {status:r.status, body:await r.json(), cookie:r.headers.get('set-cookie')};
   };
   assert.equal((await call('/api/bison/tower')).status,401);
-  assert.equal((await call('/api/bison/data/import',{table:'members',commit:true,rows:[{member_name:'Not saved'}]})).status,401);
+  assert.equal((await call('/api/bison/data/import',{table:'members',commit:true,rows:[{member_name:'Not saved'}]})).status,503);
   assert.equal((await call('/v1/staff/login',{email:'ajay.mahawar@nia.one',password:'wrong'})).status,401);
   const login = await call('/v1/staff/login',{email:'ajay.mahawar@nia.one',password:process.env.JAT_STAFF_PASSWORD});
   assert.equal(login.status,200);
@@ -61,10 +61,10 @@ test('named Jat operator can write and read Living; unsigned, expired and other-
   assert.equal(testOk.status,200);
   assert.equal(testOk.body.staff.test,true);
   assert.equal(testOk.body.staff.email,'test.desk@nia.one');
-  assert.equal((await call('/api/bison/data/import',{table:'members',commit:true,rows:[{member_name:'UAT · Jat entry'}]},withPersonal.body.token)).status,200);
+  assert.equal((await call('/api/bison/data/import',{table:'members',commit:true,rows:[{member_name:'UAT · Jat entry'}]},withPersonal.body.token)).status,503);
   const result = await call('/api/bison/tower',null,freshToken);
   assert.equal(result.status,200);
-  assert.equal(result.body.kpis.members,1);
+  assert.equal(result.body.kpis.members,0);
   assert.equal((await call('/api/tower',null,freshToken)).status,403);
   assert.equal((await call('/api/dogra/state',null,freshToken)).status,403);
   const expired = issueStaffToken(login.body.staff,Date.now()-13*60*60*1000);

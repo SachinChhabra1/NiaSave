@@ -1,6 +1,7 @@
 import memberUpdates from './member-updates/bn.js';
 // Bangla draft: Mesha strings are translated; remaining keys stay English until native-speaker review.
 export default {
+  "Browsing is open. Reservations, stays and applications are paused while Nia prepares the pilot. Contact your Nia team for help with an existing request.": "আপনি তথ্য দেখতে পারেন। নিয়া পাইলটের প্রস্তুতি নেওয়ার সময় পণ্যের বুকিং, থাকার বুকিং ও চাকরির আবেদন বন্ধ আছে। আগের অনুরোধে সাহায্যের জন্য আপনার নিয়া দলের সঙ্গে যোগাযোগ করুন।",
   ...memberUpdates,
   "Pick up your bag here. Pay when you collect.": "Pick up your bag here. Pay when you collect.",
   "Pay when it arrives.": "Pay when it arrives.",

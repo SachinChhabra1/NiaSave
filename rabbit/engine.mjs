@@ -1,3 +1,5 @@
+import {loadExistingRuntimeState} from '../lib/runtime-store.mjs';
+import { saveBookUnchanged, preserveFrozenBook, frozenRoute, freezeResponse } from '../lib/commerce/write-freeze.mjs';
 /**
  * Sikh Unit staff control plane (studio-cart only).
  * Go-live load: 1 theatre, 40 studios, 3000 members.
@@ -481,8 +483,10 @@ function skipDurableRead() {
 
 // Serialise local requests; Postgres CAS handles concurrent serverless workers.
 const runWithPersistentState = createStateRunner({
+  validate: saveBookUnchanged,
+  prepareSave: preserveFrozenBook,
   durable: hasDurableStore,
-  load: () => loadRuntimeState(RUNTIME_STATE_KEY, snapshotState(createState())),
+  load: () => loadExistingRuntimeState(RUNTIME_STATE_KEY, snapshotState(createState())),
   save: (value, version) => saveRuntimeState(RUNTIME_STATE_KEY, value, version),
   snapshot: () => snapshotState(),
   restore: (value, storage) => restoreState(value, storage || state.persist),
@@ -490,6 +494,9 @@ const runWithPersistentState = createStateRunner({
 });
 export function withSaveState(work) {
   return runWithPersistentState(true, () => work(state), true);
+}
+export function withSaveRead(work) {
+  return runWithPersistentState(false, () => work(structuredClone(state)), true);
 }
 
 export async function staffStorageStatus() {
@@ -2358,6 +2365,7 @@ async function handleStaffOnce(req, res, path, body, url) {
 }
 
 export async function handleStaff(req, res, path, body, url) {
+  if (frozenRoute(req.method,path)) return freezeResponse();
   const mutating = (req.method === "POST" || req.method === "PUT")
     && path !== "/auth/otp"
     && path !== "/auth/verify";

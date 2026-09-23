@@ -1,3 +1,5 @@
+import {loadExistingRuntimeState} from '../lib/runtime-store.mjs';
+import { livingBookUnchanged, frozenRoute, freezeResponse } from '../lib/commerce/write-freeze.mjs';
 import { createStateRunner } from '../lib/commerce/transaction.mjs';
 import { isShowcaseEntry } from '../lib/commerce/showcase-mode.mjs';
 import { expireNests } from '../lib/commerce/nests.mjs';
@@ -536,14 +538,18 @@ export function bisonPath(pathname, rewrittenPath) { let path = rewrittenPath ? 
 export function isBisonPath(path) { return path === "/bison" || path.startsWith("/bison/") || path === "/living" || path.startsWith("/living/"); }
 function normalize(path) { return path.replace(/^\/living/, "/bison"); }
 const runWithPersistentState = createStateRunner({
+  validate: livingBookUnchanged,
   durable: hasDurableStore,
-  load: () => loadRuntimeState(RUNTIME_STATE_KEY, snapshotState()),
+  load: () => loadExistingRuntimeState(RUNTIME_STATE_KEY, snapshotState()),
   save: (value, version) => saveRuntimeState(RUNTIME_STATE_KEY, value, version),
   snapshot: () => snapshotState(),
   restore: (value, storage) => restoreState(value, storage || state.persist)
 });
 export function withLivingState(work) {
   return runWithPersistentState(true, () => work(state), true);
+}
+export function withLivingRead(work) {
+  return runWithPersistentState(false, () => work(structuredClone(state)), true);
 }
 export async function bisonStorageStatus() {
   if (!hasDurableStore()) return { storage: "memory", connected: false, version: 0, product: "bison", schemaVersion: SCHEMA_VERSION };
@@ -601,6 +607,6 @@ async function handleOnce(req, path, body, url) {
   if (method === "POST" && route === "/bison/vacate") return done(vacateNest(body || {}));
   return { status: 404, body: { error: "not_found", product: "bison" } };
 }
-export async function handleBison(req, res, path, body, url) { return runWithPersistentState(true, () => { expireNests(state, Date.now()); return handleOnce(req, path, body, url); }); }
+export async function handleBison(req, res, path, body, url) { if(frozenRoute(req.method,path))return freezeResponse(); return runWithPersistentState(req.method!=='GET', () => { expireNests(state, Date.now()); return handleOnce(req, path, body, url); }); }
 
 export { SCHEMA_VERSION, STUDIO_COUNT };

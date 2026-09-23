@@ -20,7 +20,8 @@ import { pathToFileURL } from "node:url";
 import { handleStaff, isStaffPath, staffPath, staffStorageStatus, DUMMY_DATA } from "../rabbit/engine.mjs";
 import { handleBison, isBisonPath, bisonPath, bisonStorageStatus } from "../bison/engine.mjs";
 import { readCurrentPosition } from "../bison/current-position.mjs";
-import { hasDurableStore, loadRuntimeState, saveRuntimeState } from "../lib/runtime-store.mjs";
+import { hasDurableStore, loadExistingRuntimeState, loadRuntimeState, saveRuntimeState } from "../lib/runtime-store.mjs";
+import {discardTestCommerceBook} from "../lib/commerce/discard-test-book.mjs";
 import { readDograState, writeDograState } from "../lib/dogra-store.mjs";
 
 const PORT = Number(process.env.PORT || 8787);
@@ -215,6 +216,15 @@ export async function handler(req, res) {
       return json(res, 405, { error: "method_not_allowed" });
     }
     if (req.method === "GET" && (path === "/health" || path === "/v1/health")) {
+      if(process.env.VERCEL_ENV==='production' && url.searchParams.get('m1Proof')==='1'){
+        const key=process.env.NIA_RUNTIME_STATE_KEY||'operation-polo';
+        const raw=await loadExistingRuntimeState(key,null);
+        if(raw.storage!=='postgres'||!raw.value||raw.version<1)
+          return json(res,503,{error:'m1_proof_unavailable'});
+        const manifest=discardTestCommerceBook(raw.value).manifest;
+        console.info(JSON.stringify({event:'m1_runtime_proof',at:new Date().toISOString(),
+          stateKey:key,version:raw.version,...manifest}));
+      }
       const storage = await staffStorageStatus();
       return json(res, 200, { ok: true, product: "niasave", demo: DEMO, demoScope: ["otp", "payments"], time: now(), hubStage: state.hubDay.stage, storage, bison: await bisonStorageStatus() });
     }

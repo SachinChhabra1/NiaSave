@@ -343,7 +343,7 @@ if(action==='cancel')return show(t('Cancel this reservation?','यह बुक�
 if(action==='cancel-confirm'){
   if(!commitmentReady())return toast(t(PILOT_CLOSED_COPY));
   const order=orders.find(row=>row.id===id);
-  if(!order||!Number.isInteger(order.revision))return toast(t('Refresh order status and try again.','ऑर्डर की स्थिति ताज़ा करके फिर कोशिश करें।'));
+  if(!order||!Number.isInteger(order.revision))return toast(t('Try again','फिर कोशिश करें'));
   const previous=load('nia-commerce-cancel-pending',null);
   const tap=previous?.orderId===id?previous:
     {orderId:id,expectedRevision:order.revision,key:crypto.randomUUID()};

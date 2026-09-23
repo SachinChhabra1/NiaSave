@@ -340,7 +340,24 @@ if(action==='books-consent'){await api('/books/consent',{enabled:id==='on'});awa
 if(action==='earn-apply')return await reviewJob(id);if(action==='earn-retry')return await confirmJob();
 if(action==='review')return await review();if(action==='confirm')return await confirm();if(action==='refresh-orders')return await go('orders');
 if(action==='cancel')return show(t('Cancel this reservation?','यह बुकिंग रद्द करें?'),`<p>${t('Nothing has been paid. Your reserved stock will be released.','कोई भुगतान नहीं हुआ है। बुक किया गया सामान फिर उपलब्ध हो जाएगा।')}</p><button class="primary full" data-action="cancel-confirm" data-id="${id}">${t('Cancel reservation','बुकिंग रद्द करें')}</button>`);
-if(action==='cancel-confirm'){await api('/cancel',{orderId:id});await go('orders');return;}
+if(action==='cancel-confirm'){
+  if(!commitmentReady())return toast(t(PILOT_CLOSED_COPY));
+  const order=orders.find(row=>row.id===id);
+  if(!order||!Number.isInteger(order.revision))return toast(t('Try again','फिर कोशिश करें'));
+  const previous=load('nia-commerce-cancel-pending',null);
+  const tap=previous?.orderId===id?previous:
+    {orderId:id,expectedRevision:order.revision,key:crypto.randomUUID()};
+  save('nia-commerce-cancel-pending',tap);
+  try{
+    await api('/cancel',{orderId:tap.orderId,expectedRevision:tap.expectedRevision},'POST',tap.key);
+    save('nia-commerce-cancel-pending',null);
+    await go('orders');return;
+  }catch(e){
+    if(!e.uncertain&&e.code!=='service_unavailable'&&e.code!=='state_conflict')
+      save('nia-commerce-cancel-pending',null);
+    throw e;
+  }
+}
 if(action==='reorder'){const o=orders.find(o=>o.id===id);for(const l of o.lines){const p=cat.products.find(p=>p.id===l.id);if(p?.available)cart[l.id]=Math.min(l.qty,p.available,10);}save('nia-commerce-bag',cart);await go('bag');return toast(t('Added available items. Prices will be checked again.','उपलब्ध सामान जोड़ा गया। कीमतों की फिर जाँच होगी।'));}
 }catch(e){if($('#dialog').open){let error=$('#dialog-body .error-inline');if(!error){error=document.createElement('p');error.className='error-inline';error.setAttribute('role','alert');$('#dialog-body').append(error);}error.textContent=e.message;}else toast(e.message);}});
 document.addEventListener('input',event=>{if(event.target.matches('#books-plan-form input')){const values=Object.fromEntries(new FormData(event.target.form));planDrafts.set(currentPlanKey(),values);$('#plan-result').innerHTML=planResult(values,{t,money});if(planState?.status==='ready'&&planState.saveState!=='saving'){planState={...planState,saveState:planState.savedFields&&sameFields(fieldsFromValues(values),planState.savedFields)?'saved':'unsaved',error:null};refreshPlanStatus();}}});

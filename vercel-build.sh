@@ -7,6 +7,7 @@ test -f api/server.mjs
 test -f rabbit/engine.mjs
 # Save operations are owned by Rafiqi Central's Sikh Unit.
 node rabbit/public-naming-lock.mjs
+if [ "${VERCEL_ENV:-}" = "production" ]; then node scripts/discard-test-commerce.mjs; fi
 node scripts/splice-apple-home.mjs
 mkdir -p dist/products dist/assets
 # Production member home is commerce.html (generic SKUs). The React P0 catalog

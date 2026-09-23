@@ -10,9 +10,16 @@ const source=await loadExistingRuntimeState(key,null);
 if(source.storage!=='postgres'||!source.value||!Number.isSafeInteger(source.version)||source.version<1)
   throw new Error('existing_production_row_required');
 const {state,manifest}=discardTestCommerceBook(source.value);
+const shape=value=>Array.isArray(value)?{type:'array',count:value.length}:
+  value&&typeof value==='object'?{type:'object',count:Object.keys(value).length}:
+  {type:typeof value};
+const rawShape=Object.fromEntries(Object.entries(source.value).map(([field,value])=>
+  [field,shape(value)]));
+const commerceShape=Object.fromEntries(Object.entries(source.value.commerce||{}).map(
+  ([field,value])=>[field,shape(value)]));
 const evidence={event:'m1_test_book_inventory',at:new Date().toISOString(),
   databaseHost:new URL(process.env.DATABASE_URL).hostname,stateKey:key,
-  sourceVersion:source.version,...manifest};
+  sourceVersion:source.version,...manifest,rawShape,commerceShape};
 console.log(JSON.stringify(evidence));
 if(!apply){console.log(JSON.stringify({event:'m1_dry_run_no_discard'}));process.exit(0);}
 

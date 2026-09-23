@@ -8,6 +8,10 @@ The founder confirms that no real member has ever transacted on NiaSave producti
 
 Decision: document and discard that operational test book during the Central cutover. Do not migrate it into Central and do not copy member records. This decision supersedes the conditional migration path in the M0 freeze note. It does not itself delete any row, authorize reopening commitments, or change the authentication path.
 
+## Operator procedure
+
+Run `node scripts/discard-test-commerce.mjs` in the authorized production database environment to inventory the existing row and record the machine counts and hashes. Run `node scripts/discard-test-commerce.mjs --apply` there to compare and swap the exact source version, then verify that the discarded fields are empty. Retain both JSON lines from the apply run in the restricted operations evidence store and append its database host, state key, versions, timestamps and counts to the log below. Do not paste database credentials or the raw state into this document. A conflict or failed postcheck is not a successful cutover. The script has **not** yet run against production.
+
 ## Execution log (to complete when deletion runs)
 
 - Production project: `niasave` in `sachinchhabra37-8426s-projects`.

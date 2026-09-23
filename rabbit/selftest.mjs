@@ -220,7 +220,7 @@ ok("stock item uses procure name", stockProjection().rows.find(r => r.sku === "g
 ok("stock days cover blank without collected", stockProjection().rows.every(r => r.days_cover === null || r.days_cover >= 0));
 noDummyWord("publish", connectorsPayload().publish);
 
-// Restart keeps the rows: a fresh process on the Postgres protocol uploads, cold-starts, then lists.
+// M0 rejects uploads without opening or seeding a production book.
 const durableSource = `
   import assert from "node:assert/strict";
   const store = await import("./lib/runtime-store.mjs");
@@ -237,22 +237,19 @@ const durableSource = `
   const { handleStaff, resetDummy } = await import("./rabbit/engine.mjs");
   const url = new URL("http://local/api/connectors");
   const up = await handleStaff({ method: "POST" }, {}, "/connectors/upload", { kind: "procure", filename: "durable.csv", csv: "sku,buy_inr\\ngroundnut_oil,150\\n" }, url);
-  assert.equal(up.status, 200); assert.equal(up.body.persist, "postgres");
+  assert.equal(up.status, 503); assert.equal(up.body.error, "pilot_commitments_paused");
   const bad = await handleStaff({ method: "POST" }, {}, "/connectors/upload", { kind: "nope", csv: "a\\n1\\n" }, url);
-  assert.equal(bad.status, 400);
+  assert.equal(bad.status, 503);
   resetDummy();
   const listed = await handleStaff({ method: "GET" }, {}, "/connectors", {}, url);
-  assert.equal(listed.status, 200);
-  assert.equal(listed.body.persist, "postgres");
-  assert.equal(listed.body.sources.find(s => s.id === "procure").filename, "durable.csv");
-  assert.equal(listed.body.publish.savings.rows.find(r => r.service_id === "groundnut_oil").working, true);
-  assert.equal(rows.get("selftest-connectors").version, 2);
+  assert.equal(listed.status, 503);
+  assert.equal(rows.size, 0);
 `;
 const durable = spawnSync(process.execPath, ["--input-type=module", "-e", durableSource], {
   cwd: new URL("../", import.meta.url), encoding: "utf8", timeout: 20000,
   env: { PATH: process.env.PATH, DEMO: "1", DUMMY_DATA: "1", DATABASE_URL: "postgres://selftest-connectors.invalid/test", NIA_RUNTIME_STATE_KEY: "selftest-connectors", NIA_STAFF_STORE_GETS: "1" }
 });
-ok("connector upload survives restart on the Postgres protocol", durable.status === 0, durable.stderr);
+ok("M0 rejects connector uploads and missing-book reads without seeding", durable.status === 0, durable.stderr);
 noDummyWord("connectors after upload", connectorsPayload());
 noDummyWord("source after upload", sourcePayload());
 resetDummy();
@@ -299,7 +296,7 @@ ok("GET /member 200", getMem.status === 200 && getMem.body.skip === true && getM
 const getOrd = await handleStaff({ method: "GET" }, {}, "/order", {}, new URL("http://x/api/order"));
 ok("GET /order 200", getOrd.status === 200 && Array.isArray(getOrd.body.orders) && getOrd.body.skip === true);
 const postEmpty = await handleStaff({ method: "POST" }, {}, "/order", {}, new URL("http://x/api/order"));
-ok("POST /order no_lines", postEmpty.status === 400 && postEmpty.body.error === "no_lines");
+ok("M0 POST /order frozen", postEmpty.status === 503 && postEmpty.body.error === "pilot_commitments_paused");
 ok("GET /auth/me skip", (await handleStaff({ method: "GET" }, {}, "/auth/me", {}, new URL("http://x/api/auth/me"))).body.skip === true);
 ok("stock keys after phone GET", ["beatDate","theatre","stopCount","opening","stock","remaining","movements","holding"].every(k => stockPayload()[k] !== undefined));
 

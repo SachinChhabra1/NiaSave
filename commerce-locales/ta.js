@@ -1,6 +1,7 @@
 import memberUpdates from './member-updates/ta.js';
 // Member-interface translation draft; native-speaker review is required before pilot launch.
 export default {
+  "Browsing is open. Reservations, stays and applications are paused while Nia prepares the pilot. Contact your Nia team for help with an existing request.": "விவரங்களைப் பார்க்கலாம். நியா முன்னோட்டத் திட்டத்தைத் தயாரிக்கும் வரை பொருள் முன்பதிவுகள், தங்குமிட முன்பதிவுகள் மற்றும் வேலை விண்ணப்பங்கள் இடைநிறுத்தப்பட்டுள்ளன. ஏற்கனவே உள்ள கோரிக்கைக்கு உதவி தேவைப்பட்டால் உங்கள் நியா குழுவை அணுகவும்.",
   "Search essentials": "தேவையானவை தேடு",
   "Search oils, soap…": "எண்ணெய், சோப்பு தேடு…",
   "Picked": "எடுக்கப்பட்டது",

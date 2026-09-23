@@ -1,3 +1,5 @@
+import { COMMITMENTS_FROZEN } from './commerce-capabilities.js';
+export const commitmentReady = () => !COMMITMENTS_FROZEN;
 /* Browser sibling for commerce.js. Do not import lib/. Payments stay off. */
 export const PENDING_PACK = 'Pack size to be confirmed';
 
@@ -14,6 +16,7 @@ export function packReady(product = {}) {
 }
 
 export function reserveReady(product = {}) {
+  if (!commitmentReady()) return false;
   const price = Number(product.price ?? product.nia);
   const available = Number(product.available);
   if (!product?.id || !packReady(product)) return false;

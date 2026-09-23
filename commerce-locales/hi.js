@@ -1,6 +1,7 @@
 import memberUpdates from './member-updates/hi.js';
 // Member-interface translation draft; native-speaker review is required before pilot launch.
 export default {
+  "Browsing is open. Reservations, stays and applications are paused while Nia prepares the pilot. Contact your Nia team for help with an existing request.": "आप जानकारी देख सकते हैं। निया की पायलट तैयारी के दौरान सामान की बुकिंग, रहने की बुकिंग और नौकरी के आवेदन बंद हैं। पुराने अनुरोध में मदद के लिए अपनी निया टीम से संपर्क करें।",
   "Your Nia setup link is ready. Confirm this is your phone, then use its screen lock.": "आपका निया सेटअप लिंक तैयार है। पुष्टि करें कि यह आपका फोन है, फिर उसका स्क्रीन लॉक इस्तेमाल करें।",
   "Ask your Nia team for a setup link after they verify your membership. Open it on your own phone within 10 minutes. No code to type.": "सदस्यता की जाँच के बाद अपनी निया टीम से सेटअप लिंक लें। इसे 10 मिनट के अंदर अपने फोन पर खोलें। कोई कोड टाइप नहीं करना है।",
 

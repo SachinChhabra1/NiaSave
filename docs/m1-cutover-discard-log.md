@@ -17,9 +17,9 @@ Run `node scripts/discard-test-commerce.mjs` in the authorized production databa
 - Production project: `niasave` in `sachinchhabra37-8426s-projects`.
 - NiaSave deployed M0 freeze: PR #111, merge commit `e1ee36f3059d7b0b0395dd1926e1777369cfc890`.
 - Operator, timestamp, deployment revision and database identity: pending execution.
-- Raw source keys/tables and pre-discard counts, including orders, reservations, settlements, idempotency keys and audit entries: pending execution.
-- Exact selected records and their TEST provenance: founder attestation above; machine inventory pending execution.
-- Export/checksum or deletion manifest retained outside the member app: pending execution.
+- Raw source row `operation-polo-production`, version 1868 at 2026-09-23 23:48:10 UTC, deployment `dpl_46dMFhj7UQdDRvgiAz5eYsgMqGdp` (PR #120): 6 orders, 1 reservation, 2 settlements, 2 payments, 13 scans, 6 idempotency keys, 27 operational audit entries, 1 catalogue config. Source records are founder-classified internal tests.
+- Exact selected records and their TEST provenance: founder attestation above; machine inventory hash `7ad3bf8a58917f3660c689aff9faa19ebbd312d82659e1647789fcdaeee3764b` (SHA-256 of canonical selected fields).
+- Pre-discard counts, source version and checksum retained in this repository and private Vercel runtime log of deployment `dpl_46dMFhj7UQdDRvgiAz5eYsgMqGdp`; deletion and postcheck evidence pending.
 - Transaction or cutover command, affected row counts, post-discard counts, and independent verification: pending execution.
 - Central contract revision and proof of single writer before any commitment is reopened: pending execution.
 

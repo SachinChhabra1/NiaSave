@@ -696,7 +696,7 @@ export default {
   "Price when packs confirm": "প্যাক নিশ্চিত হলে দাম",
   'Illustrative test studio. Not a real Nest.': 'Illustrative test studio. Not a real Nest.',
   'View still': 'View still',
-  'Layout only. No reservation. No online payment.': 'Layout only. No reservation. No online payment.'
+  'Layout only. No reservation. No online payment.': 'Layout only. No reservation. No online payment.',
   "Related reference (optional)": "সম্পর্কিত তথ্যসূত্র (ঐচ্ছিক)",
   "Order, Nest or job reference": "অর্ডার, নেস্ট বা কাজের তথ্যসূত্র",
   "Refund approved by the Nia team": "নিয়া দল রিফান্ড অনুমোদন করেছে",

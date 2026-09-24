@@ -696,5 +696,15 @@ export default {
   "Price when packs confirm": "প্যাক নিশ্চিত হলে দাম",
   'Illustrative test studio. Not a real Nest.': 'Illustrative test studio. Not a real Nest.',
   'View still': 'View still',
-  'Layout only. No reservation. No online payment.': 'Layout only. No reservation. No online payment.'
+  'Layout only. No reservation. No online payment.': 'Layout only. No reservation. No online payment.',
+  "Related reference (optional)": "সম্পর্কিত তথ্যসূত্র (ঐচ্ছিক)",
+  "Order, Nest or job reference": "অর্ডার, নেস্ট বা কাজের তথ্যসূত্র",
+  "Refund approved by the Nia team": "নিয়া দল রিফান্ড অনুমোদন করেছে",
+  "Refund request only · not approved": "শুধু রিফান্ডের অনুরোধ · অনুমোদিত নয়",
+  "Related reference": "সম্পর্কিত তথ্যসূত্র",
+  "Move-in problem": "থাকতে আসার সমস্যা",
+  "Incorrect Nest details": "নেস্টের তথ্য ভুল",
+  "Incorrect job details": "কাজের তথ্য ভুল",
+  "Missing application update": "আবেদনের খবর পাওয়া যায়নি",
+  "Identity or access problem": "পরিচয় বা প্রবেশের সমস্যা",
 };

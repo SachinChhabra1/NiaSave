@@ -9,7 +9,8 @@ export function distanceKm(a,b) {
 }
 export function mapModel(data, now=Date.now()) {
   const source=data?.map;
-  if(source?.status !== 'ready') return {status:source?.status==='studio_missing'?'studio_missing':'unavailable',jobs:[]};
+  if(source?.status !== 'ready') return {status:['studio_missing','stale'].includes(source?.status)?source.status:'unavailable',jobs:[]};
+  if(!Array.isArray(data?.jobs)) return {status:'unavailable',jobs:[]};
   const age=now-Date.parse(source.asOf);
   if(!Number.isFinite(age)||age>300000||age < -60000) return {status:'stale',jobs:[]};
   if(!verifiedPoint(source.studio)) return {status:'studio_missing',jobs:[]};

@@ -23,7 +23,7 @@ cp -f desk.html dist/2para.html
 cp -f staff-entry.js dist/
 cp -f apple-desktop.css niasave-system.css niasave-apple-store.css niasave-ui.js dist/
 cp -f live-studios.html dist/
-cp -f commerce.html commerce.css commerce-shell.css commerce.js commerce-shell.js commerce-home.js commerce-money-status.js commerce-analytics.js commerce-content-qa.js commerce-capabilities.js commerce-truth.js commerce-owner.js commerce-passkeys.js commerce-member-auth.js commerce-i18n.js commerce-books.js commerce-services.js commerce-support.js commerce-plan.js commerce-earn-map.js commerce-categories.js commerce-shop-categories.js commerce-ops.js commerce-wave0.css commerce-wave0.js commerce-waves.css commerce-waves.js dist/
+cp -f commerce.html commerce.css commerce-shell.css commerce.js commerce-shell.js commerce-home.js commerce-money-status.js commerce-shop-v2.js commerce-analytics.js commerce-content-qa.js commerce-capabilities.js commerce-truth.js commerce-owner.js commerce-passkeys.js commerce-member-auth.js commerce-i18n.js commerce-books.js commerce-services.js commerce-support.js commerce-plan.js commerce-earn-map.js commerce-categories.js commerce-shop-categories.js commerce-ops.js commerce-wave0.css commerce-wave0.js commerce-waves.css commerce-waves.js dist/
 mkdir -p dist/commerce-locales dist/lib/commerce
 cp -f lib/commerce/support.mjs lib/commerce/partner-gate.mjs lib/commerce/analytics.mjs lib/commerce/content-qa.mjs dist/lib/commerce/
 cp -R commerce-locales/. dist/commerce-locales/

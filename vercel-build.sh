@@ -23,11 +23,12 @@ cp -f desk.html dist/2para.html
 cp -f staff-entry.js dist/
 cp -f apple-desktop.css niasave-system.css niasave-apple-store.css niasave-ui.js dist/
 cp -f live-studios.html dist/
-cp -f commerce.html commerce.css commerce.js commerce-capabilities.js commerce-truth.js commerce-owner.js commerce-passkeys.js commerce-member-auth.js commerce-i18n.js commerce-books.js commerce-services.js commerce-plan.js commerce-earn-map.js commerce-categories.js commerce-shop-categories.js commerce-ops.js commerce-wave0.css commerce-wave0.js commerce-waves.css commerce-waves.js dist/
-mkdir -p dist/commerce-locales
+cp -f commerce.html commerce.css commerce.js commerce-capabilities.js commerce-truth.js commerce-owner.js commerce-passkeys.js commerce-member-auth.js commerce-i18n.js commerce-books.js commerce-services.js commerce-support.js commerce-plan.js commerce-earn-map.js commerce-categories.js commerce-shop-categories.js commerce-ops.js commerce-wave0.css commerce-wave0.js commerce-waves.css commerce-waves.js dist/
+mkdir -p dist/commerce-locales dist/lib/commerce
+cp -f lib/commerce/support.mjs dist/lib/commerce/support.mjs
 cp -R commerce-locales/. dist/commerce-locales/
 # Every module commerce.html imports must exist in dist, or the member UI fails to load in production.
-for f in $(grep -o "from '\./[a-z-]*\.js'" commerce.js commerce-books.js commerce-services.js commerce-plan.js commerce-i18n.js | sed "s/.*from '\.\///; s/'//" | sort -u); do test -f "dist/$f" || { echo "missing dist/$f"; exit 1; }; done
+for f in $(grep -o "from '\./[a-z-]*\.js'" commerce.js commerce-books.js commerce-services.js commerce-support.js commerce-plan.js commerce-i18n.js | sed "s/.*from '\.\///; s/'//" | sort -u); do test -f "dist/$f" || { echo "missing dist/$f"; exit 1; }; done
 cp -f member.html dist/member-services.html
 if [ -d public/products ]; then cp -r public/products/. dist/products/; fi
 if [ -d assets ]; then cp -r assets/. dist/assets/; fi

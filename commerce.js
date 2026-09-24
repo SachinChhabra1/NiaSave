@@ -110,6 +110,8 @@ function applyCommitmentGate(root=document){
 // Keep rendered member controls reachable and named after each view or dialog update.
 function prepareJourney(root){
   document.documentElement.lang=lang;
+  const skip=document.querySelector('.skip');if(skip)skip.textContent=t('Skip to content','सीधे सामग्री पर जाएँ');
+  const close=document.querySelector('#dialog [data-action="close"]');if(close)close.setAttribute('aria-label',t('Close dialog','बंद करें'));
   const labels={close:t('Close dialog','बंद करें'),'close-bag':t('Close dialog','बंद करें'),'open-bag':t('Bag','बैग'),help:t('Help'),detail:t('View','देखें')};
   const controls=[...root.querySelectorAll('[data-action]')];
   for(const control of controls){
@@ -231,7 +233,7 @@ async function go(next,{fromHistory=false}={}){
     try{await loadMemberOrders();}catch(e){if(version!==navigationVersion)return;toast(e.message);page='account';history.replaceState(null,'','#account');}
   }
   if(version!==navigationVersion)return;
-  render();window.scrollTo(0,0);
+  render();window.scrollTo(0,0);$('#content').focus({preventScroll:true});
 }
 function syncLocation(){const setup=takePasskeySetup(location,history);if(setup)passkeySetupToken=setup;const next=pageFromLocation();if(setup||next!==page||location.hash!=='#'+next)go(next,{fromHistory:true}).then(()=>{if(setup&&cat?.memberAuth==='passkey')login();}).catch(e=>toast(e.message));}
 window.addEventListener('hashchange',syncLocation);

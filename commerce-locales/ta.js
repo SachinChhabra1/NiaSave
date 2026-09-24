@@ -578,4 +578,10 @@ export default {
   "Voice search is unavailable on this device.": "இந்தச் சாதனத்தில் குரல் தேடல் இல்லை.",
   "Voice search could not hear you. Type your search instead.": "உங்கள் குரலைக் கேட்க முடியவில்லை. தட்டச்சு செய்து தேடவும்.",
   "Voice search could not start. Type your search instead.": "குரல் தேடலைத் தொடங்க முடியவில்லை. தட்டச்சு செய்து தேடவும்.",
+  "Checking Central jobs": "சென்ட்ரல் வேலைகள் சரிபார்க்கப்படுகின்றன",
+  "Verified open jobs near your Nest": "உங்கள் நெஸ்ட் அருகில் சரிபார்க்கப்பட்ட வேலைகள்",
+  "Verified Nest location is not available": "சரிபார்க்கப்பட்ட நெஸ்ட் இடம் கிடைக்கவில்லை",
+  "Job projection is temporarily unavailable": "வேலைத் தகவல் தற்காலிகமாகக் கிடைக்கவில்லை",
+  "No verified open jobs nearby": "அருகில் சரிபார்க்கப்பட்ட திறந்த வேலைகள் இல்லை",
+  "Offline. Reconnect to check jobs": "இணையம் இல்லை. வேலைகளைப் பார்க்க மீண்டும் இணையுங்கள்",
 };

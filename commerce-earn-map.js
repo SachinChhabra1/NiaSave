@@ -54,14 +54,21 @@ export function mountMap(model,t) {
   let map,disposed=false;
   leaflet().then(L=>{
     if(disposed||!container.isConnected)return;
-    map=L.map(container,{scrollWheelZoom:false,dragging:!matchMedia('(pointer: coarse)').matches,touchZoom:true,zoomControl:true});
+    map=L.map(container,{scrollWheelZoom:false,dragging:!matchMedia('(pointer: coarse)').matches,touchZoom:true,zoomControl:false});
+    const zoom=L.control.zoom().addTo(map);
+    for(const [selector,symbol,label] of [['.leaflet-control-zoom-in','+',t('Zoom in')],['.leaflet-control-zoom-out','−',t('Zoom out')]]){
+      const link=zoom.getContainer().querySelector(selector);if(!link)continue;
+      const mark=document.createElement('span');mark.setAttribute('aria-hidden','true');mark.textContent=symbol;
+      const word=document.createElement('span');word.className='icon-word';word.textContent=label;
+      link.replaceChildren(mark,word);link.setAttribute('aria-label',label);link.removeAttribute('title');
+    }
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).on('tileerror',()=>{const note=document.querySelector('#earn-map-status');if(note)note.textContent=t('Map background unavailable. Your job list is still below.','नक्शे का बैकग्राउंड उपलब्ध नहीं है। नौकरियों की सूची नीचे है।');}).addTo(map);
     const points=[[model.studio.lat,model.studio.lng]];
-    const home=L.divIcon({className:'earn-pin earn-pin-home',html:'<span aria-hidden="true">◆</span>',iconSize:[38,38],iconAnchor:[19,19]});
+    const home=L.divIcon({className:'earn-pin earn-pin-home',html:`<span aria-hidden="true">◆</span><span class="earn-pin-word">${escape(t('Your Nest'))}</span>`,iconSize:[38,38],iconAnchor:[19,19]});
     L.marker(points[0],{icon:home,zIndexOffset:-1000,title:t('Your Nest','आपका नेस्ट')+': '+model.studio.name}).addTo(map).bindPopup(document.createTextNode(model.studio.name));
     model.jobs.forEach((job,index)=>{
       const point=[job.workplace.lat,job.workplace.lng];points.push(point);
-      const marker=L.divIcon({className:'earn-pin earn-pin-job',html:`<span>${index+1}</span>`,iconSize:[38,38],iconAnchor:[19,19]});
+      const marker=L.divIcon({className:'earn-pin earn-pin-job',html:`<span>${index+1}</span><span class="earn-pin-word">${escape(t('Job'))} ${index+1}</span>`,iconSize:[38,38],iconAnchor:[19,19]});
       const node=document.createElement('div');node.className='map-job-popup';node.innerHTML=mapJobDetails(job,index,model.studio,t);
       const travel=jobTravel(job,model.studio);
       if(travel){const monthly=document.createElement('p');monthly.textContent=`${t('At 26 workdays')}: ${travel.min===travel.max?rupees(travel.min*26):rupees(travel.min*26)+'\u2013'+rupees(travel.max*26)} / ${t('month')}. ${t('Travel budget only; workdays may differ.')}`;node.append(monthly);}

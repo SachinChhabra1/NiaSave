@@ -92,4 +92,6 @@ export default {
   "Completed": "पूरा हुआ",
   "Order reference": "ऑर्डर संदर्भ",
   "Payment not recorded": "भुगतान दर्ज नहीं है",
+  "Recorded stay quote": "दर्ज रहने का अनुमान",
+  "No payment recorded for this stay.": "इस प्रवास का भुगतान दर्ज नहीं है।",
 };

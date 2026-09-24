@@ -821,4 +821,7 @@ export default {
   "Offline. This may be an older statement": "অফলাইন। এটি পুরনো বিবরণ হতে পারে",
   "Send is a plan. Saving it does not move money.": "Send একটি পরিকল্পনা। সংরক্ষণ করলে টাকা যায় না।",
   "Only a Nia team recorded payment appears as paid. A saved plan is not a transfer.": "নিয়া দলের নথিভুক্ত অর্থপ্রদানই দেওয়া হয়েছে বলে দেখাবে। সংরক্ষিত পরিকল্পনা টাকা পাঠায় না।",
+  "Remove one": "একটি কমান",
+  "Add one": "একটি যোগ করুন",
+  "Close dialog": "ডায়ালগ বন্ধ করুন",
 };

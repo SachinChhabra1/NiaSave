@@ -182,3 +182,11 @@ body .member-shell #content .shop-v2-canvas{max-width:720px;min-width:0;backgrou
   .member-shell .shop-search button{min-width:0}
   .member-shell .stepper button{min-width:64px}
 }
+
+.member-shell .mesha-bag-copy .stepper button{min-height:48px;width:auto;min-width:72px}
+.money-honesty-chip,.money-honesty-operator{font-size:max(14px,var(--nia-v2-type-sm))}
+@media(max-width:400px){
+  .member-shell .mesha-bag-line{grid-template-columns:72px minmax(0,1fr)}
+  .member-shell .mesha-bag-price{grid-column:2;justify-self:start}
+  .member-shell .mesha-bag-copy .stepper button{min-width:64px}
+}

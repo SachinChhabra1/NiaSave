@@ -1,5 +1,6 @@
 import {PILOT_CLOSED_COPY} from './commerce-capabilities.js';
 import {analyticsEvent} from './commerce-analytics.js';
+import {memberShellState,lessNavIcon} from './commerce-shell.js';
 import {journeyA11y,redactClientLog} from './commerce-content-qa.js';
 import {supportFormMarkup,supportIssueLine} from './commerce-support.js';
 import {owner,ownerActions,ownerControls,ownerRequest,restoreOwner,signInOwner,exitOwner,ownerLoginMarkup,ownerAccountMarkup,ownerEarnMarkup,ownerSendMarkup} from './commerce-owner.js';
@@ -26,6 +27,7 @@ let navigationVersion=0, entryError='', entryLoading=true;
 const needsSignIn=()=>!account&&!owner.active;
 let lang=readStickyLanguage()||'en', page=pageFromLocation(), cat=null, account=null, cart=load('nia-commerce-bag',{}), locationId='', fulfillment='pickup', category='all', aisle='', search='', orders=[], issues=[], challenge='', busy=false;
 let bagOpen=false, checkoutPending=false, sessionExpired=false;
+let shellReadAt=0, shellReadFailed=false;
 let nestData=null, nestOrders=[], nestOrdersError='', nestStart='', nestDraft=null, nestPending=load('nia-nest-pending',null);
 let authPhone='', passwordToken='', pendingPassword='', authStep='';
 let disposeEarnMap=()=>{};
@@ -125,7 +127,24 @@ function prepareJourney(root){
 }
 document.addEventListener('keydown',event=>{const control=event.target.closest('[data-action][role="button"]');if(control&&(event.key==='Enter'||event.key===' ')){event.preventDefault();control.click();}});
 function show(title,body){$('#dialog').classList.remove('signin-dialog','mesha-checkout');document.body.classList.remove('signin-open','mesha-checkout-open');$('#dialog-title').textContent=title;$('#dialog-body').innerHTML=body;ownerControls($('#dialog-body'));applyCommitmentGate($('#dialog-body'));prepareJourney($('#dialog'));if(!$('#dialog').open)$('#dialog').showModal();$('#dialog-body').querySelector('input:not([type=hidden]),button:not(:disabled),select')?.focus({preventScroll:true});}
-function notice(){const n=$('#notice');if(owner.active){n.className='notice';n.textContent='Owner view · Read only · Live catalogue. Personal transactions require a member account.';return;}n.className='notice'+(!navigator.onLine?' error':'');n.textContent=!navigator.onLine?t('You are offline. Reconnect to check availability and reserve.','आप ऑफलाइन हैं। उपलब्धता देखने और बुक करने के लिए कनेक्ट करें।'):'';}
+function unsyncedTapCount(){
+  if(!account||owner.active)return 0;
+  const sameMember=key=>load(key,null)?.accountId===account.id;
+  let count=['nia-commerce-pending','nia-nest-pending','nia-earn-pending','nia-earn-withdraw-pending'].filter(sameMember).length;
+  const cancel=load('nia-commerce-cancel-pending',null);
+  if(cancel?.orderId&&orders.some(order=>order.id===cancel.orderId))count++;
+  return count;
+}
+function renderShell(){
+  const queued=unsyncedTapCount(),online=navigator.onLine;
+  const state=memberShellState({online,readAsOf:cat?.asOf,readAt:shellReadAt,readFailed:shellReadFailed,pendingCount:queued});
+  const labels={synced:t('Catalogue synced','सामान की सूची अपडेट है'),checking:t('Checking updates','नए अपडेट देख रहे हैं'),stale:t('Checking last update','पिछला अपडेट जाँच रहे हैं'),offline:t('Offline','ऑफ़लाइन'),queued:t('Queued on this phone','इस फोन पर कतार में है'),retry:t('Request needs retry','अनुरोध फिर से भेजना होगा')};
+  $('#shell-greeting').textContent=owner.active?t('Owner view','संचालक दृश्य'):account?t('Hello, Member','नमस्ते, सदस्य'):t('Welcome to NiaSave','नियासेव में स्वागत है');
+  const sync=$('#sync-state');sync.dataset.state=state;sync.textContent=labels[state];
+  const banner=$('#offline-banner');banner.hidden=online;
+  banner.textContent=online?'':(cat?.asOf?t('Offline. Last loaded information may be out of date.','ऑफ़लाइन। पिछली देखी जानकारी पुरानी हो सकती है।'):t('Offline. Connect to load information.','ऑफ़लाइन। जानकारी देखने के लिए इंटरनेट से जुड़ें।'))+(queued?' '+t('A request is queued on this phone. Retry when connected.','एक अनुरोध इस फोन पर कतार में है। इंटरनेट आने पर फिर से भेजें।'):'');
+}
+function notice(){const n=$('#notice');if(owner.active){n.className='notice';n.textContent='Owner view · Read only · Live catalogue. Personal transactions require a member account.';return;}n.className='notice';n.textContent='';}
 function pictureState(kind,line,action=''){return `<section class="picture-state" data-state="${esc(kind)}">${icon(kind==='network'?'search':kind==='signed-out'||kind==='expired'?'account':'live')}<p>${line}</p>${action}</section>`;}
 function stayPanel(){
   const loginBtn=`<button class="primary" data-action="login">${t('Sign in','साइन इन')}</button>`;
@@ -139,23 +158,20 @@ function stayPanel(){
 }
 function lessName(brand,meaningEn,meaningHi){const meaning=t(meaningEn,meaningHi);return lang==='en'?brand:`${brand} · ${meaning}`;}
 function nav(){
-  const names={live:lessName('Live','Places to stay','रहने की जगह'),earn:lessName('Earn','Jobs nearby','नौकरी'),shop:lessName('Save','Everyday essentials','रोज़ का सामान'),send:lessName('Send','Money plan','पैसे की योजना')};
-  const hints={live:t('Places to stay','रहने की जगह'),earn:t('Jobs nearby','नौकरी'),shop:t('Everyday essentials','रोज़ का सामान'),send:t('Money plan','पैसे की योजना')};
-  const mesha=document.body.classList.contains('mesha-dark')||document.body.classList.contains('mesha-lang-open');
-  for(const target of ['#desktop-nav','#mobile-nav']){
-    $(target).innerHTML=Object.entries(names).map(([key,name])=>`<button data-action="${key}" aria-label="${esc(key==='live'?'Live':key==='earn'?'Earn':key==='shop'?'Save':'Send')} · ${esc(hints[key])}" ${page===key||(key==='live'&&page==='home')?'aria-current="page"':''}>${target==='#mobile-nav'?icon(key):''}<span>${name}</span></button>`).join('');
-  }
-  $('#header-language').innerHTML=mesha?languageChip():languagePicker(true);
-  const label=owner.active?'Owner view':account?t('Account','खाता'):t('Sign in','साइन इन');
+  const labels={live:t('Live','रहें'),earn:t('Earn','कमाएँ'),shop:t('Shop','खरीदें'),send:t('Send','भेजें')};
+  $('#less-nav').setAttribute('aria-label',t('LESS navigation','लेस नेविगेशन'));
+  $('#less-nav').innerHTML=['live','earn','shop','send'].map(key=>`<button type="button" data-action="${key}" aria-label="${esc(labels[key])}" ${page===key?'aria-current="page"':''}>${lessNavIcon(key)}<span>${esc(labels[key])}</span></button>`).join('');
+  $('#header-language').innerHTML=document.body.classList.contains('mesha-dark')||document.body.classList.contains('mesha-lang-open')?languageChip():languagePicker(true);
+  const label=owner.active?t('Owner view','संचालक दृश्य'):account?t('Account','खाता'):t('Sign in','साइन इन');
   $('#sign-label').innerHTML=`${icon('account')}<span>${esc(label)}</span>`;
   $('#sign-label').setAttribute('aria-label',label);
   $('#sign-label').classList.add('signin');
   $('#sign-label').classList.toggle('mesha-avatar',false);
   $('#sign-label').dataset.action='account';
   if(['account','orders'].includes(page))$('#sign-label').setAttribute('aria-current','page');else $('#sign-label').removeAttribute('aria-current');
+  $('.header .brand').setAttribute('aria-label',t('NiaSave home','नियासेव होम'));
   document.documentElement.lang=lang;
-  const theme=$('meta[name="theme-color"]');
-  if(theme)theme.content='#f5f5f7';
+  const theme=$('meta[name="theme-color"]');if(theme)theme.content='#F5F8FB';
   $('.skip').textContent=t('Skip to content','मुख्य सामग्री पर जाएँ');
   $('[data-action="close"]').setAttribute('aria-label',t('Close dialog','बंद करें'));
 }
@@ -211,8 +227,8 @@ function ordersView(){return `<div class="page"><h1>${t('Your orders & stays','�
 function accountView(){if(owner.active)return ownerAccountMarkup(esc);return `<div class="page"><h1>${t('Your account','आपका खाता')}</h1><section class="panel stack">${account?`<h2>${esc(t(account.name))}</h2><div class="account-actions"><button data-action="membership">${icon('account')}<span>${t('Membership status')}</span>${icon('arrow')}</button><button data-action="partners">${icon('account')}<span>${t('Partner services')}</span>${icon('arrow')}</button><button data-action="orders">${icon('orders')}<span>${t('Orders & stays','ऑर्डर और नेस्ट')}</span>${icon('arrow')}</button><button data-action="help">${icon('account')}<span>${t('Contact your Nia team','अपनी निया टीम से संपर्क करें')}</span>${icon('arrow')}</button></div>`:`<h2>${t('Welcome to Niasave','नियासेव में आपका स्वागत है')}</h2><p>${t('Sign in to reserve a Nest, order essentials and follow your updates.','बुकिंग, ऑर्डर की स्थिति और सामान लेने के लिए साइन इन करें।')}</p><button class="primary" data-action="login">${t('Member sign in','सदस्य साइन इन')}</button><button data-action="owner-login">Owner access</button><button data-action="help">${t('Contact your Nia team','अपनी निया टीम से संपर्क करें')}</button>`}<button class="quiet" data-action="recovery">${t('Changed your phone number?','फोन नंबर बदल गया है?')}</button>${account?`<button class="quiet" data-action="logout">${t('Sign out','साइन आउट')}</button>`:''}</section>${cat.preview?`<p class="info">${t('Preview accounts are examples. Sign in with your Nia membership to place real orders.','प्रीव्यू खाते उदाहरण हैं। असली प्रवेश के लिए सत्यापित खाता चाहिए।')}</p>`:''}${footer()}</div>`;}
 // Public presentation only: never render a cached member, balance, order or availability here.
 function entryHomepage(){const rail=[['earn','earn',t('Earn'),t('An upskilled job.','हुनर वाली नौकरी।'),t('See jobs','नौकरियाँ देखें')],['shop','save',t('Save'),t('Shop at wholesale rates.','थोक दर पर खरीदें।'),t('Shop now','अभी खरीदें')],['send','send',t('Send'),t('Money home.','घर पैसे।'),t('See plan','योजना देखें')]];return `<section class="mesha-home apple-home nia-home"><article class="mesha-desire apple-unit nia-home-hero"><div class="mesha-desire-copy nia-home-copy"><p class="mesha-kicker nia-home-eyebrow">${t('Live')}</p><h1>${t('A Nest near work.','काम के पास नेस्ट।')}</h1><p class="nia-home-sub">${t('Move in with Nia. Roof, rest, and a short walk to the shift.','निया के साथ रहें। छत, आराम, और शिफ्ट तक थोड़ी पैदल दूरी।')}</p><div class="mesha-desire-cta nia-home-cta"><button type="button" class="mesha-pill mesha-pill-solid" data-action="live">${t('See Nest','नेस्ट देखें')}</button><button type="button" class="mesha-pill mesha-pill-ghost" data-action="how-live">${t('How it works')}</button></div></div><figure class="nia-home-photo-frame"><img class="nia-home-photo" src="/assets/studio-bunk-lockers.jpg" alt="" width="1024" height="1024"></figure></article><div class="mesha-rail apple-rail nia-home-promises" aria-label="${t('Earn')}, ${t('Save')}, ${t('Send')}">${rail.map(([action,photo,name,d,link])=>`<button type="button" class="mesha-rail-card nia-home-card nia-rise" data-action="${action}"><span class="nia-home-card-media"><span class="mesha-rail-photo ${photo}" aria-hidden="true"></span></span><span class="nia-home-card-copy"><span class="mesha-rail-name">${name}</span><span class="mesha-rail-d">${d}</span><span class="nia-home-card-link">${link}</span></span></button>`).join('')}</div></section>`;}
-function render(){const dispose=disposeEarnMap;disposeEarnMap=()=>{};dispose();if(page==='bag'){bagOpen=true;page='shop';if(location.hash!=='#shop')history.replaceState(null,'','#shop');}const pickingLang=!languageSticky()&&!owner.active;document.body.classList.toggle('mesha-lang-open',pickingLang);document.body.classList.toggle('mesha-dark',!pickingLang);document.body.classList.toggle('mesha-bag-open',bagOpen&&page==='shop');nav();notice();document.body.classList.remove('signin-open');if(pickingLang){$('#content').innerHTML=languageCard();prepareJourney(document);return;}if(!cat){$('#content').innerHTML=entryHomepage();prepareJourney(document);return;}$('#content').innerHTML=page==='home'?entryHomepage():page==='live'?liveView():page==='earn'?earnView():page==='send'?sendView():page==='shop'?shop():page==='orders'?ordersView():accountView();ownerControls();applyCommitmentGate();prepareJourney(document);if(page==='earn'&&!owner.active&&account)disposeEarnMap=mountMap(mapModel(earnData),t);}
-async function refresh(){entryError='';try{cat=await api('/catalogue');}catch(e){entryError=e.message;throw e;}finally{entryLoading=false;}if(owner.active){account=null;if(!['live','earn','shop','send','account'].includes(page))page='live';if(page==='earn')await loadEarn();if(page==='live'){try{await loadNests();}catch(e){nestData={offers:[],error:e.message};}}render();return;}account=cat.account?.role==='member'?cat.account:null;if(!account){if(page==='live'){try{await loadNests();}catch(e){nestData={offers:[],error:e.message};}}render();return;}if(earnPending&&earnPending.accountId!==account?.id){earnPending=null;save('nia-earn-pending',null);}if(page==='earn')await loadEarn();if(page==='send')await loadBooks();if(nestPending&&nestPending.accountId!==account?.id){nestPending=null;save('nia-nest-pending',null);}if(pending&&pending.accountId!==account?.id){pending=null;save('nia-commerce-pending',null);}for(const [id,q] of Object.entries(account||cat.memberAuth!=='passkey'?cart:{}))if(!cat.products.some(p=>p.id===id)||!Number.isInteger(q)||q<1||q>10)delete cart[id];save('nia-commerce-bag',cart);if(page==='live'){try{await loadNests();}catch(e){nestData={offers:[],error:e.message};}}if(page==='orders'&&account){await loadMemberOrders();}render();}
+function render(){const dispose=disposeEarnMap;disposeEarnMap=()=>{};dispose();if(page==='bag'){bagOpen=true;page='shop';if(location.hash!=='#shop')history.replaceState(null,'','#shop');}const pickingLang=!languageSticky()&&!owner.active;document.body.classList.toggle('mesha-lang-open',pickingLang);document.body.classList.toggle('mesha-dark',!pickingLang);document.body.classList.toggle('mesha-bag-open',bagOpen&&page==='shop');nav();notice();renderShell();document.body.classList.remove('signin-open');if(pickingLang){$('#content').innerHTML=languageCard();prepareJourney(document);return;}if(!cat){$('#content').innerHTML=entryHomepage();prepareJourney(document);return;}$('#content').innerHTML=page==='home'?entryHomepage():page==='live'?liveView():page==='earn'?earnView():page==='send'?sendView():page==='shop'?shop():page==='orders'?ordersView():accountView();ownerControls();applyCommitmentGate();prepareJourney(document);if(page==='earn'&&!owner.active&&account)disposeEarnMap=mountMap(mapModel(earnData),t);}
+async function refresh(){entryError='';try{cat=await api('/catalogue');shellReadAt=Date.now();shellReadFailed=false;}catch(e){shellReadFailed=true;entryError=e.message;throw e;}finally{entryLoading=false;}if(owner.active){account=null;if(!['live','earn','shop','send','account'].includes(page))page='live';if(page==='earn')await loadEarn();if(page==='live'){try{await loadNests();}catch(e){nestData={offers:[],error:e.message};}}render();return;}account=cat.account?.role==='member'?cat.account:null;if(!account){if(page==='live'){try{await loadNests();}catch(e){nestData={offers:[],error:e.message};}}render();return;}if(earnPending&&earnPending.accountId!==account?.id){earnPending=null;save('nia-earn-pending',null);}if(page==='earn')await loadEarn();if(page==='send')await loadBooks();if(nestPending&&nestPending.accountId!==account?.id){nestPending=null;save('nia-nest-pending',null);}if(pending&&pending.accountId!==account?.id){pending=null;save('nia-commerce-pending',null);}for(const [id,q] of Object.entries(account||cat.memberAuth!=='passkey'?cart:{}))if(!cat.products.some(p=>p.id===id)||!Number.isInteger(q)||q<1||q>10)delete cart[id];save('nia-commerce-bag',cart);if(page==='live'){try{await loadNests();}catch(e){nestData={offers:[],error:e.message};}}if(page==='orders'&&account){await loadMemberOrders();}render();}
 async function go(next,{fromHistory=false}={}){
   next=memberPages.has(next)?next:'home';
   if(next==='bag'){bagOpen=true;next='shop';}
@@ -483,6 +499,8 @@ if(form.id==='review-form'&&!commitmentReady())return toast(t(PILOT_CLOSED_COPY)
 if(form.id==='review-form'){emitAnalytics('save','checkout_start');locationId=fields.locationId;fulfillment=fields.fulfillment;const body={locationId,fulfillment,lines:Object.entries(cart).map(([id,qty])=>({id,qty}))};const q=await api('/quote',body);const request={...body,fingerprint:q.fingerprint};show(t('Confirm your reservation','अपनी बुकिंग की पुष्टि करें'),`<div class="stack"><ul class="review-lines">${q.lines.map(l=>`<li>${esc(t(l.name))} × ${l.qty} · ${money(l.nia*l.qty)}</li>`).join('')}</ul><div class="row"><strong>${t('Pay when you collect','लेते समय पैसे दें')}</strong><strong class="price">${money(q.amount)}</strong></div><p><strong>${esc(t(q.location.name))}</strong><br>${esc(t(q.location.address))}<br>${t('Collect before','इस समय से पहले लें')} ${esc(date(q.expiresAt))}</p><p class="info">${t('Nothing online. Pay by UPI when you pick up the bag.','ऑनलाइन कुछ नहीं। बैग लेते समय UPI से पैसे दें।')}</p><button class="primary" data-action="confirm">${t('Reserve bag','बैग बुक करें')}</button><div id="form-error" class="error-inline" role="alert"></div></div>`);draft={accountId:account.id,key:crypto.randomUUID(),body:request};}
 }catch(e){const error=$('#form-error');if(error)error.textContent=e.message;else toast(e.message);}finally{if(submit)submit.disabled=false;}});
 window.addEventListener('online',()=>{notice();render();});window.addEventListener('offline',()=>{notice();render();});
+window.addEventListener('storage',()=>renderShell());
+setInterval(()=>{if(!document.hidden)renderShell();},30000);
 (async()=>{if(location.hash!=='#'+page)history.replaceState(null,'','#'+page);try{await loadLanguage(lang);}catch{lang='en';}try{await restoreOwner();}catch(e){toast(e.message);}render();await refresh();if(passkeySetupToken&&cat.memberAuth==='passkey'&&!owner.active)login();})().catch(e=>{entryLoading=false;entryError=e.message;render();});
 
 let statusRead=false;

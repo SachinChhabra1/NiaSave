@@ -145,3 +145,11 @@ body .member-shell #content .shop-v2-canvas{max-width:720px;min-width:0;backgrou
 @media(min-width:960px){.shop-category-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(max-width:760px){.shop-category-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:400px){.shop-category-grid,.shop-item-grid{grid-template-columns:minmax(0,1fr)}}
+
+/* Earn projection state follows the same member shell at every width. */
+.store-earn{font-family:var(--nia-v2-font-sans);color:var(--nia-v2-color-ink)}
+.store-earn .store-head h1{color:var(--nia-v2-color-live)}
+.store-earn .pillar-state{margin:var(--nia-v2-space-2);padding:var(--nia-v2-space-2);border-radius:var(--nia-v2-radius-card);border:1px solid var(--nia-v2-color-line);background:var(--nia-v2-color-surface);color:var(--nia-v2-color-live);font-size:var(--nia-v2-type-sm);line-height:1.5}
+.store-earn .earn-job,.store-earn .earn-map-panel,.store-earn .earn-map-empty{border-radius:var(--nia-v2-radius-card);background:var(--nia-v2-color-surface)}
+.store-earn .earn-distance{color:var(--nia-v2-color-primary);font-weight:600}
+@media(max-width:760px){.store-earn .earn-layout{display:grid;grid-template-columns:minmax(0,1fr)}}

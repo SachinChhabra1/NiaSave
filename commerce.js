@@ -11,7 +11,7 @@ import {usesPhoneOtpFlow,usesPasswordAuth,e164In,nationalMobile,rememberOn,authE
 import {membershipMarkup,partnerListMarkup,partnerConsentMarkup,partnerState} from './commerce-services.js';
 import { planForm, planResult, planStatus, fieldsFromValues, valuesFromFields, sameFields } from './commerce-plan.js';
 import { booksMarkup, downloadBooks, personalEntryForm, healthSupportDialog, entryPurposeOptions } from './commerce-books.js';
-import { mapModel, mapMarkup, mountMap, mapJobDetails } from './commerce-earn-map.js';
+import { mapModel, mapMarkup, mountMap, mapJobDetails, earnProjectionState } from './commerce-earn-map.js';
 import { saveCategories, categoryId, categoryIcons } from './commerce-categories.js';
 import { languageOptions, validLanguage, loadLanguage, translate } from './commerce-i18n.js';
 import { shopTilesFor, manufacturersFor, SHOP_THEATRE, millOrderProduct } from './commerce-shop-categories.js';
@@ -325,12 +325,15 @@ function earnErrorPanel(){
 }
 function earnView(){if(owner.active)return ownerEarnMarkup(earnData,earnError,{esc,money});
   const signedOut=!account&&!owner.active;
-  const model=mapModel(earnData), mapped=model.status==='ready';
-  const visible=signedOut?[]:mapped?model.jobs:cat.preview && model.status==='unavailable'?earnData.jobs:[];
+  const model=mapModel(earnData), projectionState=earnProjectionState({data:earnData,error:earnError,loading:earnLoading,online:navigator.onLine,signedOut});
+  const mapped=model.status==='ready'&&['ready','empty'].includes(projectionState);
+  const visible=projectionState==='ready'?model.jobs:[];
+  const projectionCopy={loading:t('Checking Central jobs'),ready:t('Verified open jobs near your Nest'),stale:t('Job locations need refreshing'),source_missing:t('Verified Nest location is not available'),unavailable:t('Job projection is temporarily unavailable'),empty:t('No verified open jobs nearby'),offline:t('Offline. Reconnect to check jobs')};
   const taskAction=signedOut?`<button type="button" class="primary mesha-pill mesha-pill-solid" data-action="login">${t('Sign in','साइन इन')}</button>`:`<button type="button" class="mesha-pill mesha-pill-ghost" data-action="earn">${t('See jobs','नौकरियाँ देखें')}</button>`;
   return `<section class="store-screen store-earn"><header class="store-head store-task"><h1>${t('Earn')}</h1><p>${t('Jobs near your Nest','आपके नेस्ट के पास नौकरियाँ')}</p>${taskAction}</header><figure class="store-task-photo"><img src="/assets/earn.jpg" alt="" width="1168" height="728"></figure>
   ${earnErrorPanel()}
-  ${signedOut?'':`<div class="earn-layout">${mapMarkup(model,t,icon)}<section class="stack earn-results" aria-label="${t('Open jobs','खुली नौकरियाँ')}"><div><div class="eyebrow">WALK2WORK</div><h2>${t('Jobs near your Nest','आपके नेस्ट के पास नौकरियाँ')}</h2><p>${mapped?t('Closest locations first','सबसे पास की जगहें पहले'):t('Verified workplace locations will help you compare your journey.','काम की जगहों की पुष्टि से आपको आने-जाने की दूरी समझने में मदद मिलेगी।')}</p></div>
+  <p class="pillar-state" data-state="${projectionState}" role="status">${esc(projectionCopy[projectionState])}</p>
+  ${signedOut?'':`<div class="earn-layout">${mapMarkup(mapped?model:{status:projectionState==='stale'?'stale':'unavailable',jobs:[]},t,icon)}<section class="stack earn-results" aria-label="${t('Open jobs','खुली नौकरियाँ')}"><div><div class="eyebrow">WALK2WORK</div><h2>${t('Jobs near your Nest','आपके नेस्ट के पास नौकरियाँ')}</h2><p>${mapped?t('Closest locations first','सबसे पास की जगहें पहले'):t('Verified workplace locations will help you compare your journey.','काम की जगहों की पुष्टि से आपको आने-जाने की दूरी समझने में मदद मिलेगी।')}</p></div>
   ${earnPending?`${moneyStatusMarkup({status:'requested',offlineQueued:!navigator.onLine,kind:'earn'},{t,esc})}<button data-action="earn-retry">${t('Retry application safely','आवेदन सुरक्षित रूप से फिर भेजें')}</button>`:''}
   ${visible.length?visible.map((j,index)=>`<article class="panel stack earn-job" id="earn-job-${esc(j.id)}" tabindex="-1"><div class="row"><h3>${mapped?`<span class="earn-job-number">${index+1}</span>`:''}${esc(t(j.title))}</h3>${j.preview?`<span class="badge">${t('Preview')}</span>`:''}</div><p>${esc(j.employer)} · ${esc(j.city)}</p>${mapped?`<span class="earn-distance">${j.distanceKm.toFixed(1)} km · ${t('straight-line distance','सीधी रेखा में दूरी')}</span><p>${j.openPositions} ${t('open positions','खाली पद')}</p>`:''}<div class="earn-compare-cost">${mapJobDetails(j,index,model.studio,t)}</div><details class="earn-job-details"><summary>${t('Shift, requirements & apply')}</summary><p>${esc(t(j.shift))}</p><p>${esc(t(j.requirements))}</p>${jobTerms(j)?`<p>${esc(jobTerms(j))}</p>`:''}<small>${t('Apply before','इस समय से पहले आवेदन करें')}: ${esc(date(j.closesAt))}</small><button class="primary" data-action="earn-apply" data-id="${esc(j.id)}" ${applications.some(a=>a.job.id===j.id)||!navigator.onLine?'disabled':''}>${applications.some(a=>a.job.id===j.id)?t('Application received','आवेदन मिल गया'):t('Apply for this job','इस नौकरी के लिए आवेदन करें')}</button></details></article>`).join(''):`<div class="picture-state" data-state="empty">${icon('earn')}<p>${mapped?t('No jobs open right now','अभी कोई नौकरी खुली नहीं है'):t('Open jobs are being connected','खुली नौकरियाँ जोड़ी जा रही हैं')}</p></div>`}
   </section></div><section class="stack service-panel">${earnHistory()}</section>`}${footer()}</section>`;

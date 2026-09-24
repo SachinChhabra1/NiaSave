@@ -200,4 +200,11 @@ export default {
   "Voice search is unavailable on this device.": "इस उपकरण पर बोलकर खोज उपलब्ध नहीं है।",
   "Voice search could not hear you. Type your search instead.": "आपकी आवाज़ नहीं सुनी जा सकी। लिखकर खोजें।",
   "Voice search could not start. Type your search instead.": "बोलकर खोज शुरू नहीं हुई। लिखकर खोजें।",
+  "Checking Central jobs": "सेंट्रल की नौकरियाँ जाँच रहे हैं",
+  "Verified open jobs near your Nest": "आपके नेस्ट के पास सत्यापित खुली नौकरियाँ",
+  "Job locations need refreshing": "नौकरी की जगहों की जानकारी ताज़ा करनी है",
+  "Verified Nest location is not available": "सत्यापित नेस्ट की जगह उपलब्ध नहीं है",
+  "Job projection is temporarily unavailable": "नौकरी का अनुमान अभी उपलब्ध नहीं है",
+  "No verified open jobs nearby": "पास में सत्यापित खुली नौकरियाँ नहीं हैं",
+  "Offline. Reconnect to check jobs": "ऑफ़लाइन। नौकरी देखने के लिए जुड़ें",
 };

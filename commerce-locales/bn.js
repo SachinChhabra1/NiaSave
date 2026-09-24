@@ -806,4 +806,10 @@ export default {
   "Voice search is unavailable on this device.": "এই ডিভাইসে কণ্ঠে খোঁজ নেই।",
   "Voice search could not hear you. Type your search instead.": "আপনার কথা শোনা যায়নি। লিখে খুঁজুন।",
   "Voice search could not start. Type your search instead.": "কণ্ঠে খোঁজ শুরু করা যায়নি। লিখে খুঁজুন।",
+  "Checking Central jobs": "সেন্ট্রালের চাকরি যাচাই হচ্ছে",
+  "Verified open jobs near your Nest": "আপনার নেস্টের কাছে যাচাই করা খোলা চাকরি",
+  "Verified Nest location is not available": "যাচাই করা নেস্টের অবস্থান নেই",
+  "Job projection is temporarily unavailable": "চাকরির তথ্য সাময়িকভাবে পাওয়া যাচ্ছে না",
+  "No verified open jobs nearby": "কাছে যাচাই করা খোলা চাকরি নেই",
+  "Offline. Reconnect to check jobs": "অফলাইন। চাকরি দেখতে ইন্টারনেটে যুক্ত হন",
 };

@@ -39,7 +39,7 @@ export function shopPrice(product,{t,esc,money}){
 }
 const labels={rice:'Rice',atta:'Atta',oil:'Oil',pulses:'Pulses',soap:'Soap',tea:'Tea'};
 export function shopCatalogueMarkup({catalogue,query='',aisle='',lang='en',state='ready'},{t,esc,money,bag}){
-  const products=Array.isArray(catalogue?.products)?catalogue.products:[];
+  const products=memberProducts(catalogue);
   const matching=shopSearch(products,query,lang);
   const category=SHOP_CATEGORY_IDS.includes(aisle)?aisle:'';
   const visible=category?matching.filter(p=>shopCategory(p)===category):matching;

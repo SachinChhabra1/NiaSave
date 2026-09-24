@@ -76,3 +76,15 @@ export function mountMap(model,t) {
   }).catch(()=>{if(!disposed&&container.isConnected)container.textContent=t('Map unavailable. Browse the jobs below.','नक्शा उपलब्ध नहीं है। नीचे नौकरियाँ देखें।');});
   return ()=>{if(disposed)return;disposed=true;map?.remove();map=null;};
 }
+
+export function earnProjectionState({data,error='',loading=false,online=true,signedOut=false,now=Date.now()}={}){
+  if(!online)return 'offline';
+  if(signedOut)return 'source_missing';
+  if(loading)return 'loading';
+  if(error)return 'unavailable';
+  const model=mapModel(data,now);
+  if(model.status==='stale')return 'stale';
+  if(model.status==='studio_missing')return 'source_missing';
+  if(model.status!=='ready')return 'unavailable';
+  return model.jobs.length?'ready':'empty';
+}

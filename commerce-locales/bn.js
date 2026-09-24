@@ -761,4 +761,10 @@ export default {
   "View your stay": "আপনার থাকার তথ্য দেখুন",
   "Nearby job": "কাছাকাছি চাকরি",
   "Explore LESS": "লেস দেখুন",
+  "Requested": "অনুরোধ পাঠানো হয়েছে",
+  "Reserved": "বুকিং নথিভুক্ত হয়েছে",
+  "Confirmed": "সেন্ট্রাল নিশ্চিত করেছে",
+  "Queued on this phone": "এই ফোনে সারিতে আছে",
+  "Held for pickup by": "সংগ্রহের জন্য ধরে রেখেছেন",
+  "Pickup operator not yet provided by Central": "সেন্ট্রাল এখনও সংগ্রহের দায়িত্বে থাকা কর্মীর নাম দেয়নি",
 };

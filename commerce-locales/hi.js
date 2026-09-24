@@ -154,4 +154,10 @@ export default {
   "View your stay": "अपना प्रवास देखें",
   "Nearby job": "पास की नौकरी",
   "Explore LESS": "लेस देखें",
+  "Requested": "अनुरोध भेजा गया",
+  "Reserved": "बुकिंग दर्ज है",
+  "Confirmed": "सेंट्रल से पुष्टि हुई",
+  "Queued on this phone": "इस फोन पर कतार में है",
+  "Held for pickup by": "सामान देने के लिए रखा है, जिम्मेदार",
+  "Pickup operator not yet provided by Central": "सेंट्रल ने सामान देने वाले संचालक का नाम अभी नहीं दिया",
 };

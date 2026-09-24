@@ -218,4 +218,8 @@ export default {
   "Only a Nia team recorded payment appears as paid. A saved plan is not a transfer.": "निया टीम द्वारा दर्ज भुगतान ही चुकाया हुआ दिखता है। सहेजी योजना से पैसे नहीं भेजे जाते।",
   "Remove one": "एक हटाएँ",
   "Add one": "एक जोड़ें",
+  "Bag": "बैग",
+  "See jobs": "नौकरियाँ देखें",
+  "Remove one ": "एक हटाएँ ",
+  "Add one ": "एक जोड़ें ",
 };

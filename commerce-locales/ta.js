@@ -474,4 +474,7 @@ export default {
   "Your Nia team will see that you withdrew this request.": "நீங்கள் இந்தக் கோரிக்கையைத் திரும்பப் பெற்றதை உங்கள் நியா குழு பார்க்கும்.",
   "Application withdrawn": "விண்ணப்பம் திரும்பப் பெறப்பட்டது",
   "Withdrawn by member": "உறுப்பினர் விண்ணப்பத்தைத் திரும்பப் பெற்றார்",
+  "Completed": "நிறைவடைந்தது",
+  "Order reference": "ஆர்டர் குறிப்பு",
+  "Payment not recorded": "பணம் செலுத்தியது பதிவாகவில்லை",
 };

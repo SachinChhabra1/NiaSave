@@ -82,7 +82,7 @@ async function api(path,body,method='POST',key) {
 }
 function toast(message){$('#toast').textContent=message;$('#toast').hidden=false;clearTimeout(toast.timer);toast.timer=setTimeout(()=>$('#toast').hidden=true,5000);}
 
-const frozenActions=new Set(['add','review','confirm','reorder','earn-apply','earn-retry','nest-review','nest-confirm','cancel','cancel-confirm','nest-cancel','nest-cancel-confirm']);
+const frozenActions=new Set(['add','review','confirm','reorder','earn-apply','earn-retry','earn-withdraw','earn-withdraw-confirm','nest-review','nest-confirm','cancel','cancel-confirm','nest-cancel','nest-cancel-confirm']);
 function applyCommitmentGate(root=document){
   if(commitmentReady())return;
   for(const button of root.querySelectorAll('[data-action]'))if(frozenActions.has(button.dataset.action)){button.disabled=true;button.setAttribute('aria-disabled','true');}
@@ -231,10 +231,10 @@ function saveTabs(){const pills=saveCategories.filter(c=>['all','food','cleaning
 function categoryEmpty(){const c=saveCategories.find(c=>c.id===category);const isSearch=Boolean(search.trim());const line=isSearch?t('No matching products','कोई उत्पाद नहीं मिला'):category==='all'?t('No essentials available yet','अभी सामान उपलब्ध नहीं है'):t('No products in this category yet','इस श्रेणी में अभी कोई उत्पाद नहीं है');return `<div class="empty category-empty picture-state">${icon(c?.icon||'shop')}<p>${line}</p><button data-action="clear-search">${t('Show all essentials','सभी सामान देखें')}</button></div>`;}
 function insuranceView(){return `<header class="store-head"><h1>${t('Save')}</h1></header>${saveTabs()}<div class="service-grid">${[[t('Medical','चिकित्सा'),'/assets/insurance-accident-v2.jpg'],[t('Life','जीवन'),'/assets/insurance-life-v2.jpg']].map(([name,src])=>`<article class="store-nest"><img class="store-purpose" src="${src}" alt="" width="800" height="600"><div class="stack"><h2>${name}</h2><span class="badge">${t('Not yet','अभी नहीं')}</span><button data-action="partners" data-id="insurance">${t('View','देखें')}</button></div></article>`).join('')}</div>${footer()}${bagChip()}${bagOpen?bagLayer():''}`;}
 async function loadEarn(){if(!account&&!owner.active){earnData={jobs:[]};applications=[];earnError='signed_out';earnLoading=false;return;}earnError='';earnLoading=true;try{earnData=await api('/earn');applications=account?(await api('/earn/applications')).applications:[];}catch(e){earnData={jobs:[]};applications=[];earnError=e.code||e.message;}finally{earnLoading=false;}}
-const applicationStatus = value => ({interested:t('Application received','आवेदन मिल गया'),contacted:t('Team contacted you','टीम ने आपसे संपर्क किया'),interview:t('Interview arranged','इंटरव्यू तय हुआ'),selected:t('Selected','चयन हुआ'),closed:t('Application closed','आवेदन बंद हुआ')})[value]||value;
+const applicationStatus = value => ({interested:t('Application received','आवेदन मिल गया'),contacted:t('Team contacted you','टीम ने आपसे संपर्क किया'),interview:t('Interview arranged','इंटरव्यू तय हुआ'),selected:t('Selected','चयन हुआ'),closed:t('Application closed','आवेदन बंद हुआ'),withdrawn:t('Application withdrawn','आवेदन वापस लिया गया')})[value]||value;
 function earnHistory(){
   const current=applications.filter(a=>!a.historical), previous=applications.filter(a=>a.historical);
-  const card=a=>`<article class="order"><div class="row"><h3>${esc(t(a.job.title))}</h3><span class="badge">${a.historical?t('Historical record'):esc(applicationStatus(a.status))}</span></div><p>${esc(a.job.employer)} · ${esc(a.job.city)}</p>${a.historical?`<p>${t('Last recorded status')}: ${esc(applicationStatus(a.status))}</p>`:''}${a.message?`<p class="info">${esc(a.message)}</p>`:''}<small>${esc(a.id)} · ${esc(date(a.updatedAt))}</small></article>`;
+  const card=a=>`<article class="order"><div class="row"><h3>${esc(t(a.job.title))}</h3><span class="badge">${a.historical?t('Historical record'):esc(applicationStatus(a.status))}</span></div><p>${esc(a.job.employer)} · ${esc(a.job.city)}</p>${a.historical?`<p>${t('Last recorded status')}: ${esc(applicationStatus(a.status))}</p>`:''}${a.message?`<p class="info">${esc(t(a.message))}</p>`:''}${!a.historical&&['interested','contacted','interview'].includes(a.status)&&Number.isInteger(a.revision)?`<button type="button" data-action="earn-withdraw" data-id="${esc(a.id)}" ${!navigator.onLine?'disabled':''}>${t('Withdraw request','आवेदन वापस लें')}</button>`:''}<small>${esc(a.id)} · ${esc(date(a.updatedAt))}</small></article>`;
   return `${applications.length?`<section class="stack"><h2>${t('Your job applications','आपके नौकरी के आवेदन')}</h2>${current.map(card).join('')}${previous.length?`<details class="panel stack earn-previous"><summary>${t('Previous applications')} (${previous.length})</summary><p>${t('Earlier records kept for reference. These are not current application updates.')}</p>${previous.map(card).join('')}</details>`:''}</section>`:''}`;
 }
 function earnErrorPanel(){
@@ -338,6 +338,26 @@ if(action==='books-refresh')return await go('send');
 if(action==='books-download')return downloadBooks(booksData,booksMonth);
 if(action==='books-consent'){await api('/books/consent',{enabled:id==='on'});await loadBooks();render();$('[data-action="books-consent"]')?.focus({preventScroll:true});return;}
 if(action==='earn-apply')return await reviewJob(id);if(action==='earn-retry')return await confirmJob();
+if(action==='earn-withdraw')return show(t('Withdraw this application?','यह आवेदन वापस लें?'),
+  `<p>${t('Your Nia team will see that you withdrew this request.','आपकी निया टीम देखेगी कि आपने यह अनुरोध वापस लिया है।')}</p><button class="primary full" data-action="earn-withdraw-confirm" data-id="${esc(id)}">${t('Withdraw request','आवेदन वापस लें')}</button>`);
+if(action==='earn-withdraw-confirm'){
+  if(!commitmentReady())return toast(t(PILOT_CLOSED_COPY));
+  const application=applications.find(a=>a.id===id&&!a.historical);
+  if(!application||!Number.isInteger(application.revision))return toast(t('Try again','फिर कोशिश करें'));
+  const previous=load('nia-earn-withdraw-pending',null);
+  const tap=previous?.accountId===account?.id&&previous.applicationId===id&&previous.expectedRevision===application.revision?
+    previous:{accountId:account?.id,applicationId:id,expectedRevision:application.revision,key:crypto.randomUUID()};
+  save('nia-earn-withdraw-pending',tap);
+  try{
+    await api('/earn/applications/withdraw',{applicationId:id,expectedRevision:tap.expectedRevision},'POST',tap.key);
+    save('nia-earn-withdraw-pending',null);$('#dialog').close();await loadEarn();render();
+    toast(t('Application withdrawn','आवेदन वापस लिया गया'));
+  }catch(e){
+    if(!e.uncertain){save('nia-earn-withdraw-pending',null);if(e.status===409){await loadEarn();render();}}
+    toast(e.status===409?t('Try again','फिर कोशिश करें'):e.message);
+  }
+  return;
+}
 if(action==='review')return await review();if(action==='confirm')return await confirm();if(action==='refresh-orders')return await go('orders');
 if(action==='cancel')return show(t('Cancel this reservation?','यह बुकिंग रद्द करें?'),`<p>${t('Nothing has been paid. Your reserved stock will be released.','कोई भुगतान नहीं हुआ है। बुक किया गया सामान फिर उपलब्ध हो जाएगा।')}</p><button class="primary full" data-action="cancel-confirm" data-id="${id}">${t('Cancel reservation','बुकिंग रद्द करें')}</button>`);
 if(action==='cancel-confirm'){

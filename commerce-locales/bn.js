@@ -812,4 +812,13 @@ export default {
   "Job projection is temporarily unavailable": "চাকরির তথ্য সাময়িকভাবে পাওয়া যাচ্ছে না",
   "No verified open jobs nearby": "কাছে যাচাই করা খোলা চাকরি নেই",
   "Offline. Reconnect to check jobs": "অফলাইন। চাকরি দেখতে ইন্টারনেটে যুক্ত হন",
+  "Checking your money plan": "আপনার টাকার পরিকল্পনা যাচাই হচ্ছে",
+  "Recorded entries available": "নথিভুক্ত তথ্য পাওয়া যাচ্ছে",
+  "Statement needs refreshing": "বিবরণ নতুন করে আনতে হবে",
+  "Some statement sources are missing": "বিবরণের কিছু উৎস নেই",
+  "Statement temporarily unavailable": "বিবরণ সাময়িকভাবে পাওয়া যাচ্ছে না",
+  "No recorded entries yet": "এখনও কিছু নথিভুক্ত হয়নি",
+  "Offline. This may be an older statement": "অফলাইন। এটি পুরনো বিবরণ হতে পারে",
+  "Send is a plan. Saving it does not move money.": "Send একটি পরিকল্পনা। সংরক্ষণ করলে টাকা যায় না।",
+  "Only a Nia team recorded payment appears as paid. A saved plan is not a transfer.": "নিয়া দলের নথিভুক্ত অর্থপ্রদানই দেওয়া হয়েছে বলে দেখাবে। সংরক্ষিত পরিকল্পনা টাকা পাঠায় না।",
 };

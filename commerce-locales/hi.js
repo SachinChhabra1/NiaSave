@@ -207,4 +207,13 @@ export default {
   "Job projection is temporarily unavailable": "नौकरी का अनुमान अभी उपलब्ध नहीं है",
   "No verified open jobs nearby": "पास में सत्यापित खुली नौकरियाँ नहीं हैं",
   "Offline. Reconnect to check jobs": "ऑफ़लाइन। नौकरी देखने के लिए जुड़ें",
+  "Checking your money plan": "आपकी पैसे की योजना जाँच रहे हैं",
+  "Recorded entries available": "दर्ज विवरण उपलब्ध हैं",
+  "Statement needs refreshing": "विवरण ताज़ा करना है",
+  "Some statement sources are missing": "विवरण के कुछ स्रोत उपलब्ध नहीं हैं",
+  "Statement temporarily unavailable": "विवरण अभी उपलब्ध नहीं है",
+  "No recorded entries yet": "अभी कोई विवरण दर्ज नहीं है",
+  "Offline. This may be an older statement": "ऑफ़लाइन। यह पुराना विवरण हो सकता है",
+  "Send is a plan. Saving it does not move money.": "Send एक योजना है। इसे सहेजने से पैसे नहीं जाते।",
+  "Only a Nia team recorded payment appears as paid. A saved plan is not a transfer.": "निया टीम द्वारा दर्ज भुगतान ही चुकाया हुआ दिखता है। सहेजी योजना से पैसे नहीं भेजे जाते।",
 };

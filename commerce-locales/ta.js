@@ -584,4 +584,13 @@ export default {
   "Job projection is temporarily unavailable": "வேலைத் தகவல் தற்காலிகமாகக் கிடைக்கவில்லை",
   "No verified open jobs nearby": "அருகில் சரிபார்க்கப்பட்ட திறந்த வேலைகள் இல்லை",
   "Offline. Reconnect to check jobs": "இணையம் இல்லை. வேலைகளைப் பார்க்க மீண்டும் இணையுங்கள்",
+  "Checking your money plan": "உங்கள் பணத் திட்டத்தைச் சரிபார்க்கிறோம்",
+  "Recorded entries available": "பதிவான தகவல்கள் உள்ளன",
+  "Statement needs refreshing": "அறிக்கையைப் புதுப்பிக்க வேண்டும்",
+  "Some statement sources are missing": "அறிக்கையின் சில ஆதாரங்கள் இல்லை",
+  "Statement temporarily unavailable": "அறிக்கை தற்காலிகமாகக் கிடைக்கவில்லை",
+  "No recorded entries yet": "இன்னும் பதிவுகள் இல்லை",
+  "Offline. This may be an older statement": "இணையம் இல்லை. இது பழைய அறிக்கையாக இருக்கலாம்",
+  "Send is a plan. Saving it does not move money.": "Send ஒரு திட்டம். சேமிப்பதால் பணம் நகராது.",
+  "Only a Nia team recorded payment appears as paid. A saved plan is not a transfer.": "நியா குழு பதிவு செய்த கட்டணம் மட்டுமே செலுத்தப்பட்டதாகக் காட்டப்படும். சேமித்த திட்டம் பணப் பரிமாற்றம் அல்ல.",
 };

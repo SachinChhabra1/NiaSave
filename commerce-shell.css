@@ -153,3 +153,11 @@ body .member-shell #content .shop-v2-canvas{max-width:720px;min-width:0;backgrou
 .store-earn .earn-job,.store-earn .earn-map-panel,.store-earn .earn-map-empty{border-radius:var(--nia-v2-radius-card);background:var(--nia-v2-color-surface)}
 .store-earn .earn-distance{color:var(--nia-v2-color-primary);font-weight:600}
 @media(max-width:760px){.store-earn .earn-layout{display:grid;grid-template-columns:minmax(0,1fr)}}
+
+/* Send shows a statement and plan, with no transfer action. */
+.store-send.send-v2{display:grid;gap:var(--nia-v2-space-2);font-family:var(--nia-v2-font-sans);color:var(--nia-v2-color-ink);padding:var(--nia-v2-space-2)}
+.store-send.send-v2 .store-head,.store-send.send-v2 .books-transfer{background:var(--nia-v2-color-surface);border:1px solid var(--nia-v2-color-line);border-radius:var(--nia-v2-radius-card);padding:var(--nia-v2-space-2)}
+.store-send.send-v2 .store-head h1{color:var(--nia-v2-color-primary)}
+.store-send.send-v2 .pillar-state{margin:0;padding:var(--nia-v2-space-2);border:1px solid var(--nia-v2-color-line);border-radius:var(--nia-v2-radius-card);background:var(--nia-v2-color-surface);font-size:var(--nia-v2-type-sm);line-height:1.5}
+.store-send.send-v2 .books-transfer{min-width:0}
+@media(max-width:760px){.store-send.send-v2{grid-template-columns:minmax(0,1fr)}}

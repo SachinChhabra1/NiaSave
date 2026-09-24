@@ -50,3 +50,15 @@ export function personalEntryForm(entry,kind,{t,esc}){
   const today=new Date(Date.now()+19800000).toISOString().slice(0,10);
   return `<form id="books-entry-form" class="stack"><input type="hidden" name="entryId" value="${esc(entry?.reference||'')}"><input type="hidden" name="revision" value="${entry?.revision||0}"><label>${t('Date')}<input type="date" name="date" min="2020-01-01" max="${today}" value="${esc(entry?.date||today)}" required></label><label>${t('Type')}<select name="kind">${[['earning',t('Money received')],['expense',t('An expense')],['home',t('Sent home')]].map(([id,label])=>`<option value="${id}" ${(entry?.kind||kind)===id?'selected':''}>${label}</option>`).join('')}</select></label><label>${t('Amount (INR)')}<input name="amount" type="number" inputmode="decimal" min="0.01" max="1000000" step="0.01" value="${entry?entry.amountPaise/100:''}" required></label><label>${t('What was it for?')}<select name="label" required>${entryPurposeOptions(entry?.kind||kind,entry?.label||'',{t,esc})}</select></label><p class="muted">${t('Add only what is missing. Live and Save payments already appear automatically.')}</p><div id="form-error" class="error-inline" role="alert"></div><button type="submit" class="primary">${t('Save entry')}</button>${entry?`<button type="button" data-action="books-remove" data-id="${esc(entry.reference)}">${t('Remove this entry')}</button>`:''}</form>`;
 }
+
+export function sendViewState({data,online=true,signedOut=false,now=Date.now()}={}){
+  if(!online)return 'offline';
+  if(signedOut)return 'source_missing';
+  if(data===null||data===undefined)return 'loading';
+  if(data.error)return 'unavailable';
+  if(!Array.isArray(data.months))return 'source_missing';
+  if(data.liveAvailable===false)return 'source_missing';
+  const asOf=Date.parse(data.asOf||'');
+  if(Number.isFinite(asOf)&&(asOf>now+60000||now-asOf>300000))return 'stale';
+  return data.months.some(m=>Array.isArray(m.entries)&&m.entries.length)?'ready':'empty';
+}

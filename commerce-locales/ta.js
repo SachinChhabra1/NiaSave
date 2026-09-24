@@ -595,4 +595,7 @@ export default {
   "Only a Nia team recorded payment appears as paid. A saved plan is not a transfer.": "நியா குழு பதிவு செய்த கட்டணம் மட்டுமே செலுத்தப்பட்டதாகக் காட்டப்படும். சேமித்த திட்டம் பணப் பரிமாற்றம் அல்ல.",
   "Remove one": "ஒன்றைக் குறைக்கவும்",
   "Add one": "ஒன்றைச் சேர்க்கவும்",
+  "Zoom in": "பெரிதாக்கு",
+  "Zoom out": "சிறிதாக்கு",
+  "Job": "வேலை",
 };

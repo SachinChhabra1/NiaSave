@@ -222,4 +222,7 @@ export default {
   "See jobs": "नौकरियाँ देखें",
   "Remove one ": "एक हटाएँ ",
   "Add one ": "एक जोड़ें ",
+  "Zoom in": "ज़ूम बढ़ाएँ",
+  "Zoom out": "ज़ूम घटाएँ",
+  "Job": "नौकरी",
 };

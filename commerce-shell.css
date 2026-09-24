@@ -190,3 +190,20 @@ body .member-shell #content .shop-v2-canvas{max-width:720px;min-width:0;backgrou
   .member-shell .mesha-bag-price{grid-column:2;justify-self:start}
   .member-shell .mesha-bag-copy .stepper button{min-width:64px}
 }
+
+/* Accessible member focus, map words, and narrow-screen controls. */
+.header :is(button,a,select):focus-visible,.member-shell :is(button,a,input,select,textarea,[role="button"],summary):focus-visible,
+#dialog :is(button,a,input,select,textarea,[role="button"],summary):focus-visible,
+.earn-map .leaflet-interactive:focus-visible,.earn-map .leaflet-control a:focus-visible{
+  outline:3px solid var(--nia-v2-color-primary);outline-offset:3px;box-shadow:0 0 0 2px var(--nia-v2-color-surface)
+}
+.skip{z-index:100}.skip:focus-visible{top:10px;outline:3px solid var(--nia-v2-color-primary)}
+.member-shell [data-action][role="button"]{min-height:44px}
+.earn-map.leaflet-container .leaflet-control-zoom a{box-sizing:border-box;display:flex;align-items:center;justify-content:center;gap:4px;width:auto;min-width:88px;height:auto;min-height:44px;padding:4px 6px;font:600 14px/1.25 var(--nia-v2-font-sans)}
+.earn-map .leaflet-control-zoom .icon-word{display:inline;white-space:normal}
+.earn-map .earn-pin-word{position:absolute;top:38px;left:50%;transform:translateX(-50%);min-width:54px;max-width:110px;padding:2px 4px;border:1px solid var(--nia-v2-color-line);border-radius:var(--nia-v2-radius-input);background:var(--nia-v2-color-surface);color:var(--nia-v2-color-live);font:600 12px/1.25 var(--nia-v2-font-sans);text-align:center;overflow-wrap:anywhere}
+@media(max-width:400px){
+  .member-shell #content{min-width:0;overflow-wrap:anywhere}
+  .member-shell .order-actions,.member-shell .home-card-heading{flex-wrap:wrap}
+  .earn-map.leaflet-container .leaflet-control-zoom a{max-width:104px}
+}

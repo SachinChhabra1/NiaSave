@@ -9,6 +9,10 @@ export function shopSearch(products,query,lang){
   if(!term)return products;
   return products.filter(p=>[shopName(p,lang),p.name,p.brand,p.pack].some(x=>typeof x==='string'&&x.toLocaleLowerCase(lang).includes(term)));
 }
+export function memberProducts(catalogue){
+  const products=Array.isArray(catalogue?.products)?catalogue.products:[];
+  return catalogue?.preview===true?products:products.filter(p=>p?.test!==true&&p?.preview!==true);
+}
 export function shopViewState({catalogue,online=true,loading=false,readFailed=false,now=Date.now()}){
   if(!online)return 'offline';
   if(loading)return 'loading';
@@ -16,7 +20,7 @@ export function shopViewState({catalogue,online=true,loading=false,readFailed=fa
   if(!Array.isArray(catalogue?.products))return 'source_missing';
   const asOf=Date.parse(catalogue.asOf||'');
   if(Number.isFinite(asOf)&&(asOf>now+60000||now-asOf>300000))return 'stale';
-  return catalogue.products.length?'ready':'empty';
+  return memberProducts(catalogue).length?'ready':'empty';
 }
 export function shopUnit(product){
   const price=product?.unitPricePaise,unit=product?.unit;
@@ -35,7 +39,7 @@ export function shopPrice(product,{t,esc,money}){
 }
 const labels={rice:'Rice',atta:'Atta',oil:'Oil',pulses:'Pulses',soap:'Soap',tea:'Tea'};
 export function shopCatalogueMarkup({catalogue,query='',aisle='',lang='en',state='ready'},{t,esc,money,bag}){
-  const products=Array.isArray(catalogue?.products)?catalogue.products:[];
+  const products=memberProducts(catalogue);
   const matching=shopSearch(products,query,lang);
   const category=SHOP_CATEGORY_IDS.includes(aisle)?aisle:'';
   const visible=category?matching.filter(p=>shopCategory(p)===category):matching;

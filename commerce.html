@@ -2,24 +2,25 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#f5f5f7"><meta name="description" content="LESS · Less Spends. Live, Earn, Save and Send with NiaSave. Find your Nest, shop essentials and keep more for home.">
-<title>NiaSave · LESS — Less Spends</title>
+<meta name="theme-color" content="#F5F8FB"><meta name="description" content="LESS · Less Spends. Live, Earn, Shop and Send with NiaSave. Find your Nest, shop essentials and keep more for home.">
+<title>NiaSave · LESS: Less Spends</title>
 <link rel="icon" href="/assets/nia-favicon-64.png"><link rel="stylesheet" href="/commerce.css">
 <link rel="stylesheet" href="/apple-desktop.css">
 <link rel="stylesheet" href="/niasave-system.css">
 <link rel="stylesheet" href="/commerce-wave0.css">
 <link rel="stylesheet" href="/commerce-waves.css">
 <link rel="stylesheet" href="/niasave-apple-store.css">
+<link rel="stylesheet" href="/commerce-shell.css">
 <script type="module" src="/commerce.js"></script>
 <script type="module" src="/commerce-wave0.js"></script>
 <script type="module" src="/commerce-waves.js"></script>
 </head>
 <body>
 <a class="skip" href="#content">Skip to content</a>
-<header class="header"><a class="brand" href="#home" data-action="home" aria-label="NiaSave home"><img class="brand-logo" src="/assets/nia-logo-transparent.png" alt="" width="44" height="44">NiaSave</a><nav aria-label="Main navigation" id="desktop-nav"></nav><div class="header-tools"><div id="header-language"></div><button class="signin" data-action="account" id="sign-label">Sign in</button></div></header>
+<header class="header"><a class="brand" href="#home" data-action="home" aria-label="NiaSave home"><img class="brand-logo" src="/assets/nia-logo-transparent.png" alt="" width="44" height="44">NiaSave</a><div class="shell-heading"><p id="shell-greeting"></p><span id="sync-state" role="status" aria-live="polite"></span></div><div class="header-tools"><div id="header-language"></div><button class="signin" data-action="account" id="sign-label">Sign in</button></div></header>
 <div id="notice" class="notice" role="status"></div>
-<main id="content" tabindex="-1"><div class="loading">Loading the member store…</div></main>
-<nav class="mobile-nav" aria-label="Mobile navigation" id="mobile-nav"></nav>
+<div id="offline-banner" class="shell-offline-banner" role="status" hidden></div>
+<div class="member-shell"><nav id="less-nav" class="less-nav" aria-label="LESS navigation"></nav><main id="content" tabindex="-1"><div class="loading">Loading the member store…</div></main></div>
 <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
 <dialog id="dialog" aria-labelledby="dialog-title"><div class="dialog-head"><h2 id="dialog-title"></h2><button class="icon-button" data-action="close" aria-label="Close dialog">×</button></div><div id="dialog-body"></div></dialog>
 <noscript><p class="empty">Please enable JavaScript to view products and reserve a bag. Your Nia pickup team can also help you order.</p></noscript>

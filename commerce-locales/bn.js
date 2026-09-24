@@ -705,4 +705,6 @@ export default {
   "Completed": "সম্পন্ন",
   "Order reference": "অর্ডারের তথ্যসূত্র",
   "Payment not recorded": "পেমেন্ট নথিভুক্ত হয়নি",
+  "Recorded stay quote": "নথিভুক্ত থাকার আনুমানিক খরচ",
+  "No payment recorded for this stay.": "এই থাকার জন্য কোনো পেমেন্ট নথিভুক্ত নেই।",
 };

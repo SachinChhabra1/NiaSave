@@ -477,4 +477,6 @@ export default {
   "Completed": "நிறைவடைந்தது",
   "Order reference": "ஆர்டர் குறிப்பு",
   "Payment not recorded": "பணம் செலுத்தியது பதிவாகவில்லை",
+  "Recorded stay quote": "பதிவான தங்கும் கட்டண மதிப்பீடு",
+  "No payment recorded for this stay.": "இந்தத் தங்கலுக்குப் பணம் செலுத்திய பதிவு இல்லை.",
 };

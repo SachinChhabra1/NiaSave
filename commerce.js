@@ -1,5 +1,5 @@
 import {PILOT_CLOSED_COPY} from './commerce-capabilities.js';
-import {analyticsEvent} from './commerce-analytics.js';
+import {analyticsEvent,memberAnalyticsPayload} from './commerce-analytics.js';
 import {memberShellState,lessNavIcon} from './commerce-shell.js';
 import {moneyStatusMarkup} from './commerce-money-status.js';
 import {homeDashboardModel,homeDashboardMarkup} from './commerce-home.js';
@@ -55,7 +55,7 @@ const serviceContext=()=>({t,esc,lang});
 // Events carry only fixed outcome codes and the selected UI language. No member or record identifiers leave this surface.
 const observedStates=new Map();
 function emitAnalytics(pillar,event,payload={}){
-  const record=analyticsEvent(pillar,event,{...payload,segments:{language:lang}});
+  const record=analyticsEvent(pillar,event,memberAnalyticsPayload(payload,lang));
   if(record.ok)document.dispatchEvent(new CustomEvent('nia:analytics',{detail:redactClientLog(record)}));
 }
 function emitObservedState(pillar,id,status,event){
@@ -137,10 +137,16 @@ function prepareJourney(root){
   for(const control of controls){
     const native=control.matches('button,a,input,select,textarea');
     if(!native){control.tabIndex=0;control.setAttribute('role','button');}
+    const hasIcon=Boolean(control.querySelector('svg,img'))||/^[×+−]$/.test(control.textContent.trim());
+    const visible=control.textContent.replace(/[×+−]/g,'').trim();
+    if(hasIcon&&!visible&&control.matches('button,a')&&!control.classList.contains('mesha-bag-backdrop')){
+      const word=labels[control.dataset.action]||control.getAttribute('aria-label');
+      if(word){const span=document.createElement('span');span.className='icon-word';span.textContent=word;control.append(span);}
+    }
     if(!control.getAttribute('aria-label')&&!control.getAttribute('aria-labelledby')&&!control.textContent.trim()&&labels[control.dataset.action])
       control.setAttribute('aria-label',labels[control.dataset.action]);
   }
-  const audit=journeyA11y({minWidth:document.documentElement.clientWidth,keyboard:controls.every(c=>c.matches('button,a,input,select,textarea')||c.tabIndex>=0),controls:controls.map(c=>({action:c.dataset.action,ariaLabel:c.getAttribute('aria-label')||c.getAttribute('aria-labelledby'),text:c.textContent.trim(),focusable:c.matches('button,a,input,select,textarea')||c.tabIndex>=0}))});
+  const audit=journeyA11y({minWidth:document.documentElement.clientWidth,keyboard:controls.every(c=>c.matches('button,a,input,select,textarea')||c.tabIndex>=0),controls:controls.map(c=>({action:c.dataset.action,ariaLabel:c.getAttribute('aria-label')||c.getAttribute('aria-labelledby'),text:c.textContent.trim(),iconOnly:Boolean(c.querySelector('svg,img'))||/^[×+−]$/.test(c.textContent.trim()),visibleLabel:c.textContent.replace(/[×+−]/g,'').trim(),focusable:c.matches('button,a,input,select,textarea')||c.tabIndex>=0}))});
   (root.documentElement||root).dataset.a11yReady=String(audit.ok);
 }
 document.addEventListener('keydown',event=>{const control=event.target.closest('[data-action][role="button"]');if(control&&(event.key==='Enter'||event.key===' ')){event.preventDefault();control.click();}});

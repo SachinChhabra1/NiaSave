@@ -1,3 +1,4 @@
+import {fallbackCopy} from './commerce-content-qa.js';
 export const languageOptions = [
   {id:'en', label:'English'},
   {id:'hi', label:'हिन्दी'},
@@ -21,6 +22,6 @@ export async function loadLanguage(lang) {
   await pending[lang];
 }
 export function translate(lang, english, hindi) {
-  if(lang === 'hi') return hindi || dictionaries.hi?.[english] || english;
-  return dictionaries[lang]?.[english] || english;
+  if(lang === 'hi' && typeof hindi === 'string' && hindi.trim()) return fallbackCopy(lang, english, {hi:{[english]:hindi}});
+  return fallbackCopy(lang, english, dictionaries);
 }

@@ -468,7 +468,7 @@ export default {
   "Price when packs confirm": "பொதி உறுதிப்பட்டால் விலை",
   'Illustrative test studio. Not a real Nest.': 'இது சோதனை ஸ்டூடியோ. உண்மையான நெஸ்ட் அல்ல.',
   'View still': 'படத்தைப் பார்க்கவும்',
-  'Layout only. No reservation. No online payment.': 'தளவமைப்பு மட்டும். முன்பதிவு இல்லை. ஆன்லைன் கட்டணம் இல்லை.'
+  'Layout only. No reservation. No online payment.': 'தளவமைப்பு மட்டும். முன்பதிவு இல்லை. ஆன்லைன் கட்டணம் இல்லை.',
   "Related reference (optional)": "தொடர்புடைய குறிப்பு (விருப்பம்)",
   "Order, Nest or job reference": "ஆர்டர், நெஸ்ட் அல்லது வேலை குறிப்பு",
   "Refund approved by the Nia team": "நியா குழு பணத்தைத் திருப்பித் தர ஒப்புதல் அளித்தது",

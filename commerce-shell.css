@@ -95,3 +95,11 @@ body .member-shell #content,body.mesha-dark .member-shell #content{
   .home-attention-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .home-tiles{grid-template-columns:repeat(4,minmax(0,1fr))}
 }
+
+/* One acknowledgement chip across Shop, Live and Earn. */
+.money-honesty-wrap{display:inline-flex;flex-direction:column;align-items:flex-start;gap:var(--nia-v2-space-1);max-width:100%;min-width:0}
+.money-honesty-chip{display:inline-flex;align-items:center;min-height:32px;padding:4px var(--nia-v2-space-1);border-radius:var(--nia-v2-radius-pill);border:1px solid var(--nia-v2-color-line);background:var(--nia-v2-color-canvas);color:var(--nia-v2-color-live);font:600 var(--nia-v2-type-sm)/1.4 var(--nia-v2-font-sans);white-space:normal;text-align:left}
+.money-honesty-chip[data-money-state="reserved"]{border-color:var(--nia-v2-color-reserved);color:var(--nia-v2-color-reserved);background:var(--nia-v2-color-surface)}
+.money-honesty-chip[data-money-state="queued"]{border-style:dashed}
+.money-honesty-operator{color:var(--nia-v2-color-muted);font:400 var(--nia-v2-type-sm)/1.5 var(--nia-v2-font-sans);overflow-wrap:anywhere}
+.order .row:has(.money-honesty-wrap){align-items:flex-start}

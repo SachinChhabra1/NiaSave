@@ -702,4 +702,7 @@ export default {
   "Your Nia team will see that you withdrew this request.": "আপনি এই অনুরোধ প্রত্যাহার করেছেন, তা আপনার নিয়া দল দেখতে পাবে।",
   "Application withdrawn": "আবেদন প্রত্যাহার করা হয়েছে",
   "Withdrawn by member": "সদস্য আবেদন প্রত্যাহার করেছেন",
+  "Completed": "সম্পন্ন",
+  "Order reference": "অর্ডারের তথ্যসূত্র",
+  "Payment not recorded": "পেমেন্ট নথিভুক্ত হয়নি",
 };

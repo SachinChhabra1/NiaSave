@@ -696,5 +696,10 @@ export default {
   "Price when packs confirm": "প্যাক নিশ্চিত হলে দাম",
   'Illustrative test studio. Not a real Nest.': 'Illustrative test studio. Not a real Nest.',
   'View still': 'View still',
-  'Layout only. No reservation. No online payment.': 'Layout only. No reservation. No online payment.'
+  'Layout only. No reservation. No online payment.': 'Layout only. No reservation. No online payment.',
+  "Withdraw request": "আবেদন প্রত্যাহার করুন",
+  "Withdraw this application?": "এই আবেদন প্রত্যাহার করবেন?",
+  "Your Nia team will see that you withdrew this request.": "আপনি এই অনুরোধ প্রত্যাহার করেছেন, তা আপনার নিয়া দল দেখতে পাবে।",
+  "Application withdrawn": "আবেদন প্রত্যাহার করা হয়েছে",
+  "Withdrawn by member": "সদস্য আবেদন প্রত্যাহার করেছেন",
 };

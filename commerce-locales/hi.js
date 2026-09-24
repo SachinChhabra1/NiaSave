@@ -84,4 +84,9 @@ export default {
   "day": "दिन",
   "Loading…": "लोड हो रहा है…",
   "UPI at pickup or delivery": "पिकअप या डिलीवरी पर UPI",
+  "Withdraw request": "आवेदन वापस लें",
+  "Withdraw this application?": "यह आवेदन वापस लें?",
+  "Your Nia team will see that you withdrew this request.": "आपकी निया टीम देखेगी कि आपने यह अनुरोध वापस लिया है।",
+  "Application withdrawn": "आवेदन वापस लिया गया",
+  "Withdrawn by member": "सदस्य ने आवेदन वापस लिया",
 };

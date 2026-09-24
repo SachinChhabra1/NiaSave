@@ -1,1 +1,1 @@
-export {analyticsEvent} from './lib/commerce/analytics.mjs';
+export {analyticsEvent,memberAnalyticsPayload} from './lib/commerce/analytics.mjs';

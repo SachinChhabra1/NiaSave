@@ -1,3 +1,4 @@
+import {memberPartnerView,launchPartnersOrOmit} from './lib/commerce/partner-gate.mjs';
 function partnerTitle(p,t){return ({'freed-shield':t('Help with lender harassment'),'lending-low-cost':t('Lower-cost loan pathway'),'payments-pickup-upi':t('UPI at pickup or delivery'),'send-bank-transfer':t('Send money home')})[p.partnerId]||t(p.name);}
 // Central-owned member and partner views. No service is activated from the browser.
 export function membershipMarkup(state,{t,esc,lang},recovery=false){
@@ -12,13 +13,16 @@ export function membershipMarkup(state,{t,esc,lang},recovery=false){
 }
 export function partnerState(status,t){return ({held:t('Held by Nia · partner not connected'),requested:t('Requested · awaiting partner'),forwarded:t('Sent to partner'),withdrawn:t('Withdrawn'),declined:t('Declined'),closed:t('Closed')})[status]||t('Contact your Nia team');}
 export function partnerListMarkup(partners,referrals,{t,esc},kind){
-  const list=partners.filter(p=>!kind||p.kind===kind);
+  const {partners:gated}=launchPartnersOrOmit(partners);
+  const list=gated.filter(p=>!kind||p.kind===kind);
   return `<div class="stack"><p>${t('Requests and updates are held in your Nia account.')}</p>${list.map(p=>{
     const own=referrals.filter(r=>r.partnerId===p.partnerId),open=own.find(r=>['held','requested','forwarded'].includes(r.status));
     return `<article class="panel stack"><div class="row"><h3>${esc(partnerTitle(p,t))}</h3><span class="badge">${p.live?t('Accepting requests'):t('Not available yet','अभी उपलब्ध नहीं')}</span></div>${p.provider?`<p>${esc(p.provider)}</p>`:''}${p.requiresKyc?`<p class="muted">${t('Approved membership is required for financial services.')}</p>`:''}<p>${t('This is a referral request, not a policy, loan approval or payment.')}</p>${own.map(r=>`<div class="receipt"><strong>${esc(partnerState(r.status,t))}</strong><p>${t('Your reference','आपका संदर्भ')}: ${esc(r.referralId)}</p>${['held','requested','forwarded'].includes(r.status)?`<button data-action="partner-withdraw" data-id="${esc(r.referralId)}">${t('Withdraw request')}</button>`:''}</div>`).join('')}${!open&&p.acceptsReferrals&&!['payments','remittance'].includes(p.kind)?`<button data-action="partner-consent" data-id="${esc(p.partnerId)}">${t('Review request')}</button>`:''}</article>`;
   }).join('')||`<p>${t('Not available yet','अभी उपलब्ध नहीं')}</p>`}</div>`;
 }
 export function partnerConsentMarkup(p,{t,esc}){
+  p=memberPartnerView(p);
+  if(!p.actionable)return `<p class="info">${t('Not available yet','अभी उपलब्ध नहीं')}</p>`;
   const labels={full_name:t('Full name'),phone:t('Mobile number','मोबाइल नंबर'),date_of_birth:t('Date of birth'),residence_studio:t('Your Nest','आपका नेस्ट'),employer:t('Employer'),niabooks_income_months:t('Monthly income records'),niabooks_expense_months:t('Monthly expense records'),nia_health_score:t('Nia health'),lender_name:t('Lender name'),incident_summary:t('Incident summary')};
   // Unknown consent fields require a reviewed member label before this UI can request them.
   const fields=p.consentScope.filter(key=>labels[key]);

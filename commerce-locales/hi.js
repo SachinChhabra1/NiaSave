@@ -89,4 +89,7 @@ export default {
   "Your Nia team will see that you withdrew this request.": "आपकी निया टीम देखेगी कि आपने यह अनुरोध वापस लिया है।",
   "Application withdrawn": "आवेदन वापस लिया गया",
   "Withdrawn by member": "सदस्य ने आवेदन वापस लिया",
+  "Completed": "पूरा हुआ",
+  "Order reference": "ऑर्डर संदर्भ",
+  "Payment not recorded": "भुगतान दर्ज नहीं है",
 };

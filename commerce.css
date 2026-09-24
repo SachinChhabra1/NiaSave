@@ -419,3 +419,11 @@ dialog.mesha-checkout .mesha-pill-solid{width:100%;margin-top:8px}
 
 /* M0 pause copy must wrap in every supported language at narrow widths. */
 [data-pilot-paused] { min-width: 0; max-width: 100%; overflow-wrap: anywhere; }
+
+/* Core member journeys remain readable and focusable on 320px phones. */
+@media(max-width:360px){
+  #content,#dialog-body,.store-screen,.stack,.order,.receipt,.earn-layout{min-width:0;max-width:100%}
+  #content,#dialog-body{overflow-wrap:anywhere}
+  #content img,#dialog-body img{max-width:100%;height:auto}
+  #dialog{max-width:calc(100vw - 16px)}
+}

@@ -161,3 +161,32 @@ body .member-shell #content .shop-v2-canvas{max-width:720px;min-width:0;backgrou
 .store-send.send-v2 .pillar-state{margin:0;padding:var(--nia-v2-space-2);border:1px solid var(--nia-v2-color-line);border-radius:var(--nia-v2-radius-card);background:var(--nia-v2-color-surface);font-size:var(--nia-v2-type-sm);line-height:1.5}
 .store-send.send-v2 .books-transfer{min-width:0}
 @media(max-width:760px){.store-send.send-v2{grid-template-columns:minmax(0,1fr)}}
+
+/* Member icon words remain visible on touch screens at every width. */
+.member-shell button,.header button,.header .brand,#dialog button{min-height:44px}
+.member-shell .less-nav button{min-height:48px;font-size:max(14px,var(--nia-v2-type-sm))}
+.member-shell .shop-category{min-height:44px}
+.member-shell .shop-category strong{font-size:max(14px,var(--nia-v2-type-sm));line-height:1.45}
+.member-shell .shop-search [data-action="voice-search"]{gap:8px;min-height:44px;padding-inline:12px;white-space:normal;text-align:center;font-size:14px;line-height:1.4}
+.member-shell .shop-search button{min-height:44px;font-size:14px}
+.member-shell .shop-item button,.member-shell .shop-catalogue [data-action="close-aisle"]{min-height:44px}
+.member-shell .mesha-bag-thumb{display:flex;flex-direction:column;align-items:center;gap:4px;width:auto;min-width:72px;min-height:88px;overflow:visible}
+.member-shell .mesha-bag-thumb .icon-word{font-size:14px;line-height:1.4}
+.member-shell .stepper button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;min-width:72px;width:auto;min-height:48px;padding:4px 8px;line-height:1.2}
+.member-shell .stepper button .icon-word{min-width:0;font-size:14px;line-height:1.35;white-space:normal}
+.member-shell .mesha-bag-head .icon-button,#dialog .dialog-head .icon-button{display:inline-flex;align-items:center;justify-content:center;gap:6px;width:auto;min-width:44px;min-height:44px;padding:4px 8px;font-size:20px}
+.member-shell .mesha-bag-head .icon-word,#dialog .dialog-head .icon-word{font-size:14px;line-height:1.4}
+@media(max-width:400px){
+  .member-shell .shop-search>div{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+  .member-shell .shop-search input{grid-column:1/-1;min-height:44px}
+  .member-shell .shop-search button{min-width:0}
+  .member-shell .stepper button{min-width:64px}
+}
+
+.member-shell .mesha-bag-copy .stepper button{min-height:48px;width:auto;min-width:72px}
+.money-honesty-chip,.money-honesty-operator{font-size:max(14px,var(--nia-v2-type-sm))}
+@media(max-width:400px){
+  .member-shell .mesha-bag-line{grid-template-columns:72px minmax(0,1fr)}
+  .member-shell .mesha-bag-price{grid-column:2;justify-self:start}
+  .member-shell .mesha-bag-copy .stepper button{min-width:64px}
+}

@@ -216,4 +216,6 @@ export default {
   "Offline. This may be an older statement": "ऑफ़लाइन। यह पुराना विवरण हो सकता है",
   "Send is a plan. Saving it does not move money.": "Send एक योजना है। इसे सहेजने से पैसे नहीं जाते।",
   "Only a Nia team recorded payment appears as paid. A saved plan is not a transfer.": "निया टीम द्वारा दर्ज भुगतान ही चुकाया हुआ दिखता है। सहेजी योजना से पैसे नहीं भेजे जाते।",
+  "Remove one": "एक हटाएँ",
+  "Add one": "एक जोड़ें",
 };

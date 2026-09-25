@@ -7,7 +7,7 @@ import {journeyA11y,redactClientLog} from './commerce-content-qa.js';
 import {supportFormMarkup,supportIssueLine} from './commerce-support.js';
 import {owner,ownerActions,ownerControls,ownerRequest,restoreOwner,signInOwner,exitOwner,ownerLoginMarkup,ownerAccountMarkup,ownerEarnMarkup,ownerSendMarkup} from './commerce-owner.js';
 import {passkeyMarkup,usePasskey,takePasskeySetup} from './commerce-passkeys.js';
-import {usesPhoneOtpFlow,usesPasswordAuth,e164In,nationalMobile,rememberOn,authErrorText,needsSetPassword,setPasswordToken,passwordBody,setPasswordIssue,submitSetPassword,submitAuthPaths,otpRequestPaths,otpVerifyPaths,loginPath,phoneFormMarkup,verifyFormMarkup,setPasswordFormMarkup,rememberFormMarkup,passwordFormMarkup} from './commerce-member-auth.js';
+import {usesPhoneOtpFlow,usesPasswordAuth,e164In,nationalMobile,rememberOn,authErrorText,needsSetPassword,setPasswordToken,passwordBody,setPasswordIssue,submitSetPassword,submitAuthPaths,otpRequestPaths,otpVerifyPaths,loginPath,authTimeoutMs,phoneFormMarkup,verifyFormMarkup,setPasswordFormMarkup,rememberFormMarkup,passwordFormMarkup} from './commerce-member-auth.js';
 import {membershipMarkup,partnerListMarkup,partnerConsentMarkup,partnerState} from './commerce-services.js';
 import { planForm, planResult, planStatus, fieldsFromValues, valuesFromFields, sameFields } from './commerce-plan.js';
 import { booksMarkup, downloadBooks, personalEntryForm, healthSupportDialog, entryPurposeOptions, sendViewState } from './commerce-books.js';
@@ -112,7 +112,7 @@ const errorText = code => authErrorText(code,t) || ({pilot_commitments_paused:t(
 async function api(path,body,method='POST',key) {
   if(owner.active)return ownerRequest(path,body);
   let response;
-  try {response=await fetch('/api/commerce'+path,{method:body===undefined?'GET':method,credentials:'same-origin',headers:body===undefined?{}:{'content-type':'application/json',...(key?{'idempotency-key':key}:{})},...(body===undefined?{}:{body:JSON.stringify(body)}),signal:AbortSignal.timeout(12000)});} catch {throw {message:t('Connection interrupted. You can retry safely.','कनेक्शन टूट गया। आप सुरक्षित रूप से फिर कोशिश कर सकते हैं।'),uncertain:true};}
+  try {response=await fetch('/api/commerce'+path,{method:body===undefined?'GET':method,credentials:'same-origin',headers:body===undefined?{}:{'content-type':'application/json',...(key?{'idempotency-key':key}:{})},...(body===undefined?{}:{body:JSON.stringify(body)}),signal:AbortSignal.timeout(authTimeoutMs(path))});} catch {throw {message:t('Connection interrupted. You can retry safely.','कनेक्शन टूट गया। आप सुरक्षित रूप से फिर कोशिश कर सकते हैं।'),uncertain:true};}
   const result=await response.json();
   if(!response.ok){if(response.status===401){if(account||owner.active)sessionExpired=true;account=null;orders=[];nestOrders=[];applications=[];}throw {message:errorText(result.error),code:result.error,status:response.status,result};} return result;
 }
@@ -287,7 +287,7 @@ async function finishPasskey(mode,setupToken){
 }
 function entryLanguage(){return `<div class="entry-language">${languagePicker()}</div>`;}
 function showPhoneLogin(){challenge='';passwordToken='';pendingPassword='';authStep='phone';show(t('Sign in to Niasave','नियासेव में साइन इन करें'),phoneFormMarkup({t,esc,phone:authPhone,passwordLink:usesPasswordAuth(cat)})+entryLanguage());}
-function showPasswordLogin(){authStep='password';show(t('Member sign in'),passwordFormMarkup({t,phoneLink:true})+entryLanguage());}
+function showPasswordLogin(){authStep='password';show(t('Member sign in'),passwordFormMarkup({t,esc,phone:authPhone,phoneLink:true})+entryLanguage());}
 function login(){
   if(!cat)return show(t('Member sign in'),`<div class="stack"><p role="status">${esc(entryLoading?t('Loading…'):entryError||t('We could not complete that request. Please try again or ask your Nia team for help.'))}</p><button class="primary" data-action="entry-retry" ${entryLoading?'disabled':''}>${t('Try again','फिर कोशिश करें')}</button><button class="quiet" data-action="owner-login">Owner access</button></div>`);
   if(cat.memberAuth==='passkey')return show(t('Member sign in'),passkeyMarkup({t,setup:Boolean(passkeySetupToken)})+entryLanguage());
@@ -499,7 +499,10 @@ if(form.id==='earn-form'&&!commitmentReady())return toast(t(PILOT_CLOSED_COPY));
 if(form.id==='earn-form'){emitAnalytics('earn','consent',{outcome:fields.consent==='on'?'granted':'absent'});if(!earnPending)earnPending={accountId:account.id,key:crypto.randomUUID(),body:{jobId:fields.jobId,revision:fields.revision,consent:fields.consent==='on'}};save('nia-earn-pending',earnPending);await confirmJob();}
 if(form.id==='login-form'){
   if(form.dataset.authStep==='password-login'||(cat.memberAuth==='password'&&!fields.phone)){
-    await api(loginPath(cat),passwordBody(fields,{phone:authPhone||undefined}));
+    const phone=e164In(fields.phone||authPhone);
+    if(!phone)throw {code:'invalid_phone',message:errorText('invalid_phone')};
+    authPhone=phone;
+    await api(loginPath(cat),passwordBody(fields,{phone}));
     await finishMemberSession();return;
   }
   const phone=e164In(fields.phone);

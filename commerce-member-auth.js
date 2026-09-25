@@ -65,6 +65,10 @@ export function otpVerifyPaths(cat) {
   ].filter(Boolean))];
 }
 
+export function authTimeoutMs(path) {
+  return path === '/auth/request' || path === '/auth/password/request' ? 35000 : 12000;
+}
+
 export function loginPath(cat) {
   return commerceAuthPath(memberAuthCapabilities(cat).loginPath, '/auth/login');
 }
@@ -222,6 +226,6 @@ export function rememberFormMarkup({t}) {
   return `<form id="remember-form" class="stack" data-auth-step="remember">${steps(t, 'remember')}<p>${t('Your password is saved. Stay signed in on this phone?', 'पासवर्ड सहेज लिया गया। इस फोन पर साइन इन रहें?')}</p><label class="remember-choice"><input type="checkbox" name="remember" checked> ${t('Remember this phone so you stay signed in.', 'इस फोन को याद रखें ताकि आप साइन इन रहें।')}</label>${fieldError()}<button class="primary" type="submit">${t('Continue', 'आगे बढ़ें')}</button></form>`;
 }
 
-export function passwordFormMarkup({t, phoneLink = false}) {
-  return `<form id="login-form" class="stack" data-auth-step="password-login"><p>${t('Enter the member password from your Nia team. This phone stays signed in.', 'निया टीम का सदस्य पासवर्ड डालें। यह फोन साइन इन रहेगा।')}</p><label>${t('Password', 'पासवर्ड')}<input name="password" type="password" autocomplete="current-password" required></label><label class="remember-choice"><input type="checkbox" name="remember" checked> ${t('Stay signed in on this phone', 'इस फोन पर साइन इन रहें')}</label>${fieldError()}<button class="primary" type="submit">${t('Sign in and stay signed in', 'साइन इन करें और साइन इन रहें')}</button>${phoneLink ? `<button type="button" class="quiet" data-action="phone-login">${t('Use your mobile number', 'अपना मोबाइल नंबर इस्तेमाल करें')}</button>` : ''}</form>`;
+export function passwordFormMarkup({t, esc = value => String(value || ''), phone = '', phoneLink = false}) {
+  return `<form id="login-form" class="stack" data-auth-step="password-login"><p>${t('Enter the personal password you created after verification. This phone stays signed in.', 'सत्यापन के बाद बनाया गया अपना व्यक्तिगत पासवर्ड डालें। यह फोन साइन इन रहेगा।')}</p><label>${t('Mobile number', 'मोबाइल नंबर')}<span class="phone-field"><span class="phone-prefix" aria-hidden="true">+91</span><input name="phone" type="tel" autocomplete="tel-national" inputmode="numeric" pattern="[6-9][0-9]{9}" minlength="10" maxlength="10" placeholder="${t('10-digit mobile number', '10 अंकों का मोबाइल नंबर')}" value="${esc(nationalMobile(phone))}" required></span></label><label>${t('Personal password', 'व्यक्तिगत पासवर्ड')}<input name="password" type="password" autocomplete="current-password" required></label><label class="remember-choice"><input type="checkbox" name="remember" checked> ${t('Stay signed in on this phone', 'इस फोन पर साइन इन रहें')}</label>${fieldError()}<button class="primary" type="submit">${t('Sign in and stay signed in', 'साइन इन करें और साइन इन रहें')}</button>${phoneLink ? `<button type="button" class="quiet" data-action="phone-login">${t('Use your mobile number', 'अपना मोबाइल नंबर इस्तेमाल करें')}</button>` : ''}</form>`;
 }

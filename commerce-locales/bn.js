@@ -372,6 +372,8 @@ export default {
   "Sign in to reserve a Nest, order essentials and follow your updates.": "Sign in to reserve a Nest, order essentials and follow your updates.",
   "Member sign in": "Member sign in",
   "Password": "Password",
+  "Enter the personal password you created after verification. This phone stays signed in.": "সত্যাপনের পরে তৈরি করা ব্যক্তিগত পাসওয়ার্ড লিখুন। এই ফোনে সাইন ইন থাকা যাবে।",
+  "Personal password": "ব্যক্তিগত পাসওয়ার্ড",
   "Enter the member password from your Nia team. This phone stays signed in.": "Enter the member password from your Nia team. This phone stays signed in.",
   "Sign in and stay signed in": "Sign in and stay signed in",
   "This number is not registered for NiaSave. Ask your Nia team if you need access.": "This number is not registered for NiaSave. Ask your Nia team if you need access.",

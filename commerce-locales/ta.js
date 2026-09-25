@@ -141,6 +141,8 @@ export default {
   "Sign in to reserve a Nest, order essentials and follow your updates.": "நெஸ்ட் முன்பதிவு, பொருள் ஆர்டர் மற்றும் நிலையைப் பார்க்க உள்நுழையவும்.",
   "Member sign in": "உறுப்பினர் உள்நுழைவு",
   "Password": "கடவுச்சொல்",
+  "Enter the personal password you created after verification. This phone stays signed in.": "சரிபார்ப்புக்குப் பிறகு நீங்கள் உருவாக்கிய தனிப்பட்ட கடவுச்சொல்லை உள்ளிடுங்கள். இந்த ஃபோனில் உள்நுழைந்தே இருப்பீர்கள்.",
+  "Personal password": "தனிப்பட்ட கடவுச்சொல்",
   "Enter the member password from your Nia team. This phone stays signed in.": "உங்கள் Nia குழு தந்த உறுப்பினர் கடவுச்சொல்லை உள்ளிடவும். இந்த தொலைபேசி உள்நுழைந்தே இருக்கும்.",
   "Sign in and stay signed in": "உள்நுழைந்து உள்நுழைந்தே இருங்கள்",
   "This number is not registered for NiaSave. Ask your Nia team if you need access.": "இந்த எண் NiaSave-க்கு பதிவுசெய்யப்படவில்லை. அணுகல் தேவைப்பட்டால் Nia குழுவிடம் கேட்கவும்.",

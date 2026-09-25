@@ -19,6 +19,22 @@ for (const width of [320, 390, 760, 761, 960, 1280, 1440]) {
     const errors = [];
     page.on('pageerror', error => errors.push(error.message));
     await page.goto(unavailable ? '/#home' : '/#shop');
+    const strapline = page.locator('.header .brand-strapline');
+    await expect(strapline).toBeVisible();
+    await expect(strapline).toHaveText('Spend LESS, send more.');
+    await expect(strapline.locator('.brand-less')).toHaveCSS('color', 'rgb(44, 88, 128)');
+    if (width >= 761) {
+      const header = await page.locator('.header').boundingBox();
+      const content = await page.locator('#content').boundingBox();
+      const rail = await page.locator('#less-nav').boundingBox();
+      expect(header.width).toBeLessThanOrEqual(440);
+      expect(content.width).toBeLessThanOrEqual(440);
+      expect(rail.width).toBeLessThanOrEqual(440);
+      expect(Math.abs(content.x + content.width / 2 - width / 2)).toBeLessThan(2);
+      expect(Math.abs(rail.x + rail.width / 2 - width / 2)).toBeLessThan(2);
+      expect(rail.y + rail.height).toBeGreaterThanOrEqual(898);
+      await expect(page.locator('#less-nav')).toHaveCSS('grid-template-columns', /px .*px .*px .*px/);
+    }
     if (unavailable) {
       await expect(page.locator('.home-dashboard')).toContainText('Temporarily unavailable');
       await page.locator('#content').getByRole('button', { name: /Browse Essentials/ }).click();

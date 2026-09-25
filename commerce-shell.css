@@ -1,4 +1,4 @@
-/* One LESS navigation node reflows from bottom tabs to a desktop rail. */
+/* One LESS navigation node stays at the foot of the member column. */
 body .header,body.mesha-dark .header,body.mesha-dark .header.header{
   position:sticky;top:0;left:auto;transform:none;width:100%;max-width:none;height:auto;min-height:72px;
   display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:var(--nia-v2-space-2);
@@ -59,17 +59,31 @@ body .member-shell #content,body.mesha-dark .member-shell #content{
   }
 }
 @media(min-width:761px){
+  body.mesha-dark{background:var(--nia-v2-color-canvas)}
+  body .header,body.mesha-dark .header,body.mesha-dark .header.header{
+    box-sizing:border-box;max-width:440px;margin-inline:auto;
+    grid-template-columns:minmax(0,1fr) auto;gap:4px var(--nia-v2-space-1);
+    padding:var(--nia-v2-space-1) var(--nia-v2-space-2);min-height:76px
+  }
+  .header .brand{grid-column:1;grid-row:1}
+  .header .header-tools{grid-column:2;grid-row:1;min-width:0}
+  .shell-heading{grid-column:1/-1;grid-row:2;justify-content:space-between;padding:0 0 2px}
+  #shell-greeting{font-size:var(--nia-v2-type-sm)}
+  body .notice,body .shell-offline-banner{box-sizing:border-box;max-width:440px;margin-inline:auto}
   .member-shell{
-    display:grid;grid-template-columns:176px minmax(0,720px);gap:var(--nia-v2-space-3);
-    justify-content:center;align-items:start;max-width:960px;padding:var(--nia-v2-space-3)
+    display:block;max-width:440px;padding:0;background:var(--nia-v2-color-surface)
   }
   .less-nav{
-    position:sticky;top:96px;display:flex;flex-direction:column;gap:var(--nia-v2-space-1);
-    padding:var(--nia-v2-space-1);border:1px solid var(--nia-v2-color-line);
-    border-radius:var(--nia-v2-radius-card);background:var(--nia-v2-color-surface)
+    position:fixed;top:auto;left:50%;right:auto;bottom:0;transform:translateX(-50%);
+    box-sizing:border-box;width:100%;max-width:440px;
+    display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:2px;
+    padding:var(--nia-v2-space-1) var(--nia-v2-space-1) calc(var(--nia-v2-space-1) + env(safe-area-inset-bottom));
+    border:0;border-top:1px solid var(--nia-v2-color-line);border-radius:0;background:var(--nia-v2-color-surface)
   }
-  .less-nav button{min-height:48px;justify-content:flex-start;padding:var(--nia-v2-space-1)}
-  body .member-shell #content,body.mesha-dark .member-shell #content{max-width:720px;padding:0 0 var(--nia-v2-space-6)}
+  .less-nav button{min-width:0;min-height:56px;flex-direction:column;justify-content:center;gap:2px;padding:4px 2px;font-size:var(--nia-v2-type-xs)}
+  body .member-shell #content,body.mesha-dark .member-shell #content{
+    max-width:440px;padding-bottom:calc(88px + env(safe-area-inset-bottom));background:var(--nia-v2-color-surface)
+  }
 }
 @media(max-width:360px){
   body .header,body.mesha-dark .header,body.mesha-dark .header.header{padding-inline:var(--nia-v2-space-1)}
@@ -97,8 +111,7 @@ body .member-shell #content,body.mesha-dark .member-shell #content{
 .home-tile-link{color:var(--nia-v2-color-primary);font-weight:600}
 .home-dashboard button:focus-visible{outline:3px solid var(--nia-v2-color-primary);outline-offset:2px}
 @media(min-width:761px){
-  .home-attention-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .home-tiles{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .home-attention-grid,.home-tiles{grid-template-columns:minmax(0,1fr)}
 }
 
 /* One acknowledgement chip across Shop, Live and Earn. */
@@ -143,11 +156,10 @@ body .member-shell #content .shop-v2-canvas{max-width:720px;min-width:0;backgrou
 .shop-bag-inline [data-action="close-bag"]{display:none}
 .shop-v2 button:focus-visible,.shop-v2 input:focus-visible{outline:3px solid var(--nia-v2-color-primary);outline-offset:2px}
 @media(min-width:761px){
-  .shop-layout{grid-template-columns:minmax(0,1fr) 220px;align-items:start}
-  .shop-bag-inline{position:sticky;top:112px}
-  .shop-category-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .shop-layout{grid-template-columns:minmax(0,1fr)}
+  .shop-bag-inline{position:static}
+  .shop-category-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
-@media(min-width:960px){.shop-category-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(max-width:760px){.shop-category-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:400px){.shop-category-grid,.shop-item-grid{grid-template-columns:minmax(0,1fr)}}
 
@@ -211,4 +223,36 @@ body .member-shell #content .shop-v2-canvas{max-width:720px;min-width:0;backgrou
   .member-shell #content{min-width:0;overflow-wrap:anywhere}
   .member-shell .order-actions,.member-shell .home-card-heading{flex-wrap:wrap}
   .earn-map.leaflet-container .leaflet-control-zoom a{max-width:104px}
+}
+
+/* Earlier legacy desktop rules still exist; keep each member journey phone-width on wide viewports. */
+@media(min-width:761px){
+  body.mesha-dark .header .brand-strapline{display:block;color:var(--nia-v2-color-muted)}
+  body.mesha-dark .header .brand-strapline .brand-less{color:var(--nia-blue)}
+  body.mesha-dark .member-shell #content .shop-v2-canvas{max-width:440px}
+  body.mesha-dark .store-live .nest-grid,
+  .member-shell .service-grid,.member-shell .nest-grid,
+  .member-shell .earn-layout,.member-shell .earn-results,
+  .member-shell .books-layout,.member-shell .books-dashboard,
+  .member-shell .store-send.send-v2{grid-template-columns:minmax(0,1fr)}
+  body.mesha-dark .store-live .nest-grid{padding:8px 16px 28px;gap:18px}
+  .member-shell .earn-results>div:first-child{grid-column:auto}
+  .member-shell .earn-map-panel{position:relative;top:auto}
+  .member-shell .earn-map{height:320px}
+  .member-shell .books-dashboard{grid-template-areas:"summary" "summarynote" "health" "tools" "statement" "refresh"}
+  .member-shell .books-main,.member-shell .books-dashboard>.books-side{display:contents}
+  .member-shell .books-dashboard .books-summary{grid-area:summary}
+  .member-shell .books-summary-note{grid-area:summarynote}
+  .member-shell .books-dashboard .books-health{grid-area:health}
+  .member-shell .books-dashboard .books-entry-tools{grid-area:tools}
+  .member-shell .books-dashboard .books-statement{grid-area:statement}
+  .member-shell .books-refresh-note{grid-area:refresh}
+  .member-shell .books-transfer{grid-template-columns:minmax(0,1fr)}
+  .member-shell .nest-search{flex-wrap:wrap;padding:16px;gap:14px}
+  .member-shell .nest-search label{flex-basis:100%;max-width:none}
+  .member-shell .nest-search button{width:100%}
+  .member-shell .shop-category-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .member-shell .shop-layout{grid-template-columns:minmax(0,1fr)}
+  .member-shell .shop-bag-inline{position:static}
+  #dialog{max-width:calc(min(440px,100vw) - 28px)}
 }

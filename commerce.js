@@ -263,9 +263,7 @@ async function go(next,{fromHistory=false}={}){
   if(location.hash!=='#'+next)history[fromHistory?'replaceState':'pushState'](null,'','#'+next);
   $('#dialog').close();
   if(!account&&!owner.active&&next==='orders'){page='account';history.replaceState(null,'','#account');render();login();return;}
-  // Browsing must still render when the initial catalogue read fails.
-  // Keep source data absent and leave commitment/authentication gates intact.
-  if(!cat){render();window.scrollTo(0,0);$('#content').focus({preventScroll:true});return;}
+  // Each screen handles missing data; a failed catalogue must not block browsing.
   if(next==='home')await loadHome();
   if(next==='earn')await loadEarn();
   if(next==='shop'&&!owner.active)emitAnalytics('save','catalogue_view');

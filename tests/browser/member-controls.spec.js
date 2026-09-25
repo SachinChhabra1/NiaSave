@@ -7,8 +7,10 @@ for (const width of [320, 390, 760, 761, 960, 1280, 1440]) {
     await page.addInitScript(() => localStorage.setItem('nia-language', JSON.stringify('en')));
     // Exercise real markup and handlers with a read-only empty catalogue.
     // No reservation or Central decision is simulated or submitted.
+    let nestReads = 0;
     await page.route('**/api/commerce/**', async route => {
       const path = new URL(route.request().url()).pathname;
+      if (path.endsWith('/nests')) nestReads++;
       if (unavailable && path.endsWith('/catalogue')) return route.fulfill({ status: 503, json: { error: 'central_unreachable' } });
       await route.fulfill({ json: path.endsWith('/catalogue')
         ? { products: [], locations: [], account: null }
@@ -25,6 +27,11 @@ for (const width of [320, 390, 760, 761, 960, 1280, 1440]) {
     const nav = page.getByRole('navigation', { name: 'LESS navigation' });
     await nav.getByRole('button', { name: 'Live', exact: true }).click();
     await expect(page.locator('#content h1')).toHaveText('Live');
+    expect(nestReads).toBe(1);
+    if (unavailable) {
+      await page.getByRole('button', { name: 'Try again', exact: true }).click();
+      await expect.poll(() => nestReads).toBe(2);
+    }
     await nav.getByRole('button', { name: 'Earn', exact: true }).click();
     await expect(page.locator('#content h1')).toHaveText('Earn');
     await page.locator('#sign-label').click();

@@ -9,6 +9,11 @@ body .header,body.mesha-dark .header,body.mesha-dark .header.header{
 body .header .brand,body.mesha-dark .header .brand,body.mesha-dark .header .brand:visited{
   color:var(--nia-v2-color-primary);font-family:var(--nia-v2-font-sans);font-size:20px;font-weight:650;text-decoration:none
 }
+body .header{--nia-blue:var(--nia-v2-color-primary)}
+.header .brand{min-width:0}
+.header .brand-lockup{display:flex;min-width:0;flex-direction:column;align-items:flex-start;line-height:1.2}
+.header .brand-strapline{color:var(--nia-v2-color-muted);font-size:11px;font-weight:400;letter-spacing:0;white-space:normal}
+.header .brand-strapline .brand-less{color:var(--nia-blue);font-weight:700}
 body.mesha-dark .header .brand-logo{display:block}
 .shell-heading{min-width:0;display:flex;align-items:center;justify-content:center;gap:var(--nia-v2-space-2);font-family:var(--nia-v2-font-sans)}
 #shell-greeting{margin:0;color:var(--nia-v2-color-ink);font-size:var(--nia-v2-type-body);font-weight:600;line-height:var(--nia-v2-leading-heading);overflow-wrap:anywhere}

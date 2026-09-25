@@ -1,22 +1,34 @@
 import { test, expect } from '@playwright/test';
 
+for (const unavailable of [false, true]) {
 for (const width of [320, 390, 760, 761, 960, 1280, 1440]) {
-  test(`member controls respond to pointer and keyboard at ${width}px`, async ({ page }) => {
+  test(`member controls respond to pointer and keyboard at ${width}px (catalogue ${unavailable ? 'unavailable' : 'ready'})`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
     await page.addInitScript(() => localStorage.setItem('nia-language', JSON.stringify('en')));
     // Exercise real markup and handlers with a read-only empty catalogue.
     // No reservation or Central decision is simulated or submitted.
     await page.route('**/api/commerce/**', async route => {
       const path = new URL(route.request().url()).pathname;
+      if (unavailable && path.endsWith('/catalogue')) return route.fulfill({ status: 503, json: { error: 'central_unreachable' } });
       await route.fulfill({ json: path.endsWith('/catalogue')
         ? { products: [], locations: [], account: null }
         : {}, status: 200 });
     });
     const errors = [];
     page.on('pageerror', error => errors.push(error.message));
-    await page.goto('/#shop');
-    await expect(page.locator('.shop-read-state')).toHaveAttribute('data-state', 'empty');
+    await page.goto(unavailable ? '/#home' : '/#shop');
+    if (unavailable) {
+      await expect(page.locator('.home-dashboard')).toContainText('Temporarily unavailable');
+      await page.locator('#content').getByRole('button', { name: /Browse Essentials/ }).click();
+    }
+    await expect(page.locator('.shop-read-state')).toHaveAttribute('data-state', unavailable ? 'unavailable' : 'empty');
     const nav = page.getByRole('navigation', { name: 'LESS navigation' });
+    await nav.getByRole('button', { name: 'Live', exact: true }).click();
+    await expect(page.locator('#content h1')).toHaveText('Live');
+    await nav.getByRole('button', { name: 'Earn', exact: true }).click();
+    await expect(page.locator('#content h1')).toHaveText('Earn');
+    await page.locator('#sign-label').click();
+    await expect(page.locator('#content h1')).toHaveText('Your account');
     await nav.getByRole('button', { name: 'Send', exact: true }).click();
     await expect(page.locator('#content')).toContainText('Transfers not active');
     await page.locator('#content').getByRole('button', { name: 'Sign in', exact: true }).first().click();
@@ -38,4 +50,5 @@ for (const width of [320, 390, 760, 761, 960, 1280, 1440]) {
     await expect(page.locator('#dialog')).toBeVisible();
     expect(errors).toEqual([]);
   });
+}
 }

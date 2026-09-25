@@ -61,7 +61,7 @@ body .member-shell #content,body.mesha-dark .member-shell #content{
 @media(min-width:761px){
   body.mesha-dark{background:var(--nia-v2-color-canvas)}
   body .header,body.mesha-dark .header,body.mesha-dark .header.header{
-    box-sizing:border-box;max-width:440px;margin-inline:auto;
+    box-sizing:border-box;max-width:440px!important;margin-inline:auto;
     grid-template-columns:minmax(0,1fr) auto;gap:4px var(--nia-v2-space-1);
     padding:var(--nia-v2-space-1) var(--nia-v2-space-2);min-height:76px
   }

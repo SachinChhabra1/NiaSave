@@ -1,6 +1,10 @@
 import memberUpdates from './member-updates/bn.js';
 // Bangla draft: Mesha strings are translated; remaining keys stay English until native-speaker review.
 export default {
+  "Pickup operator not yet assigned": "সংগ্রহের দায়িত্বে থাকা কর্মী এখনও নির্ধারিত হননি",
+  "Payment received at pickup": "সামগ্রী নেওয়ার সময় পেমেন্ট পাওয়া গেছে",
+  "Reservations are paused. You can browse essentials and ask your Nia team for help with an existing order.": "বুকিং এখন বন্ধ। আপনি সামগ্রী দেখতে পারেন এবং আগের অর্ডারের সাহায্যের জন্য নিয়া দলের সঙ্গে যোগাযোগ করতে পারেন।",
+  "Stays and applications are paused. Contact your Nia team for help with an existing request.": "থাকার বুকিং ও আবেদন এখন বন্ধ। আগের অনুরোধের সাহায্যের জন্য নিয়া দলের সঙ্গে যোগাযোগ করুন।",
   "Browsing is open. Reservations, stays and applications are paused while Nia prepares the pilot. Contact your Nia team for help with an existing request.": "আপনি তথ্য দেখতে পারেন। নিয়া পাইলটের প্রস্তুতি নেওয়ার সময় পণ্যের বুকিং, থাকার বুকিং ও চাকরির আবেদন বন্ধ আছে। আগের অনুরোধে সাহায্যের জন্য আপনার নিয়া দলের সঙ্গে যোগাযোগ করুন।",
   ...memberUpdates,
   "Pick up your bag here. Pay when you collect.": "Pick up your bag here. Pay when you collect.",

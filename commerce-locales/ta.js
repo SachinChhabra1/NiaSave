@@ -1,6 +1,10 @@
 import memberUpdates from './member-updates/ta.js';
 // Member-interface translation draft; native-speaker review is required before pilot launch.
 export default {
+  "Pickup operator not yet assigned": "பொருள் வழங்கும் பொறுப்பாளர் இன்னும் நியமிக்கப்படவில்லை",
+  "Payment received at pickup": "பொருட்களைப் பெறும்போது பணம் பெறப்பட்டது",
+  "Reservations are paused. You can browse essentials and ask your Nia team for help with an existing order.": "முன்பதிவுகள் நிறுத்தப்பட்டுள்ளன. பொருட்களைப் பார்க்கலாம். ஏற்கனவே உள்ள ஆர்டருக்கு உதவி பெற நியா குழுவை அணுகவும்.",
+  "Stays and applications are paused. Contact your Nia team for help with an existing request.": "தங்குமிட முன்பதிவுகளும் விண்ணப்பங்களும் நிறுத்தப்பட்டுள்ளன. ஏற்கனவே உள்ள கோரிக்கைக்கு உதவி பெற நியா குழுவை அணுகவும்.",
   "Browsing is open. Reservations, stays and applications are paused while Nia prepares the pilot. Contact your Nia team for help with an existing request.": "விவரங்களைப் பார்க்கலாம். நியா முன்னோட்டத் திட்டத்தைத் தயாரிக்கும் வரை பொருள் முன்பதிவுகள், தங்குமிட முன்பதிவுகள் மற்றும் வேலை விண்ணப்பங்கள் இடைநிறுத்தப்பட்டுள்ளன. ஏற்கனவே உள்ள கோரிக்கைக்கு உதவி தேவைப்பட்டால் உங்கள் நியா குழுவை அணுகவும்.",
   "Search essentials": "தேவையானவை தேடு",
   "Search oils, soap…": "எண்ணெய், சோப்பு தேடு…",

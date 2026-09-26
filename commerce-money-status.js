@@ -17,7 +17,7 @@ export function moneyStatusMarkup(source,{t,esc}){
   const label={requested:t('Requested'),reserved:t('Reserved'),confirmed:t('Confirmed'),queued:t('Queued on this phone')}[state];
   const operator=source.kind==='shop'&&state==='reserved'?pickupOperatorName(source.record):null;
   const operatorLine=source.kind==='shop'&&state==='reserved'
-    ?`<small class="money-honesty-operator">${operator?`${esc(t('Held for pickup by'))} <strong>${esc(operator)}</strong>`:esc(t('Pickup operator not yet provided by Central'))}</small>`
+    ?`<small class="money-honesty-operator">${operator?`${esc(t('Held for pickup by'))} <strong>${esc(operator)}</strong>`:esc(t(source.record?.source==='niasave'?'Pickup operator not yet assigned':'Pickup operator not yet provided by Central'))}</small>`
     :'';
   return `<span class="money-honesty-wrap"><span class="money-honesty-chip" data-money-state="${state}" role="status">${esc(label)}</span>${operatorLine}</span>`;
 }

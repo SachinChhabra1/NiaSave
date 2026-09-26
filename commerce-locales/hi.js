@@ -1,6 +1,11 @@
 import memberUpdates from './member-updates/hi.js';
 // Member-interface translation draft; native-speaker review is required before pilot launch.
 export default {
+  "Use your WhatsApp number.": "अपना WhatsApp नंबर डालें।",
+  "Enter the code sent to your WhatsApp number.": "अपने WhatsApp नंबर पर भेजा गया कोड डालें।",
+  "This account can shop. Other services need separate member approval.": "इस खाते से खरीदारी कर सकते हैं। दूसरी सेवाओं के लिए अलग सदस्य अनुमोदन चाहिए।",
+  "Choose available products from one pickup location.": "एक ही पिकअप जगह के उपलब्ध सामान चुनें।",
+  "TEST only. No payment or physical collection.": "केवल परीक्षण। कोई भुगतान या असली सामान लेना नहीं है।",
   "Send WhatsApp code": "WhatsApp कोड भेजें",
   "Optional. WhatsApp codes will still work. Password setup needs recent WhatsApp verification.": "यह वैकल्पिक है। WhatsApp कोड से साइन इन जारी रहेगा। पासवर्ड बनाने के लिए हाल का WhatsApp सत्यापन ज़रूरी है।",
   "Save password": "पासवर्ड सेव करें",

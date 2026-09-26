@@ -1,6 +1,15 @@
 import memberUpdates from './member-updates/bn.js';
 // Bangla draft: Mesha strings are translated; remaining keys stay English until native-speaker review.
 export default {
+  "Send WhatsApp code": "WhatsApp কোড পাঠান",
+  "Optional. WhatsApp codes will still work. Password setup needs recent WhatsApp verification.": "এটি ঐচ্ছিক। WhatsApp কোড দিয়েও সাইন ইন করা যাবে। পাসওয়ার্ড তৈরি করতে সাম্প্রতিক WhatsApp যাচাই প্রয়োজন।",
+  "Save password": "পাসওয়ার্ড সেভ করুন",
+  "Verify again with WhatsApp": "WhatsApp দিয়ে আবার যাচাই করুন",
+  "Set or change password": "পাসওয়ার্ড তৈরি বা পরিবর্তন করুন",
+  "Set or change password (optional)": "পাসওয়ার্ড তৈরি বা পরিবর্তন করুন (ঐচ্ছিক)",
+  "Password could not be confirmed. Refresh your account before retrying.": "পাসওয়ার্ড নিশ্চিত করা যায়নি। আবার চেষ্টা করার আগে আপনার অ্যাকাউন্ট রিফ্রেশ করুন।",
+  "Password saved. WhatsApp sign-in is still available.": "পাসওয়ার্ড সেভ হয়েছে। WhatsApp দিয়েও সাইন ইন করতে পারবেন।",
+  "Verify again by WhatsApp to set or change an optional password.": "ঐচ্ছিক পাসওয়ার্ড তৈরি বা পরিবর্তন করতে WhatsApp দিয়ে আবার যাচাই করুন।",
   "No available products": "কোনো পণ্য পাওয়া যাচ্ছে না",
   "Sign in to view availability": "প্রাপ্যতা দেখতে সাইন ইন করুন",
   "Browse essentials from NiaSave": "NiaSave-এ প্রয়োজনীয় জিনিস দেখুন",

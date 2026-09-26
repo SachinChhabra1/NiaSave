@@ -1,6 +1,15 @@
 import memberUpdates from './member-updates/ta.js';
 // Member-interface translation draft; native-speaker review is required before pilot launch.
 export default {
+  "Send WhatsApp code": "WhatsApp குறியீட்டை அனுப்பு",
+  "Optional. WhatsApp codes will still work. Password setup needs recent WhatsApp verification.": "இது விருப்பத் தேர்வு. WhatsApp குறியீடுகள் தொடர்ந்து வேலை செய்யும். கடவுச்சொல் அமைக்க சமீபத்திய WhatsApp சரிபார்ப்பு தேவை.",
+  "Save password": "கடவுச்சொல்லைச் சேமி",
+  "Verify again with WhatsApp": "WhatsApp மூலம் மீண்டும் சரிபார்",
+  "Set or change password": "கடவுச்சொல்லை அமைக்கவும் அல்லது மாற்றவும்",
+  "Set or change password (optional)": "கடவுச்சொல்லை அமைக்கவும் அல்லது மாற்றவும் (விருப்பம்)",
+  "Password could not be confirmed. Refresh your account before retrying.": "கடவுச்சொல்லை உறுதிப்படுத்த முடியவில்லை. மீண்டும் முயற்சிக்கும் முன் உங்கள் கணக்கைப் புதுப்பிக்கவும்.",
+  "Password saved. WhatsApp sign-in is still available.": "கடவுச்சொல் சேமிக்கப்பட்டது. WhatsApp மூலமும் தொடர்ந்து உள்நுழையலாம்.",
+  "Verify again by WhatsApp to set or change an optional password.": "விருப்பக் கடவுச்சொல்லை அமைக்க அல்லது மாற்ற WhatsApp மூலம் மீண்டும் சரிபார்க்கவும்.",
   "No available products": "பொருட்கள் கிடைக்கவில்லை",
   "Sign in to view availability": "இருப்பைப் பார்க்க உள்நுழையவும்",
   "Browse essentials from NiaSave": "NiaSave-இல் அத்தியாவசியப் பொருட்களைப் பார்க்கவும்",

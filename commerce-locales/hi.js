@@ -1,6 +1,15 @@
 import memberUpdates from './member-updates/hi.js';
 // Member-interface translation draft; native-speaker review is required before pilot launch.
 export default {
+  "Send WhatsApp code": "WhatsApp कोड भेजें",
+  "Optional. WhatsApp codes will still work. Password setup needs recent WhatsApp verification.": "यह वैकल्पिक है। WhatsApp कोड से साइन इन जारी रहेगा। पासवर्ड बनाने के लिए हाल का WhatsApp सत्यापन ज़रूरी है।",
+  "Save password": "पासवर्ड सेव करें",
+  "Verify again with WhatsApp": "WhatsApp से फिर सत्यापित करें",
+  "Set or change password": "पासवर्ड बनाएँ या बदलें",
+  "Set or change password (optional)": "पासवर्ड बनाएँ या बदलें (वैकल्पिक)",
+  "Password could not be confirmed. Refresh your account before retrying.": "पासवर्ड की पुष्टि नहीं हुई। फिर कोशिश करने से पहले अपना खाता रिफ्रेश करें।",
+  "Password saved. WhatsApp sign-in is still available.": "पासवर्ड सेव हो गया। WhatsApp से साइन इन भी कर सकते हैं।",
+  "Verify again by WhatsApp to set or change an optional password.": "वैकल्पिक पासवर्ड बनाने या बदलने के लिए WhatsApp से फिर सत्यापित करें।",
   "No available products": "कोई सामान उपलब्ध नहीं है",
   "Sign in to view availability": "उपलब्धता देखने के लिए साइन इन करें",
   "Browse essentials from NiaSave": "NiaSave पर ज़रूरी सामान देखें",

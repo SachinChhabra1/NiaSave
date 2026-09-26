@@ -49,6 +49,31 @@ export function usesPasswordAuth(cat) {
   return cat?.memberAuth === 'password' || Boolean(cat?.capabilities?.password || cat?.auth?.password || memberAuthCapabilities(cat).loginPath);
 }
 
+export function otpIsPrimary(cat) {
+  return cat?.memberAuth !== 'passkey' && (cat?.memberAuth === 'otp' || memberAuthCapabilities(cat).primaryMethod === 'whatsapp_otp');
+}
+
+export function optionalPasswordPath(cat) {
+  const caps = memberAuthCapabilities(cat);
+  return caps.passwordOptional === true ? commerceAuthPath(caps.setPasswordPath) : '';
+}
+
+export function optionalPasswordAllowed(cat, account) {
+  return account?.role === 'member' && !cat?.preview && Boolean(optionalPasswordPath(cat));
+}
+
+export function optionalSetupExpired(path, code, cat, account) {
+  return code === 'setup_expired' && optionalPasswordAllowed(cat, account) && path === optionalPasswordPath(cat);
+}
+
+export async function submitOptionalPassword(api, fields, cat, account) {
+  if (!optionalPasswordAllowed(cat, account)) throw {code:'sign_in_required'};
+  const issue = setPasswordIssue(fields);
+  if (issue) throw {code:issue};
+  // A one-use OTP grant is not retried at another alias after an expiry or failure.
+  return api(optionalPasswordPath(cat), passwordBody(fields), 'POST');
+}
+
 export function otpRequestPaths(cat) {
   return [...new Set([
     commerceAuthPath(memberAuthCapabilities(cat).otpRequestPath, ''),
@@ -131,9 +156,11 @@ function setPasswordSignal(result) {
 }
 
 export function needsSetPassword(result, cat) {
+  // A completed OTP session may also offer optional password setup; that is not a gate.
+  if (result?.account?.role === 'member' && (result.next === 'authenticated' || otpIsPrimary(cat))) return false;
   if (setPasswordSignal(result)) return true;
   if (result?.account) return false;
-  return usesPhoneOtpFlow(cat);
+  return !otpIsPrimary(cat) && usesPhoneOtpFlow(cat);
 }
 
 export function setPasswordPaths(result, cat) {
@@ -194,13 +221,13 @@ export async function submitSetPassword(api, body, cat, result) {
   return submitAuthPaths(api, setPasswordPaths(result, cat), body, RETRY_SET_PASSWORD);
 }
 
-function steps(t, current) {
+function steps(t, current, otpPrimary = false) {
   const items = [
     ['phone', t('Mobile', 'मोबाइल')],
     ['code', t('Code', 'कोड')],
     ['password', t('Password', 'पासवर्ड')],
     ['remember', t('Stay signed in', 'साइन इन रहें')]
-  ];
+  ].filter(([id]) => !otpPrimary || id === 'phone' || id === 'code');
   return `<ol class="auth-steps" aria-label="${t('Sign-in steps', 'साइन इन के चरण')}">${items.map(([id, label]) => `<li${id === current ? ' aria-current="step"' : ''}>${label}</li>`).join('')}</ol>`;
 }
 
@@ -208,18 +235,18 @@ function fieldError() {
   return '<div id="form-error" class="error-inline" role="alert"></div>';
 }
 
-export function phoneFormMarkup({t, esc, phone = '', passwordLink = false}) {
+export function phoneFormMarkup({t, esc, phone = '', passwordLink = false, otpPrimary = false}) {
   const national = nationalMobile(phone);
-  return `<form id="login-form" class="stack" data-auth-step="phone">${steps(t, 'phone')}<p>${t('Use the phone number registered with Nia.', 'निया में दर्ज फोन नंबर डालें।')}</p><label>${t('Mobile number', 'मोबाइल नंबर')}<span class="phone-field"><span class="phone-prefix" aria-hidden="true">+91</span><input name="phone" type="tel" autocomplete="tel-national" inputmode="numeric" pattern="[6-9][0-9]{9}" minlength="10" maxlength="10" placeholder="${t('10-digit mobile number', '10 अंकों का मोबाइल नंबर')}" value="${esc(national)}" required></span></label>${fieldError()}<button class="primary" type="submit">${t('Send code', 'कोड भेजें')}</button>${passwordLink ? `<button type="button" class="quiet" data-action="password-login">${t('Already have a password? Sign in', 'पासवर्ड पहले से है? साइन इन करें')}</button>` : ''}<button type="button" data-action="recovery">${t('Number changed? Get help', 'नंबर बदल गया? मदद लें')}</button></form>`;
+  return `<form id="login-form" class="stack" data-auth-step="phone">${steps(t, 'phone', otpPrimary)}<p>${t('Use the phone number registered with Nia.', 'निया में दर्ज फोन नंबर डालें।')}</p><label>${t('Mobile number', 'मोबाइल नंबर')}<span class="phone-field"><span class="phone-prefix" aria-hidden="true">+91</span><input name="phone" type="tel" autocomplete="tel-national" inputmode="numeric" pattern="[6-9][0-9]{9}" minlength="10" maxlength="10" placeholder="${t('10-digit mobile number', '10 अंकों का मोबाइल नंबर')}" value="${esc(national)}" required></span></label>${fieldError()}<button class="primary" type="submit">${otpPrimary ? t('Send WhatsApp code') : t('Send code', 'कोड भेजें')}</button>${passwordLink ? `<button type="button" class="quiet" data-action="password-login">${t('Already have a password? Sign in', 'पासवर्ड पहले से है? साइन इन करें')}</button>` : ''}<button type="button" data-action="recovery">${t('Number changed? Get help', 'नंबर बदल गया? मदद लें')}</button></form>`;
 }
 
-export function verifyFormMarkup({t, esc, phone = ''}) {
+export function verifyFormMarkup({t, esc, phone = '', otpPrimary = false}) {
   const shown = e164In(phone) || phone;
-  return `<form id="verify-form" class="stack" data-auth-step="code">${steps(t, 'code')}<p>${t('If this number is registered with Nia, a code will arrive on WhatsApp.', 'यदि यह नंबर निया में पंजीकृत है, तो WhatsApp पर कोड आएगा।')}</p>${shown ? `<p class="auth-phone">${esc(shown)}</p>` : ''}<label>${t('Verification code', 'पुष्टि कोड')}<input name="code" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{4,8}" maxlength="8" required></label>${fieldError()}<button class="primary" type="submit">${t('Verify & continue', 'पुष्टि करके आगे बढ़ें')}</button><button type="button" data-action="login">${t('Use another number / resend', 'दूसरा नंबर / फिर भेजें')}</button></form>`;
+  return `<form id="verify-form" class="stack" data-auth-step="code">${steps(t, 'code', otpPrimary)}<p>${t('If this number is registered with Nia, a code will arrive on WhatsApp.', 'यदि यह नंबर निया में पंजीकृत है, तो WhatsApp पर कोड आएगा।')}</p>${shown ? `<p class="auth-phone">${esc(shown)}</p>` : ''}<label>${t('Verification code', 'पुष्टि कोड')}<input name="code" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{4,8}" maxlength="8" required></label>${fieldError()}<button class="primary" type="submit">${t('Verify & continue', 'पुष्टि करके आगे बढ़ें')}</button><button type="button" data-action="login">${t('Use another number / resend', 'दूसरा नंबर / फिर भेजें')}</button></form>`;
 }
 
-export function setPasswordFormMarkup({t}) {
-  return `<form id="set-password-form" class="stack" data-auth-step="password">${steps(t, 'password')}<p>${t('Create a password for this phone. You will use it the next time you sign in.', 'इस फोन के लिए पासवर्ड बनाएँ। अगली बार इसी से साइन इन करेंगे।')}</p><label>${t('New password', 'नया पासवर्ड')}<input name="password" type="password" autocomplete="new-password" minlength="8" required></label><label>${t('Confirm password', 'पासवर्ड की पुष्टि')}<input name="confirm" type="password" autocomplete="new-password" minlength="8" required></label><label class="remember-choice"><input type="checkbox" name="remember" checked> ${t('Stay signed in on this phone', 'इस फोन पर साइन इन रहें')}</label>${fieldError()}<button class="primary" type="submit">${t('Save password and continue', 'पासवर्ड सहेजें और आगे बढ़ें')}</button><button type="button" class="quiet" data-action="login">${t('Use another number / resend', 'दूसरा नंबर / फिर भेजें')}</button></form>`;
+export function setPasswordFormMarkup({t, optional = false}) {
+  return `<form id="set-password-form" class="stack" data-auth-step="${optional ? 'optional-password' : 'password'}">${optional ? '' : steps(t, 'password')}<p>${optional ? t('Optional. WhatsApp codes will still work. Password setup needs recent WhatsApp verification.') : t('Create a password for this phone. You will use it the next time you sign in.', 'इस फोन के लिए पासवर्ड बनाएँ। अगली बार इसी से साइन इन करेंगे।')}</p><label>${t('New password', 'नया पासवर्ड')}<input name="password" type="password" autocomplete="new-password" minlength="8" required></label><label>${t('Confirm password', 'पासवर्ड की पुष्टि')}<input name="confirm" type="password" autocomplete="new-password" minlength="8" required></label><label class="remember-choice"><input type="checkbox" name="remember" checked> ${t('Stay signed in on this phone', 'इस फोन पर साइन इन रहें')}</label>${fieldError()}<button class="primary" type="submit">${optional ? t('Save password') : t('Save password and continue', 'पासवर्ड सहेजें और आगे बढ़ें')}</button><button type="button" class="quiet" data-action="${optional ? 'phone-login' : 'login'}">${optional ? t('Verify again with WhatsApp') : t('Use another number / resend', 'दूसरा नंबर / फिर भेजें')}</button></form>`;
 }
 
 export function rememberFormMarkup({t}) {

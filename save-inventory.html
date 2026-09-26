@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#F4F6FA">
+  <title>NiaSave · Inventory and orders</title>
+  <link rel="icon" href="/assets/nia-favicon-64.png" type="image/png">
+  <link rel="stylesheet" href="/staff.css">
+  <link rel="stylesheet" href="/nia-operator.css">
+  <link rel="stylesheet" href="/save-inventory.css">
+</head>
+<body class="save-inventory">
+  <div class="tower">
+    <header class="top">
+      <div class="mark"><img class="nia-logo" src="/assets/nia-mark-square.png" alt="Nia"><div class="desk-head"><h1>NiaSave staff</h1></div></div>
+      <div class="meta"><a href="/save-desk.html">Save desk</a> · <a href="/ops.html">Ops board</a></div>
+    </header>
+    <div class="shell">
+      <aside class="rail" aria-label="Staff navigation"><div class="rail-block"><h2 class="rail-h">Save</h2><a class="rail-link on" href="/save-inventory.html" aria-current="page">Inventory and orders</a><a class="rail-link" href="/save-desk.html">Save desk</a></div></aside>
+      <main class="pane"><div class="wrap">
+        <p class="eyebrow">NiaSave</p>
+        <h1 class="page-title">Inventory and orders</h1>
+        <p class="sub">Review stock before publishing. Record payment and collection against each order.</p>
+        <p id="save-status" class="save-status" role="status" aria-live="polite">Loading saved inventory…</p>
+        <div class="save-tabs" role="tablist" aria-label="Save work">
+          <button id="inventory-tab" type="button" role="tab" aria-selected="true" aria-controls="inventory-panel">Inventory</button>
+          <button id="orders-tab" type="button" role="tab" aria-selected="false" aria-controls="orders-panel" tabindex="-1">Orders</button>
+        </div>
+        <section id="inventory-panel" role="tabpanel" aria-labelledby="inventory-tab">
+          <div class="save-section-head"><div><h2>Saved inventory</h2><p id="inventory-summary" class="sub">Loading…</p></div><button type="button" id="refresh-inventory" class="ghost">Refresh inventory</button></div>
+          <div id="inventory-list" class="save-table-wrap" tabindex="0" aria-label="Saved inventory"></div>
+          <section class="card save-upload" aria-labelledby="upload-title">
+            <h2 id="upload-title">Upload inventory</h2>
+            <p>Choose a CSV or paste its contents. Preview the changes before publishing.</p>
+            <p>Use confirmed product, price and stock records. Blank quantities are not recorded zeroes.</p>
+            <details><summary>CSV columns and format</summary><div id="csv-help">Loading the upload format…</div></details>
+            <form id="inventory-upload">
+              <label for="inventory-file">Inventory CSV file</label>
+              <input id="inventory-file" type="file" accept=".csv,text/csv">
+              <label for="inventory-csv">CSV contents</label>
+              <textarea id="inventory-csv" rows="7" spellcheck="false" autocomplete="off" required aria-describedby="csv-limit"></textarea>
+              <p id="csv-limit" class="sub">Your changes are saved only after you preview and publish.</p>
+              <div class="actions"><button id="preview-inventory" type="submit" disabled>Preview changes</button><button id="clear-inventory" type="button" class="ghost">Clear upload</button></div>
+            </form>
+            <div id="upload-status" role="status" aria-live="polite"></div>
+            <div id="upload-preview" class="save-table-wrap" tabindex="0" aria-label="Inventory upload preview"></div>
+            <button id="publish-inventory" type="button" hidden disabled>Publish reviewed inventory</button>
+          </section>
+        </section>
+        <section id="orders-panel" role="tabpanel" aria-labelledby="orders-tab" hidden>
+          <div class="save-section-head"><div><h2>Orders</h2><p id="orders-summary" class="sub">Loading…</p></div><button type="button" id="refresh-orders" class="ghost">Refresh orders</button></div>
+          <div id="order-list" class="save-orders"></div>
+        </section>
+      </div></main>
+    </div>
+  </div>
+  <script src="/staff.js"></script>
+  <script type="module" src="/save-inventory.js"></script>
+</body>
+</html>

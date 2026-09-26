@@ -268,7 +268,8 @@
   ],
   "git": {
     "deploymentEnabled": {
-      "release/niasave-save-otp-20260926": false
+      "release/niasave-save-otp-20260926": false,
+      "fix/niasave-customer-shopping-20260926": false
     }
   }
 }

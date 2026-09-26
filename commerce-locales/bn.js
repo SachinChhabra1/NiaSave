@@ -1,6 +1,11 @@
 import memberUpdates from './member-updates/bn.js';
 // Bangla draft: Mesha strings are translated; remaining keys stay English until native-speaker review.
 export default {
+  "Use your WhatsApp number.": "আপনার WhatsApp নম্বর দিন।",
+  "Enter the code sent to your WhatsApp number.": "আপনার WhatsApp নম্বরে পাঠানো কোড লিখুন।",
+  "This account can shop. Other services need separate member approval.": "এই অ্যাকাউন্ট থেকে কেনাকাটা করা যাবে। অন্য পরিষেবার জন্য আলাদা সদস্য অনুমোদন প্রয়োজন।",
+  "Choose available products from one pickup location.": "একই সংগ্রহস্থলের উপলব্ধ পণ্য বেছে নিন।",
+  "TEST only. No payment or physical collection.": "শুধু পরীক্ষা। কোনো টাকা দেওয়া বা পণ্য সংগ্রহ করা হবে না।",
   "Send WhatsApp code": "WhatsApp কোড পাঠান",
   "Optional. WhatsApp codes will still work. Password setup needs recent WhatsApp verification.": "এটি ঐচ্ছিক। WhatsApp কোড দিয়েও সাইন ইন করা যাবে। পাসওয়ার্ড তৈরি করতে সাম্প্রতিক WhatsApp যাচাই প্রয়োজন।",
   "Save password": "পাসওয়ার্ড সেভ করুন",

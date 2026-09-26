@@ -1,6 +1,11 @@
 import memberUpdates from './member-updates/ta.js';
 // Member-interface translation draft; native-speaker review is required before pilot launch.
 export default {
+  "Use your WhatsApp number.": "உங்கள் WhatsApp எண்ணைப் பயன்படுத்தவும்.",
+  "Enter the code sent to your WhatsApp number.": "உங்கள் WhatsApp எண்ணிற்கு அனுப்பிய குறியீட்டை உள்ளிடவும்.",
+  "This account can shop. Other services need separate member approval.": "இந்தக் கணக்கில் பொருட்கள் வாங்கலாம். மற்ற சேவைகளுக்குத் தனி உறுப்பினர் ஒப்புதல் தேவை.",
+  "Choose available products from one pickup location.": "ஒரே சேகரிப்பு இடத்திலுள்ள பொருட்களைத் தேர்வு செய்யவும்.",
+  "TEST only. No payment or physical collection.": "சோதனை மட்டும். பணம் செலுத்தவோ பொருட்களைப் பெறவோ வேண்டாம்.",
   "Send WhatsApp code": "WhatsApp குறியீட்டை அனுப்பு",
   "Optional. WhatsApp codes will still work. Password setup needs recent WhatsApp verification.": "இது விருப்பத் தேர்வு. WhatsApp குறியீடுகள் தொடர்ந்து வேலை செய்யும். கடவுச்சொல் அமைக்க சமீபத்திய WhatsApp சரிபார்ப்பு தேவை.",
   "Save password": "கடவுச்சொல்லைச் சேமி",

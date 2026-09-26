@@ -21,6 +21,7 @@ fi
 cp -f desk.html ops.html bison.html bison-studios.html bison-contracts.html bison-clocks.html bison-collections.html bison-nests.html bison-data.html pickup.html recon.html predict.html hub.html next.html cash.html source.html inventory.html ageing.html po.html dispatch.html invoice.html biker.html vendors.html payout.html save-desk.html staff.css staff.js save-desk-ui.css nia-operator.css bison.css bison.js bison-data.js dist/
 cp -f desk.html dist/2para.html
 cp -f staff-entry.js dist/
+cp -f save-inventory.html save-inventory.js save-inventory.css dist/
 cp -f apple-desktop.css niasave-system.css niasave-apple-store.css niasave-ui.js dist/
 cp -f live-studios.html dist/
 cp -f commerce.html commerce.css commerce-shell.css commerce.js commerce-shell.js commerce-home.js commerce-money-status.js commerce-shop-v2.js commerce-analytics.js commerce-content-qa.js commerce-capabilities.js commerce-truth.js commerce-owner.js commerce-passkeys.js commerce-member-auth.js commerce-i18n.js commerce-books.js commerce-services.js commerce-support.js commerce-plan.js commerce-earn-map.js commerce-categories.js commerce-shop-categories.js commerce-ops.js commerce-wave0.css commerce-wave0.js commerce-waves.css commerce-waves.js dist/

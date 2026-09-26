@@ -1,6 +1,22 @@
 import memberUpdates from './member-updates/bn.js';
 // Bangla draft: Mesha strings are translated; remaining keys stay English until native-speaker review.
 export default {
+  "No available products": "কোনো পণ্য পাওয়া যাচ্ছে না",
+  "Sign in to view availability": "প্রাপ্যতা দেখতে সাইন ইন করুন",
+  "Browse essentials from NiaSave": "NiaSave-এ প্রয়োজনীয় জিনিস দেখুন",
+  "Loading NiaSave catalogue": "NiaSave-এর পণ্যের তালিকা লোড হচ্ছে",
+  "Catalogue from NiaSave": "NiaSave-এর পণ্যের তালিকা",
+  "Catalogue details not available": "পণ্যের তালিকার তথ্য পাওয়া যাচ্ছে না",
+  "Photo not available": "ছবি পাওয়া যাচ্ছে না",
+  "Unit price not recorded": "একক মূল্য নথিভুক্ত নেই",
+  "These products have no category assigned.": "এই পণ্যগুলির বিভাগ নির্ধারিত হয়নি।",
+  "Unit prices and lowest-price labels are not recorded. Products are shown without ranking.": "একক মূল্য ও সর্বনিম্ন মূল্যের লেবেল নথিভুক্ত নেই। পণ্যগুলি ক্রম নির্ধারণ ছাড়াই দেখানো হচ্ছে।",
+  "Final price and availability are checked by NiaSave at review.": "পর্যালোচনার সময় NiaSave চূড়ান্ত মূল্য ও প্রাপ্যতা যাচাই করে।",
+  "Sign in to see essentials for your location and reserve.": "আপনার এলাকার পণ্য দেখতে ও সংরক্ষণ করতে সাইন ইন করুন।",
+  "Catalogue unavailable. Refresh to check reservations.": "পণ্যের তালিকা পাওয়া যাচ্ছে না। সংরক্ষণ যাচাই করতে রিফ্রেশ করুন।",
+  "Refresh the catalogue to check current availability.": "বর্তমান প্রাপ্যতা যাচাই করতে পণ্যের তালিকা রিফ্রেশ করুন।",
+  "No essentials are available to reserve for your location right now.": "আপনার এলাকায় এখন সংরক্ষণের জন্য কোনো পণ্য পাওয়া যাচ্ছে না।",
+  "Reservations are unavailable right now. You can browse essentials or ask Nia for help.": "এখন সংরক্ষণ করা যাচ্ছে না। আপনি পণ্য দেখতে বা Nia-এর সাহায্য চাইতে পারেন।",
   "Pickup operator not yet assigned": "সংগ্রহের দায়িত্বে থাকা কর্মী এখনও নির্ধারিত হননি",
   "Payment received at pickup": "সামগ্রী নেওয়ার সময় পেমেন্ট পাওয়া গেছে",
   "Reservations are paused. You can browse essentials and ask your Nia team for help with an existing order.": "বুকিং এখন বন্ধ। আপনি সামগ্রী দেখতে পারেন এবং আগের অর্ডারের সাহায্যের জন্য নিয়া দলের সঙ্গে যোগাযোগ করতে পারেন।",

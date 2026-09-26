@@ -1,7 +1,12 @@
 // Presentation only. The catalogue read was already validated against Central on the server.
-export function memberShellState({online,readAsOf,readAt,readFailed=false,pendingCount=0,now=Date.now()}={}){
+export function memberShellState({online,readAsOf,readAt,readFailed=false,pendingCount=0,sourceOwner,signedIn,now=Date.now()}={}){
   if(!online)return pendingCount>0?'queued':'offline';
   if(pendingCount>0)return 'retry';
+  // Public Nia catalogues intentionally withhold member inventory and its source clock.
+  if(sourceOwner==='niasave'&&signedIn===false&&Number.isFinite(readAt)){
+    if(readFailed||readAt>now||now-readAt>60000)return 'stale';
+    return 'signin';
+  }
   const asOf=Date.parse(readAsOf||'');
   if(!Number.isFinite(asOf)||!Number.isFinite(readAt))return 'checking';
   if(readFailed||readAt>now||now-readAt>60000)return 'stale';

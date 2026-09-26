@@ -1,6 +1,22 @@
 import memberUpdates from './member-updates/ta.js';
 // Member-interface translation draft; native-speaker review is required before pilot launch.
 export default {
+  "No available products": "பொருட்கள் கிடைக்கவில்லை",
+  "Sign in to view availability": "இருப்பைப் பார்க்க உள்நுழையவும்",
+  "Browse essentials from NiaSave": "NiaSave-இல் அத்தியாவசியப் பொருட்களைப் பார்க்கவும்",
+  "Loading NiaSave catalogue": "NiaSave பொருள் பட்டியல் ஏற்றப்படுகிறது",
+  "Catalogue from NiaSave": "NiaSave பொருள் பட்டியல்",
+  "Catalogue details not available": "பொருள் பட்டியல் விவரங்கள் கிடைக்கவில்லை",
+  "Photo not available": "படம் கிடைக்கவில்லை",
+  "Unit price not recorded": "அலகு விலை பதிவு செய்யப்படவில்லை",
+  "These products have no category assigned.": "இந்தப் பொருட்களுக்கு வகை ஒதுக்கப்படவில்லை.",
+  "Unit prices and lowest-price labels are not recorded. Products are shown without ranking.": "அலகு விலைகளும் குறைந்த விலை குறிகளும் பதிவு செய்யப்படவில்லை. பொருட்கள் தரவரிசையின்றிக் காட்டப்படுகின்றன.",
+  "Final price and availability are checked by NiaSave at review.": "மறுபார்வையின்போது இறுதி விலையையும் கிடைக்கும் அளவையும் NiaSave சரிபார்க்கும்.",
+  "Sign in to see essentials for your location and reserve.": "உங்கள் இடத்திற்கான பொருட்களைப் பார்த்து முன்பதிவு செய்ய உள்நுழையவும்.",
+  "Catalogue unavailable. Refresh to check reservations.": "பொருள் பட்டியல் கிடைக்கவில்லை. முன்பதிவைச் சரிபார்க்கப் புதுப்பிக்கவும்.",
+  "Refresh the catalogue to check current availability.": "தற்போதைய இருப்பைச் சரிபார்க்கப் பொருள் பட்டியலைப் புதுப்பிக்கவும்.",
+  "No essentials are available to reserve for your location right now.": "உங்கள் இடத்தில் இப்போது முன்பதிவு செய்யப் பொருட்கள் இல்லை.",
+  "Reservations are unavailable right now. You can browse essentials or ask Nia for help.": "இப்போது முன்பதிவு செய்ய முடியாது. பொருட்களைப் பார்க்கலாம் அல்லது Nia-விடம் உதவி கேட்கலாம்.",
   "Pickup operator not yet assigned": "பொருள் வழங்கும் பொறுப்பாளர் இன்னும் நியமிக்கப்படவில்லை",
   "Payment received at pickup": "பொருட்களைப் பெறும்போது பணம் பெறப்பட்டது",
   "Reservations are paused. You can browse essentials and ask your Nia team for help with an existing order.": "முன்பதிவுகள் நிறுத்தப்பட்டுள்ளன. பொருட்களைப் பார்க்கலாம். ஏற்கனவே உள்ள ஆர்டருக்கு உதவி பெற நியா குழுவை அணுகவும்.",

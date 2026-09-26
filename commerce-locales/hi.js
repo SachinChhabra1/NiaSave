@@ -1,6 +1,22 @@
 import memberUpdates from './member-updates/hi.js';
 // Member-interface translation draft; native-speaker review is required before pilot launch.
 export default {
+  "No available products": "कोई सामान उपलब्ध नहीं है",
+  "Sign in to view availability": "उपलब्धता देखने के लिए साइन इन करें",
+  "Browse essentials from NiaSave": "NiaSave पर ज़रूरी सामान देखें",
+  "Loading NiaSave catalogue": "NiaSave की सूची लोड हो रही है",
+  "Catalogue from NiaSave": "NiaSave की सामान सूची",
+  "Catalogue details not available": "सामान की जानकारी उपलब्ध नहीं है",
+  "Photo not available": "फ़ोटो उपलब्ध नहीं है",
+  "Unit price not recorded": "प्रति इकाई कीमत दर्ज नहीं है",
+  "These products have no category assigned.": "इन सामानों की श्रेणी तय नहीं है।",
+  "Unit prices and lowest-price labels are not recorded. Products are shown without ranking.": "प्रति इकाई कीमत और सबसे कम कीमत के लेबल दर्ज नहीं हैं। सामान बिना रैंकिंग के दिखाए गए हैं।",
+  "Final price and availability are checked by NiaSave at review.": "समीक्षा के समय NiaSave अंतिम कीमत और उपलब्धता जाँचता है।",
+  "Sign in to see essentials for your location and reserve.": "अपनी जगह के लिए सामान देखने और आरक्षित करने के लिए साइन इन करें।",
+  "Catalogue unavailable. Refresh to check reservations.": "सामान की सूची उपलब्ध नहीं है। आरक्षण जाँचने के लिए रीफ़्रेश करें।",
+  "Refresh the catalogue to check current availability.": "अभी की उपलब्धता जाँचने के लिए सामान की सूची रीफ़्रेश करें।",
+  "No essentials are available to reserve for your location right now.": "आपकी जगह पर अभी आरक्षित करने के लिए कोई सामान उपलब्ध नहीं है।",
+  "Reservations are unavailable right now. You can browse essentials or ask Nia for help.": "अभी आरक्षण उपलब्ध नहीं है। आप सामान देख सकते हैं या Nia से मदद माँग सकते हैं।",
   "Pickup operator not yet assigned": "सामान देने वाले संचालक की जिम्मेदारी अभी तय नहीं हुई है",
   "Payment received at pickup": "सामान लेते समय भुगतान मिला",
   "Reservations are paused. You can browse essentials and ask your Nia team for help with an existing order.": "बुकिंग अभी बंद है। आप सामान देख सकते हैं और पुराने ऑर्डर के लिए अपनी निया टीम से मदद माँग सकते हैं।",

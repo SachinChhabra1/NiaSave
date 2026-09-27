@@ -39,6 +39,15 @@ export function ratchetProblems({baseline, baseBaseline, gaps, baseGaps}) {
   return problems;
 }
 
+function refResolves(ref) {
+  try {
+    execFileSync('git', ['rev-parse', '--verify', '--end-of-options', ref], {cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe']});
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 function readGit(ref, file) {
   try {
     return execFileSync('git', ['show', ref + ':' + file], {cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe']});
@@ -51,6 +60,10 @@ function main() {
   const ref = process.argv[2];
   if (!ref) {
     console.error('Pass the base ref, for example origin/main.');
+    process.exit(1);
+  }
+  if (!refResolves(ref)) {
+    console.error('Base ref ' + ref + ' does not resolve.');
     process.exit(1);
   }
   const baselineFile = path.relative(root, baselinePath).split(path.sep).join('/');

@@ -118,12 +118,13 @@ for (const width of [360, 390]) {
             await expect(page.locator('#less-nav button[aria-current="page"]')).toHaveAttribute('data-action', name);
           }
           expect(await iconGaps(page)).toEqual([]);
+          await expect(page.locator('#commerce-ops')).toHaveCount(0);
           const facts = await visibleFacts(page);
           expect(facts.length).toBeGreaterThan(5);
           const file = lang + '/' + width + '/' + mode + '/' + name;
           const seen = new Set();
           for (const fact of facts) {
-            if (violationKind(fact.text) && !copyCovers(fact.text, baseline.entries)) banned.push(file + ': ' + fact.text);
+            if (violationKind(fact.text) && !copyCovers(fact.text, baseline.entries, name)) banned.push(file + ': ' + fact.text);
             if (fact.size < 14) {
               const key = file + '\0' + fact.text;
               if (!seen.has(key)) {
@@ -141,8 +142,19 @@ for (const width of [360, 390]) {
           }
         }
         expect(banned).toEqual([]);
-        const allowedFonts = new Set(baseline.entries.filter(entry => entry.kind === 'font').map(entry => entry.file + '\0' + entry.string));
-        const freshFonts = fonts.filter(entry => !allowedFonts.has(entry.file + '\0' + entry.string));
+        const allowedFonts = new Map();
+        for (const entry of baseline.entries) {
+          if (entry.kind !== 'font') continue;
+          const size = Number(entry.size);
+          if (!Number.isFinite(size)) continue;
+          const key = entry.file + '\0' + entry.string;
+          const prior = allowedFonts.get(key);
+          if (prior == null || size < prior) allowedFonts.set(key, size);
+        }
+        const freshFonts = fonts.filter(entry => {
+          const recorded = allowedFonts.get(entry.file + '\0' + entry.string);
+          return recorded == null || entry.size < recorded;
+        });
         expect(freshFonts).toEqual([]);
         const allowedDates = new Set(baseline.entries.filter(entry => entry.kind === 'date').map(entry => entry.file + '\0' + entry.string));
         const freshDates = dates.filter(entry => !allowedDates.has(entry.file + '\0' + entry.string));

@@ -21,7 +21,10 @@ jobs:
           node-version: 24
 
       - name: Fetch the pull request base branch
-        run: git fetch --no-tags --depth=1 origin "${{ github.base_ref }}"
+        run: git fetch --no-tags --depth=1 origin "+refs/heads/${{ github.base_ref }}:refs/remotes/origin/${{ github.base_ref }}"
+
+      - name: Prove the base ref resolves
+        run: git rev-parse --verify --end-of-options "refs/remotes/origin/${{ github.base_ref }}"
 
       - name: Reject a new baseline entry or a larger total
         run: node tests/ui-clarity/ratchet.mjs "origin/${{ github.base_ref }}"

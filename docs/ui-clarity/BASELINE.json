@@ -267,6 +267,12 @@
     {
       "kind": "copy",
       "file": "commerce-locales/bn.js",
+      "string": "Some statement sources are missing",
+      "rule": "banned"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
       "string": "Source",
       "rule": "banned"
     },
@@ -304,6 +310,12 @@
       "kind": "copy",
       "file": "commerce-locales/bn.js",
       "string": "Your entries are editable. Source payments are corrected by your Nia team.",
+      "rule": "banned"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "Your verified sign-in supplies the new number. An operator must verify the change.",
       "rule": "banned"
     },
     {
@@ -388,6 +400,12 @@
       "kind": "copy",
       "file": "commerce-locales/bn.js",
       "string": "বর্তমান প্রাপ্যতা যাচাই করতে পণ্যের তালিকা রিফ্রেশ করুন।",
+      "rule": "banned"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "বিবরণের কিছু উৎস নেই",
       "rule": "banned"
     },
     {
@@ -646,6 +664,12 @@
       "kind": "copy",
       "file": "commerce-locales/hi.js",
       "string": "Search the catalogue",
+      "rule": "banned"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/hi.js",
+      "string": "Some statement sources are missing",
       "rule": "banned"
     },
     {
@@ -975,6 +999,12 @@
     {
       "kind": "copy",
       "file": "commerce-locales/member-updates/hi.js",
+      "string": "Your verified sign-in supplies the new number. An operator must verify the change.",
+      "rule": "banned"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/hi.js",
       "string": "आप अपनी प्रविष्टियाँ बदल सकते हैं। मूल भुगतान निया टीम ठीक करती है।",
       "rule": "banned"
     },
@@ -989,6 +1019,12 @@
       "file": "commerce-locales/member-updates/hi.js",
       "string": "तेल, साबुन, डिटर्जेंट — सदस्य कीमत। मुफ़्त देखें। फोन केवल चेकआउट पर।",
       "rule": "emdash"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/hi.js",
+      "string": "नया नंबर आपके सत्यापित साइन-इन से लिया जाएगा। टीम बदलाव सत्यापित करेगी।",
+      "rule": "banned"
     },
     {
       "kind": "copy",
@@ -1071,6 +1107,12 @@
     {
       "kind": "copy",
       "file": "commerce-locales/member-updates/kn.js",
+      "string": "Your verified sign-in supplies the new number. An operator must verify the change.",
+      "rule": "banned"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/kn.js",
       "string": "ಈ ಕರಡು ಈ ತೆರೆದ ಸೆಷನ್‌ನಲ್ಲಿ ಮಾತ್ರ ಉಳಿಯುತ್ತದೆ. Central ಸಂಪರ್ಕವಾದಾಗ ಖಾತೆಗೆ ಉಳಿಸಬಹುದು.",
       "rule": "banned"
     },
@@ -1102,6 +1144,12 @@
       "kind": "copy",
       "file": "commerce-locales/member-updates/kn.js",
       "string": "ಸೆಂಟ್ರಲ್ ಅನ್ನು ತಲುಪಲು ಆಗಲಿಲ್ಲ. ನೀವು ನಮೂದಿಸಿದ ಮೊತ್ತಗಳು ಇಲ್ಲಿಯೇ ಇವೆ; ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
+      "rule": "banned"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/kn.js",
+      "string": "ಹೊಸ ಸಂಖ್ಯೆ ಪರಿಶೀಲಿಸಿದ ಪ್ರವೇಶದಿಂದ ಪಡೆಯಲಾಗುತ್ತದೆ. ತಂಡ ಬದಲಾವಣೆಯನ್ನು ಪರಿಶೀಲಿಸಬೇಕು.",
       "rule": "banned"
     },
     {
@@ -1143,6 +1191,12 @@
     {
       "kind": "copy",
       "file": "commerce-locales/member-updates/mr.js",
+      "string": "Your verified sign-in supplies the new number. An operator must verify the change.",
+      "rule": "banned"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/mr.js",
       "string": "तुमच्या नोंदी बदलता येतात. मूळ देयकांची दुरुस्ती Nia टीम करते.",
       "rule": "banned"
     },
@@ -1151,6 +1205,12 @@
       "file": "commerce-locales/member-updates/mr.js",
       "string": "तेल, साबण, डिटर्जेंट — सदस्य किंमत. मोफत पाहा. फोन फक्त चेकआउटवर.",
       "rule": "emdash"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/mr.js",
+      "string": "नवीन क्रमांक सत्यापित साइन-इनमधून घेतला जाईल. टीमने बदल पडताळणे आवश्यक आहे.",
+      "rule": "banned"
     },
     {
       "kind": "copy",
@@ -1227,6 +1287,12 @@
     {
       "kind": "copy",
       "file": "commerce-locales/member-updates/ta.js",
+      "string": "Your verified sign-in supplies the new number. An operator must verify the change.",
+      "rule": "banned"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/ta.js",
       "string": "இந்த வரைவு இந்தத் திறந்த அமர்வில் மட்டும் இருக்கும். Central இணைந்ததும் கணக்கில் சேமிக்கலாம்.",
       "rule": "banned"
     },
@@ -1258,6 +1324,12 @@
       "kind": "copy",
       "file": "commerce-locales/member-updates/ta.js",
       "string": "சென்ட்ரலை அணுக முடியவில்லை. நீங்கள் உள்ளிட்ட தொகைகள் இங்கேயே உள்ளன; மீண்டும் முயற்சிக்கவும்.",
+      "rule": "banned"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/ta.js",
+      "string": "புதிய எண் சரிபார்க்கப்பட்ட உள்நுழைவிலிருந்து பெறப்படும். குழு மாற்றத்தைச் சரிபார்க்க வேண்டும்.",
       "rule": "banned"
     },
     {
@@ -1503,6 +1575,12 @@
     {
       "kind": "copy",
       "file": "commerce-locales/ta.js",
+      "string": "Some statement sources are missing",
+      "rule": "banned"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
       "string": "This account has catalogue access only.",
       "rule": "banned"
     },
@@ -1528,6 +1606,12 @@
       "kind": "copy",
       "file": "commerce-locales/ta.js",
       "string": "அலகு விலையும் குறைந்த விலை குறியீடும் சென்ட்ரலிடம் இருந்து வரவில்லை. பொருட்கள் தரவரிசையின்றி காட்டப்படுகின்றன.",
+      "rule": "banned"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
+      "string": "அறிக்கையின் சில ஆதாரங்கள் இல்லை",
       "rule": "banned"
     },
     {
@@ -1730,6 +1814,12 @@
     },
     {
       "kind": "copy",
+      "file": "commerce-services.js",
+      "string": "Your verified sign-in supplies the new number. An operator must verify the change.",
+      "rule": "banned"
+    },
+    {
+      "kind": "copy",
       "file": "commerce-shop-v2.js",
       "string": "Browse Essentials from Central",
       "rule": "banned"
@@ -1901,6 +1991,13 @@
       "file": "commerce.js",
       "string": "Preview access — no real OTP, orders or payment.",
       "rule": "emdash"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce.js",
+      "screen": "send",
+      "string": "Some statement sources are missing",
+      "rule": "banned"
     },
     {
       "kind": "copy",

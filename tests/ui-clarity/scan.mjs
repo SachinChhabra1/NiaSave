@@ -11,7 +11,23 @@ export const baselinePath = path.join(root, 'docs/ui-clarity/BASELINE.json');
 
 const STAFF_COPY_FILES = new Set(['commerce-owner.js', 'commerce-ops.js']);
 const LANGUAGES = ['bn', 'hi', 'kn', 'mr', 'ta'];
-const ENGLISH = /(?:^|[^A-Za-z0-9_-])(?:central|projection|catalogue|source|supplied|published)(?=$|[^A-Za-z0-9_-])|explore\s+less/i;
+const SCREENS = new Set(['home', 'live', 'earn', 'shop', 'send']);
+// catalogue/source keep their stem so the plural and the past still match.
+// supply is separate so "supple" and "supplement" stay out.
+const BANNED_ENGLISH = '(?:central|projection|catalogu|sourc|publish)(?:e|es|ed|ing|s)?|suppl(?:y|ies|ied|ying)';
+const ENGLISH = new RegExp('(?:^|[^A-Za-z0-9_-])(?:' + BANNED_ENGLISH + ')(?=$|[^A-Za-z0-9_-])|explore\\s+less', 'i');
+const EXACT_BANNED = new RegExp('^(?:' + BANNED_ENGLISH + ')$', 'i');
+const COPY_SCREEN_BY_FILE = new Map([
+  ['commerce-home.js', 'home'],
+  ['commerce-shop-v2.js', 'shop'],
+  ['commerce-shop-categories.js', 'shop'],
+  ['commerce-categories.js', 'shop'],
+  ['commerce-earn-map.js', 'earn'],
+  ['commerce-books.js', 'send'],
+  ['commerce-plan.js', 'send']
+]);
+// The shell paints this line on every member screen. It is not a one-screen label.
+const SHELL_COPY = new Set(['Catalogue synced']);
 const DATE_PLACEHOLDER = /mm\/dd\/yyyy/i;
 const EM_DASH = '\u2014';
 const TRANSLATED = [
@@ -193,8 +209,8 @@ function keepString(text) {
   if (!kind) return false;
   if (kind === 'banned') {
     if (text.startsWith('/') || text.includes('/api/') || text.includes('/v1/')) return false;
-    if (!/\s/.test(text) && !/^(?:central|projection|catalogue|source|supplied|published)$/i.test(text) && !EXACT_TRANSLATED.includes(text) && !TRANSLATED.includes(text)) return false;
-    if (/^[A-Za-z0-9_.:/-]+$/.test(text) && !/^(?:central|projection|catalogue|source|supplied|published)$/i.test(text)) return false;
+    if (!/\s/.test(text) && !EXACT_BANNED.test(text) && !EXACT_TRANSLATED.includes(text) && !TRANSLATED.includes(text)) return false;
+    if (/^[A-Za-z0-9_.:/-]+$/.test(text) && !EXACT_BANNED.test(text)) return false;
   }
   return true;
 }
@@ -301,11 +317,61 @@ export function textRuns(value) {
   return parts.map(part => normalizeVisible(decodeEntities(part))).filter(Boolean);
 }
 
-export function copyCovers(text, entries) {
+export function copyScreen(entry) {
+  if (SCREENS.has(entry.screen)) return entry.screen;
+  const mapped = COPY_SCREEN_BY_FILE.get(entry.file || '');
+  if (mapped) return mapped;
+  // This sentence is rendered from commerce.js, which also holds the other four screens.
+  if (entry.string === 'Some statement sources are missing') return 'send';
+  const tail = String(entry.file || '').split('/').pop();
+  if (SCREENS.has(tail)) return tail;
+  return '';
+}
+
+let localeCache = null;
+function localePacks() {
+  if (!localeCache) localeCache = Object.fromEntries(LANGUAGES.map(lang => [lang, localePack(lang)]));
+  return localeCache;
+}
+
+const coverIndex = new WeakMap();
+
+function screensFor(entries) {
+  const cached = coverIndex.get(entries);
+  if (cached) return cached;
+  const index = new Map();
+  const packs = localePacks();
+  const add = (text, screen) => {
+    if (!screen) return;
+    for (const run of textRuns(text)) {
+      let screens = index.get(run);
+      if (!screens) {
+        screens = new Set();
+        index.set(run, screens);
+      }
+      screens.add(screen);
+    }
+  };
+  for (const entry of entries) {
+    if ((entry.kind || 'copy') !== 'copy') continue;
+    const screens = SHELL_COPY.has(entry.string) ? [...SCREENS] : [copyScreen(entry)].filter(Boolean);
+    for (const screen of screens) {
+      add(entry.string, screen);
+      for (const lang of LANGUAGES) {
+        const hit = resolvedTranslation(packs[lang], lang, entry.string);
+        if (!hit) continue;
+        add(hit.value, screen);
+      }
+    }
+  }
+  coverIndex.set(entries, index);
+  return index;
+}
+
+export function copyCovers(text, entries, screen) {
   const visible = normalizeVisible(text);
   if (!visible || !violationKind(visible)) return true;
-  return entries.some(entry => {
-    if ((entry.kind || 'copy') !== 'copy') return false;
-    return textRuns(entry.string).some(run => run === visible);
-  });
+  if (!screen) return false;
+  const screens = screensFor(entries).get(visible);
+  return Boolean(screens && screens.has(screen));
 }

@@ -127,7 +127,7 @@ function applyCommitmentGate(root=document){
   const target=root===document?$('#content'):root;
   const shopCopy=page==='shop'&&category!=='insurance'?shopReservationNotice({catalogue:cat,signedIn:!!account,reservationsEnabled:saveCommitmentReady()}):undefined;
   const shoppingOpen=cat?.capabilities?.saveShoppingOpen===true;
-  const copy=shopCopy!==undefined?shopCopy:(saveCommitmentReady()||shoppingOpen)?(['live','earn'].includes(page)||category==='insurance'?OTHER_COMMITMENTS_PAUSED_COPY:page==='send'&&!account?'This is for money you send home.':!account&&shoppingOpen?'Log in to see goods near you and reserve them.':null):PILOT_CLOSED_COPY;
+  const copy=shopCopy!==undefined?shopCopy:page==='send'?(account?null:'This is for money you send home.'):(saveCommitmentReady()||shoppingOpen)?(['live','earn'].includes(page)||category==='insurance'?OTHER_COMMITMENTS_PAUSED_COPY:!account&&shoppingOpen?'Log in to see goods near you and reserve them.':null):PILOT_CLOSED_COPY;
   const previous=target?.querySelector('[data-pilot-paused]');
   if(previous)previous.remove();
   if(target&&copy)target.prepend(pauseNote(copy));
@@ -170,7 +170,7 @@ function prepareJourney(root){
   (root.documentElement||root).dataset.a11yReady=String(audit.ok);
 }
 document.addEventListener('keydown',event=>{const control=event.target.closest('[data-action][role="button"]');if(control&&(event.key==='Enter'||event.key===' ')){event.preventDefault();control.click();}});
-function show(title,body){$('#dialog').classList.remove('signin-dialog','mesha-checkout');document.body.classList.remove('signin-open','mesha-checkout-open');$('#dialog-title').textContent=title;$('#dialog-body').innerHTML=body;const dateWalker=document.createTreeWalker($('#dialog-body'),NodeFilter.SHOW_TEXT);let dateNode;while((dateNode=dateWalker.nextNode()))dateNode.textContent=dateNode.textContent.replace(/\d{4}-\d{2}-\d{2}/g,iso=>showDMY(iso)||iso);ownerControls($('#dialog-body'));applyCommitmentGate($('#dialog-body'));prepareJourney($('#dialog'));if(!$('#dialog').open)$('#dialog').showModal();$('#dialog-body').querySelector('input:not([type=hidden]),button:not(:disabled),select')?.focus({preventScroll:true});}
+function show(title,body){$('#dialog').classList.remove('signin-dialog','mesha-checkout');document.body.classList.remove('signin-open','mesha-checkout-open');$('#dialog-title').textContent=title;$('#dialog-body').innerHTML=body;ownerControls($('#dialog-body'));applyCommitmentGate($('#dialog-body'));prepareJourney($('#dialog'));if(!$('#dialog').open)$('#dialog').showModal();$('#dialog-body').querySelector('input:not([type=hidden]),button:not(:disabled),select')?.focus({preventScroll:true});}
 function unsyncedTapCount(){
   if(!account||owner.active)return 0;
   const sameMember=key=>load(key,null)?.accountId===account.id;
@@ -376,21 +376,26 @@ function liveDateBounds(){
 }
 function liveDateForm(){
   const bounds=liveDateBounds();
-  if(!bounds)return `<p class="info live-dates-missing">${esc(t('Dates could not be loaded.'))}</p>`;
+  if(!bounds){
+    const placesAlreadyRetry=!nestData?.offers?.length&&(!navigator.onLine||(!cat&&shellReadFailed)||stayErrorKind(nestData?.error,{signedIn:Boolean(account||owner.active||sessionExpired)})==='network');
+    const retry=placesAlreadyRetry?'':`<button type="button" class="primary" data-action="live">${t('Try again')}</button>`;
+    return `<div class="live-dates-missing"><p class="info">${esc(t('We could not get the dates. Try again, or call Nia.'))}</p><div class="live-dates-actions">${retry}${callNiaMarkup({t,esc,icon,phone:NIA_HELP_PHONE,className:'call-nia'})}</div></div>`;
+  }
   const {min,max,today,todayIsReal,week}=bounds;
   const current=liveShownDate(bounds);
-  const open=liveDateOpen||(current!==today&&current!==week);
-  const mode=current===today?'today':current===week?'week':'pick';
-  const pickLabel=mode==='pick'?showDMY(current):t('Pick a date');
-  const todayLabel=todayIsReal?t('Today'):showDMY(today);
+  const open=liveDateOpen||(current!==today&&(!week||current!==week));
+  const mode=current===today?'today':week&&current===week?'week':'pick';
+  const todayLabel=todayIsReal?t('Today'):`${t('Soonest')} · ${showDMY(today)}`;
   const picker=open?datePartSelects(current,min,max,{t,esc,partAttr:'live-part'}):'';
-  return `<form id="nest-search-form" class="store-date nest-search live-move"><fieldset class="live-move-set"><legend>${t('Move in')}</legend><div class="live-chips" role="group" aria-label="${esc(t('Move in'))}"><button type="button" class="live-chip" data-live-date="today" aria-pressed="${mode==='today'}">${todayLabel}</button><button type="button" class="live-chip" data-live-date="week" aria-pressed="${mode==='week'}">${t('This week')}</button><button type="button" class="live-chip" data-live-date="pick" aria-pressed="${mode==='pick'}">${esc(pickLabel)}</button></div>${picker}<input type="hidden" name="start" value="${esc(current)}"></fieldset><button class="primary" type="submit">${t('See Nests')}</button></form>`;
+  const weekChip=week?`<button type="button" class="live-chip" data-live-date="week" aria-pressed="${mode==='week'}">${t('This week')}</button>`:'';
+  return `<form id="nest-search-form" class="store-date nest-search live-move"><fieldset class="live-move-set"><legend>${t('Move in')}</legend><div class="live-chips" role="group" aria-label="${esc(t('Move in'))}"><button type="button" class="live-chip" data-live-date="today" aria-pressed="${mode==='today'}">${esc(todayLabel)}</button>${weekChip}<button type="button" class="live-chip" data-live-date="pick" aria-pressed="${mode==='pick'}">${esc(t('Pick a date'))}</button></div><p class="live-date-asked">${esc(t('You are asking for:'))} ${esc(showDMY(current))}</p>${picker}<input type="hidden" name="start" value="${esc(current)}"></fieldset><button class="primary" type="submit">${t('See Nests')}</button></form>`;
 }
 function applyLiveChip(kind){
   const bounds=liveDateBounds();
   if(!bounds)return;
   const {today,week}=bounds;
   if(kind==='pick'){liveDateOpen=true;render();document.querySelector('[data-live-part="day"]')?.focus({preventScroll:true});return;}
+  if(kind==='week'&&!week)return;
   liveDateOpen=false;
   const start=kind==='week'?week:today;
   const form=document.getElementById('nest-search-form');
@@ -463,7 +468,7 @@ function sendView(){if(owner.active)return ownerSendMarkup();
   const state=sendViewState({data:booksData,online:navigator.onLine,signedOut});
   const labels={loading:t('Checking your money plan'),ready:t('Recorded entries available'),stale:t('Statement needs refreshing'),source_missing:signedOut?t('Log in to see the money you send home.'):t('Details did not load.'),unavailable:t('Statement temporarily unavailable'),empty:t('No recorded entries yet'),offline:t('Offline. This may be an older statement')};
   const taskAction=signedOut?`<button type="button" class="primary" data-action="login">${t('Log in','लॉग इन')}</button>`:'';
-  return `<section class="store-screen store-send send-v2"><header class="store-head store-task"><h1>${t('Send')}</h1><p class="nia-transfer-status" role="status"><span class="badge">${t('Sending money has not started')}</span></p><p>${t('This is your plan. No money moves from here.')}</p>${taskAction}</header><p class="pillar-state" data-state="${state}" role="status">${esc(labels[state])}</p>${signedOut?`${sendExample()}<p class="send-login-line">${t('Log in to see your money.')}</p><div class="send-example-actions">${taskAction}${callNiaMarkup({t,esc,icon,phone:NIA_HELP_PHONE,className:'call-nia'})}</div>`:state==='loading'?pictureState('loading',t('Checking your money plan')):booksMarkup(booksData,booksMonth,account,{t,esc,money})}<section class="panel stack books-transfer"><div class="row"><h2>${t('Sending money')}</h2><span class="badge">${t('Sending money has not started')}</span></div><p>${t('Only money the Nia team has recorded shows as sent. Nothing is sent from here.')}</p></section>${footer()}</section>`;}
+  return `<section class="store-screen store-send send-v2"><header class="store-head store-task"><h1>${t('Send')}</h1><p class="nia-transfer-status" role="status"><span class="badge">${t('Sending money has not started')}</span></p><p>${t('This is only your own record. Nia does not send money.')}</p>${taskAction}</header><p class="pillar-state" data-state="${state}" role="status">${esc(labels[state])}</p>${signedOut?`${sendExample()}<div class="send-example-actions">${taskAction}${callNiaMarkup({t,esc,icon,phone:NIA_HELP_PHONE,className:'call-nia'})}</div>`:state==='loading'?pictureState('loading',t('Checking your money plan')):booksMarkup(booksData,booksMonth,account,{t,esc,money})}<section class="panel stack books-transfer"><div class="row"><h2>${t('Sending money')}</h2><span class="badge">${t('Sending money has not started')}</span></div><p>${t('Only money the Nia team has recorded shows as sent. Nothing is sent from here.')}</p></section>${footer()}</section>`;}
 
 async function loadNests(){nestData=nestStart?await api('/nests/availability',{start:nestStart}):await api('/nests');nestStart=nestData.start;emitAnalytics('live','availability_search',{outcome:(nestData.offers||[]).length?'results':'empty'});}
 // Local illustrative artwork only. Jat's published studio media will replace this preview map.

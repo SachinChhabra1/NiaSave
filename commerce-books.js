@@ -55,15 +55,15 @@ export function clampIso(year,month,day,min,max){const dim=monthLastDay(year,mon
 export function monthsInRange(year,min,max){const months=[];for(let m=1;m<=12;m++){const start=isoJoin(year,m,1);const end=isoJoin(year,m,monthLastDay(year,m));if(end>=min&&start<=max)months.push(m);}return months;}
 export function daysInRange(year,month,min,max){const days=[];const dim=monthLastDay(year,month);for(let d=1;d<=dim;d++){const iso=isoJoin(year,month,d);if(iso>=min&&iso<=max)days.push(d);}return days;}
 export function weekMoveIn(min,max,todayChip){
-  const part=isoParts(todayChip);if(!part)return todayChip||min||'';
-  const utc=Date.UTC(part.y,part.m-1,part.d);const weekday=new Date(utc).getUTCDay();const weekStart=utc-weekday*86400000;
-  let iso=new Date(weekStart+6*86400000).toISOString().slice(0,10);
-  if(max&&iso>max)iso=max;if(min&&iso<min)iso=min;
-  if(iso!==todayChip)return iso;
-  for(let i=weekday+1;i<=6;i++){const candidate=new Date(weekStart+i*86400000).toISOString().slice(0,10);if(candidate>=min&&candidate<=max&&candidate!==todayChip)return candidate;}
-  for(let i=weekday-1;i>=0;i--){const candidate=new Date(weekStart+i*86400000).toISOString().slice(0,10);if(candidate>=min&&candidate<=max&&candidate!==todayChip)return candidate;}
-  for(let i=1;i<=6;i++){const candidate=new Date(utc+i*86400000).toISOString().slice(0,10);if(max&&candidate>max)break;if((!min||candidate>=min)&&candidate!==todayChip)return candidate;}
-  return iso;
+  const part=isoParts(todayChip);if(!part)return '';
+  const utc=Date.UTC(part.y,part.m-1,part.d);const weekday=new Date(utc).getUTCDay();
+  for(let i=1;i<=6-weekday;i++){
+    const candidate=new Date(utc+i*86400000).toISOString().slice(0,10);
+    if(min&&candidate<min)continue;
+    if(max&&candidate>max)return '';
+    if(candidate!==todayChip)return candidate;
+  }
+  return '';
 }
 export function datePartSelects(iso,min,max,{t,esc,partAttr}){
   const part=isoParts(iso);if(!part)return '';

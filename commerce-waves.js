@@ -63,7 +63,7 @@ function sendCard(hasPrimarySendView = false) {
     ${hasPrimarySendView ? '' : `<header class="store-head send-safety-fallback">
       <h1>Send</h1>
       <p class="nia-transfer-status" role="status"><span class="badge">Sending money has not started</span></p>
-      <p>This is your plan. No money moves from here.</p>
+      <p>This is only your own record. Nia does not send money.</p>
     </header>`}
     <h2>Plan money home</h2>
     <p>Money does not move.</p>

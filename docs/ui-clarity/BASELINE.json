@@ -32,6 +32,30 @@
   },
   {
    "kind": "copy",
+   "file": "commerce-home.js",
+   "string": "Central details missing",
+   "rule": "banned"
+  },
+  {
+   "kind": "copy",
+   "file": "commerce-home.js",
+   "string": "Explore LESS",
+   "rule": "banned"
+  },
+  {
+   "kind": "copy",
+   "file": "commerce-home.js",
+   "string": "Membership fee details are not available from Central",
+   "rule": "banned"
+  },
+  {
+   "kind": "copy",
+   "file": "commerce-home.js",
+   "string": "Reservation recorded by Central",
+   "rule": "banned"
+  },
+  {
+   "kind": "copy",
    "file": "commerce-locales/bn.js",
    "string": "Catalogue details missing from Central",
    "rule": "banned"

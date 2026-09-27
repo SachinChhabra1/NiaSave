@@ -133,7 +133,7 @@ export default {
   "Shoes": "Shoes",
   "Cover": "Cover",
   "Your bag is empty": "Your bag is empty",
-  "Add oils or soap from Save. Browse free.": "Add oils or soap from Save. Browse free.",
+  "Add oil or soap from Shop. Looking is free.": "ಖರೀದಿಯಿಂದ ಎಣ್ಣೆ ಅಥವಾ ಸೋಪ್ ಸೇರಿಸಿ. ನೋಡುವುದು ಉಚಿತ.",
   "Back to Save": "Back to Save",
   "vs kirana": "vs kirana",
   "pay at pickup": "pay at pickup",

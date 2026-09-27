@@ -39,12 +39,6 @@
     {
       "kind": "copy",
       "file": "commerce-home.js",
-      "string": "Checking Central updates",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-home.js",
       "string": "Explore LESS",
       "rule": "banned"
     },
@@ -58,18 +52,6 @@
       "kind": "copy",
       "file": "commerce-home.js",
       "string": "Reservation recorded by Central",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-home.js",
-      "string": "Updates shown here come from Central",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/bn.js",
-      "string": "Browse Essentials from Central",
       "rule": "banned"
     },
     {
@@ -111,12 +93,6 @@
     {
       "kind": "copy",
       "file": "commerce-locales/bn.js",
-      "string": "Catalogue temporarily unavailable",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/bn.js",
       "string": "Catalogue unavailable. Refresh to check reservations.",
       "rule": "banned"
     },
@@ -143,18 +119,6 @@
       "file": "commerce-locales/bn.js",
       "string": "Central member lookup unavailable — try again or use password if offered.",
       "rule": "banned+emdash"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/bn.js",
-      "string": "Checking Central jobs",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/bn.js",
-      "string": "Checking Central updates",
-      "rule": "banned"
     },
     {
       "kind": "copy",
@@ -219,20 +183,8 @@
     {
       "kind": "copy",
       "file": "commerce-locales/bn.js",
-      "string": "No published products",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/bn.js",
       "string": "Pack details unavailable — ask Nia",
       "rule": "emdash"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/bn.js",
-      "string": "Photo not supplied by Central",
-      "rule": "banned"
     },
     {
       "kind": "copy",
@@ -291,24 +243,6 @@
     {
       "kind": "copy",
       "file": "commerce-locales/bn.js",
-      "string": "Unit price not supplied by Central",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/bn.js",
-      "string": "Unit prices and lowest-price labels await Central. Products are shown without ranking.",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/bn.js",
-      "string": "Updates shown here come from Central",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/bn.js",
       "string": "Your entries are editable. Source payments are corrected by your Nia team.",
       "rule": "banned"
     },
@@ -321,19 +255,7 @@
     {
       "kind": "copy",
       "file": "commerce-locales/bn.js",
-      "string": "একক দাম ও সবচেয়ে কম দামের চিহ্ন সেন্ট্রাল দেয়নি। পণ্যগুলি ক্রম না দিয়ে দেখানো হয়েছে।",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/bn.js",
       "string": "এখনও কোনো পণ্য প্রকাশিত হয়নি",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/bn.js",
-      "string": "এখানকার তথ্য সেন্ট্রাল থেকে আসে",
       "rule": "banned"
     },
     {
@@ -352,12 +274,6 @@
       "kind": "copy",
       "file": "commerce-locales/bn.js",
       "string": "তালিকা নতুন করে আনতে হবে",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/bn.js",
-      "string": "তালিকা সাময়িকভাবে পাওয়া যাচ্ছে না",
       "rule": "banned"
     },
     {
@@ -393,12 +309,6 @@
     {
       "kind": "copy",
       "file": "commerce-locales/bn.js",
-      "string": "প্রকাশিত পণ্য নেই",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/bn.js",
       "string": "বর্তমান প্রাপ্যতা যাচাই করতে পণ্যের তালিকা রিফ্রেশ করুন।",
       "rule": "banned"
     },
@@ -423,19 +333,7 @@
     {
       "kind": "copy",
       "file": "commerce-locales/bn.js",
-      "string": "সেন্ট্রাল একক দাম দেয়নি",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/bn.js",
       "string": "সেন্ট্রাল এখনও সংগ্রহের দায়িত্বে থাকা কর্মীর নাম দেয়নি",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/bn.js",
-      "string": "সেন্ট্রাল ছবি দেয়নি",
       "rule": "banned"
     },
     {
@@ -471,37 +369,13 @@
     {
       "kind": "copy",
       "file": "commerce-locales/bn.js",
-      "string": "সেন্ট্রালের চাকরি যাচাই হচ্ছে",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/bn.js",
       "string": "সেন্ট্রালের তথ্য নেই",
       "rule": "banned"
     },
     {
       "kind": "copy",
       "file": "commerce-locales/bn.js",
-      "string": "সেন্ট্রালের তথ্য যাচাই হচ্ছে",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/bn.js",
       "string": "সেন্ট্রালের তালিকা লোড হচ্ছে",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/bn.js",
-      "string": "সেন্ট্রালের নিত্যপ্রয়োজনীয় পণ্য দেখুন",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/hi.js",
-      "string": "Browse Essentials from Central",
       "rule": "banned"
     },
     {
@@ -543,12 +417,6 @@
     {
       "kind": "copy",
       "file": "commerce-locales/hi.js",
-      "string": "Catalogue temporarily unavailable",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/hi.js",
       "string": "Catalogue unavailable. Refresh to check reservations.",
       "rule": "banned"
     },
@@ -562,18 +430,6 @@
       "kind": "copy",
       "file": "commerce-locales/hi.js",
       "string": "Central has not assigned these products to the six Shop categories.",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/hi.js",
-      "string": "Checking Central jobs",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/hi.js",
-      "string": "Checking Central updates",
       "rule": "banned"
     },
     {
@@ -633,18 +489,6 @@
     {
       "kind": "copy",
       "file": "commerce-locales/hi.js",
-      "string": "No published products",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/hi.js",
-      "string": "Photo not supplied by Central",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/hi.js",
       "string": "Pickup operator not yet provided by Central",
       "rule": "banned"
     },
@@ -675,24 +519,6 @@
     {
       "kind": "copy",
       "file": "commerce-locales/hi.js",
-      "string": "Unit price not supplied by Central",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/hi.js",
-      "string": "Unit prices and lowest-price labels await Central. Products are shown without ranking.",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/hi.js",
-      "string": "Updates shown here come from Central",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/hi.js",
       "string": "अंतिम कीमत और उपलब्धता सेंट्रल समीक्षा के समय जाँचेगा।",
       "rule": "banned"
     },
@@ -711,25 +537,7 @@
     {
       "kind": "copy",
       "file": "commerce-locales/hi.js",
-      "string": "कोई प्रकाशित उत्पाद नहीं",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/hi.js",
       "string": "नौकरी का अनुमान अभी उपलब्ध नहीं है",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/hi.js",
-      "string": "प्रति इकाई कीमत और सबसे कम कीमत का चिह्न सेंट्रल से बाकी है। सामान बिना क्रम दिए दिखाया गया है।",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/hi.js",
-      "string": "यहाँ की जानकारी सेंट्रल से आती है",
       "rule": "banned"
     },
     {
@@ -759,12 +567,6 @@
     {
       "kind": "copy",
       "file": "commerce-locales/hi.js",
-      "string": "सामान की सूची अभी उपलब्ध नहीं",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/hi.js",
       "string": "सामान की सूची उपलब्ध नहीं है। आरक्षण जाँचने के लिए रीफ़्रेश करें।",
       "rule": "banned"
     },
@@ -789,12 +591,6 @@
     {
       "kind": "copy",
       "file": "commerce-locales/hi.js",
-      "string": "सेंट्रल की नौकरियाँ जाँच रहे हैं",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/hi.js",
       "string": "सेंट्रल की सूची लोड हो रही है",
       "rule": "banned"
     },
@@ -802,18 +598,6 @@
       "kind": "copy",
       "file": "commerce-locales/hi.js",
       "string": "सेंट्रल ने इन उत्पादों को दुकान की छह श्रेणियों में नहीं रखा है।",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/hi.js",
-      "string": "सेंट्रल ने प्रति इकाई कीमत नहीं दी",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/hi.js",
-      "string": "सेंट्रल ने फोटो नहीं दी",
       "rule": "banned"
     },
     {
@@ -832,18 +616,6 @@
       "kind": "copy",
       "file": "commerce-locales/hi.js",
       "string": "सेंट्रल से आई सामान की सूची",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/hi.js",
-      "string": "सेंट्रल से ज़रूरी सामान देखें",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/hi.js",
-      "string": "सेंट्रल से जानकारी जाँच रहे हैं",
       "rule": "banned"
     },
     {
@@ -1383,12 +1155,6 @@
     {
       "kind": "copy",
       "file": "commerce-locales/ta.js",
-      "string": "Browse Essentials from Central",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/ta.js",
       "string": "Catalogue details missing from Central",
       "rule": "banned"
     },
@@ -1425,12 +1191,6 @@
     {
       "kind": "copy",
       "file": "commerce-locales/ta.js",
-      "string": "Catalogue temporarily unavailable",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/ta.js",
       "string": "Catalogue unavailable. Refresh to check reservations.",
       "rule": "banned"
     },
@@ -1457,18 +1217,6 @@
       "file": "commerce-locales/ta.js",
       "string": "Central உறுப்பினர் சரிபார்ப்பு இல்லை — மீண்டும் முயலவும் அல்லது கடவுச்சொல் வழங்கப்பட்டால் பயன்படுத்தவும்.",
       "rule": "banned+emdash"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/ta.js",
-      "string": "Checking Central jobs",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/ta.js",
-      "string": "Checking Central updates",
-      "rule": "banned"
     },
     {
       "kind": "copy",
@@ -1527,20 +1275,8 @@
     {
       "kind": "copy",
       "file": "commerce-locales/ta.js",
-      "string": "No published products",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/ta.js",
       "string": "Pack details unavailable — ask Nia",
       "rule": "emdash"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/ta.js",
-      "string": "Photo not supplied by Central",
-      "rule": "banned"
     },
     {
       "kind": "copy",
@@ -1587,37 +1323,7 @@
     {
       "kind": "copy",
       "file": "commerce-locales/ta.js",
-      "string": "Unit price not supplied by Central",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/ta.js",
-      "string": "Unit prices and lowest-price labels await Central. Products are shown without ranking.",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/ta.js",
-      "string": "Updates shown here come from Central",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/ta.js",
-      "string": "அலகு விலையும் குறைந்த விலை குறியீடும் சென்ட்ரலிடம் இருந்து வரவில்லை. பொருட்கள் தரவரிசையின்றி காட்டப்படுகின்றன.",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/ta.js",
       "string": "அறிக்கையின் சில ஆதாரங்கள் இல்லை",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/ta.js",
-      "string": "இங்குள்ள தகவல் சென்ட்ரலில் இருந்து வருகிறது",
       "rule": "banned"
     },
     {
@@ -1647,12 +1353,6 @@
     {
       "kind": "copy",
       "file": "commerce-locales/ta.js",
-      "string": "சென்ட்ரலில் இருந்து அத்தியாவசியப் பொருட்களைப் பார்க்கவும்",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/ta.js",
       "string": "சென்ட்ரலில் இருந்து பொருள் பட்டியல்",
       "rule": "banned"
     },
@@ -1660,12 +1360,6 @@
       "kind": "copy",
       "file": "commerce-locales/ta.js",
       "string": "சென்ட்ரலில் முன்பதிவு பதிவாகியுள்ளது",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/ta.js",
-      "string": "சென்ட்ரல் அலகு விலையை வழங்கவில்லை",
       "rule": "banned"
     },
     {
@@ -1683,12 +1377,6 @@
     {
       "kind": "copy",
       "file": "commerce-locales/ta.js",
-      "string": "சென்ட்ரல் தகவலைச் சரிபார்க்கிறோம்",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/ta.js",
       "string": "சென்ட்ரல் பட்டியல் ஏற்றப்படுகிறது",
       "rule": "banned"
     },
@@ -1701,19 +1389,7 @@
     {
       "kind": "copy",
       "file": "commerce-locales/ta.js",
-      "string": "சென்ட்ரல் புகைப்படம் வழங்கவில்லை",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/ta.js",
       "string": "சென்ட்ரல் விவரங்கள் இல்லை",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/ta.js",
-      "string": "சென்ட்ரல் வேலைகள் சரிபார்க்கப்படுகின்றன",
       "rule": "banned"
     },
     {
@@ -1726,12 +1402,6 @@
       "kind": "copy",
       "file": "commerce-locales/ta.js",
       "string": "பட்டியலைப் புதுப்பிக்க வேண்டும்",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/ta.js",
-      "string": "பட்டியல் தற்காலிகமாகக் கிடைக்கவில்லை",
       "rule": "banned"
     },
     {
@@ -1785,12 +1455,6 @@
     {
       "kind": "copy",
       "file": "commerce-locales/ta.js",
-      "string": "வெளியிடப்பட்ட பொருட்கள் இல்லை",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-locales/ta.js",
       "string": "வேலைத் தகவல் தற்காலிகமாகக் கிடைக்கவில்லை",
       "rule": "banned"
     },
@@ -1821,12 +1485,6 @@
     {
       "kind": "copy",
       "file": "commerce-shop-v2.js",
-      "string": "Browse Essentials from Central",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-shop-v2.js",
       "string": "Catalogue details missing from Central",
       "rule": "banned"
     },
@@ -1852,12 +1510,6 @@
       "kind": "copy",
       "file": "commerce-shop-v2.js",
       "string": "Catalogue needs refreshing",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-shop-v2.js",
-      "string": "Catalogue temporarily unavailable",
       "rule": "banned"
     },
     {
@@ -1899,18 +1551,6 @@
     {
       "kind": "copy",
       "file": "commerce-shop-v2.js",
-      "string": "No published products",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-shop-v2.js",
-      "string": "Photo not supplied by Central",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-shop-v2.js",
       "string": "Refresh the catalogue to check current availability.",
       "rule": "banned"
     },
@@ -1918,18 +1558,6 @@
       "kind": "copy",
       "file": "commerce-shop-v2.js",
       "string": "Search the catalogue",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-shop-v2.js",
-      "string": "Unit price not supplied by Central",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce-shop-v2.js",
-      "string": "Unit prices and lowest-price labels await Central. Products are shown without ranking.",
       "rule": "banned"
     },
     {
@@ -1959,12 +1587,6 @@
     {
       "kind": "copy",
       "file": "commerce.js",
-      "string": "Checking Central jobs",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce.js",
       "string": "Job projection is temporarily unavailable",
       "rule": "banned"
     },
@@ -1978,12 +1600,6 @@
       "kind": "copy",
       "file": "commerce.js",
       "string": "Owner view · Read only · Live catalogue. Personal transactions require a member account.",
-      "rule": "banned"
-    },
-    {
-      "kind": "copy",
-      "file": "commerce.js",
-      "string": "Photo not supplied by Central",
       "rule": "banned"
     },
     {
@@ -2076,13 +1692,6 @@
       "kind": "font",
       "file": "en/360/down/earn",
       "screen": "earn",
-      "string": "Checking updates",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "en/360/down/earn",
-      "screen": "earn",
       "string": "English",
       "size": 13
     },
@@ -2104,22 +1713,8 @@
       "kind": "font",
       "file": "en/360/down/earn",
       "screen": "earn",
-      "string": "Make leaving home worth it.",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "en/360/down/earn",
-      "screen": "earn",
       "string": "Spend",
       "size": 11
-    },
-    {
-      "kind": "font",
-      "file": "en/360/down/earn",
-      "screen": "earn",
-      "string": "Why Nia",
-      "size": 12
     },
     {
       "kind": "font",
@@ -2127,20 +1722,6 @@
       "screen": "home",
       "string": ", send more.",
       "size": 11
-    },
-    {
-      "kind": "font",
-      "file": "en/360/down/home",
-      "screen": "home",
-      "string": "Checking Central updates",
-      "size": 13
-    },
-    {
-      "kind": "font",
-      "file": "en/360/down/home",
-      "screen": "home",
-      "string": "Checking updates",
-      "size": 12
     },
     {
       "kind": "font",
@@ -2165,24 +1746,10 @@
     },
     {
       "kind": "font",
-      "file": "en/360/down/home",
-      "screen": "home",
-      "string": "Temporarily unavailable",
-      "size": 13
-    },
-    {
-      "kind": "font",
       "file": "en/360/down/live",
       "screen": "live",
       "string": ", send more.",
       "size": 11
-    },
-    {
-      "kind": "font",
-      "file": "en/360/down/live",
-      "screen": "live",
-      "string": "Checking updates",
-      "size": 12
     },
     {
       "kind": "font",
@@ -2209,22 +1776,8 @@
       "kind": "font",
       "file": "en/360/down/live",
       "screen": "live",
-      "string": "Make leaving home worth it.",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "en/360/down/live",
-      "screen": "live",
       "string": "Spend",
       "size": 11
-    },
-    {
-      "kind": "font",
-      "file": "en/360/down/live",
-      "screen": "live",
-      "string": "Why Nia",
-      "size": 12
     },
     {
       "kind": "font",
@@ -2232,13 +1785,6 @@
       "screen": "send",
       "string": ", send more.",
       "size": 11
-    },
-    {
-      "kind": "font",
-      "file": "en/360/down/send",
-      "screen": "send",
-      "string": "Checking updates",
-      "size": 12
     },
     {
       "kind": "font",
@@ -2260,13 +1806,6 @@
       "screen": "send",
       "string": "LESS",
       "size": 11
-    },
-    {
-      "kind": "font",
-      "file": "en/360/down/send",
-      "screen": "send",
-      "string": "Make leaving home worth it.",
-      "size": 12
     },
     {
       "kind": "font",
@@ -2284,24 +1823,10 @@
     },
     {
       "kind": "font",
-      "file": "en/360/down/send",
-      "screen": "send",
-      "string": "Why Nia",
-      "size": 12
-    },
-    {
-      "kind": "font",
       "file": "en/360/down/shop",
       "screen": "shop",
       "string": ", send more.",
       "size": 11
-    },
-    {
-      "kind": "font",
-      "file": "en/360/down/shop",
-      "screen": "shop",
-      "string": "Checking updates",
-      "size": 12
     },
     {
       "kind": "font",
@@ -2335,36 +1860,8 @@
       "kind": "font",
       "file": "en/360/down/shop",
       "screen": "shop",
-      "string": "Make leaving home worth it.",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "en/360/down/shop",
-      "screen": "shop",
-      "string": "No published products",
-      "size": 13
-    },
-    {
-      "kind": "font",
-      "file": "en/360/down/shop",
-      "screen": "shop",
-      "string": "Photo not supplied by Central",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "en/360/down/shop",
-      "screen": "shop",
       "string": "Spend",
       "size": 11
-    },
-    {
-      "kind": "font",
-      "file": "en/360/down/shop",
-      "screen": "shop",
-      "string": "Why Nia",
-      "size": 12
     },
     {
       "kind": "font",
@@ -2372,13 +1869,6 @@
       "screen": "earn",
       "string": ", send more.",
       "size": 11
-    },
-    {
-      "kind": "font",
-      "file": "en/360/empty/earn",
-      "screen": "earn",
-      "string": "Catalogue synced",
-      "size": 12
     },
     {
       "kind": "font",
@@ -2405,22 +1895,8 @@
       "kind": "font",
       "file": "en/360/empty/earn",
       "screen": "earn",
-      "string": "Make leaving home worth it.",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "en/360/empty/earn",
-      "screen": "earn",
       "string": "Spend",
       "size": 11
-    },
-    {
-      "kind": "font",
-      "file": "en/360/empty/earn",
-      "screen": "earn",
-      "string": "Why Nia",
-      "size": 12
     },
     {
       "kind": "font",
@@ -2428,20 +1904,6 @@
       "screen": "home",
       "string": ", send more.",
       "size": 11
-    },
-    {
-      "kind": "font",
-      "file": "en/360/empty/home",
-      "screen": "home",
-      "string": "Catalogue synced",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "en/360/empty/home",
-      "screen": "home",
-      "string": "Checking Central updates",
-      "size": 13
     },
     {
       "kind": "font",
@@ -2461,13 +1923,6 @@
       "kind": "font",
       "file": "en/360/empty/home",
       "screen": "home",
-      "string": "Nothing to show yet",
-      "size": 13
-    },
-    {
-      "kind": "font",
-      "file": "en/360/empty/home",
-      "screen": "home",
       "string": "Spend",
       "size": 11
     },
@@ -2477,13 +1932,6 @@
       "screen": "live",
       "string": ", send more.",
       "size": 11
-    },
-    {
-      "kind": "font",
-      "file": "en/360/empty/live",
-      "screen": "live",
-      "string": "Catalogue synced",
-      "size": 12
     },
     {
       "kind": "font",
@@ -2510,22 +1958,8 @@
       "kind": "font",
       "file": "en/360/empty/live",
       "screen": "live",
-      "string": "Make leaving home worth it.",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "en/360/empty/live",
-      "screen": "live",
       "string": "Spend",
       "size": 11
-    },
-    {
-      "kind": "font",
-      "file": "en/360/empty/live",
-      "screen": "live",
-      "string": "Why Nia",
-      "size": 12
     },
     {
       "kind": "font",
@@ -2533,13 +1967,6 @@
       "screen": "send",
       "string": ", send more.",
       "size": 11
-    },
-    {
-      "kind": "font",
-      "file": "en/360/empty/send",
-      "screen": "send",
-      "string": "Catalogue synced",
-      "size": 12
     },
     {
       "kind": "font",
@@ -2561,13 +1988,6 @@
       "screen": "send",
       "string": "LESS",
       "size": 11
-    },
-    {
-      "kind": "font",
-      "file": "en/360/empty/send",
-      "screen": "send",
-      "string": "Make leaving home worth it.",
-      "size": 12
     },
     {
       "kind": "font",
@@ -2585,24 +2005,10 @@
     },
     {
       "kind": "font",
-      "file": "en/360/empty/send",
-      "screen": "send",
-      "string": "Why Nia",
-      "size": 12
-    },
-    {
-      "kind": "font",
       "file": "en/360/empty/shop",
       "screen": "shop",
       "string": ", send more.",
       "size": 11
-    },
-    {
-      "kind": "font",
-      "file": "en/360/empty/shop",
-      "screen": "shop",
-      "string": "Catalogue synced",
-      "size": 12
     },
     {
       "kind": "font",
@@ -2636,36 +2042,8 @@
       "kind": "font",
       "file": "en/360/empty/shop",
       "screen": "shop",
-      "string": "Make leaving home worth it.",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "en/360/empty/shop",
-      "screen": "shop",
-      "string": "No published products",
-      "size": 13
-    },
-    {
-      "kind": "font",
-      "file": "en/360/empty/shop",
-      "screen": "shop",
-      "string": "Photo not supplied by Central",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "en/360/empty/shop",
-      "screen": "shop",
       "string": "Spend",
       "size": 11
-    },
-    {
-      "kind": "font",
-      "file": "en/360/empty/shop",
-      "screen": "shop",
-      "string": "Why Nia",
-      "size": 12
     },
     {
       "kind": "font",
@@ -2673,13 +2051,6 @@
       "screen": "earn",
       "string": ", send more.",
       "size": 11
-    },
-    {
-      "kind": "font",
-      "file": "en/390/down/earn",
-      "screen": "earn",
-      "string": "Checking updates",
-      "size": 12
     },
     {
       "kind": "font",
@@ -2706,22 +2077,8 @@
       "kind": "font",
       "file": "en/390/down/earn",
       "screen": "earn",
-      "string": "Make leaving home worth it.",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "en/390/down/earn",
-      "screen": "earn",
       "string": "Spend",
       "size": 11
-    },
-    {
-      "kind": "font",
-      "file": "en/390/down/earn",
-      "screen": "earn",
-      "string": "Why Nia",
-      "size": 12
     },
     {
       "kind": "font",
@@ -2729,20 +2086,6 @@
       "screen": "home",
       "string": ", send more.",
       "size": 11
-    },
-    {
-      "kind": "font",
-      "file": "en/390/down/home",
-      "screen": "home",
-      "string": "Checking Central updates",
-      "size": 13
-    },
-    {
-      "kind": "font",
-      "file": "en/390/down/home",
-      "screen": "home",
-      "string": "Checking updates",
-      "size": 12
     },
     {
       "kind": "font",
@@ -2767,24 +2110,10 @@
     },
     {
       "kind": "font",
-      "file": "en/390/down/home",
-      "screen": "home",
-      "string": "Temporarily unavailable",
-      "size": 13
-    },
-    {
-      "kind": "font",
       "file": "en/390/down/live",
       "screen": "live",
       "string": ", send more.",
       "size": 11
-    },
-    {
-      "kind": "font",
-      "file": "en/390/down/live",
-      "screen": "live",
-      "string": "Checking updates",
-      "size": 12
     },
     {
       "kind": "font",
@@ -2811,22 +2140,8 @@
       "kind": "font",
       "file": "en/390/down/live",
       "screen": "live",
-      "string": "Make leaving home worth it.",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "en/390/down/live",
-      "screen": "live",
       "string": "Spend",
       "size": 11
-    },
-    {
-      "kind": "font",
-      "file": "en/390/down/live",
-      "screen": "live",
-      "string": "Why Nia",
-      "size": 12
     },
     {
       "kind": "font",
@@ -2834,13 +2149,6 @@
       "screen": "send",
       "string": ", send more.",
       "size": 11
-    },
-    {
-      "kind": "font",
-      "file": "en/390/down/send",
-      "screen": "send",
-      "string": "Checking updates",
-      "size": 12
     },
     {
       "kind": "font",
@@ -2862,13 +2170,6 @@
       "screen": "send",
       "string": "LESS",
       "size": 11
-    },
-    {
-      "kind": "font",
-      "file": "en/390/down/send",
-      "screen": "send",
-      "string": "Make leaving home worth it.",
-      "size": 12
     },
     {
       "kind": "font",
@@ -2886,24 +2187,10 @@
     },
     {
       "kind": "font",
-      "file": "en/390/down/send",
-      "screen": "send",
-      "string": "Why Nia",
-      "size": 12
-    },
-    {
-      "kind": "font",
       "file": "en/390/down/shop",
       "screen": "shop",
       "string": ", send more.",
       "size": 11
-    },
-    {
-      "kind": "font",
-      "file": "en/390/down/shop",
-      "screen": "shop",
-      "string": "Checking updates",
-      "size": 12
     },
     {
       "kind": "font",
@@ -2937,36 +2224,8 @@
       "kind": "font",
       "file": "en/390/down/shop",
       "screen": "shop",
-      "string": "Make leaving home worth it.",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "en/390/down/shop",
-      "screen": "shop",
-      "string": "No published products",
-      "size": 13
-    },
-    {
-      "kind": "font",
-      "file": "en/390/down/shop",
-      "screen": "shop",
-      "string": "Photo not supplied by Central",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "en/390/down/shop",
-      "screen": "shop",
       "string": "Spend",
       "size": 11
-    },
-    {
-      "kind": "font",
-      "file": "en/390/down/shop",
-      "screen": "shop",
-      "string": "Why Nia",
-      "size": 12
     },
     {
       "kind": "font",
@@ -2974,13 +2233,6 @@
       "screen": "earn",
       "string": ", send more.",
       "size": 11
-    },
-    {
-      "kind": "font",
-      "file": "en/390/empty/earn",
-      "screen": "earn",
-      "string": "Catalogue synced",
-      "size": 12
     },
     {
       "kind": "font",
@@ -3007,22 +2259,8 @@
       "kind": "font",
       "file": "en/390/empty/earn",
       "screen": "earn",
-      "string": "Make leaving home worth it.",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "en/390/empty/earn",
-      "screen": "earn",
       "string": "Spend",
       "size": 11
-    },
-    {
-      "kind": "font",
-      "file": "en/390/empty/earn",
-      "screen": "earn",
-      "string": "Why Nia",
-      "size": 12
     },
     {
       "kind": "font",
@@ -3030,20 +2268,6 @@
       "screen": "home",
       "string": ", send more.",
       "size": 11
-    },
-    {
-      "kind": "font",
-      "file": "en/390/empty/home",
-      "screen": "home",
-      "string": "Catalogue synced",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "en/390/empty/home",
-      "screen": "home",
-      "string": "Checking Central updates",
-      "size": 13
     },
     {
       "kind": "font",
@@ -3063,13 +2287,6 @@
       "kind": "font",
       "file": "en/390/empty/home",
       "screen": "home",
-      "string": "Nothing to show yet",
-      "size": 13
-    },
-    {
-      "kind": "font",
-      "file": "en/390/empty/home",
-      "screen": "home",
       "string": "Spend",
       "size": 11
     },
@@ -3079,13 +2296,6 @@
       "screen": "live",
       "string": ", send more.",
       "size": 11
-    },
-    {
-      "kind": "font",
-      "file": "en/390/empty/live",
-      "screen": "live",
-      "string": "Catalogue synced",
-      "size": 12
     },
     {
       "kind": "font",
@@ -3112,22 +2322,8 @@
       "kind": "font",
       "file": "en/390/empty/live",
       "screen": "live",
-      "string": "Make leaving home worth it.",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "en/390/empty/live",
-      "screen": "live",
       "string": "Spend",
       "size": 11
-    },
-    {
-      "kind": "font",
-      "file": "en/390/empty/live",
-      "screen": "live",
-      "string": "Why Nia",
-      "size": 12
     },
     {
       "kind": "font",
@@ -3135,13 +2331,6 @@
       "screen": "send",
       "string": ", send more.",
       "size": 11
-    },
-    {
-      "kind": "font",
-      "file": "en/390/empty/send",
-      "screen": "send",
-      "string": "Catalogue synced",
-      "size": 12
     },
     {
       "kind": "font",
@@ -3163,13 +2352,6 @@
       "screen": "send",
       "string": "LESS",
       "size": 11
-    },
-    {
-      "kind": "font",
-      "file": "en/390/empty/send",
-      "screen": "send",
-      "string": "Make leaving home worth it.",
-      "size": 12
     },
     {
       "kind": "font",
@@ -3187,24 +2369,10 @@
     },
     {
       "kind": "font",
-      "file": "en/390/empty/send",
-      "screen": "send",
-      "string": "Why Nia",
-      "size": 12
-    },
-    {
-      "kind": "font",
       "file": "en/390/empty/shop",
       "screen": "shop",
       "string": ", send more.",
       "size": 11
-    },
-    {
-      "kind": "font",
-      "file": "en/390/empty/shop",
-      "screen": "shop",
-      "string": "Catalogue synced",
-      "size": 12
     },
     {
       "kind": "font",
@@ -3238,36 +2406,8 @@
       "kind": "font",
       "file": "en/390/empty/shop",
       "screen": "shop",
-      "string": "Make leaving home worth it.",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "en/390/empty/shop",
-      "screen": "shop",
-      "string": "No published products",
-      "size": 13
-    },
-    {
-      "kind": "font",
-      "file": "en/390/empty/shop",
-      "screen": "shop",
-      "string": "Photo not supplied by Central",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "en/390/empty/shop",
-      "screen": "shop",
       "string": "Spend",
       "size": 11
-    },
-    {
-      "kind": "font",
-      "file": "en/390/empty/shop",
-      "screen": "shop",
-      "string": "Why Nia",
-      "size": 12
     },
     {
       "kind": "font",
@@ -3289,27 +2429,6 @@
       "screen": "earn",
       "string": "Spend",
       "size": 11
-    },
-    {
-      "kind": "font",
-      "file": "hi/360/down/earn",
-      "screen": "earn",
-      "string": "घर से दूर आना सार्थक हो।",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "hi/360/down/earn",
-      "screen": "earn",
-      "string": "नए अपडेट देख रहे हैं",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "hi/360/down/earn",
-      "screen": "earn",
-      "string": "निया क्यों",
-      "size": 12
     },
     {
       "kind": "font",
@@ -3350,27 +2469,6 @@
       "kind": "font",
       "file": "hi/360/down/home",
       "screen": "home",
-      "string": "नए अपडेट देख रहे हैं",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "hi/360/down/home",
-      "screen": "home",
-      "string": "फिलहाल उपलब्ध नहीं",
-      "size": 13
-    },
-    {
-      "kind": "font",
-      "file": "hi/360/down/home",
-      "screen": "home",
-      "string": "सेंट्रल से जानकारी जाँच रहे हैं",
-      "size": 13
-    },
-    {
-      "kind": "font",
-      "file": "hi/360/down/home",
-      "screen": "home",
       "string": "हिन्दी",
       "size": 13
     },
@@ -3394,27 +2492,6 @@
       "screen": "live",
       "string": "Spend",
       "size": 11
-    },
-    {
-      "kind": "font",
-      "file": "hi/360/down/live",
-      "screen": "live",
-      "string": "घर से दूर आना सार्थक हो।",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "hi/360/down/live",
-      "screen": "live",
-      "string": "नए अपडेट देख रहे हैं",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "hi/360/down/live",
-      "screen": "live",
-      "string": "निया क्यों",
-      "size": 12
     },
     {
       "kind": "font",
@@ -3450,27 +2527,6 @@
       "screen": "send",
       "string": "Spend",
       "size": 11
-    },
-    {
-      "kind": "font",
-      "file": "hi/360/down/send",
-      "screen": "send",
-      "string": "घर से दूर आना सार्थक हो।",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "hi/360/down/send",
-      "screen": "send",
-      "string": "नए अपडेट देख रहे हैं",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "hi/360/down/send",
-      "screen": "send",
-      "string": "निया क्यों",
-      "size": 12
     },
     {
       "kind": "font",
@@ -3518,34 +2574,6 @@
       "kind": "font",
       "file": "hi/360/down/shop",
       "screen": "shop",
-      "string": "कोई प्रकाशित उत्पाद नहीं",
-      "size": 13
-    },
-    {
-      "kind": "font",
-      "file": "hi/360/down/shop",
-      "screen": "shop",
-      "string": "घर से दूर आना सार्थक हो।",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "hi/360/down/shop",
-      "screen": "shop",
-      "string": "नए अपडेट देख रहे हैं",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "hi/360/down/shop",
-      "screen": "shop",
-      "string": "निया क्यों",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "hi/360/down/shop",
-      "screen": "shop",
       "string": "बैग शुरू करने के लिए सामान चुनें।",
       "size": 13
     },
@@ -3560,13 +2588,6 @@
       "kind": "font",
       "file": "hi/360/down/shop",
       "screen": "shop",
-      "string": "सेंट्रल ने फोटो नहीं दी",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "hi/360/down/shop",
-      "screen": "shop",
       "string": "हिन्दी",
       "size": 13
     },
@@ -3590,20 +2611,6 @@
       "screen": "earn",
       "string": "Spend",
       "size": 11
-    },
-    {
-      "kind": "font",
-      "file": "hi/360/empty/earn",
-      "screen": "earn",
-      "string": "घर से दूर आना सार्थक हो।",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "hi/360/empty/earn",
-      "screen": "earn",
-      "string": "निया क्यों",
-      "size": 12
     },
     {
       "kind": "font",
@@ -3616,13 +2623,6 @@
       "kind": "font",
       "file": "hi/360/empty/earn",
       "screen": "earn",
-      "string": "सामान की सूची अपडेट है",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "hi/360/empty/earn",
-      "screen": "earn",
       "string": "हिन्दी",
       "size": 13
     },
@@ -3651,27 +2651,6 @@
       "kind": "font",
       "file": "hi/360/empty/home",
       "screen": "home",
-      "string": "अभी दिखाने के लिए कुछ नहीं",
-      "size": 13
-    },
-    {
-      "kind": "font",
-      "file": "hi/360/empty/home",
-      "screen": "home",
-      "string": "सामान की सूची अपडेट है",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "hi/360/empty/home",
-      "screen": "home",
-      "string": "सेंट्रल से जानकारी जाँच रहे हैं",
-      "size": 13
-    },
-    {
-      "kind": "font",
-      "file": "hi/360/empty/home",
-      "screen": "home",
       "string": "हिन्दी",
       "size": 13
     },
@@ -3695,20 +2674,6 @@
       "screen": "live",
       "string": "Spend",
       "size": 11
-    },
-    {
-      "kind": "font",
-      "file": "hi/360/empty/live",
-      "screen": "live",
-      "string": "घर से दूर आना सार्थक हो।",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "hi/360/empty/live",
-      "screen": "live",
-      "string": "निया क्यों",
-      "size": 12
     },
     {
       "kind": "font",
@@ -3721,13 +2686,6 @@
       "kind": "font",
       "file": "hi/360/empty/live",
       "screen": "live",
-      "string": "सामान की सूची अपडेट है",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "hi/360/empty/live",
-      "screen": "live",
       "string": "हिन्दी",
       "size": 13
     },
@@ -3751,20 +2709,6 @@
       "screen": "send",
       "string": "Spend",
       "size": 11
-    },
-    {
-      "kind": "font",
-      "file": "hi/360/empty/send",
-      "screen": "send",
-      "string": "घर से दूर आना सार्थक हो।",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "hi/360/empty/send",
-      "screen": "send",
-      "string": "निया क्यों",
-      "size": 12
     },
     {
       "kind": "font",
@@ -3784,13 +2728,6 @@
       "kind": "font",
       "file": "hi/360/empty/send",
       "screen": "send",
-      "string": "सामान की सूची अपडेट है",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "hi/360/empty/send",
-      "screen": "send",
       "string": "हिन्दी",
       "size": 13
     },
@@ -3814,27 +2751,6 @@
       "screen": "shop",
       "string": "Spend",
       "size": 11
-    },
-    {
-      "kind": "font",
-      "file": "hi/360/empty/shop",
-      "screen": "shop",
-      "string": "कोई प्रकाशित उत्पाद नहीं",
-      "size": 13
-    },
-    {
-      "kind": "font",
-      "file": "hi/360/empty/shop",
-      "screen": "shop",
-      "string": "घर से दूर आना सार्थक हो।",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "hi/360/empty/shop",
-      "screen": "shop",
-      "string": "निया क्यों",
-      "size": 12
     },
     {
       "kind": "font",
@@ -3854,20 +2770,6 @@
       "kind": "font",
       "file": "hi/360/empty/shop",
       "screen": "shop",
-      "string": "सामान की सूची अपडेट है",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "hi/360/empty/shop",
-      "screen": "shop",
-      "string": "सेंट्रल ने फोटो नहीं दी",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "hi/360/empty/shop",
-      "screen": "shop",
       "string": "हिन्दी",
       "size": 13
     },
@@ -3891,27 +2793,6 @@
       "screen": "earn",
       "string": "Spend",
       "size": 11
-    },
-    {
-      "kind": "font",
-      "file": "hi/390/down/earn",
-      "screen": "earn",
-      "string": "घर से दूर आना सार्थक हो।",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "hi/390/down/earn",
-      "screen": "earn",
-      "string": "नए अपडेट देख रहे हैं",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "hi/390/down/earn",
-      "screen": "earn",
-      "string": "निया क्यों",
-      "size": 12
     },
     {
       "kind": "font",
@@ -3952,27 +2833,6 @@
       "kind": "font",
       "file": "hi/390/down/home",
       "screen": "home",
-      "string": "नए अपडेट देख रहे हैं",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "hi/390/down/home",
-      "screen": "home",
-      "string": "फिलहाल उपलब्ध नहीं",
-      "size": 13
-    },
-    {
-      "kind": "font",
-      "file": "hi/390/down/home",
-      "screen": "home",
-      "string": "सेंट्रल से जानकारी जाँच रहे हैं",
-      "size": 13
-    },
-    {
-      "kind": "font",
-      "file": "hi/390/down/home",
-      "screen": "home",
       "string": "हिन्दी",
       "size": 13
     },
@@ -3996,27 +2856,6 @@
       "screen": "live",
       "string": "Spend",
       "size": 11
-    },
-    {
-      "kind": "font",
-      "file": "hi/390/down/live",
-      "screen": "live",
-      "string": "घर से दूर आना सार्थक हो।",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "hi/390/down/live",
-      "screen": "live",
-      "string": "नए अपडेट देख रहे हैं",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "hi/390/down/live",
-      "screen": "live",
-      "string": "निया क्यों",
-      "size": 12
     },
     {
       "kind": "font",
@@ -4052,27 +2891,6 @@
       "screen": "send",
       "string": "Spend",
       "size": 11
-    },
-    {
-      "kind": "font",
-      "file": "hi/390/down/send",
-      "screen": "send",
-      "string": "घर से दूर आना सार्थक हो।",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "hi/390/down/send",
-      "screen": "send",
-      "string": "नए अपडेट देख रहे हैं",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "hi/390/down/send",
-      "screen": "send",
-      "string": "निया क्यों",
-      "size": 12
     },
     {
       "kind": "font",
@@ -4120,34 +2938,6 @@
       "kind": "font",
       "file": "hi/390/down/shop",
       "screen": "shop",
-      "string": "कोई प्रकाशित उत्पाद नहीं",
-      "size": 13
-    },
-    {
-      "kind": "font",
-      "file": "hi/390/down/shop",
-      "screen": "shop",
-      "string": "घर से दूर आना सार्थक हो।",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "hi/390/down/shop",
-      "screen": "shop",
-      "string": "नए अपडेट देख रहे हैं",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "hi/390/down/shop",
-      "screen": "shop",
-      "string": "निया क्यों",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "hi/390/down/shop",
-      "screen": "shop",
       "string": "बैग शुरू करने के लिए सामान चुनें।",
       "size": 13
     },
@@ -4162,13 +2952,6 @@
       "kind": "font",
       "file": "hi/390/down/shop",
       "screen": "shop",
-      "string": "सेंट्रल ने फोटो नहीं दी",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "hi/390/down/shop",
-      "screen": "shop",
       "string": "हिन्दी",
       "size": 13
     },
@@ -4192,20 +2975,6 @@
       "screen": "earn",
       "string": "Spend",
       "size": 11
-    },
-    {
-      "kind": "font",
-      "file": "hi/390/empty/earn",
-      "screen": "earn",
-      "string": "घर से दूर आना सार्थक हो।",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "hi/390/empty/earn",
-      "screen": "earn",
-      "string": "निया क्यों",
-      "size": 12
     },
     {
       "kind": "font",
@@ -4218,13 +2987,6 @@
       "kind": "font",
       "file": "hi/390/empty/earn",
       "screen": "earn",
-      "string": "सामान की सूची अपडेट है",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "hi/390/empty/earn",
-      "screen": "earn",
       "string": "हिन्दी",
       "size": 13
     },
@@ -4253,27 +3015,6 @@
       "kind": "font",
       "file": "hi/390/empty/home",
       "screen": "home",
-      "string": "अभी दिखाने के लिए कुछ नहीं",
-      "size": 13
-    },
-    {
-      "kind": "font",
-      "file": "hi/390/empty/home",
-      "screen": "home",
-      "string": "सामान की सूची अपडेट है",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "hi/390/empty/home",
-      "screen": "home",
-      "string": "सेंट्रल से जानकारी जाँच रहे हैं",
-      "size": 13
-    },
-    {
-      "kind": "font",
-      "file": "hi/390/empty/home",
-      "screen": "home",
       "string": "हिन्दी",
       "size": 13
     },
@@ -4297,20 +3038,6 @@
       "screen": "live",
       "string": "Spend",
       "size": 11
-    },
-    {
-      "kind": "font",
-      "file": "hi/390/empty/live",
-      "screen": "live",
-      "string": "घर से दूर आना सार्थक हो।",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "hi/390/empty/live",
-      "screen": "live",
-      "string": "निया क्यों",
-      "size": 12
     },
     {
       "kind": "font",
@@ -4323,13 +3050,6 @@
       "kind": "font",
       "file": "hi/390/empty/live",
       "screen": "live",
-      "string": "सामान की सूची अपडेट है",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "hi/390/empty/live",
-      "screen": "live",
       "string": "हिन्दी",
       "size": 13
     },
@@ -4353,20 +3073,6 @@
       "screen": "send",
       "string": "Spend",
       "size": 11
-    },
-    {
-      "kind": "font",
-      "file": "hi/390/empty/send",
-      "screen": "send",
-      "string": "घर से दूर आना सार्थक हो।",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "hi/390/empty/send",
-      "screen": "send",
-      "string": "निया क्यों",
-      "size": 12
     },
     {
       "kind": "font",
@@ -4386,13 +3092,6 @@
       "kind": "font",
       "file": "hi/390/empty/send",
       "screen": "send",
-      "string": "सामान की सूची अपडेट है",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "hi/390/empty/send",
-      "screen": "send",
       "string": "हिन्दी",
       "size": 13
     },
@@ -4421,27 +3120,6 @@
       "kind": "font",
       "file": "hi/390/empty/shop",
       "screen": "shop",
-      "string": "कोई प्रकाशित उत्पाद नहीं",
-      "size": 13
-    },
-    {
-      "kind": "font",
-      "file": "hi/390/empty/shop",
-      "screen": "shop",
-      "string": "घर से दूर आना सार्थक हो।",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "hi/390/empty/shop",
-      "screen": "shop",
-      "string": "निया क्यों",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "hi/390/empty/shop",
-      "screen": "shop",
       "string": "बैग शुरू करने के लिए सामान चुनें।",
       "size": 13
     },
@@ -4451,20 +3129,6 @@
       "screen": "shop",
       "string": "मदद",
       "size": 13
-    },
-    {
-      "kind": "font",
-      "file": "hi/390/empty/shop",
-      "screen": "shop",
-      "string": "सामान की सूची अपडेट है",
-      "size": 12
-    },
-    {
-      "kind": "font",
-      "file": "hi/390/empty/shop",
-      "screen": "shop",
-      "string": "सेंट्रल ने फोटो नहीं दी",
-      "size": 12
     },
     {
       "kind": "font",

@@ -54,7 +54,7 @@ for (const width of [320, 390, 760, 761, 960, 1280, 1440]) {
     await expect(page.locator('#content h1')).toHaveText('Your account');
     await nav.getByRole('button', { name: 'Send', exact: true }).click();
     await expect(page.locator('#content')).toContainText('Transfers not active');
-    await page.locator('#content').getByRole('button', { name: 'Sign in', exact: true }).first().click();
+    await page.locator('#content').getByRole('button', { name: 'Log in', exact: true }).first().click();
     await expect(page.locator('#dialog')).toBeVisible();
     await page.getByRole('button', { name: 'Close dialog', exact: true }).click();
     await expect(page.locator('#dialog')).not.toBeVisible();
@@ -68,7 +68,7 @@ for (const width of [320, 390, 760, 761, 960, 1280, 1440]) {
     await nav.getByRole('button', { name: 'Send', exact: true }).focus();
     await page.keyboard.press('Enter');
     await expect(page.locator('#content')).toContainText('Transfers not active');
-    await page.locator('#content').getByRole('button', { name: 'Sign in', exact: true }).first().focus();
+    await page.locator('#content').getByRole('button', { name: 'Log in', exact: true }).first().focus();
     await page.keyboard.press('Space');
     await expect(page.locator('#dialog')).toBeVisible();
     expect(errors).toEqual([]);

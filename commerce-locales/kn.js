@@ -487,5 +487,6 @@ export default {
   "Money earned": "ಗಳಿಸಿದ ಹಣ",
   "Money spent": "ಖರ್ಚಾದ ಹಣ",
   "Money left": "ಉಳಿದ ಹಣ",
-  "A person writing in a notebook": "ಪುಸ್ತಕದಲ್ಲಿ ಬರೆಯುತ್ತಿರುವ ವ್ಯಕ್ತಿ"
+  "A person writing in a notebook": "ಪುಸ್ತಕದಲ್ಲಿ ಬರೆಯುತ್ತಿರುವ ವ್ಯಕ್ತಿ",
+  "No recorded entries.": "ಯಾವ ದಾಖಲೆಯೂ ಇಲ್ಲ."
 };

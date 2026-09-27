@@ -620,7 +620,7 @@ export default {
   "Recorded entries available": "பதிவான தகவல்கள் உள்ளன",
   "Statement needs refreshing": "அறிக்கையைப் புதுப்பிக்க வேண்டும்",
   "Statement temporarily unavailable": "அறிக்கை தற்காலிகமாகக் கிடைக்கவில்லை",
-  "No recorded entries yet": "இன்னும் பதிவுகள் இல்லை",
+  "No recorded entries.": "பதிவு ஏதும் இல்லை.",
   "Offline. This may be an older statement": "இணையம் இல்லை. இது பழைய அறிக்கையாக இருக்கலாம்",
   "Remove one": "ஒன்றைக் குறைக்கவும்",
   "Add one": "ஒன்றைச் சேர்க்கவும்",

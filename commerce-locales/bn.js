@@ -847,7 +847,7 @@ export default {
   "Recorded entries available": "নথিভুক্ত তথ্য পাওয়া যাচ্ছে",
   "Statement needs refreshing": "বিবরণ নতুন করে আনতে হবে",
   "Statement temporarily unavailable": "বিবরণ সাময়িকভাবে পাওয়া যাচ্ছে না",
-  "No recorded entries yet": "এখনও কিছু নথিভুক্ত হয়নি",
+  "No recorded entries.": "কিছু লেখা হয়নি।",
   "Offline. This may be an older statement": "অফলাইন। এটি পুরনো বিবরণ হতে পারে",
   "Remove one": "একটি কমান",
   "Add one": "একটি যোগ করুন",

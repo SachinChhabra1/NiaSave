@@ -466,5 +466,6 @@ export default {
   "Money earned": "कमावलेले पैसे",
   "Money spent": "खर्च झालेले पैसे",
   "Money left": "उरलेले पैसे",
-  "A person writing in a notebook": "वहीत लिहित असलेली व्यक्ती"
+  "A person writing in a notebook": "वहीत लिहित असलेली व्यक्ती",
+  "No recorded entries.": "कोणतीही नोंद नाही."
 };

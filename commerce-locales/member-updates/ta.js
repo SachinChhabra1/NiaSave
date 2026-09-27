@@ -133,7 +133,7 @@ export default {
   "Shoes": "காலணி",
   "Cover": "காப்பீடு",
   "Your bag is empty": "உங்கள் பை காலியாக உள்ளது",
-  "Add oil or soap from Shop. Looking is free.": "கடையில் எண்ணெய் அல்லது சோப்பு சேருங்கள். பார்ப்பது இலவசம்.",
+  "Add oil or soap from Shop. Looking is free.": "எண்ணெய் அல்லது சோப்பு சேருங்கள்.",
   "Back to Save": "Save-க்கு திரும்பு",
   "vs kirana": "கிரானாவை விட குறைவு",
   "pay at pickup": "பிக்அப்பில் செலுத்துங்கள்",

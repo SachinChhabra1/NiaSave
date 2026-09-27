@@ -419,10 +419,10 @@ export default {
   "Getting your details": "तुमची माहिती येत आहे",
   "Rice, atta, oil at low prices": "तांदूळ, पीठ, तेल, कमी भावात",
   "Price coming soon": "किंमत लवकर येईल",
-  "Prices come soon. Call Nia to order now.": "किंमत लवकर येईल. आत्ता ऑर्डरसाठी नियाला फोन करा.",
-  "Shop is closed for now. Please try later.": "दुकान आत्ता बंद आहे. नंतर प्रयत्न करा.",
+  "Prices are not up yet. To order now, call Nia.": "किंमत अजून लागली नाही. आत्ता ऑर्डरसाठी नियाला फोन करा.",
+  "Shop is closed for now. Please try later.": "आत्ता बंद आहे. नंतर प्रयत्न करा.",
   "Coming soon": "लवकर येईल",
   "Where do you stay? We will show work near you.": "तुम्ही कुठे राहता? आम्ही जवळचे काम दाखवू.",
   "Finding jobs near you": "तुमच्या जवळची कामे शोधत आहोत",
-  "Add oil or soap from Shop. Looking is free.": "दुकानातून तेल किंवा साबण घाला. बघणे मोफत आहे.",
+  "Add oil or soap from Shop. Looking is free.": "तेल किंवा साबण घाला.",
 };

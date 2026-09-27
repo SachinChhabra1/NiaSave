@@ -134,7 +134,7 @@ export default {
   "Shoes": "जूते",
   "Cover": "बीमा",
   "Your bag is empty": "आपका बैग खाली है",
-  "Add oil or soap from Shop. Looking is free.": "दुकान से तेल या साबुन जोड़ें। देखना मुफ़्त है।",
+  "Add oil or soap from Shop. Looking is free.": "तेल या साबुन जोड़ें।",
   "Back to Save": "Save पर वापस",
   "vs kirana": "किराना से कम",
   "pay at pickup": "पिकअप पर भुगतान",

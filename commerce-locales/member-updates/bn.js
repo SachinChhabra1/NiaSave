@@ -25,7 +25,7 @@ export default {
   "Shoes": "জুতো",
   "Cover": "বীমা",
   "Your bag is empty": "আপনার ব্যাগ খালি",
-  "Add oil or soap from Shop. Looking is free.": "দোকান থেকে তেল বা সাবান যোগ করুন। দেখা ফ্রি।",
+  "Add oil or soap from Shop. Looking is free.": "তেল বা সাবান যোগ করুন।",
   "Back to Save": "Save-এ ফিরুন",
   "vs kirana": "কিরানার চেয়ে কম",
   "pay at pickup": "পিকআপে টাকা",

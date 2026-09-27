@@ -11,17 +11,10 @@ export function pickupOperatorName(record){
   const name=typeof value==='string'?value:typeof value?.name==='string'?value.name:'';
   return name.trim()||null;
 }
-function shopOrder(source){
-  const record=source?.record;
-  if(record&&typeof record==='object')return true;
-  return Array.isArray(source?.lines)&&source.lines.length>0;
-}
 export function moneyStatusMarkup(source,{t,esc}){
   const state=moneyStatusState(source);
   if(!state)return '';
-  // The Shop chip is a sentence about an order. A bare request with no order stays hidden.
-  if(source.kind==='shop'&&(state==='requested'||state==='queued')&&!shopOrder(source))return '';
-  const label=source.kind==='shop'&&state==='requested'?t('You asked Nia for this order'):{requested:t('Requested'),reserved:t('Reserved'),confirmed:t('Confirmed'),queued:t('Queued on this phone')}[state];
+  const label={requested:t('Requested'),reserved:t('Reserved'),confirmed:t('Confirmed'),queued:t('Queued on this phone')}[state];
   const operator=source.kind==='shop'&&state==='reserved'?pickupOperatorName(source.record):null;
   const operatorLine=source.kind==='shop'&&state==='reserved'
     ?`<small class="money-honesty-operator">${operator?`${esc(t('Held for pickup by'))} <strong>${esc(operator)}</strong>`:esc(t(source.record?.source==='niasave'?'Pickup operator not yet assigned':'Pickup operator not yet provided by Central'))}</small>`

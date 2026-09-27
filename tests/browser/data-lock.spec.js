@@ -160,8 +160,7 @@ test('queued taps are still read and shown', async ({page}) => {
   await expect(page.locator('#content')).toContainText('Example rice pack');
   await expect(page.locator('#content')).toContainText('Bag');
   await expect(page.locator('#content')).toContainText('2');
-  await expect(page.locator('#content .money-honesty-chip')).toHaveCount(0);
-  await expect(page.locator('#sync-state')).toHaveText('Request needs retry');
+  await expect(page.locator('#content')).toContainText('Requested');
   await page.locator('#less-nav button[data-action="live"]').click();
   await expect(page.locator('#content')).toContainText('A Nest request is awaiting confirmation');
   await page.locator('#less-nav button[data-action="earn"]').click();

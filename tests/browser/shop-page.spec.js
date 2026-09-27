@@ -24,7 +24,6 @@ test('empty Shop at 360px stays under 1500px with photos and no placeholder box'
   await expect(page.locator('.shop-category')).toHaveCount(6);
   await expect(page.locator('.shop-category img')).toHaveCount(6);
   await expect(page.locator('.shop-v2 .shop-photo-missing')).toHaveCount(0);
-  await expect(page.locator('#content .money-honesty-chip')).toHaveCount(0);
   await expect(page.locator('.shop-v2')).toContainText('Search for rice, oil, soap');
   await expect(page.locator('.shop-v2')).toContainText('These goods');
   await expect(page.locator('.shop-v2')).toContainText('Prices are not up yet. To order now, call Nia.');

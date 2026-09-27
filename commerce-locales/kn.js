@@ -448,7 +448,6 @@ export default {
   "These goods": "ಈ ಸಾಮಾನು",
   "All goods": "ಎಲ್ಲಾ ಸಾಮಾನು",
   "Nothing to add yet. Call Nia to order.": "ಈಗ ಸೇರಿಸಲು ಏನೂ ಇಲ್ಲ. ಆರ್ಡರ್ ಮಾಡಲು ನಿಯಾಗೆ ಫೋನ್ ಮಾಡಿ.",
-  "You asked Nia for this order": "ಈ ಆರ್ಡರ್ ಅನ್ನು ನೀವು ನಿಯಾಳಲ್ಲಿ ಕೇಳಿದ್ದೀರಿ",
   "Where do you stay? We will show work near you.": "ನೀವು ಎಲ್ಲಿ ಇರುತ್ತೀರಿ? ಹತ್ತಿರದ ಕೆಲಸ ತೋರಿಸುತ್ತೇವೆ.",
   "Finding jobs near you": "ನಿಮ್ಮ ಹತ್ತಿರದ ಕೆಲಸ ಹುಡುಕುತ್ತಿದ್ದೇವೆ",
   "Booking starts soon. Call Nia for help.": "ಬುಕಿಂಗ್ ಬೇಗ ಶುರುವಾಗುತ್ತದೆ. ಸಹಾಯಕ್ಕೆ ನಿಯಾಗೆ ಫೋನ್ ಮಾಡಿ.",

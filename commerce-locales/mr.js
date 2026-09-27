@@ -426,7 +426,6 @@ export default {
   "These goods": "हे सामान",
   "All goods": "सगळे सामान",
   "Nothing to add yet. Call Nia to order.": "आत्ता घालायला काही नाही. ऑर्डरसाठी नियाला फोन करा.",
-  "You asked Nia for this order": "तुम्ही हा ऑर्डर नियाकडे मागितला आहे",
   "Where do you stay? We will show work near you.": "तुम्ही कुठे राहता? आम्ही जवळचे काम दाखवू.",
   "Finding jobs near you": "तुमच्या जवळची कामे शोधत आहोत",
   "Add oil or soap from Shop. Looking is free.": "तेल किंवा साबण घाला.",

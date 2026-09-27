@@ -51,11 +51,12 @@ async function visibleFacts(page) {
       if (dialog && !dialog.open) continue;
       if (el.closest('[hidden]')) continue;
       const style = getComputedStyle(el);
+      if (el.closest('#commerce-ops')) continue;
       if (style.display === 'none' || style.visibility === 'hidden' || Number(style.opacity) === 0) continue;
       if (style.clip && style.clip !== 'auto') continue;
       const rect = el.getBoundingClientRect();
       if (rect.width < 2 || rect.height < 2) continue;
-      facts.push({text, size: Number(style.fontSize)});
+      facts.push({text, size: parseFloat(style.fontSize)});
     }
     return facts;
   });
@@ -65,13 +66,34 @@ async function iconGaps(page) {
   return page.evaluate(() => {
     const gaps = [];
     const word = el => el.innerText.replace(/\s+/g, ' ').trim();
-    for (const el of document.querySelectorAll('#less-nav button')) {
-      if (el.querySelector('svg') && !word(el)) gaps.push('bottom bar');
-    }
-    for (const el of document.querySelectorAll('.home-tile, .shop-category, .home-attention-card')) {
-      if (el.querySelector('svg') && !word(el)) gaps.push(el.className || 'tile');
+    const hasIcon = el => {
+      if (el.querySelector('svg, img')) return true;
+      return [el, ...el.querySelectorAll('*')].some(node => {
+        const image = getComputedStyle(node).backgroundImage;
+        return Boolean(image) && image !== 'none';
+      });
+    };
+    for (const el of document.querySelectorAll('#less-nav button, .home-tile, .shop-category, .home-attention-card')) {
+      if (el.closest('#commerce-ops')) continue;
+      if (hasIcon(el) && !word(el)) gaps.push((el.className || 'tile') + ' has an icon and no word');
     }
     return gaps;
+  });
+}
+
+async function visibleDates(page) {
+  return page.evaluate(() => {
+    const found = [];
+    for (const input of document.querySelectorAll('input[type="date"]')) {
+      if (input.closest('#commerce-ops')) continue;
+      const style = getComputedStyle(input);
+      if (style.display === 'none' || style.visibility === 'hidden' || Number(style.opacity) === 0) continue;
+      const rect = input.getBoundingClientRect();
+      if (rect.width < 2 || rect.height < 2) continue;
+      const label = input.labels && input.labels[0] ? input.labels[0].innerText.replace(/\s+/g, ' ').trim() : '';
+      found.push(label || input.getAttribute('aria-label') || 'input[type=date]');
+    }
+    return found;
   });
 }
 
@@ -89,6 +111,7 @@ for (const width of [360, 390]) {
         await expect(page.locator('#less-nav button')).toHaveCount(4);
         const fonts = [];
         const banned = [];
+        const dates = [];
         for (const name of ['home', 'live', 'earn', 'shop', 'send']) {
           if (name !== 'home') {
             await page.locator(`#less-nav button[data-action="${name}"]`).click();
@@ -105,15 +128,25 @@ for (const width of [360, 390]) {
               const key = file + '\0' + fact.text;
               if (!seen.has(key)) {
                 seen.add(key);
-                fonts.push({kind: 'font', file, string: fact.text});
+                fonts.push({kind: 'font', file, screen: name, string: fact.text, size: fact.size});
               }
             }
           }
+          const seenDates = new Set();
+          for (const label of await visibleDates(page)) {
+            const key = file + '\0' + label;
+            if (seenDates.has(key)) continue;
+            seenDates.add(key);
+            dates.push({kind: 'date', file, screen: name, string: label});
+          }
         }
         expect(banned).toEqual([]);
-        const allowed = new Set(baseline.entries.filter(entry => entry.kind === 'font').map(entry => entry.file + '\0' + entry.string));
-        const fresh = fonts.filter(entry => !allowed.has(entry.file + '\0' + entry.string));
-        expect(fresh).toEqual([]);
+        const allowedFonts = new Set(baseline.entries.filter(entry => entry.kind === 'font').map(entry => entry.file + '\0' + entry.string));
+        const freshFonts = fonts.filter(entry => !allowedFonts.has(entry.file + '\0' + entry.string));
+        expect(freshFonts).toEqual([]);
+        const allowedDates = new Set(baseline.entries.filter(entry => entry.kind === 'date').map(entry => entry.file + '\0' + entry.string));
+        const freshDates = dates.filter(entry => !allowedDates.has(entry.file + '\0' + entry.string));
+        expect(freshDates).toEqual([]);
       });
     }
   }

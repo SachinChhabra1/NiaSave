@@ -1,4 +1,7 @@
 // Member-copy scan for the UI clarity guard. Strings only, not comments.
+// Staff pages are outside this lane. commerce-owner.js and commerce-ops.js are
+// excluded from this copy scan and from the browser copy guard. Their server
+// calls stay in the frozen data-lines snapshot.
 import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
@@ -6,6 +9,8 @@ import {fileURLToPath} from 'node:url';
 export const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 export const baselinePath = path.join(root, 'docs/ui-clarity/BASELINE.json');
 
+const STAFF_COPY_FILES = new Set(['commerce-owner.js', 'commerce-ops.js']);
+const LANGUAGES = ['bn', 'hi', 'kn', 'mr', 'ta'];
 const ENGLISH = /(?:^|[^A-Za-z0-9_-])(?:central|projection|catalogue|source|supplied|published)(?=$|[^A-Za-z0-9_-])|explore\s+less/i;
 const DATE_PLACEHOLDER = /mm\/dd\/yyyy/i;
 const EM_DASH = '\u2014';
@@ -13,6 +18,8 @@ const TRANSLATED = [
   'सेंट्रल',
   'সেন্ট্রাল',
   'சென்ட்ரல்',
+  'சென்ட்ர',
+  'ಸೆಂಟ್ರಲ್',
   'लेस देखें',
   'লেস দেখুন',
   'லெஸ் பகுதிகளைப் பார்க்கவும்',
@@ -21,9 +28,13 @@ const TRANSLATED = [
   'வெளியிடப்பட்ட',
   'வெளியிடப்பட',
   'स्रोत',
-  'மூலப் பதிவு'
+  'मूल',
+  'मूळ',
+  'மூலப் பதிவு',
+  'ಮೂಲ ದಾಖಲೆ',
+  'ಮೂಲ ಪಾವತಿ'
 ];
-const EXACT_TRANSLATED = ['மூலம்'];
+const EXACT_TRANSLATED = ['மூலம்', 'ಮೂಲ'];
 
 export function hasBannedWord(text) {
   return ENGLISH.test(text) || TRANSLATED.some(token => text.includes(token)) || EXACT_TRANSLATED.includes(text);
@@ -189,7 +200,7 @@ function keepString(text) {
 }
 
 export function memberSourceFiles() {
-  const names = fs.readdirSync(root).filter(name => /^commerce.*\.js$/.test(name) || name === 'commerce.html');
+  const names = fs.readdirSync(root).filter(name => (/^commerce.*\.js$/.test(name) || name === 'commerce.html') && !STAFF_COPY_FILES.has(name));
   const locales = [];
   const walk = dir => {
     for (const entry of fs.readdirSync(dir, {withFileTypes: true})) {
@@ -202,19 +213,66 @@ export function memberSourceFiles() {
   return [...names.map(name => path.join(root, name)), ...locales];
 }
 
+function objectPairs(src) {
+  const pairs = [];
+  const re = /(['"])((?:\\.|(?!\1)[^\\])*)\1\s*:\s*(['"])((?:\\.|(?!\3)[^\\])*)\3/g;
+  let match;
+  while ((match = re.exec(src))) {
+    pairs.push({index: match.index, key: unescapeLiteral(match[2]), value: unescapeLiteral(match[4])});
+  }
+  return pairs;
+}
+
+function localePack(lang) {
+  const mainPath = path.join(root, 'commerce-locales', lang + '.js');
+  const updatePath = path.join(root, 'commerce-locales', 'member-updates', lang + '.js');
+  const mainSrc = fs.readFileSync(mainPath, 'utf8');
+  const spreadAt = mainSrc.indexOf('...memberUpdates');
+  const before = new Map();
+  const after = new Map();
+  for (const pair of objectPairs(mainSrc)) {
+    if (spreadAt >= 0 && pair.index > spreadAt) after.set(pair.key, pair.value);
+    else before.set(pair.key, pair.value);
+  }
+  const updates = new Map();
+  for (const pair of objectPairs(fs.readFileSync(updatePath, 'utf8'))) updates.set(pair.key, pair.value);
+  return {before, after, updates};
+}
+
+function resolvedTranslation(pack, lang, key) {
+  if (pack.after.has(key)) return {file: 'commerce-locales/' + lang + '.js', value: pack.after.get(key)};
+  if (pack.updates.has(key)) return {file: 'commerce-locales/member-updates/' + lang + '.js', value: pack.updates.get(key)};
+  if (pack.before.has(key)) return {file: 'commerce-locales/' + lang + '.js', value: pack.before.get(key)};
+  return null;
+}
+
 export function scanCopyViolations() {
   const entries = [];
   const seen = new Set();
+  const add = entry => {
+    const key = entry.kind + '\0' + entry.file + '\0' + entry.string;
+    if (seen.has(key)) return;
+    seen.add(key);
+    entries.push(entry);
+  };
   for (const full of memberSourceFiles()) {
     const rel = path.relative(root, full).split(path.sep).join('/');
     const src = fs.readFileSync(full, 'utf8');
     const strings = rel.endsWith('.html') ? extractHtml(src) : extractStrings(src);
     for (const text of strings) {
       if (!keepString(text)) continue;
-      const key = rel + '\0' + text;
-      if (seen.has(key)) continue;
-      seen.add(key);
-      entries.push({kind: 'copy', file: rel, string: text, rule: violationKind(text)});
+      add({kind: 'copy', file: rel, string: text, rule: violationKind(text)});
+    }
+  }
+  const flagged = entries.slice();
+  const locales = Object.fromEntries(LANGUAGES.map(lang => [lang, localePack(lang)]));
+  for (const entry of flagged) {
+    for (const lang of LANGUAGES) {
+      const hit = resolvedTranslation(locales[lang], lang, entry.string);
+      if (!hit) continue;
+      const text = hit.value.replace(/\s+/g, ' ').trim();
+      if (!text) continue;
+      add({kind: 'copy', file: hit.file, string: text, rule: violationKind(text) || entry.rule});
     }
   }
   entries.sort((a, b) => (a.file + a.string).localeCompare(b.file + b.string));
@@ -233,12 +291,21 @@ export function normalizeVisible(text) {
   return String(text || '').replace(/\u00a0/g, ' ').replace(/\s+/g, ' ').trim();
 }
 
+function decodeEntities(text) {
+  return text.replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'");
+}
+
+export function textRuns(value) {
+  const raw = String(value || '');
+  const parts = raw.includes('<') ? raw.split(/<[^>]*>/) : [raw];
+  return parts.map(part => normalizeVisible(decodeEntities(part))).filter(Boolean);
+}
+
 export function copyCovers(text, entries) {
   const visible = normalizeVisible(text);
   if (!visible || !violationKind(visible)) return true;
   return entries.some(entry => {
-    if (entry.kind !== 'copy') return false;
-    const known = normalizeVisible(entry.string);
-    return known === visible || known.includes(visible);
+    if ((entry.kind || 'copy') !== 'copy') return false;
+    return textRuns(entry.string).some(run => run === visible);
   });
 }

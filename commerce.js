@@ -11,7 +11,7 @@ import {passkeyMarkup,usePasskey,takePasskeySetup} from './commerce-passkeys.js'
 import {otpIsPrimary,optionalPasswordAllowed,optionalSetupExpired,submitOptionalPassword,usesPhoneOtpFlow,usesPasswordAuth,e164In,nationalMobile,rememberOn,authErrorText,needsSetPassword,setPasswordToken,passwordBody,setPasswordIssue,submitSetPassword,submitAuthPaths,otpRequestPaths,otpVerifyPaths,loginPath,authTimeoutMs,phoneFormMarkup,verifyFormMarkup,setPasswordFormMarkup,rememberFormMarkup,passwordFormMarkup} from './commerce-member-auth.js';
 import {membershipMarkup,partnerListMarkup,partnerConsentMarkup,partnerState} from './commerce-services.js';
 import { planForm, planResult, planStatus, fieldsFromValues, valuesFromFields, sameFields } from './commerce-plan.js';
-import { booksMarkup, downloadBooks, personalEntryForm, healthSupportDialog, entryPurposeOptions, sendViewState } from './commerce-books.js';
+import { booksMarkup, downloadBooks, personalEntryForm, healthSupportDialog, entryPurposeOptions, sendViewState, booksDateMarkup, istDay, isoParts, showDMY, clampIso, datePartSelects, weekMoveIn } from './commerce-books.js';
 import { mapModel, mapMarkup, mountMap, mapJobDetails, earnProjectionState } from './commerce-earn-map.js';
 import { saveCategories, categoryId, categoryIcons } from './commerce-categories.js';
 import { languageOptions, validLanguage, loadLanguage, translate } from './commerce-i18n.js';
@@ -33,6 +33,8 @@ let lang=readStickyLanguage()||'en', page=pageFromLocation(), cat=null, account=
 let bagOpen=false, checkoutPending=false, sessionExpired=false;
 let shellReadAt=0, shellReadFailed=false;
 let nestData=null, nestOrders=[], nestOrdersError='', nestStart='', nestDraft=null, nestPending=load('nia-nest-pending',null);
+let liveDateDraft='';
+let liveDateOpen=false;
 let authPhone='', passwordToken='', pendingPassword='', authStep='';
 let disposeEarnMap=()=>{};
 let booksData=null,booksMonth='',booksRequest=null;
@@ -125,7 +127,7 @@ function applyCommitmentGate(root=document){
   const target=root===document?$('#content'):root;
   const shopCopy=page==='shop'&&category!=='insurance'?shopReservationNotice({catalogue:cat,signedIn:!!account,reservationsEnabled:saveCommitmentReady()}):undefined;
   const shoppingOpen=cat?.capabilities?.saveShoppingOpen===true;
-  const copy=shopCopy!==undefined?shopCopy:(saveCommitmentReady()||shoppingOpen)?(['live','earn'].includes(page)||category==='insurance'?OTHER_COMMITMENTS_PAUSED_COPY:!account&&shoppingOpen?'Log in to see goods near you and reserve them.':null):PILOT_CLOSED_COPY;
+  const copy=shopCopy!==undefined?shopCopy:page==='send'?(account?null:'This is for money you send home.'):(saveCommitmentReady()||shoppingOpen)?(['live','earn'].includes(page)||category==='insurance'?OTHER_COMMITMENTS_PAUSED_COPY:!account&&shoppingOpen?'Log in to see goods near you and reserve them.':null):PILOT_CLOSED_COPY;
   const previous=target?.querySelector('[data-pilot-paused]');
   if(previous)previous.remove();
   if(target&&copy)target.prepend(pauseNote(copy));
@@ -182,9 +184,10 @@ function renderShell(){
   const state=memberShellState({online,readAsOf:cat?.asOf,readAt:shellReadAt,readFailed:shellReadFailed,pendingCount:queued,sourceOwner:cat?.owner,signedIn:!!account});
   const labels={signin:t('Log in to see what is here'),synced:t('Catalogue synced','सामान की सूची अपडेट है'),checking:t('Getting your details','आपकी जानकारी आ रही है'),stale:t('Checking last update','पिछला अपडेट जाँच रहे हैं'),offline:t('Offline','ऑफ़लाइन'),queued:t('Queued on this phone','इस फोन पर कतार में है'),retry:t('Request needs retry','अनुरोध फिर से भेजना होगा')};
   const homeQuiet=page==='home'&&!document.body.classList.contains('mesha-lang-open');
+  const hideWelcome=(page==='earn'||page==='send')&&!owner.active&&!account;
   const greet=$('#shell-greeting');
-  greet.hidden=homeQuiet;
-  greet.textContent=homeQuiet?'':(owner.active?t('Owner view','संचालक दृश्य'):account?t('Hello, Member','नमस्ते, सदस्य'):t('Welcome to NiaSave','नियासेव में स्वागत है'));
+  greet.hidden=homeQuiet||hideWelcome;
+  greet.textContent=homeQuiet||hideWelcome?'':(owner.active?t('Owner view','संचालक दृश्य'):account?t('Hello, Member','नमस्ते, सदस्य'):t('Welcome to NiaSave','नियासेव में स्वागत है'));
   const sync=$('#sync-state');sync.dataset.state=state;const syncWord=homeQuiet?(shellReadFailed?t('Details did not load.'):''):(shellReadFailed&&state==='checking'?t('Details did not load.'):(labels[state]||t('Details did not load.')));sync.replaceChildren();if(syncWord){const syncText=document.createElement('span');syncText.className='sync-word';syncText.textContent=syncWord;sync.append(syncText);}sync.hidden=!syncWord;
   const heading=greet.closest('.shell-heading');if(heading)heading.hidden=homeQuiet&&!syncWord;
   const banner=$('#offline-banner');banner.hidden=online;
@@ -284,6 +287,7 @@ async function go(next,{fromHistory=false}={}){
   if(owner.active&&!['live','earn','shop','send','account'].includes(next))next='account';
   const version=++navigationVersion;
   page=next;
+  if(next!=='live')liveDateDraft='';
   if(location.hash!=='#'+next)history[fromHistory?'replaceState':'pushState'](null,'','#'+next);
   $('#dialog').close();
   if(!account&&!owner.active&&next==='orders'){page='account';history.replaceState(null,'','#account');render();login();return;}
@@ -354,18 +358,104 @@ function earnErrorPanel(){
   if(earnError)return pictureState('network',esc(earnError),`<button class="primary" data-action="earn">${t('Try again','फिर कोशिश करें')}</button>`);
   return '';
 }
+function liveShownDate(bounds){
+  const {min,max,today}=bounds;
+  const echoed=isoParts(nestStart)&&nestStart>=min&&nestStart<=max?nestStart:'';
+  let current=isoParts(liveDateDraft)?liveDateDraft:(echoed||today);
+  if(current<min)current=min;
+  if(current>max)current=max;
+  return current;
+}
+function liveDateBounds(){
+  const min=nestData?.minDate;
+  const max=nestData?.maxDate;
+  if(!isoParts(min)||!isoParts(max)||min>max)return null;
+  const real=istDay();
+  const today=real>=min&&real<=max?real:min;
+  return {min,max,today,todayIsReal:today===real,week:weekMoveIn(min,max,today)};
+}
+function liveDateForm(){
+  const bounds=liveDateBounds();
+  if(!bounds){
+    const placesAlreadyRetry=!nestData?.offers?.length&&(!navigator.onLine||(!cat&&shellReadFailed)||stayErrorKind(nestData?.error,{signedIn:Boolean(account||owner.active||sessionExpired)})==='network');
+    const retry=placesAlreadyRetry?'':`<button type="button" class="primary" data-action="live">${t('Try again')}</button>`;
+    return `<div class="live-dates-missing"><p class="info">${esc(t('We could not get the dates. Try again, or call Nia.'))}</p><div class="live-dates-actions">${retry}${callNiaMarkup({t,esc,icon,phone:NIA_HELP_PHONE,className:'call-nia'})}</div></div>`;
+  }
+  const {min,max,today,todayIsReal,week}=bounds;
+  const current=liveShownDate(bounds);
+  const open=liveDateOpen||(current!==today&&(!week||current!==week));
+  const mode=current===today?'today':week&&current===week?'week':'pick';
+  const todayLabel=todayIsReal?t('Today'):`${t('Soonest')} · ${showDMY(today)}`;
+  const picker=open?datePartSelects(current,min,max,{t,esc,partAttr:'live-part'}):'';
+  const weekChip=week?`<button type="button" class="live-chip" data-live-date="week" aria-pressed="${mode==='week'}">${t('This week')}</button>`:'';
+  return `<form id="nest-search-form" class="store-date nest-search live-move"><fieldset class="live-move-set"><legend>${t('Move in')}</legend><div class="live-chips" role="group" aria-label="${esc(t('Move in'))}"><button type="button" class="live-chip" data-live-date="today" aria-pressed="${mode==='today'}">${esc(todayLabel)}</button>${weekChip}<button type="button" class="live-chip" data-live-date="pick" aria-pressed="${mode==='pick'}">${esc(t('Pick a date'))}</button></div><p class="live-date-asked">${esc(t('You are asking for:'))} ${esc(showDMY(current))}</p>${picker}<input type="hidden" name="start" value="${esc(current)}"></fieldset><button class="primary" type="submit">${t('See Nests')}</button></form>`;
+}
+function applyLiveChip(kind){
+  const bounds=liveDateBounds();
+  if(!bounds)return;
+  const {today,week}=bounds;
+  if(kind==='pick'){liveDateOpen=true;render();document.querySelector('[data-live-part="day"]')?.focus({preventScroll:true});return;}
+  if(kind==='week'&&!week)return;
+  liveDateOpen=false;
+  const start=kind==='week'?week:today;
+  const form=document.getElementById('nest-search-form');
+  const input=form?.querySelector('[name=start]');
+  if(input)input.value=start;
+  if(form)form.requestSubmit();
+}
+function syncLiveDateParts(which){
+  const form=document.getElementById('nest-search-form');
+  if(!form)return;
+  const bounds=liveDateBounds();
+  if(!bounds)return;
+  const {min,max}=bounds;
+  const day=Number(form.querySelector('[data-live-part="day"]')?.value);
+  const month=Number(form.querySelector('[data-live-part="month"]')?.value);
+  const year=Number(form.querySelector('[data-live-part="year"]')?.value);
+  if(!day||!month||!year)return;
+  liveDateDraft=clampIso(year,month,day,min,max);
+  liveDateOpen=true;
+  render();
+  if(which)document.querySelector(`[data-live-part="${which}"]`)?.focus({preventScroll:true});
+}
+function syncBooksDateParts(which){
+  const form=document.getElementById('books-entry-form');
+  if(!form)return;
+  const min='2020-01-01';
+  const max=istDay();
+  const day=Number(form.querySelector('[data-books-part="day"]')?.value);
+  const month=Number(form.querySelector('[data-books-part="month"]')?.value);
+  const year=Number(form.querySelector('[data-books-part="year"]')?.value);
+  if(!day||!month||!year)return;
+  const iso=clampIso(year,month,day,min,max);
+  const field=form.querySelector('.books-date');
+  if(!field)return;
+  field.outerHTML=booksDateMarkup(iso,min,max,{t,esc});
+  if(which)form.querySelector(`[data-books-part="${which}"]`)?.focus({preventScroll:true});
+}
+function earnHow(){
+  const steps=[[t('Stay in a safe place near work'),'/assets/studio-bunk-lockers.jpg'],[t('See work near where you stay'),'/assets/earn.jpg'],[t('Walk to work'),'/assets/earn-nearby-work-v2.jpg']];
+  const call=callNiaMarkup({t,esc,icon,phone:NIA_HELP_PHONE,className:'call-nia'});
+  return `<section class="earn-how"><h2>${t('How Earn works')}</h2><ol class="earn-how-steps">${steps.map(([line,src],index)=>`<li><img src="${esc(src)}" alt="" width="800" height="500"><span>${index+1}. ${esc(line)}</span></li>`).join('')}</ol><div class="earn-how-actions"><button type="button" class="primary" data-action="login">${t('Log in')}</button>${call}</div></section>`;
+}
+function sendExample(){
+  const rows=[[t('Money earned'),'₹10,000'],[t('Money spent'),'₹4,000'],[t('Sent home'),'₹2,000'],[t('Money left'),'₹4,000']];
+  return `<article class="send-example"><p class="send-example-flag">${esc(t('Example'))}</p><img src="/assets/send-notebook.jpg" alt="${esc(t('A person writing in a notebook'))}" width="1123" height="782"><ul>${rows.map(([name,amount])=>`<li><span>${esc(name)}</span><strong>${amount}</strong></li>`).join('')}</ul></article>`;
+}
+
 function earnView(){if(owner.active)return ownerEarnMarkup(earnData,earnError,{esc,money});
   const signedOut=!account&&!owner.active;
+  if(signedOut)return `<section class="store-screen store-earn"><header class="store-head store-task"><h1>${t('Earn')}</h1><p>${t('Jobs near where you stay')}</p></header>${earnHow()}${footer()}</section>`;
   const model=mapModel(earnData), projectionState=earnProjectionState({data:earnData,error:earnError,loading:earnLoading,online:navigator.onLine,signedOut});
   const mapped=model.status==='ready'&&['ready','empty'].includes(projectionState);
   const displayModel={...model,jobs:model.jobs.filter(j=>cat?.preview||(j.preview!==true&&j.test!==true))};
   const visible=projectionState==='ready'?displayModel.jobs:[];
-  const projectionCopy={loading:t('Finding jobs near you'),ready:t('Verified open jobs near your Nest'),stale:t('Job locations need refreshing'),source_missing:t('Where do you stay? We will show work near you.'),unavailable:t('Job projection is temporarily unavailable'),empty:t('No verified open jobs nearby'),offline:t('Offline. Reconnect to check jobs')};
+  const projectionCopy={loading:t('Finding jobs near you'),ready:t('Jobs near where you stay'),stale:t('Job locations need refreshing'),source_missing:t('Where do you stay? We will show work near you.'),unavailable:t('Job projection is temporarily unavailable'),empty:t('No verified open jobs nearby'),offline:t('Offline. Reconnect to check jobs')};
   const taskAction=signedOut?`<button type="button" class="primary mesha-pill mesha-pill-solid" data-action="login">${t('Log in','लॉग इन')}</button>`:`<button type="button" class="mesha-pill mesha-pill-ghost" data-action="earn">${t('See jobs','नौकरियाँ देखें')}</button>`;
-  return `<section class="store-screen store-earn"><header class="store-head store-task"><h1>${t('Earn')}</h1><p>${t('Jobs near your Nest','आपके नेस्ट के पास नौकरियाँ')}</p>${taskAction}</header><figure class="store-task-photo"><img src="/assets/earn.jpg" alt="" width="1168" height="728"></figure>
+  return `<section class="store-screen store-earn"><header class="store-head store-task"><h1>${t('Earn')}</h1><p>${t('Jobs near where you stay')}</p>${taskAction}</header><figure class="store-task-photo"><img src="/assets/earn.jpg" alt="" width="1168" height="728"></figure>
   ${earnErrorPanel()}
   <p class="pillar-state" data-state="${projectionState}" role="status">${esc(projectionCopy[projectionState])}</p>
-  ${signedOut?'':`<div class="earn-layout">${mapMarkup(mapped?displayModel:{status:projectionState==='stale'?'stale':'unavailable',jobs:[]},t,icon)}<section class="stack earn-results" aria-label="${t('Open jobs','खुली नौकरियाँ')}"><div><div class="eyebrow">WALK2WORK</div><h2>${t('Jobs near your Nest','आपके नेस्ट के पास नौकरियाँ')}</h2><p>${mapped?t('Closest locations first','सबसे पास की जगहें पहले'):t('Verified workplace locations will help you compare your journey.','काम की जगहों की पुष्टि से आपको आने-जाने की दूरी समझने में मदद मिलेगी।')}</p></div>
+  ${signedOut?'':`<div class="earn-layout">${mapMarkup(mapped?displayModel:{status:projectionState==='stale'?'stale':'unavailable',jobs:[]},t,icon)}<section class="stack earn-results" aria-label="${t('Open jobs','खुली नौकरियाँ')}"><div><div class="eyebrow">WALK2WORK</div><h2>${t('Jobs near where you stay')}</h2><p>${mapped?t('Closest locations first','सबसे पास की जगहें पहले'):t('Verified workplace locations will help you compare your journey.','काम की जगहों की पुष्टि से आपको आने-जाने की दूरी समझने में मदद मिलेगी।')}</p></div>
   ${earnPending?`${moneyStatusMarkup({status:'requested',offlineQueued:!navigator.onLine,kind:'earn'},{t,esc})}<button data-action="earn-retry">${t('Retry application safely','आवेदन सुरक्षित रूप से फिर भेजें')}</button>`:''}
   ${visible.length?visible.map((j,index)=>`<article class="panel stack earn-job" id="earn-job-${esc(j.id)}" tabindex="-1"><div class="row"><h3>${mapped?`<span class="earn-job-number">${index+1}</span>`:''}${esc(t(j.title))}</h3>${j.preview?`<span class="badge">${t('Preview')}</span>`:''}</div><p>${esc(j.employer)} · ${esc(j.city)}</p>${mapped?`<span class="earn-distance">${j.distanceKm.toFixed(1)} km · ${t('straight-line distance','सीधी रेखा में दूरी')}</span><p>${j.openPositions} ${t('open positions','खाली पद')}</p>`:''}<div class="earn-compare-cost">${mapJobDetails(j,index,model.studio,t)}</div><details class="earn-job-details"><summary>${t('Shift, requirements & apply')}</summary><p>${esc(t(j.shift))}</p><p>${esc(t(j.requirements))}</p>${jobTerms(j)?`<p>${esc(jobTerms(j))}</p>`:''}<small>${t('Apply before','इस समय से पहले आवेदन करें')}: ${esc(date(j.closesAt))}</small><button class="primary" data-action="earn-apply" data-id="${esc(j.id)}" ${applications.some(a=>a.job.id===j.id)||!navigator.onLine?'disabled':''}>${applications.some(a=>a.job.id===j.id)?t('Application received','आवेदन मिल गया'):t('Apply for this job','इस नौकरी के लिए आवेदन करें')}</button></details></article>`).join(''):`<div class="picture-state" data-state="empty">${icon('earn')}<p>${mapped?t('No jobs open right now','अभी कोई नौकरी खुली नहीं है'):t('Open jobs are being connected','खुली नौकरियाँ जोड़ी जा रही हैं')}</p></div>`}
   </section></div><section class="stack service-panel">${earnHistory()}</section>`}${footer()}</section>`;
@@ -376,9 +466,9 @@ async function confirmJob(){if(!commitmentReady())return toast(t(PILOT_CLOSED_CO
 function sendView(){if(owner.active)return ownerSendMarkup();
   const signedOut=!account&&!owner.active;
   const state=sendViewState({data:booksData,online:navigator.onLine,signedOut});
-  const labels={loading:t('Checking your money plan'),ready:t('Recorded entries available'),stale:t('Statement needs refreshing'),source_missing:t('Some statement sources are missing'),unavailable:t('Statement temporarily unavailable'),empty:t('No recorded entries yet'),offline:t('Offline. This may be an older statement')};
+  const labels={loading:t('Checking your money plan'),ready:t('Recorded entries available'),stale:t('Statement needs refreshing'),source_missing:signedOut?t('Log in to see the money you send home.'):t('Details did not load.'),unavailable:t('Statement temporarily unavailable'),empty:t('No recorded entries yet'),offline:t('Offline. This may be an older statement')};
   const taskAction=signedOut?`<button type="button" class="primary" data-action="login">${t('Log in','लॉग इन')}</button>`:'';
-  return `<section class="store-screen store-send send-v2"><header class="store-head store-task"><h1>${t('Send')}</h1><p class="nia-transfer-status" role="status"><span class="badge">${t('Transfers not active','ट्रांसफ़र अभी सक्रिय नहीं')}</span></p><p>${t('Send is a plan. Saving it does not move money.')}</p>${taskAction}</header><p class="pillar-state" data-state="${state}" role="status">${esc(labels[state])}</p>${signedOut?pictureState('signed-out',t('Log in to see your money plan','पैसे की योजना देखने के लिए लॉग इन करें।'),taskAction):state==='loading'?pictureState('loading',t('Checking your money plan')):booksMarkup(booksData,booksMonth,account,{t,esc,money})}<section class="panel stack books-transfer"><div class="row"><h2>${t('Transfers','ट्रांसफ़र')}</h2><span class="badge">${t('Transfers not active','ट्रांसफ़र अभी सक्रिय नहीं')}</span></div><p>${t('Only a Nia team recorded payment appears as paid. A saved plan is not a transfer.')}</p></section>${footer()}</section>`;}
+  return `<section class="store-screen store-send send-v2"><header class="store-head store-task"><h1>${t('Send')}</h1><p class="nia-transfer-status" role="status"><span class="badge">${t('Sending money has not started')}</span></p><p>${t('This is only your own record. Nia does not send money.')}</p>${taskAction}</header><p class="pillar-state" data-state="${state}" role="status">${esc(labels[state])}</p>${signedOut?`${sendExample()}<div class="send-example-actions">${taskAction}${callNiaMarkup({t,esc,icon,phone:NIA_HELP_PHONE,className:'call-nia'})}</div>`:state==='loading'?pictureState('loading',t('Checking your money plan')):booksMarkup(booksData,booksMonth,account,{t,esc,money})}<section class="panel stack books-transfer"><div class="row"><h2>${t('Sending money')}</h2><span class="badge">${t('Sending money has not started')}</span></div><p>${t('Only money the Nia team has recorded shows as sent. Nothing is sent from here.')}</p></section>${footer()}</section>`;}
 
 async function loadNests(){nestData=nestStart?await api('/nests/availability',{start:nestStart}):await api('/nests');nestStart=nestData.start;emitAnalytics('live','availability_search',{outcome:(nestData.offers||[]).length?'results':'empty'});}
 // Local illustrative artwork only. Jat's published studio media will replace this preview map.
@@ -393,7 +483,7 @@ function nestPhoto(n){
   const caption=n.test?t('Illustrative test studio. Not a real Nest.','उदाहरण टेस्ट स्टूडियो। असली नेस्ट नहीं।'):t('Illustrative shared studio with bunks and lockers','बंक और लॉकर वाले साझा स्टूडियो का उदाहरण');
   return image?`<div class="nest-image"><img src="${esc(image.src)}" width="${image.width}" height="${image.height}" alt="${esc(n.name)} · ${esc(caption)}" loading="lazy"></div>`:`<div class="nest-image"><span class="shop-photo-missing"></span></div>`;
 }
-function liveView(){const offers=(nestData?.offers||[]).filter(n=>cat?.preview||(n.test!==true&&n.preview!==true));return `<section class="store-screen store-live"><header class="store-head"><h1>${t('Live')}</h1><p>${t('Find a place near work.','काम के पास रहने की जगह देखें।')}</p></header><form id="nest-search-form" class="store-date nest-search"><label>${t('Move in','आएँ')}<input type="date" name="start" value="${esc(nestStart)}" min="${esc(nestData?.minDate)}" max="${esc(nestData?.maxDate)}" required></label><button class="primary" type="submit">${t('See Nests','नेस्ट देखें')}</button></form>${!owner.active&&nestPending?`${moneyStatusMarkup({status:'requested',offlineQueued:!navigator.onLine,kind:'live'},{t,esc})}<p class="info">${t('A Nest request is awaiting confirmation. Retry safely to check its result.','नेस्ट अनुरोध की पुष्टि बाकी है। नतीजा जाँचने के लिए फिर कोशिश करें।')} <button data-action="nest-confirm">${t('Check my request','मेरा अनुरोध जाँचें')}</button></p>`:''}<div class="nest-grid">${offers.map(n=>`<article class="nest-card store-nest">${nestPhoto(n)}<div class="stack"><h2>${esc(n.name)}</h2>${n.test?`<p class="muted nest-test-flag">${t('Illustrative test studio. Not a real Nest.','उदाहरण टेस्ट स्टूडियो। असली नेस्ट नहीं।')}</p>`:''}${n.test?'':pricePair(0,n.rent)}${n.test?`<button class="primary full" data-action="nest-preview" data-id="${esc(n.studioId)}">${t('View still','स्टिल देखें')}</button>`:`<button class="primary full" data-action="nest-review" data-id="${esc(n.studioId)}" ${!n.available||!navigator.onLine?'disabled':''}>${t('View','देखें')}</button>`}</div></article>`).join('')}</div>${offers.length?'':stayPanel()}${footer()}</section>`;}
+function liveView(){const offers=(nestData?.offers||[]).filter(n=>cat?.preview||(n.test!==true&&n.preview!==true));return `<section class="store-screen store-live"><header class="store-head"><h1>${t('Live')}</h1><p>${t('Find a place near work.','काम के पास रहने की जगह देखें।')}</p></header><div class="nest-grid">${offers.map(n=>`<article class="nest-card store-nest">${nestPhoto(n)}<div class="stack"><h2>${esc(n.name)}</h2>${n.test?`<p class="muted nest-test-flag">${t('Illustrative test studio. Not a real Nest.','उदाहरण टेस्ट स्टूडियो। असली नेस्ट नहीं।')}</p>`:''}${n.test?'':pricePair(0,n.rent)}${n.test?`<button class="primary full" data-action="nest-preview" data-id="${esc(n.studioId)}">${t('View still','स्टिल देखें')}</button>`:`<button class="primary full" data-action="nest-review" data-id="${esc(n.studioId)}" ${!n.available||!navigator.onLine?'disabled':''}>${t('View','देखें')}</button>`}</div></article>`).join('')}</div>${offers.length?'':stayPanel()}${liveDateForm()}${!owner.active&&nestPending?`${moneyStatusMarkup({status:'requested',offlineQueued:!navigator.onLine,kind:'live'},{t,esc})}<p class="info">${t('A Nest request is awaiting confirmation. Retry safely to check its result.','नेस्ट अनुरोध की पुष्टि बाकी है। नतीजा जाँचने के लिए फिर कोशिश करें।')} <button data-action="nest-confirm">${t('Check my request','मेरा अनुरोध जाँचें')}</button></p>`:''}${footer()}</section>`;}
 async function loadMemberOrders(){if(account?.kind==='customer'){orders=(await api('/orders')).orders;issues=[];nestOrders=[];applications=[];nestOrdersError='';return;}await loadEarn();orders=(await api('/orders')).orders;
   for(const order of orders){const event={ready:'ready',collected:'collection'}[order.status];emitObservedState('save',order.id,order.status,event);}
   issues=(await api('/support')).issues;nestOrdersError='';try{nestOrders=(await api('/nests/bookings')).bookings;
@@ -404,7 +494,7 @@ async function previewTestNest(studioId){const n=(nestData?.offers||[]).find(o=>
 async function reviewNest(studioId){if(!commitmentReady())return toast(t(PILOT_CLOSED_COPY));if(!account)return login();if(nestPending)return show(t('Check your Nest request','नेस्ट का अनुरोध जाँचें'),`<p>${t('Your previous request may have reached us. Retry to retrieve its result.','पिछला अनुरोध पहुँच गया हो सकता है। नतीजा देखने के लिए फिर कोशिश करें।')}</p><button class="primary full" data-action="nest-confirm">${t('Retry safely','सुरक्षित रूप से फिर कोशिश करें')}</button>`);const body={studioId,start:nestStart};const q=await api('/nests/quote',body);emitAnalytics('live','quote',{outcome:'available'});nestDraft={accountId:account.id,key:crypto.randomUUID(),body:{...body,fingerprint:q.fingerprint}};show(t('Review your Nest','अपना नेस्ट देखें'),`<div class="stack"><h3>${esc(q.name)}</h3><p>${esc(t(q.address))}<br>${esc(q.start)} → ${esc(q.end)} · ${t('30 days','30 दिन')}</p><div class="receipt"><div class="row"><span>${t('Stay','निवास')}</span><strong>${money(q.rent)}</strong></div><div class="row"><span>${t('Tax','कर')}</span><strong>${money(q.tax)}</strong></div><div class="row"><span>${t('Deposit','जमा')}</span><strong>${money(q.deposit)}</strong></div><div class="row"><strong>${t('Total at move-in','आते समय कुल')}</strong><strong class="price">${money(q.total)}</strong></div></div><p>${esc(t(q.terms))}</p><p class="info">${t('Nothing to pay online. Hold for up to','ऑनलाइन भुगतान नहीं। अधिकतम')} ${q.holdHours} ${t('hours, or until the end of your move-in day if sooner. Meet the team before expiry. Agreement and check-in are completed with the team.','घंटे या आने के दिन के अंत तक, जो पहले हो। समय समाप्त होने से पहले टीम से मिलें। समझौता और चेक-इन टीम के साथ पूरा होगा।')}</p><button class="primary" data-action="nest-confirm">${t('Reserve Nest · Pay at move-in','नेस्ट बुक करें · आते समय भुगतान करें')}</button><div id="form-error" role="alert" class="error-inline"></div></div>`);}
 async function confirmNest(){if(!commitmentReady())return toast(t(PILOT_CLOSED_COPY));if(busy)return;if(!account)return login();if(!nestPending&&nestDraft){nestPending=nestDraft;nestDraft=null;save('nia-nest-pending',nestPending);}if(!nestPending)return;if(nestPending.accountId!==account.id){nestPending=null;save('nia-nest-pending',null);return;}busy=true;const btn=$('[data-action="nest-confirm"]');if(btn)btn.disabled=true;try{await api('/nests/bookings',nestPending.body,'POST',nestPending.key);nestPending=null;save('nia-nest-pending',null);await go('orders');emitAnalytics('live','hold_confirmation',{outcome:'reserved'});toast(t('Nest reserved. Check your reference and hold expiry below.','नेस्ट बुक हो गया। नीचे संदर्भ और समय सीमा देखें।'));}catch(e){if(!e.uncertain&&!['service_unavailable','save_storage_unavailable','state_conflict'].includes(e.code)){nestPending=null;save('nia-nest-pending',null);$('#dialog').close();await go('live');}if($('#form-error'))$('#form-error').textContent=e.message;else toast(e.message);}finally{busy=false;if(btn)btn.disabled=false;}}
 
-document.addEventListener('click',async event=>{const button=event.target.closest('[data-action]');if(!button)return;event.preventDefault();const action=button.dataset.action,id=button.dataset.id;if(!commitmentActionReady(action))return;try{
+document.addEventListener('click',async event=>{const liveChip=event.target.closest('[data-live-date]');if(liveChip){event.preventDefault();applyLiveChip(liveChip.dataset.liveDate);return;}const button=event.target.closest('[data-action]');if(!button)return;event.preventDefault();const action=button.dataset.action,id=button.dataset.id;if(!commitmentActionReady(action))return;try{
 if(action==='owner-login')return show('Owner access',ownerLoginMarkup()+`<button class="quiet full" data-action="entry-back">${t('Log in')}</button>`);
 if(action==='owner-exit'){exitOwner();return location.reload();}
 if(owner.active&&!ownerActions.has(action))return toast('Owner view is read only.');
@@ -510,7 +600,7 @@ if(action==='reorder'){const o=orders.find(o=>o.id===id);for(const l of o.lines)
 }catch(e){if($('#dialog').open){let error=$('#dialog-body .error-inline');if(!error){error=document.createElement('p');error.className='error-inline';error.setAttribute('role','alert');$('#dialog-body').append(error);}error.textContent=e.message;}else toast(e.message);}});
 document.addEventListener('input',event=>{if(event.target.matches('#books-plan-form input')){const values=Object.fromEntries(new FormData(event.target.form));planDrafts.set(currentPlanKey(),values);$('#plan-result').innerHTML=planResult(values,{t,money});if(planState?.status==='ready'&&planState.saveState!=='saving'){planState={...planState,saveState:planState.savedFields&&sameFields(fieldsFromValues(values),planState.savedFields)?'saved':'unsaved',error:null};refreshPlanStatus();}}});
 document.addEventListener('submit',event=>{if(event.target.id==='books-plan-form')event.preventDefault();});
-document.addEventListener('change',async event=>{if(event.target.matches('#books-entry-form [name="kind"]')){event.target.form.elements.namedItem('label').innerHTML=entryPurposeOptions(event.target.value,'',{t,esc});return;}if(event.target.matches('[data-books-month]')){booksMonth=event.target.value;render();$('[data-books-month]')?.focus({preventScroll:true});return;}if(event.target.matches('[data-language-select]')){const selector=event.target,next=selector.value;if(!validLanguage(next))return;selector.disabled=true;try{await chooseLang(next);($('#dialog').open?$('#dialog [data-language-select]'):$('[data-language-select]'))?.focus({preventScroll:true});}catch{selector.value=lang;toast(t('Language could not be loaded. Check your connection and try again.','भाषा लोड नहीं हुई। कनेक्शन जाँचकर फिर कोशिश करें।'));}finally{selector.disabled=false;}}});
+document.addEventListener('change',async event=>{if(event.target.matches('[data-live-part]')){syncLiveDateParts(event.target.getAttribute('data-live-part'));return;}if(event.target.matches('[data-books-part]')){syncBooksDateParts(event.target.getAttribute('data-books-part'));return;}if(event.target.matches('#books-entry-form [name="kind"]')){event.target.form.elements.namedItem('label').innerHTML=entryPurposeOptions(event.target.value,'',{t,esc});return;}if(event.target.matches('[data-books-month]')){booksMonth=event.target.value;render();$('[data-books-month]')?.focus({preventScroll:true});return;}if(event.target.matches('[data-language-select]')){const selector=event.target,next=selector.value;if(!validLanguage(next))return;selector.disabled=true;try{await chooseLang(next);($('#dialog').open?$('#dialog [data-language-select]'):$('[data-language-select]'))?.focus({preventScroll:true});}catch{selector.value=lang;toast(t('Language could not be loaded. Check your connection and try again.','भाषा लोड नहीं हुई। कनेक्शन जाँचकर फिर कोशिश करें।'));}finally{selector.disabled=false;}}});
 document.addEventListener('submit',async event=>{if(owner.active&&event.target.id!=='nest-search-form'){event.preventDefault();return;}if(!['owner-login-form','passkey-setup-form','login-form','verify-form','set-password-form','remember-form','review-form','recovery-form','support-form','nest-search-form','save-search-form','earn-form','books-entry-form','member-enrol-form','member-recovery-form','partner-referral-form'].includes(event.target.id))return;event.preventDefault();const form=event.target,fields=Object.fromEntries(new FormData(form));const submit=form.querySelector('button[type=submit],button.primary');if(submit)submit.disabled=true;try{
 if(form.id==='owner-login-form'){await signInOwner(fields);account=null;nestPending=null;orders=[];nestOrders=[];applications=[];page='live';history.replaceState(null,'','#live');form.reset();$('#dialog').close();await refresh();return;}
 if(form.id==='passkey-setup-form'){await finishPasskey('register',passkeySetupToken);return;}
@@ -518,7 +608,7 @@ if(form.id==='member-enrol-form'){await api('/membership/enrol',{fullName:fields
 if(form.id==='member-recovery-form'){await api('/membership/recovery',{oldPhone:'+91'+fields.oldPhone});emitAnalytics('identity','recovery_requested',{outcome:'received'});show(t('Request help','मदद माँगें'),`<p>${t('Your Nia team will review the request. Your account has not changed.')}</p>`);}
 if(form.id==='partner-referral-form'){const chosen=new FormData(form).getAll('fields');if(!chosen.length)throw {message:t('Choose at least one record to share.')};await api('/partners/referrals',{partnerId:fields.partnerId,consentVersion:Number(fields.consentVersion),fields:chosen,consent:fields.consent==='on'});return await openPartners();}
 if(form.id==='books-entry-form'){const amountPaise=Math.round(Number(fields.amount)*100);await submitBooks({...(fields.entryId?{id:fields.entryId,revision:Number(fields.revision)}:{}),date:fields.date,kind:fields.kind,amountPaise,label:fields.label});}
-if(form.id==='nest-search-form'){nestStart=fields.start;await loadNests();render();}
+if(form.id==='nest-search-form'){liveDateDraft='';nestStart=fields.start;await loadNests();render();}
 if(form.id==='save-search-form'){search=String(fields.q||'').trim().slice(0,40);aisle='';render();return;}
 if(form.id==='earn-form'&&!commitmentReady())return toast(t(PILOT_CLOSED_COPY));
 if(form.id==='earn-form'){emitAnalytics('earn','consent',{outcome:fields.consent==='on'?'granted':'absent'});if(!earnPending)earnPending={accountId:account.id,key:crypto.randomUUID(),body:{jobId:fields.jobId,revision:fields.revision,consent:fields.consent==='on'}};save('nia-earn-pending',earnPending);await confirmJob();}

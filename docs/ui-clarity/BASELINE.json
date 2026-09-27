@@ -213,12 +213,6 @@
   {
    "kind": "copy",
    "file": "commerce-locales/bn.js",
-   "string": "Some statement sources are missing",
-   "rule": "banned"
-  },
-  {
-   "kind": "copy",
-   "file": "commerce-locales/bn.js",
    "string": "Source",
    "rule": "banned"
   },
@@ -484,12 +478,6 @@
    "kind": "copy",
    "file": "commerce-locales/hi.js",
    "string": "Reservation recorded by Central",
-   "rule": "banned"
-  },
-  {
-   "kind": "copy",
-   "file": "commerce-locales/hi.js",
-   "string": "Some statement sources are missing",
    "rule": "banned"
   },
   {
@@ -1227,12 +1215,6 @@
   {
    "kind": "copy",
    "file": "commerce-locales/ta.js",
-   "string": "Some statement sources are missing",
-   "rule": "banned"
-  },
-  {
-   "kind": "copy",
-   "file": "commerce-locales/ta.js",
    "string": "This account has catalogue access only.",
    "rule": "banned"
   },
@@ -1509,13 +1491,6 @@
   {
    "kind": "copy",
    "file": "commerce.js",
-   "screen": "send",
-   "string": "Some statement sources are missing",
-   "rule": "banned"
-  },
-  {
-   "kind": "copy",
-   "file": "commerce.js",
    "string": "This account has catalogue access only.",
    "rule": "banned"
   },
@@ -1532,72 +1507,10 @@
    "rule": "emdash"
   },
   {
-   "kind": "date",
-   "file": "en/360/down/live",
-   "screen": "live",
-   "string": "Move in"
-  },
-  {
-   "kind": "date",
-   "file": "en/360/empty/live",
-   "screen": "live",
-   "string": "Move in"
-  },
-  {
-   "kind": "date",
-   "file": "en/390/down/live",
-   "screen": "live",
-   "string": "Move in"
-  },
-  {
-   "kind": "date",
-   "file": "en/390/empty/live",
-   "screen": "live",
-   "string": "Move in"
-  },
-  {
-   "kind": "date",
-   "file": "hi/360/down/live",
-   "screen": "live",
-   "string": "आएँ"
-  },
-  {
-   "kind": "date",
-   "file": "hi/360/empty/live",
-   "screen": "live",
-   "string": "आएँ"
-  },
-  {
-   "kind": "date",
-   "file": "hi/390/down/live",
-   "screen": "live",
-   "string": "आएँ"
-  },
-  {
-   "kind": "date",
-   "file": "hi/390/empty/live",
-   "screen": "live",
-   "string": "आएँ"
-  },
-  {
-   "kind": "font",
-   "file": "en/360/down/send",
-   "screen": "send",
-   "string": "Only a Nia team recorded payment appears as paid. A saved plan is not a transfer.",
-   "size": 13
-  },
-  {
    "kind": "font",
    "file": "en/360/down/shop",
    "screen": "shop",
    "string": "Choose a product to start your bag.",
-   "size": 13
-  },
-  {
-   "kind": "font",
-   "file": "en/360/empty/send",
-   "screen": "send",
-   "string": "Only a Nia team recorded payment appears as paid. A saved plan is not a transfer.",
    "size": 13
   },
   {
@@ -1609,23 +1522,9 @@
   },
   {
    "kind": "font",
-   "file": "en/390/down/send",
-   "screen": "send",
-   "string": "Only a Nia team recorded payment appears as paid. A saved plan is not a transfer.",
-   "size": 13
-  },
-  {
-   "kind": "font",
    "file": "en/390/down/shop",
    "screen": "shop",
    "string": "Choose a product to start your bag.",
-   "size": 13
-  },
-  {
-   "kind": "font",
-   "file": "en/390/empty/send",
-   "screen": "send",
-   "string": "Only a Nia team recorded payment appears as paid. A saved plan is not a transfer.",
    "size": 13
   },
   {
@@ -1637,23 +1536,9 @@
   },
   {
    "kind": "font",
-   "file": "hi/360/down/send",
-   "screen": "send",
-   "string": "निया टीम द्वारा दर्ज भुगतान ही चुकाया हुआ दिखता है। सहेजी योजना से पैसे नहीं भेजे जाते।",
-   "size": 13
-  },
-  {
-   "kind": "font",
    "file": "hi/360/down/shop",
    "screen": "shop",
    "string": "बैग शुरू करने के लिए सामान चुनें।",
-   "size": 13
-  },
-  {
-   "kind": "font",
-   "file": "hi/360/empty/send",
-   "screen": "send",
-   "string": "निया टीम द्वारा दर्ज भुगतान ही चुकाया हुआ दिखता है। सहेजी योजना से पैसे नहीं भेजे जाते।",
    "size": 13
   },
   {
@@ -1665,23 +1550,9 @@
   },
   {
    "kind": "font",
-   "file": "hi/390/down/send",
-   "screen": "send",
-   "string": "निया टीम द्वारा दर्ज भुगतान ही चुकाया हुआ दिखता है। सहेजी योजना से पैसे नहीं भेजे जाते।",
-   "size": 13
-  },
-  {
-   "kind": "font",
    "file": "hi/390/down/shop",
    "screen": "shop",
    "string": "बैग शुरू करने के लिए सामान चुनें।",
-   "size": 13
-  },
-  {
-   "kind": "font",
-   "file": "hi/390/empty/send",
-   "screen": "send",
-   "string": "निया टीम द्वारा दर्ज भुगतान ही चुकाया हुआ दिखता है। सहेजी योजना से पैसे नहीं भेजे जाते।",
    "size": 13
   },
   {

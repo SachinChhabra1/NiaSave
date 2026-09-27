@@ -64,7 +64,7 @@ export default {
   "Refresh statement": "विवरण ताज़ा करें",
   "Earnings": "कमाई",
   "Expenses": "खर्च",
-  "Sent home": "घर भेजा",
+  "Sent home": "घर भेजा पैसा",
   "Refund": "वापसी",
   "Choose whether to calculate your Nia health score.": "चुनें कि अपना निया हेल्थ स्कोर निकालना है या नहीं।",
   "Refresh your records before calculating a score.": "स्कोर निकालने से पहले रिकॉर्ड ताज़ा करें।",

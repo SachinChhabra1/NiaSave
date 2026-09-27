@@ -13,4 +13,4 @@ export function saveLaunchEnabled(env = {}) {
     && (env.CENTRAL_COMMERCE_KEY || '').length >= 32;
 }
 export const SAVE_PAUSED_COPY = 'Reservations are paused. You can browse essentials and ask your Nia team for help with an existing order.';
-export const OTHER_COMMITMENTS_PAUSED_COPY = 'Stays and applications are paused. Contact your Nia team for help with an existing request.';
+export const OTHER_COMMITMENTS_PAUSED_COPY = 'Booking starts soon. Call Nia for help.';

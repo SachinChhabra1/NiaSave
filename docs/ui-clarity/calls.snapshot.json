@@ -1,0 +1,939 @@
+{
+  "commerce-analytics.js": [],
+  "commerce-books.js": [],
+  "commerce-capabilities.js": [],
+  "commerce-categories.js": [],
+  "commerce-content-qa.js": [],
+  "commerce-earn-map.js": [],
+  "commerce-home.js": [],
+  "commerce-i18n.js": [],
+  "commerce-member-auth.js": [
+    {
+      "kind": "api",
+      "path": {
+        "src": "optionalPasswordPath ( cat )"
+      },
+      "method": {
+        "lit": "POST"
+      },
+      "body": {
+        "src": "passwordBody ( fields )"
+      },
+      "key": null
+    },
+    {
+      "kind": "api",
+      "path": {
+        "src": "path"
+      },
+      "method": {
+        "lit": "POST"
+      },
+      "body": {
+        "src": "body"
+      },
+      "key": null
+    },
+    {
+      "kind": "string",
+      "value": "/api/commerce"
+    }
+  ],
+  "commerce-money-status.js": [],
+  "commerce-ops.js": [
+    {
+      "kind": "api",
+      "path": {
+        "lit": "action"
+      },
+      "method": {
+        "lit": "GET"
+      },
+      "body": {
+        "keys": [
+          "action",
+          "amount",
+          "note",
+          "orderId",
+          "pickupCode",
+          "receiptVerified",
+          "reference",
+          "statementVerified",
+          "stockInspected"
+        ]
+      },
+      "key": null
+    },
+    {
+      "kind": "api",
+      "path": {
+        "lit": "config"
+      },
+      "method": {
+        "lit": "PUT"
+      },
+      "body": {
+        "src": "JSON.parse ( fields.config )"
+      },
+      "key": null
+    },
+    {
+      "kind": "api",
+      "path": {
+        "lit": "recovery"
+      },
+      "method": {
+        "lit": "GET"
+      },
+      "body": {
+        "keys": [
+          "evidenceReference",
+          "providerUpdated",
+          "ticketId"
+        ]
+      },
+      "key": null
+    },
+    {
+      "kind": "api",
+      "path": {
+        "lit": "state"
+      },
+      "method": {
+        "lit": "GET"
+      },
+      "body": null,
+      "key": null
+    },
+    {
+      "kind": "api",
+      "path": {
+        "lit": "support"
+      },
+      "method": {
+        "lit": "GET"
+      },
+      "body": {
+        "keys": [
+          "id",
+          "note",
+          "status"
+        ]
+      },
+      "key": null
+    },
+    {
+      "kind": "fetch",
+      "url": {
+        "lit": "/v1/staff/login"
+      },
+      "method": {
+        "lit": "POST"
+      }
+    },
+    {
+      "kind": "fetch",
+      "url": {
+        "src": "'/api/commerce/staff/' + path"
+      },
+      "method": {
+        "src": "body === undefined ? 'GET' : method"
+      }
+    },
+    {
+      "kind": "string",
+      "value": "/api/commerce/staff/"
+    },
+    {
+      "kind": "string",
+      "value": "/v1/staff/login"
+    }
+  ],
+  "commerce-owner.js": [
+    {
+      "kind": "fetch",
+      "url": {
+        "lit": "/v1/staff/login"
+      },
+      "method": {
+        "lit": "POST"
+      }
+    },
+    {
+      "kind": "fetch",
+      "url": {
+        "src": "'/v1/staff/storefront' + path"
+      },
+      "method": {
+        "lit": "GET"
+      }
+    },
+    {
+      "kind": "string",
+      "value": "/v1/staff/login"
+    },
+    {
+      "kind": "string",
+      "value": "/v1/staff/storefront"
+    }
+  ],
+  "commerce-passkeys.js": [
+    {
+      "kind": "api",
+      "path": {
+        "lit": "/auth/passkey/options"
+      },
+      "method": {
+        "lit": "GET"
+      },
+      "body": {
+        "keys": [
+          "... ( mode === 'register' ? { setupToken } : { } )",
+          "mode"
+        ]
+      },
+      "key": null
+    },
+    {
+      "kind": "api",
+      "path": {
+        "lit": "/auth/passkey/verify"
+      },
+      "method": {
+        "lit": "GET"
+      },
+      "body": {
+        "keys": [
+          "response"
+        ]
+      },
+      "key": null
+    }
+  ],
+  "commerce-plan.js": [],
+  "commerce-save-scope.js": [],
+  "commerce-services.js": [],
+  "commerce-shell.js": [],
+  "commerce-shop-categories.js": [],
+  "commerce-shop-v2.js": [],
+  "commerce-support.js": [],
+  "commerce-truth.js": [],
+  "commerce-wave0.js": [],
+  "commerce-waves.js": [],
+  "commerce.html": [],
+  "commerce.js": [
+    {
+      "kind": "api",
+      "path": {
+        "lit": "/auth/logout"
+      },
+      "method": {
+        "lit": "GET"
+      },
+      "body": {
+        "keys": []
+      },
+      "key": null
+    },
+    {
+      "kind": "api",
+      "path": {
+        "lit": "/auth/preview"
+      },
+      "method": {
+        "lit": "GET"
+      },
+      "body": {
+        "keys": [
+          "role"
+        ]
+      },
+      "key": null
+    },
+    {
+      "kind": "api",
+      "path": {
+        "lit": "/books"
+      },
+      "method": {
+        "lit": "GET"
+      },
+      "body": null,
+      "key": null
+    },
+    {
+      "kind": "api",
+      "path": {
+        "lit": "/books/consent"
+      },
+      "method": {
+        "lit": "GET"
+      },
+      "body": {
+        "keys": [
+          "enabled"
+        ]
+      },
+      "key": null
+    },
+    {
+      "kind": "api",
+      "path": {
+        "lit": "/books/entries"
+      },
+      "method": {
+        "lit": "POST"
+      },
+      "body": {
+        "src": "booksRequest.body"
+      },
+      "key": {
+        "src": "booksRequest.key"
+      }
+    },
+    {
+      "kind": "api",
+      "path": {
+        "lit": "/books/plan"
+      },
+      "method": {
+        "lit": "PUT"
+      },
+      "body": {
+        "src": "planRequest.body"
+      },
+      "key": {
+        "src": "planRequest.key"
+      }
+    },
+    {
+      "kind": "api",
+      "path": {
+        "lit": "/cancel"
+      },
+      "method": {
+        "lit": "POST"
+      },
+      "body": {
+        "keys": [
+          "expectedRevision",
+          "orderId"
+        ]
+      },
+      "key": {
+        "src": "tap.key"
+      }
+    },
+    {
+      "kind": "api",
+      "path": {
+        "lit": "/catalogue"
+      },
+      "method": {
+        "lit": "GET"
+      },
+      "body": null,
+      "key": null
+    },
+    {
+      "kind": "api",
+      "path": {
+        "lit": "/earn"
+      },
+      "method": {
+        "lit": "GET"
+      },
+      "body": null,
+      "key": null
+    },
+    {
+      "kind": "api",
+      "path": {
+        "lit": "/earn/applications"
+      },
+      "method": {
+        "lit": "GET"
+      },
+      "body": null,
+      "key": null
+    },
+    {
+      "kind": "api",
+      "path": {
+        "lit": "/earn/applications"
+      },
+      "method": {
+        "lit": "POST"
+      },
+      "body": {
+        "src": "earnPending.body"
+      },
+      "key": {
+        "src": "earnPending.key"
+      }
+    },
+    {
+      "kind": "api",
+      "path": {
+        "lit": "/earn/applications/withdraw"
+      },
+      "method": {
+        "lit": "POST"
+      },
+      "body": {
+        "keys": [
+          "applicationId",
+          "expectedRevision"
+        ]
+      },
+      "key": {
+        "src": "tap.key"
+      }
+    },
+    {
+      "kind": "api",
+      "path": {
+        "lit": "/membership"
+      },
+      "method": {
+        "lit": "GET"
+      },
+      "body": null,
+      "key": null
+    },
+    {
+      "kind": "api",
+      "path": {
+        "lit": "/membership/enrol"
+      },
+      "method": {
+        "lit": "GET"
+      },
+      "body": {
+        "keys": [
+          "consent",
+          "fullName",
+          "preferredLanguage"
+        ]
+      },
+      "key": null
+    },
+    {
+      "kind": "api",
+      "path": {
+        "lit": "/membership/recovery"
+      },
+      "method": {
+        "lit": "GET"
+      },
+      "body": {
+        "keys": [
+          "oldPhone"
+        ]
+      },
+      "key": null
+    },
+    {
+      "kind": "api",
+      "path": {
+        "lit": "/nests"
+      },
+      "method": {
+        "lit": "GET"
+      },
+      "body": null,
+      "key": null
+    },
+    {
+      "kind": "api",
+      "path": {
+        "lit": "/nests/availability"
+      },
+      "method": {
+        "lit": "GET"
+      },
+      "body": {
+        "keys": [
+          "start"
+        ]
+      },
+      "key": null
+    },
+    {
+      "kind": "api",
+      "path": {
+        "lit": "/nests/bookings"
+      },
+      "method": {
+        "lit": "GET"
+      },
+      "body": null,
+      "key": null
+    },
+    {
+      "kind": "api",
+      "path": {
+        "lit": "/nests/bookings"
+      },
+      "method": {
+        "lit": "POST"
+      },
+      "body": {
+        "src": "nestPending.body"
+      },
+      "key": {
+        "src": "nestPending.key"
+      }
+    },
+    {
+      "kind": "api",
+      "path": {
+        "lit": "/nests/cancel"
+      },
+      "method": {
+        "lit": "GET"
+      },
+      "body": {
+        "keys": [
+          "bookingId"
+        ]
+      },
+      "key": null
+    },
+    {
+      "kind": "api",
+      "path": {
+        "lit": "/nests/quote"
+      },
+      "method": {
+        "lit": "GET"
+      },
+      "body": {
+        "src": "body"
+      },
+      "key": null
+    },
+    {
+      "kind": "api",
+      "path": {
+        "lit": "/orders"
+      },
+      "method": {
+        "lit": "GET"
+      },
+      "body": null,
+      "key": null
+    },
+    {
+      "kind": "api",
+      "path": {
+        "lit": "/orders"
+      },
+      "method": {
+        "lit": "GET"
+      },
+      "body": null,
+      "key": null
+    },
+    {
+      "kind": "api",
+      "path": {
+        "lit": "/orders"
+      },
+      "method": {
+        "lit": "POST"
+      },
+      "body": {
+        "src": "pending.body"
+      },
+      "key": {
+        "src": "pending.key"
+      }
+    },
+    {
+      "kind": "api",
+      "path": {
+        "lit": "/partners"
+      },
+      "method": {
+        "lit": "GET"
+      },
+      "body": null,
+      "key": null
+    },
+    {
+      "kind": "api",
+      "path": {
+        "lit": "/partners/referrals"
+      },
+      "method": {
+        "lit": "GET"
+      },
+      "body": null,
+      "key": null
+    },
+    {
+      "kind": "api",
+      "path": {
+        "lit": "/partners/referrals"
+      },
+      "method": {
+        "lit": "GET"
+      },
+      "body": {
+        "keys": [
+          "consent",
+          "consentVersion",
+          "fields",
+          "partnerId"
+        ]
+      },
+      "key": null
+    },
+    {
+      "kind": "api",
+      "path": {
+        "lit": "/partners/withdraw"
+      },
+      "method": {
+        "lit": "GET"
+      },
+      "body": {
+        "keys": [
+          "referralId"
+        ]
+      },
+      "key": null
+    },
+    {
+      "kind": "api",
+      "path": {
+        "lit": "/quote"
+      },
+      "method": {
+        "lit": "GET"
+      },
+      "body": {
+        "src": "body"
+      },
+      "key": null
+    },
+    {
+      "kind": "api",
+      "path": {
+        "lit": "/recovery"
+      },
+      "method": {
+        "lit": "GET"
+      },
+      "body": {
+        "keys": [
+          "memberId",
+          "newPhone"
+        ]
+      },
+      "key": null
+    },
+    {
+      "kind": "api",
+      "path": {
+        "lit": "/support"
+      },
+      "method": {
+        "lit": "GET"
+      },
+      "body": null,
+      "key": null
+    },
+    {
+      "kind": "api",
+      "path": {
+        "lit": "/support"
+      },
+      "method": {
+        "lit": "GET"
+      },
+      "body": {
+        "src": "fields"
+      },
+      "key": null
+    },
+    {
+      "kind": "api",
+      "path": {
+        "src": "'/books/plan?month=' + planMonth ( )"
+      },
+      "method": {
+        "lit": "GET"
+      },
+      "body": null,
+      "key": null
+    },
+    {
+      "kind": "api",
+      "path": {
+        "src": "loginPath ( cat )"
+      },
+      "method": {
+        "lit": "GET"
+      },
+      "body": {
+        "src": "passwordBody ( fields , { phone } )"
+      },
+      "key": null
+    },
+    {
+      "kind": "api",
+      "path": {
+        "src": "loginPath ( cat )"
+      },
+      "method": {
+        "lit": "GET"
+      },
+      "body": {
+        "src": "passwordBody ( { password : pendingPassword , remember : rememberOn ( fields ) } , { phone : authPhone } )"
+      },
+      "key": null
+    },
+    {
+      "kind": "api",
+      "path": {
+        "src": "path"
+      },
+      "method": {
+        "lit": "GET"
+      },
+      "body": null,
+      "key": null
+    },
+    {
+      "kind": "fetch",
+      "url": {
+        "src": "'/api/commerce' + path"
+      },
+      "method": {
+        "src": "body === undefined ? 'GET' : method"
+      }
+    },
+    {
+      "kind": "load",
+      "key": {
+        "lit": "nia-commerce-bag"
+      }
+    },
+    {
+      "kind": "load",
+      "key": {
+        "lit": "nia-commerce-cancel-pending"
+      }
+    },
+    {
+      "kind": "load",
+      "key": {
+        "lit": "nia-commerce-cancel-pending"
+      }
+    },
+    {
+      "kind": "load",
+      "key": {
+        "lit": "nia-commerce-pending"
+      }
+    },
+    {
+      "kind": "load",
+      "key": {
+        "lit": "nia-earn-pending"
+      }
+    },
+    {
+      "kind": "load",
+      "key": {
+        "lit": "nia-earn-withdraw-pending"
+      }
+    },
+    {
+      "kind": "load",
+      "key": {
+        "lit": "nia-nest-pending"
+      }
+    },
+    {
+      "kind": "load",
+      "key": {
+        "src": "key"
+      }
+    },
+    {
+      "kind": "save",
+      "key": {
+        "lit": "nia-commerce-bag"
+      }
+    },
+    {
+      "kind": "save",
+      "key": {
+        "lit": "nia-commerce-bag"
+      }
+    },
+    {
+      "kind": "save",
+      "key": {
+        "lit": "nia-commerce-bag"
+      }
+    },
+    {
+      "kind": "save",
+      "key": {
+        "lit": "nia-commerce-bag"
+      }
+    },
+    {
+      "kind": "save",
+      "key": {
+        "lit": "nia-commerce-bag"
+      }
+    },
+    {
+      "kind": "save",
+      "key": {
+        "lit": "nia-commerce-cancel-pending"
+      }
+    },
+    {
+      "kind": "save",
+      "key": {
+        "lit": "nia-commerce-cancel-pending"
+      }
+    },
+    {
+      "kind": "save",
+      "key": {
+        "lit": "nia-commerce-cancel-pending"
+      }
+    },
+    {
+      "kind": "save",
+      "key": {
+        "lit": "nia-commerce-pending"
+      }
+    },
+    {
+      "kind": "save",
+      "key": {
+        "lit": "nia-commerce-pending"
+      }
+    },
+    {
+      "kind": "save",
+      "key": {
+        "lit": "nia-commerce-pending"
+      }
+    },
+    {
+      "kind": "save",
+      "key": {
+        "lit": "nia-commerce-pending"
+      }
+    },
+    {
+      "kind": "save",
+      "key": {
+        "lit": "nia-commerce-pending"
+      }
+    },
+    {
+      "kind": "save",
+      "key": {
+        "lit": "nia-earn-pending"
+      }
+    },
+    {
+      "kind": "save",
+      "key": {
+        "lit": "nia-earn-pending"
+      }
+    },
+    {
+      "kind": "save",
+      "key": {
+        "lit": "nia-earn-pending"
+      }
+    },
+    {
+      "kind": "save",
+      "key": {
+        "lit": "nia-earn-pending"
+      }
+    },
+    {
+      "kind": "save",
+      "key": {
+        "lit": "nia-earn-pending"
+      }
+    },
+    {
+      "kind": "save",
+      "key": {
+        "lit": "nia-earn-withdraw-pending"
+      }
+    },
+    {
+      "kind": "save",
+      "key": {
+        "lit": "nia-earn-withdraw-pending"
+      }
+    },
+    {
+      "kind": "save",
+      "key": {
+        "lit": "nia-earn-withdraw-pending"
+      }
+    },
+    {
+      "kind": "save",
+      "key": {
+        "lit": "nia-language"
+      }
+    },
+    {
+      "kind": "save",
+      "key": {
+        "lit": "nia-nest-pending"
+      }
+    },
+    {
+      "kind": "save",
+      "key": {
+        "lit": "nia-nest-pending"
+      }
+    },
+    {
+      "kind": "save",
+      "key": {
+        "lit": "nia-nest-pending"
+      }
+    },
+    {
+      "kind": "save",
+      "key": {
+        "lit": "nia-nest-pending"
+      }
+    },
+    {
+      "kind": "save",
+      "key": {
+        "lit": "nia-nest-pending"
+      }
+    },
+    {
+      "kind": "save",
+      "key": {
+        "lit": "nia-nest-pending"
+      }
+    },
+    {
+      "kind": "string",
+      "value": "/api/commerce"
+    }
+  ]
+}

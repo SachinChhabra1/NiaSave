@@ -837,7 +837,6 @@ export default {
   "Search by voice": "কণ্ঠে খুঁজুন",
   "Search": "খুঁজুন",
   "Prices are not up yet. To order now, call Nia.": "দাম এখনও ঠিক হয়নি। এখন অর্ডার করতে নিয়াকে ফোন করুন।",
-  "Prices come soon. Call Nia to order now.": "দাম শীঘ্রই আসবে। এখন অর্ডার করতে নিয়াকে ফোন করুন।",
   "Final price and availability are checked by Central at review.": "চূড়ান্ত দাম ও প্রাপ্যতা পর্যালোচনার সময় সেন্ট্রাল যাচাই করবে।",
   "Choose a product to start your bag.": "ব্যাগ শুরু করতে একটি পণ্য বেছে নিন।",
   "Nothing to add yet. Call Nia to order.": "এখন যোগ করার কিছু নেই। অর্ডার করতে নিয়াকে ফোন করুন।",

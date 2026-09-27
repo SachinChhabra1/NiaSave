@@ -609,7 +609,6 @@ export default {
   "Search by voice": "குரலால் தேடவும்",
   "Search": "தேடவும்",
   "Prices are not up yet. To order now, call Nia.": "விலை இன்னும் போடவில்லை. இப்போது ஆர்டர் செய்ய நியாவை போன் செய்யுங்கள்.",
-  "Prices come soon. Call Nia to order now.": "விலை விரைவில் வரும். இப்போது ஆர்டர் செய்ய நியாவை போன் செய்யுங்கள்.",
   "Final price and availability are checked by Central at review.": "இறுதி விலையும் கிடைப்பும் சென்ட்ரல் மதிப்பாய்வில் சரிபார்க்கப்படும்.",
   "Choose a product to start your bag.": "பையைத் தொடங்க ஒரு பொருளைத் தேர்ந்தெடுக்கவும்.",
   "Nothing to add yet. Call Nia to order.": "இப்போது சேர்க்க ஒன்றும் இல்லை. ஆர்டர் செய்ய நியாவை போன் செய்யுங்கள்.",

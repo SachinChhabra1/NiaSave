@@ -442,7 +442,6 @@ export default {
   "Rice, atta, oil at low prices": "ಅಕ್ಕಿ, ಆಟಾ, ಎಣ್ಣೆ, ಕಡಿಮೆ ಬೆಲೆ",
   "Price coming soon": "ಬೆಲೆ ಬೇಗ ಬರುತ್ತದೆ",
   "Prices are not up yet. To order now, call Nia.": "ಬೆಲೆ ಇನ್ನೂ ಹಾಕಿಲ್ಲ. ಈಗ ಆರ್ಡರ್ ಮಾಡಲು ನಿಯಾಗೆ ಫೋನ್ ಮಾಡಿ.",
-  "Prices come soon. Call Nia to order now.": "ಬೆಲೆ ಬೇಗ ಬರುತ್ತದೆ. ಈಗ ಆರ್ಡರ್ ಮಾಡಲು ನಿಯಾಗೆ ಫೋನ್ ಮಾಡಿ.",
   "Shop is closed for now. Please try later.": "ಈಗ ಮುಚ್ಚಿದೆ. ನಂತರ ಪ್ರಯತ್ನಿಸಿ.",
   "Coming soon": "ಬೇಗ ಬರುತ್ತದೆ",
   "Search for rice, oil, soap": "ಅಕ್ಕಿ, ಎಣ್ಣೆ, ಸೋಪು ಹುಡುಕಿ",

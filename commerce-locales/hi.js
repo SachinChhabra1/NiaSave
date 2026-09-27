@@ -247,7 +247,6 @@ export default {
   "Search by voice": "बोलकर खोजें",
   "Search": "खोजें",
   "Prices are not up yet. To order now, call Nia.": "कीमत अभी नहीं लगी है। अभी ऑर्डर के लिए निया को फ़ोन करें।",
-  "Prices come soon. Call Nia to order now.": "कीमत जल्द आएगी। अभी ऑर्डर के लिए निया को फ़ोन करें।",
   "Final price and availability are checked by Central at review.": "अंतिम कीमत और उपलब्धता सेंट्रल समीक्षा के समय जाँचेगा।",
   "Choose a product to start your bag.": "बैग शुरू करने के लिए सामान चुनें।",
   "Nothing to add yet. Call Nia to order.": "अभी जोड़ने को कुछ नहीं। ऑर्डर के लिए निया को फ़ोन करें।",

@@ -34,7 +34,7 @@ export function shopSourceCopy(owner){
     missing:'Catalogue details missing from Central',empty:'No products published yet',
     photo:'',unit:'Price coming soon',
     categories:'Central has not assigned these products to the six Shop categories.',
-    ranking:'Prices come soon. Call Nia to order now.',
+    ranking:'Prices are not up yet. To order now, call Nia.',
     review:'Final price and availability are checked by Central at review.',
   };
 }

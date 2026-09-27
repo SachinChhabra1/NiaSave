@@ -420,7 +420,6 @@ export default {
   "Rice, atta, oil at low prices": "तांदूळ, पीठ, तेल, कमी भावात",
   "Price coming soon": "किंमत लवकर येईल",
   "Prices are not up yet. To order now, call Nia.": "किंमत अजून लागली नाही. आत्ता ऑर्डरसाठी नियाला फोन करा.",
-  "Prices come soon. Call Nia to order now.": "किंमत लवकर येईल. आत्ता ऑर्डरसाठी नियाला फोन करा.",
   "Shop is closed for now. Please try later.": "आत्ता बंद आहे. नंतर प्रयत्न करा.",
   "Coming soon": "लवकर येईल",
   "Search for rice, oil, soap": "तांदूळ, तेल, साबण शोधा",

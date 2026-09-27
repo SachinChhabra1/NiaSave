@@ -27,7 +27,7 @@ test('empty Shop at 360px stays under 1500px with photos and no placeholder box'
   await expect(page.locator('#content .money-honesty-chip')).toHaveCount(0);
   await expect(page.locator('.shop-v2')).toContainText('Search for rice, oil, soap');
   await expect(page.locator('.shop-v2')).toContainText('These goods');
-  await expect(page.locator('.shop-v2')).toContainText('Prices come soon. Call Nia to order now.');
+  await expect(page.locator('.shop-v2')).toContainText('Prices are not up yet. To order now, call Nia.');
   await expect(page.locator('.shop-v2')).not.toContainText('Shop is closed for now');
   await expect(page.locator('.shop-v2')).toContainText('Nothing to add yet. Call Nia to order.');
   const columns = await page.locator('.shop-category-grid').evaluate(el => getComputedStyle(el).gridTemplateColumns.split(' ').length);
@@ -36,7 +36,7 @@ test('empty Shop at 360px stays under 1500px with photos and no placeholder box'
   expect(height).toBeLessThan(1500);
 });
 
-test('a closed Shop does not also say that prices come soon', async ({page}) => {
+test('a closed Shop shows only the closed line', async ({page}) => {
   await openShop(page, {
     width: 360,
     lang: 'en',

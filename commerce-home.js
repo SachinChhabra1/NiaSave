@@ -1,4 +1,37 @@
 import {mapModel} from './commerce-earn-map.js';
+import {NIA_HELP_PHONE,callNiaMarkup} from './commerce-support.js';
+
+const CATEGORY_WORD={rice:'Rice',atta:'Atta',oil:'Oil',pulses:'Pulses',soap:'Soap',tea:'Tea'};
+
+// The server marks one row. The first marked row is shown. Prices are not compared.
+function shopPriceFact(catalogue){
+  if(catalogue?.status!=='ready'||!catalogue.data||typeof catalogue.data!=='object')return null;
+  const data=catalogue.data;
+  if(typeof data.lowestUnitPriceLine==='string'&&data.lowestUnitPriceLine.trim())return {line:data.lowestUnitPriceLine.trim()};
+  const products=Array.isArray(data.products)?data.products:[];
+  const rows=data.preview===true?products:products.filter(product=>product&&product.test!==true&&product.preview!==true);
+  for(const product of rows){
+    if(typeof product.lowestUnitPriceLine==='string'&&product.lowestUnitPriceLine.trim())return {line:product.lowestUnitPriceLine.trim()};
+  }
+  const flagged=rows.find(product=>product.lowestUnitPriceInCategory===true);
+  if(!flagged)return null;
+  const category=CATEGORY_WORD[flagged.shopCategoryId||flagged.category];
+  const paise=flagged.unitPricePaise;
+  const unit=flagged.unit;
+  if(!category||!Number.isSafeInteger(paise)||paise<=0||(unit!=='kg'&&unit!=='litre'))return null;
+  return {category,paise,unit};
+}
+
+function rupees(paise){
+  const value=paise/100;
+  return Number.isInteger(value)?String(value):value.toFixed(2);
+}
+
+function priceChip(fact,t,esc){
+  if(!fact)return '';
+  const line=fact.line?fact.line:`${t(fact.category)}: ₹${rupees(fact.paise)} ${fact.unit==='kg'?t('a kilo'):t('a litre')}`;
+  return `<span class="home-tile-price">${esc(line)}</span>`;
+}
 
 // A read-only presentation of responses already scoped by Central.
 export function homeDashboardModel({stay,earn,fee,send,catalogue,online=true}){
@@ -20,25 +53,22 @@ export function homeDashboardModel({stay,earn,fee,send,catalogue,online=true}){
   const sendView=state(send)==='ready'?(Array.isArray(send.data.months)?'ready':'source_missing'):state(send);
   // The current membership response has no fee contract. Never infer a membership fee from a stay quote or payment.
   const feeView=state(fee)==='ready'?'source_missing':state(fee);
-  return {stay:{state:stayView,booking:stayView==='ready'?active:null},job:{state:jobView,job:jobView==='ready'?jobs[0]:null},fee:{state:feeView},tiles:{live:stayView,earn:jobView,shop:shopView,send:sendView}};
+  return {stay:{state:stayView,booking:stayView==='ready'?active:null},job:{state:jobView,job:jobView==='ready'?jobs[0]:null},fee:{state:feeView},tiles:{live:stayView,earn:jobView,shop:shopView,send:sendView},shopPrice:shopPriceFact(catalogue)};
 }
 
-export function homeDashboardMarkup(model,{t,esc,icon,online}){
-  const stateCopy={
-    loading:t('Getting your details'),
-    ready:t('Current information'),
-    stale:t('Information needs refreshing'),
-    source_missing:t('Central details missing'),
-    unavailable:t('Temporarily unavailable'),
-    empty:t('Nothing to show yet'),
-    offline:t('Offline. Reconnect to check')
-  };
-  const copy=(state)=>esc(stateCopy[state]||stateCopy.unavailable);
-  const card=(name,action,state,body)=>`<article class="home-attention-card" data-state="${esc(state)}"><div class="home-card-heading"><span aria-hidden="true">${icon(action)}</span><h3>${esc(name)}</h3></div><div role="status">${body||`<p>${copy(state)}</p>`}</div><button type="button" data-action="${action}">${esc(t('View details'))}</button></article>`;
-  const stay=model.stay, job=model.job;
-  const stayText=stay.state==='ready'?`<p><strong>${esc(stay.booking.name||t('Your Nest'))}</strong></p><p>${esc(stay.booking.status==='in'?t('Checked in'):t('Reservation recorded by Central'))}</p>`:stay.state==='empty'?'<p>'+esc(t('No current stay or reservation recorded'))+'</p>':'<p>'+copy(stay.state)+'</p>';
-  const feeText='<p>'+copy(model.fee.state)+'</p>'+(model.fee.state==='source_missing'?'<p>'+esc(t('Membership fee details are not available from Central'))+'</p>':'');
-  const jobText=job.state==='ready'?`<p><strong>${esc(t(job.job.title))}</strong></p><p>${esc(job.job.employer)}</p><p>${esc(t('Open role near your verified Nest'))}</p>`:job.state==='empty'?'<p>'+esc(t('No verified nearby open jobs right now'))+'</p>':'<p>'+copy(job.state)+'</p>';
-  const tiles=[['live',t('Live'),t('See your Nest')],['earn',t('Earn'),t('See jobs')],['shop',t('Shop'),t('Browse Essentials')],['send',t('Send'),t('See your plan')]];
-  return `<section class="home-dashboard" aria-label="${esc(t('Home dashboard'))}"><header><h1>${esc(t('Your NiaSave home'))}</h1></header><section aria-labelledby="home-attention-title"><h2 id="home-attention-title">${esc(t('Needs attention'))}</h2><div class="home-attention-grid"><article class="home-attention-card" data-state="${esc(stay.state)}"><div class="home-card-heading"><span aria-hidden="true">${icon('live')}</span><h3>${esc(t('Stay and membership fee'))}</h3></div><div role="status">${stayText}<p class="home-fee-label">${esc(t('Membership fee'))}</p>${feeText}</div><button type="button" data-action="live">${esc(t('View your stay'))}</button></article>${card(t('Nearby job'),'earn',job.state,jobText)}</div></section><section aria-labelledby="home-less-title"><h2 id="home-less-title">${esc(t('Explore LESS'))}</h2><div class="home-tiles">${tiles.map(([action,name,link])=>`<button type="button" class="home-tile" data-action="${action}" data-state="${esc(model.tiles[action])}"><span aria-hidden="true">${icon(action)}</span><strong>${esc(name)}</strong><small>${copy(model.tiles[action])}</small><span class="home-tile-link">${esc(link)}</span></button>`).join('')}</div></section></section>`;
+export function homeDashboardMarkup(model,{t,esc,icon}){
+  const needs=[];
+  const stay=model.stay;
+  if(stay?.state==='ready'&&stay.booking){
+    const booked=stay.booking.status==='in'?t('Checked in'):t('Your stay is booked.');
+    needs.push(`<article class="home-attention-card" data-state="ready"><div class="home-card-heading"><span aria-hidden="true">${icon('live')}</span><h3>${esc(t('Your stay'))}</h3></div><div role="status"><p><strong>${esc(stay.booking.name||t('Your stay'))}</strong></p><p>${esc(booked)}</p></div><button type="button" data-action="live">${esc(t('View your stay'))}</button></article>`);
+  }
+  const job=model.job;
+  if(job?.state==='ready'&&job.job){
+    needs.push(`<article class="home-attention-card" data-state="ready"><div class="home-card-heading"><span aria-hidden="true">${icon('earn')}</span><h3>${esc(t('Nearby job'))}</h3></div><div role="status"><p><strong>${esc(t(job.job.title))}</strong></p><p>${esc(job.job.employer)}</p></div><button type="button" data-action="earn">${esc(t('See jobs'))}</button></article>`);
+  }
+  const attention=needs.length?`<section aria-labelledby="home-attention-title"><h2 id="home-attention-title">${esc(t('Needs attention'))}</h2><div class="home-attention-grid">${needs.join('')}</div></section>`:'';
+  const tiles=[['live',t('Live'),t('A safe place to stay near work'),'/assets/studio-bunk-lockers.jpg',''],['earn',t('Earn'),t('Jobs near where you stay'),'/assets/earn.jpg',''],['shop',t('Shop'),t('Rice, atta, oil at low prices'),'/assets/home-rice.jpg',priceChip(model.shopPrice,t,esc)],['send',t('Send'),t('Save money to send home'),'/assets/send-purpose-family.jpg','']];
+  const talk=callNiaMarkup({t,esc,icon,phone:NIA_HELP_PHONE,label:t('Call'),className:'home-call'});
+  return `<section class="home-dashboard" aria-label="${esc(t('Home dashboard'))}"><header class="home-title"><h1>${esc(t('What do you need today?'))}</h1></header>${attention}<div class="home-tiles">${tiles.map(([action,name,line,src,extra])=>`<button type="button" class="home-tile home-tile-${action}" data-action="${action}"><img src="${esc(src)}" alt="" width="640" height="360"><span class="home-tile-copy"><span class="home-tile-name">${icon(action)}<strong>${esc(name)}</strong></span><span class="home-tile-line">${esc(line)}</span>${extra}</span></button>`).join('')}</div><section class="home-talk"><span class="home-talk-mark" aria-hidden="true">${icon('phone')}</span><span class="home-talk-copy"><strong>${esc(t('Talk to us'))}</strong><span>${esc(t('The Nia team will help you.'))}</span></span>${talk}</section></section>`;
 }

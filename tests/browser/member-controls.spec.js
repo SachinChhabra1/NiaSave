@@ -36,8 +36,9 @@ for (const width of [320, 390, 760, 761, 960, 1280, 1440]) {
       await expect(page.locator('#less-nav')).toHaveCSS('grid-template-columns', /px .*px .*px .*px/);
     }
     if (unavailable) {
-      await expect(page.locator('.home-dashboard')).toContainText('Temporarily unavailable');
-      await page.locator('#content').getByRole('button', { name: /Browse Essentials/ }).click();
+      await expect(page.locator('.home-dashboard')).toContainText('Rice, atta, oil at low prices');
+      await expect(page.locator('.home-dashboard')).not.toContainText('Temporarily unavailable');
+      await page.locator('#content').getByRole('button', { name: /Rice, atta, oil at low prices/ }).click();
     }
     await expect(page.locator('.shop-read-state')).toHaveAttribute('data-state', unavailable ? 'unavailable' : 'empty');
     const nav = page.getByRole('navigation', { name: 'LESS navigation' });

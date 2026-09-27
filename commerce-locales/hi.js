@@ -307,6 +307,7 @@ export default {
   "Soonest": "सबसे जल्दी",
   "You are asking for:": "आप यह तारीख माँग रहे हैं:",
   "We could not get the dates. Try again, or call Nia.": "तारीखें नहीं मिलीं। फिर कोशिश करें, या निया को फ़ोन करें।",
+  "Try again": "फिर कोशिश करें",
   "See Nests": "नेस्ट देखें",
   "Log in to see your money.": "अपना पैसा देखने के लिए लॉग इन करें।",
   "Log in to see the money you send home.": "घर भेजा पैसा देखने के लिए लॉग इन करें।",

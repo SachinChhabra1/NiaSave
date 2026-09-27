@@ -458,4 +458,5 @@ export default {
   "a litre": "ಲೀಟರ್",
   "Your stay": "ನಿಮ್ಮ ವಾಸದ ಜಾಗ",
   "Your stay is booked.": "ನಿಮ್ಮ ವಾಸದ ಜಾಗ ಬುಕ್ ಆಗಿದೆ.",
+  "Details did not load.": "ವಿವರ ಬಂದಿಲ್ಲ.",
 };

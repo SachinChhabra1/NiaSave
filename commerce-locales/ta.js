@@ -646,4 +646,5 @@ export default {
   "a litre": "லிட்டர்",
   "Your stay": "உங்கள் தங்கும் இடம்",
   "Your stay is booked.": "உங்கள் தங்கும் இடம் புக் ஆகிவிட்டது.",
+  "Details did not load.": "விவரம் ஏறவில்லை.",
 };

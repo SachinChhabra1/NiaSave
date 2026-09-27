@@ -876,4 +876,5 @@ export default {
   "a litre": "লিটার",
   "Your stay": "আপনার থাকার জায়গা",
   "Your stay is booked.": "আপনার থাকার জায়গা বুক হয়েছে।",
+  "Details did not load.": "তথ্য আসেনি।",
 };

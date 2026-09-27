@@ -75,6 +75,8 @@ test('an empty help number opens Help and the pause line stays short', async ({p
   await page.goto('/#home');
   await expect(page.locator('.pause-note-line')).toHaveText('Booking starts soon. Call Nia for help.');
   await expect(page.locator('.home-dashboard')).not.toContainText('Getting your details');
+  await expect(page.locator('#sync-state')).toHaveText('Details did not load.');
+  await expect(page.locator('#content')).not.toContainText('Getting your details');
   await expect(page.locator('.home-attention-card')).toHaveCount(0);
   await expect(page.locator('#call-nia')).toHaveAttribute('data-action', 'help');
   await page.locator('#call-nia').click();

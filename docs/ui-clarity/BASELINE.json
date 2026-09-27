@@ -1,0 +1,1394 @@
+{
+  "entries": [
+    {
+      "kind": "copy",
+      "file": "commerce-books.js",
+      "string": "Illustrative source record"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-books.js",
+      "string": "Source"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-books.js",
+      "string": "Your entries are editable. Source payments are corrected by your Nia team."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-books.js",
+      "string": "स्रोत"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-books.js",
+      "string": "स्रोत रिकॉर्ड का उदाहरण"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-home.js",
+      "string": "Central details missing"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-home.js",
+      "string": "Checking Central updates"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-home.js",
+      "string": "Explore LESS"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-home.js",
+      "string": "Membership fee details are not available from Central"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-home.js",
+      "string": "Reservation recorded by Central"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-home.js",
+      "string": "Updates shown here come from Central"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "Browse Essentials from Central"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "Catalogue details missing from Central"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "Catalogue details not available"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "Catalogue from Central"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "Catalogue from NiaSave"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "Catalogue needs refreshing"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "Catalogue synced"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "Catalogue temporarily unavailable"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "Catalogue unavailable. Refresh to check reservations."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "Central could not be reached. Your typed amounts are still here; try again."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "Central details missing"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "Central has not assigned these products to the six Shop categories."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "Central member lookup unavailable — try again or use password if offered."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "Checking Central jobs"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "Checking Central updates"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "Explore LESS"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "Final price and availability are checked by Central at review."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "Illustrative source record"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "Job projection is temporarily unavailable"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "Loading Central catalogue"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "Loading NiaSave catalogue"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "Membership fee details are not available from Central"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "No products published yet"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "No published products"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "Pack details unavailable — ask Nia"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "Photo not supplied by Central"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "Pickup operator not yet provided by Central"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "Preview access — no real OTP, orders or payment."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "Refresh the catalogue to check current availability."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "Reservation recorded by Central"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "Search the catalogue"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "Source"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "This account has catalogue access only."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "This draft stays only in this open session. Saving to your account will be available when Central is connected."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "Unit price not supplied by Central"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "Unit prices and lowest-price labels await Central. Products are shown without ranking."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "Updates shown here come from Central"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "Your entries are editable. Source payments are corrected by your Nia team."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "একক দাম ও সবচেয়ে কম দামের চিহ্ন সেন্ট্রাল দেয়নি। পণ্যগুলি ক্রম না দিয়ে দেখানো হয়েছে।"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "এখনও কোনো পণ্য প্রকাশিত হয়নি"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "এখানকার তথ্য সেন্ট্রাল থেকে আসে"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "চূড়ান্ত দাম ও প্রাপ্যতা পর্যালোচনার সময় সেন্ট্রাল যাচাই করবে।"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "প্যাকের তথ্য নেই — নিয়াকে জিজ্ঞাসা করুন"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "প্রকাশিত পণ্য নেই"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "লেস দেখুন"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "সেন্ট্রাল এই পণ্যগুলিকে দোকানের ছয়টি বিভাগে রাখেনি।"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "সেন্ট্রাল একক দাম দেয়নি"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "সেন্ট্রাল এখনও সংগ্রহের দায়িত্বে থাকা কর্মীর নাম দেয়নি"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "সেন্ট্রাল ছবি দেয়নি"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "সেন্ট্রাল থেকে তালিকার বিবরণ পাওয়া যায়নি"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "সেন্ট্রাল থেকে পণ্যের তালিকা"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "সেন্ট্রাল থেকে সদস্যপদ ফি-র তথ্য পাওয়া যাচ্ছে না"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "সেন্ট্রাল নিশ্চিত করেছে"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "সেন্ট্রালে বুকিং নথিভুক্ত হয়েছে"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "সেন্ট্রালের চাকরি যাচাই হচ্ছে"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "সেন্ট্রালের তথ্য নেই"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "সেন্ট্রালের তথ্য যাচাই হচ্ছে"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "সেন্ট্রালের তালিকা লোড হচ্ছে"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/bn.js",
+      "string": "সেন্ট্রালের নিত্যপ্রয়োজনীয় পণ্য দেখুন"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/hi.js",
+      "string": "Browse Essentials from Central"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/hi.js",
+      "string": "Catalogue details missing from Central"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/hi.js",
+      "string": "Catalogue details not available"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/hi.js",
+      "string": "Catalogue from Central"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/hi.js",
+      "string": "Catalogue from NiaSave"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/hi.js",
+      "string": "Catalogue needs refreshing"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/hi.js",
+      "string": "Catalogue synced"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/hi.js",
+      "string": "Catalogue temporarily unavailable"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/hi.js",
+      "string": "Catalogue unavailable. Refresh to check reservations."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/hi.js",
+      "string": "Central details missing"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/hi.js",
+      "string": "Central has not assigned these products to the six Shop categories."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/hi.js",
+      "string": "Checking Central jobs"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/hi.js",
+      "string": "Checking Central updates"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/hi.js",
+      "string": "Explore LESS"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/hi.js",
+      "string": "Final price and availability are checked by Central at review."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/hi.js",
+      "string": "Job projection is temporarily unavailable"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/hi.js",
+      "string": "Loading Central catalogue"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/hi.js",
+      "string": "Loading NiaSave catalogue"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/hi.js",
+      "string": "Membership fee details are not available from Central"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/hi.js",
+      "string": "No products published yet"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/hi.js",
+      "string": "No published products"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/hi.js",
+      "string": "Photo not supplied by Central"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/hi.js",
+      "string": "Pickup operator not yet provided by Central"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/hi.js",
+      "string": "Refresh the catalogue to check current availability."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/hi.js",
+      "string": "Reservation recorded by Central"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/hi.js",
+      "string": "Search the catalogue"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/hi.js",
+      "string": "Unit price not supplied by Central"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/hi.js",
+      "string": "Unit prices and lowest-price labels await Central. Products are shown without ranking."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/hi.js",
+      "string": "Updates shown here come from Central"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/hi.js",
+      "string": "अंतिम कीमत और उपलब्धता सेंट्रल समीक्षा के समय जाँचेगा।"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/hi.js",
+      "string": "अभी कोई उत्पाद प्रकाशित नहीं है"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/hi.js",
+      "string": "कोई प्रकाशित उत्पाद नहीं"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/hi.js",
+      "string": "प्रति इकाई कीमत और सबसे कम कीमत का चिह्न सेंट्रल से बाकी है। सामान बिना क्रम दिए दिखाया गया है।"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/hi.js",
+      "string": "यहाँ की जानकारी सेंट्रल से आती है"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/hi.js",
+      "string": "लेस देखें"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/hi.js",
+      "string": "विवरण के कुछ स्रोत उपलब्ध नहीं हैं"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/hi.js",
+      "string": "सेंट्रल की जानकारी उपलब्ध नहीं"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/hi.js",
+      "string": "सेंट्रल की नौकरियाँ जाँच रहे हैं"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/hi.js",
+      "string": "सेंट्रल की सूची लोड हो रही है"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/hi.js",
+      "string": "सेंट्रल ने इन उत्पादों को दुकान की छह श्रेणियों में नहीं रखा है।"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/hi.js",
+      "string": "सेंट्रल ने प्रति इकाई कीमत नहीं दी"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/hi.js",
+      "string": "सेंट्रल ने फोटो नहीं दी"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/hi.js",
+      "string": "सेंट्रल ने सामान देने वाले संचालक का नाम अभी नहीं दिया"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/hi.js",
+      "string": "सेंट्रल में बुकिंग दर्ज है"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/hi.js",
+      "string": "सेंट्रल से आई सामान की सूची"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/hi.js",
+      "string": "सेंट्रल से ज़रूरी सामान देखें"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/hi.js",
+      "string": "सेंट्रल से जानकारी जाँच रहे हैं"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/hi.js",
+      "string": "सेंट्रल से पुष्टि हुई"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/hi.js",
+      "string": "सेंट्रल से सदस्यता शुल्क की जानकारी उपलब्ध नहीं है"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/hi.js",
+      "string": "सेंट्रल से सूची का विवरण नहीं मिला"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/kn.js",
+      "string": "Central member lookup unavailable — try again or use password if offered."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/kn.js",
+      "string": "Central ಸದಸ್ಯ ಪರಿಶೀಲನೆ ಲಭ್ಯವಿಲ್ಲ — ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ ಅಥವಾ ಪಾಸ್‌ವರ್ಡ್ ನೀಡಿದ್ದರೆ ಬಳಸಿ."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/kn.js",
+      "string": "Pack details unavailable — ask Nia"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/kn.js",
+      "string": "Preview access — no real OTP, orders or payment."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/kn.js",
+      "string": "This account has catalogue access only."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/kn.js",
+      "string": "ಪ್ಯಾಕ್ ವಿವರ ಇಲ್ಲ — Nia ಕೇಳಿ"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/kn.js",
+      "string": "ಮುನ್ನೋಟ ಪ್ರವೇಶ — ನಿಜವಾದ OTP, ಆರ್ಡರ್ ಅಥವಾ ಪಾವತಿ ಇಲ್ಲ."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/bn.js",
+      "string": "Oil, soap, detergent — member price."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/bn.js",
+      "string": "Oil, soap, detergent — member price. Browse free. Phone only at checkout."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/bn.js",
+      "string": "We'll send a code to reserve this bag. Pay at pickup — not online."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/bn.js",
+      "string": "তেল, সাবান, ডিটারজেন্ট — সদস্য দাম।"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/bn.js",
+      "string": "তেল, সাবান, ডিটারজেন্ট — সদস্য দাম। বিনামূল্যে দেখুন। ফোন শুধু চেকআউটে।"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/bn.js",
+      "string": "ব্যাগ রাখতে কোড পাঠাব। পিকআপে টাকা — অনলাইনে নয়।"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/hi.js",
+      "string": "Central could not be reached. Your typed amounts are still here; try again."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/hi.js",
+      "string": "Illustrative source record"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/hi.js",
+      "string": "Oil, soap, detergent — member price."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/hi.js",
+      "string": "Oil, soap, detergent — member price. Browse free. Phone only at checkout."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/hi.js",
+      "string": "Source"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/hi.js",
+      "string": "This draft stays only in this open session. Saving to your account will be available when Central is connected."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/hi.js",
+      "string": "We'll send a code to reserve this bag. Pay at pickup — not online."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/hi.js",
+      "string": "Your entries are editable. Source payments are corrected by your Nia team."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/hi.js",
+      "string": "तेल, साबुन, डिटर्जेंट — सदस्य कीमत।"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/hi.js",
+      "string": "तेल, साबुन, डिटर्जेंट — सदस्य कीमत। मुफ़्त देखें। फोन केवल चेकआउट पर।"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/hi.js",
+      "string": "बैग रोकने के लिए कोड भेजेंगे। पिकअप पर भुगतान — ऑनलाइन नहीं।"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/hi.js",
+      "string": "यह मसौदा केवल इस खुले सत्र में रहता है। Central से जुड़ने पर खाते में सहेज सकेंगे।"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/hi.js",
+      "string": "सेंट्रल से संपर्क नहीं हो सका। आपकी लिखी रकमें यहीं हैं; फिर कोशिश करें।"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/hi.js",
+      "string": "स्रोत"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/hi.js",
+      "string": "स्रोत रिकॉर्ड का उदाहरण"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/kn.js",
+      "string": "Central could not be reached. Your typed amounts are still here; try again."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/kn.js",
+      "string": "Illustrative source record"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/kn.js",
+      "string": "Oil, soap, detergent — member price."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/kn.js",
+      "string": "Oil, soap, detergent — member price. Browse free. Phone only at checkout."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/kn.js",
+      "string": "Source"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/kn.js",
+      "string": "This draft stays only in this open session. Saving to your account will be available when Central is connected."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/kn.js",
+      "string": "We'll send a code to reserve this bag. Pay at pickup — not online."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/kn.js",
+      "string": "Your entries are editable. Source payments are corrected by your Nia team."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/kn.js",
+      "string": "ಈ ಕರಡು ಈ ತೆರೆದ ಸೆಷನ್‌ನಲ್ಲಿ ಮಾತ್ರ ಉಳಿಯುತ್ತದೆ. Central ಸಂಪರ್ಕವಾದಾಗ ಖಾತೆಗೆ ಉಳಿಸಬಹುದು."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/kn.js",
+      "string": "ಎಣ್ಣೆ, ಸಾಬೂನು, ಡಿಟರ್ಜೆಂಟ್ — ಸದಸ್ಯ ಬೆಲೆ. ಉಚಿತವಾಗಿ ನೋಡಿ. ಫೋನ್ ಚೆಕ್‌ಔಟ್‌ನಲ್ಲಿ ಮಾತ್ರ."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/mr.js",
+      "string": "Central could not be reached. Your typed amounts are still here; try again."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/mr.js",
+      "string": "Illustrative source record"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/mr.js",
+      "string": "Oil, soap, detergent — member price. Browse free. Phone only at checkout."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/mr.js",
+      "string": "Source"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/mr.js",
+      "string": "This draft stays only in this open session. Saving to your account will be available when Central is connected."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/mr.js",
+      "string": "Your entries are editable. Source payments are corrected by your Nia team."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/mr.js",
+      "string": "तेल, साबण, डिटर्जेंट — सदस्य किंमत. मोफत पाहा. फोन फक्त चेकआउटवर."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/mr.js",
+      "string": "सेंट्रलशी संपर्क होउ शकला नाही. तुम्ही लिहिलेल्या रकमा इथेच आहेत; पुन्हा प्रयत्न करा."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/mr.js",
+      "string": "स्रोत"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/mr.js",
+      "string": "स्रोत नोंदीचा नमुना"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/mr.js",
+      "string": "हा मसुदा फक्त या सुरू असलेल्या सत्रात राहतो. Central जोडल्यानंतर खात्यात जतन करता येईल."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/ta.js",
+      "string": "Central could not be reached. Your typed amounts are still here; try again."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/ta.js",
+      "string": "Illustrative source record"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/ta.js",
+      "string": "Oil, soap, detergent — member price."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/ta.js",
+      "string": "Oil, soap, detergent — member price. Browse free. Phone only at checkout."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/ta.js",
+      "string": "Source"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/ta.js",
+      "string": "This draft stays only in this open session. Saving to your account will be available when Central is connected."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/ta.js",
+      "string": "We'll send a code to reserve this bag. Pay at pickup — not online."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/ta.js",
+      "string": "Your entries are editable. Source payments are corrected by your Nia team."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/ta.js",
+      "string": "இந்த வரைவு இந்தத் திறந்த அமர்வில் மட்டும் இருக்கும். Central இணைந்ததும் கணக்கில் சேமிக்கலாம்."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/ta.js",
+      "string": "இந்தப் பையை முன்பதிவு செய்ய குறியீடு அனுப்புவோம். பிக்அப்பில் பணம் — ஆன்லைனில் அல்ல."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/ta.js",
+      "string": "எண்ணெய், சோப்பு, டிடர்ஜென்ட் — உறுப்பினர் விலை."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/ta.js",
+      "string": "எண்ணெய், சோப்பு, டிடர்ஜென்ட் — உறுப்பினர் விலை. இலவசமாக பாருங்கள். போன் செக்அவுட்டில் மட்டும்."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/member-updates/ta.js",
+      "string": "மூலம்"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/mr.js",
+      "string": "Central member lookup unavailable — try again or use password if offered."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/mr.js",
+      "string": "Central सदस्य तपासणी उपलब्ध नाही — पुन्हा प्रयत्न करा किंवा पासवर्ड दिला असल्यास वापरा."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/mr.js",
+      "string": "Preview access — no real OTP, orders or payment."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/mr.js",
+      "string": "This account has catalogue access only."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/mr.js",
+      "string": "पूर्वदर्शन प्रवेश — खरा OTP, ऑर्डर किंवा पेमेंट नाही."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
+      "string": "Browse Essentials from Central"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
+      "string": "Catalogue details missing from Central"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
+      "string": "Catalogue details not available"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
+      "string": "Catalogue from Central"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
+      "string": "Catalogue from NiaSave"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
+      "string": "Catalogue needs refreshing"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
+      "string": "Catalogue synced"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
+      "string": "Catalogue temporarily unavailable"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
+      "string": "Catalogue unavailable. Refresh to check reservations."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
+      "string": "Central details missing"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
+      "string": "Central has not assigned these products to the six Shop categories."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
+      "string": "Central member lookup unavailable — try again or use password if offered."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
+      "string": "Central உறுப்பினர் சரிபார்ப்பு இல்லை — மீண்டும் முயலவும் அல்லது கடவுச்சொல் வழங்கப்பட்டால் பயன்படுத்தவும்."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
+      "string": "Checking Central jobs"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
+      "string": "Checking Central updates"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
+      "string": "Explore LESS"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
+      "string": "Final price and availability are checked by Central at review."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
+      "string": "Job projection is temporarily unavailable"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
+      "string": "Loading Central catalogue"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
+      "string": "Loading NiaSave catalogue"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
+      "string": "Membership fee details are not available from Central"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
+      "string": "No products published yet"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
+      "string": "No published products"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
+      "string": "Pack details unavailable — ask Nia"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
+      "string": "Photo not supplied by Central"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
+      "string": "Pickup operator not yet provided by Central"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
+      "string": "Preview access — no real OTP, orders or payment."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
+      "string": "Refresh the catalogue to check current availability."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
+      "string": "Reservation recorded by Central"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
+      "string": "Search the catalogue"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
+      "string": "This account has catalogue access only."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
+      "string": "Unit price not supplied by Central"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
+      "string": "Unit prices and lowest-price labels await Central. Products are shown without ranking."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
+      "string": "Updates shown here come from Central"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
+      "string": "இறுதி விலையும் கிடைப்பும் சென்ட்ரல் மதிப்பாய்வில் சரிபார்க்கப்படும்."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
+      "string": "இன்னும் பொருட்கள் வெளியிடப்படவில்லை"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
+      "string": "சென்ட்ரல் அலகு விலையை வழங்கவில்லை"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
+      "string": "சென்ட்ரல் இந்தப் பொருட்களை ஆறு கடை வகைகளில் சேர்க்கவில்லை."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
+      "string": "சென்ட்ரல் உறுதிப்படுத்தியது"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
+      "string": "சென்ட்ரல் தகவலைச் சரிபார்க்கிறோம்"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
+      "string": "சென்ட்ரல் பட்டியல் ஏற்றப்படுகிறது"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
+      "string": "சென்ட்ரல் பட்டியல் விவரங்கள் இல்லை"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
+      "string": "சென்ட்ரல் புகைப்படம் வழங்கவில்லை"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
+      "string": "சென்ட்ரல் விவரங்கள் இல்லை"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
+      "string": "சென்ட்ரல் வேலைகள் சரிபார்க்கப்படுகின்றன"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
+      "string": "பொதி விவரம் இல்லை — Nia-விடம் கேளுங்கள்"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
+      "string": "பொருள் வழங்கும் பொறுப்பாளரின் பெயரை சென்ட்ரல் இன்னும் வழங்கவில்லை"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
+      "string": "முன்னோட்ட அணுகல் — உண்மையான OTP, ஆர்டர் அல்லது பணப்பரிவர்த்தனை இல்லை."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
+      "string": "லெஸ் பகுதிகளைப் பார்க்கவும்"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-locales/ta.js",
+      "string": "வெளியிடப்பட்ட பொருட்கள் இல்லை"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-member-auth.js",
+      "string": "Central member lookup unavailable — try again or use password if offered."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-member-auth.js",
+      "string": "सेंट्रल सदस्य जाँच उपलब्ध नहीं है — फिर कोशिश करें या पासवर्ड इस्तेमाल करें।"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-money-status.js",
+      "string": "Pickup operator not yet provided by Central"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-ops.js",
+      "string": "<header class=\"ops-top\"><div class=\"eyebrow\">RAFIQI CENTRAL / 2 PARA / SAVE OPERATIONS</div><h1>Sikh Unit</h1><p>Member orders · pickup, delivery and receipt verification</p><div class=\"row\"><a href=\"/ops.html\">← Save overview</a><a href=\"/commerce.html\">Member storefront ↗</a><button data-ops=\"refresh\">Refresh</button></div></header>"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-owner.js",
+      "string": "</h2><p>View the published NiaSave catalogue across Live, Earn, Save and Send. Orders, bookings, applications and personal statements require a member account.</p><button class=\"primary\" data-action=\"live\">Explore NiaSave</button><a href=\"https://rafiqicentral.com/2para\">Open business operations</a><button data-action=\"owner-exit\">Sign out of owner view</button></section></div>"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-owner.js",
+      "string": "<div class=\"page\"><div class=\"service-intro\"><div class=\"eyebrow\">EARN · WALK2WORK</div><h1>Work worth leaving home for.</h1><p>Published job offers. Members see opportunities near their verified Nest.</p></div>"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-owner.js",
+      "string": "<section class=\"panel stack\"><h2>No published jobs available yet</h2><p>Verified, open Walk2Work opportunities will appear here when published.</p></section>"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-owner.js",
+      "string": "The catalogue could not be reached. Please retry."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-owner.js",
+      "string": "The live catalogue is unavailable. Please retry."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-shop-v2.js",
+      "string": "Browse Essentials from Central"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-shop-v2.js",
+      "string": "Catalogue details missing from Central"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-shop-v2.js",
+      "string": "Catalogue details not available"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-shop-v2.js",
+      "string": "Catalogue from Central"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-shop-v2.js",
+      "string": "Catalogue from NiaSave"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-shop-v2.js",
+      "string": "Catalogue needs refreshing"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-shop-v2.js",
+      "string": "Catalogue temporarily unavailable"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-shop-v2.js",
+      "string": "Catalogue unavailable. Refresh to check reservations."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-shop-v2.js",
+      "string": "Central has not assigned these products to the six Shop categories."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-shop-v2.js",
+      "string": "Final price and availability are checked by Central at review."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-shop-v2.js",
+      "string": "Loading Central catalogue"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-shop-v2.js",
+      "string": "Loading NiaSave catalogue"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-shop-v2.js",
+      "string": "No products published yet"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-shop-v2.js",
+      "string": "No published products"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-shop-v2.js",
+      "string": "Photo not supplied by Central"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-shop-v2.js",
+      "string": "Refresh the catalogue to check current availability."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-shop-v2.js",
+      "string": "Search the catalogue"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-shop-v2.js",
+      "string": "Unit price not supplied by Central"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-shop-v2.js",
+      "string": "Unit prices and lowest-price labels await Central. Products are shown without ranking."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce-waves.js",
+      "string": "Source"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce.js",
+      "string": "</span></button></div><p>Browse published essentials and prices. Ordering requires member sign in.</p></section>"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce.js",
+      "string": "Catalogue synced"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce.js",
+      "string": "Central could not be reached. Your typed amounts are still here; try again."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce.js",
+      "string": "Checking Central jobs"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce.js",
+      "string": "Job projection is temporarily unavailable"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce.js",
+      "string": "Oil, soap, detergent — member price."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce.js",
+      "string": "Owner view · Read only · Live catalogue. Personal transactions require a member account."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce.js",
+      "string": "Photo not supplied by Central"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce.js",
+      "string": "Preview access — no real OTP, orders or payment."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce.js",
+      "string": "This account has catalogue access only."
+    },
+    {
+      "kind": "copy",
+      "file": "commerce.js",
+      "string": "तेल, साबुन, डिटर्जेंट — सदस्य कीमत।"
+    },
+    {
+      "kind": "copy",
+      "file": "commerce.js",
+      "string": "प्रीव्यू प्रवेश — असली OTP, ऑर्डर या भुगतान नहीं।"
+    }
+  ]
+}

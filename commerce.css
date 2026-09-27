@@ -121,7 +121,7 @@ body{background:var(--bg);color:var(--fg)}
 .store-go-photo.live{background-image:url('/assets/studio-bunk-lockers.jpg')}
 .store-go-photo.earn{background-image:url('/assets/earn.jpg')}
 .store-go-photo.save{background-image:url('/assets/oils-mass-market-sheet.jpg');background-size:200% 200%;background-position:0 0}
-.store-go-photo.send{background-image:url('/assets/send.jpg')}
+.store-go-photo.send{background-image:url('/assets/send-notebook.jpg')}
 .store-go-copy{padding:14px 14px 16px}
 .store-go-name{display:block;font-size:17px;font-weight:650;letter-spacing:-.03em}
 .store-go-d{display:block;font-size:12px;color:var(--muted);margin-top:4px;line-height:1.3}
@@ -281,7 +281,7 @@ body.mesha-dark dialog:not(.mesha-checkout){color:#161b24;background:#fff}
 .mesha-rail-photo{display:block;width:100%;max-width:112px;aspect-ratio:1;border-radius:50%;background-color:#1c1c1e;background-size:cover;background-position:center}
 .mesha-rail-photo.earn{background-image:url('/assets/earn.jpg');background-position:50% 40%}
 .mesha-rail-photo.save{background-image:url('/assets/oils-editorial-sheet.png');background-size:230%;background-position:8% 10%}
-.mesha-rail-photo.send{background-image:url('/assets/send.jpg');background-position:50% 55%}
+.mesha-rail-photo.send{background-image:url('/assets/send-notebook.jpg');background-position:50% 55%}
 .mesha-rail-name{font-size:15px;font-weight:600;letter-spacing:-.02em}
 .mesha-rail-d{font-size:14px;color:#9a9a9a;text-align:left;line-height:1.3}
 .mesha-save-hero{
@@ -355,7 +355,7 @@ body.mesha-dark .mobile-bag{display:none}
 .mesha-bag-empty p{margin:0;color:#9a9a9a;font-size:15px;line-height:1.45}
 .mesha-bag-total{display:flex;align-items:center;justify-content:space-between;padding:22px 0 8px;font-size:16px}
 .mesha-bag-total strong{font-size:22px;letter-spacing:-.03em}
-.mesha-bag-quiet,.mesha-bag-note{margin:0 0 16px;color:#8a8a8a;font-size:13px;line-height:1.4;text-align:center}
+.mesha-bag-quiet,.mesha-bag-note{margin:0 0 16px;color:#3d4c5c;font-size:14px;line-height:1.4;text-align:center}
 .mesha-bag-quiet{text-align:left;margin-bottom:18px}
 .mesha-bag .mesha-pill-solid{width:100%}
 body.mesha-bag-open{overflow:hidden}

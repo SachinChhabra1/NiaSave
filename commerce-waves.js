@@ -30,7 +30,7 @@ function savePlan(value) {
 function packLine(product) {
   const pack = product?.pack || PENDING_PACK;
   const hint = product?.collectHint?.name || COLLECT.name;
-  const source = product?.sourceSiteCode ? `Source ${product.sourceSiteCode}` : '';
+  const source = product?.sourceSiteCode ? `Where from ${product.sourceSiteCode}` : '';
   return `<span class="pack-line">${pack} · Collect at ${hint}</span>${source ? `<span class="source-line">${source}</span>` : ''}`;
 }
 

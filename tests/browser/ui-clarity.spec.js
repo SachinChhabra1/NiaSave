@@ -1,4 +1,8 @@
 import {test, expect} from '@playwright/test';
+import http from 'node:http';
+import fs from 'node:fs';
+import path from 'node:path';
+import zlib from 'node:zlib';
 import {BASELINE_MAX} from '../ui-clarity/limits.mjs';
 import {copyCovers, readBaseline, violationKind} from '../ui-clarity/scan.mjs';
 import {bodyFor} from '../ui-clarity/replies.mjs';
@@ -81,6 +85,45 @@ async function iconGaps(page) {
   });
 }
 
+async function statusContrast(page) {
+  return page.evaluate(() => {
+    const lin = channel => {
+      const c = channel / 255;
+      return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+    };
+    const lum = rgb => 0.2126 * lin(rgb[0]) + 0.7152 * lin(rgb[1]) + 0.0722 * lin(rgb[2]);
+    const parse = color => {
+      const match = String(color).match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([0-9.]+))?/);
+      return match ? [Number(match[1]), Number(match[2]), Number(match[3]), match[4] == null ? 1 : Number(match[4])] : null;
+    };
+    const background = el => {
+      let node = el;
+      while (node) {
+        const parsed = parse(getComputedStyle(node).backgroundColor);
+        if (parsed && parsed[3] > 0.05) return parsed.slice(0, 3);
+        node = node.parentElement;
+      }
+      return [255, 255, 255];
+    };
+    const rows = [];
+    for (const el of document.querySelectorAll('[role="status"]')) {
+      if (el.closest('#commerce-ops')) continue;
+      const style = getComputedStyle(el);
+      if (style.display === 'none' || style.visibility === 'hidden' || Number(style.opacity) === 0) continue;
+      const rect = el.getBoundingClientRect();
+      if (rect.width < 2 || rect.height < 2) continue;
+      const text = el.innerText.replace(/\s+/g, ' ').trim();
+      if (!text) continue;
+      const fg = parse(style.color);
+      if (!fg) continue;
+      const back = background(el);
+      const ratio = (Math.max(lum(fg), lum(back)) + 0.05) / (Math.min(lum(fg), lum(back)) + 0.05);
+      rows.push({text: text.slice(0, 80), ratio: Math.round(ratio * 100) / 100, color: style.color, background: `rgb(${back.join(',')})`});
+    }
+    return rows;
+  });
+}
+
 async function visibleDates(page) {
   return page.evaluate(() => {
     const found = [];
@@ -112,6 +155,9 @@ for (const width of [360, 390]) {
         const fonts = [];
         const banned = [];
         const dates = [];
+        const contrast = [];
+        const sizes = new Set();
+        const oddType = [];
         for (const name of ['home', 'live', 'earn', 'shop', 'send']) {
           if (name !== 'home') {
             await page.locator(`#less-nav button[data-action="${name}"]`).click();
@@ -119,11 +165,17 @@ for (const width of [360, 390]) {
           }
           expect(await iconGaps(page)).toEqual([]);
           await expect(page.locator('#commerce-ops')).toHaveCount(0);
+          const file = lang + '/' + width + '/' + mode + '/' + name;
+          for (const row of await statusContrast(page)) {
+            contrast.push(file + ' ' + row.ratio + ' ' + row.text);
+            if (row.ratio < 4.5) banned.push(file + ' contrast ' + row.ratio + ' ' + row.text + ' ' + row.color + ' on ' + row.background);
+          }
           const facts = await visibleFacts(page);
           expect(facts.length).toBeGreaterThan(5);
-          const file = lang + '/' + width + '/' + mode + '/' + name;
           const seen = new Set();
           for (const fact of facts) {
+            sizes.add(Math.round(fact.size));
+            if (![14, 16, 24].includes(Math.round(fact.size))) oddType.push(Math.round(fact.size) + 'px ' + fact.text.slice(0, 70));
             if (violationKind(fact.text) && !copyCovers(fact.text, baseline.entries, name)) banned.push(file + ': ' + fact.text);
             if (fact.size < 14) {
               const key = file + '\0' + fact.text;
@@ -146,6 +198,8 @@ for (const width of [360, 390]) {
             const openFile = file + '/pick';
             const openFacts = await visibleFacts(page);
             for (const fact of openFacts) {
+              sizes.add(Math.round(fact.size));
+            if (![14, 16, 24].includes(Math.round(fact.size))) oddType.push(Math.round(fact.size) + 'px ' + fact.text.slice(0, 70));
               if (violationKind(fact.text) && !copyCovers(fact.text, baseline.entries, name)) banned.push(openFile + ': ' + fact.text);
               if (fact.size < 14) {
                 const key = openFile + '\0' + fact.text;
@@ -163,12 +217,32 @@ for (const width of [360, 390]) {
             expect(before).toBe('day');
             expect(after).toBe('day');
           }
+          const login = page.locator('#content [data-action="login"]');
+          if (await login.count() && await login.first().isVisible()) {
+            await login.first().click();
+            await expect(page.locator('#dialog[open], dialog[open]')).toHaveCount(1);
+            const openFile = file + '/login';
+            for (const fact of await visibleFacts(page)) {
+              sizes.add(Math.round(fact.size));
+            if (![14, 16, 24].includes(Math.round(fact.size))) oddType.push(Math.round(fact.size) + 'px ' + fact.text.slice(0, 70));
+              if (violationKind(fact.text) && !copyCovers(fact.text, baseline.entries, name)) banned.push(openFile + ': ' + fact.text);
+              if (fact.size < 14) fonts.push({kind: 'font', file: openFile, screen: name, string: fact.text, size: fact.size});
+            }
+            for (const label of await visibleDates(page)) dates.push({kind: 'date', file: openFile, screen: name, string: label});
+            await page.locator('#dialog [data-action="close"]').click();
+          }
           if (name === 'send') {
             const add = page.locator('[data-action="books-add"]');
             if (await add.count() && await add.first().isVisible()) {
               await add.first().click();
               await expect(page.locator('#books-entry-form')).toBeVisible();
               const openFile = file + '/books-add';
+              for (const fact of await visibleFacts(page)) {
+                sizes.add(Math.round(fact.size));
+            if (![14, 16, 24].includes(Math.round(fact.size))) oddType.push(Math.round(fact.size) + 'px ' + fact.text.slice(0, 70));
+                if (violationKind(fact.text) && !copyCovers(fact.text, baseline.entries, name)) banned.push(openFile + ': ' + fact.text);
+                if (fact.size < 14) fonts.push({kind: 'font', file: openFile, screen: name, string: fact.text, size: fact.size});
+              }
               for (const label of await visibleDates(page)) dates.push({kind: 'date', file: openFile, screen: name, string: label});
               const dialogText = await page.locator('#dialog').innerText();
               expect(dialogText.toLowerCase()).not.toContain('mm/dd/yyyy');
@@ -177,6 +251,8 @@ for (const width of [360, 390]) {
           }
         }
         expect(banned).toEqual([]);
+        expect(oddType).toEqual([]);
+        expect(contrast.length).toBeGreaterThan(0);
         const allowedFonts = new Map();
         for (const entry of baseline.entries) {
           if (entry.kind !== 'font') continue;
@@ -240,4 +316,112 @@ test('opened Send entry forms show dd/mm/yyyy and keep focus', async ({page}) =>
   await expect(page.locator('#books-entry-form input[type="date"]')).toHaveCount(0);
   await expect(page.locator('#books-entry-form [name="date"]')).toHaveValue('2026-09-02');
   await expect(page.locator('.books-date-shown')).toHaveText('02/09/2026');
+  expect(await visibleDates(page)).toEqual([]);
+});
+
+test('the week chip names the date it asked for', async ({page}) => {
+  test.setTimeout(90000);
+  await page.setViewportSize({width: 360, height: 780});
+  await prepare(page, 'en');
+  let asked = '';
+  await page.route('**/*', async route => {
+    const url = route.request().url();
+    if (url.includes('openstreetmap.org')) return route.abort();
+    if (!url.includes('/api/') && !url.includes('/v1/')) return route.continue();
+    const parsed = new URL(url);
+    const body = JSON.parse(JSON.stringify(bodyFor('empty', parsed.pathname)));
+    if (parsed.pathname.endsWith('/nests/availability')) {
+      let posted = {};
+      try { posted = route.request().postDataJSON(); } catch { posted = {}; }
+      asked = posted && posted.start ? posted.start : '';
+      if (asked) body.start = asked;
+    }
+    await route.fulfill({status: 200, contentType: 'application/json', body: JSON.stringify(body)});
+  });
+  await page.goto('/#live');
+  await page.locator('[data-live-date="week"]').click();
+  expect(asked).toBe('2026-09-16');
+  await expect(page.locator('.live-date-asked')).toHaveText('You are asking for: 16/09/2026');
+});
+
+for (const lang of ['en', 'hi', 'ta', 'bn']) {
+  test(`bottom bar labels are written in ${lang}`, async ({page}) => {
+    test.setTimeout(90000);
+    await page.setViewportSize({width: 360, height: 780});
+    await prepare(page, lang);
+    await install(page, 'empty');
+    await page.goto('/#home');
+    await expect(page.locator('#less-nav button')).toHaveCount(4);
+    const labels = await page.locator('#less-nav button span').allTextContents();
+    expect(labels).toHaveLength(4);
+    const script = {en: /[A-Za-z]/, hi: /\p{Script=Devanagari}/u, ta: /\p{Script=Tamil}/u, bn: /\p{Script=Bengali}/u}[lang];
+    for (const label of labels) {
+      expect(label.trim()).toMatch(script);
+      if (lang !== 'en') expect(label).not.toMatch(/[A-Za-z]/);
+    }
+  });
+}
+
+test('first load transfers at most 500KB before below-the-fold images', async ({page}) => {
+  test.setTimeout(90000);
+  const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../..');
+  const types = {'.html': 'text/html', '.js': 'text/javascript', '.mjs': 'text/javascript', '.css': 'text/css', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.svg': 'image/svg+xml', '.webmanifest': 'application/manifest+json'};
+  const server = http.createServer((req, res) => {
+    const urlPath = decodeURIComponent((req.url || '/').split('?')[0]);
+    const rel = urlPath === '/' ? 'commerce.html' : urlPath.replace(/^\/+/, '');
+    const file = path.join(root, rel);
+    if (!file.startsWith(root) || !fs.existsSync(file) || !fs.statSync(file).isFile()) {
+      res.writeHead(404);
+      res.end();
+      return;
+    }
+    const body = fs.readFileSync(file);
+    const gz = zlib.gzipSync(body);
+    const type = types[path.extname(file)] || 'application/octet-stream';
+    res.writeHead(200, {'Content-Type': type, 'Content-Encoding': 'gzip', 'Content-Length': String(gz.length), 'Cache-Control': 'no-store'});
+    res.end(gz);
+  });
+  await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
+  const port = server.address().port;
+  try {
+  await page.setViewportSize({width: 360, height: 780});
+  await prepare(page, 'en');
+  await page.route('**/*', async route => {
+    const url = route.request().url();
+    if (url.includes('/api/') || url.includes('/v1/')) {
+      const parsed = new URL(url);
+      await route.fulfill({status: 200, contentType: 'application/json', body: JSON.stringify(bodyFor('empty', parsed.pathname))});
+      return;
+    }
+    if (!url.startsWith(`http://127.0.0.1:${port}`)) return route.abort();
+    return route.continue();
+  });
+  await page.goto(`http://127.0.0.1:${port}/commerce.html#home`, {waitUntil: 'networkidle'});
+  const measured = await page.evaluate(() => {
+    const fold = window.innerHeight;
+    const below = new Set();
+    for (const img of document.images) {
+      if (img.getBoundingClientRect().top >= fold) below.add(img.currentSrc || img.src);
+    }
+    const resources = performance.getEntriesByType('resource').map(entry => ({
+      name: entry.name,
+      size: entry.transferSize || entry.encodedBodySize || 0,
+      type: entry.initiatorType
+    }));
+    const nav = performance.getEntriesByType('navigation')[0];
+    let total = nav ? (nav.transferSize || nav.encodedBodySize || 0) : 0;
+    const kept = [];
+    for (const entry of resources) {
+      const image = entry.type === 'img' || /\.(png|jpe?g|webp|gif|svg)(\?|$)/i.test(entry.name);
+      if (image && [...below].some(src => entry.name === src || src.endsWith(entry.name))) continue;
+      if (image && below.has(entry.name)) continue;
+      total += entry.size;
+      kept.push(entry.name.split('/').pop() + ':' + entry.size);
+    }
+    return {total, kept};
+  });
+  expect(measured.total, measured.kept.join('\n')).toBeLessThanOrEqual(500 * 1024);
+  } finally {
+    await new Promise(resolve => server.close(resolve));
+  }
 });

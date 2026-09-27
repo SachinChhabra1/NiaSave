@@ -323,3 +323,38 @@ body .member-shell #content .shop-v2-canvas{max-width:720px;min-width:0;backgrou
 .send-example ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
 .send-example li{display:flex;justify-content:space-between;gap:12px;font-size:16px;line-height:1.35}
 .send-example li span,.send-example li strong{font-size:16px}
+.send-example-period{margin:0;font-size:16px;line-height:1.35}
+
+/* Three sizes on member screens: title 24, body 16, label 14. */
+body.mesha-dark .header,
+body.mesha-dark .header :is(span,a,button,select,small,p,div),
+body.mesha-dark .notice,
+body.mesha-dark .footer,
+body.mesha-dark .footer :is(span,a,button),
+body.mesha-dark .less-nav,
+body.mesha-dark .less-nav button,
+body.mesha-dark .less-nav button span,
+body.mesha-dark #dialog,
+body.mesha-dark #dialog :is(p,span,button,label,small,li,input,select),
+body.mesha-dark .member-shell #content,
+body.mesha-dark .member-shell #content :is(p,li,span,a,button,div,strong,b,td,th,summary,input,select){font-size:16px!important}
+body.mesha-dark .header .brand,
+body.mesha-dark .member-shell #content :is(h1,h2,h3),
+body.mesha-dark #dialog :is(h1,h2,h3){font-size:24px!important}
+body.mesha-dark .header .brand-strapline,
+body.mesha-dark .less-nav button,
+body.mesha-dark .less-nav button span,
+body.mesha-dark .footer,
+body.mesha-dark .footer :is(a,button,span),
+body.mesha-dark .member-shell #content :is(small,.badge,label,.eyebrow,.home-tile-line,.shop-category small,.mesha-bag-note,.send-example-flag){font-size:14px!important}
+body.mesha-dark .footer,
+body.mesha-dark .member-shell #content :is(small,.badge,.mesha-bag-note,.home-tile-line){color:#1C3F5C}
+body.mesha-dark .pause-note,
+body.mesha-dark .pause-note-line,
+body.mesha-dark .pause-note-more,
+body.mesha-dark .pause-note-more summary,
+body.mesha-dark .pause-note-full{font-size:16px!important;color:#1C3F5C}
+body.mesha-dark .member-shell [role="status"],
+body.mesha-dark .pillar-state,
+body.mesha-dark #sync-state,
+body.mesha-dark .nia-transfer-status{color:#1C3F5C}

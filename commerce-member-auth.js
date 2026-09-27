@@ -132,7 +132,7 @@ export function authErrorText(code, t) {
     set_password_required: t('Set a password to stay signed in on this phone.', 'इस फोन पर लॉग इन रहने के लिए पासवर्ड बनाएँ।'),
     password_not_set: t('Set a password to stay signed in on this phone.', 'इस फोन पर लॉग इन रहने के लिए पासवर्ड बनाएँ।'),
     otp_unavailable: t('A code could not be sent. Try again, or log in with your password if you have one.', 'कोड नहीं गया। फिर कोशिश करें, या पासवर्ड हो तो उससे लॉग इन करें।'),
-    central_member_lookup_unavailable: t('Central member lookup unavailable — try again or use password if offered.', 'सेंट्रल सदस्य जाँच उपलब्ध नहीं है — फिर कोशिश करें या पासवर्ड इस्तेमाल करें।'),
+    central_member_lookup_unavailable: t('We could not check this member. Try again. Use a password if you see one.', 'इस सदस्य की जाँच नहीं हो सकी। फिर कोशिश करें। पासवर्ड दिखे तो उसे डालें।'),
     member_setup_not_configured: t('Password setup is not available yet. Ask your Nia team.', 'पासवर्ड बनाना अभी उपलब्ध नहीं है। निया टीम से पूछें।')
   })[code];
 }

@@ -29,6 +29,27 @@ export function supportFormMarkup({t, esc}, {orderId='', relatedRef='', kinds=SU
   </form>`;
 }
 
+// Empty until the Founders give a number. Never put a real number here.
+export const NIA_HELP_PHONE = '';
+
+export function niaHelpHref(phone = NIA_HELP_PHONE) {
+  const raw = String(phone ?? '').trim();
+  if (!/^\+?[0-9][0-9 ().-]{6,}$/.test(raw)) return '';
+  const compact = raw.replace(/[^\d+]/g, '');
+  if (!/^\+?[0-9]{7,15}$/.test(compact)) return '';
+  return 'tel:' + compact;
+}
+
+export function callNiaMarkup({t, esc, icon, phone = NIA_HELP_PHONE, label, className = 'call-nia'} = {}) {
+  const word = label || t('Call Nia');
+  const mark = typeof icon === 'function' ? icon('phone') : '';
+  const href = niaHelpHref(phone);
+  const safe = esc || (value => String(value ?? ''));
+  const klass = /^[a-z0-9-]+$/.test(String(className || '')) ? className : 'call-nia';
+  if (href) return `<a class="${klass}" href="${safe(href)}">${mark}<span>${safe(word)}</span></a>`;
+  return `<button type="button" class="${klass}" data-action="help">${mark}<span>${safe(word)}</span></button>`;
+}
+
 export function supportIssueLine(issue, {t, esc}) {
   const refund = issue.refundApproved === true
     ? t('Refund approved by the Nia team')

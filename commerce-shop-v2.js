@@ -22,18 +22,18 @@ export function shopSourceCopy(owner){
     ranking:'Unit prices and lowest-price labels are not recorded. Products are shown without ranking.',
     review:'Final price and availability are checked by NiaSave at review.',
   }:{
-    heading:'Browse Essentials from Central',loading:'Loading Central catalogue',ready:'Catalogue from Central',
+    heading:'Rice, atta, oil at low prices',loading:'Loading Central catalogue',ready:'Catalogue from Central',
     missing:'Catalogue details missing from Central',empty:'No products published yet',
-    photo:'Photo not supplied by Central',unit:'Unit price not supplied by Central',
+    photo:'',unit:'Price coming soon',
     categories:'Central has not assigned these products to the six Shop categories.',
-    ranking:'Unit prices and lowest-price labels await Central. Products are shown without ranking.',
+    ranking:'Prices are not up yet. To order now, call Nia.',
     review:'Final price and availability are checked by Central at review.',
   };
 }
 // Wording only: the existing server capability and stock guards still control actions.
 export function shopReservationNotice({catalogue,signedIn,reservationsEnabled}){
   if(catalogue?.owner!=='niasave')return undefined;
-  if(!signedIn)return 'Sign in to see essentials for your location and reserve.';
+  if(!signedIn)return 'Log in to see goods near you and reserve them.';
   if(!Array.isArray(catalogue.products))return 'Catalogue unavailable. Refresh to check reservations.';
   if(shopViewState({catalogue})==='stale')return 'Refresh the catalogue to check current availability.';
   const products=memberProducts(catalogue);
@@ -60,7 +60,9 @@ export function shopUnit(product){
 export function shopPhoto(product,{esc,name,t,sourceOwner}){
   const src=product?.photoUrl;
   if(typeof src==='string'&&/^https:\/\//i.test(src))return `<img src="${esc(src)}" alt="${esc(name)}" loading="lazy" width="320" height="320">`;
-  return `<span class="shop-photo-missing">${esc(t(shopSourceCopy(sourceOwner).photo))}</span>`;
+  const missing=shopSourceCopy(sourceOwner).photo;
+  if(!missing)return `<span class="shop-photo-missing"></span>`;
+  return `<span class="shop-photo-missing">${esc(t(missing))}</span>`;
 }
 export function shopPrice(product,{t,esc,money,sourceOwner}){
   const sticker=Number.isFinite(product?.price)&&product.price>0?`<span>${esc(t('Sticker price'))}: <strong>${esc(money(product.price))}</strong></span>`:`<span>${esc(t('Sticker price unavailable'))}</span>`;
@@ -75,12 +77,12 @@ export function shopCatalogueMarkup({catalogue,query='',aisle='',lang='en',state
   const visible=category?matching.filter(p=>shopCategory(p)===category):matching;
   const sourceOwner=catalogue?.owner,copy=shopSourceCopy(sourceOwner);
   const moneyContext={t,esc,money,sourceOwner};
-  const noRows=sourceOwner==='niasave'?(signedIn?'No available products':'Sign in to view availability'):'No published products';
-  const stateText={loading:t(copy.loading),ready:t(copy.ready),stale:t('Catalogue needs refreshing'),source_missing:t(copy.missing),unavailable:t('Catalogue temporarily unavailable'),empty:t(sourceOwner==='niasave'&&!signedIn?'Sign in to see essentials for your location and reserve.':copy.empty),offline:t('Offline. Reconnect for current prices')};
+  const noRows=sourceOwner==='niasave'?(signedIn?'No available products':'Log in to see what is here'):'Coming soon';
+  const stateText={loading:t(copy.loading),ready:t(copy.ready),stale:t('Catalogue needs refreshing'),source_missing:t(copy.missing),unavailable:t('Shop is closed for now. Please try later.'),empty:t(sourceOwner==='niasave'&&!signedIn?'Log in to see goods near you and reserve them.':copy.empty),offline:t('Offline. Reconnect for current prices')};
   const item=p=>`<article class="shop-item"><div class="shop-item-photo">${shopPhoto(p,{esc,t,name:shopName(p,lang),sourceOwner})}</div><div class="shop-item-detail"><h3>${esc(shopName(p,lang))}</h3>${p.brand?`<p>${esc(p.brand)}</p>`:''}${p.pack?`<p>${esc(p.pack)}</p>`:''}${shopPrice(p,moneyContext)}<button type="button" data-action="open-buy" data-id="${esc(p.id)}">${esc(t('View item'))}</button></div></article>`;
   const tile=id=>{const rows=products.filter(p=>shopCategory(p)===id);const first=rows.find(p=>p.photoUrl);
     const lowest=rows.find(p=>shopUnit(p)?.lowest);
-    return `<button type="button" class="shop-category" data-action="open-aisle" data-id="${id}"><span class="shop-category-photo">${first?shopPhoto(first,{esc,t,name:shopName(first,lang),sourceOwner}):`<span class="shop-photo-missing">${esc(t(copy.photo))}</span>`}</span><strong>${esc(t(labels[id]))}</strong><small>${lowest?`${esc(t('From'))} ${esc(money(shopUnit(lowest).price))} / ${esc(t(shopUnit(lowest).unit==='kg'?'kg':'litre'))}`:esc(rows.length?t(copy.unit):t(noRows))}</small></button>`;};
+    return `<button type="button" class="shop-category" data-action="open-aisle" data-id="${id}"><span class="shop-category-photo">${shopPhoto(first||{},{esc,t,name:first?shopName(first,lang):'',sourceOwner})}</span><strong>${esc(t(labels[id]))}</strong><small>${lowest?`${esc(t('From'))} ${esc(money(shopUnit(lowest).price))} / ${esc(t(shopUnit(lowest).unit==='kg'?'kg':'litre'))}`:esc(rows.length?t(copy.unit):t(noRows))}</small></button>`;};
   const other=products.filter(p=>shopCategory(p)==='other');
   const content=query.trim()?`<section aria-label="${esc(t('Search results'))}"><h2>${esc(t('Search results'))}</h2><div class="shop-item-grid">${visible.map(item).join('')||`<p>${esc(t('No matching products'))}</p>`}</div></section>`:
     category?`<section aria-label="${esc(t(labels[category]))}"><button type="button" data-action="close-aisle">${esc(t('All categories'))}</button><h2>${esc(t(labels[category]))}</h2><div class="shop-item-grid">${visible.map(item).join('')||`<p>${esc(t(noRows))}</p>`}</div></section>`:

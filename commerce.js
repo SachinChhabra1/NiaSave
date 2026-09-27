@@ -5,7 +5,7 @@ import {memberShellState,lessNavIcon} from './commerce-shell.js';
 import {moneyStatusMarkup} from './commerce-money-status.js';
 import {homeDashboardModel,homeDashboardMarkup} from './commerce-home.js';
 import {journeyA11y,redactClientLog} from './commerce-content-qa.js';
-import {supportFormMarkup,supportIssueLine} from './commerce-support.js';
+import {supportFormMarkup,supportIssueLine,NIA_HELP_PHONE,callNiaMarkup} from './commerce-support.js';
 import {owner,ownerActions,ownerControls,ownerRequest,restoreOwner,signInOwner,exitOwner,ownerLoginMarkup,ownerAccountMarkup,ownerEarnMarkup,ownerSendMarkup} from './commerce-owner.js';
 import {passkeyMarkup,usePasskey,takePasskeySetup} from './commerce-passkeys.js';
 import {otpIsPrimary,optionalPasswordAllowed,optionalSetupExpired,submitOptionalPassword,usesPhoneOtpFlow,usesPasswordAuth,e164In,nationalMobile,rememberOn,authErrorText,needsSetPassword,setPasswordToken,passwordBody,setPasswordIssue,submitSetPassword,submitAuthPaths,otpRequestPaths,otpVerifyPaths,loginPath,authTimeoutMs,phoneFormMarkup,verifyFormMarkup,setPasswordFormMarkup,rememberFormMarkup,passwordFormMarkup} from './commerce-member-auth.js';
@@ -102,7 +102,7 @@ if(!validLanguage(lang))lang='en';
 const t = (en,hi) => translate(lang,en,hi);
 const money = n => new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR',maximumFractionDigits:2,minimumFractionDigits:0}).format(n||0);
 const date = v => new Date(v).toLocaleString(lang+'-IN',{day:'numeric',month:'short',hour:'numeric',minute:'2-digit',timeZone:'Asia/Kolkata'});
-const icons={live:'<path d="m3 10 9-7 9 7M5 9v12h14V9M9 21v-7h6v7"/>',earn:'<rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V3h8v4M3 12h18M10 12v3h4v-3"/>',send:'<path d="m3 11 18-8-8 18-3-8-7-2Zm7 2L21 3"/>',shop:'<path d="M3 10h18L19 4H5l-2 6Zm2 0v10h14V10M9 20v-6h6v6"/>',bag:'<path d="M5 7h14l1 14H4L5 7Zm3 0V5a4 4 0 0 1 8 0v2"/>',orders:'<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/>',account:'<circle cx="12" cy="7" r="4"/><path d="M4 21v-2a8 8 0 0 1 16 0v2"/>',search:'<circle cx="10" cy="10" r="7"/><path d="m15 15 6 6"/>',qr:'<path d="M3 3h6v6H3zM15 3h6v6h-6zM3 15h6v6H3zM15 15h2v2h-2zM19 19h2v2h-2zM15 21v-2M21 15h-2"/>',arrow:'<path d="m9 5 7 7-7 7"/>'};
+const icons={live:'<path d="m3 10 9-7 9 7M5 9v12h14V9M9 21v-7h6v7"/>',earn:'<rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V3h8v4M3 12h18M10 12v3h4v-3"/>',send:'<path d="m3 11 18-8-8 18-3-8-7-2Zm7 2L21 3"/>',shop:'<path d="M3 10h18L19 4H5l-2 6Zm2 0v10h14V10M9 20v-6h6v6"/>',bag:'<path d="M5 7h14l1 14H4L5 7Zm3 0V5a4 4 0 0 1 8 0v2"/>',orders:'<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/>',account:'<circle cx="12" cy="7" r="4"/><path d="M4 21v-2a8 8 0 0 1 16 0v2"/>',phone:'<path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-8.1-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7 12 12 0 0 0 .7 2.7 2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4 12 12 0 0 0 2.7.7 2 2 0 0 1 1.7 2z"/>',search:'<circle cx="10" cy="10" r="7"/><path d="m15 15 6 6"/>',qr:'<path d="M3 3h6v6H3zM15 3h6v6h-6zM3 15h6v6H3zM15 15h2v2h-2zM19 19h2v2h-2zM15 21v-2M21 15h-2"/>',arrow:'<path d="m9 5 7 7-7 7"/>'};
 Object.assign(icons,categoryIcons);
 const icon = name => `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${icons[name]||icons.bag}</svg>`;
 const jobTerms = j => j.preview ? String(j.terms || '').replace('DEMO ONLY · Fictional employer, workplace and vacancy for presentation. No real job offer or application is sent.', '').trim() : j.terms;
@@ -128,7 +128,21 @@ function applyCommitmentGate(root=document){
   const copy=shopCopy!==undefined?shopCopy:(saveCommitmentReady()||shoppingOpen)?(['live','earn'].includes(page)||category==='insurance'?OTHER_COMMITMENTS_PAUSED_COPY:!account&&shoppingOpen?'Log in to see goods near you and reserve them.':null):PILOT_CLOSED_COPY;
   const previous=target?.querySelector('[data-pilot-paused]');
   if(previous)previous.remove();
-  if(target&&copy){const note=document.createElement('p');note.className='info';note.dataset.pilotPaused='';note.setAttribute('role','status');note.textContent=t(copy);target.prepend(note);}
+  if(target&&copy)target.prepend(pauseNote(copy));
+}
+function pauseNote(copy){
+  const full=t(copy);
+  const short=t('Booking starts soon. Call Nia for help.');
+  const shorten=copy===PILOT_CLOSED_COPY||page==='home';
+  const safe=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  if(!shorten){const note=document.createElement('p');note.className='info';note.dataset.pilotPaused='';note.setAttribute('role','status');note.textContent=full;return note;}
+  const note=document.createElement('div');
+  note.className='pause-note';
+  note.dataset.pilotPaused='';
+  note.setAttribute('role','status');
+  const more=full===short?'':`<details class="pause-note-more"><summary>${safe(t('Read more'))}</summary><p class="pause-note-full">${safe(full)}</p></details>`;
+  note.innerHTML=`<p class="pause-note-line">${safe(short)}</p>${more}`;
+  return note;
 }
 
 // Keep rendered member controls reachable and named after each view or dialog update.
@@ -168,7 +182,7 @@ function renderShell(){
   const state=memberShellState({online,readAsOf:cat?.asOf,readAt:shellReadAt,readFailed:shellReadFailed,pendingCount:queued,sourceOwner:cat?.owner,signedIn:!!account});
   const labels={signin:t('Log in to see what is here'),synced:t('Catalogue synced','सामान की सूची अपडेट है'),checking:t('Getting your details','आपकी जानकारी आ रही है'),stale:t('Checking last update','पिछला अपडेट जाँच रहे हैं'),offline:t('Offline','ऑफ़लाइन'),queued:t('Queued on this phone','इस फोन पर कतार में है'),retry:t('Request needs retry','अनुरोध फिर से भेजना होगा')};
   $('#shell-greeting').textContent=owner.active?t('Owner view','संचालक दृश्य'):account?t('Hello, Member','नमस्ते, सदस्य'):t('Welcome to NiaSave','नियासेव में स्वागत है');
-  const sync=$('#sync-state');sync.dataset.state=state;sync.textContent=labels[state];
+  const sync=$('#sync-state');sync.dataset.state=state;const syncWord=labels[state]||t('Getting your details');sync.replaceChildren();const syncText=document.createElement('span');syncText.className='sync-word';syncText.textContent=syncWord;sync.append(syncText);
   const banner=$('#offline-banner');banner.hidden=online;
   banner.textContent=online?'':(cat?.asOf?t('Offline. Last loaded information may be out of date.','ऑफ़लाइन। पिछली देखी जानकारी पुरानी हो सकती है।'):t('Offline. Connect to load information.','ऑफ़लाइन। जानकारी देखने के लिए इंटरनेट से जुड़ें।'))+(queued?' '+t('A request is queued on this phone. Retry when connected.','एक अनुरोध इस फोन पर कतार में है। इंटरनेट आने पर फिर से भेजें।'):'');
 }
@@ -191,8 +205,9 @@ function nav(){
   $('#less-nav').innerHTML=['live','earn','shop','send'].map(key=>`<button type="button" data-action="${key}" aria-label="${esc(labels[key])}" ${page===key?'aria-current="page"':''}>${lessNavIcon(key)}<span>${esc(labels[key])}</span></button>`).join('');
   $('#header-language').innerHTML=document.body.classList.contains('mesha-dark')||document.body.classList.contains('mesha-lang-open')?languageChip():languagePicker(true);
   const label=owner.active?t('Owner view','संचालक दृश्य'):account?t('Account','खाता'):t('Log in','लॉग इन');
-  $('#sign-label').innerHTML=`${icon('account')}<span>${esc(label)}</span>`;
+  $('#sign-label').innerHTML=`<span>${esc(label)}</span>`;
   $('#sign-label').setAttribute('aria-label',label);
+  paintCallNia();
   $('#sign-label').classList.add('signin');
   $('#sign-label').classList.toggle('mesha-avatar',false);
   $('#sign-label').dataset.action='account';
@@ -238,7 +253,8 @@ async function finishMemberSession(){sessionExpired=false;$('#dialog').close();a
 async function openBag(){bagOpen=true;if(page!=='shop')return go('shop');render();}
 function closeBag(){bagOpen=false;if(page==='shop')render();}
 function languagePicker(top=false){return `<label class="language-picker ${top?'language-top':''}"><span>${t('Language','भाषा')}</span><select data-language-select aria-label="${t('Choose your language','अपनी भाषा चुनें')}">${languageOptions.map(l=>`<option value="${l.id}" lang="${l.id}" ${lang===l.id?'selected':''}>${l.label}</option>`).join('')}</select></label>`;}
-function languageChip(){const current=languageOptions.find(l=>l.id===lang)||languageOptions[0];return `<button type="button" class="mesha-chip" data-action="language" aria-label="${t('Change language','भाषा बदलें')}">${esc(current.label)}</button>`;}
+function paintCallNia(){const current=document.getElementById('call-nia');if(!current)return;const wrap=document.createElement('div');wrap.innerHTML=callNiaMarkup({t,esc,icon,phone:NIA_HELP_PHONE,label:t('Call Nia'),className:'call-nia'});const next=wrap.firstElementChild;if(!next)return;next.id='call-nia';current.replaceWith(next);}
+function languageChip(){const current=languageOptions.find(l=>l.id===lang)||languageOptions[0];const globe='<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>';return `<button type="button" class="mesha-chip" data-action="language" aria-label="${t('Change language','भाषा बदलें')}">${globe}<span>${esc(current.label)}</span></button>`;}
 function languageButtons(){const hint={en:t('Continue'),hi:'Hindi',ta:'Tamil',bn:'Bengali'};return `<div class="mesha-lang-list">${languageOptions.map(l=>`<button type="button" class="mesha-lang-btn" data-action="choose-lang" data-id="${l.id}" lang="${l.id}"><span lang="${l.id}">${l.label}</span><span>${hint[l.id]||''}</span></button>`).join('')}</div>`;}
 function languageCard(){return `<section class="mesha-lang" aria-labelledby="mesha-lang-title"><p class="mesha-wordmark">NiaSave</p><div class="mesha-lang-sheet"><p class="mesha-kicker">${t('First step','पहला कदम')}</p><h1 id="mesha-lang-title">${t('Choose your language','अपनी भाषा चुनें')}</h1><p class="mesha-lang-keep">${t("We'll keep this for every screen. Change it anytime.",'यह हर स्क्रीन पर रहेगा। कभी भी बदलें।')}</p>${languageButtons()}<p class="mesha-lang-foot">${t('Look first. Log in only when you pay.','पहले देख लें। पैसे देते समय ही लॉग इन करें।')}</p></div></section>`;}
 async function chooseLang(next){if(!validLanguage(next))return;try{await loadLanguage(next);lang=next;save('nia-language',lang);$('#dialog').close();render();}catch{toast(t('Language could not be loaded. Check your connection and try again.','भाषा लोड नहीं हुई। कनेक्शन जाँचकर फिर कोशिश करें।'));}}

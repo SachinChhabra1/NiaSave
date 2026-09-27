@@ -51,10 +51,14 @@ async function journey(page, mode) {
   await expect(page.locator('.home-dashboard')).toBeVisible();
   if (mode === 'signed-in') {
     await expect(page.locator('#content')).toContainText('Example packing job');
-    await expect(page.locator('.home-fee-label')).toHaveText('Membership fee');
-    await expect(page.locator('.home-attention-card').first()).toContainText('Central details missing');
+    await expect(page.locator('.home-attention-card')).toContainText('Example packing job');
+    await expect(page.locator('.home-dashboard')).not.toContainText('Central details missing');
   }
-  if (mode === 'down') await expect(page.locator('.home-dashboard')).toContainText('Temporarily unavailable');
+  if (mode === 'down') {
+    await expect(page.locator('.home-dashboard')).toContainText('Rice, atta, oil at low prices');
+    await expect(page.locator('.home-dashboard')).not.toContainText('Temporarily unavailable');
+    await expect(page.locator('.home-attention-card')).toHaveCount(0);
+  }
   if (mode === 'empty') await expect(page.locator('.home-dashboard')).not.toContainText('Example rice pack');
   await page.locator('#less-nav button[data-action="live"]').click();
   await expect(page.locator('#content h1')).toHaveText('Live');

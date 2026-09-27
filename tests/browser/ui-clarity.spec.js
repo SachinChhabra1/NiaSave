@@ -140,6 +140,41 @@ for (const width of [360, 390]) {
             seenDates.add(key);
             dates.push({kind: 'date', file, screen: name, string: label});
           }
+          if (name === 'live' && await page.locator('[data-live-date="pick"]').count()) {
+            await page.locator('[data-live-date="pick"]').click();
+            await expect(page.locator('[data-live-part="day"]')).toBeFocused();
+            const openFile = file + '/pick';
+            const openFacts = await visibleFacts(page);
+            for (const fact of openFacts) {
+              if (violationKind(fact.text) && !copyCovers(fact.text, baseline.entries, name)) banned.push(openFile + ': ' + fact.text);
+              if (fact.size < 14) {
+                const key = openFile + '\0' + fact.text;
+                if (!seen.has(key)) {
+                  seen.add(key);
+                  fonts.push({kind: 'font', file: openFile, screen: name, string: fact.text, size: fact.size});
+                }
+              }
+            }
+            for (const label of await visibleDates(page)) dates.push({kind: 'date', file: openFile, screen: name, string: label});
+            const day = page.locator('[data-live-part="day"]');
+            const before = await page.evaluate(() => document.activeElement && document.activeElement.getAttribute('data-live-part'));
+            await day.selectOption({index: 1});
+            const after = await page.evaluate(() => document.activeElement && document.activeElement.getAttribute('data-live-part'));
+            expect(before).toBe('day');
+            expect(after).toBe('day');
+          }
+          if (name === 'send') {
+            const add = page.locator('[data-action="books-add"]');
+            if (await add.count() && await add.first().isVisible()) {
+              await add.first().click();
+              await expect(page.locator('#books-entry-form')).toBeVisible();
+              const openFile = file + '/books-add';
+              for (const label of await visibleDates(page)) dates.push({kind: 'date', file: openFile, screen: name, string: label});
+              const dialogText = await page.locator('#dialog').innerText();
+              expect(dialogText.toLowerCase()).not.toContain('mm/dd/yyyy');
+              await page.getByRole('button', {name: 'Close dialog', exact: true}).click();
+            }
+          }
         }
         expect(banned).toEqual([]);
         const allowedFonts = new Map();
@@ -167,3 +202,42 @@ for (const width of [360, 390]) {
 function assertBaselineSize(baseline) {
   expect(baseline.entries.length).toBeLessThanOrEqual(BASELINE_MAX);
 }
+
+test('opened Send entry forms show dd/mm/yyyy and keep focus', async ({page}) => {
+  test.setTimeout(90000);
+  await page.setViewportSize({width: 360, height: 780});
+  await prepare(page, 'en');
+  await page.route('**/*', async route => {
+    const url = route.request().url();
+    if (url.includes('openstreetmap.org')) return route.abort();
+    if (!url.includes('/api/') && !url.includes('/v1/')) return route.continue();
+    const parsed = new URL(url);
+    const body = JSON.parse(JSON.stringify(bodyFor('signed-in', parsed.pathname)));
+    if (parsed.pathname.endsWith('/books') && body.months) {
+      body.months[0].entries[0].editable = true;
+    }
+    await route.fulfill({status: 200, contentType: 'application/json', body: JSON.stringify(body)});
+  });
+  await page.goto('/#send');
+  await page.locator('[data-action="books-add"]').first().click();
+  await expect(page.locator('#books-entry-form input[type="date"]')).toHaveCount(0);
+  await expect(page.locator('#books-entry-form [name="date"]')).toHaveValue('2026-09-15');
+  await expect(page.locator('.books-date-shown')).toHaveText('15/09/2026');
+  const months = await page.locator('[data-books-part="month"] option').evaluateAll(nodes => nodes.map(node => node.value));
+  expect(months).toContain('9');
+  await expect(page.locator('[data-books-part="month"]')).toHaveValue('9');
+  const month = page.locator('[data-books-part="month"]');
+  await month.focus();
+  const before = await page.evaluate(() => document.activeElement && document.activeElement.getAttribute('data-books-part'));
+  await month.selectOption('8');
+  const after = await page.evaluate(() => document.activeElement && document.activeElement.getAttribute('data-books-part'));
+  expect(before).toBe('month');
+  expect(after).toBe('month');
+  await expect(page.locator('#dialog')).not.toContainText('mm/dd/yyyy');
+  await page.getByRole('button', {name: 'Close dialog', exact: true}).click();
+  await page.locator('.books-entry summary').first().click();
+  await page.locator('[data-action="books-edit"]').click();
+  await expect(page.locator('#books-entry-form input[type="date"]')).toHaveCount(0);
+  await expect(page.locator('#books-entry-form [name="date"]')).toHaveValue('2026-09-02');
+  await expect(page.locator('.books-date-shown')).toHaveText('02/09/2026');
+});

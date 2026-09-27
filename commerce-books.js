@@ -46,9 +46,43 @@ export function entryPurposeOptions(kind,value,{t,esc}){
   return `<option value="" ${value?'':'selected'} disabled>${t('Choose a purpose')}</option>`+options.map(label=>`<option value="${esc(label)}" ${label===value?'selected':''}>${esc(t(label))}</option>`).join('');
 }
 
+export function istDay(time=Date.now()){return new Date(time+19800000).toISOString().slice(0,10);}
+export function isoParts(iso){const match=/^(\d{4})-(\d{2})-(\d{2})$/.exec(iso||'');return match?{y:Number(match[1]),m:Number(match[2]),d:Number(match[3])}:null;}
+export function isoJoin(y,m,d){return String(y).padStart(4,'0')+'-'+String(m).padStart(2,'0')+'-'+String(d).padStart(2,'0');}
+export function showDMY(iso){const part=isoParts(iso);return part?String(part.d).padStart(2,'0')+'/'+String(part.m).padStart(2,'0')+'/'+part.y:'';}
+export function monthLastDay(year,month){return new Date(Date.UTC(year,month,0)).getUTCDate();}
+export function clampIso(year,month,day,min,max){const dim=monthLastDay(year,month);let iso=isoJoin(year,month,Math.min(Math.max(day,1),dim));if(min&&iso<min)iso=min;if(max&&iso>max)iso=max;return iso;}
+export function monthsInRange(year,min,max){const months=[];for(let m=1;m<=12;m++){const start=isoJoin(year,m,1);const end=isoJoin(year,m,monthLastDay(year,m));if(end>=min&&start<=max)months.push(m);}return months;}
+export function daysInRange(year,month,min,max){const days=[];const dim=monthLastDay(year,month);for(let d=1;d<=dim;d++){const iso=isoJoin(year,month,d);if(iso>=min&&iso<=max)days.push(d);}return days;}
+export function weekMoveIn(min,max,todayChip){
+  const part=isoParts(todayChip);if(!part)return todayChip||min||'';
+  const utc=Date.UTC(part.y,part.m-1,part.d);const weekday=new Date(utc).getUTCDay();const weekStart=utc-weekday*86400000;
+  let iso=new Date(weekStart+6*86400000).toISOString().slice(0,10);
+  if(max&&iso>max)iso=max;if(min&&iso<min)iso=min;
+  if(iso!==todayChip)return iso;
+  for(let i=weekday+1;i<=6;i++){const candidate=new Date(weekStart+i*86400000).toISOString().slice(0,10);if(candidate>=min&&candidate<=max&&candidate!==todayChip)return candidate;}
+  for(let i=weekday-1;i>=0;i--){const candidate=new Date(weekStart+i*86400000).toISOString().slice(0,10);if(candidate>=min&&candidate<=max&&candidate!==todayChip)return candidate;}
+  for(let i=1;i<=6;i++){const candidate=new Date(utc+i*86400000).toISOString().slice(0,10);if(max&&candidate>max)break;if((!min||candidate>=min)&&candidate!==todayChip)return candidate;}
+  return iso;
+}
+export function datePartSelects(iso,min,max,{t,esc,partAttr}){
+  const part=isoParts(iso);if(!part)return '';
+  const minP=isoParts(min),maxP=isoParts(max);
+  const years=[];if(minP&&maxP)for(let y=minP.y;y<=maxP.y;y++)years.push(y);
+  const months=monthsInRange(part.y,min,max);
+  const days=daysInRange(part.y,part.m,min,max);
+  const opt=(n,selected)=>`<option value="${n}" ${Number(n)===Number(selected)?'selected':''}>${String(n).padStart(2,'0')}</option>`;
+  return `<div class="date-parts"><label>${t('Day')}<select data-${partAttr}="day" aria-label="${esc(t('Day'))}">${days.map(d=>opt(d,part.d)).join('')}</select></label><label>${t('Month')}<select data-${partAttr}="month" aria-label="${esc(t('Month'))}">${months.map(m=>opt(m,part.m)).join('')}</select></label><label>${t('Year')}<select data-${partAttr}="year" aria-label="${esc(t('Year'))}">${years.map(y=>`<option value="${y}" ${Number(y)===part.y?'selected':''}>${y}</option>`).join('')}</select></label></div>`;
+}
+export function booksDateMarkup(iso,min,max,{t,esc}){
+  return `<fieldset class="books-date"><legend>${t('Date')}</legend><p class="books-date-shown">${esc(showDMY(iso))}</p>${datePartSelects(iso,min,max,{t,esc,partAttr:'books-part'})}<input type="hidden" name="date" value="${esc(iso)}" required></fieldset>`;
+}
 export function personalEntryForm(entry,kind,{t,esc}){
-  const today=new Date(Date.now()+19800000).toISOString().slice(0,10);
-  return `<form id="books-entry-form" class="stack"><input type="hidden" name="entryId" value="${esc(entry?.reference||'')}"><input type="hidden" name="revision" value="${entry?.revision||0}"><label>${t('Date')}<input type="date" name="date" min="2020-01-01" max="${today}" value="${esc(entry?.date||today)}" required></label><label>${t('Type')}<select name="kind">${[['earning',t('Money received')],['expense',t('An expense')],['home',t('Sent home')]].map(([id,label])=>`<option value="${id}" ${(entry?.kind||kind)===id?'selected':''}>${label}</option>`).join('')}</select></label><label>${t('Amount (INR)')}<input name="amount" type="number" inputmode="decimal" min="0.01" max="1000000" step="0.01" value="${entry?entry.amountPaise/100:''}" required></label><label>${t('What was it for?')}<select name="label" required>${entryPurposeOptions(entry?.kind||kind,entry?.label||'',{t,esc})}</select></label><p class="muted">${t('Add only what is missing. Live and Save payments already appear automatically.')}</p><div id="form-error" class="error-inline" role="alert"></div><button type="submit" class="primary">${t('Save entry')}</button>${entry?`<button type="button" data-action="books-remove" data-id="${esc(entry.reference)}">${t('Remove this entry')}</button>`:''}</form>`;
+  const today=istDay();
+  const min='2020-01-01';
+  const raw=entry?.date||today;
+  const value=raw>=min&&raw<=today?raw:today;
+  return `<form id="books-entry-form" class="stack"><input type="hidden" name="entryId" value="${esc(entry?.reference||'')}"><input type="hidden" name="revision" value="${entry?.revision||0}">${booksDateMarkup(value,min,today,{t,esc})}<label>${t('Type')}<select name="kind">${[['earning',t('Money received')],['expense',t('An expense')],['home',t('Sent home')]].map(([id,label])=>`<option value="${id}" ${(entry?.kind||kind)===id?'selected':''}>${label}</option>`).join('')}</select></label><label>${t('Amount (INR)')}<input name="amount" type="number" inputmode="decimal" min="0.01" max="1000000" step="0.01" value="${entry?entry.amountPaise/100:''}" required></label><label>${t('What was it for?')}<select name="label" required>${entryPurposeOptions(entry?.kind||kind,entry?.label||'',{t,esc})}</select></label><p class="muted">${t('Add only what is missing. Live and Save payments already appear automatically.')}</p><div id="form-error" class="error-inline" role="alert"></div><button type="submit" class="primary">${t('Save entry')}</button>${entry?`<button type="button" data-action="books-remove" data-id="${esc(entry.reference)}">${t('Remove this entry')}</button>`:''}</form>`;
 }
 
 export function sendViewState({data,online=true,signedOut=false,now=Date.now()}={}){

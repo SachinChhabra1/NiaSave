@@ -20,7 +20,6 @@ export default {
 
   "Log in to see what is here": "इथे काय आहे ते बघण्यासाठी लॉग इन करा",
   "Log in to see jobs near you": "जवळची नौकरी बघण्यासाठी लॉग इन करा",
-  "Log in to see your money plan": "पैशांची योजना बघण्यासाठी लॉग इन करा.",
   "Log in with your phone before you ask to join or change your number. The Nia team can help.": "सामील होण्यासाठी किंवा क्रमांक बदलण्यापूर्वी फोनने लॉग इन करा. निया टीम मदत करेल.",
   "Log in to see goods near you and reserve them.": "जवळचे सामान बघायला आणि राखून ठेवायला लॉग इन करा.",
   "Log in to see places to stay": "राहण्याची जागा बघण्यासाठी लॉग इन करा",
@@ -358,7 +357,6 @@ export default {
   "Map background unavailable. Your job list is still below.": "नकाशाची पार्श्वभूमी उपलब्ध नाही. नोकऱ्यांची यादी खाली आहे.",
   "View job": "नोकरी पाहा",
   "Map unavailable. Browse the jobs below.": "नकाशा उपलब्ध नाही. खालील नोकऱ्या पाहा.",
-  "Jobs near your Nest": "तुमच्या नेस्टजवळच्या नोकऱ्या",
   "Closest locations first": "सर्वात जवळची ठिकाणे आधी",
   "Verified workplace locations will help you compare your journey.": "कामाच्या ठिकाणांची खात्री झाल्यावर प्रवासाची तुलना करता येईल.",
   "straight-line distance": "सरळ रेषेतील अंतर",
@@ -449,8 +447,8 @@ export default {
   "Month": "महिना",
   "Year": "वर्ष",
   "How Earn works": "कमवा कसे चालते",
-  "Stay in a Nest": "नेस्टमध्ये रहा",
-  "See jobs near it": "त्याच्या जवळ काम बघा",
+  "Stay in a safe place near work": "कामाजवळ सुरक्षित जागी राहा",
+  "See work near where you stay": "तुम्ही जिथे राहता, त्याच्या जवळ काम बघा",
   "Walk to work": "कामापर्यंत चालत जा",
   "Sending money": "पैसे पाठवणे",
   "Sending money has not started": "पैसे पाठवणे अजून सुरू झालेले नाही",
@@ -458,5 +456,12 @@ export default {
   "Only money the Nia team has recorded shows as sent. Nothing is sent from here.": "निया टीमने जे पैसे लिहिले, तेच पाठवलेले दिसेल. इथून पैसे जात नाहीत.",
   "Spend": "खर्च",
   "Example": "उदाहरण",
-  "Log in to see your money.": "तुमचे पैसे बघण्यासाठी लॉग इन करा."
+  "Log in to see your money.": "तुमचे पैसे बघण्यासाठी लॉग इन करा.",
+  "Log in to see the money you send home.": "घरी पाठवलेले पैसे बघण्यासाठी लॉग इन करा.",
+  "This is for money you send home.": "हे घरी पाठवलेल्या पैशांसाठी आहे.",
+  "Dates could not be loaded.": "तारखा आल्या नाहीत.",
+  "Money earned": "कमावलेले पैसे",
+  "Money spent": "खर्च झालेले पैसे",
+  "Money left": "उरलेले पैसे",
+  "A person writing in a notebook": "वहीत लिहित असलेली व्यक्ती"
 };

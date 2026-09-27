@@ -213,12 +213,6 @@
   {
    "kind": "copy",
    "file": "commerce-locales/bn.js",
-   "string": "Some statement sources are missing",
-   "rule": "banned"
-  },
-  {
-   "kind": "copy",
-   "file": "commerce-locales/bn.js",
    "string": "Source",
    "rule": "banned"
   },
@@ -484,12 +478,6 @@
    "kind": "copy",
    "file": "commerce-locales/hi.js",
    "string": "Reservation recorded by Central",
-   "rule": "banned"
-  },
-  {
-   "kind": "copy",
-   "file": "commerce-locales/hi.js",
-   "string": "Some statement sources are missing",
    "rule": "banned"
   },
   {
@@ -1222,12 +1210,6 @@
    "kind": "copy",
    "file": "commerce-locales/ta.js",
    "string": "Reservation recorded by Central",
-   "rule": "banned"
-  },
-  {
-   "kind": "copy",
-   "file": "commerce-locales/ta.js",
-   "string": "Some statement sources are missing",
    "rule": "banned"
   },
   {

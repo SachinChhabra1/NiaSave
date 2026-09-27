@@ -11,7 +11,7 @@ import {passkeyMarkup,usePasskey,takePasskeySetup} from './commerce-passkeys.js'
 import {otpIsPrimary,optionalPasswordAllowed,optionalSetupExpired,submitOptionalPassword,usesPhoneOtpFlow,usesPasswordAuth,e164In,nationalMobile,rememberOn,authErrorText,needsSetPassword,setPasswordToken,passwordBody,setPasswordIssue,submitSetPassword,submitAuthPaths,otpRequestPaths,otpVerifyPaths,loginPath,authTimeoutMs,phoneFormMarkup,verifyFormMarkup,setPasswordFormMarkup,rememberFormMarkup,passwordFormMarkup} from './commerce-member-auth.js';
 import {membershipMarkup,partnerListMarkup,partnerConsentMarkup,partnerState} from './commerce-services.js';
 import { planForm, planResult, planStatus, fieldsFromValues, valuesFromFields, sameFields } from './commerce-plan.js';
-import { booksMarkup, downloadBooks, personalEntryForm, healthSupportDialog, entryPurposeOptions, sendViewState } from './commerce-books.js';
+import { booksMarkup, downloadBooks, personalEntryForm, healthSupportDialog, entryPurposeOptions, sendViewState, booksDateMarkup, istDay, isoParts, showDMY, clampIso, datePartSelects, weekMoveIn } from './commerce-books.js';
 import { mapModel, mapMarkup, mountMap, mapJobDetails, earnProjectionState } from './commerce-earn-map.js';
 import { saveCategories, categoryId, categoryIcons } from './commerce-categories.js';
 import { languageOptions, validLanguage, loadLanguage, translate } from './commerce-i18n.js';
@@ -33,6 +33,7 @@ let lang=readStickyLanguage()||'en', page=pageFromLocation(), cat=null, account=
 let bagOpen=false, checkoutPending=false, sessionExpired=false;
 let shellReadAt=0, shellReadFailed=false;
 let nestData=null, nestOrders=[], nestOrdersError='', nestStart='', nestDraft=null, nestPending=load('nia-nest-pending',null);
+let liveDateDraft='';
 let liveDateOpen=false;
 let authPhone='', passwordToken='', pendingPassword='', authStep='';
 let disposeEarnMap=()=>{};
@@ -126,7 +127,7 @@ function applyCommitmentGate(root=document){
   const target=root===document?$('#content'):root;
   const shopCopy=page==='shop'&&category!=='insurance'?shopReservationNotice({catalogue:cat,signedIn:!!account,reservationsEnabled:saveCommitmentReady()}):undefined;
   const shoppingOpen=cat?.capabilities?.saveShoppingOpen===true;
-  const copy=shopCopy!==undefined?shopCopy:(saveCommitmentReady()||shoppingOpen)?(['live','earn'].includes(page)||category==='insurance'?OTHER_COMMITMENTS_PAUSED_COPY:!account&&shoppingOpen?'Log in to see goods near you and reserve them.':null):PILOT_CLOSED_COPY;
+  const copy=shopCopy!==undefined?shopCopy:(saveCommitmentReady()||shoppingOpen)?(['live','earn'].includes(page)||category==='insurance'?OTHER_COMMITMENTS_PAUSED_COPY:page==='send'&&!account?'This is for money you send home.':!account&&shoppingOpen?'Log in to see goods near you and reserve them.':null):PILOT_CLOSED_COPY;
   const previous=target?.querySelector('[data-pilot-paused]');
   if(previous)previous.remove();
   if(target&&copy)target.prepend(pauseNote(copy));
@@ -169,7 +170,7 @@ function prepareJourney(root){
   (root.documentElement||root).dataset.a11yReady=String(audit.ok);
 }
 document.addEventListener('keydown',event=>{const control=event.target.closest('[data-action][role="button"]');if(control&&(event.key==='Enter'||event.key===' ')){event.preventDefault();control.click();}});
-function show(title,body){$('#dialog').classList.remove('signin-dialog','mesha-checkout');document.body.classList.remove('signin-open','mesha-checkout-open');$('#dialog-title').textContent=title;$('#dialog-body').innerHTML=body;ownerControls($('#dialog-body'));applyCommitmentGate($('#dialog-body'));prepareJourney($('#dialog'));if(!$('#dialog').open)$('#dialog').showModal();$('#dialog-body').querySelector('input:not([type=hidden]),button:not(:disabled),select')?.focus({preventScroll:true});}
+function show(title,body){$('#dialog').classList.remove('signin-dialog','mesha-checkout');document.body.classList.remove('signin-open','mesha-checkout-open');$('#dialog-title').textContent=title;$('#dialog-body').innerHTML=body;const dateWalker=document.createTreeWalker($('#dialog-body'),NodeFilter.SHOW_TEXT);let dateNode;while((dateNode=dateWalker.nextNode()))dateNode.textContent=dateNode.textContent.replace(/\d{4}-\d{2}-\d{2}/g,iso=>showDMY(iso)||iso);ownerControls($('#dialog-body'));applyCommitmentGate($('#dialog-body'));prepareJourney($('#dialog'));if(!$('#dialog').open)$('#dialog').showModal();$('#dialog-body').querySelector('input:not([type=hidden]),button:not(:disabled),select')?.focus({preventScroll:true});}
 function unsyncedTapCount(){
   if(!account||owner.active)return 0;
   const sameMember=key=>load(key,null)?.accountId===account.id;
@@ -286,6 +287,7 @@ async function go(next,{fromHistory=false}={}){
   if(owner.active&&!['live','earn','shop','send','account'].includes(next))next='account';
   const version=++navigationVersion;
   page=next;
+  if(next!=='live')liveDateDraft='';
   if(location.hash!=='#'+next)history[fromHistory?'replaceState':'pushState'](null,'','#'+next);
   $('#dialog').close();
   if(!account&&!owner.active&&next==='orders'){page='account';history.replaceState(null,'','#account');render();login();return;}
@@ -356,36 +358,39 @@ function earnErrorPanel(){
   if(earnError)return pictureState('network',esc(earnError),`<button class="primary" data-action="earn">${t('Try again','फिर कोशिश करें')}</button>`);
   return '';
 }
-function istDay(time=Date.now()){return new Date(time+19800000).toISOString().slice(0,10);}
-function isoParts(iso){const match=/^(\d{4})-(\d{2})-(\d{2})$/.exec(iso||'');return match?{y:Number(match[1]),m:Number(match[2]),d:Number(match[3])}:null;}
-function isoJoin(y,m,d){return String(y).padStart(4,'0')+'-'+String(m).padStart(2,'0')+'-'+String(d).padStart(2,'0');}
-function showDMY(iso){const part=isoParts(iso);return part?String(part.d).padStart(2,'0')+'/'+String(part.m).padStart(2,'0')+'/'+part.y:'';}
-function plusIso(iso,days){const part=isoParts(iso);if(!part)return iso||'';return new Date(Date.UTC(part.y,part.m-1,part.d)+days*86400000).toISOString().slice(0,10);}
-function weekMoveIn(min,max){const part=isoParts(min);if(!part)return min||'';const utc=Date.UTC(part.y,part.m-1,part.d);const weekday=new Date(utc).getUTCDay();const add=weekday===0?0:7-weekday;let iso=new Date(utc+add*86400000).toISOString().slice(0,10);if(max&&iso>max)iso=max;if(min&&iso<min)iso=min;return iso;}
-function liveDateBounds(){const min=nestData?.minDate||istDay();const max=nestData?.maxDate||plusIso(min,30);return {min,max,today:min,week:weekMoveIn(min,max)};}
-function clampLiveIso(year,month,day,min,max){const dim=new Date(Date.UTC(year,month,0)).getUTCDate();let iso=isoJoin(year,month,Math.min(Math.max(day,1),dim));if(min&&iso<min)iso=min;if(max&&iso>max)iso=max;return iso;}
+function liveShownDate(bounds){
+  const {min,max,today}=bounds;
+  const echoed=isoParts(nestStart)&&nestStart>=min&&nestStart<=max?nestStart:'';
+  let current=isoParts(liveDateDraft)?liveDateDraft:(echoed||today);
+  if(current<min)current=min;
+  if(current>max)current=max;
+  return current;
+}
+function liveDateBounds(){
+  const min=nestData?.minDate;
+  const max=nestData?.maxDate;
+  if(!isoParts(min)||!isoParts(max)||min>max)return null;
+  const real=istDay();
+  const today=real>=min&&real<=max?real:min;
+  return {min,max,today,todayIsReal:today===real,week:weekMoveIn(min,max,today)};
+}
 function liveDateForm(){
-  const {min,max,today,week}=liveDateBounds();
-  const current=isoParts(nestStart)?nestStart:today;
-  const custom=current!==today&&current!==week;
-  const open=liveDateOpen||custom;
+  const bounds=liveDateBounds();
+  if(!bounds)return `<p class="info live-dates-missing">${esc(t('Dates could not be loaded.'))}</p>`;
+  const {min,max,today,todayIsReal,week}=bounds;
+  const current=liveShownDate(bounds);
+  const open=liveDateOpen||(current!==today&&current!==week);
   const mode=current===today?'today':current===week?'week':'pick';
   const pickLabel=mode==='pick'?showDMY(current):t('Pick a date');
-  const part=isoParts(mode==='pick'?current:today)||isoParts(today);
-  const minP=isoParts(min),maxP=isoParts(max);
-  const years=[];if(minP&&maxP)for(let y=minP.y;y<=maxP.y;y++)years.push(y);
-  const months=[];
-  for(let m=1;m<=12;m++){const start=isoJoin(part.y,m,1);const end=isoJoin(part.y,m,28);if(end>=min&&start<=max)months.push(m);}
-  const dim=new Date(Date.UTC(part.y,part.m,0)).getUTCDate();
-  const days=[];
-  for(let d=1;d<=dim;d++){const iso=isoJoin(part.y,part.m,d);if(iso>=min&&iso<=max)days.push(d);}
-  const opt=(n,selected)=>`<option value="${n}" ${Number(n)===Number(selected)?'selected':''}>${String(n).padStart(2,'0')}</option>`;
-  const picker=open?`<div class="live-date-pick"><label>${t('Day')}<select data-live-part="day" aria-label="${esc(t('Day'))}">${days.map(d=>opt(d,part.d)).join('')}</select></label><label>${t('Month')}<select data-live-part="month" aria-label="${esc(t('Month'))}">${months.map(m=>opt(m,part.m)).join('')}</select></label><label>${t('Year')}<select data-live-part="year" aria-label="${esc(t('Year'))}">${years.map(y=>`<option value="${y}" ${y===part.y?'selected':''}>${y}</option>`).join('')}</select></label></div>`:'';
-  return `<form id="nest-search-form" class="store-date nest-search live-move"><fieldset class="live-move-set"><legend>${t('Move in')}</legend><div class="live-chips" role="group" aria-label="${esc(t('Move in'))}"><button type="button" class="live-chip" data-live-date="today" aria-pressed="${mode==='today'}">${t('Today')}</button><button type="button" class="live-chip" data-live-date="week" aria-pressed="${mode==='week'}">${t('This week')}</button><button type="button" class="live-chip" data-live-date="pick" aria-pressed="${mode==='pick'}">${esc(pickLabel)}</button></div><p class="live-date-shown">${esc(showDMY(current))}</p>${picker}<input type="hidden" name="start" value="${esc(current)}"></fieldset><button class="primary" type="submit">${t('See Nests')}</button></form>`;
+  const todayLabel=todayIsReal?t('Today'):showDMY(today);
+  const picker=open?datePartSelects(current,min,max,{t,esc,partAttr:'live-part'}):'';
+  return `<form id="nest-search-form" class="store-date nest-search live-move"><fieldset class="live-move-set"><legend>${t('Move in')}</legend><div class="live-chips" role="group" aria-label="${esc(t('Move in'))}"><button type="button" class="live-chip" data-live-date="today" aria-pressed="${mode==='today'}">${todayLabel}</button><button type="button" class="live-chip" data-live-date="week" aria-pressed="${mode==='week'}">${t('This week')}</button><button type="button" class="live-chip" data-live-date="pick" aria-pressed="${mode==='pick'}">${esc(pickLabel)}</button></div>${picker}<input type="hidden" name="start" value="${esc(current)}"></fieldset><button class="primary" type="submit">${t('See Nests')}</button></form>`;
 }
 function applyLiveChip(kind){
-  const {today,week}=liveDateBounds();
-  if(kind==='pick'){liveDateOpen=true;render();return;}
+  const bounds=liveDateBounds();
+  if(!bounds)return;
+  const {today,week}=bounds;
+  if(kind==='pick'){liveDateOpen=true;render();document.querySelector('[data-live-part="day"]')?.focus({preventScroll:true});return;}
   liveDateOpen=false;
   const start=kind==='week'?week:today;
   const form=document.getElementById('nest-search-form');
@@ -393,26 +398,44 @@ function applyLiveChip(kind){
   if(input)input.value=start;
   if(form)form.requestSubmit();
 }
-function syncLiveDateParts(){
+function syncLiveDateParts(which){
   const form=document.getElementById('nest-search-form');
   if(!form)return;
-  const {min,max}=liveDateBounds();
+  const bounds=liveDateBounds();
+  if(!bounds)return;
+  const {min,max}=bounds;
   const day=Number(form.querySelector('[data-live-part="day"]')?.value);
   const month=Number(form.querySelector('[data-live-part="month"]')?.value);
   const year=Number(form.querySelector('[data-live-part="year"]')?.value);
   if(!day||!month||!year)return;
-  nestStart=clampLiveIso(year,month,day,min,max);
+  liveDateDraft=clampIso(year,month,day,min,max);
   liveDateOpen=true;
   render();
+  if(which)document.querySelector(`[data-live-part="${which}"]`)?.focus({preventScroll:true});
+}
+function syncBooksDateParts(which){
+  const form=document.getElementById('books-entry-form');
+  if(!form)return;
+  const min='2020-01-01';
+  const max=istDay();
+  const day=Number(form.querySelector('[data-books-part="day"]')?.value);
+  const month=Number(form.querySelector('[data-books-part="month"]')?.value);
+  const year=Number(form.querySelector('[data-books-part="year"]')?.value);
+  if(!day||!month||!year)return;
+  const iso=clampIso(year,month,day,min,max);
+  const field=form.querySelector('.books-date');
+  if(!field)return;
+  field.outerHTML=booksDateMarkup(iso,min,max,{t,esc});
+  if(which)form.querySelector(`[data-books-part="${which}"]`)?.focus({preventScroll:true});
 }
 function earnHow(){
-  const steps=[[t('Stay in a Nest'),'/assets/studio-bunk-lockers.jpg'],[t('See jobs near it'),'/assets/earn.jpg'],[t('Walk to work'),'/assets/earn-nearby-work-v2.jpg']];
+  const steps=[[t('Stay in a safe place near work'),'/assets/studio-bunk-lockers.jpg'],[t('See work near where you stay'),'/assets/earn.jpg'],[t('Walk to work'),'/assets/earn-nearby-work-v2.jpg']];
   const call=callNiaMarkup({t,esc,icon,phone:NIA_HELP_PHONE,className:'call-nia'});
-  return `<section class="earn-how"><h2>${t('How Earn works')}</h2><ol class="earn-how-steps">${steps.map(([line,src])=>`<li><img src="${esc(src)}" alt="" width="800" height="500"><span>${esc(line)}</span></li>`).join('')}</ol><div class="earn-how-actions"><button type="button" class="primary" data-action="login">${t('Log in')}</button>${call}</div></section>`;
+  return `<section class="earn-how"><h2>${t('How Earn works')}</h2><ol class="earn-how-steps">${steps.map(([line,src],index)=>`<li><img src="${esc(src)}" alt="" width="800" height="500"><span>${index+1}. ${esc(line)}</span></li>`).join('')}</ol><div class="earn-how-actions"><button type="button" class="primary" data-action="login">${t('Log in')}</button>${call}</div></section>`;
 }
 function sendExample(){
-  const rows=[[t('Earn'),'₹10,000'],[t('Spend'),'₹4,000'],[t('Send'),'₹2,000']];
-  return `<article class="send-example"><p class="send-example-flag">${esc(t('Example'))}</p><img src="/assets/send.jpg" alt="" width="800" height="500"><ul>${rows.map(([name,amount])=>`<li><span>${esc(name)}</span><strong>${amount}</strong></li>`).join('')}</ul></article>`;
+  const rows=[[t('Money earned'),'₹10,000'],[t('Money spent'),'₹4,000'],[t('Sent home'),'₹2,000'],[t('Money left'),'₹4,000']];
+  return `<article class="send-example"><p class="send-example-flag">${esc(t('Example'))}</p><img src="/assets/send-notebook.jpg" alt="${esc(t('A person writing in a notebook'))}" width="1123" height="782"><ul>${rows.map(([name,amount])=>`<li><span>${esc(name)}</span><strong>${amount}</strong></li>`).join('')}</ul></article>`;
 }
 
 function earnView(){if(owner.active)return ownerEarnMarkup(earnData,earnError,{esc,money});
@@ -438,7 +461,7 @@ async function confirmJob(){if(!commitmentReady())return toast(t(PILOT_CLOSED_CO
 function sendView(){if(owner.active)return ownerSendMarkup();
   const signedOut=!account&&!owner.active;
   const state=sendViewState({data:booksData,online:navigator.onLine,signedOut});
-  const labels={loading:t('Checking your money plan'),ready:t('Recorded entries available'),stale:t('Statement needs refreshing'),source_missing:t('Details did not load.'),unavailable:t('Statement temporarily unavailable'),empty:t('No recorded entries yet'),offline:t('Offline. This may be an older statement')};
+  const labels={loading:t('Checking your money plan'),ready:t('Recorded entries available'),stale:t('Statement needs refreshing'),source_missing:signedOut?t('Log in to see the money you send home.'):t('Details did not load.'),unavailable:t('Statement temporarily unavailable'),empty:t('No recorded entries yet'),offline:t('Offline. This may be an older statement')};
   const taskAction=signedOut?`<button type="button" class="primary" data-action="login">${t('Log in','लॉग इन')}</button>`:'';
   return `<section class="store-screen store-send send-v2"><header class="store-head store-task"><h1>${t('Send')}</h1><p class="nia-transfer-status" role="status"><span class="badge">${t('Sending money has not started')}</span></p><p>${t('This is your plan. No money moves from here.')}</p>${taskAction}</header><p class="pillar-state" data-state="${state}" role="status">${esc(labels[state])}</p>${signedOut?`${sendExample()}<p class="send-login-line">${t('Log in to see your money.')}</p><div class="send-example-actions">${taskAction}${callNiaMarkup({t,esc,icon,phone:NIA_HELP_PHONE,className:'call-nia'})}</div>`:state==='loading'?pictureState('loading',t('Checking your money plan')):booksMarkup(booksData,booksMonth,account,{t,esc,money})}<section class="panel stack books-transfer"><div class="row"><h2>${t('Sending money')}</h2><span class="badge">${t('Sending money has not started')}</span></div><p>${t('Only money the Nia team has recorded shows as sent. Nothing is sent from here.')}</p></section>${footer()}</section>`;}
 
@@ -572,7 +595,7 @@ if(action==='reorder'){const o=orders.find(o=>o.id===id);for(const l of o.lines)
 }catch(e){if($('#dialog').open){let error=$('#dialog-body .error-inline');if(!error){error=document.createElement('p');error.className='error-inline';error.setAttribute('role','alert');$('#dialog-body').append(error);}error.textContent=e.message;}else toast(e.message);}});
 document.addEventListener('input',event=>{if(event.target.matches('#books-plan-form input')){const values=Object.fromEntries(new FormData(event.target.form));planDrafts.set(currentPlanKey(),values);$('#plan-result').innerHTML=planResult(values,{t,money});if(planState?.status==='ready'&&planState.saveState!=='saving'){planState={...planState,saveState:planState.savedFields&&sameFields(fieldsFromValues(values),planState.savedFields)?'saved':'unsaved',error:null};refreshPlanStatus();}}});
 document.addEventListener('submit',event=>{if(event.target.id==='books-plan-form')event.preventDefault();});
-document.addEventListener('change',async event=>{if(event.target.matches('[data-live-part]')){syncLiveDateParts();return;}if(event.target.matches('#books-entry-form [name="kind"]')){event.target.form.elements.namedItem('label').innerHTML=entryPurposeOptions(event.target.value,'',{t,esc});return;}if(event.target.matches('[data-books-month]')){booksMonth=event.target.value;render();$('[data-books-month]')?.focus({preventScroll:true});return;}if(event.target.matches('[data-language-select]')){const selector=event.target,next=selector.value;if(!validLanguage(next))return;selector.disabled=true;try{await chooseLang(next);($('#dialog').open?$('#dialog [data-language-select]'):$('[data-language-select]'))?.focus({preventScroll:true});}catch{selector.value=lang;toast(t('Language could not be loaded. Check your connection and try again.','भाषा लोड नहीं हुई। कनेक्शन जाँचकर फिर कोशिश करें।'));}finally{selector.disabled=false;}}});
+document.addEventListener('change',async event=>{if(event.target.matches('[data-live-part]')){syncLiveDateParts(event.target.getAttribute('data-live-part'));return;}if(event.target.matches('[data-books-part]')){syncBooksDateParts(event.target.getAttribute('data-books-part'));return;}if(event.target.matches('#books-entry-form [name="kind"]')){event.target.form.elements.namedItem('label').innerHTML=entryPurposeOptions(event.target.value,'',{t,esc});return;}if(event.target.matches('[data-books-month]')){booksMonth=event.target.value;render();$('[data-books-month]')?.focus({preventScroll:true});return;}if(event.target.matches('[data-language-select]')){const selector=event.target,next=selector.value;if(!validLanguage(next))return;selector.disabled=true;try{await chooseLang(next);($('#dialog').open?$('#dialog [data-language-select]'):$('[data-language-select]'))?.focus({preventScroll:true});}catch{selector.value=lang;toast(t('Language could not be loaded. Check your connection and try again.','भाषा लोड नहीं हुई। कनेक्शन जाँचकर फिर कोशिश करें।'));}finally{selector.disabled=false;}}});
 document.addEventListener('submit',async event=>{if(owner.active&&event.target.id!=='nest-search-form'){event.preventDefault();return;}if(!['owner-login-form','passkey-setup-form','login-form','verify-form','set-password-form','remember-form','review-form','recovery-form','support-form','nest-search-form','save-search-form','earn-form','books-entry-form','member-enrol-form','member-recovery-form','partner-referral-form'].includes(event.target.id))return;event.preventDefault();const form=event.target,fields=Object.fromEntries(new FormData(form));const submit=form.querySelector('button[type=submit],button.primary');if(submit)submit.disabled=true;try{
 if(form.id==='owner-login-form'){await signInOwner(fields);account=null;nestPending=null;orders=[];nestOrders=[];applications=[];page='live';history.replaceState(null,'','#live');form.reset();$('#dialog').close();await refresh();return;}
 if(form.id==='passkey-setup-form'){await finishPasskey('register',passkeySetupToken);return;}
@@ -580,7 +603,7 @@ if(form.id==='member-enrol-form'){await api('/membership/enrol',{fullName:fields
 if(form.id==='member-recovery-form'){await api('/membership/recovery',{oldPhone:'+91'+fields.oldPhone});emitAnalytics('identity','recovery_requested',{outcome:'received'});show(t('Request help','मदद माँगें'),`<p>${t('Your Nia team will review the request. Your account has not changed.')}</p>`);}
 if(form.id==='partner-referral-form'){const chosen=new FormData(form).getAll('fields');if(!chosen.length)throw {message:t('Choose at least one record to share.')};await api('/partners/referrals',{partnerId:fields.partnerId,consentVersion:Number(fields.consentVersion),fields:chosen,consent:fields.consent==='on'});return await openPartners();}
 if(form.id==='books-entry-form'){const amountPaise=Math.round(Number(fields.amount)*100);await submitBooks({...(fields.entryId?{id:fields.entryId,revision:Number(fields.revision)}:{}),date:fields.date,kind:fields.kind,amountPaise,label:fields.label});}
-if(form.id==='nest-search-form'){nestStart=fields.start;await loadNests();render();}
+if(form.id==='nest-search-form'){liveDateDraft='';nestStart=fields.start;await loadNests();render();}
 if(form.id==='save-search-form'){search=String(fields.q||'').trim().slice(0,40);aisle='';render();return;}
 if(form.id==='earn-form'&&!commitmentReady())return toast(t(PILOT_CLOSED_COPY));
 if(form.id==='earn-form'){emitAnalytics('earn','consent',{outcome:fields.consent==='on'?'granted':'absent'});if(!earnPending)earnPending={accountId:account.id,key:crypto.randomUUID(),body:{jobId:fields.jobId,revision:fields.revision,consent:fields.consent==='on'}};save('nia-earn-pending',earnPending);await confirmJob();}

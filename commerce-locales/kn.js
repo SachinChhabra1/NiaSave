@@ -20,7 +20,6 @@ export default {
 
   "Log in to see what is here": "ಇಲ್ಲಿ ಏನಿದೆ ನೋಡಲು ಲಾಗ್ ಇನ್ ಮಾಡಿ",
   "Log in to see jobs near you": "ಹತ್ತಿರದ ಕೆಲಸ ನೋಡಲು ಲಾಗ್ ಇನ್ ಮಾಡಿ",
-  "Log in to see your money plan": "ನಿಮ್ಮ ಹಣದ ಯೋಜನೆ ನೋಡಲು ಲಾಗ್ ಇನ್ ಮಾಡಿ.",
   "Log in with your phone before you ask to join or change your number. The Nia team can help.": "ಸೇರಲು ಅಥವಾ ಸಂಖ್ಯೆ ಬದಲಿಸಲು ಮೊದಲು ಫೋನ್‌ನಿಂದ ಲಾಗ್ ಇನ್ ಮಾಡಿ. ನಿಯಾ ತಂಡ ಸಹಾಯ ಮಾಡುತ್ತದೆ.",
   "Log in to see goods near you and reserve them.": "ಹತ್ತಿರದ ಸಾಮಾನು ನೋಡಿ ಕಾಯ್ದಿರಿಸಲು ಲಾಗ್ ಇನ್ ಮಾಡಿ.",
   "Log in to see places to stay": "ವಾಸದ ಜಾಗ ನೋಡಲು ಲಾಗ್ ಇನ್ ಮಾಡಿ",
@@ -355,7 +354,6 @@ export default {
   "Map background unavailable. Your job list is still below.": "ನಕ್ಷೆಯ ಹಿನ್ನೆಲೆ ಲಭ್ಯವಿಲ್ಲ. ಉದ್ಯೋಗ ಪಟ್ಟಿ ಕೆಳಗೆ ಇದೆ.",
   "View job": "ಉದ್ಯೋಗವನ್ನು ನೋಡಿ",
   "Map unavailable. Browse the jobs below.": "ನಕ್ಷೆ ಲಭ್ಯವಿಲ್ಲ. ಕೆಳಗಿನ ಉದ್ಯೋಗಗಳನ್ನು ನೋಡಿ.",
-  "Jobs near your Nest": "ನಿಮ್ಮ ನೆಸ್ಟ್ ಹತ್ತಿರದ ಉದ್ಯೋಗಗಳು",
   "Closest locations first": "ಹತ್ತಿರದ ಸ್ಥಳಗಳು ಮೊದಲು",
   "Verified workplace locations will help you compare your journey.": "ಪರಿಶೀಲಿಸಿದ ಉದ್ಯೋಗ ಸ್ಥಳಗಳು ನಿಮ್ಮ ಪ್ರಯಾಣವನ್ನು ಹೋಲಿಸಲು ಸಹಾಯ ಮಾಡುತ್ತವೆ.",
   "straight-line distance": "ನೇರ ರೇಖೆಯ ದೂರ",
@@ -470,8 +468,8 @@ export default {
   "Month": "ತಿಂಗಳು",
   "Year": "ವರ್ಷ",
   "How Earn works": "ಗಳಿಕೆ ಹೇಗೆ ಆಗುತ್ತದೆ",
-  "Stay in a Nest": "ನೆಸ್ಟ್‌ನಲ್ಲಿ ಇರಿ",
-  "See jobs near it": "ಅದರ ಹತ್ತಿರ ಕೆಲಸ ನೋಡಿ",
+  "Stay in a safe place near work": "ಕೆಲಸದ ಹತ್ತಿರ ಸುರಕ್ಷಿತ ಜಾಗದಲ್ಲಿ ಇರಿ",
+  "See work near where you stay": "ನೀವು ಇರುವ ಜಾಗದ ಹತ್ತಿರ ಕೆಲಸ ನೋಡಿ",
   "Walk to work": "ಕೆಲಸಕ್ಕೆ ನಡೆದು ಹೋಗಿ",
   "Sending money": "ಹಣ ಕಳುಹಿಸುವುದು",
   "Sending money has not started": "ಹಣ ಕಳುಹಿಸುವುದು ಇನ್ನೂ ಶುರುವಾಗಿಲ್ಲ",
@@ -479,5 +477,12 @@ export default {
   "Only money the Nia team has recorded shows as sent. Nothing is sent from here.": "ನಿಯಾ ತಂಡ ಬರೆದ ಹಣ ಮಾತ್ರ ಕಳುಹಿಸಿದಂತೆ ಕಾಣುತ್ತದೆ. ಇಲ್ಲಿಂದ ಹಣ ಹೋಗುವುದಿಲ್ಲ.",
   "Spend": "ಖರ್ಚು",
   "Example": "ಉದಾಹರಣೆ",
-  "Log in to see your money.": "ನಿಮ್ಮ ಹಣ ನೋಡಲು ಲಾಗ್ ಇನ್ ಮಾಡಿ."
+  "Log in to see your money.": "ನಿಮ್ಮ ಹಣ ನೋಡಲು ಲಾಗ್ ಇನ್ ಮಾಡಿ.",
+  "Log in to see the money you send home.": "ಮನೆಗೆ ಕಳುಹಿಸುವ ಹಣ ನೋಡಲು ಲಾಗ್ ಇನ್ ಮಾಡಿ.",
+  "This is for money you send home.": "ಇದು ಮನೆಗೆ ಕಳುಹಿಸುವ ಹಣಕ್ಕಾಗಿ.",
+  "Dates could not be loaded.": "ದಿನಾಂಕಗಳು ಬರಲಿಲ್ಲ.",
+  "Money earned": "ಗಳಿಸಿದ ಹಣ",
+  "Money spent": "ಖರ್ಚಾದ ಹಣ",
+  "Money left": "ಉಳಿದ ಹಣ",
+  "A person writing in a notebook": "ಪುಸ್ತಕದಲ್ಲಿ ಬರೆಯುತ್ತಿರುವ ವ್ಯಕ್ತಿ"
 };

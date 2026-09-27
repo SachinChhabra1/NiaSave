@@ -1,0 +1,36 @@
+name: UI guards
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, labeled, unlabeled]
+
+permissions:
+  contents: read
+
+jobs:
+  hold:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Fetch the pull request base branch
+        run: git fetch --no-tags --depth=1 origin "+refs/heads/${{ github.base_ref }}:refs/remotes/origin/${{ github.base_ref }}"
+
+      - name: Prove the base ref resolves
+        run: git rev-parse --verify --end-of-options "refs/remotes/origin/${{ github.base_ref }}"
+
+      - name: Reject a new baseline entry or a larger total
+        run: node tests/ui-clarity/ratchet.mjs "origin/${{ github.base_ref }}"
+
+      - name: Fail a held pull request
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_LABELS: ${{ join(github.event.pull_request.labels.*.name, ',') }}
+        run: node tests/ui-guards/hold-check.mjs

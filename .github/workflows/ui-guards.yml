@@ -27,7 +27,7 @@ jobs:
         run: git rev-parse --verify --end-of-options "refs/remotes/origin/${{ github.base_ref }}"
 
       - name: Reject a new baseline entry or a larger total
-        run: node tests/ui-clarity/ratchet.mjs "origin/${{ github.base_ref }}"
+        run: node tests/ui-clarity/ratchet.mjs "refs/remotes/origin/${{ github.base_ref }}"
 
       - name: Fail a held pull request
         env:

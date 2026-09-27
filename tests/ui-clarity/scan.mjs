@@ -321,8 +321,6 @@ export function copyScreen(entry) {
   if (SCREENS.has(entry.screen)) return entry.screen;
   const mapped = COPY_SCREEN_BY_FILE.get(entry.file || '');
   if (mapped) return mapped;
-  // This sentence is rendered from commerce.js, which also holds the other four screens.
-  if (entry.string === 'Some statement sources are missing') return 'send';
   const tail = String(entry.file || '').split('/').pop();
   if (SCREENS.has(tail)) return tail;
   return '';

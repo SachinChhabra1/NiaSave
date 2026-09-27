@@ -1,0 +1,102 @@
+{
+  "ready": [
+    {
+      "method": "GET",
+      "path": "/api/commerce/catalogue",
+      "fields": []
+    },
+    {
+      "method": "GET",
+      "path": "/api/commerce/nests",
+      "fields": []
+    }
+  ],
+  "empty": [
+    {
+      "method": "GET",
+      "path": "/api/commerce/catalogue",
+      "fields": []
+    },
+    {
+      "method": "GET",
+      "path": "/api/commerce/nests",
+      "fields": []
+    }
+  ],
+  "down": [
+    {
+      "method": "GET",
+      "path": "/api/commerce/catalogue",
+      "fields": []
+    },
+    {
+      "method": "GET",
+      "path": "/api/commerce/nests",
+      "fields": []
+    }
+  ],
+  "stale": [
+    {
+      "method": "GET",
+      "path": "/api/commerce/catalogue",
+      "fields": []
+    },
+    {
+      "method": "GET",
+      "path": "/api/commerce/nests",
+      "fields": []
+    }
+  ],
+  "signed-in": [
+    {
+      "method": "GET",
+      "path": "/api/commerce/books",
+      "fields": []
+    },
+    {
+      "method": "GET",
+      "path": "/api/commerce/books",
+      "fields": []
+    },
+    {
+      "method": "GET",
+      "path": "/api/commerce/books/plan?month=2026-09",
+      "fields": []
+    },
+    {
+      "method": "GET",
+      "path": "/api/commerce/catalogue",
+      "fields": []
+    },
+    {
+      "method": "GET",
+      "path": "/api/commerce/earn",
+      "fields": []
+    },
+    {
+      "method": "GET",
+      "path": "/api/commerce/earn",
+      "fields": []
+    },
+    {
+      "method": "GET",
+      "path": "/api/commerce/earn/applications",
+      "fields": []
+    },
+    {
+      "method": "GET",
+      "path": "/api/commerce/membership",
+      "fields": []
+    },
+    {
+      "method": "GET",
+      "path": "/api/commerce/nests",
+      "fields": []
+    },
+    {
+      "method": "GET",
+      "path": "/api/commerce/nests/bookings",
+      "fields": []
+    }
+  ]
+}

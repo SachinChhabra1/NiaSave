@@ -528,6 +528,12 @@ body.mesha-dark header.header .shell-heading{
   justify-content:flex-start;
   gap:4px 10px;
 }
+#shell-greeting[hidden],
+#sync-state[hidden],
+.shell-heading[hidden]{display:none}
+body.mesha-dark header.header:has(.shell-heading[hidden]){
+  grid-template-areas:"brand login" "actions actions";
+}
 body.mesha-dark #shell-greeting{font-size:14px}
 body.mesha-dark #sync-state{white-space:normal;font-size:14px;color:#344054}
 body.mesha-dark #sync-state::before{content:none;width:0;height:0;background:transparent}

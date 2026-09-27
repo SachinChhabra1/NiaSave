@@ -181,8 +181,12 @@ function renderShell(){
   const queued=unsyncedTapCount(),online=navigator.onLine;
   const state=memberShellState({online,readAsOf:cat?.asOf,readAt:shellReadAt,readFailed:shellReadFailed,pendingCount:queued,sourceOwner:cat?.owner,signedIn:!!account});
   const labels={signin:t('Log in to see what is here'),synced:t('Catalogue synced','सामान की सूची अपडेट है'),checking:t('Getting your details','आपकी जानकारी आ रही है'),stale:t('Checking last update','पिछला अपडेट जाँच रहे हैं'),offline:t('Offline','ऑफ़लाइन'),queued:t('Queued on this phone','इस फोन पर कतार में है'),retry:t('Request needs retry','अनुरोध फिर से भेजना होगा')};
-  $('#shell-greeting').textContent=owner.active?t('Owner view','संचालक दृश्य'):account?t('Hello, Member','नमस्ते, सदस्य'):t('Welcome to NiaSave','नियासेव में स्वागत है');
-  const sync=$('#sync-state');sync.dataset.state=state;const syncWord=shellReadFailed&&state==='checking'?t('Details did not load.'):(labels[state]||t('Details did not load.'));sync.replaceChildren();const syncText=document.createElement('span');syncText.className='sync-word';syncText.textContent=syncWord;sync.append(syncText);
+  const homeQuiet=page==='home'&&!document.body.classList.contains('mesha-lang-open');
+  const greet=$('#shell-greeting');
+  greet.hidden=homeQuiet;
+  greet.textContent=homeQuiet?'':(owner.active?t('Owner view','संचालक दृश्य'):account?t('Hello, Member','नमस्ते, सदस्य'):t('Welcome to NiaSave','नियासेव में स्वागत है'));
+  const sync=$('#sync-state');sync.dataset.state=state;const syncWord=homeQuiet?(shellReadFailed?t('Details did not load.'):''):(shellReadFailed&&state==='checking'?t('Details did not load.'):(labels[state]||t('Details did not load.')));sync.replaceChildren();if(syncWord){const syncText=document.createElement('span');syncText.className='sync-word';syncText.textContent=syncWord;sync.append(syncText);}sync.hidden=!syncWord;
+  const heading=greet.closest('.shell-heading');if(heading)heading.hidden=homeQuiet&&!syncWord;
   const banner=$('#offline-banner');banner.hidden=online;
   banner.textContent=online?'':(cat?.asOf?t('Offline. Last loaded information may be out of date.','ऑफ़लाइन। पिछली देखी जानकारी पुरानी हो सकती है।'):t('Offline. Connect to load information.','ऑफ़लाइन। जानकारी देखने के लिए इंटरनेट से जुड़ें।'))+(queued?' '+t('A request is queued on this phone. Retry when connected.','एक अनुरोध इस फोन पर कतार में है। इंटरनेट आने पर फिर से भेजें।'):'');
 }

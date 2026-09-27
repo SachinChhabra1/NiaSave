@@ -33,7 +33,7 @@ export function shopSourceCopy(owner){
 // Wording only: the existing server capability and stock guards still control actions.
 export function shopReservationNotice({catalogue,signedIn,reservationsEnabled}){
   if(catalogue?.owner!=='niasave')return undefined;
-  if(!signedIn)return 'Sign in to see essentials for your location and reserve.';
+  if(!signedIn)return 'Log in to see goods near you and reserve them.';
   if(!Array.isArray(catalogue.products))return 'Catalogue unavailable. Refresh to check reservations.';
   if(shopViewState({catalogue})==='stale')return 'Refresh the catalogue to check current availability.';
   const products=memberProducts(catalogue);
@@ -77,8 +77,8 @@ export function shopCatalogueMarkup({catalogue,query='',aisle='',lang='en',state
   const visible=category?matching.filter(p=>shopCategory(p)===category):matching;
   const sourceOwner=catalogue?.owner,copy=shopSourceCopy(sourceOwner);
   const moneyContext={t,esc,money,sourceOwner};
-  const noRows=sourceOwner==='niasave'?(signedIn?'No available products':'Sign in to view availability'):'Coming soon';
-  const stateText={loading:t(copy.loading),ready:t(copy.ready),stale:t('Catalogue needs refreshing'),source_missing:t(copy.missing),unavailable:t('Shop is closed for now. Please try later.'),empty:t(sourceOwner==='niasave'&&!signedIn?'Sign in to see essentials for your location and reserve.':copy.empty),offline:t('Offline. Reconnect for current prices')};
+  const noRows=sourceOwner==='niasave'?(signedIn?'No available products':'Log in to see what is here'):'Coming soon';
+  const stateText={loading:t(copy.loading),ready:t(copy.ready),stale:t('Catalogue needs refreshing'),source_missing:t(copy.missing),unavailable:t('Shop is closed for now. Please try later.'),empty:t(sourceOwner==='niasave'&&!signedIn?'Log in to see goods near you and reserve them.':copy.empty),offline:t('Offline. Reconnect for current prices')};
   const item=p=>`<article class="shop-item"><div class="shop-item-photo">${shopPhoto(p,{esc,t,name:shopName(p,lang),sourceOwner})}</div><div class="shop-item-detail"><h3>${esc(shopName(p,lang))}</h3>${p.brand?`<p>${esc(p.brand)}</p>`:''}${p.pack?`<p>${esc(p.pack)}</p>`:''}${shopPrice(p,moneyContext)}<button type="button" data-action="open-buy" data-id="${esc(p.id)}">${esc(t('View item'))}</button></div></article>`;
   const tile=id=>{const rows=products.filter(p=>shopCategory(p)===id);const first=rows.find(p=>p.photoUrl);
     const lowest=rows.find(p=>shopUnit(p)?.lowest);

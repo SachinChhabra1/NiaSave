@@ -61,8 +61,8 @@ for (const width of [320, 390, 760, 761, 960, 1280, 1440]) {
     await expect(page.locator('#dialog')).not.toBeVisible();
     await nav.getByRole('button', { name: 'Shop', exact: true }).click();
     await page.locator('[data-action="open-aisle"][data-id="rice"]').click();
-    await expect(page.getByRole('button', { name: 'All categories', exact: true })).toBeVisible();
-    await page.getByRole('button', { name: 'All categories', exact: true }).click();
+    await expect(page.getByRole('button', { name: 'All goods', exact: true })).toBeVisible();
+    await page.getByRole('button', { name: 'All goods', exact: true }).click();
     await page.getByRole('searchbox').fill('rice');
     await page.getByRole('button', { name: 'Search', exact: true }).click();
     await expect(page.getByRole('searchbox')).toHaveValue('rice');

@@ -1,11 +1,47 @@
 import {test, expect} from '@playwright/test';
+import {execFileSync} from 'node:child_process';
 import http from 'node:http';
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import zlib from 'node:zlib';
+import {fileURLToPath} from 'node:url';
 import {BASELINE_MAX} from '../ui-clarity/limits.mjs';
 import {copyCovers, readBaseline, violationKind} from '../ui-clarity/scan.mjs';
 import {bodyFor} from '../ui-clarity/replies.mjs';
+
+const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
+
+// The shipped member home is whatever `npm run build:production` writes, including the
+// in-place splice of commerce.js. Stage that build outside the repo so the test can run
+// with no prior dist/ and the working tree stays untouched.
+function stageProductionBuild() {
+  const stage = fs.mkdtempSync(path.join(os.tmpdir(), 'niasave-weight-'));
+  try {
+    fs.cpSync(repoRoot, stage, {
+      recursive: true,
+      filter(src) {
+        const rel = path.relative(repoRoot, src);
+        if (!rel) return true;
+        const top = rel.split(path.sep)[0];
+        return top !== 'node_modules' && top !== 'dist' && top !== '.git' && top !== 'test-results';
+      }
+    });
+    fs.symlinkSync(path.join(repoRoot, 'node_modules'), path.join(stage, 'node_modules'));
+    try {
+      execFileSync('sh', ['vercel-build.sh'], {cwd: stage, stdio: 'pipe', env: process.env});
+    } catch (error) {
+      const detail = [error.stdout, error.stderr].map(chunk => chunk && chunk.toString()).filter(Boolean).join('\n');
+      throw new Error(detail || error.message);
+    }
+    const root = path.join(stage, 'dist');
+    if (!fs.existsSync(path.join(root, 'commerce.html'))) throw new Error('staged production build did not emit dist/commerce.html');
+    return {stage, root};
+  } catch (error) {
+    fs.rmSync(stage, {recursive: true, force: true});
+    throw error;
+  }
+}
 
 async function prepare(page, lang) {
   await page.addInitScript(language => {
@@ -364,10 +400,11 @@ for (const lang of ['en', 'hi', 'ta', 'bn']) {
 
 test('first load transfers at most 500KB before below-the-fold images', async ({page}) => {
   test.setTimeout(90000);
-  const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../..', 'dist');
-  if (!fs.existsSync(path.join(root, 'commerce.html'))) throw new Error('dist/commerce.html is missing. Run npm run build:production first.');
+  const {stage, root} = stageProductionBuild();
+  let server;
+  try {
   const types = {'.html': 'text/html', '.js': 'text/javascript', '.mjs': 'text/javascript', '.css': 'text/css', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.svg': 'image/svg+xml', '.webmanifest': 'application/manifest+json'};
-  const server = http.createServer((req, res) => {
+  server = http.createServer((req, res) => {
     const urlPath = decodeURIComponent((req.url || '/').split('?')[0]);
     const rel = urlPath === '/' ? 'commerce.html' : urlPath.replace(/^\/+/, '');
     const file = path.join(root, rel);
@@ -384,7 +421,6 @@ test('first load transfers at most 500KB before below-the-fold images', async ({
   });
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
   const port = server.address().port;
-  try {
   await page.setViewportSize({width: 360, height: 780});
   await prepare(page, 'en');
   const fontBytes = [];
@@ -470,8 +506,10 @@ test('first load transfers at most 500KB before below-the-fold images', async ({
       measured.kept.push(file.split('/').pop() + ':' + size);
     }
   }
+  console.log('first-load bytes ' + measured.total + ' fonts ' + measured.kept.filter(row => /font|woff|plex|css2|gstatic/i.test(row)).join(' '));
   expect(measured.total, measured.kept.join('\n')).toBeLessThanOrEqual(500 * 1024);
   } finally {
-    await new Promise(resolve => server.close(resolve));
+    if (server) await new Promise(resolve => server.close(resolve));
+    fs.rmSync(stage, {recursive: true, force: true});
   }
 });

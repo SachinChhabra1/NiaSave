@@ -2,12 +2,12 @@
 // Do not infer categories, unit prices, or cheapest flags from pack text or sticker price.
 export const SHOP_CATEGORY_IDS=Object.freeze(['rice','atta','oil','pulses','soap','tea']);
 const DEFAULT_PHOTOS={
-  rice:'/assets/shop-defaults/rice.jpg',
-  atta:'/assets/shop-defaults/atta.jpg',
-  oil:'/assets/shop-defaults/oil.jpg',
-  pulses:'/assets/shop-defaults/pulses.jpg',
-  soap:'/assets/shop-defaults/soap.jpg',
-  tea:'/assets/shop-defaults/tea.jpg'
+  rice:{src:'/assets/shop-defaults/rice.jpg',width:411,height:420},
+  atta:{src:'/assets/shop-defaults/atta.jpg',width:411,height:420},
+  oil:{src:'/assets/shop-defaults/oil.jpg',width:420,height:420},
+  pulses:{src:'/assets/shop-defaults/pulses.jpg',width:411,height:420},
+  soap:{src:'/assets/shop-defaults/soap.jpg',width:420,height:420},
+  tea:{src:'/assets/shop-defaults/tea.jpg',width:420,height:420}
 };
 export function voiceLanguage(lang){return ({en:'en-IN',hi:'hi-IN',ta:'ta-IN',bn:'bn-IN'})[lang]||'en-IN';}
 export function shopName(product,lang){const translated=product?.translations?.[lang]?.name;return typeof translated==='string'&&translated.trim()?translated.trim():String(product?.name||'');}
@@ -79,7 +79,7 @@ export function shopPhoto(product,{esc,name,t,sourceOwner,category}={}){
   const fallback=DEFAULT_PHOTOS[id];
   if(fallback){
     const word=alt||(labels[id]&&t?t(labels[id]):labels[id]||'');
-    return `<img src="${esc(fallback)}" alt="${esc(word)}" loading="lazy" width="320" height="240">`;
+    return `<img src="${esc(fallback.src)}" alt="${esc(word)}" loading="lazy" width="${fallback.width}" height="${fallback.height}">`;
   }
   const missing=shopSourceCopy(sourceOwner).photo;
   if(!missing)return '';

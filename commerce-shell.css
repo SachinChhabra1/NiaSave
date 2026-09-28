@@ -142,16 +142,18 @@ body .member-shell #content .shop-v2-canvas{max-width:720px;min-width:0;backgrou
 .shop-layout,.shop-catalogue,.shop-catalogue>section{display:grid;gap:var(--nia-v2-space-2);min-width:0}
 .shop-category-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--nia-v2-space-2)}
 .shop-item-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--nia-v2-space-2)}
-.shop-category,.shop-item{min-width:0;border:1px solid var(--nia-v2-color-line);border-radius:var(--nia-v2-radius-tile);background:var(--nia-v2-color-surface);padding:var(--nia-v2-space-2);color:var(--nia-v2-color-ink)}
-.shop-category{display:grid;gap:4px;text-align:left;cursor:pointer;padding:8px}
-.shop-category-photo,.shop-item-photo{display:block;aspect-ratio:4/3;border-radius:var(--nia-v2-radius-card);overflow:hidden;background:#fff}
-.shop-category-photo{aspect-ratio:1/1;max-height:88px}
+.shop-category,.shop-item{min-width:0;border:1px solid var(--nia-v2-color-line);border-radius:16px;background:var(--nia-v2-color-surface);color:var(--nia-v2-color-ink);overflow:hidden}
+.shop-category{display:grid;gap:0;text-align:left;cursor:pointer;padding:0}
+.shop-category-photo,.shop-item-photo{display:block;width:100%;aspect-ratio:4/3;border-radius:0;overflow:hidden;background:#F6F3EE}
+.shop-category-photo{aspect-ratio:1/1}
 .shop-category-photo img,.shop-item-photo img{width:100%;height:100%;object-fit:cover}
+.shop-category strong{display:block;padding:10px 12px 0}
 .shop-photo-missing{display:flex;align-items:center;justify-content:center;width:100%;height:100%;border:1px solid var(--nia-v2-color-line);border-radius:var(--nia-v2-radius-card);color:var(--nia-v2-color-muted);font-size:14px;text-align:center;padding:var(--nia-v2-space-1);box-sizing:border-box}
 .shop-category small,.shop-item p{color:var(--nia-v2-color-muted);line-height:1.5;overflow-wrap:anywhere}
-.shop-category small{font-size:14px}
-.shop-item{display:grid;grid-template-columns:96px minmax(0,1fr);gap:var(--nia-v2-space-2)}
-.shop-item-detail{display:grid;align-content:start;gap:var(--nia-v2-space-1);min-width:0}
+.shop-category small{display:block;font-size:14px;padding:0 12px 12px}
+.shop-item{display:grid;grid-template-columns:96px minmax(0,1fr);gap:0;padding:0}
+.shop-item-photo{align-self:start}
+.shop-item-detail{display:grid;align-content:start;gap:var(--nia-v2-space-1);min-width:0;padding:12px}
 .shop-price-pair{display:grid;gap:4px;line-height:1.5}
 .shop-lowest{color:var(--nia-v2-color-primary);font-weight:650}
 .shop-item button,.shop-catalogue [data-action="close-aisle"]{justify-self:start;border:1px solid var(--nia-v2-color-primary);border-radius:var(--nia-v2-radius-button);color:var(--nia-v2-color-primary);background:var(--nia-v2-color-surface);padding:var(--nia-v2-space-1)}
@@ -196,8 +198,8 @@ body .member-shell #content .shop-v2-canvas{max-width:720px;min-width:0;backgrou
 /* Member icon words remain visible on touch screens at every width. */
 .member-shell button,.header button,.header .brand,#dialog button{min-height:44px}
 .member-shell .less-nav button{min-height:48px;font-size:max(14px,var(--nia-v2-type-sm))}
-.member-shell .shop-category{min-height:44px}
-.member-shell .shop-category strong{font-size:max(14px,var(--nia-v2-type-sm));line-height:1.45}
+.member-shell .shop-category{min-height:44px;padding:0;overflow:hidden;border-radius:16px;gap:0}
+.member-shell .shop-category strong{font-size:max(14px,var(--nia-v2-type-sm));line-height:1.45;padding:10px 12px 0}
 .footer{font-size:14px}
 .footer-links a{font-size:14px}
 .member-shell .shop-search [data-action="voice-search"]{gap:8px;min-height:44px;padding-inline:12px;white-space:normal;text-align:center;font-size:14px;line-height:1.4}
@@ -311,13 +313,23 @@ body .member-shell #content .shop-v2-canvas{max-width:720px;min-width:0;backgrou
 }
 .send-login-line{margin:0 16px;font-size:16px;line-height:1.4}
 .earn-how h2,.earn-how-actions{margin-left:16px;margin-right:16px}
-.earn-how h2{font-size:22px;line-height:1.3}
+.earn-how h2{font-size:22px;line-height:1.3;text-align:left}
 .earn-how-steps{display:grid;gap:12px;margin:0 0 12px;padding:0 16px;list-style:none}
-.earn-how-steps li{display:grid;gap:8px;margin:0;background:#fff;border-radius:16px;overflow:hidden}
-.earn-how-steps img,#content .earn-how-steps img,#content .send-example img{display:block;width:100%;max-width:100%;height:140px;object-fit:cover}
-.earn-how-steps span{display:block;padding:0 12px 12px;font-size:16px;line-height:1.35}
+.earn-how-steps li{display:grid;gap:0;margin:0;background:#fff;border:1px solid var(--nia-v2-color-line);border-radius:16px;overflow:hidden}
+.earn-how-steps img,#content .earn-how-steps img{display:block;width:100%;max-width:100%;height:auto;aspect-ratio:16/10;object-fit:cover;border-radius:0;background:#F6F3EE}
+#content .send-example img{display:block;width:100%;max-width:100%;height:140px;object-fit:cover}
+/* 30% keeps the gate signpost whole. 55% cuts the arrows off and slices the helmet. */
+.earn-how-steps img[data-earn-step="1"]{object-position:center 45%}
+.earn-how-steps img[data-earn-step="2"]{object-position:center 40%}
+.earn-how-steps img[data-earn-step="3"]{object-position:center 30%}
+.earn-how-caption{display:flex;align-items:center;gap:10px;padding:12px;background:#fff}
+.earn-how-num{display:inline-flex;flex:none;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:#2C5880;color:#fff;font-size:16px;font-weight:700;line-height:1}
+.earn-how-line{display:block;min-width:0;padding:0;font-size:17px;font-weight:600;line-height:1.35;color:#101828}
 .earn-how-actions,.send-example-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .store-head .earn-how-actions{margin:12px 0 0;justify-content:center}
+body.mesha-dark .store-earn .store-head.store-task:has(.earn-how-actions){text-align:left;padding:20px 16px 8px}
+body.mesha-dark .store-earn .store-head.store-task:has(.earn-how-actions) :is(h1,p){text-align:left}
+body.mesha-dark .store-earn .store-head.store-task:has(.earn-how-actions) p{max-width:none;margin-left:0;margin-right:0}
 body.mesha-dark .store-head.store-task .earn-how-actions .primary{margin:0}
 .send-example{display:grid;gap:10px;margin:0 16px;padding:16px;border-radius:16px;background:#fff}
 .send-example-flag{margin:0;font-size:16px;font-weight:700;line-height:1.3}
@@ -360,3 +372,5 @@ body.mesha-dark .member-shell [role="status"],
 body.mesha-dark .pillar-state,
 body.mesha-dark #sync-state,
 body.mesha-dark .nia-transfer-status{color:#1C3F5C}
+body.mesha-dark .member-shell #content .earn-how-line{font-size:17px!important;font-weight:600;color:#101828}
+body.mesha-dark .member-shell #content .earn-how-num{font-size:16px!important;font-weight:700;color:#fff}

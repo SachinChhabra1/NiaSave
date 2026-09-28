@@ -474,8 +474,8 @@ function syncBooksDateParts(which){
   if(which)form.querySelector(`[data-books-part="${which}"]`)?.focus({preventScroll:true});
 }
 function earnHow(){
-  const steps=[[t('Stay in a safe place near work'),'/assets/studio-bunk-lockers.jpg'],[t('See work near where you stay'),''],[t('Walk to work'),'']];
-  return `<section class="earn-how"><h2>${t('How Earn works')}</h2><ol class="earn-how-steps">${steps.map(([line,src],index)=>`<li>${src?`<img src="${esc(src)}" alt="" width="800" height="500">`:''}<span>${index+1}. ${esc(line)}</span></li>`).join('')}</ol></section>`;
+  const steps=[[t('Stay in a safe place near work'),'/assets/nest-chk-demo.jpg',816,544],[t('See work near where you stay'),'/assets/earn.jpg',800,498],[t('Walk to work'),'/assets/earn-gigs-editorial-v4.jpg',816,1020]];
+  return `<section class="earn-how"><h2>${t('How Earn works')}</h2><ol class="earn-how-steps">${steps.map(([line,src,width,height],index)=>`<li><img src="${esc(src)}" alt="" width="${width}" height="${height}" data-earn-step="${index+1}"><span class="earn-how-caption"><span class="earn-how-num">${index+1}</span><span class="earn-how-line">${esc(line)}</span></span></li>`).join('')}</ol></section>`;
 }
 function sendExample(){
   const rows=[[t('Money earned'),'₹10,000'],[t('Money spent'),'₹4,000'],[t('Sent home'),'₹2,000'],[t('Money left'),'₹4,000']];
@@ -542,7 +542,7 @@ async function loadNests(){nestData=nestStart?await api('/nests/availability',{s
 const previewNestImages = {
   'std-35005': {src:'/assets/studio-bunk-lockers.jpg', width:800, height:800},
   'std-34696': {src:'/assets/nest-blr-demo.jpg', width:1586, height:992},
-  'std-34998': {src:'/assets/nest-chk-demo.jpg', width:1536, height:1024},
+  'std-34998': {src:'/assets/nest-chk-demo.jpg', width:816, height:544},
 };
 function nestPhoto(n){
   const media=n.photo?.url?{src:n.photo.url,width:n.photo.width||1200,height:n.photo.height||900}:null;

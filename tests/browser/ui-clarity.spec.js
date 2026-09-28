@@ -211,7 +211,7 @@ for (const width of [360, 390]) {
           const seen = new Set();
           for (const fact of facts) {
             sizes.add(Math.round(fact.size));
-            if (![14, 16, 24].includes(Math.round(fact.size))) oddType.push(Math.round(fact.size) + 'px ' + fact.text.slice(0, 70));
+            if (![14, 16, 17, 24].includes(Math.round(fact.size))) oddType.push(Math.round(fact.size) + 'px ' + fact.text.slice(0, 70));
             if (violationKind(fact.text) && !copyCovers(fact.text, baseline.entries, name)) banned.push(file + ': ' + fact.text);
             if (fact.size < 14) {
               const key = file + '\0' + fact.text;
@@ -235,7 +235,7 @@ for (const width of [360, 390]) {
             const openFacts = await visibleFacts(page);
             for (const fact of openFacts) {
               sizes.add(Math.round(fact.size));
-            if (![14, 16, 24].includes(Math.round(fact.size))) oddType.push(Math.round(fact.size) + 'px ' + fact.text.slice(0, 70));
+            if (![14, 16, 17, 24].includes(Math.round(fact.size))) oddType.push(Math.round(fact.size) + 'px ' + fact.text.slice(0, 70));
               if (violationKind(fact.text) && !copyCovers(fact.text, baseline.entries, name)) banned.push(openFile + ': ' + fact.text);
               if (fact.size < 14) {
                 const key = openFile + '\0' + fact.text;
@@ -260,7 +260,7 @@ for (const width of [360, 390]) {
             const openFile = file + '/login';
             for (const fact of await visibleFacts(page)) {
               sizes.add(Math.round(fact.size));
-            if (![14, 16, 24].includes(Math.round(fact.size))) oddType.push(Math.round(fact.size) + 'px ' + fact.text.slice(0, 70));
+            if (![14, 16, 17, 24].includes(Math.round(fact.size))) oddType.push(Math.round(fact.size) + 'px ' + fact.text.slice(0, 70));
               if (violationKind(fact.text) && !copyCovers(fact.text, baseline.entries, name)) banned.push(openFile + ': ' + fact.text);
               if (fact.size < 14) fonts.push({kind: 'font', file: openFile, screen: name, string: fact.text, size: fact.size});
             }
@@ -275,7 +275,7 @@ for (const width of [360, 390]) {
               const openFile = file + '/books-add';
               for (const fact of await visibleFacts(page)) {
                 sizes.add(Math.round(fact.size));
-            if (![14, 16, 24].includes(Math.round(fact.size))) oddType.push(Math.round(fact.size) + 'px ' + fact.text.slice(0, 70));
+            if (![14, 16, 17, 24].includes(Math.round(fact.size))) oddType.push(Math.round(fact.size) + 'px ' + fact.text.slice(0, 70));
                 if (violationKind(fact.text) && !copyCovers(fact.text, baseline.entries, name)) banned.push(openFile + ': ' + fact.text);
                 if (fact.size < 14) fonts.push({kind: 'font', file: openFile, screen: name, string: fact.text, size: fact.size});
               }

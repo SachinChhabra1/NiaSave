@@ -31,8 +31,11 @@ async function overlaps(page) {
         const left = Math.max(rect.left, port.left, 0);
         const right = Math.min(rect.right, port.right, window.innerWidth);
         if (bottom - top < 1 || right - left < 1) continue;
-        const overlapsBar = bottom > barBox.top + 1 && top < barBox.bottom - 1 && right > barBox.left + 1 && left < barBox.right - 1;
-        if (overlapsBar) return (el.innerText || el.getAttribute('aria-label') || el.id || 'control').replace(/\s+/g, ' ').trim().slice(0, 80);
+        const clippedOverlap = bottom > barBox.top + 1 && top < barBox.bottom - 1 && right > barBox.left + 1 && left < barBox.right - 1;
+        // At the opening scroll, the scroller ends where the bar starts, so clipping
+        // the control to the scroller hides a short button that sits across that edge.
+        const openingCut = scroller.scrollTop === 0 && rect.height <= 88 && rect.top < barBox.top - 1 && rect.bottom > barBox.top + 1 && rect.right > barBox.left + 1 && rect.left < barBox.right - 1;
+        if (clippedOverlap || openingCut) return (el.innerText || el.getAttribute('aria-label') || el.id || 'control').replace(/\s+/g, ' ').trim().slice(0, 80);
       }
       return '';
     };
@@ -97,6 +100,19 @@ for (const width of [360, 390]) {
           await expect(page.locator('#less-nav button[aria-current="page"]')).toHaveAttribute('data-action', name);
         }
         await expect(page.locator('#call-nia')).toBeVisible();
+        if (name === 'earn') {
+          await page.locator('#content').evaluate(node => { node.scrollTop = 0; });
+          const opening = await page.evaluate(() => {
+            const button = [...document.querySelectorAll('#content button')].find(el => {
+              const label = (el.innerText || '').replace(/\s+/g, ' ').trim();
+              return label === 'Log in' || label === 'लॉग इन';
+            });
+            const bar = document.querySelector('#less-nav').getBoundingClientRect();
+            const rect = button ? button.getBoundingClientRect() : null;
+            return rect ? {bottom: rect.bottom, barTop: bar.top, gap: bar.top - rect.bottom} : {missing: true};
+          });
+          expect(opening.gap, 'signed-out Earn login at scroll 0: ' + JSON.stringify(opening)).toBeGreaterThanOrEqual(1);
+        }
         expect(await overlaps(page), name).toBe('');
         expect(await reachable(page), name).toBe('');
       }

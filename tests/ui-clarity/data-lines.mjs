@@ -1,6 +1,7 @@
 // Frozen list of member data lines. Order inside a file does not matter.
 import fs from 'node:fs';
 import path from 'node:path';
+import {pathToFileURL} from 'node:url';
 import {root} from './scan.mjs';
 
 export const snapshotPath = path.join(root, 'docs/ui-clarity/data-lines.snapshot.json');
@@ -49,4 +50,13 @@ export function dataLineChanges(found, saved) {
     }
   }
   return changes;
+}
+
+const isMain = process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
+if (isMain) {
+  const changes = dataLineChanges(collectDataLines(), readDataLines());
+  if (changes.length) {
+    console.error(changes.join('\n'));
+    process.exit(1);
+  }
 }

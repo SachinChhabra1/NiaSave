@@ -23,9 +23,9 @@ export function supportFormMarkup({t, esc}, {orderId='', relatedRef='', kinds=SU
     <label>${t('What happened?','क्या हुआ?')}<select name="kind">${kinds.map(k=>`<option value="${k}">${esc(supportKindLabel(k,t))}</option>`).join('')}</select></label>
     <label>${t('Related reference (optional)')}<input name="relatedRef" value="${esc(relatedRef)}" maxlength="120" placeholder="${esc(t('Order, Nest or job reference'))}"></label>
     <label>${t('Tell us more (optional)','और बताएँ (ज़रूरी नहीं)')}<textarea name="note" maxlength="500"></textarea></label>
-    <p>${t('Submitting a request does not mean a refund has been approved or paid. Your Nia team will review it.','अनुरोध भेजने का मतलब रिफंड की मंज़ूरी या भुगतान नहीं है। निया टीम इसकी जाँच करेगी।')}</p>
+    <p>${t('Submitting a request does not mean a refund has been approved or paid. Your Nia team will review it.','माँग भेजने का मतलब रिफंड की मंज़ूरी या भुगतान नहीं है। निया टीम इसकी जाँच करेगी।')}</p>
     <div id="form-error" class="error-inline" role="alert"></div>
-    <button class="primary">${t('Send request','अनुरोध भेजें')}</button>
+    <button class="primary">${t('Send request','माँग भेजें')}</button>
   </form>`;
 }
 
@@ -54,5 +54,5 @@ export function supportIssueLine(issue, {t, esc}) {
   const refund = issue.refundApproved === true
     ? t('Refund approved by the Nia team')
     : (issue.kind === 'return_refund' ? t('Refund request only · not approved') : '');
-  return `<p class="info">${t('Help request','मदद का अनुरोध')} ${esc(issue.reference || issue.id)} · ${esc(t(issue.status))}${issue.relatedRef?`<br>${t('Related reference')}: ${esc(issue.relatedRef)}`:''}${refund?`<br>${esc(refund)}`:''}${issue.note?`<br>${esc(issue.note)}`:''}</p>`;
+  return `<p class="info">${t('Help request','मदद की माँग')} ${esc(issue.reference || issue.id)} · ${esc(t(issue.status))}${issue.relatedRef?`<br>${t('Related reference')}: ${esc(issue.relatedRef)}`:''}${refund?`<br>${esc(refund)}`:''}${issue.note?`<br>${esc(issue.note)}`:''}</p>`;
 }

@@ -50,15 +50,23 @@ const TRANSLATED = [
   'ಮೂಲ ದಾಖಲೆ',
   'ಮೂಲ ಪಾವತಿ'
 ];
+// Class 10 textbook words. Hindi only. Spoken replacements stay off this list.
+const HINDI_TEXTBOOK = ['सक्रिय', 'विवरण', 'स्रोत', 'हस्तांतरण', 'प्रक्षेपण', 'आवेदन', 'अनुरोध', 'सार्थक'];
 const EXACT_TRANSLATED = ['மூலம்', 'ಮೂಲ'];
 
-export function hasBannedWord(text) {
-  return ENGLISH.test(text) || TRANSLATED.some(token => text.includes(token)) || EXACT_TRANSLATED.includes(text);
+function hindiTextbookApplies(file = '') {
+  const norm = String(file).split('\\').join('/');
+  return !/\/(?:ta|bn|kn|mr)\.js$/.test(norm);
 }
 
-export function violationKind(text) {
+export function hasBannedWord(text, file = '') {
+  if (ENGLISH.test(text) || TRANSLATED.some(token => text.includes(token)) || EXACT_TRANSLATED.includes(text)) return true;
+  return hindiTextbookApplies(file) && HINDI_TEXTBOOK.some(token => text.includes(token));
+}
+
+export function violationKind(text, file = '') {
   const reasons = [];
-  if (hasBannedWord(text)) reasons.push('banned');
+  if (hasBannedWord(text, file)) reasons.push('banned');
   if (text.includes(EM_DASH)) reasons.push('emdash');
   if (DATE_PLACEHOLDER.test(text)) reasons.push('date');
   return reasons.join('+');
@@ -204,12 +212,12 @@ function extractHtml(src) {
   return found;
 }
 
-function keepString(text) {
-  const kind = violationKind(text);
+function keepString(text, file) {
+  const kind = violationKind(text, file);
   if (!kind) return false;
   if (kind === 'banned') {
     if (text.startsWith('/') || text.includes('/api/') || text.includes('/v1/')) return false;
-    if (!/\s/.test(text) && !EXACT_BANNED.test(text) && !EXACT_TRANSLATED.includes(text) && !TRANSLATED.includes(text)) return false;
+    if (!/\s/.test(text) && !EXACT_BANNED.test(text) && !EXACT_TRANSLATED.includes(text) && !TRANSLATED.includes(text) && !(hindiTextbookApplies(file) && HINDI_TEXTBOOK.includes(text))) return false;
     if (/^[A-Za-z0-9_.:/-]+$/.test(text) && !EXACT_BANNED.test(text)) return false;
   }
   return true;
@@ -276,8 +284,8 @@ export function scanCopyViolations() {
     const src = fs.readFileSync(full, 'utf8');
     const strings = rel.endsWith('.html') ? extractHtml(src) : extractStrings(src);
     for (const text of strings) {
-      if (!keepString(text)) continue;
-      add({kind: 'copy', file: rel, string: text, rule: violationKind(text)});
+      if (!keepString(text, rel)) continue;
+      add({kind: 'copy', file: rel, string: text, rule: violationKind(text, rel)});
     }
   }
   const flagged = entries.slice();
@@ -288,7 +296,7 @@ export function scanCopyViolations() {
       if (!hit) continue;
       const text = hit.value.replace(/\s+/g, ' ').trim();
       if (!text) continue;
-      add({kind: 'copy', file: hit.file, string: text, rule: violationKind(text) || entry.rule});
+      add({kind: 'copy', file: hit.file, string: text, rule: violationKind(text, hit.file) || entry.rule});
     }
   }
   entries.sort((a, b) => (a.file + a.string).localeCompare(b.file + b.string));

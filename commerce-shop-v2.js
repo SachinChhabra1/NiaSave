@@ -23,30 +23,30 @@ export function memberProducts(catalogue){
 }
 export function shopSourceCopy(owner){
   return owner==='niasave'?{
-    heading:'Browse essentials from NiaSave',loading:'Loading NiaSave catalogue',ready:'Catalogue from NiaSave',
-    missing:'Catalogue details not available',empty:'No essentials are available to reserve for your location right now.',
+    heading:'Browse essentials from NiaSave',loading:'Loading the NiaSave list',ready:'NiaSave list of things to buy',
+    missing:'The list of things is not here.',empty:'No essentials are available to reserve for your location right now.',
     photo:'Photo not available',unit:'Unit price not recorded',
     categories:'These products have no category assigned.',
     ranking:'Unit prices and lowest-price labels are not recorded. Products are shown without ranking.',
     review:'Final price and availability are checked by NiaSave at review.',
   }:{
-    heading:'Rice, atta, oil at low prices',loading:'Loading Central catalogue',ready:'Catalogue from Central',
-    missing:'Catalogue details missing from Central',empty:'No products published yet',
+    heading:'Rice, atta, oil at low prices',loading:'Loading things to buy',ready:'List of things to buy',
+    missing:'The list of things did not load.',empty:'Nothing to buy here.',
     photo:'',unit:'Price coming soon',
-    categories:'Central has not assigned these products to the six Shop categories.',
+    categories:'These things are not in the six Shop groups.',
     ranking:'Prices are not up yet. To order now, call Nia.',
-    review:'Final price and availability are checked by Central at review.',
+    review:'The final price and what is in stock are checked when you review.',
   };
 }
 // Wording only: the existing server capability and stock guards still control actions.
 export function shopReservationNotice({catalogue,signedIn,reservationsEnabled}){
   if(catalogue?.owner!=='niasave')return undefined;
   if(!signedIn)return 'Log in to see goods near you and reserve them.';
-  if(!Array.isArray(catalogue.products))return 'Catalogue unavailable. Refresh to check reservations.';
-  if(shopViewState({catalogue})==='stale')return 'Refresh the catalogue to check current availability.';
+  if(!Array.isArray(catalogue.products))return 'The list did not load. Refresh to check your bookings.';
+  if(shopViewState({catalogue})==='stale')return 'Refresh the list to see what is in stock.';
   const products=memberProducts(catalogue);
   if(!products.some(p=>Number.isSafeInteger(p.available)&&p.available>0)){
-    if(products.some(p=>!Number.isSafeInteger(p.available)||p.available<0))return 'Refresh the catalogue to check current availability.';
+    if(products.some(p=>!Number.isSafeInteger(p.available)||p.available<0))return 'Refresh the list to see what is in stock.';
     return 'No essentials are available to reserve for your location right now.';
   }
   return reservationsEnabled?null:'Reservations are unavailable right now. You can browse essentials or ask Nia for help.';
@@ -106,7 +106,7 @@ export function shopCatalogueMarkup({catalogue,query='',aisle='',lang='en',state
   const sourceOwner=catalogue?.owner,copy=shopSourceCopy(sourceOwner);
   const moneyContext={t,esc,money,sourceOwner};
   const noRows=sourceOwner==='niasave'?(signedIn?'No available products':'Log in to see what is here'):'Coming soon';
-  const stateText={loading:t(copy.loading),ready:t(copy.ready),stale:t('Catalogue needs refreshing'),source_missing:t(copy.missing),unavailable:t('Shop is closed for now. Please try later.'),empty:t(sourceOwner==='niasave'&&!signedIn?'Log in to see goods near you and reserve them.':copy.empty),offline:t('Offline. Reconnect for current prices')};
+  const stateText={loading:t(copy.loading),ready:t(copy.ready),stale:t('The list of things needs a refresh.'),source_missing:t(copy.missing),unavailable:t('Shop is closed for now. Please try later.'),empty:t(sourceOwner==='niasave'&&!signedIn?'Log in to see goods near you and reserve them.':copy.empty),offline:t('Offline. Reconnect for current prices')};
   const quiet=!products.length||state==='empty'||state==='unavailable'||state==='source_missing';
   const photoFor=(p,categoryId)=>shopPhoto(p,{esc,t,name:p&&p.name?shopName(p,lang):'',sourceOwner,category:categoryId});
   const item=p=>{

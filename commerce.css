@@ -640,7 +640,7 @@ body.mesha-dark .member-shell #content .home-tile img{
   height:118px;
   object-fit:cover;
 }
-body.mesha-dark .member-shell #content .home-tile-send img{object-position:center 25%}
+body.mesha-dark .member-shell #content .home-tile-send img{object-position:center top}
 body.mesha-dark .member-shell #content .family-photo-card{
   margin:0 16px 12px;
   background:#fff;
@@ -655,7 +655,7 @@ body.mesha-dark .member-shell #content .family-photo-card .family-photo-img{
   height:auto;
   aspect-ratio:4/3;
   object-fit:cover;
-  object-position:center 25%;
+  object-position:center top;
 }
 body.mesha-dark .member-shell #content .family-photo-pick{
   display:block;

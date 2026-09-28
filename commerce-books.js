@@ -101,15 +101,38 @@ export function sendViewState({data,online=true,signedOut=false,now=Date.now()}=
 export const FAMILY_PHOTO_KEY='nia-family-photo';
 const FAMILY_PHOTO_MAX_BYTES=20*1024*1024;
 const FAMILY_PHOTO_EDGE=900;
+const FAMILY_PHOTO_MIN_PAYLOAD=32;
 let familyPhotoFailed=false;
+let familyPhotoOnSend=false;
 
 export function markFamilyPhotoFailure(){familyPhotoFailed=true;}
 export function clearFamilyPhotoNotice(){familyPhotoFailed=false;}
 
+// Cleared on leaving Send and on opening it again. A render that stays on Send keeps the notice.
+export function presentFamilyPhoto(screen){
+  if(screen!=='send'||!familyPhotoOnSend)familyPhotoFailed=false;
+  familyPhotoOnSend=screen==='send';
+}
+
+function acceptedFamilyPhoto(value){
+  if(typeof value!=='string')return '';
+  const marker=';base64,';
+  const at=value.indexOf(marker);
+  if(at<0)return '';
+  const header=value.slice(0,at).toLowerCase();
+  if(!header.startsWith('data:image/'))return '';
+  const type=header.slice('data:image/'.length);
+  if(!/^[a-z0-9.+-]+$/.test(type)||type.includes('svg'))return '';
+  const payload=value.slice(at+marker.length);
+  if(payload.length<FAMILY_PHOTO_MIN_PAYLOAD||payload.length%4!==0)return '';
+  if(!/^[A-Za-z0-9+/]+={0,2}$/.test(payload))return '';
+  return value;
+}
+
 export function readFamilyPhoto(){
   try{
     const value=localStorage.getItem(FAMILY_PHOTO_KEY);
-    return typeof value==='string'&&value.startsWith('data:image/')?value:'';
+    return acceptedFamilyPhoto(value);
   }catch{
     return '';
   }
@@ -189,13 +212,13 @@ function familyPhotoInput(){
 }
 
 export function familyPhotoArt({photo,t,esc}){
-  if(photo)return `<img class="family-photo-img" src="${esc(photo)}" alt="${esc(t('Your family photo'))}" width="900" height="675">`;
+  if(photo)return `<img class="family-photo-img" src="${esc(photo)}" alt="${esc(t('Your family photo'))}">`;
   return familyPhotoEmpty(t,esc);
 }
 
 export function familyPhotoCard({photo,t,esc,icon}){
   const picture=photo
-    ?`<img class="family-photo-img" src="${esc(photo)}" alt="${esc(t('Your family photo'))}" width="900" height="675">`
+    ?`<img class="family-photo-img" src="${esc(photo)}" alt="${esc(t('Your family photo'))}">`
     :`<label class="family-photo-pick">${familyPhotoInput()}${familyPhotoEmpty(t,esc)}</label>`;
   const words=photo
     ?`<div class="family-photo-actions"><label class="family-photo-change">${familyPhotoInput()}${icon('pencil')}<span>${esc(t('Change photo'))}</span></label><button type="button" class="family-photo-remove" data-family-photo-remove>${esc(t('Remove photo'))}</button></div>`

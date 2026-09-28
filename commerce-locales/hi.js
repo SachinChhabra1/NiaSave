@@ -422,7 +422,7 @@ export default {
   "Your reference": "आपका नंबर",
   "Your reservation does not sign the agreement or check you in.": "बुकिंग से समझौते पर दस्तखत या अंदर आना नहीं होता।",
   "hours, or until the end of your move-in day if sooner. Meet the team before expiry. Agreement and check-in are completed with the team.": "घंटे, या आने के दिन के अंत तक, जो पहले हो। समय खत्म होने से पहले टीम से मिलें। समझौता और अंदर आना टीम के साथ होता है।",
-  "Central could not be reached. Your typed amounts are still here; try again.": "यह नहीं खुला। आपने जो रकम लिखी है, वह यहीं है। फिर कोशिश करें।",
-  "This account has catalogue access only.": "यह खाता सिर्फ़ खरीदने की सूची देख सकता है।",
+  "This did not open. The amounts you typed are still here. Try again.": "यह नहीं खुला। आपने जो रकम लिखी है, वह यहीं है। फिर कोशिश करें।",
+  "This account can only view the shopping list.": "यह खाता सिर्फ़ खरीदने की सूची देख सकता है।",
   "Why Nia": "निया क्यों",
 };

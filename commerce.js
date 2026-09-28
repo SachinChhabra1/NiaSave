@@ -111,7 +111,47 @@ const jobTerms = j => j.preview ? String(j.terms || '').replace('DEMO ONLY · Fi
 const title = p => lang==='hi' && p.hindi ? p.hindi : (p.translations?.[lang]?.name || t(p.name));
 const count = () => Object.values(cart).reduce((n,q) => n+q,0);
 const total = () => (cat?.products||[]).reduce((n,p)=>n+p.price*(cart[p.id]||0),0);
-const errorText = code => authErrorText(code,t) || ({customer_save_only:t('This account can shop. Other services need separate member approval.'),pilot_commitments_paused:t(PILOT_CLOSED_COPY),passkey_device_unavailable:t('Passkeys are unavailable on this device. Ask your Nia team for help.'),passkey_cancelled:t('Sign-in was cancelled. Tap again when you are ready.'),setup_expired:t('This setup code expired or was used. Ask your Nia team for a new code.'),ceremony_expired:t('Sign-in expired. Please try again.'),passkey_not_accepted:t('This passkey could not be accepted. Try again or ask your Nia team for help.'),verified_phone_required:t('Sign in with a verified phone before requesting enrolment or a number change. Your Nia team can help.'),delivery_location_unverified:t('Ask your Nia team to verify your delivery location.'),kyc_not_approved:t('Approved membership is required for financial services.'),member_not_enrolled:t('Please check your membership status.'),central_unreachable:t('Your Nia team could not be reached. Please try again.'),entry_changed:t('This entry changed. Refresh your statement before editing again.'),valid_date_amount_and_description_required:t('Enter a valid date, amount and description.'),entry_not_found:t('This entry is unavailable or cannot be edited.'),job_not_available:t('This job is no longer accepting applications. Refresh to see available jobs.','इस नौकरी के लिए आवेदन बंद हैं। उपलब्ध नौकरियाँ देखने के लिए ताज़ा करें।'),job_details_changed:t('The job details changed. Refresh and review them before applying.','नौकरी की जानकारी बदल गई है। आवेदन से पहले ताज़ा करके जानकारी देखें।'),nest_not_available:t('That Nest is no longer available for these dates. Choose another location or date.','इन तारीखों के लिए नेस्ट उपलब्ध नहीं है। दूसरी जगह या तारीख चुनें।'),invalid_move_in_date:t('Choose a move-in date within the next 30 days.','अगले 30 दिनों में आने की तारीख चुनें।'),existing_nest_stay:t('You already have a Nest for these dates. Open Orders & stays to review it.','इन तारीखों के लिए आपका नेस्ट पहले से है। ऑर्डर और नेस्ट देखें।'),stock_changed:t('Availability changed. Review your bag and try again.','स्टॉक बदल गया है। अपना बैग जाँचकर फिर कोशिश करें।'),price_or_details_changed:t('Your order details changed. Please review the updated total.','ऑर्डर की जानकारी बदल गई है। नया कुल देखें।'),invalid_password:t('That password is not correct. Try again or ask your Nia team.','पासवर्ड सही नहीं है। फिर कोशिश करें या निया टीम से पूछें।'),pack_unconfirmed:t('Ask Nia about this pack.','इस पैक के बारे में निया से पूछें।'),sign_in_required:t('Please sign in again. Your bag is still here.','फिर से साइन इन करें। आपका बैग यहीं है।'),too_many_attempts:t('Too many attempts. Please try again after 15 minutes.','बहुत बार कोशिश हुई। 15 मिनट बाद फिर कोशिश करें।'),location_unavailable:t('This place is closed. Ask Nia.','यह जगह बंद है। निया से पूछें।'),contact_team_to_cancel:t('Your bag is being prepared. Please contact the pickup team.','आपका बैग तैयार हो रहा है। पिकअप टीम से संपर्क करें।'),too_many_active_orders:t('You already have three active orders. Collect or cancel one first.','आपके तीन चालू ऑर्डर हैं। पहले एक लें या रद्द करें।'),commerce_not_configured:t('Ordering is not open yet. Please check with your Nia team.','अभी ऑर्डर शुरू नहीं हुए हैं। अपनी निया टीम से संपर्क करें।'),member_access_required:t('This account has catalogue access only.','इस खाते से केवल कैटलॉग देखा जा सकता है।'),plan_revision_conflict:t('Your plan changed elsewhere. Reload it, check the amounts, then save again.'),plan_save_not_permitted:t('Saving needs an active, verified membership. The calculator still works; nothing is saved.'),central_connection_not_configured:t('Account saving is not connected yet. The calculator still works; nothing is saved.'),books_not_enabled:t('Account saving is not connected yet. The calculator still works; nothing is saved.'),central_unreachable:t('Your Nia team could not be reached. Please try again.'),plan_unavailable:t('Central could not be reached. Your typed amounts are still here; try again.'),idempotency_key_reused:t('That save request was already used with different amounts. Try again.'),invalid_plan:t('Use amounts from 0 to 10,00,000, with up to two decimal places.')})[code] || t('We could not complete that request. Please try again or ask your Nia team for help.','यह अनुरोध पूरा नहीं हुआ। फिर कोशिश करें या निया टीम से मदद लें।');
+const errorText = code => authErrorText(code,t) || ({
+  customer_save_only:t('This account can shop. Other services need separate member approval.'),
+  pilot_commitments_paused:t(PILOT_CLOSED_COPY),
+  passkey_device_unavailable:t('Passkeys are unavailable on this device. Ask your Nia team for help.'),
+  passkey_cancelled:t('Sign-in was cancelled. Tap again when you are ready.'),
+  setup_expired:t('This setup code expired or was used. Ask your Nia team for a new code.'),
+  ceremony_expired:t('Sign-in expired. Please try again.'),
+  passkey_not_accepted:t('This passkey could not be accepted. Try again or ask your Nia team for help.'),
+  verified_phone_required:t('Sign in with a verified phone before requesting enrolment or a number change. Your Nia team can help.'),
+  delivery_location_unverified:t('Ask your Nia team to verify your delivery location.'),
+  kyc_not_approved:t('Approved membership is required for financial services.'),
+  member_not_enrolled:t('Please check your membership status.'),
+  central_unreachable:t('Your Nia team could not be reached. Please try again.'),
+  entry_changed:t('This entry changed. Refresh your statement before editing again.'),
+  valid_date_amount_and_description_required:t('Enter a valid date, amount and description.'),
+  entry_not_found:t('This entry is unavailable or cannot be edited.'),
+  job_not_available:t('This job is no longer accepting applications. Refresh to see available jobs.','इस नौकरी के फॉर्म बंद हैं। उपलब्ध नौकरियाँ देखने के लिए ताज़ा करें।'),
+  job_details_changed:t('The job details changed. Refresh and review them before applying.','नौकरी की जानकारी बदली है। फॉर्म से पहले ताज़ा करके जाँचें।'),
+  nest_not_available:t('That Nest is no longer available for these dates. Choose another location or date.','इन तारीखों के लिए नेस्ट उपलब्ध नहीं है। दूसरी जगह या तारीख चुनें।'),
+  invalid_move_in_date:t('Choose a move-in date within the next 30 days.','अगले 30 दिनों में आने की तारीख चुनें।'),
+  existing_nest_stay:t('You already have a Nest for these dates. Open Orders & stays to review it.','इन तारीखों के लिए आपका नेस्ट पहले से है। ऑर्डर और नेस्ट देखें।'),
+  stock_changed:t('Availability changed. Review your bag and try again.','स्टॉक बदल गया है। अपना बैग जाँचकर फिर कोशिश करें।'),
+  price_or_details_changed:t('Your order details changed. Please review the updated total.','ऑर्डर की जानकारी बदल गई है। नया कुल देखें।'),
+  invalid_password:t('That password is not correct. Try again or ask your Nia team.','पासवर्ड सही नहीं है। फिर कोशिश करें या निया टीम से पूछें।'),
+  pack_unconfirmed:t('Ask Nia about this pack.','इस पैक के बारे में निया से पूछें।'),
+  sign_in_required:t('Please sign in again. Your bag is still here.','फिर से साइन इन करें। आपका बैग यहीं है।'),
+  too_many_attempts:t('Too many attempts. Please try again after 15 minutes.','बहुत बार कोशिश हुई। 15 मिनट बाद फिर कोशिश करें।'),
+  location_unavailable:t('This place is closed. Ask Nia.','यह जगह बंद है। निया से पूछें।'),
+  contact_team_to_cancel:t('Your bag is being prepared. Please contact the pickup team.','आपका बैग तैयार हो रहा है। पिकअप टीम से संपर्क करें।'),
+  too_many_active_orders:t('You already have three active orders. Collect or cancel one first.','आपके तीन चालू ऑर्डर हैं। पहले एक लें या रद्द करें।'),
+  commerce_not_configured:t('Ordering is not open yet. Please check with your Nia team.','अभी ऑर्डर शुरू नहीं हुए हैं। अपनी निया टीम से संपर्क करें।'),
+  member_access_required:t('This account can only view the shopping list.','यह खाता सिर्फ़ खरीदने की सूची देख सकता है।'),
+  plan_revision_conflict:t('Your plan changed elsewhere. Reload it, check the amounts, then save again.'),
+  plan_save_not_permitted:t('Saving needs an active, verified membership. The calculator still works; nothing is saved.'),
+  central_connection_not_configured:t('Account saving is not connected yet. The calculator still works; nothing is saved.'),
+  books_not_enabled:t('Account saving is not connected yet. The calculator still works; nothing is saved.'),
+  central_unreachable:t('Your Nia team could not be reached. Please try again.'),
+  plan_unavailable:t('This did not open. The amounts you typed are still here. Try again.'),
+  idempotency_key_reused:t('That save request was already used with different amounts. Try again.'),
+  invalid_plan:t('Use amounts from 0 to 10,00,000, with up to two decimal places.')
+})[code] || t('We could not complete that request. Please try again or ask your Nia team for help.','यह काम पूरा नहीं हुआ। फिर कोशिश करें या निया टीम से मदद लें।');
 async function api(path,body,method='POST',key) {
   if(owner.active)return ownerRequest(path,body);
   let response;
@@ -461,7 +501,32 @@ function earnView(){if(owner.active)return ownerEarnMarkup(earnData,earnError,{e
   </section></div><section class="stack service-panel">${earnHistory()}</section>`}${footer()}</section>`;
 }
 async function reviewJob(id){if(!commitmentReady())return toast(t(PILOT_CLOSED_COPY));if(!account){login();return;}if(earnPending){show(t('Check your application','अपना फॉर्म जाँचें'),`<p>${t('Your last request may have reached us. Retry safely to retrieve it.','पिछला माँग पहुँच गया हो सकता है। उसे पाने के लिए सुरक्षित रूप से फिर कोशिश करें।')}</p><button class="primary" data-action="earn-retry">${t('Retry application safely','फॉर्म सुरक्षित रूप से फिर भेजें')}</button><div id="form-error" role="alert"></div>`);return;}const j=earnData.jobs.find(j=>j.id===id);if(!j)return;emitAnalytics('earn','job_view');show(t('Apply for this job','इस नौकरी के लिए फॉर्म करें'),`<form id="earn-form" class="stack"><h3>${esc(t(j.title))}</h3><p>${esc(j.employer)} · ${esc(j.city)}</p><p>${money(j.payMin)}–${money(j.payMax)} / ${esc(t(j.payPeriod))}</p><p>${esc(t(j.shift))}</p>${jobTerms(j)?`<p>${esc(jobTerms(j))}</p>`:''}<input type="hidden" name="jobId" value="${esc(j.id)}"><input type="hidden" name="revision" value="${esc(j.revision)}"><label><input type="checkbox" name="consent" required> ${t('Share my member details with the Nia Walk2Work team about this job. Applying does not confirm a job or a payment.','इस नौकरी के लिए मेरी सदस्य जानकारी निया Walk2Work टीम से साझा करें। फॉर्म से नौकरी या भुगतान की पुष्टि नहीं होती।')}</label><button class="primary">${t('Send application','फॉर्म भेजें')}</button><div id="form-error" role="alert"></div></form>`);}
-async function confirmJob(){if(!commitmentReady())return toast(t(PILOT_CLOSED_COPY));if(busy||!earnPending)return;if(earnPending.accountId!==account?.id){login();return;}busy=true;try{await api('/earn/applications',earnPending.body,'POST',earnPending.key);earnPending=null;save('nia-earn-pending',null);await go('earn');emitAnalytics('earn','submission',{outcome:'received'});toast(t('Application received','आवेदन मिल गया'));}catch(e){if(!e.uncertain&&!['service_unavailable','save_storage_unavailable','state_conflict'].includes(e.code)){earnPending=null;save('nia-earn-pending',null);}if($('#form-error'))$('#form-error').textContent=e.message;else toast(e.message);}finally{busy=false;}}
+async function confirmJob(){
+  if(!commitmentReady())return toast(t(PILOT_CLOSED_COPY));
+  if(busy||!earnPending)return;
+  if(earnPending.accountId!==account?.id){
+  login();
+  return;
+  }
+  busy=true;
+  try{
+  await api('/earn/applications',earnPending.body,'POST',earnPending.key);
+  earnPending=null;
+  save('nia-earn-pending',null);
+  await go('earn');
+  emitAnalytics('earn','submission',{outcome:'received'});
+  toast(t('Application received','फॉर्म मिल गया'));
+  }catch(e){
+  if(!e.uncertain&&!['service_unavailable','save_storage_unavailable','state_conflict'].includes(e.code)){
+  earnPending=null;
+  save('nia-earn-pending',null);
+  }
+  if($('#form-error'))$('#form-error').textContent=e.message;
+  else toast(e.message);
+  }finally{
+  busy=false;
+  }
+}
 
 function sendView(){if(owner.active)return ownerSendMarkup();
   const signedOut=!account&&!owner.active;
@@ -491,7 +556,15 @@ async function loadMemberOrders(){if(account?.kind==='customer'){orders=(await a
   }catch(e){nestOrders=[];nestOrdersError=e.message;}}
 function nestOrdersView(){if(nestOrdersError)return `<p class="info">${t('Nest status is temporarily unavailable.','नेस्ट की स्थिति अभी उपलब्ध नहीं है।')} ${esc(nestOrdersError)}</p>`;return nestOrders.length?`<section class="stack"><h2>${t('Your Nests','आपके नेस्ट')}</h2>${nestOrders.map(b=>`<article class="order"><div class="row"><h2>${esc(b.name)} · ${esc(b.nestId)}</h2>${moneyStatusMarkup({status:b.status,centralAcknowledged:true,kind:'live'},{t,esc})||`<span class="badge">${esc(b.status==='in'?t('Moved in','आ गए'):b.status==='out'?t('Checked out','निवास समाप्त'):statusText(b.status))}</span>`}</div><p>${esc(t(b.address))}<br>${esc(b.start)} → ${esc(b.end)}</p><p><strong>${t('Booking reference','बुकिंग संदर्भ')}: ${esc(b.id)}</strong></p>${b.status==='reserved'?`<p>${t('Meet your Nia team before the hold expires','नेस्ट रोकने का समय समाप्त होने से पहले निया टीम से मिलें')}: <strong>${esc(date(b.expiresAt))}</strong></p>`:''}<p>${b.status==='reserved'?t('Reserved move-in total','बुकिंग के समय आने पर कुल'):t('Recorded stay quote','दर्ज रहने का अनुमान')}: <strong>${money(b.quote.total)}</strong><br>${b.paidAmount?`${t('Recorded by the team','टीम द्वारा दर्ज')}: ${money(b.paidAmount)} · ${esc(b.paymentReferences.join(', '))}`:b.status==='reserved'?t('No payment recorded. Pay by UPI with the team at move-in.','कोई भुगतान दर्ज नहीं है। आते समय टीम को UPI से भुगतान करें।'):t('No payment recorded for this stay.','इस प्रवास का भुगतान दर्ज नहीं है।')}</p>${b.status==='reserved'?`<p class="muted">${t('Your reservation does not sign the agreement or check you in.','बुकिंग से समझौते पर हस्ताक्षर या चेक-इन नहीं होता।')}</p>`:''}<div class="order-actions">${b.canCancel&&commitmentReady()?`<button data-action="nest-cancel" data-id="${esc(b.id)}">${t('Cancel Nest reservation','नेस्ट की बुकिंग रद्द करें')}</button>`:''}<button data-action="help">${t('Ask your Nia team','अपनी निया टीम से पूछें')}</button></div></article>`).join('')}</section>`:'';}
 async function previewTestNest(studioId){const n=(nestData?.offers||[]).find(o=>o.studioId===studioId);if(!n)return;show(n.name,`<div class="stack">${nestPhoto(n)}<p>${esc(n.theatre)} · ${esc(n.city)}</p><p>${esc(t(n.address))}</p><p class="info">${t('Illustrative test studio. Not a real Nest.','उदाहरण टेस्ट स्टूडियो। असली नेस्ट नहीं।')}</p><p>${t('Layout only. No reservation. No online payment.','केवल लेआउट। कोई बुकिंग नहीं। ऑनलाइन भुगतान नहीं।')}</p></div>`);}
-async function reviewNest(studioId){if(!commitmentReady())return toast(t(PILOT_CLOSED_COPY));if(!account)return login();if(nestPending)return show(t('Check your Nest request','नेस्ट का अनुरोध जाँचें'),`<p>${t('Your previous request may have reached us. Retry to retrieve its result.','पिछला अनुरोध पहुँच गया हो सकता है। नतीजा देखने के लिए फिर कोशिश करें।')}</p><button class="primary full" data-action="nest-confirm">${t('Retry safely','सुरक्षित रूप से फिर कोशिश करें')}</button>`);const body={studioId,start:nestStart};const q=await api('/nests/quote',body);emitAnalytics('live','quote',{outcome:'available'});nestDraft={accountId:account.id,key:crypto.randomUUID(),body:{...body,fingerprint:q.fingerprint}};show(t('Review your Nest','अपना नेस्ट देखें'),`<div class="stack"><h3>${esc(q.name)}</h3><p>${esc(t(q.address))}<br>${esc(q.start)} → ${esc(q.end)} · ${t('30 days','30 दिन')}</p><div class="receipt"><div class="row"><span>${t('Stay','निवास')}</span><strong>${money(q.rent)}</strong></div><div class="row"><span>${t('Tax','कर')}</span><strong>${money(q.tax)}</strong></div><div class="row"><span>${t('Deposit','जमा')}</span><strong>${money(q.deposit)}</strong></div><div class="row"><strong>${t('Total at move-in','आते समय कुल')}</strong><strong class="price">${money(q.total)}</strong></div></div><p>${esc(t(q.terms))}</p><p class="info">${t('Nothing to pay online. Hold for up to','ऑनलाइन भुगतान नहीं। अधिकतम')} ${q.holdHours} ${t('hours, or until the end of your move-in day if sooner. Meet the team before expiry. Agreement and check-in are completed with the team.','घंटे या आने के दिन के अंत तक, जो पहले हो। समय समाप्त होने से पहले टीम से मिलें। समझौता और चेक-इन टीम के साथ पूरा होगा।')}</p><button class="primary" data-action="nest-confirm">${t('Reserve Nest · Pay at move-in','नेस्ट बुक करें · आते समय भुगतान करें')}</button><div id="form-error" role="alert" class="error-inline"></div></div>`);}
+async function reviewNest(studioId){
+  if(!commitmentReady())return toast(t(PILOT_CLOSED_COPY));
+  if(!account)return login();
+  if(nestPending)return show(t('Check your Nest request','नेस्ट की बात जाँचें'),`<p>${t('Your previous request may have reached us. Retry to retrieve its result.','पिछली बात पहुँच गई हो सकती है। नतीजा देखने के लिए फिर कोशिश करें।')}</p><button class="primary full" data-action="nest-confirm">${t('Retry safely','सुरक्षित रूप से फिर कोशिश करें')}</button>`);
+  const body={studioId,start:nestStart};const q=await api('/nests/quote',body);
+  emitAnalytics('live','quote',{outcome:'available'});
+  nestDraft={accountId:account.id,key:crypto.randomUUID(),body:{...body,fingerprint:q.fingerprint}};
+  show(t('Review your Nest','अपना नेस्ट देखें'),`<div class="stack"><h3>${esc(q.name)}</h3><p>${esc(t(q.address))}<br>${esc(q.start)} → ${esc(q.end)} · ${t('30 days','30 दिन')}</p><div class="receipt"><div class="row"><span>${t('Stay','निवास')}</span><strong>${money(q.rent)}</strong></div><div class="row"><span>${t('Tax','कर')}</span><strong>${money(q.tax)}</strong></div><div class="row"><span>${t('Deposit','जमा')}</span><strong>${money(q.deposit)}</strong></div><div class="row"><strong>${t('Total at move-in','आते समय कुल')}</strong><strong class="price">${money(q.total)}</strong></div></div><p>${esc(t(q.terms))}</p><p class="info">${t('Nothing to pay online. Hold for up to','ऑनलाइन भुगतान नहीं। अधिकतम')} ${q.holdHours} ${t('hours, or until the end of your move-in day if sooner. Meet the team before expiry. Agreement and check-in are completed with the team.','घंटे या आने के दिन के अंत तक, जो पहले हो। समय समाप्त होने से पहले टीम से मिलें। समझौता और चेक-इन टीम के साथ पूरा होगा।')}</p><button class="primary" data-action="nest-confirm">${t('Reserve Nest · Pay at move-in','नेस्ट बुक करें · आते समय भुगतान करें')}</button><div id="form-error" role="alert" class="error-inline"></div></div>`);
+  }
 async function confirmNest(){if(!commitmentReady())return toast(t(PILOT_CLOSED_COPY));if(busy)return;if(!account)return login();if(!nestPending&&nestDraft){nestPending=nestDraft;nestDraft=null;save('nia-nest-pending',nestPending);}if(!nestPending)return;if(nestPending.accountId!==account.id){nestPending=null;save('nia-nest-pending',null);return;}busy=true;const btn=$('[data-action="nest-confirm"]');if(btn)btn.disabled=true;try{await api('/nests/bookings',nestPending.body,'POST',nestPending.key);nestPending=null;save('nia-nest-pending',null);await go('orders');emitAnalytics('live','hold_confirmation',{outcome:'reserved'});toast(t('Nest reserved. Check your reference and hold expiry below.','नेस्ट बुक हो गया। नीचे संदर्भ और समय सीमा देखें।'));}catch(e){if(!e.uncertain&&!['service_unavailable','save_storage_unavailable','state_conflict'].includes(e.code)){nestPending=null;save('nia-nest-pending',null);$('#dialog').close();await go('live');}if($('#form-error'))$('#form-error').textContent=e.message;else toast(e.message);}finally{busy=false;if(btn)btn.disabled=false;}}
 
 document.addEventListener('click',async event=>{const liveChip=event.target.closest('[data-live-date]');if(liveChip){event.preventDefault();applyLiveChip(liveChip.dataset.liveDate);return;}const button=event.target.closest('[data-action]');if(!button)return;event.preventDefault();const action=button.dataset.action,id=button.dataset.id;if(!commitmentActionReady(action))return;try{
@@ -668,8 +741,15 @@ if(form.id==='remember-form'){
   pendingPassword='';
   await finishMemberSession();
 }
-if(form.id==='recovery-form'){const result=await api('/recovery',{memberId:fields.memberId,newPhone:'+91'+fields.phone});show(t('Help request received','मदद का अनुरोध मिल गया'),`<p>${t('Your reference','आपका संदर्भ')}: <strong>${esc(result.id)}</strong></p><p>${t('Bring this reference and your member ID to your Nia team. Your account and orders have not changed.','यह संदर्भ और सदस्य ID लेकर निया टीम के पास जाएँ। आपका खाता और ऑर्डर नहीं बदले हैं।')}</p>`);}
-if(form.id==='support-form'){const issue=await api('/support',fields);emitAnalytics('save','support_request',{outcome:'received'});show(t('Help request received','मदद का अनुरोध मिल गया'),supportIssueLine(issue,{t,esc}));}
+if(form.id==='recovery-form'){
+  const result=await api('/recovery',{memberId:fields.memberId,newPhone:'+91'+fields.phone});
+  show(t('Help request received','मदद की बात मिल गई'),`<p>${t('Your reference','आपका संदर्भ')}: <strong>${esc(result.id)}</strong></p><p>${t('Bring this reference and your member ID to your Nia team. Your account and orders have not changed.','यह संदर्भ और सदस्य ID लेकर निया टीम के पास जाएँ। आपका खाता और ऑर्डर नहीं बदले हैं।')}</p>`);
+  }
+if(form.id==='support-form'){
+  const issue=await api('/support',fields);
+  emitAnalytics('save','support_request',{outcome:'received'});
+  show(t('Help request received','मदद की बात मिल गई'),supportIssueLine(issue,{t,esc}));
+  }
 if(form.id==='review-form'&&!saveCommitmentReady())return toast(t(SAVE_PAUSED_COPY));
 if(form.id==='review-form'){emitAnalytics('save','checkout_start');locationId=fields.locationId;fulfillment=fields.fulfillment;const body={locationId,fulfillment,lines:Object.entries(cart).map(([id,qty])=>({id,qty}))};const q=await api('/quote',body);const request={...body,fingerprint:q.fingerprint};show(t('Confirm your reservation','अपनी बुकिंग की पुष्टि करें'),`<div class="stack"><ul class="review-lines">${q.lines.map(l=>`<li>${esc(t(l.name))} × ${l.qty} · ${money(l.nia*l.qty)}</li>`).join('')}</ul><div class="row"><strong>${t('Pay when you collect','लेते समय पैसे दें')}</strong><strong class="price">${money(q.amount)}</strong></div><p><strong>${esc(t(q.location.name))}</strong><br>${esc(t(q.location.address))}<br>${t('Collect before','इस समय से पहले लें')} ${esc(date(q.expiresAt))}</p><p class="info">${t('Nothing online. Pay by UPI when you pick up the bag.','ऑनलाइन कुछ नहीं। बैग लेते समय UPI से पैसे दें।')}</p><button class="primary" data-action="confirm">${t('Reserve bag','बैग बुक करें')}</button><div id="form-error" class="error-inline" role="alert"></div></div>`);draft={accountId:account.id,key:crypto.randomUUID(),body:request};}
 }catch(e){const error=$('#form-error');if(error)error.textContent=e.message;else toast(e.message);}finally{if(submit)submit.disabled=false;}});

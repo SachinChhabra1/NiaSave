@@ -511,6 +511,7 @@ export default {
   "Check": "ನೋಡಿ",
   "View still": "ಚಿತ್ರ ನೋಡಿ",
   "Kirana": "ಕಿರಾಣಿ",
+  "Saving": "ಉಳಿತಾಯ",
   "This did not open. The amounts you typed are still here. Try again.": "ಇದು ಬರಲಿಲ್ಲ. ನೀವು ಬರೆದ ಮೊತ್ತ ಇಲ್ಲೇ ಇದೆ. ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
   "This account can only view the shopping list.": "ಈ ಖಾತೆ ಖರೀದಿ ಪಟ್ಟಿಯನ್ನು ಮಾತ್ರ ನೋಡಬಹುದು.",
   "Add one": "ಒಂದು ಸೇರಿಸಿ",

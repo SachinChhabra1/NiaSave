@@ -723,6 +723,7 @@ export default {
   "Lowest in this theatre": "এই থিয়েটারে সবচেয়ে সস্তা",
   "3 manufacturers": "৩ নির্মাতা",
   "Kirana": "কিরানা",
+  "Saving": "সাশ্রয়",
   "Local mills in this theatre": "এই থিয়েটারের স্থানীয় মিল",
   "Rajputana Theatre": "রাজপুতানা থিয়েটার",
   "Price when packs confirm": "প্যাক নিশ্চিত হলে দাম",

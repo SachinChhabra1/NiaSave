@@ -494,6 +494,7 @@ export default {
   "Check": "तपासा",
   "View still": "फोटो बघा",
   "Kirana": "किराणा",
+  "Saving": "बचत",
   "This did not open. The amounts you typed are still here. Try again.": "हे आले नाही. तुम्ही लिहिलेली रक्कम इथेच आहे. पुन्हा प्रयत्न करा.",
   "This account can only view the shopping list.": "हे खाते फक्त खरेदीची यादी बघू शकते.",
   "Add one": "एक जोडा",

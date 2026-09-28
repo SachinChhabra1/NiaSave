@@ -497,6 +497,7 @@ export default {
   "Lowest in this theatre": "இந்த அரங்கில் மலிவானது",
   "3 manufacturers": "3 உற்பத்தியாளர்கள்",
   "Kirana": "கிரானா",
+  "Saving": "சேமிப்பு",
   "Local mills in this theatre": "இந்த அரங்கின் உள்ளூர் ஆலைகள்",
   "Rajputana Theatre": "ராஜபுதானா அரங்கு",
   "Price when packs confirm": "பொதி உறுதிப்பட்டால் விலை",

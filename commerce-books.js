@@ -220,9 +220,10 @@ export function familyPhotoCard({photo,t,esc,icon}){
   const picture=photo
     ?`<img class="family-photo-img" src="${esc(photo)}" alt="${esc(t('Your family photo'))}">`
     :`<label class="family-photo-pick">${familyPhotoInput()}${familyPhotoEmpty(t,esc)}</label>`;
-  const words=photo
+  const actions=photo
     ?`<div class="family-photo-actions"><label class="family-photo-change">${familyPhotoInput()}${icon('pencil')}<span>${esc(t('Change photo'))}</span></label><button type="button" class="family-photo-remove" data-family-photo-remove>${esc(t('Remove photo'))}</button></div>`
-    :`<p class="family-photo-stay">${esc(t('This photo stays on this phone. Nia never sees it.'))}</p>`;
+    :'';
+  const stay=`<p class="family-photo-stay">${esc(t('This photo stays on this phone. Nia never sees it.'))}</p>`;
   const error=familyPhotoFailed?`<p class="family-photo-error" role="alert">${esc(t('This photo could not be added. Try another photo.'))}</p>`:'';
-  return `<article class="family-photo-card"><div class="family-photo-picture">${picture}</div><div class="family-photo-copy"><h2>${esc(t('Your family'))}</h2>${words}${error}</div></article>`;
+  return `<article class="family-photo-card"><div class="family-photo-picture">${picture}</div><div class="family-photo-copy"><h2>${esc(t('Your family'))}</h2>${actions}${stay}${error}</div></article>`;
 }

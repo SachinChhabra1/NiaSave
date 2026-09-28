@@ -690,6 +690,7 @@ body.mesha-dark .member-shell #content .family-photo-empty .family-photo-empty-w
 body.mesha-dark .member-shell #content .family-photo-copy{padding:12px}
 body.mesha-dark .member-shell #content .family-photo-copy h2{margin:0 0 8px;line-height:1.2;color:#101828}
 body.mesha-dark .member-shell #content .family-photo-stay{margin:0;line-height:1.4;color:#1C3F5C}
+body.mesha-dark .member-shell #content .family-photo-actions + .family-photo-stay{margin-top:8px}
 body.mesha-dark .member-shell #content .family-photo-error{margin:8px 0 0;line-height:1.4;color:#1C3F5C}
 body.mesha-dark .member-shell #content .family-photo-actions{display:flex;flex-wrap:wrap;gap:8px}
 body.mesha-dark .member-shell #content .family-photo-change,

@@ -151,8 +151,7 @@ body .member-shell #content .shop-v2-canvas{max-width:720px;min-width:0;backgrou
 .shop-photo-missing{display:flex;align-items:center;justify-content:center;width:100%;height:100%;border:1px solid var(--nia-v2-color-line);border-radius:var(--nia-v2-radius-card);color:var(--nia-v2-color-muted);font-size:14px;text-align:center;padding:var(--nia-v2-space-1);box-sizing:border-box}
 .shop-category small,.shop-item p{color:var(--nia-v2-color-muted);line-height:1.5;overflow-wrap:anywhere}
 .shop-category small{display:block;font-size:14px;padding:0 12px 12px}
-.shop-item{display:grid;grid-template-columns:96px minmax(0,1fr);gap:0;padding:0}
-.shop-item-photo{align-self:start}
+.shop-item{display:grid;grid-template-columns:minmax(0,1fr);gap:0;padding:0}
 .shop-item-detail{display:grid;align-content:start;gap:var(--nia-v2-space-1);min-width:0;padding:12px}
 .shop-price-pair{display:grid;gap:4px;line-height:1.5}
 .shop-lowest{color:var(--nia-v2-color-primary);font-weight:650}

@@ -1,7 +1,31 @@
 // Presentation only. The catalogue read was already validated against Central on the server.
-export function memberShellState({online,readAsOf,readAt,readFailed=false,pendingCount=0,sourceOwner,signedIn,now=Date.now()}={}){
+const SHELL_WORDS={
+  signin:'Log in to see what is here',
+  synced:'Your information is up to date.',
+  checking:'Getting your details',
+  stale:'Checking last update',
+  offline:'Offline',
+  queued:'Queued on this phone',
+  retry:'Request needs retry'
+};
+// A 401 or 403 is sign-in only when nobody was signed in when the read started.
+export function catalogueDenialIsSignIn(error,{hadSession=false}={}){
+  const status=Number(error&&error.status);
+  return hadSession!==true&&(status===401||status===403);
+}
+export function shellStatusWord({readFailed=false,homeQuiet=false,state}={}){
+  if(readFailed)return 'Details did not load.';
+  if(homeQuiet)return '';
+  return SHELL_WORDS[state]||'Details did not load.';
+}
+export function memberShellState({online,readAsOf,readAt,readFailed=false,pendingCount=0,sourceOwner,signedIn,guestAuth=false,now=Date.now()}={}){
   if(!online)return pendingCount>0?'queued':'offline';
   if(pendingCount>0)return 'retry';
+  // A signed-out 401 or 403 is not a failed read. Ask for login.
+  if(guestAuth===true&&signedIn===false&&Number.isFinite(readAt)){
+    if(readFailed||readAt>now||now-readAt>60000)return 'stale';
+    return 'signin';
+  }
   // Public Nia catalogues intentionally withhold member inventory and its source clock.
   if(sourceOwner==='niasave'&&signedIn===false&&Number.isFinite(readAt)){
     if(readFailed||readAt>now||now-readAt>60000)return 'stale';

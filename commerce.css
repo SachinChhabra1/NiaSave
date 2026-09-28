@@ -356,6 +356,9 @@ body.mesha-dark .mobile-bag{display:none}
 .mesha-bag-total{display:flex;align-items:center;justify-content:space-between;padding:22px 0 8px;font-size:16px}
 .mesha-bag-total strong{font-size:22px;letter-spacing:-.03em}
 .mesha-bag-quiet,.mesha-bag-note{margin:0 0 16px;color:#3d4c5c;font-size:14px;line-height:1.4;text-align:center}
+.mesha-bag-reason{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0 0 12px}
+.mesha-bag-reason .mesha-bag-note{flex:1 1 14em;margin:0;text-align:left}
+.mesha-bag-reason .call-nia{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;flex:none}
 .mesha-bag-quiet{text-align:left;margin-bottom:18px}
 .mesha-bag .mesha-pill-solid{width:100%}
 body.mesha-bag-open{overflow:hidden}

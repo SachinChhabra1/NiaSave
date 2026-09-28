@@ -26,6 +26,7 @@ export default {
   "These products have no category assigned.": "இந்தப் பொருட்களுக்கு வகை ஒதுக்கப்படவில்லை.",
   "Unit prices and lowest-price labels are not recorded. Products are shown without ranking.": "அலகு விலைகளும் குறைந்த விலை குறிகளும் பதிவு செய்யப்படவில்லை. பொருட்கள் தரவரிசையின்றிக் காட்டப்படுகின்றன.",
   "Final price and availability are checked by NiaSave at review.": "மறுபார்வையின்போது இறுதி விலையையும் கிடைக்கும் அளவையும் NiaSave சரிபார்க்கும்.",
+  "The Nia team will confirm the final price before you pay.": "பணம் செலுத்தும் முன் Nia குழு இறுதி விலையை உறுதி செய்யும்.",
   "Log in to see goods near you and reserve them.": "அருகிலுள்ள பொருளைப் பார்த்து ஒதுக்க லாக் இன் செய்யுங்கள்.",
   "The list did not load. Refresh to check your bookings.": "பட்டியல் ஏறவில்லை. புக்கிங் பார்க்க மீண்டும் ஏற்றுங்கள்.",
   "Refresh the list to see what is in stock.": "என்ன இருக்கிறது என்று பார்க்க பட்டியலை மீண்டும் ஏற்றுங்கள்.",

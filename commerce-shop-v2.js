@@ -28,14 +28,14 @@ export function shopSourceCopy(owner){
     photo:'Photo not available',unit:'Unit price not recorded',
     categories:'These products have no category assigned.',
     ranking:'Unit prices and lowest-price labels are not recorded. Products are shown without ranking.',
-    review:'Final price and availability are checked by NiaSave at review.',
+    review:'The Nia team will confirm the final price before you pay.',
   }:{
     heading:'Rice, atta, oil at low prices',loading:'Loading things to buy',ready:'List of things to buy',
     missing:'The list of things did not load.',empty:'Nothing to buy here.',
     photo:'',unit:'Price coming soon',
     categories:'These things are not in the six Shop groups.',
     ranking:'Prices are not up yet. To order now, call Nia.',
-    review:'The final price and what is in stock are checked when you review.',
+    review:'The Nia team will confirm the final price before you pay.',
   };
 }
 // Wording only: the existing server capability and stock guards still control actions.

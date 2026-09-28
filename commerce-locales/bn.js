@@ -26,6 +26,7 @@ export default {
   "These products have no category assigned.": "এই পণ্যগুলির বিভাগ নির্ধারিত হয়নি।",
   "Unit prices and lowest-price labels are not recorded. Products are shown without ranking.": "একক মূল্য ও সর্বনিম্ন মূল্যের লেবেল নথিভুক্ত নেই। পণ্যগুলি ক্রম নির্ধারণ ছাড়াই দেখানো হচ্ছে।",
   "Final price and availability are checked by NiaSave at review.": "পর্যালোচনার সময় NiaSave চূড়ান্ত মূল্য ও প্রাপ্যতা যাচাই করে।",
+  "The Nia team will confirm the final price before you pay.": "টাকা দেওয়ার আগে Nia দল চূড়ান্ত দাম নিশ্চিত করবে।",
   "Log in to see goods near you and reserve them.": "কাছের জিনিস দেখতে ও আটকে রাখতে লগ ইন করুন।",
   "The list did not load. Refresh to check your bookings.": "তালিকা আসেনি। বুকিং দেখতে আবার খুলুন।",
   "Refresh the list to see what is in stock.": "কী আছে দেখতে তালিকা আবার খুলুন।",

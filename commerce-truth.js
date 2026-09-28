@@ -1,4 +1,4 @@
-import { COMMITMENTS_FROZEN } from './commerce-capabilities.js';
+import { COMMITMENTS_FROZEN, SAVE_PAUSED_COPY } from './commerce-capabilities.js';
 export const commitmentReady = () => !COMMITMENTS_FROZEN;
 let saveReservations = false;
 export const setSaveCapabilities = capabilities => { saveReservations = capabilities?.saveReservations === true; };
@@ -36,6 +36,28 @@ export function reserveReady(product = {}) {
 
 export function bagHasUnconfirmedPack(products = [], cart = {}) {
   return (products || []).some(product => cart[product.id] && !packReady(product));
+}
+
+// Same price check reserveReady already uses. A missing price is not a pack problem.
+export function bagPricesMissing(products = [], cart = {}) {
+  return (products || []).some(product => {
+    if (!cart[product.id]) return false;
+    const price = Number(product.price ?? product.nia);
+    return !Number.isFinite(price) || price <= 0;
+  });
+}
+
+export const BAG_OFFLINE_COPY = 'Offline. Reconnect for current prices';
+export const BAG_PACK_COPY = 'Ask Nia about this pack.';
+export const BAG_PRICES_COPY = 'Prices are not up yet. To order now, call Nia.';
+
+// The first reason the bag code already detects. Empty when nothing blocks Continue.
+export function bagContinueReason({online = true, reservationsReady = true, unconfirmedPack = false, pricesMissing = false} = {}) {
+  if (online === false) return BAG_OFFLINE_COPY;
+  if (reservationsReady === false) return SAVE_PAUSED_COPY;
+  if (unconfirmedPack) return BAG_PACK_COPY;
+  if (pricesMissing) return BAG_PRICES_COPY;
+  return '';
 }
 
 export function stayErrorKind(error, {signedIn=false}={}) {

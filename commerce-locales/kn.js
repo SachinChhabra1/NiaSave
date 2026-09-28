@@ -499,6 +499,7 @@ export default {
   "The list did not load. Refresh to check your bookings.": "ಪಟ್ಟಿ ಬರಲಿಲ್ಲ. ಬುಕಿಂಗ್ ನೋಡಲು ಮತ್ತೆ ತೆರೆಯಿರಿ.",
   "These things are not in the six Shop groups.": "ಈ ಸಾಮಾನು ಅಂಗಡಿಯ ಆರು ಗುಂಪಿನಲ್ಲಿ ಇಲ್ಲ.",
   "The final price and what is in stock are checked when you review.": "ನೋಡುವಾಗ ಕೊನೆಯ ಬೆಲೆ ಮತ್ತು ಇರುವ ಸಾಮಾನು ಪರಿಶೀಲಿಸಲಾಗುತ್ತದೆ.",
+  "The Nia team will confirm the final price before you pay.": "ಹಣ ಕೊಡುವ ಮೊದಲು Nia ತಂಡ ಅಂತಿಮ ಬೆಲೆಯನ್ನು ಖಚಿತಪಡಿಸುತ್ತದೆ.",
   "Jobs did not load. Try again.": "ಕೆಲಸಗಳು ಬರಲಿಲ್ಲ. ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
   "Loading things to buy": "ಖರೀದಿ ಸಾಮಾನು ತೆರೆಯುತ್ತಿದೆ",
   "Loading the NiaSave list": "NiaSave ಪಟ್ಟಿ ತೆರೆಯುತ್ತಿದೆ",

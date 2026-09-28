@@ -478,6 +478,7 @@ export default {
   "The list did not load. Refresh to check your bookings.": "यादी आली नाही. बुकिंग बघण्यासाठी पुन्हा उघडा.",
   "These things are not in the six Shop groups.": "या वस्तू दुकानाच्या सहा गटांत नाहीत.",
   "The final price and what is in stock are checked when you review.": "तपासताना शेवटची किंमत आणि साठा बघितला जातो.",
+  "The Nia team will confirm the final price before you pay.": "पैसे देण्यापूर्वी Nia टीम अंतिम किंमत पक्की करेल.",
   "Jobs did not load. Try again.": "नौकऱ्या आल्या नाहीत. पुन्हा प्रयत्न करा.",
   "Loading things to buy": "खरेदीच्या वस्तू उघडत आहेत",
   "Loading the NiaSave list": "NiaSave यादी उघडत आहे",

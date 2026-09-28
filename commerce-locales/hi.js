@@ -26,6 +26,7 @@ export default {
   "These products have no category assigned.": "इन सामानों की श्रेणी तय नहीं है।",
   "Unit prices and lowest-price labels are not recorded. Products are shown without ranking.": "प्रति इकाई कीमत और सबसे कम कीमत के लेबल दर्ज नहीं हैं। सामान बिना रैंकिंग के दिखाए गए हैं।",
   "Final price and availability are checked by NiaSave at review.": "समीक्षा के समय NiaSave अंतिम कीमत और उपलब्धता जाँचता है।",
+  "The Nia team will confirm the final price before you pay.": "पैसे देने से पहले Nia टीम अंतिम कीमत पक्की करेगी।",
   "Log in to see goods near you and reserve them.": "पास का सामान देखने और अपने नाम करने के लिए लॉग इन करें।",
   "The list did not load. Refresh to check your bookings.": "सूची नहीं खुली। बुकिंग देखने के लिए फिर से खोलें।",
   "Refresh the list to see what is in stock.": "क्या मौजूद है, यह देखने के लिए सूची फिर खोलें।",

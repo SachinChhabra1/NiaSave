@@ -96,3 +96,110 @@ export function sendViewState({data,online=true,signedOut=false,now=Date.now()}=
   if(Number.isFinite(asOf)&&(asOf>now+60000||now-asOf>300000))return 'stale';
   return data.months.some(m=>Array.isArray(m.entries)&&m.entries.length)?'ready':'empty';
 }
+
+// The family photo lives only in this browser. It is never sent anywhere.
+export const FAMILY_PHOTO_KEY='nia-family-photo';
+const FAMILY_PHOTO_MAX_BYTES=20*1024*1024;
+const FAMILY_PHOTO_EDGE=900;
+let familyPhotoFailed=false;
+
+export function markFamilyPhotoFailure(){familyPhotoFailed=true;}
+export function clearFamilyPhotoNotice(){familyPhotoFailed=false;}
+
+export function readFamilyPhoto(){
+  try{
+    const value=localStorage.getItem(FAMILY_PHOTO_KEY);
+    return typeof value==='string'&&value.startsWith('data:image/')?value:'';
+  }catch{
+    return '';
+  }
+}
+
+export function clearFamilyPhoto(){
+  try{
+    localStorage.removeItem(FAMILY_PHOTO_KEY);
+  }catch{
+    /* a blocked store must not throw into the render */
+  }
+}
+
+function rejectFamilyFile(file){
+  if(!file||typeof file.type!=='string'||!file.type.startsWith('image/'))throw new Error('not-image');
+  if(typeof file.size==='number'&&file.size>FAMILY_PHOTO_MAX_BYTES)throw new Error('too-large');
+}
+
+async function bitmapFromFile(file){
+  if(typeof createImageBitmap==='function'){
+    try{return await createImageBitmap(file,{imageOrientation:'from-image'});}catch{/* try without the option */}
+    try{return await createImageBitmap(file);}catch{/* the image element is the fallback */}
+  }
+  if(typeof URL==='undefined'||typeof URL.createObjectURL!=='function'||typeof Image!=='function')throw new Error('unreadable');
+  const url=URL.createObjectURL(file);
+  try{
+    const image=new Image();
+    await new Promise((resolve,reject)=>{
+      image.onload=()=>resolve();
+      image.onerror=()=>reject(new Error('unreadable'));
+      image.src=url;
+    });
+    return image;
+  }finally{
+    URL.revokeObjectURL(url);
+  }
+}
+
+function jpegDataUrl(source){
+  const width=source.naturalWidth||source.width;
+  const height=source.naturalHeight||source.height;
+  if(!width||!height)throw new Error('unreadable');
+  const scale=FAMILY_PHOTO_EDGE/Math.max(width,height);
+  const canvasWidth=Math.max(1,Math.round(width*scale));
+  const canvasHeight=Math.max(1,Math.round(height*scale));
+  const canvas=document.createElement('canvas');
+  canvas.width=canvasWidth;
+  canvas.height=canvasHeight;
+  const ctx=canvas.getContext('2d');
+  if(!ctx)throw new Error('unreadable');
+  ctx.drawImage(source,0,0,canvasWidth,canvasHeight);
+  if(typeof source.close==='function')source.close();
+  const dataUrl=canvas.toDataURL('image/jpeg',0.82);
+  if(typeof dataUrl!=='string'||!dataUrl.startsWith('data:image/'))throw new Error('unreadable');
+  return dataUrl;
+}
+
+export async function storeFamilyPhoto(file){
+  rejectFamilyFile(file);
+  const dataUrl=jpegDataUrl(await bitmapFromFile(file));
+  try{
+    localStorage.setItem(FAMILY_PHOTO_KEY,dataUrl);
+  }catch{
+    throw new Error('storage');
+  }
+  return dataUrl;
+}
+
+const FAMILY_CAMERA='<svg class="family-photo-camera" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><path d="M12 11v4M10 13h4"/></svg>';
+
+function familyPhotoEmpty(t,esc){
+  return `<span class="family-photo-empty"><span class="family-photo-empty-mark" aria-hidden="true">${FAMILY_CAMERA}</span><span class="family-photo-empty-word">${esc(t('Add your family photo'))}</span></span>`;
+}
+
+function familyPhotoInput(){
+  return '<input class="visually-hidden" type="file" accept="image/*" data-family-photo>';
+}
+
+export function familyPhotoArt({photo,t,esc}){
+  if(photo)return `<img class="family-photo-img" src="${esc(photo)}" alt="${esc(t('Your family photo'))}" width="900" height="675">`;
+  return familyPhotoEmpty(t,esc);
+}
+
+export function familyPhotoCard({photo,t,esc,icon}){
+  const picture=photo
+    ?`<img class="family-photo-img" src="${esc(photo)}" alt="${esc(t('Your family photo'))}" width="900" height="675">`
+    :`<label class="family-photo-pick">${familyPhotoInput()}${familyPhotoEmpty(t,esc)}</label>`;
+  const words=photo
+    ?`<div class="family-photo-actions"><label class="family-photo-change">${familyPhotoInput()}${icon('pencil')}<span>${esc(t('Change photo'))}</span></label><button type="button" class="family-photo-remove" data-family-photo-remove>${esc(t('Remove photo'))}</button></div>`
+    :`<p class="family-photo-stay">${esc(t('This photo stays on this phone. Nia never sees it.'))}</p>`;
+  const error=familyPhotoFailed?`<p class="family-photo-error" role="alert">${esc(t('This photo could not be added. Try another photo.'))}</p>`:'';
+  return `<article class="family-photo-card"><div class="family-photo-picture">${picture}</div><div class="family-photo-copy"><h2>${esc(t('Your family'))}</h2>${words}${error}</div></article>`;
+}

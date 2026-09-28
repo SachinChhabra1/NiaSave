@@ -551,4 +551,12 @@ export default {
   "View your stay": "तुमचे राहणे बघा",
   "Your Nia team will see that you withdrew this request.": "तुम्ही ही विनंती मागे घेतली आहे, हे निया टीम बघेल.",
   "Your bag is empty": "तुमची बॅग रिकामी आहे",
+  "Add your family photo": "तुमच्या कुटुंबाचा फोटो लावा",
+  "Your family": "तुमचे कुटुंब",
+  "Change photo": "फोटो बदला",
+  "Remove photo": "फोटो काढा",
+  "This photo stays on this phone. Nia never sees it.": "हा फोटो याच फोनमध्ये राहतो. Nia तो कधीच पाहत नाही.",
+  "Remove this photo?": "हा फोटो काढायचा?",
+  "This photo could not be added. Try another photo.": "हा फोटो लावता आला नाही. दुसरा फोटो निवडा.",
+  "Your family photo": "तुमच्या कुटुंबाचा फोटो",
 };

@@ -672,4 +672,12 @@ export default {
   "In one month": "ஒரு மாதத்தில்",
   "This did not open. The amounts you typed are still here. Try again.": "இது ஏறவில்லை. நீங்கள் எழுதிய தொகை இங்கே உள்ளது. மீண்டும் முயலுங்கள்.",
   "This account can only view the shopping list.": "இந்தக் கணக்கு வாங்கும் பட்டியலை மட்டும் பார்க்கும்.",
+  "Add your family photo": "உங்கள் குடும்பப் புகைப்படத்தைச் சேர்க்கவும்",
+  "Your family": "உங்கள் குடும்பம்",
+  "Change photo": "புகைப்படத்தை மாற்றவும்",
+  "Remove photo": "புகைப்படத்தை நீக்கவும்",
+  "This photo stays on this phone. Nia never sees it.": "இந்தப் புகைப்படம் இந்த போனில் மட்டுமே இருக்கும். Nia இதை ஒருபோதும் பார்க்காது.",
+  "Remove this photo?": "இந்தப் புகைப்படத்தை நீக்கவா?",
+  "This photo could not be added. Try another photo.": "இந்தப் புகைப்படத்தைச் சேர்க்க முடியவில்லை. வேறு புகைப்படத்தைத் தேர்ந்தெடுக்கவும்.",
+  "Your family photo": "உங்கள் குடும்பப் புகைப்படம்",
 };

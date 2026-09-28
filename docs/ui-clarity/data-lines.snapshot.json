@@ -1,6 +1,10 @@
 {
   "commerce-analytics.js": [],
-  "commerce-books.js": [],
+  "commerce-books.js": [
+    "    const value=localStorage.getItem(FAMILY_PHOTO_KEY);",
+    "    localStorage.removeItem(FAMILY_PHOTO_KEY);",
+    "    localStorage.setItem(FAMILY_PHOTO_KEY,dataUrl);"
+  ],
   "commerce-capabilities.js": [],
   "commerce-categories.js": [],
   "commerce-content-qa.js": [],

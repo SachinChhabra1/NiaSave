@@ -900,4 +900,12 @@ export default {
   "In one month": "এক মাসে",
   "This did not open. The amounts you typed are still here. Try again.": "এটা আসেনি। আপনার লেখা টাকা এখানেই আছে। আবার চেষ্টা করুন।",
   "This account can only view the shopping list.": "এই অ্যাকাউন্ট শুধু কেনার তালিকা দেখতে পারে।",
+  "Add your family photo": "আপনার পরিবারের ছবি যোগ করুন",
+  "Your family": "আপনার পরিবার",
+  "Change photo": "ছবি বদলান",
+  "Remove photo": "ছবি সরান",
+  "This photo stays on this phone. Nia never sees it.": "এই ছবি এই ফোনেই থাকে। Nia কখনও এটি দেখে না।",
+  "Remove this photo?": "এই ছবি সরাবেন?",
+  "This photo could not be added. Try another photo.": "এই ছবি যোগ করা গেল না। অন্য ছবি বেছে নিন।",
+  "Your family photo": "আপনার পরিবারের ছবি",
 };

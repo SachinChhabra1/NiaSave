@@ -427,4 +427,12 @@ export default {
   "This did not open. The amounts you typed are still here. Try again.": "यह नहीं खुला। आपने जो रकम लिखी है, वह यहीं है। फिर कोशिश करें।",
   "This account can only view the shopping list.": "यह खाता सिर्फ़ खरीदने की सूची देख सकता है।",
   "Why Nia": "निया क्यों",
+  "Add your family photo": "अपने परिवार की फ़ोटो लगाएँ",
+  "Your family": "आपका परिवार",
+  "Change photo": "फ़ोटो बदलें",
+  "Remove photo": "फ़ोटो हटाएँ",
+  "This photo stays on this phone. Nia never sees it.": "यह फ़ोटो इसी फ़ोन में रहती है। Nia इसे कभी नहीं देखता।",
+  "Remove this photo?": "यह फ़ोटो हटाएँ?",
+  "This photo could not be added. Try another photo.": "यह फ़ोटो नहीं लग सकी। कोई दूसरी फ़ोटो चुनें।",
+  "Your family photo": "आपके परिवार की फ़ोटो",
 };

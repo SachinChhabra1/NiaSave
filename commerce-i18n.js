@@ -22,6 +22,8 @@ export async function loadLanguage(lang) {
   await pending[lang];
 }
 export function translate(lang, english, hindi) {
+  const loaded = dictionaries[lang];
+  if(loaded && typeof loaded[english] === 'string' && loaded[english].trim()) return fallbackCopy(lang, english, dictionaries);
   if(lang === 'hi' && typeof hindi === 'string' && hindi.trim()) return fallbackCopy(lang, english, {hi:{[english]:hindi}});
   return fallbackCopy(lang, english, dictionaries);
 }

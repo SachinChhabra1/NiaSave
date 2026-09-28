@@ -54,5 +54,5 @@ export function supportIssueLine(issue, {t, esc}) {
   const refund = issue.refundApproved === true
     ? t('Refund approved by the Nia team')
     : (issue.kind === 'return_refund' ? t('Refund request only · not approved') : '');
-  return `<p class="info">${t('Help request','मदद का माँग')} ${esc(issue.reference || issue.id)} · ${esc(t(issue.status))}${issue.relatedRef?`<br>${t('Related reference')}: ${esc(issue.relatedRef)}`:''}${refund?`<br>${esc(refund)}`:''}${issue.note?`<br>${esc(issue.note)}`:''}</p>`;
+  return `<p class="info">${t('Help request','मदद की माँग')} ${esc(issue.reference || issue.id)} · ${esc(t(issue.status))}${issue.relatedRef?`<br>${t('Related reference')}: ${esc(issue.relatedRef)}`:''}${refund?`<br>${esc(refund)}`:''}${issue.note?`<br>${esc(issue.note)}`:''}</p>`;
 }

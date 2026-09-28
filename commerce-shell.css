@@ -317,6 +317,8 @@ body .member-shell #content .shop-v2-canvas{max-width:720px;min-width:0;backgrou
 .earn-how-steps img,#content .earn-how-steps img,#content .send-example img{display:block;width:100%;max-width:100%;height:140px;object-fit:cover}
 .earn-how-steps span{display:block;padding:0 12px 12px;font-size:16px;line-height:1.35}
 .earn-how-actions,.send-example-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.store-head .earn-how-actions{margin:12px 0 0;justify-content:center}
+body.mesha-dark .store-head.store-task .earn-how-actions .primary{margin:0}
 .send-example{display:grid;gap:10px;margin:0 16px;padding:16px;border-radius:16px;background:#fff}
 .send-example-flag{margin:0;font-size:16px;font-weight:700;line-height:1.3}
 .send-example img{display:block;width:100%;height:140px;object-fit:cover;border-radius:12px}
@@ -325,7 +327,7 @@ body .member-shell #content .shop-v2-canvas{max-width:720px;min-width:0;backgrou
 .send-example li span,.send-example li strong{font-size:16px}
 .send-example-period{margin:0;font-size:16px;line-height:1.35}
 
-/* Three sizes on member screens: title 24, body 16, label 14. */
+/* 16 / 24 / 14 are forced here. The rules above do not hold three sizes on their own. */
 body.mesha-dark .header,
 body.mesha-dark .header :is(span,a,button,select,small,p,div),
 body.mesha-dark .notice,

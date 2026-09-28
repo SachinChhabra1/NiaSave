@@ -30,8 +30,7 @@ function savePlan(value) {
 function packLine(product) {
   const pack = product?.pack || PENDING_PACK;
   const hint = product?.collectHint?.name || COLLECT.name;
-  const source = product?.sourceSiteCode ? `Where from ${product.sourceSiteCode}` : '';
-  return `<span class="pack-line">${pack} · Collect at ${hint}</span>${source ? `<span class="source-line">${source}</span>` : ''}`;
+  return `<span class="pack-line">${pack} · Collect at ${hint}</span>`;
 }
 
 function decorateProducts(root) {
@@ -41,7 +40,6 @@ function decorateProducts(root) {
     const line = document.createElement('div');
     line.innerHTML = packLine({
       pack: card.getAttribute('data-pack') || PENDING_PACK,
-      sourceSiteCode: card.getAttribute('data-source-site') || '',
       collectHint: { name: COLLECT.name }
     });
     host.append(...line.childNodes);

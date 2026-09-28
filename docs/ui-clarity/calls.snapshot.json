@@ -47,7 +47,7 @@
         "lit": "action"
       },
       "method": {
-        "lit": "GET"
+        "absent": true
       },
       "body": {
         "keys": [
@@ -83,7 +83,7 @@
         "lit": "recovery"
       },
       "method": {
-        "lit": "GET"
+        "absent": true
       },
       "body": {
         "keys": [
@@ -100,7 +100,7 @@
         "lit": "state"
       },
       "method": {
-        "lit": "GET"
+        "absent": true
       },
       "body": null,
       "key": null
@@ -111,7 +111,7 @@
         "lit": "support"
       },
       "method": {
-        "lit": "GET"
+        "absent": true
       },
       "body": {
         "keys": [
@@ -184,7 +184,7 @@
         "lit": "/auth/passkey/options"
       },
       "method": {
-        "lit": "GET"
+        "absent": true
       },
       "body": {
         "keys": [
@@ -200,7 +200,7 @@
         "lit": "/auth/passkey/verify"
       },
       "method": {
-        "lit": "GET"
+        "absent": true
       },
       "body": {
         "keys": [
@@ -228,7 +228,7 @@
         "lit": "/auth/logout"
       },
       "method": {
-        "lit": "GET"
+        "absent": true
       },
       "body": {
         "keys": []
@@ -241,7 +241,7 @@
         "lit": "/auth/preview"
       },
       "method": {
-        "lit": "GET"
+        "absent": true
       },
       "body": {
         "keys": [
@@ -256,7 +256,7 @@
         "lit": "/books"
       },
       "method": {
-        "lit": "GET"
+        "absent": true
       },
       "body": null,
       "key": null
@@ -267,7 +267,7 @@
         "lit": "/books/consent"
       },
       "method": {
-        "lit": "GET"
+        "absent": true
       },
       "body": {
         "keys": [
@@ -330,7 +330,7 @@
         "lit": "/catalogue"
       },
       "method": {
-        "lit": "GET"
+        "absent": true
       },
       "body": null,
       "key": null
@@ -341,7 +341,7 @@
         "lit": "/earn"
       },
       "method": {
-        "lit": "GET"
+        "absent": true
       },
       "body": null,
       "key": null
@@ -352,7 +352,7 @@
         "lit": "/earn/applications"
       },
       "method": {
-        "lit": "GET"
+        "absent": true
       },
       "body": null,
       "key": null
@@ -396,7 +396,7 @@
         "lit": "/membership"
       },
       "method": {
-        "lit": "GET"
+        "absent": true
       },
       "body": null,
       "key": null
@@ -407,7 +407,7 @@
         "lit": "/membership/enrol"
       },
       "method": {
-        "lit": "GET"
+        "absent": true
       },
       "body": {
         "keys": [
@@ -424,7 +424,7 @@
         "lit": "/membership/recovery"
       },
       "method": {
-        "lit": "GET"
+        "absent": true
       },
       "body": {
         "keys": [
@@ -439,7 +439,7 @@
         "lit": "/nests"
       },
       "method": {
-        "lit": "GET"
+        "absent": true
       },
       "body": null,
       "key": null
@@ -450,7 +450,7 @@
         "lit": "/nests/availability"
       },
       "method": {
-        "lit": "GET"
+        "absent": true
       },
       "body": {
         "keys": [
@@ -465,7 +465,7 @@
         "lit": "/nests/bookings"
       },
       "method": {
-        "lit": "GET"
+        "absent": true
       },
       "body": null,
       "key": null
@@ -491,7 +491,7 @@
         "lit": "/nests/cancel"
       },
       "method": {
-        "lit": "GET"
+        "absent": true
       },
       "body": {
         "keys": [
@@ -506,7 +506,7 @@
         "lit": "/nests/quote"
       },
       "method": {
-        "lit": "GET"
+        "absent": true
       },
       "body": {
         "src": "body"
@@ -519,7 +519,7 @@
         "lit": "/orders"
       },
       "method": {
-        "lit": "GET"
+        "absent": true
       },
       "body": null,
       "key": null
@@ -530,7 +530,7 @@
         "lit": "/orders"
       },
       "method": {
-        "lit": "GET"
+        "absent": true
       },
       "body": null,
       "key": null
@@ -556,7 +556,7 @@
         "lit": "/partners"
       },
       "method": {
-        "lit": "GET"
+        "absent": true
       },
       "body": null,
       "key": null
@@ -567,7 +567,7 @@
         "lit": "/partners/referrals"
       },
       "method": {
-        "lit": "GET"
+        "absent": true
       },
       "body": null,
       "key": null
@@ -578,7 +578,7 @@
         "lit": "/partners/referrals"
       },
       "method": {
-        "lit": "GET"
+        "absent": true
       },
       "body": {
         "keys": [
@@ -596,7 +596,7 @@
         "lit": "/partners/withdraw"
       },
       "method": {
-        "lit": "GET"
+        "absent": true
       },
       "body": {
         "keys": [
@@ -611,7 +611,7 @@
         "lit": "/quote"
       },
       "method": {
-        "lit": "GET"
+        "absent": true
       },
       "body": {
         "src": "body"
@@ -624,7 +624,7 @@
         "lit": "/recovery"
       },
       "method": {
-        "lit": "GET"
+        "absent": true
       },
       "body": {
         "keys": [
@@ -640,7 +640,7 @@
         "lit": "/support"
       },
       "method": {
-        "lit": "GET"
+        "absent": true
       },
       "body": null,
       "key": null
@@ -651,7 +651,7 @@
         "lit": "/support"
       },
       "method": {
-        "lit": "GET"
+        "absent": true
       },
       "body": {
         "src": "fields"
@@ -664,7 +664,7 @@
         "src": "'/books/plan?month=' + planMonth ( )"
       },
       "method": {
-        "lit": "GET"
+        "absent": true
       },
       "body": null,
       "key": null
@@ -675,7 +675,7 @@
         "src": "loginPath ( cat )"
       },
       "method": {
-        "lit": "GET"
+        "absent": true
       },
       "body": {
         "src": "passwordBody ( fields , { phone } )"
@@ -688,7 +688,7 @@
         "src": "loginPath ( cat )"
       },
       "method": {
-        "lit": "GET"
+        "absent": true
       },
       "body": {
         "src": "passwordBody ( { password : pendingPassword , remember : rememberOn ( fields ) } , { phone : authPhone } )"
@@ -701,7 +701,7 @@
         "src": "path"
       },
       "method": {
-        "lit": "GET"
+        "absent": true
       },
       "body": null,
       "key": null

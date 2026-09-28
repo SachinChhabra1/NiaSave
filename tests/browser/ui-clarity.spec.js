@@ -364,7 +364,8 @@ for (const lang of ['en', 'hi', 'ta', 'bn']) {
 
 test('first load transfers at most 500KB before below-the-fold images', async ({page}) => {
   test.setTimeout(90000);
-  const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../..');
+  const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../..', 'dist');
+  if (!fs.existsSync(path.join(root, 'commerce.html'))) throw new Error('dist/commerce.html is missing. Run npm run build:production first.');
   const types = {'.html': 'text/html', '.js': 'text/javascript', '.mjs': 'text/javascript', '.css': 'text/css', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.svg': 'image/svg+xml', '.webmanifest': 'application/manifest+json'};
   const server = http.createServer((req, res) => {
     const urlPath = decodeURIComponent((req.url || '/').split('?')[0]);
@@ -386,6 +387,24 @@ test('first load transfers at most 500KB before below-the-fold images', async ({
   try {
   await page.setViewportSize({width: 360, height: 780});
   await prepare(page, 'en');
+  const fontBytes = [];
+  page.on('response', response => {
+    const url = response.url();
+    if (!/fonts\.(googleapis|gstatic)\.com/.test(url)) return;
+    fontBytes.push((async () => {
+      const header = Number(response.headers()['content-length'] || 0);
+      let bytes = header;
+      let text = '';
+      if (!bytes || /fonts\.googleapis\.com/.test(url)) {
+        try {
+          const body = await response.body();
+          if (!bytes) bytes = body.length;
+          if (/fonts\.googleapis\.com/.test(url)) text = body.toString('utf8');
+        } catch { /* already consumed, or no body */ }
+      }
+      return {url, bytes, text};
+    })());
+  });
   await page.route('**/*', async route => {
     const url = route.request().url();
     if (url.includes('/api/') || url.includes('/v1/')) {
@@ -393,7 +412,10 @@ test('first load transfers at most 500KB before below-the-fold images', async ({
       await route.fulfill({status: 200, contentType: 'application/json', body: JSON.stringify(bodyFor('empty', parsed.pathname))});
       return;
     }
-    if (!url.startsWith(`http://127.0.0.1:${port}`)) return route.abort();
+    if (!url.startsWith(`http://127.0.0.1:${port}`)) {
+      if (/fonts\.(googleapis|gstatic)\.com/.test(url)) return route.continue();
+      return route.abort();
+    }
     return route.continue();
   });
   await page.goto(`http://127.0.0.1:${port}/commerce.html#home`, {waitUntil: 'networkidle'});
@@ -420,6 +442,34 @@ test('first load transfers at most 500KB before below-the-fold images', async ({
     }
     return {total, kept};
   });
+  const seen = new Set();
+  const fonts = await Promise.all(fontBytes);
+  for (const font of fonts) {
+    if (!font.bytes || seen.has(font.url)) continue;
+    seen.add(font.url);
+    const name = font.url.split('/').pop();
+    const counted = measured.kept.some(row => row.startsWith(name + ':') && !row.endsWith(':0'));
+    if (!counted) {
+      measured.total += font.bytes;
+      measured.kept.push(name + ':' + font.bytes);
+    }
+    if (!font.text) continue;
+    const latin = new Set();
+    for (const block of font.text.split('/*').slice(1)) {
+      const label = block.slice(0, 24);
+      if (!/latin/i.test(label) || /latin-ext/i.test(label)) continue;
+      const file = (block.match(/url\(([^)]+)\)/) || [])[1];
+      if (file) latin.add(file.replace(/['"]/g, ''));
+    }
+    for (const file of latin) {
+      if (seen.has(file) || fonts.some(item => item.url === file)) continue;
+      seen.add(file);
+      const reply = await page.request.get(file);
+      const size = Number(reply.headers()['content-length'] || 0) || (await reply.body()).length;
+      measured.total += size;
+      measured.kept.push(file.split('/').pop() + ':' + size);
+    }
+  }
   expect(measured.total, measured.kept.join('\n')).toBeLessThanOrEqual(500 * 1024);
   } finally {
     await new Promise(resolve => server.close(resolve));

@@ -86,3 +86,22 @@ export function readGaps() {
 export function gapCount(gaps) {
   return languages.reduce((sum, lang) => sum + (Array.isArray(gaps[lang]) ? gaps[lang].length : 0), 0);
 }
+
+const isMain = process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
+if (isMain) {
+  const saved = readGaps();
+  const missing = await missingTranslations();
+  const problems = [];
+  for (const lang of languages) {
+    const known = new Set(saved[lang] || []);
+    for (const key of missing[lang]) {
+      if (!known.has(key)) problems.push(lang + ': ' + key);
+    }
+  }
+  const live = languages.reduce((sum, lang) => sum + missing[lang].length, 0);
+  if (live > gapCount(saved)) problems.push('translation gaps grew from ' + gapCount(saved) + ' to ' + live);
+  if (problems.length) {
+    console.error(problems.join('\n'));
+    process.exit(1);
+  }
+}

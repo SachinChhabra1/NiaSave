@@ -106,7 +106,7 @@ const money = n => new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR
 const date = v => new Date(v).toLocaleString(lang+'-IN',{day:'numeric',month:'short',hour:'numeric',minute:'2-digit',timeZone:'Asia/Kolkata'});
 const icons={live:'<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/>',earn:'<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M2 12a20 20 0 0 0 20 0M12 12v2"/>',send:'<path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/>',shop:'<path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18M16 10a4 4 0 0 1-8 0"/>',bag:'<path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18M16 10a4 4 0 0 1-8 0"/>',orders:'<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/>',account:'<circle cx="12" cy="7" r="4"/><path d="M4 21v-2a8 8 0 0 1 16 0v2"/>',phone:'<path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-8.1-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7 12 12 0 0 0 .7 2.7 2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4 12 12 0 0 0 2.7.7 2 2 0 0 1 1.7 2z"/>',search:'<circle cx="10" cy="10" r="7"/><path d="m15 15 6 6"/>',qr:'<path d="M3 3h6v6H3zM15 3h6v6h-6zM3 15h6v6H3zM15 15h2v2h-2zM19 19h2v2h-2zM15 21v-2M21 15h-2"/>',arrow:'<path d="m9 5 7 7-7 7"/>'};
 Object.assign(icons,categoryIcons);
-const icon = name => `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${icons[name]||icons.bag}</svg>`;
+const icon = name => ['live','earn','shop','send'].includes(name) ? lessNavIcon(name) : `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${icons[name]||icons.bag}</svg>`;
 const jobTerms = j => j.preview ? String(j.terms || '').replace('DEMO ONLY · Fictional employer, workplace and vacancy for presentation. No real job offer or application is sent.', '').trim() : j.terms;
 const title = p => lang==='hi' && p.hindi ? p.hindi : (p.translations?.[lang]?.name || t(p.name));
 const count = () => Object.values(cart).reduce((n,q) => n+q,0);
@@ -222,7 +222,7 @@ function unsyncedTapCount(){
 function renderShell(){
   const queued=unsyncedTapCount(),online=navigator.onLine;
   const state=memberShellState({online,readAsOf:cat?.asOf,readAt:shellReadAt,readFailed:shellReadFailed,pendingCount:queued,sourceOwner:cat?.owner,signedIn:!!account});
-  const labels={signin:t('Log in to see what is here'),synced:t('Prices are up to date.','सामान की सूची अपडेट है'),checking:t('Getting your details','आपकी जानकारी आ रही है'),stale:t('Checking last update','पिछला अपडेट जाँच रहे हैं'),offline:t('Offline','ऑफ़लाइन'),queued:t('Queued on this phone','इस फोन पर कतार में है'),retry:t('Request needs retry','माँग फिर से भेजना होगा')};
+  const labels={signin:t('Log in to see what is here'),synced:t('Your information is up to date.','आपकी जानकारी ताज़ा है।'),checking:t('Getting your details','आपकी जानकारी आ रही है'),stale:t('Checking last update','पिछला अपडेट जाँच रहे हैं'),offline:t('Offline','ऑफ़लाइन'),queued:t('Queued on this phone','इस फोन पर कतार में है'),retry:t('Request needs retry','माँग फिर से भेजनी होगी')};
   const homeQuiet=page==='home'&&!document.body.classList.contains('mesha-lang-open');
   const hideWelcome=(page==='earn'||page==='send')&&!owner.active&&!account;
   const greet=$('#shell-greeting');
@@ -366,7 +366,7 @@ function login(){
   return showPhoneLogin();
 }
 function recovery(){show(t('Changed your number?','नंबर बदल गया है?'),`<form id="recovery-form" class="stack"><p>${t('Keep your member ID, orders and history. Your Nia team will verify your identity before changing account access.','आपकी सदस्य ID, ऑर्डर और इतिहास वही रहेंगे। खाता बदलने से पहले निया टीम आपकी पहचान जाँचेगी।')}</p><label>${t('Member ID','सदस्य ID')}<input name="memberId" autocomplete="off" maxlength="100" pattern="[a-zA-Z0-9_-]+" required></label><label>${t('New mobile number','नया मोबाइल नंबर')}<input name="phone" type="tel" inputmode="numeric" pattern="[6-9][0-9]{9}" maxlength="10" required></label><p><small>${t('This number is used only so the Nia team can resolve your access request.','इस नंबर का उपयोग निया टीम केवल आपकी मदद के लिए करेगी।')}</small></p><div id="form-error" class="error-inline" role="alert"></div><button class="primary">${t('Request help','मदद माँगें')}</button></form>`);}
-async function review(){if(!saveCommitmentReady())return toast(t(SAVE_PAUSED_COPY));if(bagHasUnconfirmedPack(cat?.products||[],cart)){toast(t('Ask Nia about this pack.','इस पैक के बारे में निया से पूछें।'));return;}if(!account){checkoutPending=true;return checkoutSignIn();}checkoutPending=false;if(bagOpen){bagOpen=false;render();}if(pending){show(t('Check your reservation','अपनी बुकिंग जाँचें'),`<p>${t('Your last request may have reached us. Retry the same request to retrieve your order without creating a duplicate.','पिछला माँग पहुँच गया हो सकता है। उसी माँग को फिर भेजें; दूसरा ऑर्डर नहीं बनेगा।')}</p><button class="primary full" data-action="confirm">${t('Retry safely','सुरक्षित रूप से फिर कोशिश करें')}</button><div id="form-error" class="error-inline" role="alert"></div>`);return;}
+async function review(){if(!saveCommitmentReady())return toast(t(SAVE_PAUSED_COPY));if(bagHasUnconfirmedPack(cat?.products||[],cart)){toast(t('Ask Nia about this pack.','इस पैक के बारे में निया से पूछें।'));return;}if(!account){checkoutPending=true;return checkoutSignIn();}checkoutPending=false;if(bagOpen){bagOpen=false;render();}if(pending){show(t('Check your reservation','अपनी बुकिंग जाँचें'),`<p>${t('Your last request may have reached us. Retry the same request to retrieve your order without creating a duplicate.','पिछली माँग पहुँच गई हो सकती है। उसी माँग को फिर भेजें; दूसरा ऑर्डर नहीं बनेगा।')}</p><button class="primary full" data-action="confirm">${t('Retry safely','सुरक्षित रूप से फिर कोशिश करें')}</button><div id="form-error" class="error-inline" role="alert"></div>`);return;}
 const availableLocations=saveLocations(cat,account,fulfillment,cart);if(!availableLocations.length)return toast(t('Choose available products from one pickup location.'));show(t('Pay when you collect','लेते समय पैसे दें'),`<form id="review-form" class="stack">${fulfillmentToggle()}<label>${fulfillment==='pickup'?t('Where will you collect?','सामान कहाँ लेंगे?'):t('Where should we deliver?','सामान कहाँ पहुँचाएँ?')}<select name="locationId" required><option value="">${t('Choose a location','जगह चुनें')}</option>${availableLocations.map(l=>`<option value="${l.id}" ${l.id===locationId?'selected':''}>${esc(t(l.name))}</option>`).join('')}</select></label><input type="hidden" name="fulfillment" value="${fulfillment}"><p class="info">${cat?.test?t('TEST only. No payment or physical collection.'):t('Pay by UPI when you collect your bag. Nothing online.','बैग लेते समय UPI से पैसे दें। ऑनलाइन कुछ नहीं।')}</p><div id="form-error" class="error-inline" role="alert"></div><button class="primary">${t('Check price','कीमत देखें')}</button></form>`);}
 async function confirm(){if(!saveCommitmentReady())return toast(t(SAVE_PAUSED_COPY));if(busy)return;if(!pending&&draft){pending=draft;draft=null;save('nia-commerce-pending',pending);}if(!pending)return;busy=true;const btn=$('[data-action="confirm"]');if(btn){btn.disabled=true;btn.textContent=t('Confirming…','पुष्टि हो रही है…');}try{const order=await api('/orders',pending.body,'POST',pending.key);pending=null;save('nia-commerce-pending',null);cart={};save('nia-commerce-bag',cart);await go('orders');emitAnalytics('save','reservation',{outcome:'reserved'});toast(t('Reserved. Your collection code is ','बुक हो गया। आपका कोड है ')+order.pickupCode);}catch(e){if(!e.uncertain&&e.code!=='service_unavailable'&&e.code!=='save_storage_unavailable'&&e.code!=='state_conflict'){pending=null;save('nia-commerce-pending',null);}if($('#form-error'))$('#form-error').textContent=e.message;if(btn){btn.disabled=false;btn.textContent=t('Try again','फिर कोशिश करें');if(!pending){btn.dataset.action='review';btn.textContent=t('Review again','फिर जाँचें');}}}finally{busy=false;}}
 function saveSearch(){return `<form id="save-search-form" class="save-search" role="search"><label class="visually-hidden">${t('Search essentials','ज़रूरी सामान खोजें')}</label><input type="search" name="q" value="${esc(search)}" placeholder="${t('Search oils, soap…','तेल, साबुन खोजें')}" maxlength="40" aria-label="${t('Search essentials','ज़रूरी सामान खोजें')}"></form>`;}
@@ -380,7 +380,7 @@ async function loadEarn(){if(!account&&!owner.active){earnData={jobs:[]};applica
       const event={contacted:'review',interview:'interview',selected:'offer',closed:'rejection'}[application.status];
       emitObservedState('earn',application.id,application.status,event);
     }}catch(e){earnData={jobs:[]};applications=[];earnError=e.code||e.message;}finally{earnLoading=false;}}
-const applicationStatus = value => ({interested:t('Application received','फॉर्म मिल गया'),contacted:t('Team contacted you','टीम ने आपसे संपर्क किया'),interview:t('Interview arranged','इंटरव्यू तय हुआ'),selected:t('Selected','चयन हुआ'),closed:t('Application closed','फॉर्म बंद हुआ'),withdrawn:t('Application withdrawn','फॉर्म वापस लिया गया')})[value]||value;
+const applicationStatus = value => ({interested:t('Application received','आपका फॉर्म हमें मिल गया।'),contacted:t('Team contacted you','टीम ने आपसे संपर्क किया'),interview:t('Interview arranged','इंटरव्यू तय हुआ'),selected:t('Selected','चयन हुआ'),closed:t('Application closed','फॉर्म बंद हुआ'),withdrawn:t('Application withdrawn','फॉर्म वापस लिया गया')})[value]||value;
 function earnHistory(){
   const visible=applications.filter(a=>cat?.preview||(a.job?.preview!==true&&a.job?.test!==true));
   const current=visible.filter(a=>!a.historical), previous=visible.filter(a=>a.historical);
@@ -475,8 +475,7 @@ function syncBooksDateParts(which){
 }
 function earnHow(){
   const steps=[[t('Stay in a safe place near work'),'/assets/studio-bunk-lockers.jpg'],[t('See work near where you stay'),''],[t('Walk to work'),'']];
-  const call=callNiaMarkup({t,esc,icon,phone:NIA_HELP_PHONE,className:'call-nia'});
-  return `<section class="earn-how"><h2>${t('How Earn works')}</h2><ol class="earn-how-steps">${steps.map(([line,src],index)=>`<li>${src?`<img src="${esc(src)}" alt="" width="800" height="500">`:''}<span>${index+1}. ${esc(line)}</span></li>`).join('')}</ol><div class="earn-how-actions"><button type="button" class="primary" data-action="login">${t('Log in')}</button>${call}</div></section>`;
+  return `<section class="earn-how"><h2>${t('How Earn works')}</h2><ol class="earn-how-steps">${steps.map(([line,src],index)=>`<li>${src?`<img src="${esc(src)}" alt="" width="800" height="500">`:''}<span>${index+1}. ${esc(line)}</span></li>`).join('')}</ol></section>`;
 }
 function sendExample(){
   const rows=[[t('Money earned'),'₹10,000'],[t('Money spent'),'₹4,000'],[t('Sent home'),'₹2,000'],[t('Money left'),'₹4,000']];
@@ -485,22 +484,25 @@ function sendExample(){
 
 function earnView(){if(owner.active)return ownerEarnMarkup(earnData,earnError,{esc,money});
   const signedOut=!account&&!owner.active;
-  if(signedOut)return `<section class="store-screen store-earn"><header class="store-head store-task"><h1>${t('Earn')}</h1><p>${t('Jobs near where you stay')}</p></header>${earnHow()}${footer()}</section>`;
+  if(signedOut){
+    const call=callNiaMarkup({t,esc,icon,phone:NIA_HELP_PHONE,className:'call-nia'});
+    return `<section class="store-screen store-earn"><header class="store-head store-task"><h1>${t('Earn')}</h1><p>${t('Jobs near where you stay')}</p><div class="earn-how-actions"><button type="button" class="primary" data-action="login">${t('Log in')}</button>${call}</div></header>${earnHow()}${footer()}</section>`;
+  }
   const model=mapModel(earnData), projectionState=earnProjectionState({data:earnData,error:earnError,loading:earnLoading,online:navigator.onLine,signedOut});
   const mapped=model.status==='ready'&&['ready','empty'].includes(projectionState);
   const displayModel={...model,jobs:model.jobs.filter(j=>cat?.preview||(j.preview!==true&&j.test!==true))};
   const visible=projectionState==='ready'?displayModel.jobs:[];
   const projectionCopy={loading:t('Finding jobs near you'),ready:t('Jobs near where you stay'),stale:t('Job locations need refreshing'),source_missing:t('Where do you stay? We will show work near you.'),unavailable:t('Jobs did not load. Try again.'),empty:t('No verified open jobs nearby'),offline:t('Offline. Reconnect to check jobs')};
   const taskAction=signedOut?`<button type="button" class="primary mesha-pill mesha-pill-solid" data-action="login">${t('Log in','लॉग इन')}</button>`:`<button type="button" class="mesha-pill mesha-pill-ghost" data-action="earn">${t('See jobs','नौकरियाँ देखें')}</button>`;
-  return `<section class="store-screen store-earn"><header class="store-head store-task"><h1>${t('Earn')}</h1><p>${t('Jobs near where you stay')}</p>${taskAction}</header><figure class="store-task-photo"><img src="/assets/earn.jpg" alt="" width="1168" height="728"></figure>
+  return `<section class="store-screen store-earn"><header class="store-head store-task"><h1>${t('Earn')}</h1><p>${t('Jobs near where you stay')}</p>${taskAction}</header><figure class="store-task-photo"><img src="/assets/earn.jpg" alt="" width="800" height="498"></figure>
   ${earnErrorPanel()}
   <p class="pillar-state" data-state="${projectionState}" role="status">${esc(projectionCopy[projectionState])}</p>
   ${signedOut?'':`<div class="earn-layout">${mapMarkup(mapped?displayModel:{status:projectionState==='stale'?'stale':'unavailable',jobs:[]},t,icon)}<section class="stack earn-results" aria-label="${t('Open jobs','खुली नौकरियाँ')}"><div><div class="eyebrow">WALK2WORK</div><h2>${t('Jobs near where you stay')}</h2><p>${mapped?t('Closest locations first','सबसे पास की जगहें पहले'):t('Verified workplace locations will help you compare your journey.','काम की जगहों की पुष्टि से आपको आने-जाने की दूरी समझने में मदद मिलेगी।')}</p></div>
   ${earnPending?`${moneyStatusMarkup({status:'requested',offlineQueued:!navigator.onLine,kind:'earn'},{t,esc})}<button data-action="earn-retry">${t('Retry application safely','फॉर्म सुरक्षित रूप से फिर भेजें')}</button>`:''}
-  ${visible.length?visible.map((j,index)=>`<article class="panel stack earn-job" id="earn-job-${esc(j.id)}" tabindex="-1"><div class="row"><h3>${mapped?`<span class="earn-job-number">${index+1}</span>`:''}${esc(t(j.title))}</h3>${j.preview?`<span class="badge">${t('Preview')}</span>`:''}</div><p>${esc(j.employer)} · ${esc(j.city)}</p>${mapped?`<span class="earn-distance">${j.distanceKm.toFixed(1)} km · ${t('straight-line distance','सीधी रेखा में दूरी')}</span><p>${j.openPositions} ${t('open positions','खाली पद')}</p>`:''}<div class="earn-compare-cost">${mapJobDetails(j,index,model.studio,t)}</div><details class="earn-job-details"><summary>${t('Shift, requirements & apply')}</summary><p>${esc(t(j.shift))}</p><p>${esc(t(j.requirements))}</p>${jobTerms(j)?`<p>${esc(jobTerms(j))}</p>`:''}<small>${t('Apply before','इस समय से पहले फॉर्म करें')}: ${esc(date(j.closesAt))}</small><button class="primary" data-action="earn-apply" data-id="${esc(j.id)}" ${applications.some(a=>a.job.id===j.id)||!navigator.onLine?'disabled':''}>${applications.some(a=>a.job.id===j.id)?t('Application received','फॉर्म मिल गया'):t('Apply for this job','इस नौकरी के लिए फॉर्म करें')}</button></details></article>`).join(''):`<div class="picture-state" data-state="empty">${icon('earn')}<p>${mapped?t('No jobs open right now','अभी कोई नौकरी खुली नहीं है'):t('Open jobs are being connected','खुली नौकरियाँ जोड़ी जा रही हैं')}</p></div>`}
+  ${visible.length?visible.map((j,index)=>`<article class="panel stack earn-job" id="earn-job-${esc(j.id)}" tabindex="-1"><div class="row"><h3>${mapped?`<span class="earn-job-number">${index+1}</span>`:''}${esc(t(j.title))}</h3>${j.preview?`<span class="badge">${t('Preview')}</span>`:''}</div><p>${esc(j.employer)} · ${esc(j.city)}</p>${mapped?`<span class="earn-distance">${j.distanceKm.toFixed(1)} km · ${t('straight-line distance','सीधी रेखा में दूरी')}</span><p>${j.openPositions} ${t('open positions','खाली पद')}</p>`:''}<div class="earn-compare-cost">${mapJobDetails(j,index,model.studio,t)}</div><details class="earn-job-details"><summary>${t('Shift, requirements & apply')}</summary><p>${esc(t(j.shift))}</p><p>${esc(t(j.requirements))}</p>${jobTerms(j)?`<p>${esc(jobTerms(j))}</p>`:''}<small>${t('Apply before','इस समय से पहले फॉर्म करें')}: ${esc(date(j.closesAt))}</small><button class="primary" data-action="earn-apply" data-id="${esc(j.id)}" ${applications.some(a=>a.job.id===j.id)||!navigator.onLine?'disabled':''}>${applications.some(a=>a.job.id===j.id)?t('Application received','आपका फॉर्म हमें मिल गया।'):t('Apply for this job','इस नौकरी के लिए फॉर्म करें')}</button></details></article>`).join(''):`<div class="picture-state" data-state="empty">${icon('earn')}<p>${mapped?t('No jobs open right now','अभी कोई नौकरी खुली नहीं है'):t('Open jobs are being connected','खुली नौकरियाँ जोड़ी जा रही हैं')}</p></div>`}
   </section></div><section class="stack service-panel">${earnHistory()}</section>`}${footer()}</section>`;
 }
-async function reviewJob(id){if(!commitmentReady())return toast(t(PILOT_CLOSED_COPY));if(!account){login();return;}if(earnPending){show(t('Check your application','अपना फॉर्म जाँचें'),`<p>${t('Your last request may have reached us. Retry safely to retrieve it.','पिछला माँग पहुँच गया हो सकता है। उसे पाने के लिए सुरक्षित रूप से फिर कोशिश करें।')}</p><button class="primary" data-action="earn-retry">${t('Retry application safely','फॉर्म सुरक्षित रूप से फिर भेजें')}</button><div id="form-error" role="alert"></div>`);return;}const j=earnData.jobs.find(j=>j.id===id);if(!j)return;emitAnalytics('earn','job_view');show(t('Apply for this job','इस नौकरी के लिए फॉर्म करें'),`<form id="earn-form" class="stack"><h3>${esc(t(j.title))}</h3><p>${esc(j.employer)} · ${esc(j.city)}</p><p>${money(j.payMin)}–${money(j.payMax)} / ${esc(t(j.payPeriod))}</p><p>${esc(t(j.shift))}</p>${jobTerms(j)?`<p>${esc(jobTerms(j))}</p>`:''}<input type="hidden" name="jobId" value="${esc(j.id)}"><input type="hidden" name="revision" value="${esc(j.revision)}"><label><input type="checkbox" name="consent" required> ${t('Share my member details with the Nia Walk2Work team about this job. Applying does not confirm a job or a payment.','इस नौकरी के लिए मेरी सदस्य जानकारी निया Walk2Work टीम से साझा करें। फॉर्म से नौकरी या भुगतान की पुष्टि नहीं होती।')}</label><button class="primary">${t('Send application','फॉर्म भेजें')}</button><div id="form-error" role="alert"></div></form>`);}
+async function reviewJob(id){if(!commitmentReady())return toast(t(PILOT_CLOSED_COPY));if(!account){login();return;}if(earnPending){show(t('Check your application','अपना फॉर्म जाँचें'),`<p>${t('Your last request may have reached us. Retry safely to retrieve it.','पिछली माँग पहुँच गई हो सकती है। उसे पाने के लिए सुरक्षित रूप से फिर कोशिश करें।')}</p><button class="primary" data-action="earn-retry">${t('Retry application safely','फॉर्म सुरक्षित रूप से फिर भेजें')}</button><div id="form-error" role="alert"></div>`);return;}const j=earnData.jobs.find(j=>j.id===id);if(!j)return;emitAnalytics('earn','job_view');show(t('Apply for this job','इस नौकरी के लिए फॉर्म करें'),`<form id="earn-form" class="stack"><h3>${esc(t(j.title))}</h3><p>${esc(j.employer)} · ${esc(j.city)}</p><p>${money(j.payMin)}–${money(j.payMax)} / ${esc(t(j.payPeriod))}</p><p>${esc(t(j.shift))}</p>${jobTerms(j)?`<p>${esc(jobTerms(j))}</p>`:''}<input type="hidden" name="jobId" value="${esc(j.id)}"><input type="hidden" name="revision" value="${esc(j.revision)}"><label><input type="checkbox" name="consent" required> ${t('Share my member details with the Nia Walk2Work team about this job. Applying does not confirm a job or a payment.','इस नौकरी के लिए मेरी सदस्य जानकारी निया Walk2Work टीम से साझा करें। फॉर्म से नौकरी या भुगतान की पुष्टि नहीं होती।')}</label><button class="primary">${t('Send application','फॉर्म भेजें')}</button><div id="form-error" role="alert"></div></form>`);}
 async function confirmJob(){
   if(!commitmentReady())return toast(t(PILOT_CLOSED_COPY));
   if(busy||!earnPending)return;
@@ -515,7 +517,7 @@ async function confirmJob(){
   save('nia-earn-pending',null);
   await go('earn');
   emitAnalytics('earn','submission',{outcome:'received'});
-  toast(t('Application received','फॉर्म मिल गया'));
+  toast(t('Application received','आपका फॉर्म हमें मिल गया।'));
   }catch(e){
   if(!e.uncertain&&!['service_unavailable','save_storage_unavailable','state_conflict'].includes(e.code)){
   earnPending=null;
@@ -538,13 +540,13 @@ function sendView(){if(owner.active)return ownerSendMarkup();
 async function loadNests(){nestData=nestStart?await api('/nests/availability',{start:nestStart}):await api('/nests');nestStart=nestData.start;emitAnalytics('live','availability_search',{outcome:(nestData.offers||[]).length?'results':'empty'});}
 // Local illustrative artwork only. Jat's published studio media will replace this preview map.
 const previewNestImages = {
-  'std-35005': {src:'/assets/studio-bunk-lockers.jpg', width:1024, height:1024},
+  'std-35005': {src:'/assets/studio-bunk-lockers.jpg', width:800, height:800},
   'std-34696': {src:'/assets/nest-blr-demo.jpg', width:1586, height:992},
   'std-34998': {src:'/assets/nest-chk-demo.jpg', width:1536, height:1024},
 };
 function nestPhoto(n){
   const media=n.photo?.url?{src:n.photo.url,width:n.photo.width||1200,height:n.photo.height||900}:null;
-  const image=media||(cat?.preview?previewNestImages[n.studioId]||{src:'/assets/studio-bunk-lockers.jpg',width:1024,height:1024}:null);
+  const image=media||(cat?.preview?previewNestImages[n.studioId]||{src:'/assets/studio-bunk-lockers.jpg',width:800,height:800}:null);
   const caption=n.test?t('Illustrative test studio. Not a real Nest.','उदाहरण टेस्ट स्टूडियो। असली नेस्ट नहीं।'):t('Illustrative shared studio with bunks and lockers','बंक और लॉकर वाले साझा स्टूडियो का उदाहरण');
   return image?`<div class="nest-image"><img src="${esc(image.src)}" width="${image.width}" height="${image.height}" alt="${esc(n.name)} · ${esc(caption)}" loading="lazy"></div>`:`<div class="nest-image"><span class="shop-photo-missing"></span></div>`;
 }
@@ -559,7 +561,7 @@ async function previewTestNest(studioId){const n=(nestData?.offers||[]).find(o=>
 async function reviewNest(studioId){
   if(!commitmentReady())return toast(t(PILOT_CLOSED_COPY));
   if(!account)return login();
-  if(nestPending)return show(t('Check your Nest request','नेस्ट की बात जाँचें'),`<p>${t('Your previous request may have reached us. Retry to retrieve its result.','पिछली बात पहुँच गई हो सकती है। नतीजा देखने के लिए फिर कोशिश करें।')}</p><button class="primary full" data-action="nest-confirm">${t('Retry safely','सुरक्षित रूप से फिर कोशिश करें')}</button>`);
+  if(nestPending)return show(t('Check your Nest request','आपने जो नेस्ट माँगा था, वह देखें'),`<p>${t('Your previous request may have reached us. Retry to retrieve its result.','पिछली माँग पहुँच गई हो सकती है। नतीजा देखने के लिए फिर कोशिश करें।')}</p><button class="primary full" data-action="nest-confirm">${t('Retry safely','सुरक्षित रूप से फिर कोशिश करें')}</button>`);
   const body={studioId,start:nestStart};const q=await api('/nests/quote',body);
   emitAnalytics('live','quote',{outcome:'available'});
   nestDraft={accountId:account.id,key:crypto.randomUUID(),body:{...body,fingerprint:q.fingerprint}};
@@ -630,7 +632,7 @@ if(action==='books-download')return downloadBooks(booksData,booksMonth);
 if(action==='books-consent'){await api('/books/consent',{enabled:id==='on'});await loadBooks();render();$('[data-action="books-consent"]')?.focus({preventScroll:true});return;}
 if(action==='earn-apply')return await reviewJob(id);if(action==='earn-retry')return await confirmJob();
 if(action==='earn-withdraw')return show(t('Withdraw this application?','यह फॉर्म वापस लें?'),
-  `<p>${t('Your Nia team will see that you withdrew this request.','आपकी निया टीम देखेगी कि आपने यह माँग वापस लिया है।')}</p><button class="primary full" data-action="earn-withdraw-confirm" data-id="${esc(id)}">${t('Withdraw request','फॉर्म वापस लें')}</button>`);
+  `<p>${t('Your Nia team will see that you withdrew this request.','आपकी निया टीम देखेगी कि आपने यह माँग वापस ली है।')}</p><button class="primary full" data-action="earn-withdraw-confirm" data-id="${esc(id)}">${t('Withdraw request','फॉर्म वापस लें')}</button>`);
 if(action==='earn-withdraw-confirm'){
   if(!commitmentReady())return toast(t(PILOT_CLOSED_COPY));
   const application=applications.find(a=>a.id===id&&!a.historical);
@@ -711,7 +713,7 @@ if(form.id==='verify-form'){
   passwordToken=setPasswordToken(result);
   if(needsSetPassword(result,cat)){show(t('Set your password','अपना पासवर्ड बनाएँ'),setPasswordFormMarkup({t})+entryLanguage());return;}
   if(result.account){await finishMemberSession();return;}
-  throw {message:t('We could not complete that request. Please try again or ask your Nia team for help.','यह माँग पूरा नहीं हुआ। फिर कोशिश करें या निया टीम से मदद लें।')};
+  throw {message:t('We could not complete that request. Please try again or ask your Nia team for help.','यह माँग पूरी नहीं हुई। फिर कोशिश करें या निया टीम से मदद लें।')};
 }
 if(form.id==='set-password-form'){
   if(form.dataset.authStep==='optional-password'){
@@ -743,12 +745,12 @@ if(form.id==='remember-form'){
 }
 if(form.id==='recovery-form'){
   const result=await api('/recovery',{memberId:fields.memberId,newPhone:'+91'+fields.phone});
-  show(t('Help request received','मदद की बात मिल गई'),`<p>${t('Your reference','आपका संदर्भ')}: <strong>${esc(result.id)}</strong></p><p>${t('Bring this reference and your member ID to your Nia team. Your account and orders have not changed.','यह संदर्भ और सदस्य ID लेकर निया टीम के पास जाएँ। आपका खाता और ऑर्डर नहीं बदले हैं।')}</p>`);
+  show(t('Help request received','आपकी मदद की माँग हमें मिल गई।'),`<p>${t('Your reference','आपका संदर्भ')}: <strong>${esc(result.id)}</strong></p><p>${t('Bring this reference and your member ID to your Nia team. Your account and orders have not changed.','यह संदर्भ और सदस्य ID लेकर निया टीम के पास जाएँ। आपका खाता और ऑर्डर नहीं बदले हैं।')}</p>`);
   }
 if(form.id==='support-form'){
   const issue=await api('/support',fields);
   emitAnalytics('save','support_request',{outcome:'received'});
-  show(t('Help request received','मदद की बात मिल गई'),supportIssueLine(issue,{t,esc}));
+  show(t('Help request received','आपकी मदद की माँग हमें मिल गई।'),supportIssueLine(issue,{t,esc}));
   }
 if(form.id==='review-form'&&!saveCommitmentReady())return toast(t(SAVE_PAUSED_COPY));
 if(form.id==='review-form'){emitAnalytics('save','checkout_start');locationId=fields.locationId;fulfillment=fields.fulfillment;const body={locationId,fulfillment,lines:Object.entries(cart).map(([id,qty])=>({id,qty}))};const q=await api('/quote',body);const request={...body,fingerprint:q.fingerprint};show(t('Confirm your reservation','अपनी बुकिंग की पुष्टि करें'),`<div class="stack"><ul class="review-lines">${q.lines.map(l=>`<li>${esc(t(l.name))} × ${l.qty} · ${money(l.nia*l.qty)}</li>`).join('')}</ul><div class="row"><strong>${t('Pay when you collect','लेते समय पैसे दें')}</strong><strong class="price">${money(q.amount)}</strong></div><p><strong>${esc(t(q.location.name))}</strong><br>${esc(t(q.location.address))}<br>${t('Collect before','इस समय से पहले लें')} ${esc(date(q.expiresAt))}</p><p class="info">${t('Nothing online. Pay by UPI when you pick up the bag.','ऑनलाइन कुछ नहीं। बैग लेते समय UPI से पैसे दें।')}</p><button class="primary" data-action="confirm">${t('Reserve bag','बैग बुक करें')}</button><div id="form-error" class="error-inline" role="alert"></div></div>`);draft={accountId:account.id,key:crypto.randomUUID(),body:request};}

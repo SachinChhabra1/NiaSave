@@ -1,6 +1,6 @@
 // Member call inventory. Line formatting can change; a call cannot.
 // api()'s third argument is the method. When that argument is absent the
-// record says GET, including calls that pass a body.
+// record says so. api() itself defaults the parameter to POST.
 // An object-literal body records its sorted keys. A spread is one of those
 // keys, written as its source, so a spread cannot change unseen.
 import {execFileSync} from 'node:child_process';
@@ -524,7 +524,7 @@ function splitArgs(src, openIndex) {
 
 function apiRecord(args) {
   const pathArg = args.length ? classify(args[0]) : {src: ''};
-  const method = args.length >= 3 ? classify(args[2]) : {lit: 'GET'};
+  const method = args.length >= 3 ? classify(args[2]) : {absent: true};
   let body = null;
   if (args.length >= 2) {
     body = isObjectLiteral(args[1]) ? {keys: objectKeys(args[1])} : classify(args[1]);

@@ -3,7 +3,9 @@
 export function saveLocations(cat,account,fulfillment='pickup',cart={}) {
   const products=(cat?.products||[]).filter(p=>cart[p.id]);
   return (cat?.locations||[]).filter(location=>(cat?.owner==='niasave'||account?.locationIds?.includes(location.id))&&
-    location.modes?.includes(fulfillment)&&products.every(p=>cat?.owner==='niasave'?Array.isArray(p.locationIds)&&p.locationIds.includes(location.id):!Array.isArray(p.locationIds)||p.locationIds.includes(location.id)));
+    location.modes?.includes(fulfillment)&&products.every(p=>
+      (cat?.owner==='niasave'?Array.isArray(p.locationIds)&&p.locationIds.includes(location.id):!Array.isArray(p.locationIds)||p.locationIds.includes(location.id))&&
+      (!Array.isArray(p.modes)||p.modes.includes(fulfillment))));
 }
 export function reorderProduct(cat,order,line){
   const atSite=p=>!Array.isArray(p.locationIds)||p.locationIds.includes(order.location?.id);

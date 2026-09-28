@@ -16,9 +16,9 @@ The only definition of done. Copy to `docs/ui-clarity/DONE-BAR.md` in the first 
 | A8 | PDF, 25 MB file, private window: error line, rest of Send works | open | |
 | A9 | Zero new requests while adding, changing, removing photo | open | |
 | A10 | Notebook photo gone, four money rows unchanged | open | |
-| A11 | Signed out: no "Details did not load."; network off: it shows | open | |
-| A12 | Bag line reworded; true reason and Call Nia above disabled Continue | open | |
-| A13 | Live, Home tiles (words), Earn signed in, NiaBooks unchanged | open | |
+| A11 | Signed out: no "Details did not load."; network off: it shows | **passed locally** | Shop at 390 and 1280, en and hi: a 200 and a 403 both say "Log in to see what is here". Home stays quiet on a 403. A failed catalogue read (network abort, 500, 503) says "Details did not load." Production check waits until this branch is merged. |
+| A12 | Bag line reworded; true reason and Call Nia above disabled Continue | **passed locally** | Both review lines are "The Nia team will confirm the final price before you pay." With reservations paused, that reason and Call Nia sit above a disabled Continue, en and hi, 390 and 1280. Each other cause has its own test. |
+| A13 | Live, Home tiles (words), Earn signed in, NiaBooks unchanged | **passed locally** | Home, Live, Earn signed in, and Send (NiaBooks) text is the same before and after, en and hi, 390 and 1280. |
 | A14 | All section 6 guards green in CI on each PR | **passed for PC-1** | verify + hold green on e9e123a. 417 unit, 44 browser, calls-frozen, member-copy-guard, data-lines, translation-lock, home-splice-contract all pass. Baseline 0 rows. |
 | A15 | "This photo stays on this phone. Nia never sees it." shows under the photo in every state (empty, with photo, after Change), in all six languages | open | |
 
@@ -29,7 +29,7 @@ The only definition of done. Copy to `docs/ui-clarity/DONE-BAR.md` in the first 
 | D1 | Four addresses: same status and top-level fields as before | **passed for PC-1** | Four addresses unchanged in status and top-level fields against the snapshot taken before PC-1. |
 | D2 | Same requests on every journey as main at 1957736 | **passed for PC-1** | Same two calls on every journey, en and hi: GET /api/commerce/catalogue, GET /api/commerce/nests. Zero page errors. |
 | D3 | Prices, Nest names, plan amount still show in the new cards | **passed for PC-1** | Six Shop category cards, six with a photo, six with a word, in both languages. |
-| D4 | Real failures still show "Details did not load." | **passed for PC-1** | No signed-out screen claims "Details did not load." in either language. |
+| D4 | Real failures still show "Details did not load." | **passed locally for PC-3** | Network abort, a 500, and a 503 still say "Details did not load." A 403 while a member session is already open is not treated as sign-in. A signed-out 401 or 403 is sign-in. Production check waits until this branch is merged. |
 | D5 | Photo never leaves the phone, checked on production | open | |
 | D6 | Bag and queued taps survive the deploy | **passed for PC-1** | Bag storage readable after the deploy in both languages. |
 

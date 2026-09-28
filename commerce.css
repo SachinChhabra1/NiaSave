@@ -640,7 +640,76 @@ body.mesha-dark .member-shell #content .home-tile img{
   height:118px;
   object-fit:cover;
 }
-body.mesha-dark .member-shell #content .home-tile-send img{object-position:center 30%}
+body.mesha-dark .member-shell #content .home-tile-send img{object-position:center top}
+body.mesha-dark .member-shell #content .family-photo-card{
+  margin:0 16px 12px;
+  background:#fff;
+  border:1px solid #E4E9F0;
+  border-radius:16px;
+  overflow:hidden;
+}
+body.mesha-dark .member-shell #content .family-photo-picture{display:block;width:100%}
+body.mesha-dark .member-shell #content .family-photo-card .family-photo-img{
+  display:block;
+  width:100%;
+  height:auto;
+  aspect-ratio:4/3;
+  object-fit:cover;
+  object-position:center top;
+}
+body.mesha-dark .member-shell #content .family-photo-pick{
+  display:block;
+  width:100%;
+  margin:0;
+  padding:0;
+  position:relative;
+  cursor:pointer;
+}
+body.mesha-dark .member-shell #content .family-photo-empty{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  box-sizing:border-box;
+  width:100%;
+  padding:8px;
+  background:#EEF3F8;
+  border:1.5px dashed #6A8CAE;
+  text-align:center;
+}
+body.mesha-dark .member-shell #content .home-tile .family-photo-empty{height:118px}
+body.mesha-dark .member-shell #content .family-photo-card .family-photo-empty{aspect-ratio:4/3}
+body.mesha-dark .member-shell #content .family-photo-camera{width:32px;height:32px;color:#2C5880;flex:none}
+body.mesha-dark .member-shell #content .family-photo-empty .family-photo-empty-word{
+  font-size:14px!important;
+  font-weight:600;
+  line-height:1.3;
+  color:#1C3F5C;
+}
+body.mesha-dark .member-shell #content .family-photo-copy{padding:12px}
+body.mesha-dark .member-shell #content .family-photo-copy h2{margin:0 0 8px;line-height:1.2;color:#101828}
+body.mesha-dark .member-shell #content .family-photo-stay{margin:0;line-height:1.4;color:#1C3F5C}
+body.mesha-dark .member-shell #content .family-photo-actions + .family-photo-stay{margin-top:8px}
+body.mesha-dark .member-shell #content .family-photo-error{margin:8px 0 0;line-height:1.4;color:#1C3F5C}
+body.mesha-dark .member-shell #content .family-photo-actions{display:flex;flex-wrap:wrap;gap:8px}
+body.mesha-dark .member-shell #content .family-photo-change,
+body.mesha-dark .member-shell #content .family-photo-remove{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  min-height:48px;
+  margin:0;
+  padding:10px 16px;
+  border:1px solid #E4E9F0;
+  border-radius:8px;
+  background:#fff;
+  color:#1C3F5C;
+  cursor:pointer;
+  position:relative;
+}
+body.mesha-dark .member-shell #content .family-photo-change .icon{width:20px;height:20px;flex:none;color:#2C5880}
 body.mesha-dark .member-shell #content .home-tile-copy{
   display:flex;
   flex-direction:column;

@@ -563,4 +563,12 @@ export default {
   "View item": "ಸಾಮಾನು ನೋಡಿ",
   "View your stay": "ನಿಮ್ಮ ವಾಸ ನೋಡಿ",
   "Your Nia team will see that you withdrew this request.": "ನೀವು ಈ ವಿನಂತಿಯನ್ನು ಹಿಂಪಡೆದಿದ್ದೀರಿ ಎಂದು ನಿಯಾ ತಂಡ ನೋಡುತ್ತದೆ.",
+  "Add your family photo": "ನಿಮ್ಮ ಕುಟುಂಬದ ಫೋಟೋ ಸೇರಿಸಿ",
+  "Your family": "ನಿಮ್ಮ ಕುಟುಂಬ",
+  "Change photo": "ಫೋಟೋ ಬದಲಿಸಿ",
+  "Remove photo": "ಫೋಟೋ ತೆಗೆಯಿರಿ",
+  "This photo stays on this phone. Nia never sees it.": "ಈ ಫೋಟೋ ಈ ಫೋನ್‌ನಲ್ಲೇ ಇರುತ್ತದೆ. Nia ಇದನ್ನು ಎಂದಿಗೂ ನೋಡುವುದಿಲ್ಲ.",
+  "Remove this photo?": "ಈ ಫೋಟೋ ತೆಗೆಯಬೇಕೇ?",
+  "This photo could not be added. Try another photo.": "ಈ ಫೋಟೋ ಸೇರಿಸಲು ಆಗಲಿಲ್ಲ. ಬೇರೆ ಫೋಟೋ ಆರಿಸಿ.",
+  "Your family photo": "ನಿಮ್ಮ ಕುಟುಂಬದ ಫೋಟೋ",
 };

@@ -24,10 +24,13 @@ for (const width of [320, 390, 700, 768, 1280, 1440]) {
     }
     await page.getByRole('link', {name: 'For enterprises', exact: true}).click();
     await expect(page).toHaveURL(/#enterprises$/);
-    await page.getByRole('button', {name: 'Discuss an enterprise partnership'}).click();
-    await expect(page.getByRole('dialog')).toBeVisible();
-    await page.getByRole('button', {name: 'Back to NiaSave'}).click();
-    await expect(page.getByRole('dialog')).not.toBeVisible();
+    await expect(page.locator('a[data-enquiry]')).toHaveCount(4);
+    for (const enquiry of await page.locator('a[data-enquiry]').all()) {
+      await expect(enquiry).toHaveAttribute('href', 'https://www.nia.one/contact');
+    }
+    await page.route('https://www.nia.one/contact', route => route.fulfill({contentType: 'text/html', body: '<h1>Nia contact destination</h1>'}));
+    await page.getByRole('link', {name: 'Discuss an enterprise partnership'}).click();
+    await expect(page).toHaveURL('https://www.nia.one/contact');
     expect(memberReads).toEqual([]);
   });
 }

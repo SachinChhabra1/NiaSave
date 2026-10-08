@@ -48,14 +48,6 @@ function publicEntry() {
   toggle.addEventListener('click', () => { const open = toggle.getAttribute('aria-expanded') !== 'true'; toggle.setAttribute('aria-expanded', String(open)); toggle.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation'); navigation.classList.toggle('is-open', open); });
   navigation.addEventListener('click', event => { if (event.target.closest('a')) closeMenu(); });
   document.addEventListener('keydown', event => { if (event.key === 'Escape') closeMenu(); });
-  const dialog = document.querySelector('.enquiry-dialog');
-  document.querySelectorAll('[data-enquiry]').forEach(button => button.addEventListener('click', () => {
-    const enterprise = button.dataset.enquiry === 'enterprise';
-    document.querySelector('#enquiry-title').textContent = enterprise ? 'Partner with NiaSave' : 'Meet NiaSave';
-    document.querySelector('#enquiry-copy').textContent = enterprise ? 'Explore workforce support through housing near work, everyday essentials and human support through Nia.' : 'Explore NiaSave’s connected approach to Live, Earn, Shop and Send.';
-    dialog.showModal();
-  }));
-  document.querySelectorAll('.dialog-close, .dialog-dismiss').forEach(button => button.addEventListener('click', () => dialog.close()));
   window.addEventListener('hashchange', () => { if (!isPublicEntry(location.hash)) location.reload(); });
   if (location.hash) requestAnimationFrame(() => document.getElementById(location.hash.slice(1))?.scrollIntoView());
 }

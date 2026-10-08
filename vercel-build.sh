@@ -9,15 +9,9 @@ test -f rabbit/engine.mjs
 node rabbit/public-naming-lock.mjs
 node scripts/splice-apple-home.mjs
 mkdir -p dist/products dist/assets
-# Production member home is commerce.html (generic SKUs). The React P0 catalog
-# (Tata Salt / Fortune / invented weekly savings) must never be dist/index.html.
-if [ "${VERCEL_ENV:-}" = "production" ] || [ "${COMMERCE_STOREFRONT:-0}" = "1" ]; then
-  cp commerce.html dist/index.html
-elif [ -f member.html ]; then
-  cp member.html dist/index.html
-elif [ -f index.html ]; then
-  cp index.html dist/index.html
-fi
+# Public/member dispatcher preserves root member fragments; commerce stays intact.
+cp public-home.html dist/index.html
+cp public-home.html public-home.css public-entry.js dist/
 cp -f desk.html ops.html bison.html bison-studios.html bison-contracts.html bison-clocks.html bison-collections.html bison-nests.html bison-data.html pickup.html recon.html predict.html hub.html next.html cash.html source.html inventory.html ageing.html po.html dispatch.html invoice.html biker.html vendors.html payout.html save-desk.html staff.css staff.js save-desk-ui.css nia-operator.css bison.css bison.js bison-data.js dist/
 cp -f desk.html dist/2para.html
 cp -f staff-entry.js dist/

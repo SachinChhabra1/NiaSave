@@ -16,7 +16,9 @@ async function memberEntry() {
   const styles = [];
   for (const node of member.head.querySelectorAll('meta[name="description"], meta[name="theme-color"], link[rel="stylesheet"]')) {
     const copy = document.importNode(node, true);
-    if (copy.tagName === 'LINK') styles.push(new Promise((resolve, reject) => { copy.onload = resolve; copy.onerror = reject; }));
+    // Existing CSP can reject an imported remote font while the local sheet is
+    // usable. Preserve the original member page's fallback-font behavior.
+    if (copy.tagName === 'LINK') styles.push(new Promise(resolve => { copy.onload = resolve; copy.onerror = resolve; }));
     document.head.append(copy);
   }
   await Promise.all(styles);

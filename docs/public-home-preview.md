@@ -19,7 +19,7 @@ Production previously copied commerce.html to dist/index.html. The new build cop
 
 The dispatcher fetches the existing same-origin commerce document, mounts its existing body and styles, then loads its original external scripts. Member code, storage, auth, Central contracts, money gates, language selection and API requests are untouched. Setup secrets stay in the fragment until the existing parser removes them. Public visits do not load commerce modules or request member APIs. Back/forward returning to a public fragment reloads the public entry before commerce can canonicalize it to #home.
 
-Tradeoffs: first member entry adds a same-origin commerce.html read; if that read fails, the fallback link preserves query and fragment and opens the direct member document. Member styles finish loading before the existing scripts run. Root `/` no longer opens the language chooser until a visitor enters member services; this is the intended public/member split.
+Tradeoffs: first member entry adds a same-origin commerce.html read; if that read fails, the fallback link preserves query and fragment and opens the direct member document. Member styles settle before the existing scripts run. The original stylesheet imports a Google Font blocked by the existing production CSP; its error event is tolerated so the same fallback-font behavior remains usable. A production-CSP browser regression covers this. Root `/` no longer opens the language chooser until a visitor enters member services; this is the intended public/member split.
 
 ## Design and imagery review
 
@@ -45,7 +45,7 @@ Above-the-fold copy matches the approved hero/header. Below-fold intentional add
 
 ## Validation
 
-Passed: engine selftest; Bison 26/26; Tanot 6/6; commerce 423/423; security 49/49; browser 75/75 (57 existing regressions and 18 new public/member tests); Vite build and production artifact build. Storage commands succeed but database integration explicitly skips without DATABASE_URL. No lint/type-check scripts exist; modified JavaScript passed node --check and git diff --check passed.
+Passed: engine selftest; Bison 26/26; Tanot 6/6; commerce 423/423; security 49/49; browser 76/76 (57 existing regressions and 19 new public/member tests); Vite build and production artifact build. Storage commands succeed but database integration explicitly skips without DATABASE_URL. No lint/type-check scripts exist; modified JavaScript passed node --check and git diff --check passed.
 
 The native in-app browser verified public rendering/navigation and member-language handoff. Playwright provided repeatable responsive screenshots and regression tests. Desktop screenshot viewport 984×900, mobile 390×900; additional public layouts checked at 320, 700, 768, 1280 and 1440. Local evidence is in the task's sibling preview-evidence/ and baseline-results/. Actual screenshots were inspected with view_image; local Library concept view_image could not be satisfied because downloads failed, but both user attachments were inspected directly.
 

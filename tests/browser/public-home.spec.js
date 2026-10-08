@@ -72,3 +72,14 @@ test('member entry failure provides an intact direct-entry fallback', async ({pa
   await page.goto('/?lang=hi#account');
   await expect(page.getByRole('link', {name: 'Open member services'})).toHaveAttribute('href', '/commerce.html?lang=hi#account');
 });
+
+test('production CSP font rejection does not block existing member entry', async ({page}) => {
+  await memberReplies(page);
+  await page.route('http://127.0.0.1:4187/', async route => {
+    const response = await route.fetch();
+    await route.fulfill({response, headers: {...response.headers(), 'content-security-policy': "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self'; img-src 'self' data:"}});
+  });
+  await page.goto('/#account');
+  await expect(page.locator('.mesha-lang')).toBeVisible();
+  await expect(page.getByRole('link', {name: 'Open member services'})).toHaveCount(0);
+});

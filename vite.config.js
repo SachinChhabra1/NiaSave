@@ -9,7 +9,7 @@ export default defineConfig({
       configureServer(server) {
         server.middlewares.use((req, _res, next) => {
           const url = req.url && req.url.split("?")[0];
-          if (url === "/" || url === "/index.html") req.url = "/commerce.html";
+          if (url === "/" || url === "/index.html") req.url = "/public-home.html";
           next();
         });
       }

@@ -30,8 +30,7 @@ function savePlan(value) {
 function packLine(product) {
   const pack = product?.pack || PENDING_PACK;
   const hint = product?.collectHint?.name || COLLECT.name;
-  const source = product?.sourceSiteCode ? `Source ${product.sourceSiteCode}` : '';
-  return `<span class="pack-line">${pack} · Collect at ${hint}</span>${source ? `<span class="source-line">${source}</span>` : ''}`;
+  return `<span class="pack-line">${pack} · Collect at ${hint}</span>`;
 }
 
 function decorateProducts(root) {
@@ -41,7 +40,6 @@ function decorateProducts(root) {
     const line = document.createElement('div');
     line.innerHTML = packLine({
       pack: card.getAttribute('data-pack') || PENDING_PACK,
-      sourceSiteCode: card.getAttribute('data-source-site') || '',
       collectHint: { name: COLLECT.name }
     });
     host.append(...line.childNodes);
@@ -62,8 +60,8 @@ function sendCard(hasPrimarySendView = false) {
   return `<section class="send-plan-card">
     ${hasPrimarySendView ? '' : `<header class="store-head send-safety-fallback">
       <h1>Send</h1>
-      <p class="nia-transfer-status" role="status"><span class="badge">Transfers not active</span></p>
-      <p>This is a money statement and a plan to send home. Saving a plan does not move money.</p>
+      <p class="nia-transfer-status" role="status"><span class="badge">Sending money has not started</span></p>
+      <p>This is only your own record. Nia does not send money.</p>
     </header>`}
     <h2>Plan money home</h2>
     <p>Money does not move.</p>

@@ -265,5 +265,11 @@
       "path": "/api/bison/data/sync",
       "schedule": "*/15 * * * *"
     }
-  ]
+  ],
+  "git": {
+    "deploymentEnabled": {
+      "release/niasave-save-otp-20260926": false,
+      "fix/niasave-customer-shopping-20260926": false
+    }
+  }
 }

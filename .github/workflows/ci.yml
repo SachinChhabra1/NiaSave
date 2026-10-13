@@ -48,6 +48,12 @@ jobs:
       - name: Verify security boundaries
         run: npm run test:security
 
+      - name: Install Chromium for member interaction tests
+        run: npx playwright install --with-deps chromium
+
+      - name: Verify member controls across phone and desktop
+        run: npm run test:browser
+
       - name: Build production artifact
         run: npm run build:production
 

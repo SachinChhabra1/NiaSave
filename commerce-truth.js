@@ -1,5 +1,14 @@
 import { COMMITMENTS_FROZEN } from './commerce-capabilities.js';
 export const commitmentReady = () => !COMMITMENTS_FROZEN;
+let saveReservations = false;
+export const setSaveCapabilities = capabilities => { saveReservations = capabilities?.saveReservations === true; };
+export const saveCommitmentReady = () => saveReservations;
+export const SAVE_ACTIONS = new Set(['add','review','confirm','reorder','cancel','cancel-confirm']);
+export const OTHER_COMMITMENT_ACTIONS = new Set(['earn-apply','earn-retry','earn-withdraw','earn-withdraw-confirm','nest-review','nest-confirm','nest-cancel','nest-cancel-confirm']);
+export function commitmentActionReady(action) {
+  return SAVE_ACTIONS.has(action) ? saveCommitmentReady()
+    : OTHER_COMMITMENT_ACTIONS.has(action) ? commitmentReady() : true;
+}
 /* Browser sibling for commerce.js. Do not import lib/. Payments stay off. */
 export const PENDING_PACK = 'Pack size to be confirmed';
 
@@ -16,12 +25,12 @@ export function packReady(product = {}) {
 }
 
 export function reserveReady(product = {}) {
-  if (!commitmentReady()) return false;
+  if (!saveCommitmentReady()) return false;
   const price = Number(product.price ?? product.nia);
   const available = Number(product.available);
   if (!product?.id || !packReady(product)) return false;
   if (!Number.isFinite(price) || price <= 0) return false;
-  if (Number.isFinite(available) && available <= 0) return false;
+  if (!Number.isInteger(available) || available <= 0) return false;
   return true;
 }
 

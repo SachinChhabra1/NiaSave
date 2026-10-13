@@ -13,8 +13,8 @@ export function passkeyMarkup({t,setup=false}) {
     <p>${t('Your Nia setup link is ready. Confirm this is your phone, then use its screen lock.')}</p>
     <label><input type="checkbox" name="ownPhone" required> ${t('This is my own phone, not a shared phone.')}</label>
     <button class="primary" type="submit">${t('Set up my passkey')}</button></form>`;
-  return `<div class="stack">${setup?form:`<p>${t('Use your own phone’s screen lock to sign in. No SMS code is needed.')}</p>
-    <button class="primary" data-action="passkey-signin">${t('Sign in with a passkey')}</button>
+  return `<div class="stack">${setup?form:`<p>${t('Use your phone screen lock to log in. No SMS code is needed.')}</p>
+    <button class="primary" data-action="passkey-signin">${t('Log in with a passkey')}</button>
     <details><summary>${t('First time or a replacement phone?')}</summary>
     <p>${t('Ask your Nia team for a setup link after they verify your membership. Open it on your own phone within 10 minutes. No code to type.')}</p></details>`}
     <p>${t('Lost access? Your Nia team will check your identity before restoring access. Your history stays with your membership.')}</p>

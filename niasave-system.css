@@ -1,3 +1,41 @@
+/* Nia Design System v2.1. Shared member tokens; surfaces adopt them in later PRs. */
+:root{
+  --nia-v2-color-primary:#2C5880;
+  --nia-v2-color-live:#1C3F5C;
+  --nia-v2-color-shop:#6A8CAE;
+  --nia-v2-color-earth:#8E6D45;
+  --nia-v2-color-reserved:#B85433;
+  --nia-v2-color-ink:#1C3F5C;
+  --nia-v2-color-muted:#46617B;
+  --nia-v2-color-line:#D7E2EC;
+  --nia-v2-color-canvas:#F5F8FB;
+  --nia-v2-color-surface:#FFFFFF;
+  --nia-v2-color-on-primary:#FFFFFF;
+  --nia-v2-font-sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  --nia-v2-type-xs:12px;
+  --nia-v2-type-sm:14px;
+  --nia-v2-type-body:16px;
+  --nia-v2-type-title:20px;
+  --nia-v2-type-section:24px;
+  --nia-v2-type-display:32px;
+  --nia-v2-type-hero:40px;
+  --nia-v2-leading-body:1.5;
+  --nia-v2-leading-heading:1.2;
+  --nia-v2-space-1:8px;
+  --nia-v2-space-2:16px;
+  --nia-v2-space-3:24px;
+  --nia-v2-space-4:32px;
+  --nia-v2-space-5:40px;
+  --nia-v2-space-6:48px;
+  --nia-v2-space-8:64px;
+  --nia-v2-radius-input:8px;
+  --nia-v2-radius-button:10px;
+  --nia-v2-radius-card:12px;
+  --nia-v2-radius-tile:16px;
+  --nia-v2-radius-pill:999px;
+  --nia-v2-icon-stroke:1.5px;
+}
+
 /* NiaSave Apple Store system — light canvas. Presentation only. */
 :root{
   --nia-ground-dark:#1d1d1f;

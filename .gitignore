@@ -11,3 +11,7 @@ skills-lock.json
 # Preview-only TEST studio stills. Do not ship generated photos as real.
 assets/studio-media/test/*.webp
 assets/studio-media/test/manifest.json
+
+# Browser test artifacts
+test-results/
+playwright-report/

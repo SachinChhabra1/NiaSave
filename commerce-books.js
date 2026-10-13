@@ -12,25 +12,25 @@ export function healthSupportDialog(kind,t){
 export function booksMarkup(data,month,account,{t,esc,money}){
   const rupees=n=>money(n/100),monthLabel=m=>new Date(m+'-01T12:00:00Z').toLocaleDateString(document.documentElement.lang+'-IN',{month:'long',year:'numeric'});
   const intro=`<div class="service-intro"><div class="eyebrow">SEND · NIABOOKS</div><h1>${t('Your work. Your money. Your story.','आपका काम। आपका पैसा। आपकी कहानी।')}</h1><p>${t('See what you earn, what you spend and what reaches home.','देखें कितना कमाया, कितना खर्च हुआ और कितना घर पहुँचा।')}</p></div>`;
-  if(!account)return intro+`<section class="panel stack"><h2>NiaBooks</h2><p>${t('Sign in to see your personal money statement.','अपना पैसे का विवरण देखने के लिए साइन इन करें।')}</p><button class="primary" data-action="login">${t('Sign in','साइन इन')}</button></section>`+healthSupportMarkup(t);
-  if(!data?.months?.length)return intro+`<section class="panel stack"><h2>${t('Your money story starts here.','आपके पैसे की कहानी यहाँ शुरू होती है।')}</h2><p>${esc(data?.error||t('Your statement will appear when your Nia team connects verified financial records.','निया टीम से पुष्टि किए गए वित्तीय रिकॉर्ड जुड़ने पर आपका विवरण यहाँ दिखेगा।'))}</p><p class="muted">${t('No score yet. Missing information is not a low score.','अभी स्कोर नहीं है। जानकारी की कमी का मतलब कम स्कोर नहीं है।')}</p><button data-action="books-refresh">${t('Refresh statement','विवरण ताज़ा करें')}</button></section>`+healthSupportMarkup(t);
+  if(!account)return intro+`<section class="panel stack"><h2>NiaBooks</h2><p>${t('Log in to see your money.','अपना पैसा देखने के लिए लॉग इन करें।')}</p><button class="primary" data-action="login">${t('Log in','लॉग इन')}</button></section>`+healthSupportMarkup(t);
+  if(!data?.months?.length)return intro+`<section class="panel stack"><h2>${t('Your money story starts here.','आपके पैसे की कहानी यहाँ शुरू होती है।')}</h2><p>${esc(data?.error||t('Your statement will appear when your Nia team connects verified financial records.','निया टीम से पुष्टि किए गए वित्तीय रिकॉर्ड जुड़ने पर आपका हिसाब यहाँ दिखेगा।'))}</p><p class="muted">${t('No score yet. Missing information is not a low score.','अभी स्कोर नहीं है। जानकारी की कमी का मतलब कम स्कोर नहीं है।')}</p><button data-action="books-refresh">${t('Refresh statement','हिसाब ताज़ा करें')}</button></section>`+healthSupportMarkup(t);
   const m=data.months.find(m=>m.month===month)||data.months.at(-1),tot=m.totals,score=data.score;
   const labels={earning:t('Earnings','कमाई'),expense:t('Expenses','खर्च'),home:t('Sent home','घर भेजा'),refund:t('Refund','वापसी')};
   const scoreReason=score.reason==='consent_required'?t('Choose whether to calculate your Nia health score.','चुनें कि आप अपना निया हेल्थ स्कोर निकालना चाहते हैं या नहीं।'):score.reason==='source_stale'?t('Refresh your records before calculating a score.','स्कोर निकालने से पहले रिकॉर्ड ताज़ा करें।'):t('We need three complete months of verified records. Missing information is not a low score.','हमें तीन पूरे महीनों के पुष्टि किए गए रिकॉर्ड चाहिए। जानकारी की कमी का मतलब कम स्कोर नहीं है।');
-  return intro+`<div class="books-toolbar"><label>${t('Your monthly statement','आपका मासिक विवरण')}<select data-books-month>${[...data.months].reverse().map(x=>`<option value="${esc(x.month)}" ${x.month===m.month?'selected':''}>${esc(monthLabel(x.month))}</option>`).join('')}</select></label><button data-action="books-refresh">${t('Refresh statement','विवरण ताज़ा करें')}</button><button data-action="books-download">${t('Download statement','विवरण डाउनलोड करें')}</button></div>
+  return intro+`<div class="books-toolbar"><label>${t('Your monthly statement','आपका मासिक हिसाब')}<select data-books-month>${[...data.months].reverse().map(x=>`<option value="${esc(x.month)}" ${x.month===m.month?'selected':''}>${esc(monthLabel(x.month))}</option>`).join('')}</select></label><button data-action="books-refresh">${t('Refresh statement','हिसाब ताज़ा करें')}</button><button data-action="books-download">${t('Download statement','हिसाब डाउनलोड करें')}</button></div>
 
   ${data.liveAvailable===false?`<p class="info">${t('Live payments could not refresh. This statement may be incomplete.')}</p>`:''}
-  <p class="muted">${data.preview&&data.months.some(x=>x.entries.some(e=>e.reference.startsWith('DEMO-BOOKS-')))?t('Example statement · Fictional amounts for this demo.','उदाहरण विवरण · इस डेमो के लिए काल्पनिक राशियाँ।'):''} ${data.status==='stale'?t('Records need refreshing.','रिकॉर्ड ताज़ा करने की ज़रूरत है।'):''}</p>
+  <p class="muted">${data.preview&&data.months.some(x=>x.entries.some(e=>e.reference.startsWith('DEMO-BOOKS-')))?t('Example statement · Fictional amounts for this demo.','उदाहरण हिसाब · इस डेमो के लिए काल्पनिक राशियाँ।'):''} ${data.status==='stale'?t('Records need refreshing.','रिकॉर्ड ताज़ा करने की ज़रूरत है।'):''}</p>
   <div class="books-quick-actions"><button data-action="books-add" data-id="earning">+ ${t('Money received')}</button><button data-action="books-add" data-id="expense">+ ${t('An expense')}</button><button data-action="books-harassment">${t('Lender harassing you?')}</button></div><div class="books-dashboard"><div class="books-main"><div class="books-summary">${[['earned',t('You earned','आपने कमाया')],['spent',t('You spent','आपने खर्च किया')],['home',t('You sent home','आपने घर भेजा')],['left',t('Left after outgoings','खर्च के बाद बाकी')]].map(([key,label])=>`<section class="panel"><span>${label}</span><strong>${key==='earned'&&!m.entries.some(e=>e.kind==='earning')?t('Not recorded'):key==='left'&&!m.complete?t('Incomplete'):rupees(tot[key])}</strong></section>`).join('')}</div>
   <p class="books-note books-summary-note">${!m.complete?t('Some records are missing. Add income and outside spending to complete your picture.')+' ':''}${t('Recorded earnings − expenses − money sent home + refunds. This is a cash-flow summary, not your bank balance.','दर्ज कमाई − खर्च − घर भेजा पैसा + वापसी। यह पैसे के आने-जाने का सार है, बैंक बैलेंस नहीं।')} ${tot.refunds?t('Refunds','वापसी')+': '+rupees(tot.refunds):''}</p>
-  ${planCard(t)}<section class="panel stack books-entry-tools"><h2>${t('Add income or expense')}</h2><p>${t('Live and Save payments appear automatically. Add your earnings and spending outside Nia, by date.')}</p><div class="books-add-buttons"><button data-action="books-add" data-id="earning">+ ${t('Money received')}</button><button data-action="books-add" data-id="expense">+ ${t('An expense')}</button><button data-action="books-add" data-id="home">+ ${t('Sent home')}</button></div><small>${t('Your entries are editable. Source payments are corrected by your Nia team.')}</small></section>
-  <section class="panel books-statement"><h2>${t('Money in. Money out.','पैसा आया। पैसा गया।')}</h2><p class="muted">${esc(monthLabel(m.month))} · ${m.complete?t('Complete example history','पूरा उदाहरण विवरण'):t('Partial records','अधूरे रिकॉर्ड')}</p><div class="books-lines">${[...m.entries].sort((a,b)=>b.date.localeCompare(a.date)).map(e=>`<details class="books-entry"><summary><span><b>${esc(t(e.label))}</b><small>${esc(e.date)} · ${e.origin==='personal'?t('Added by you'):e.origin==='save'?t('From Save'):e.origin==='live'?t('From Live'):labels[e.kind]}${e.status!=='settled'?' · '+esc(e.status):''}</small></span><strong>${['earning','refund'].includes(e.kind)?'+':'−'}${rupees(e.amountPaise)}</strong></summary><p>${t('Source','स्रोत')}: ${esc(e.source)}<br>${t('Reference','संदर्भ')}: ${esc(e.reference)}<br>${e.origin==='personal'?t('Added by you; not independently verified'):data.preview?t('Illustrative source record','स्रोत रिकॉर्ड का उदाहरण'):esc(e.status)}</p>${e.editable?`<button data-action="books-edit" data-id="${esc(e.reference)}">${t('Edit entry')}</button>`:''}</details>`).join('')}</div>${m.pending?`<p>${t('Pending entries are excluded from totals.','लंबित प्रविष्टियाँ कुल में शामिल नहीं हैं।')}</p>`:''}<button data-action="help">${t('Something looks wrong? Ask your Nia team','कुछ गलत लग रहा है? निया टीम से पूछें')}</button></section>
-  </div><aside class="books-side"><section class="panel stack books-health"><div class="row"><h2>${t('Nia health','निया हेल्थ')}</h2><span class="badge">${t('Experimental','प्रायोगिक')}</span></div>${score.status==='ready'?`<div class="books-score"><strong>${score.value}</strong><span>/ 100</span></div><p>${t('Based on your last three complete months.','आपके पिछले तीन पूरे महीनों के आधार पर।')} ${score.months?.length?esc(monthLabel(score.months[0]))+' – '+esc(monthLabel(score.months.at(-1))):''}</p><label>${t('Money retained','बचाया गया पैसा')} <b>${score.retainedPoints}/60</b><meter min="0" max="60" value="${score.retainedPoints}">${score.retainedPoints}</meter></label><label>${t('Income consistency','कमाई की नियमितता')} <b>${score.stabilityPoints}/40</b><meter min="0" max="40" value="${score.stabilityPoints}">${score.stabilityPoints}</meter></label>`:`<h3>${t('Build your money picture','अपने पैसे की तस्वीर बनाएँ')}</h3><p>${scoreReason}</p>${!data.consent?`<button data-action="books-consent" data-id="on">${t('Show my Nia health score')}</button>`:''}`}${healthSupportMarkup(t)}<p class="books-health-caption">${t('Cash-flow health. Not a credit score or loan approval.')}</p><details><summary>${t('How it works','यह कैसे काम करता है')}</summary><p>${t('Money retained: up to 60 points, reaching 60 when 20% of recorded income remains after expenses and transfers. Income consistency: up to 40 points, using the lowest monthly income divided by the highest across three months. These trial weights are not validated for lending.','बचाया गया पैसा: अधिकतम 60 अंक, जब खर्च और ट्रांसफ़र के बाद दर्ज आय का 20% बचता है। कमाई की नियमितता: तीन महीनों की सबसे कम आय को सबसे अधिक आय से भाग देकर अधिकतम 40 अंक। इन प्रयोगात्मक वज़नों की ऋण के लिए पुष्टि नहीं हुई है।')}</p><p>${t('Sending more home can lower the money-retained part of this trial score. It does not measure your contribution to your family.')}</p><p>${t('Optional. Used only for this statement; it does not change your access to Nia services.','वैकल्पिक। केवल इस विवरण के लिए; निया सेवाओं तक आपकी पहुँच नहीं बदलती।')}</p><button data-action="books-consent" data-id="${data.consent?'off':'on'}">${data.consent?t('Turn off my score','मेरा स्कोर बंद करें'):t('Show my Nia health score','मेरा निया हेल्थ स्कोर दिखाएँ')}</button></details></section><p class="books-note books-refresh-note">${t('Records refreshed','रिकॉर्ड ताज़ा किए गए')}: ${data.asOf?esc(new Date(data.asOf).toLocaleString()):t('External records not connected')}</p></aside></div>`;
+  ${planCard(t)}<section class="panel stack books-entry-tools"><h2>${t('Add income or expense')}</h2><p>${t('Live and Save payments appear automatically. Add your earnings and spending outside Nia, by date.')}</p><div class="books-add-buttons"><button data-action="books-add" data-id="earning">+ ${t('Money received')}</button><button data-action="books-add" data-id="expense">+ ${t('An expense')}</button><button data-action="books-add" data-id="home">+ ${t('Sent home')}</button></div><small>${t('You can change what you added. Your Nia team corrects the payments.')}</small></section>
+  <section class="panel books-statement"><h2>${t('Money in. Money out.','पैसा आया। पैसा गया।')}</h2><p class="muted">${esc(monthLabel(m.month))} · ${m.complete?t('Complete example history','पूरा उदाहरण हिसाब'):t('Partial records','अधूरे रिकॉर्ड')}</p><div class="books-lines">${[...m.entries].sort((a,b)=>b.date.localeCompare(a.date)).map(e=>`<details class="books-entry"><summary><span><b>${esc(t(e.label))}</b><small>${esc(e.date)} · ${e.origin==='personal'?t('Added by you'):e.origin==='save'?t('From Save'):e.origin==='live'?t('From Live'):labels[e.kind]}${e.status!=='settled'?' · '+esc(e.status):''}</small></span><strong>${['earning','refund'].includes(e.kind)?'+':'−'}${rupees(e.amountPaise)}</strong></summary><p>${t('Where from','कहाँ से')}: ${esc(e.source)}<br>${t('Reference','संदर्भ')}: ${esc(e.reference)}<br>${e.origin==='personal'?t('Added by you; not independently verified'):data.preview?t('Example record','उदाहरण का हिसाब'):esc(e.status)}</p>${e.editable?`<button data-action="books-edit" data-id="${esc(e.reference)}">${t('Edit entry')}</button>`:''}</details>`).join('')}</div>${m.pending?`<p>${t('Pending entries are excluded from totals.','लंबित प्रविष्टियाँ कुल में शामिल नहीं हैं।')}</p>`:''}<button data-action="help">${t('Something looks wrong? Ask your Nia team','कुछ गलत लग रहा है? निया टीम से पूछें')}</button></section>
+  </div><aside class="books-side"><section class="panel stack books-health"><div class="row"><h2>${t('Nia health','निया हेल्थ')}</h2><span class="badge">${t('Experimental','प्रायोगिक')}</span></div>${score.status==='ready'?`<div class="books-score"><strong>${score.value}</strong><span>/ 100</span></div><p>${t('Based on your last three complete months.','आपके पिछले तीन पूरे महीनों के आधार पर।')} ${score.months?.length?esc(monthLabel(score.months[0]))+' – '+esc(monthLabel(score.months.at(-1))):''}</p><label>${t('Money retained','बचाया गया पैसा')} <b>${score.retainedPoints}/60</b><meter min="0" max="60" value="${score.retainedPoints}">${score.retainedPoints}</meter></label><label>${t('Income consistency','कमाई की नियमितता')} <b>${score.stabilityPoints}/40</b><meter min="0" max="40" value="${score.stabilityPoints}">${score.stabilityPoints}</meter></label>`:`<h3>${t('Build your money picture','अपने पैसे की तस्वीर बनाएँ')}</h3><p>${scoreReason}</p>${!data.consent?`<button data-action="books-consent" data-id="on">${t('Show my Nia health score')}</button>`:''}`}${healthSupportMarkup(t)}<p class="books-health-caption">${t('Cash-flow health. Not a credit score or loan approval.')}</p><details><summary>${t('How it works','यह कैसे काम करता है')}</summary><p>${t('Money retained: up to 60 points, reaching 60 when 20% of recorded income remains after expenses and transfers. Income consistency: up to 40 points, using the lowest monthly income divided by the highest across three months. These trial weights are not validated for lending.','बचाया गया पैसा: अधिकतम 60 अंक, जब खर्च और ट्रांसफ़र के बाद दर्ज आय का 20% बचता है। कमाई की नियमितता: तीन महीनों की सबसे कम आय को सबसे अधिक आय से भाग देकर अधिकतम 40 अंक। इन प्रयोगात्मक वज़नों की ऋण के लिए पुष्टि नहीं हुई है।')}</p><p>${t('Sending more home can lower the money-retained part of this trial score. It does not measure your contribution to your family.')}</p><p>${t('Optional. Used only for this statement; it does not change your access to Nia services.','वैकल्पिक। केवल इस हिसाब के लिए; निया सेवाओं तक आपकी पहुँच नहीं बदलती।')}</p><button data-action="books-consent" data-id="${data.consent?'off':'on'}">${data.consent?t('Turn off my score','मेरा स्कोर बंद करें'):t('Show my Nia health score','मेरा निया हेल्थ स्कोर दिखाएँ')}</button></details></section><p class="books-note books-refresh-note">${t('Records refreshed','रिकॉर्ड ताज़ा किए गए')}: ${data.asOf?esc(new Date(data.asOf).toLocaleString()):t('External records not connected')}</p></aside></div>`;
 }
 export function downloadBooks(data,month){
   const m=data?.months?.find(m=>m.month===month)||data?.months?.at(-1);if(!m)return;
   const cell=v=>'"'+String(v).replace(/^[=+@\-\t\r]/,"'$&").replaceAll('"','""')+'"';
-  const rows=[['NiaBooks',data.preview?'ILLUSTRATIVE DEMO':'Recorded statement',m.month],['Not a bank balance. Pending/failed rows excluded from totals.'],['Date','Description','Type','Amount INR','Status','Source','Reference'],...m.entries.map(e=>[e.date,e.label,e.kind,(e.amountPaise/100).toFixed(2),e.origin==='personal'?'self-reported':e.status,e.source,e.reference]),[],['Earnings',m.totals.earned/100],['Expenses',m.totals.spent/100],['Sent home',m.totals.home/100],['Refunds',m.totals.refunds/100],['Left after outgoings',m.totals.left/100]];
+  const rows=[['NiaBooks',data.preview?'ILLUSTRATIVE DEMO':'Recorded statement',m.month],['Not a bank balance. Pending/failed rows excluded from totals.'],['Date','Description','Type','Amount INR','Status','Where from','Reference'],...m.entries.map(e=>[e.date,e.label,e.kind,(e.amountPaise/100).toFixed(2),e.origin==='personal'?'self-reported':e.status,e.source,e.reference]),[],['Earnings',m.totals.earned/100],['Expenses',m.totals.spent/100],['Sent home',m.totals.home/100],['Refunds',m.totals.refunds/100],['Left after outgoings',m.totals.left/100]];
   const url=URL.createObjectURL(new Blob(['\uFEFF'+rows.map(r=>r.map(cell).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download=`NiaBooks-${m.month}${data.preview?'-example':''}.csv`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
 
@@ -46,7 +46,184 @@ export function entryPurposeOptions(kind,value,{t,esc}){
   return `<option value="" ${value?'':'selected'} disabled>${t('Choose a purpose')}</option>`+options.map(label=>`<option value="${esc(label)}" ${label===value?'selected':''}>${esc(t(label))}</option>`).join('');
 }
 
+export function istDay(time=Date.now()){return new Date(time+19800000).toISOString().slice(0,10);}
+export function isoParts(iso){const match=/^(\d{4})-(\d{2})-(\d{2})$/.exec(iso||'');return match?{y:Number(match[1]),m:Number(match[2]),d:Number(match[3])}:null;}
+export function isoJoin(y,m,d){return String(y).padStart(4,'0')+'-'+String(m).padStart(2,'0')+'-'+String(d).padStart(2,'0');}
+export function showDMY(iso){const part=isoParts(iso);return part?String(part.d).padStart(2,'0')+'/'+String(part.m).padStart(2,'0')+'/'+part.y:'';}
+export function monthLastDay(year,month){return new Date(Date.UTC(year,month,0)).getUTCDate();}
+export function clampIso(year,month,day,min,max){const dim=monthLastDay(year,month);let iso=isoJoin(year,month,Math.min(Math.max(day,1),dim));if(min&&iso<min)iso=min;if(max&&iso>max)iso=max;return iso;}
+export function monthsInRange(year,min,max){const months=[];for(let m=1;m<=12;m++){const start=isoJoin(year,m,1);const end=isoJoin(year,m,monthLastDay(year,m));if(end>=min&&start<=max)months.push(m);}return months;}
+export function daysInRange(year,month,min,max){const days=[];const dim=monthLastDay(year,month);for(let d=1;d<=dim;d++){const iso=isoJoin(year,month,d);if(iso>=min&&iso<=max)days.push(d);}return days;}
+export function weekMoveIn(min,max,todayChip){
+  const part=isoParts(todayChip);if(!part)return '';
+  const utc=Date.UTC(part.y,part.m-1,part.d);const weekday=new Date(utc).getUTCDay();
+  for(let i=1;i<=6-weekday;i++){
+    const candidate=new Date(utc+i*86400000).toISOString().slice(0,10);
+    if(min&&candidate<min)continue;
+    if(max&&candidate>max)return '';
+    if(candidate!==todayChip)return candidate;
+  }
+  return '';
+}
+export function datePartSelects(iso,min,max,{t,esc,partAttr}){
+  const part=isoParts(iso);if(!part)return '';
+  const minP=isoParts(min),maxP=isoParts(max);
+  const years=[];if(minP&&maxP)for(let y=minP.y;y<=maxP.y;y++)years.push(y);
+  const months=monthsInRange(part.y,min,max);
+  const days=daysInRange(part.y,part.m,min,max);
+  const opt=(n,selected)=>`<option value="${n}" ${Number(n)===Number(selected)?'selected':''}>${String(n).padStart(2,'0')}</option>`;
+  return `<div class="date-parts"><label>${t('Day')}<select data-${partAttr}="day" aria-label="${esc(t('Day'))}">${days.map(d=>opt(d,part.d)).join('')}</select></label><label>${t('Month')}<select data-${partAttr}="month" aria-label="${esc(t('Month'))}">${months.map(m=>opt(m,part.m)).join('')}</select></label><label>${t('Year')}<select data-${partAttr}="year" aria-label="${esc(t('Year'))}">${years.map(y=>`<option value="${y}" ${Number(y)===part.y?'selected':''}>${y}</option>`).join('')}</select></label></div>`;
+}
+export function booksDateMarkup(iso,min,max,{t,esc}){
+  return `<fieldset class="books-date"><legend>${t('Date')}</legend><p class="books-date-shown">${esc(showDMY(iso))}</p>${datePartSelects(iso,min,max,{t,esc,partAttr:'books-part'})}<input type="hidden" name="date" value="${esc(iso)}" required></fieldset>`;
+}
 export function personalEntryForm(entry,kind,{t,esc}){
-  const today=new Date(Date.now()+19800000).toISOString().slice(0,10);
-  return `<form id="books-entry-form" class="stack"><input type="hidden" name="entryId" value="${esc(entry?.reference||'')}"><input type="hidden" name="revision" value="${entry?.revision||0}"><label>${t('Date')}<input type="date" name="date" min="2020-01-01" max="${today}" value="${esc(entry?.date||today)}" required></label><label>${t('Type')}<select name="kind">${[['earning',t('Money received')],['expense',t('An expense')],['home',t('Sent home')]].map(([id,label])=>`<option value="${id}" ${(entry?.kind||kind)===id?'selected':''}>${label}</option>`).join('')}</select></label><label>${t('Amount (INR)')}<input name="amount" type="number" inputmode="decimal" min="0.01" max="1000000" step="0.01" value="${entry?entry.amountPaise/100:''}" required></label><label>${t('What was it for?')}<select name="label" required>${entryPurposeOptions(entry?.kind||kind,entry?.label||'',{t,esc})}</select></label><p class="muted">${t('Add only what is missing. Live and Save payments already appear automatically.')}</p><div id="form-error" class="error-inline" role="alert"></div><button type="submit" class="primary">${t('Save entry')}</button>${entry?`<button type="button" data-action="books-remove" data-id="${esc(entry.reference)}">${t('Remove this entry')}</button>`:''}</form>`;
+  const today=istDay();
+  const min='2020-01-01';
+  const raw=entry?.date||today;
+  const value=raw>=min&&raw<=today?raw:today;
+  return `<form id="books-entry-form" class="stack"><input type="hidden" name="entryId" value="${esc(entry?.reference||'')}"><input type="hidden" name="revision" value="${entry?.revision||0}">${booksDateMarkup(value,min,today,{t,esc})}<label>${t('Type')}<select name="kind">${[['earning',t('Money received')],['expense',t('An expense')],['home',t('Sent home')]].map(([id,label])=>`<option value="${id}" ${(entry?.kind||kind)===id?'selected':''}>${label}</option>`).join('')}</select></label><label>${t('Amount (INR)')}<input name="amount" type="number" inputmode="decimal" min="0.01" max="1000000" step="0.01" value="${entry?entry.amountPaise/100:''}" required></label><label>${t('What was it for?')}<select name="label" required>${entryPurposeOptions(entry?.kind||kind,entry?.label||'',{t,esc})}</select></label><p class="muted">${t('Add only what is missing. Live and Save payments already appear automatically.')}</p><div id="form-error" class="error-inline" role="alert"></div><button type="submit" class="primary">${t('Save entry')}</button>${entry?`<button type="button" data-action="books-remove" data-id="${esc(entry.reference)}">${t('Remove this entry')}</button>`:''}</form>`;
+}
+
+export function sendViewState({data,online=true,signedOut=false,now=Date.now()}={}){
+  if(!online)return 'offline';
+  if(signedOut)return 'source_missing';
+  if(data===null||data===undefined)return 'loading';
+  if(data.error)return 'unavailable';
+  if(!Array.isArray(data.months))return 'source_missing';
+  if(data.liveAvailable===false)return 'source_missing';
+  const asOf=Date.parse(data.asOf||'');
+  if(Number.isFinite(asOf)&&(asOf>now+60000||now-asOf>300000))return 'stale';
+  return data.months.some(m=>Array.isArray(m.entries)&&m.entries.length)?'ready':'empty';
+}
+
+// The family photo lives only in this browser. It is never sent anywhere.
+export const FAMILY_PHOTO_KEY='nia-family-photo';
+const FAMILY_PHOTO_MAX_BYTES=20*1024*1024;
+const FAMILY_PHOTO_EDGE=900;
+const FAMILY_PHOTO_MIN_PAYLOAD=32;
+let familyPhotoFailed=false;
+let familyPhotoOnSend=false;
+
+export function markFamilyPhotoFailure(){familyPhotoFailed=true;}
+export function clearFamilyPhotoNotice(){familyPhotoFailed=false;}
+
+// Cleared on leaving Send and on opening it again. A render that stays on Send keeps the notice.
+export function presentFamilyPhoto(screen){
+  if(screen!=='send'||!familyPhotoOnSend)familyPhotoFailed=false;
+  familyPhotoOnSend=screen==='send';
+}
+
+function acceptedFamilyPhoto(value){
+  if(typeof value!=='string')return '';
+  const marker=';base64,';
+  const at=value.indexOf(marker);
+  if(at<0)return '';
+  const header=value.slice(0,at).toLowerCase();
+  if(!header.startsWith('data:image/'))return '';
+  const type=header.slice('data:image/'.length);
+  if(!/^[a-z0-9.+-]+$/.test(type)||type.includes('svg'))return '';
+  const payload=value.slice(at+marker.length);
+  if(payload.length<FAMILY_PHOTO_MIN_PAYLOAD||payload.length%4!==0)return '';
+  if(!/^[A-Za-z0-9+/]+={0,2}$/.test(payload))return '';
+  return value;
+}
+
+export function readFamilyPhoto(){
+  try{
+    const value=localStorage.getItem(FAMILY_PHOTO_KEY);
+    return acceptedFamilyPhoto(value);
+  }catch{
+    return '';
+  }
+}
+
+export function clearFamilyPhoto(){
+  try{
+    localStorage.removeItem(FAMILY_PHOTO_KEY);
+  }catch{
+    /* a blocked store must not throw into the render */
+  }
+}
+
+function rejectFamilyFile(file){
+  if(!file||typeof file.type!=='string'||!file.type.startsWith('image/'))throw new Error('not-image');
+  if(typeof file.size==='number'&&file.size>FAMILY_PHOTO_MAX_BYTES)throw new Error('too-large');
+}
+
+async function bitmapFromFile(file){
+  if(typeof createImageBitmap==='function'){
+    try{return await createImageBitmap(file,{imageOrientation:'from-image'});}catch{/* try without the option */}
+    try{return await createImageBitmap(file);}catch{/* the image element is the fallback */}
+  }
+  if(typeof URL==='undefined'||typeof URL.createObjectURL!=='function'||typeof Image!=='function')throw new Error('unreadable');
+  const url=URL.createObjectURL(file);
+  try{
+    const image=new Image();
+    await new Promise((resolve,reject)=>{
+      image.onload=()=>resolve();
+      image.onerror=()=>reject(new Error('unreadable'));
+      image.src=url;
+    });
+    return image;
+  }finally{
+    URL.revokeObjectURL(url);
+  }
+}
+
+function jpegDataUrl(source){
+  const width=source.naturalWidth||source.width;
+  const height=source.naturalHeight||source.height;
+  if(!width||!height)throw new Error('unreadable');
+  const scale=FAMILY_PHOTO_EDGE/Math.max(width,height);
+  const canvasWidth=Math.max(1,Math.round(width*scale));
+  const canvasHeight=Math.max(1,Math.round(height*scale));
+  const canvas=document.createElement('canvas');
+  canvas.width=canvasWidth;
+  canvas.height=canvasHeight;
+  const ctx=canvas.getContext('2d');
+  if(!ctx)throw new Error('unreadable');
+  ctx.drawImage(source,0,0,canvasWidth,canvasHeight);
+  if(typeof source.close==='function')source.close();
+  const dataUrl=canvas.toDataURL('image/jpeg',0.82);
+  if(typeof dataUrl!=='string'||!dataUrl.startsWith('data:image/'))throw new Error('unreadable');
+  return dataUrl;
+}
+
+export async function storeFamilyPhoto(file){
+  rejectFamilyFile(file);
+  const dataUrl=jpegDataUrl(await bitmapFromFile(file));
+  try{
+    localStorage.setItem(FAMILY_PHOTO_KEY,dataUrl);
+  }catch{
+    throw new Error('storage');
+  }
+  return dataUrl;
+}
+
+const FAMILY_CAMERA='<svg class="family-photo-camera" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><path d="M12 11v4M10 13h4"/></svg>';
+
+function familyPhotoEmpty(t,esc){
+  return `<span class="family-photo-empty"><span class="family-photo-empty-mark" aria-hidden="true">${FAMILY_CAMERA}</span><span class="family-photo-empty-word">${esc(t('Add your family photo'))}</span></span>`;
+}
+
+function familyPhotoInput(){
+  return '<input class="visually-hidden" type="file" accept="image/*" data-family-photo>';
+}
+
+export function familyPhotoArt({photo,t,esc}){
+  if(photo)return `<img class="family-photo-img" src="${esc(photo)}" alt="${esc(t('Your family photo'))}">`;
+  return familyPhotoEmpty(t,esc);
+}
+
+export function familyPhotoCard({photo,t,esc,icon}){
+  const picture=photo
+    ?`<img class="family-photo-img" src="${esc(photo)}" alt="${esc(t('Your family photo'))}">`
+    :`<label class="family-photo-pick">${familyPhotoInput()}${familyPhotoEmpty(t,esc)}</label>`;
+  const actions=photo
+    ?`<div class="family-photo-actions"><label class="family-photo-change">${familyPhotoInput()}${icon('pencil')}<span>${esc(t('Change photo'))}</span></label><button type="button" class="family-photo-remove" data-family-photo-remove>${esc(t('Remove photo'))}</button></div>`
+    :'';
+  const stay=`<p class="family-photo-stay">${esc(t('This photo stays on this phone. Nia never sees it.'))}</p>`;
+  const error=familyPhotoFailed?`<p class="family-photo-error" role="alert">${esc(t('This photo could not be added. Try another photo.'))}</p>`:'';
+  return `<article class="family-photo-card"><div class="family-photo-picture">${picture}</div><div class="family-photo-copy"><h2>${esc(t('Your family'))}</h2>${actions}${stay}${error}</div></article>`;
 }

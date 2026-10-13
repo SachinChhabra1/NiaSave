@@ -24,10 +24,10 @@ Download the blank header template from the page. No example product or quantity
 
 Preview sends typed rows to `/api/commerce/staff/save/inventory-preview` without publishing. Review all returned rows, then publish with the server's preview hash and a stable idempotency key. Editing the upload invalidates the preview. A failed or interrupted publish retains the same key for retry. Server-side scope, stock holds, revisions and validation remain authoritative.
 
-## Pickup completion
+## Pickup or delivery completion
 
-Orders load from `/api/commerce/staff/save/snapshot`. Use the member-provided pickup code; staff must not infer or prefill it. Enter the amount actually received in INR, payment evidence, and handover evidence, then confirm both payment and handover. The exact rupee amount is converted to whole paise without rounding and must match the order total.
+Orders load from `/api/commerce/staff/save/snapshot` with the Central-authorized `mode`. For pickup, use the member-provided pickup code; staff must not infer or prefill it. Delivery orders use the scoped order row and delivery handover evidence and do not require a pickup code. Enter the amount actually received in INR, payment evidence, and handover evidence, then confirm both payment and handover. The exact rupee amount is converted to whole paise without rounding and must match the order total.
 
-`/api/commerce/staff/save/complete` receives the order revision and idempotency key. Repeating an unchanged interrupted action reuses that key. Recording payment received at pickup does not claim bank settlement verification. Refresh errors clear stale records, and missing write capabilities leave controls closed.
+`/api/commerce/staff/save/complete` receives the order revision and idempotency key. Repeating an unchanged interrupted action reuses that key. Recording payment received at fulfilment does not claim bank settlement verification. Refresh errors clear stale records, and missing write capabilities leave controls closed.
 
 The UI tests use synthetic intercepted API responses only. They do not upload real inventory, place real orders, receive payment or complete a physical handover.

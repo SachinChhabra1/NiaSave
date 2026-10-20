@@ -13,7 +13,9 @@ for (const width of [320, 390, 700, 768, 1280, 1440]) {
     await expect(page.getByRole('heading', {level: 1})).toHaveText('A better lifearound work.');
     await expect(page.locator('.pillars article')).toHaveCount(4);
     await expect(page.locator('.pilot-note')).toContainText('Money transfers have not started');
-    await expect(page.locator('.public-footer small')).toContainText('generated illustrations');
+    await expect(page.locator('.public-footer small')).toHaveText('Photograph from the Nia Studios marketing brochure.');
+    await expect(page.locator('.hero-media img')).toHaveAttribute('alt', 'Nia members sharing a meal in a Studio dining room');
+    await expect(page.locator('.hero-media img')).toHaveAttribute('src', '/assets/public-home/studio-dining-1600.webp');
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     // Force lazy cards into view before checking bytes and framing.
     await page.locator('.pillars').scrollIntoViewIfNeeded();

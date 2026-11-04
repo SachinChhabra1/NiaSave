@@ -1,6 +1,9 @@
 import memberUpdates from './member-updates/hi.js';
 // Member-interface translation draft; native-speaker review is required before pilot launch.
 export default {
+  "Phone": "फ़ोन",
+  "Change": "बदलें",
+  "Resend code": "कोड फिर भेजें",
   "Enter the 4 to 8 digit code from WhatsApp.": "WhatsApp में आया 4 से 8 अंकों का कोड डालें।",
   "NiaSave brings living, work and everyday essentials together.": "नियासेव रहने की जगह, काम और रोज़मर्रा का सामान एक साथ लाता है।",
   "WhatsApp code": "WhatsApp कोड",

@@ -13,9 +13,16 @@ for(const file of ['lib','rabbit','bison','showcase','commerce-categories.js','c
 await mkdir(resolve(out,'api'),{recursive:true});
 await writeFile(resolve(out,'api/index.mjs'),"export { default } from '../showcase/handler.mjs';\n");
 await cp(resolve(root,'showcase/middleware.js'),resolve(out,'middleware.js'));
+const investor = process.env.NIA_SHOWCASE === '1' && process.env.NIASAVE_INVESTOR_DEMO === '1';
+if(investor){
+  await cp(resolve(root,'showcase/investor-public'),resolve(out,'public'),{recursive:true});
+  await cp(resolve(root,'showcase/investor-public/index.html'),resolve(out,'public/ops.html'));
+}
+// core.mjs uses these shared modules; copy them without altering their production flags.
+for(const file of ['commerce-capabilities.js','commerce-shop-categories.js']) await cp(resolve(root,file),resolve(out,file));
 const pkg=JSON.parse(await readFile(resolve(root,'package.json'),'utf8'));
 await writeFile(resolve(out,'package.json'),JSON.stringify({name:'niasave-showcase',private:true,type:'module',engines:{node:'24.x'},dependencies:{'@neondatabase/serverless':pkg.dependencies['@neondatabase/serverless']}} ,null,2));
-await writeFile(resolve(out,'vercel.json'),JSON.stringify({version:2,framework:null,buildCommand:'',outputDirectory:'public',regions:['sin1'],functions:{'api/index.mjs':{includeFiles:'{lib,rabbit,bison,showcase}/**',maxDuration:60}},rewrites:[{source:'/api/:path*',destination:'/api?path=:path*'}],headers:[{source:'/(.*)',headers:[{key:'Cache-Control',value:'no-store'},{key:'X-Robots-Tag',value:'noindex, nofollow, noarchive'},{key:'X-Content-Type-Options',value:'nosniff'},{key:'Referrer-Policy',value:'same-origin'}]}]},null,2));
+await writeFile(resolve(out,'vercel.json'),JSON.stringify({version:2,framework:null,buildCommand:'',outputDirectory:'public',regions:['sin1'],functions:{'api/index.mjs':{includeFiles:'{lib,rabbit,bison,showcase}/**',maxDuration:60}},rewrites:[{source:'/api/:path*',destination:'/api?path=:path*'}],headers:[{source:'/(.*)',headers:[...(investor?[{key:'Content-Security-Policy',value:"default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self' data:; frame-ancestors 'self' https://www.nia.one https://nia.one https://*.vercel.app"}]:[]),{key:'Cache-Control',value:'no-store'},{key:'X-Robots-Tag',value:'noindex, nofollow, noarchive'},{key:'X-Content-Type-Options',value:'nosniff'},{key:'Referrer-Policy',value:'same-origin'}]}]},null,2));
 await writeFile(resolve(out,'.gitignore'),'.env*\n.vercel/\nnode_modules/\n');
 await writeFile(resolve(out,'.vercelignore'),'.env*\n.qa*\nnode_modules/\n');
 console.log('Showcase deployment assembled at '+out);

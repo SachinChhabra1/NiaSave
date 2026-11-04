@@ -1,0 +1,2 @@
+import {defineConfig} from '@playwright/test';
+export default defineConfig({testDir:'./tests',testMatch:'investor-demo.spec.js',workers:1,use:{ignoreHTTPSErrors:true,baseURL:'http://127.0.0.1:4196',viewport:{width:390,height:844},launchOptions:process.env.CHROMIUM_PATH?{executablePath:process.env.CHROMIUM_PATH}:{}},webServer:{command:'node tests/investor-demo-server.mjs',url:'http://127.0.0.1:4196',reuseExistingServer:false}});

@@ -1,0 +1,58 @@
+import {test,expect} from '@playwright/test';
+import {mkdir} from 'node:fs/promises';
+import {homedir} from 'node:os';
+import {join} from 'node:path';
+test('fictional Shop → bag → reserve → pretend UPI → collected',async({page,context})=>{
+ const shots=process.env.DEMO_SHOTS_DIR||join(homedir(),'demo-shots');await mkdir(shots,{recursive:true});
+ const shot=name=>page.screenshot({path:join(shots,name),fullPage:false});
+ const failures=[];page.on('pageerror',e=>failures.push(e.message));
+ const response=await page.goto('/');
+ expect(response.headers()['x-frame-options']).toBeUndefined();
+ expect(response.headers()['content-security-policy']).toContain("frame-ancestors 'self' https://www.nia.one https://nia.one https://*.vercel.app");
+ await expect(page.getByRole('heading',{name:'Shop essentials'})).toBeVisible();
+ await expect(page.locator('[data-add]')).toHaveCount(20);
+ const cookie=(await context.cookies()).find(c=>c.name==='nia_investor_demo');
+ expect(cookie.httpOnly).toBe(true);expect(cookie.secure).toBe(true);expect(cookie.sameSite).toBe('None');
+ await shot('demo-01-shop.png');
+ await page.getByRole('button',{name:'Add',exact:true}).first().click();
+ await page.getByRole('button',{name:/Bag 1/}).click();
+ await expect(page.getByRole('heading',{name:'Your bag'})).toBeVisible();await shot('demo-02-bag.png');
+ await page.getByRole('button',{name:'Reserve bag'}).click();
+ await expect(page.getByRole('heading',{name:'Your bag is reserved.'})).toBeVisible();
+ const code=await page.getByTestId('collection-code').textContent();await shot('demo-03-confirmation.png');
+ await page.getByRole('link',{name:/Open demo operations/}).click();
+ await expect(page.getByRole('heading',{name:'From bag to pickup.'})).toBeVisible();await shot('demo-04-ops.png');
+ await page.getByLabel('Pretend UPI reference (12 digits)').fill('000000000001');
+ await page.getByLabel('Pretend amount (INR)').fill('1');
+ await page.getByRole('button',{name:'Record pretend payment'}).click();
+ await expect(page.getByRole('alert')).toContainText('verify_exact_receipt_amount_and_reference');
+ await page.getByLabel('Pretend amount (INR)').fill('245');
+ await page.getByRole('button',{name:'Record pretend payment'}).click();
+ await expect(page.getByLabel('Collection code')).toBeVisible();await shot('demo-05-payment.png');
+ await page.getByLabel('Collection code').fill('WRONG');
+ await page.getByRole('button',{name:'Mark collected'}).click();
+ await expect(page.getByRole('alert')).toContainText('pickup_code_and_verified_payment_required');
+ await page.getByLabel('Collection code').fill(code);
+ await page.getByRole('button',{name:'Mark collected'}).click();
+ await expect(page.getByTestId('order-status')).toHaveText('Collected');await shot('demo-06-collected.png');
+ await page.reload();await expect(page.getByTestId('order-status')).toHaveText('Collected');
+ expect(failures).toEqual([]);
+});
+
+test('cross-site phone frame automatically signs in with a partitioned demo cookie',async({page,context})=>{
+ const parent='https://investor-preview.vercel.app';
+ const demo='https://127.0.0.1:4197';
+ // Only the local test iframe needs permission to reach loopback from a public parent.
+ await context.grantPermissions(['local-network-access'],{origin:parent});
+ await context.route(parent+'/**',route=>route.fulfill({contentType:'text/html',body:`<!doctype html><iframe title="Demo phone" src="${demo}/" width="390" height="844"></iframe>`}));
+ await page.goto(parent);
+ const frame=page.frameLocator('iframe');
+ await expect(frame.getByRole('heading',{name:'Shop essentials'})).toBeVisible();
+ const cookies=await context.cookies(demo);
+ const session=cookies.find(c=>c.name==='nia_investor_demo');
+ expect(session.httpOnly).toBe(true);expect(session.secure).toBe(true);expect(session.sameSite).toBe('None');expect(session.partitionKey).toBeTruthy();
+ await frame.getByRole('button',{name:'Add',exact:true}).first().click();
+ await frame.getByRole('button',{name:/Bag 1/}).click();
+ await frame.getByRole('button',{name:'Reserve bag'}).click();
+ await expect(frame.getByRole('heading',{name:'Your bag is reserved.'})).toBeVisible();
+});

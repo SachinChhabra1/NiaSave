@@ -1,3 +1,4 @@
+import { investorDemo } from './investor-mode.mjs';
 import { showcaseAccess } from './access.mjs';
 import { showcaseReady, enableShowcaseEntry } from '../lib/commerce/showcase-mode.mjs';
 // Set before dynamic imports capture storage configuration. Never use the broad
@@ -9,6 +10,11 @@ export default async function handler(req,res) {
   if(!showcaseReady()) return send(503,{error:'showcase_not_configured'});
   const url=new URL(req.url,'https://'+req.headers.host);
   const path=['/api','/api/showcase','/api/showcase.mjs'].includes(url.pathname) ? '/api/'+(url.searchParams.get('path')||'').replace(/^\/+/, '') : url.pathname;
+  if(investorDemo()){
+    if(!path.startsWith('/api/commerce/'))return send(404,{error:'not_found'});
+    const [{createInvestorHandler},{withInvestorState}]=await Promise.all([import('./investor-http.mjs'),import('./investor-store.mjs')]);
+    return createInvestorHandler(withInvestorState)(req,res,path.slice('/api/commerce'.length));
+  }
   const central=path==='/api/central/commerce';
   if(!central && !showcaseAccess(req.headers.authorization)) return send(401,{error:'showcase_invitation_required'},{'www-authenticate':'Basic realm="NiaSave showcase"'});
   if(!central && !path.startsWith('/api/commerce/') && path!=='/api/showcase/health') return send(404,{error:'not_found'});

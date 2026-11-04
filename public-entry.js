@@ -1,3 +1,4 @@
+import { loadPublicStats } from './public-stats.js';
 // The public entry owns only routing and marketing interactions. Member modules,
 // fragments (including setup secrets), storage and API contracts remain unchanged.
 const publicFragments = new Set(['', 'platform', 'enterprises', 'investors', 'public-main']);
@@ -42,6 +43,7 @@ function publicEntry() {
   const template = document.querySelector('#public-home');
   const content = template.content.cloneNode(true);
   document.body.replaceChildren(content);
+  loadPublicStats(document);
   const toggle = document.querySelector('.menu-toggle');
   const navigation = document.querySelector('#public-navigation');
   const closeMenu = () => { toggle.setAttribute('aria-expanded', 'false'); toggle.setAttribute('aria-label', 'Open navigation'); navigation.classList.remove('is-open'); };

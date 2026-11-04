@@ -88,3 +88,24 @@ test('production CSP font rejection does not block existing member entry', async
   await expect(page.locator('.mesha-lang')).toBeVisible();
   await expect(page.getByRole('link', {name: 'Open member services'})).toHaveCount(0);
 });
+
+test('live traction hides null fields and shows only Central aggregates', async ({page}) => {
+  await page.route('**/api/public-stats', route => route.fulfill({json: {studios: 7, capacity: 100, occupiedBeds: 0, cities: null, enterpriseClients: null, partners: 2, asOf: new Date().toISOString()}}));
+  await page.goto('/');
+  await expect(page.locator('[data-public-stat="studios"] strong')).toHaveText('7');
+  await expect(page.locator('[data-public-stat="occupiedBeds"] strong')).toHaveText('0');
+  await expect(page.locator('[data-public-stat="cities"]')).toBeHidden();
+  await expect(page.locator('[data-public-stat="partners"] strong')).toHaveText('2');
+  await expect(page.locator('.traction-source')).toContainText('Live from Nia Central · as of');
+});
+for (const scenario of ['failure', 'nulls', 'stale']) {
+  test(`traction hides unavailable numbers: ${scenario}`, async ({page}) => {
+    await page.route('**/api/public-stats', route => route.fulfill({status: scenario === 'failure' ? 503 : 200, json: {studios: scenario === 'stale' ? 7 : null, asOf: scenario === 'stale' ? '2000-01-01' : new Date().toISOString()}}));
+    await page.goto('/');
+    await expect(page.locator('.hero h1')).toBeVisible();
+    await expect(page.locator('[data-public-stat]:visible')).toHaveCount(0);
+    await expect(page.locator('.traction-source')).toBeHidden();
+    await expect(page.locator('.traction')).not.toContainText('4,093');
+    await expect(page.locator('.traction')).not.toContainText('Living source book');
+  });
+}

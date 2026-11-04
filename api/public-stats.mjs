@@ -22,3 +22,4 @@ export async function publicStatsHttp(req, res, { env = process.env, fetchImpl =
     res.statusCode = 503; return res.end(JSON.stringify({ error: 'stats_unavailable' }));
   }
 }
+export default publicStatsHttp;

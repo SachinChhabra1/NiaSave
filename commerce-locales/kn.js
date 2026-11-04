@@ -571,4 +571,8 @@ export default {
   "Remove this photo?": "ಈ ಫೋಟೋ ತೆಗೆಯಬೇಕೇ?",
   "This photo could not be added. Try another photo.": "ಈ ಫೋಟೋ ಸೇರಿಸಲು ಆಗಲಿಲ್ಲ. ಬೇರೆ ಫೋಟೋ ಆರಿಸಿ.",
   "Your family photo": "ನಿಮ್ಮ ಕುಟುಂಬದ ಫೋಟೋ",
+  "Your savings progress": "ನಿಮ್ಮ ಉಳಿತಾಯದ ಪ್ರಗತಿ",
+  "Your money picture": "ನಿಮ್ಮ ಹಣದ ಚಿತ್ರಣ",
+  "A verified savings total and goal are not available on this home screen yet. View your money records and plan your next step.": "ಈ ಮುಖಪುಟದಲ್ಲಿ ಪರಿಶೀಲಿಸಿದ ಒಟ್ಟು ಉಳಿತಾಯ ಮತ್ತು ಗುರಿ ಇನ್ನೂ ಲಭ್ಯವಿಲ್ಲ. ನಿಮ್ಮ ಹಣದ ದಾಖಲೆಗಳನ್ನು ನೋಡಿ ಮುಂದಿನ ಹೆಜ್ಜೆಯನ್ನು ಯೋಜಿಸಿ.",
+  "View my money plan": "ನನ್ನ ಹಣದ ಯೋಜನೆ ನೋಡಿ",
 };

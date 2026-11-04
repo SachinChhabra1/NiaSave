@@ -559,4 +559,8 @@ export default {
   "Remove this photo?": "हा फोटो काढायचा?",
   "This photo could not be added. Try another photo.": "हा फोटो लावता आला नाही. दुसरा फोटो निवडा.",
   "Your family photo": "तुमच्या कुटुंबाचा फोटो",
+  "Your savings progress": "तुमच्या बचतीची प्रगती",
+  "Your money picture": "तुमच्या पैशांचा आढावा",
+  "A verified savings total and goal are not available on this home screen yet. View your money records and plan your next step.": "या मुख्य पानावर बचतीची पडताळलेली एकूण रक्कम आणि उद्दिष्ट अद्याप उपलब्ध नाही. तुमच्या पैशांच्या नोंदी पाहा आणि पुढचे पाऊल ठरवा.",
+  "View my money plan": "माझ्या पैशांचे नियोजन पाहा",
 };

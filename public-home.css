@@ -552,3 +552,19 @@ h2{font-family:inherit;font-weight:700;font-size:clamp(32px,3.8vw,48px);letter-s
 .public-footer{padding-block:32px;font-size:12px}
 @media(max-width:1000px){.public-header{gap:20px}.public-header nav{gap:14px}.pillars{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:800px){.public-header{height:80px}.hero{padding:40px 26px 48px}.hero-copy{padding:0}.hero h1{font-size:clamp(46px,11vw,76px);letter-spacing:-2.5px}.hero-copy>p:not(.eyebrow){font-size:17px}.hero-media{margin-top:32px;transform:none;box-shadow:8px 8px 0 #dceee5}.hero-media img{height:auto;aspect-ratio:4/3}.hero-media figcaption{font-size:15px;padding:18px}.platform{padding-block:48px}.pillars{display:grid;gap:12px}.pillars article{padding:20px 14px}.pillar-number{margin-bottom:20px}.pillars p{font-size:14px}.enterprise{padding:48px 26px}.enterprise-support ul{display:block;font-size:15px}.enterprise-support{margin-top:28px}.investor{padding-block:48px}.investor-inner{flex-direction:column;align-items:stretch}.investor .button{align-self:stretch;white-space:normal}.model-flow{font-size:14px;gap:8px}.model-flow li{gap:8px}.availability,.pilot-note{font-size:12px}}
+
+/* Second pass: editorial story, evidence, and a restrained operating palette. */
+.hero-media{transform:none;box-shadow:none;border-radius:4px 4px 40px 4px}
+.hero{padding-bottom:64px}.hero h1{font-weight:800}.hero-media figcaption{padding:24px 28px}
+.problem{display:grid;grid-template-columns:1fr 1fr;gap:64px;padding-block:72px;border-top:1px solid var(--line)}
+.problem .eyebrow,.traction .eyebrow{margin-bottom:20px}
+.problem-copy{font-size:19px;line-height:1.65;max-width:520px}.problem-copy p+p{margin-top:18px}.problem-copy .text-link{margin-top:24px;font-size:15px}
+.platform-intro{max-width:630px;margin-top:24px;font-size:18px;line-height:1.6}
+.pillars article{border-radius:4px 4px 24px 4px;box-shadow:none}.pillar-number{font-size:16px;font-variant-numeric:tabular-nums;border-bottom:1px solid var(--line);padding-bottom:18px}
+.investor-thesis{max-width:650px;font-size:18px;line-height:1.65;margin-top:24px}.investor .button{box-shadow:none}
+.traction{padding-block:80px}.traction-heading{display:grid;grid-template-columns:1.4fr 1fr;align-items:end;gap:56px}.traction-heading>p{font-size:17px;line-height:1.65;color:var(--muted)}
+.traction-stats{display:grid;grid-template-columns:1fr 1fr 1.15fr;margin-top:40px;border-block:1px solid var(--line)}
+.traction-stats article{padding:30px 28px 32px 0;min-width:0}.traction-stats article+article{border-left:1px solid var(--line);padding-left:28px}.stat-context{display:block;font-size:11px;font-weight:750;letter-spacing:1.4px;text-transform:uppercase;color:var(--muted)}
+.traction-stats strong{display:block;font-size:clamp(52px,6vw,80px);letter-spacing:-3px;line-height:1.2;margin:16px 0;color:#087b70;font-variant-numeric:tabular-nums}.traction-stats h3{font-size:21px}.traction-stats p{font-size:14px;line-height:1.6;margin-top:12px;color:var(--muted)}.traction-status h3{margin-top:28px;font-size:28px}.status-line{display:block;margin-top:24px;font-size:13px;font-weight:700}
+.traction-source{margin-top:20px;font-size:12px;line-height:1.7;color:var(--muted)}.traction-source a{text-decoration:underline;text-underline-offset:3px}
+@media(max-width:800px){.problem{grid-template-columns:1fr;gap:28px;padding-block:48px}.problem-copy{font-size:17px}.traction{padding-block:48px}.traction-heading{grid-template-columns:1fr;gap:24px}.traction-stats{grid-template-columns:1fr 1fr}.traction-stats article{padding:24px 16px 24px 0}.traction-stats article+article{padding-left:16px}.traction-stats .traction-status{grid-column:1/-1;border-left:0;border-top:1px solid var(--line);padding:24px 0}.traction-stats strong{font-size:52px}.traction-stats h3{font-size:18px}.investor-thesis{font-size:16px}}

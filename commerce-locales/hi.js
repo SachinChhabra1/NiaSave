@@ -435,4 +435,8 @@ export default {
   "Remove this photo?": "यह फ़ोटो हटाएँ?",
   "This photo could not be added. Try another photo.": "यह फ़ोटो नहीं लग सकी। कोई दूसरी फ़ोटो चुनें।",
   "Your family photo": "आपके परिवार की फ़ोटो",
+  "Your savings progress": "आपकी बचत की प्रगति",
+  "Your money picture": "आपके पैसों का हाल",
+  "A verified savings total and goal are not available on this home screen yet. View your money records and plan your next step.": "इस होम स्क्रीन पर अभी बचत की पुष्टि की गई कुल राशि और लक्ष्य उपलब्ध नहीं हैं। अपने पैसों का रिकॉर्ड देखें और अगला कदम तय करें।",
+  "View my money plan": "मेरे पैसों की योजना देखें",
 };

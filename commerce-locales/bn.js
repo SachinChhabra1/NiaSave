@@ -908,4 +908,8 @@ export default {
   "Remove this photo?": "এই ছবি সরাবেন?",
   "This photo could not be added. Try another photo.": "এই ছবি যোগ করা গেল না। অন্য ছবি বেছে নিন।",
   "Your family photo": "আপনার পরিবারের ছবি",
+  "Your savings progress": "আপনার সঞ্চয়ের অগ্রগতি",
+  "Your money picture": "আপনার টাকার হিসাব",
+  "A verified savings total and goal are not available on this home screen yet. View your money records and plan your next step.": "এই হোম স্ক্রিনে যাচাই করা মোট সঞ্চয় ও লক্ষ্য এখনও পাওয়া যাচ্ছে না। আপনার টাকার রেকর্ড দেখুন এবং পরের ধাপ ঠিক করুন।",
+  "View my money plan": "আমার টাকার পরিকল্পনা দেখুন",
 };

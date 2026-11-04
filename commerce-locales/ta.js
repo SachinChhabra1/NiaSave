@@ -680,4 +680,8 @@ export default {
   "Remove this photo?": "இந்தப் புகைப்படத்தை நீக்கவா?",
   "This photo could not be added. Try another photo.": "இந்தப் புகைப்படத்தைச் சேர்க்க முடியவில்லை. வேறு புகைப்படத்தைத் தேர்ந்தெடுக்கவும்.",
   "Your family photo": "உங்கள் குடும்பப் புகைப்படம்",
+  "Your savings progress": "உங்கள் சேமிப்பு முன்னேற்றம்",
+  "Your money picture": "உங்கள் பண நிலவரம்",
+  "A verified savings total and goal are not available on this home screen yet. View your money records and plan your next step.": "இந்த முகப்புத் திரையில் சரிபார்க்கப்பட்ட மொத்த சேமிப்பும் இலக்கும் இன்னும் கிடைக்கவில்லை. உங்கள் பணப் பதிவுகளைப் பார்த்து அடுத்த படியைத் திட்டமிடுங்கள்.",
+  "View my money plan": "எனது பணத் திட்டத்தைப் பார்க்கவும்",
 };

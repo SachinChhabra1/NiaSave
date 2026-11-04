@@ -1,3 +1,4 @@
+import { publicStatsHttp } from './public-stats.mjs';
 /**
  * NiaSave P0 API. Sikh Unit owns Save. Jat Unit owns Living. Legacy API identifiers remain stable.
  * Demo member 9876541042 / NIA-1042 remains while OTP and payment are skipped.
@@ -150,6 +151,7 @@ export async function handler(req, res) {
   const rewrittenPath = url.searchParams.get("path");
   const path = rewrittenPath ? `/${rewrittenPath.replace(/^\/+/, "")}` : url.pathname;
   const commercePath = path.replace(/^\/api/, "");
+  if (commercePath === "/public-stats") return publicStatsHttp(req, res);
   if(frozenRoute(req.method,commercePath)){const r=freezeResponse();return json(res,r.status,r.body);}
   if (commercePath.startsWith('/v1/staff/storefront/')) return ownerViewHttp(req,res,commercePath.slice('/v1/staff/storefront'.length),staffFromReq);
   if (commercePath === "/central/commerce") return centralCommerceHttp(req,res);

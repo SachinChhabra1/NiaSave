@@ -427,3 +427,62 @@ body.mesha-dark #dialog :is(.info,.notice){background:#f5f5f7;border-color:#dede
 body.mesha-dark #dialog .primary{border-radius:10px}
 body.mesha-dark .member-shell #content > .info{background:#f5f5f7;border-color:#dedee3;color:#50525b}
 body.mesha-dark :is(button,a,input,select,summary):focus-visible{outline:3px solid #0069ed;outline-offset:3px}
+
+/* Member entry: the public site's paper, ink and blue, scoped to sign-in. */
+body.mesha-lang-open{background:#faf9f5}
+body.mesha-lang-open main{max-width:480px;padding:0 24px}
+.mesha-lang{background:#faf9f5;min-height:100vh;padding-bottom:24px}
+.mesha-wordmark{padding:40px 0 28px;text-align:left;font-size:32px;letter-spacing:-1.5px;color:#172934}
+.mesha-wordmark span{color:#0758d6}
+.mesha-lang-sheet{padding:24px 0;background:transparent;border-top:1px solid #dedfd9}
+.mesha-lang-sheet .mesha-kicker{color:#0758d6;letter-spacing:1.6px;line-height:1.5}
+.mesha-lang-sheet h1{font:normal 44px/1.08 Georgia,'Times New Roman',serif;letter-spacing:-1.5px;color:#172934;margin:16px 0}
+.mesha-lang-keep{color:#53616a;max-width:32ch;font-size:16px;line-height:1.6;margin-bottom:24px}
+.mesha-lang-list{gap:10px}
+.mesha-lang-btn{min-height:56px;padding:14px 18px;border:1px solid #dedfd9;border-radius:4px;background:#fff;text-align:left}
+.mesha-lang-btn span:last-child{color:#172934;font-weight:600}
+.mesha-lang-btn:hover:not(:disabled){background:#eaf0f8;border-color:#0758d6}
+.mesha-lang-btn:focus-visible{outline:3px solid #0758d6;outline-offset:3px}
+.mesha-lang-foot{color:#53616a;text-align:left;margin:24px 0 0;line-height:1.6}
+body.mesha-dark #dialog:has([data-auth-step]){background:#faf9f5;border:1px solid #dedfd9;border-radius:6px;padding:24px;width:440px;max-width:calc(100vw - 24px);max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);color:#172934;box-shadow:0 20px 64px #17293426}
+body.mesha-dark #dialog:has([data-auth-step])::backdrop{background:#17293499}
+body.mesha-dark #dialog:has([data-auth-step]) .dialog-head{align-items:flex-start;gap:12px;padding-bottom:20px;border-bottom:1px solid #dedfd9}
+body.mesha-dark #dialog:has([data-auth-step]) .dialog-head h2{font:normal 24px/1.2 Georgia,'Times New Roman',serif;font-size:24px!important;letter-spacing:-1px;color:#172934}
+body.mesha-dark #dialog:has([data-auth-step]) .icon-button{min-height:48px;min-width:48px;color:#53616a}
+body.mesha-dark #dialog:has([data-auth-step]) .icon-word{display:none}
+#dialog [data-auth-step]{gap:18px}
+body.mesha-dark #dialog [data-auth-step] p{color:#53616a;line-height:1.6;margin:0}
+body.mesha-dark #dialog [data-auth-step] label{color:#172934;gap:10px;font-weight:600}
+body.mesha-dark #dialog [data-auth-step] input{min-width:0;min-height:56px;border:1px solid #87949d;border-radius:4px;background:#fff;color:#172934;padding:14px 12px}
+body.mesha-dark #dialog [data-auth-step] input::placeholder{color:#64717a;opacity:1}
+body.mesha-dark #dialog [data-auth-step] .phone-field{border-radius:4px;border-color:#87949d;background:#fff}
+body.mesha-dark #dialog [data-auth-step] .phone-field input{border:0}
+body.mesha-dark #dialog [data-auth-step] .phone-prefix{background:#eaf0f8;color:#172934;align-self:stretch;display:flex;align-items:center}
+body.mesha-dark #dialog [data-auth-step] button{min-height:52px;border-radius:4px;border-color:#dedfd9;color:#0758d6;background:#fff;line-height:1.5;white-space:normal}
+body.mesha-dark #dialog [data-auth-step] button.primary{background:#0758d6;border-color:#0758d6;color:#fff;font-weight:600}
+body.mesha-dark #dialog [data-auth-step] button.primary:hover:not(:disabled){background:#0648af}
+body.mesha-dark #dialog [data-auth-step] button:disabled{opacity:1;background:#eaf0f8;color:#53616a;border-color:#dedfd9;cursor:wait}
+body.mesha-dark #dialog [data-auth-step] :is(input,button):focus-visible{outline:3px solid #0758d6;outline-offset:3px}
+body.mesha-dark #dialog [data-auth-step] .auth-steps{color:#53616a;margin:0;gap:8px}
+body.mesha-dark #dialog [data-auth-step] .auth-steps li{text-align:left;padding:8px 0;border-color:#dedfd9}
+body.mesha-dark #dialog [data-auth-step] .auth-steps [aria-current=step]{color:#0758d6;border-color:#0758d6}
+body.mesha-dark #dialog [data-auth-step] .auth-phone{color:#172934;font-weight:600}
+body.mesha-dark #dialog [data-auth-step] .error-inline:not(:empty){background:#fff0eb;color:#942d20;border-left:3px solid #b43b28;padding:12px;line-height:1.5}
+#dialog [data-auth-step] .error-inline:empty{display:none}
+body.mesha-dark #dialog:has([data-auth-step]) .entry-language{margin-top:24px;padding-top:18px;border-top:1px solid #dedfd9}
+body.mesha-dark #dialog:has([data-auth-step]) .entry-language button{min-height:48px;color:#0758d6;border-radius:4px}
+body.mesha-dark #dialog [data-auth-step] .remember-choice{min-height:48px;align-items:center}
+body.mesha-dark #dialog [data-auth-step] input[type=checkbox]{min-height:24px;padding:0}
+@media(max-width:360px){body.mesha-lang-open main{padding-inline:20px}.mesha-lang-sheet h1{font-size:38px}body.mesha-dark #dialog:has([data-auth-step]){padding:20px}}
+body.mesha-dark .page:has(.member-entry){background:#faf9f5;color:#172934;min-height:calc(100vh - 180px)}
+body.mesha-dark .member-entry{background:#fff;border:1px solid #dedfd9;border-radius:4px;padding:24px;gap:18px}
+body.mesha-dark .member-entry h2{font-family:Georgia,'Times New Roman',serif;font-weight:400;color:#172934}
+body.mesha-dark .member-entry p{color:#53616a;line-height:1.6}
+body.mesha-dark .member-entry button{min-height:52px;border-radius:4px}
+body.mesha-dark .member-entry button.primary{background:#0758d6;color:#fff;border-color:#0758d6}
+body.mesha-dark #dialog:has([data-auth-step]) .dialog-head h2{font-family:Georgia,'Times New Roman',serif!important;font-weight:400!important}
+body.mesha-dark #dialog:has([data-auth-step]) .entry-language select{min-height:48px;background:#fff;border:1px solid #87949d;border-radius:4px;color:#172934}
+#dialog [data-auth-step] button.primary:disabled::after{content:' …'}
+body.mesha-lang-open #less-nav{display:none}
+body.mesha-lang-open .member-shell #content{padding:0 24px;background:#faf9f5}
+body.mesha-lang-open .mesha-lang-sheet h1{font-family:Georgia,'Times New Roman',serif!important;font-weight:400!important}

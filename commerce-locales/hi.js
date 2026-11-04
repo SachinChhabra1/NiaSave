@@ -1,6 +1,9 @@
 import memberUpdates from './member-updates/hi.js';
 // Member-interface translation draft; native-speaker review is required before pilot launch.
 export default {
+  "Enter the 4 to 8 digit code from WhatsApp.": "WhatsApp में आया 4 से 8 अंकों का कोड डालें।",
+  "NiaSave brings living, work and everyday essentials together.": "नियासेव रहने की जगह, काम और रोज़मर्रा का सामान एक साथ लाता है।",
+  "WhatsApp code": "WhatsApp कोड",
   "Use your WhatsApp number.": "अपना WhatsApp नंबर डालें।",
   "Enter the code sent to your WhatsApp number.": "अपने WhatsApp नंबर पर भेजा गया कोड डालें।",
   "This account can shop. Other services need separate member approval.": "इस खाते से खरीदारी कर सकते हैं। दूसरी सेवाओं के लिए अलग सदस्य अनुमोदन चाहिए।",

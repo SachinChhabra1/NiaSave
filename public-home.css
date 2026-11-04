@@ -10,9 +10,30 @@
   background:var(--paper);
   font-synthesis:none
 }
-* {
-  box-sizing:border-box
-}
+
+/* NiaSave investor-facing visual refresh */
+:root{--ink:#102a43;--muted:#526579;--blue:#1769e0;--line:#dbe7ef;--paper:#f7fbfd;--mint:#dff6ec;--sun:#ffd66b;--coral:#ff8d73}
+body{background:var(--paper);color:var(--ink)}
+.public-header{height:84px;border-bottom:0;background:rgba(247,251,253,.86);backdrop-filter:blur(16px);position:sticky;top:0;z-index:10;border-radius:0 0 20px 20px}
+.public-brand{font-size:30px;color:var(--ink)}
+.public-brand span{color:var(--blue)}
+.public-header nav{color:var(--ink);font-weight:600}
+.public-header nav a:hover,.member-link:hover{color:var(--blue)}
+.button{border-radius:999px;padding:15px 20px;box-shadow:0 10px 24px rgba(23,105,224,.18);transition:transform .2s ease,box-shadow .2s ease}
+.button:hover{transform:translateY(-2px);box-shadow:0 14px 28px rgba(23,105,224,.25)}
+.hero{max-width:1320px;padding-block:76px 88px;gap:72px}
+.hero-copy{max-width:520px}.eyebrow{color:#168567;letter-spacing:2.4px;font-size:11px}
+.hero h1{font-size:clamp(58px,6.4vw,92px);color:var(--ink)}
+.hero h1 em{color:var(--blue)}
+.hero-copy>p:not(.eyebrow){font-size:19px;color:var(--muted)}
+.hero-media{border-radius:28px;box-shadow:0 24px 60px rgba(16,42,67,.14);background:var(--mint);padding:10px}
+.hero-media img{border-radius:20px}.hero-media figcaption{margin:10px 0 0;border-radius:16px;background:var(--mint);color:#126b54;padding:16px 18px}
+.platform{background:#eaf6f4;border-block:1px solid #d9eee9;padding-block:72px 78px}.platform h2,.enterprise h2,.investor h2{font-size:clamp(34px,4vw,54px)}
+.pillars{grid-template-columns:repeat(4,1fr);gap:16px;margin-top:42px}.pillars article{display:block;padding:22px;border:1px solid #cfe6e0;border-radius:20px;background:rgba(255,255,255,.62);min-height:150px}.pillar-number{display:block;margin-bottom:28px;color:#168567}.pillars h3{font-size:22px}.availability{margin-top:30px}
+.enterprise{max-width:none;padding:86px max(56px,calc((100vw - 1128px)/2));background:var(--ink);grid-template-columns:1.15fr 1fr}.enterprise-support ul{font-size:15px}.enterprise-support li::before{content:'✓';color:var(--sun);margin-right:10px}.enterprise-support .text-link{border-color:#46647d}
+.investor{background:var(--sun);padding-block:48px}.investor .button{background:var(--ink);color:#fff}.public-footer{max-width:1320px;padding-block:34px;border-top:0}
+@media(max-width:800px){.public-header{height:72px;margin-inline:12px;padding-inline:14px}.hero{padding-block:46px 56px}.hero-media{margin-top:38px;border-radius:22px}.hero-copy{padding-inline:0}.pillars{grid-template-columns:1fr 1fr;gap:10px}.pillars article{min-height:135px;padding:16px}.pillar-number{margin-bottom:18px}.enterprise{padding:58px 26px;display:block}.enterprise-support{margin-top:34px}.investor-inner{align-items:flex-start;flex-direction:column}.investor .button{width:100%}}
+
 body {
   margin:0
 }
@@ -508,3 +529,7 @@ h2 {
   }
 
 }
+
+/* Bold public narrative: calm confidence with clear investor and partner actions. */
+body{background:#f3faf7;color:#102a43}.public-header{background:rgba(243,250,247,.88);border-bottom:1px solid #d5e6df;box-shadow:0 8px 24px rgba(16,42,67,.06)}.public-brand{font-size:32px;font-weight:850;letter-spacing:-1.8px;color:#123b5d}.public-brand span{color:#1769e0}.public-header nav a{color:#31536b}.button{background:#1769e0;border-radius:999px;color:#fff;font-weight:800;box-shadow:0 12px 24px rgba(23,105,224,.22)}.member-link{font-weight:750;color:#123b5d}.hero{padding-block:92px 110px}.hero-copy h1{font-size:clamp(60px,7vw,104px);line-height:.93;letter-spacing:-5px;color:#123b5d}.hero-copy h1 em{color:#1769e0}.hero-copy>p:not(.eyebrow){font-size:21px;line-height:1.5;color:#526579}.eyebrow{color:#168567;font-weight:800;letter-spacing:2.5px}.hero-media{border-radius:30px;background:#dff6ec;box-shadow:0 30px 70px rgba(18,59,93,.18)}.hero-media figcaption{background:#123b5d;color:#fff;border-radius:18px}.hero-media figcaption strong{color:#ffd66b}.platform{background:#e7f6f1;border-color:#d0e9df}.platform h2,.enterprise h2,.investor h2{font-size:clamp(40px,5vw,68px);letter-spacing:-2.5px}.pillars article{border:1px solid #c6e4d7;border-radius:22px;background:rgba(255,255,255,.7);box-shadow:0 10px 22px rgba(18,59,93,.05);transition:transform .2s ease,box-shadow .2s ease}.pillars article:hover{transform:translateY(-5px);box-shadow:0 18px 30px rgba(18,59,93,.1)}.pillar-number{color:#1769e0;font-weight:800}.availability,.pilot-note{color:#526579}.enterprise{background:#123b5d;border-radius:0 0 28px 28px}.enterprise .eyebrow{color:#9eddbd}.enterprise h2,.enterprise .section-copy{color:#fff}.enterprise-support li{color:#dcecf5}.enterprise-support li::before{color:#ffd66b}.investor{background:#ffd66b}.investor .button{background:#123b5d}.public-footer{border-top-color:#d5e6df}.public-footer .public-brand{font-size:24px}
+@media(max-width:800px){.hero{padding-block:54px 70px}.hero-copy h1{font-size:clamp(54px,15vw,78px);letter-spacing:-3px}.hero-copy>p:not(.eyebrow){font-size:18px}.platform h2,.enterprise h2,.investor h2{font-size:42px}.enterprise{border-radius:0;padding-block:64px}.public-header{margin-inline:0;border-radius:0}.public-footer{padding-block:28px}}

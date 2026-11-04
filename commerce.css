@@ -803,3 +803,18 @@ body.mesha-dark .footer-links a{font-size:14px}
   body.mesha-dark header.header .call-nia,
   body.mesha-dark header.header .header-actions .mesha-chip{font-size:15px;padding:8px 8px}
 }
+
+/* Member home: emphasize the daily choice while keeping all existing states. */
+body.mesha-dark .member-shell #content .home-dashboard{background:#f2f7f3}
+body.mesha-dark .member-shell #content .home-title{margin:16px;padding:24px 20px;border-radius:20px;background:#123b45;border-bottom:6px solid #d9eea4}
+body.mesha-dark .member-shell #content .home-dashboard .home-title h1{padding:0;color:#fff;font-size:clamp(28px,4vw,36px);line-height:1.18;letter-spacing:-.7px;max-width:20ch}
+body.mesha-dark .member-shell #content .home-tile{border-color:#ccdfd5;border-radius:16px;box-shadow:0 4px 0 #dce8df}
+body.mesha-dark .member-shell #content .home-tile-copy{padding:14px 12px 18px;gap:8px}
+body.mesha-dark .member-shell #content .home-tile-name{width:100%;color:#123b45}
+body.mesha-dark .member-shell #content .home-tile-name::after{content:'↗';margin-left:auto;font-size:22px;color:#087b70}
+body.mesha-dark .member-shell #content .home-tile-price{background:#e2efb8;color:#123b45}
+body.mesha-dark .member-shell #content .home-talk{background:#e4eee7;border-color:#ccdfd5;border-radius:16px}
+body.mesha-dark .member-shell #content .home-talk-mark{background:#fff;color:#075e69}
+body.mesha-dark .member-shell #content .home-call{background:#075e69;min-height:48px;border-radius:12px}
+body.mesha-dark .member-shell #content .home-tile:focus-visible,body.mesha-dark .member-shell #content .home-call:focus-visible{outline:3px solid #075e69;outline-offset:4px}
+@media(prefers-reduced-motion:no-preference){body.mesha-dark .member-shell #content .home-tile{transition:box-shadow .18s ease,transform .18s ease}body.mesha-dark .member-shell #content .home-tile:hover{transform:translateY(-2px);box-shadow:0 6px 0 #ccdfd5}}

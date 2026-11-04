@@ -33,7 +33,7 @@ All invited visitors share one fictional member and demo operator. Demo ops is
 intentionally available to demo visitors; it cannot access ordinary operations.
 A fresh instance has 100 units per product. Repeated bootstrap preserves stock,
 reservations and receipts; it does not reset edits. The fixture pickup windows
-last one year from initial seed. Reservations expire after two hours for pickup;
+last one year from initial seed. Reservations carry a two-hour collection window;
 this is a synthetic presentation, not evidence of live fulfilment readiness.
 
 ## Prepare a separate Preview deployment
@@ -88,7 +88,7 @@ does not use Basic auth or expose the Central gateway. It rejects all API paths
 outside its own commerce demo endpoints. No Central origin/key from a live system
 is needed. VERCEL_ENV is supplied by Vercel; use Preview, not Production.
 
-Website project (`nia-one-website-pages`; confirm its linked Vercel project name):
+Website Vercel project `nia-one-website-pages`:
 
 - INVESTOR_DEMO_URL
 - INVESTORS_PASSWORD
@@ -105,7 +105,10 @@ npm run test:investor-demo
 ```
 
 Playwright starts a local HTTP server with a transactional, cloned in-memory store;
-that test seam is never packaged in the hosted function. No database or Central
+that test seam is never packaged in the hosted function. A second browser test
+uses a temporary localhost HTTPS certificate (generated with OpenSSL and removed
+immediately after loading) to verify cross-site framing and an actual Chromium
+partitioned cookie. No test TLS key is committed or logged. No database or Central
 connection is made. Hosted writes require the existing PostgreSQL CAS runner and
 use only `SHOWCASE_INSTANCE:investor-demo-v1` inside SHOWCASE_DATABASE_URL. Store
 failures cannot acknowledge successful mutations. A separate fake-SQL test proves

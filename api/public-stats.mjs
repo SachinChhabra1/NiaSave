@@ -1,4 +1,4 @@
-const fields = ['studios', 'capacity', 'occupiedBeds', 'cities', 'enterpriseClients'];
+const fields = ['studios', 'capacity', 'occupiedBeds', 'cities', 'enterpriseClients', 'partners'];
 export function safePublicStats(body, now = Date.now()) {
   const at = Date.parse(body?.asOf);
   if (!Number.isFinite(at) || at > now || now - at > 300000) throw new Error('stats_unavailable');

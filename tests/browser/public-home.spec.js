@@ -90,12 +90,12 @@ test('production CSP font rejection does not block existing member entry', async
 });
 
 test('live traction hides null fields and shows only Central aggregates', async ({page}) => {
-  await page.route('**/api/public-stats', route => route.fulfill({json: {studios: 7, capacity: 100, occupiedBeds: 0, cities: null, enterpriseClients: null, asOf: new Date().toISOString()}}));
+  await page.route('**/api/public-stats', route => route.fulfill({json: {studios: 7, capacity: 100, occupiedBeds: 0, cities: null, enterpriseClients: null, partners: 2, asOf: new Date().toISOString()}}));
   await page.goto('/');
   await expect(page.locator('[data-public-stat="studios"] strong')).toHaveText('7');
   await expect(page.locator('[data-public-stat="occupiedBeds"] strong')).toHaveText('0');
   await expect(page.locator('[data-public-stat="cities"]')).toBeHidden();
-  await expect(page.locator('[data-public-stat="enterpriseClients"]')).toBeHidden();
+  await expect(page.locator('[data-public-stat="partners"] strong')).toHaveText('2');
   await expect(page.locator('.traction-source')).toContainText('Live from Nia Central · as of');
 });
 for (const scenario of ['failure', 'nulls', 'stale']) {

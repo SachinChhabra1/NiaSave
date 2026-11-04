@@ -10,6 +10,9 @@
   background:var(--paper);
   font-synthesis:none
 }
+* {
+  box-sizing:border-box
+}
 
 /* NiaSave investor-facing visual refresh */
 :root{--ink:#102a43;--muted:#526579;--blue:#1769e0;--line:#dbe7ef;--paper:#f7fbfd;--mint:#dff6ec;--sun:#ffd66b;--coral:#ff8d73}

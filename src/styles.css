@@ -207,6 +207,23 @@ body {
   background: #fff;
 }
 
+/* Calm, energetic member surfaces with savings-first hierarchy. */
+.nia-save{--navy:#123b5d;--navy-dark:#0d2942;--paper:#fbfdfc;--plate:#e6f2ed;--ink:#142a3b;--muted:#617484;--line:#dce8e4;--soft:#f1f8f5;--accent:#1769e0}
+.nia-save__app{width:min(100%,1180px);height:min(100svh,900px);border:1px solid #d9e6e1;border-radius:28px;box-shadow:0 24px 80px rgba(18,59,93,.14)}
+.nia-save__nav{background:#f2faf7;border-color:var(--line)}
+.nia-save__nav button.is-active{color:#168567}.nia-save__nav button.is-active::before{border-color:#168567}
+.nia-save__brand-bar{border-bottom-color:var(--line)}
+.nia-save__brand-bar h1{color:var(--navy);font-size:30px;letter-spacing:-1.2px}
+.nia-save__promise{border:1px solid #d5ebe2;border-radius:22px;background:linear-gradient(135deg,#e4f7ef 0%,#edf7ff 100%);padding:18px;margin-top:18px;box-shadow:0 10px 24px rgba(18,59,93,.06)}
+.nia-save__weekly-progress{border-color:#c6e1d5;background:rgba(255,255,255,.72);border-radius:16px}
+.nia-save__weekly-progress-copy b{color:#168567}.nia-save__progress-row i{background:#cce9dc}.nia-save__progress-row i b{background:#22a675}
+.nia-save__search{border:1px solid var(--line);background:#fff;box-shadow:0 5px 14px rgba(18,59,93,.05)}
+.nia-save__product-card{border-color:#dce8e4;border-radius:20px;background:#fff;box-shadow:0 8px 22px rgba(18,59,93,.06);transition:transform .2s ease,box-shadow .2s ease}.nia-save__product-card:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(18,59,93,.12)}
+.nia-save__pack-plate{background:#edf7f2}.nia-save__add,.nia-save__primary{border-radius:999px;background:#1769e0;box-shadow:0 8px 18px rgba(23,105,224,.18)}
+.nia-save__save-hero{border-radius:24px;background:linear-gradient(135deg,#123b5d,#1769e0);box-shadow:0 14px 32px rgba(18,59,93,.18)}
+@media(min-width:760px){.nia-save__nav{grid-template-columns:1fr;align-content:start;gap:8px;width:220px;padding:24px 14px;border-right:1px solid var(--line);border-top:0}.nia-save__app{display:grid;grid-template-columns:220px 1fr}.nia-save__screen{grid-column:2;grid-row:1}.nia-save__nav--desktop-only{display:grid;grid-column:1;grid-row:1}.nia-save__desktop-brand,.nia-save__desktop-nav-label,.nia-save__desktop-nav-note{display:flex}.nia-save__desktop-brand{align-items:center;gap:10px;padding:0 12px 20px;color:var(--navy)}.nia-save__desktop-brand>span{display:grid;place-items:center;width:36px;height:36px;border-radius:12px;background:#d8f1e5;color:#168567;font-weight:800}.nia-save__desktop-brand small{display:block;color:var(--muted);font-size:11px;margin-top:3px}.nia-save__desktop-nav-label{padding:14px 14px 4px;color:#168567;font-size:11px;letter-spacing:2px;font-weight:700}.nia-save__desktop-nav-note{padding:12px 14px;color:var(--muted);font-size:11px}}
+
+
 .nia-save__shop {
   padding: max(22px, env(safe-area-inset-top)) 20px 30px;
 }
@@ -1887,3 +1904,25 @@ button.nia-save__row {
   from { opacity: 0; transform: translateY(3px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+/* Investor-ready NiaSave system: make savings, progress, and next action the visual anchors. */
+.nia-save{--navy:#123b5d;--navy-dark:#0b2942;--paper:#fbfdfc;--plate:#e4f2ed;--ink:#102a43;--muted:#607587;--line:#d5e6df;--soft:#eff8f4;--accent:#1769e0;--green:#168567;background:radial-gradient(circle at 78% 5%,#e3f6ef 0,transparent 34%),#f2f8f6}
+.nia-save__app{border:1px solid #d5e6df;border-radius:30px;box-shadow:0 28px 90px rgba(18,59,93,.16)}
+.nia-save__header{background:rgba(251,253,252,.92);backdrop-filter:blur(16px);border-bottom-color:var(--line)}
+.nia-save__header h1,.nia-save__brand-bar h1{color:var(--navy);font-size:clamp(30px,4vw,42px);letter-spacing:-1.8px}
+.nia-save__content{padding-top:24px}
+.nia-save__promise{border:1px solid #c8e4d8;border-radius:24px;background:linear-gradient(135deg,#dbf5e9 0%,#eef7ff 100%);box-shadow:0 14px 30px rgba(18,59,93,.08)}
+.nia-save__weekly-progress{border:1px solid #b9dccb;border-radius:18px;background:rgba(255,255,255,.72);box-shadow:0 7px 16px rgba(18,59,93,.06)}
+.nia-save__weekly-progress-copy b{color:var(--green);font-size:18px}.nia-save__progress-row i{height:10px;background:#c8e9d9}.nia-save__progress-row i b{background:#22a675}
+.nia-save__fever-promise{color:var(--green)}
+.nia-save__search{height:58px;border:1px solid var(--line);border-radius:18px;background:#fff;box-shadow:0 7px 18px rgba(18,59,93,.05)}
+.nia-save__section-title h2{font-size:26px;letter-spacing:-.8px}.nia-save__section-title button{color:var(--accent);font-weight:750}
+.nia-save__product-card{border:1px solid var(--line);border-radius:22px;box-shadow:0 10px 26px rgba(18,59,93,.07);transition:transform .2s ease,box-shadow .2s ease}.nia-save__product-card:hover{transform:translateY(-4px);box-shadow:0 17px 36px rgba(18,59,93,.13)}
+.nia-save__pack-plate{background:#eef8f4;border-radius:17px}.nia-save__price-proof{background:#fff1be;color:#775700}
+.nia-save__product-price small{color:var(--green);font-weight:750}.nia-save__add,.nia-save__primary{min-height:48px;border-radius:999px;background:var(--accent);box-shadow:0 10px 20px rgba(23,105,224,.2);font-weight:800}.nia-save__add:hover,.nia-save__primary:hover{background:#0f58c7;transform:translateY(-2px)}
+.nia-save__money-card,.nia-save__today,.nia-save__extra,.nia-save__next,.nia-save__home-lead,.nia-save__goal-row,.nia-save__home-list>.nia-save__row,.nia-save__family{border-color:var(--line);border-radius:20px;background:rgba(255,255,255,.76);box-shadow:0 9px 24px rgba(18,59,93,.05)}
+.nia-save__money-card>strong,.nia-save__nest-lead>strong,.nia-save__home-lead>p strong{color:var(--navy)}
+.nia-save__next{border:1px solid #b9dccb;background:#e7f7ef}.nia-save__next strong{color:var(--green)}.nia-save__next i{background:#c8e9d9}.nia-save__next i b,.nia-save__goal-row i b{background:#22a675}
+.nia-save__nav{background:#f2faf7;border-color:var(--line)}.nia-save__nav button.is-active{color:var(--green)}.nia-save__nav button.is-active::before{border-color:var(--green)}
+@media (min-width:960px){.nia-save__nav,.nia-save__nav--desktop-only{background:#102f49;border-right-color:#214b69}.nia-save__desktop-brand>span{background:#d9f3e7;color:var(--green)}.nia-save__nav button.is-active{background:#1b4a69;color:#fff}.nia-save__nav button.is-active::before{background:#ffd66b}.nia-save__desktop-nav-label{color:#79c5a6}.nia-save__header{background:#fbfdfc}.nia-save__content{padding:34px 48px 64px}.nia-save__promise{padding:24px}.nia-save__money-card,.nia-save__nest-lead,.nia-save__home-lead{min-height:260px}}
+@media (max-width:600px){.nia-save__app{border-radius:0}.nia-save__content{padding:18px 16px 28px}.nia-save__promise{padding:16px}.nia-save__weekly-progress-copy b{font-size:16px}.nia-save__product-grid{gap:12px}}

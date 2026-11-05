@@ -427,3 +427,352 @@ body.mesha-dark #dialog :is(.info,.notice){background:#f5f5f7;border-color:#dede
 body.mesha-dark #dialog .primary{border-radius:10px}
 body.mesha-dark .member-shell #content > .info{background:#f5f5f7;border-color:#dedee3;color:#50525b}
 body.mesha-dark :is(button,a,input,select,summary):focus-visible{outline:3px solid #0069ed;outline-offset:3px}
+
+/* Member entry: the public site's paper, ink and blue, scoped to sign-in. */
+body.mesha-lang-open{background:#faf9f5}
+body.mesha-lang-open main{max-width:480px;padding:0 24px}
+.mesha-lang{background:#faf9f5;min-height:100vh;padding-bottom:24px}
+.mesha-wordmark{padding:40px 0 28px;text-align:left;font-size:32px;letter-spacing:-1.5px;color:#172934}
+.mesha-wordmark span{color:#0758d6}
+.mesha-lang-sheet{padding:24px 0;background:transparent;border-top:1px solid #dedfd9}
+.mesha-lang-sheet .mesha-kicker{color:#0758d6;letter-spacing:1.6px;line-height:1.5}
+.mesha-lang-sheet h1{font:normal 44px/1.08 Georgia,'Times New Roman',serif;letter-spacing:-1.5px;color:#172934;margin:16px 0}
+.mesha-lang-keep{color:#53616a;max-width:32ch;font-size:16px;line-height:1.6;margin-bottom:24px}
+.mesha-lang-list{gap:10px}
+.mesha-lang-btn{min-height:56px;padding:14px 18px;border:1px solid #dedfd9;border-radius:4px;background:#fff;text-align:left}
+.mesha-lang-btn span:last-child{color:#172934;font-weight:600}
+.mesha-lang-btn:hover:not(:disabled){background:#eaf0f8;border-color:#0758d6}
+.mesha-lang-btn:focus-visible{outline:3px solid #0758d6;outline-offset:3px}
+.mesha-lang-foot{color:#53616a;text-align:left;margin:24px 0 0;line-height:1.6}
+body.mesha-dark .page:has(.member-entry){background:#faf9f5;color:#172934;min-height:calc(100vh - 180px)}
+body.mesha-dark .member-entry{background:#fff;border:1px solid #dedfd9;border-radius:4px;padding:24px;gap:18px}
+body.mesha-dark .member-entry h2{font-family:Georgia,'Times New Roman',serif;font-weight:400;color:#172934}
+body.mesha-dark .member-entry p{color:#53616a;line-height:1.6}
+body.mesha-dark .member-entry button{min-height:52px;border-radius:4px}
+body.mesha-dark .member-entry button.primary{background:#0758d6;color:#fff;border-color:#0758d6}
+body.mesha-lang-open #less-nav{display:none}
+body.mesha-lang-open .member-shell #content{padding:0 24px;background:#faf9f5}
+body.mesha-lang-open .mesha-lang-sheet h1{font-family:Georgia,'Times New Roman',serif!important;font-weight:400!important}
+
+/* A dedicated sign-in sheet. Existing dialog and form hooks stay in place. */
+.auth-sheet-brand { display: none; }
+body:has(#dialog[open] [data-auth-step]),
+body:has(#dialog[open] [data-action="entry-retry"]) { overflow: hidden; }
+body.mesha-dark #dialog:has(:is([data-auth-step], [data-action="entry-retry"])) {
+  --entry-ink: #172934;
+  --entry-muted: #53616a;
+  --entry-blue: #0758d6;
+  --entry-line: #dedfd9;
+  width: 560px;
+  max-width: calc(100vw - 48px);
+  max-height: calc(100vh - 48px);
+  max-height: calc(100dvh - 48px);
+  padding: 36px 48px;
+  border: 1px solid var(--entry-line);
+  border-radius: 6px;
+  background: #faf9f5;
+  color: var(--entry-ink);
+  box-shadow: 0 24px 96px #17293433;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+body.mesha-dark #dialog:has(:is([data-auth-step], [data-action="entry-retry"]))::backdrop {
+  background: #172934a6;
+}
+body.mesha-dark #dialog:has(:is([data-auth-step], [data-action="entry-retry"])) .dialog-head {
+  display: grid;
+  grid-template-columns: 1fr 48px;
+  gap: 32px 16px;
+  align-items: center;
+  margin: 0 0 12px;
+  padding: 0;
+  border: 0;
+}
+body.mesha-dark #dialog:has(:is([data-auth-step], [data-action="entry-retry"])) .auth-sheet-brand {
+  display: block;
+  font-size: 24px !important;
+  font-weight: 700;
+  letter-spacing: -1px;
+  color: var(--entry-ink);
+}
+body.mesha-dark #dialog .auth-sheet-brand > span {
+  font-size: inherit !important;
+  color: #0758d6;
+}
+body.mesha-dark #dialog:has(:is([data-auth-step], [data-action="entry-retry"])) .dialog-head h2 {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  font-family: var(--nia-v2-font-sans) !important;
+  font-size: 24px !important;
+  font-weight: 700 !important;
+  line-height: 1.25;
+  letter-spacing: -.5px;
+  color: var(--entry-ink);
+}
+body.mesha-dark #dialog:has(:is([data-auth-step], [data-action="entry-retry"])) .icon-button {
+  grid-column: 2;
+  grid-row: 1;
+  width: 48px;
+  min-height: 48px;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--entry-muted);
+}
+body.mesha-dark #dialog:has(:is([data-auth-step], [data-action="entry-retry"])) .icon-button > span {
+  font-size: 24px !important;
+}
+body.mesha-dark #dialog:has(:is([data-auth-step], [data-action="entry-retry"])) .icon-word { display: none; }
+body.mesha-dark #dialog:has(:is([data-auth-step], [data-action="entry-retry"])) #dialog-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+#dialog [data-auth-step] { order: 0; gap: 24px; }
+body.mesha-dark #dialog [data-auth-step] p {
+  margin: 0;
+  color: #53616a;
+  line-height: 1.6;
+}
+body.mesha-dark #dialog [data-auth-step] .auth-intro { margin-bottom: 4px; }
+body.mesha-dark #dialog [data-auth-step] .auth-steps {
+  display: flex;
+  gap: 20px;
+  padding: 0;
+  margin: 4px 0 0;
+  color: #53616a;
+}
+body.mesha-dark #dialog [data-auth-step] .auth-steps li {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  padding: 0 0 16px;
+  border-bottom: 2px solid #dedfd9;
+  text-align: left;
+}
+body.mesha-dark #dialog [data-auth-step] .auth-step-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 28px;
+  height: 28px;
+  border: 1px solid #a6afb2;
+  border-radius: 50%;
+  font-variant-numeric: tabular-nums;
+}
+body.mesha-dark #dialog [data-auth-step] [aria-current="step"] {
+  color: #0758d6;
+  border-color: #0758d6;
+  font-weight: 600;
+}
+body.mesha-dark #dialog [data-auth-step] [aria-current="step"] .auth-step-number {
+  background: #0758d6;
+  border-color: #0758d6;
+  color: #fff;
+}
+body.mesha-dark #dialog [data-auth-step] label {
+  gap: 12px;
+  color: #172934;
+  font-weight: 600;
+}
+body.mesha-dark #dialog [data-auth-step] input {
+  min-width: 0;
+  min-height: 64px;
+  padding: 16px;
+  border: 1px solid #87949d;
+  border-radius: 4px;
+  background: #fff;
+  color: #172934;
+  font-size: 24px !important;
+  line-height: 1.25;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+}
+body.mesha-dark #dialog [data-auth-step] input::placeholder {
+  color: #64717a;
+  opacity: 1;
+  font-size: 20px;
+  letter-spacing: 0;
+}
+body.mesha-dark #dialog [data-auth-step] .phone-field {
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+  border: 1px solid #87949d;
+  border-radius: 4px;
+  background: #fff;
+}
+body.mesha-dark #dialog [data-auth-step] .phone-field:focus-within {
+  outline: 3px solid #0758d6;
+  outline-offset: 3px;
+}
+body.mesha-dark #dialog [data-auth-step] .phone-field input {
+  width: 100%;
+  border: 0;
+  outline: none;
+  box-shadow: none;
+  padding-left: 12px;
+}
+body.mesha-dark #dialog [data-auth-step] .phone-prefix {
+  display: flex;
+  align-items: center;
+  align-self: center;
+  min-width: 68px;
+  padding: 0 16px;
+  border: 0;
+  border-right: 1px solid #dedfd9;
+  background: #fff;
+  color: #172934;
+  font-size: 24px !important;
+  font-weight: 400;
+}
+body.mesha-dark #dialog [data-auth-step="code"] input { letter-spacing: .22em; }
+body.mesha-dark #dialog [data-auth-step] button {
+  min-height: 48px;
+  border-radius: 4px;
+  white-space: normal;
+  line-height: 1.5;
+}
+body.mesha-dark #dialog [data-auth-step] button.primary,
+body.mesha-dark #dialog:has([data-action="entry-retry"]) button.primary {
+  min-height: 56px;
+  padding: 16px 20px;
+  border: 1px solid #0758d6;
+  border-radius: 4px;
+  background: #0758d6;
+  color: #fff;
+  font-weight: 600;
+}
+body.mesha-dark #dialog [data-auth-step] button.primary:hover:not(:disabled) { background: #0648af; }
+body.mesha-dark #dialog [data-auth-step] :is(.auth-text-link, .quiet) {
+  justify-self: center;
+  width: fit-content;
+  max-width: 100%;
+  padding: 8px 4px;
+  border: 0;
+  background: transparent;
+  color: #0758d6;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  font-weight: 400;
+}
+body.mesha-dark #dialog [data-auth-step] button:disabled {
+  opacity: 1;
+  background: #eaf0f8;
+  border-color: #a5b6d0;
+  color: #364e6e;
+  cursor: wait;
+}
+#dialog [data-auth-step] button.primary:disabled::after { content: ' …'; }
+body.mesha-dark #dialog [data-auth-step] :is(button,input):focus-visible {
+  outline: 3px solid #0758d6;
+  outline-offset: 3px;
+}
+body.mesha-dark #dialog [data-auth-step] .phone-field input:focus-visible { outline: none; }
+#dialog [data-auth-step] .error-inline:empty { display: none; }
+body.mesha-dark #dialog [data-auth-step] .error-inline:not(:empty) {
+  border-left: 3px solid #ae3f2d;
+  padding: 14px 16px;
+  background: #fff0eb;
+  color: #8b2d20;
+  line-height: 1.6;
+}
+body.mesha-dark #dialog [data-auth-step] .auth-number-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #dedfd9;
+}
+body.mesha-dark #dialog [data-auth-step] .auth-phone { color: #172934; font-weight: 600; }
+body.mesha-dark #dialog:has([data-auth-step]) .entry-language {
+  order: 1;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid #dedfd9;
+}
+body.mesha-dark #dialog:has([data-auth-step]) .language-picker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  color: #53616a;
+}
+body.mesha-dark #dialog:has([data-auth-step]) .entry-language select {
+  width: auto;
+  min-width: 140px;
+  min-height: 48px;
+  padding: 10px 36px 10px 14px;
+  border: 1px solid #a6afb2;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #172934;
+}
+body.mesha-dark #dialog:has(:is([data-auth-step], [data-action="entry-retry"])) [data-pilot-paused] {
+  order: 2;
+  display: block;
+  margin: 24px 0 0;
+  padding: 18px 0 0;
+  border: 0;
+  border-top: 1px solid #dedfd9;
+  border-radius: 0;
+  background: transparent;
+  color: #53616a;
+}
+body.mesha-dark #dialog:has([data-auth-step]) .pause-note p { color: #53616a; line-height: 1.6; }
+body.mesha-dark #dialog:has([data-auth-step]) .pause-note summary {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  padding-block: 8px;
+  color: #0758d6;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+body.mesha-dark #dialog [data-auth-step] .remember-choice { min-height: 48px; align-items: center; }
+body.mesha-dark #dialog [data-auth-step] input[type="checkbox"] { min-height: 24px; padding: 0; }
+@media (max-width: 600px) {
+  body.mesha-dark #dialog:has(:is([data-auth-step], [data-action="entry-retry"])) {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    max-width: 100%;
+    height: 100vh;
+    height: 100dvh;
+    max-height: 100vh;
+    max-height: 100dvh;
+    margin: 0;
+    padding: max(20px, env(safe-area-inset-top)) 24px max(24px, env(safe-area-inset-bottom));
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+  body.mesha-dark #dialog:has([data-auth-step]) .dialog-head { gap: 28px 16px; }
+  #dialog [data-auth-step] { gap: 20px; }
+}
+@media (max-width: 360px) {
+  body.mesha-dark #dialog:has([data-auth-step]) { padding-inline: 20px; }
+  body.mesha-dark #dialog [data-auth-step] .phone-prefix { min-width: 60px; padding-inline: 12px; }
+  body.mesha-dark #dialog [data-auth-step] .auth-steps { gap: 8px; }
+}
+body.mesha-dark #dialog:has([data-action="entry-retry"]) #dialog-body > .stack {
+  gap: 24px;
+  padding-top: 12px;
+}
+body.mesha-dark #dialog:has([data-action="entry-retry"]) [role="status"] {
+  margin: 0;
+  padding: 20px;
+  border-left: 3px solid #a5b6d0;
+  background: #eaf0f8;
+  color: #364e6e;
+  line-height: 1.6;
+}
+body.mesha-dark #dialog:has([data-action="entry-retry"]) button:disabled {
+  opacity: 1;
+  background: #eaf0f8;
+  border-color: #a5b6d0;
+  color: #364e6e;
+}

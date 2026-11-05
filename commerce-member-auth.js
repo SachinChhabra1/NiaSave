@@ -223,12 +223,12 @@ export async function submitSetPassword(api, body, cat, result) {
 
 function steps(t, current, otpPrimary = false) {
   const items = [
-    ['phone', t('Mobile', 'मोबाइल')],
+    ['phone', t('Phone', 'फ़ोन')],
     ['code', t('Code', 'कोड')],
     ['password', t('Password', 'पासवर्ड')],
     ['remember', t('Stay signed in', 'लॉग इन रहें')]
   ].filter(([id]) => !otpPrimary || id === 'phone' || id === 'code');
-  return `<ol class="auth-steps" aria-label="${t('Log in steps', 'लॉग इन के चरण')}">${items.map(([id, label]) => `<li${id === current ? ' aria-current="step"' : ''}>${label}</li>`).join('')}</ol>`;
+  return `<ol class="auth-steps" aria-label="${t('Log in steps', 'लॉग इन के चरण')}">${items.map(([id, label], index) => `<li${id === current ? ' aria-current="step"' : ''}><span class="auth-step-number" aria-hidden="true">${index + 1}</span><span>${label}</span></li>`).join('')}</ol>`;
 }
 
 function fieldError() {
@@ -237,12 +237,12 @@ function fieldError() {
 
 export function phoneFormMarkup({t, esc, phone = '', passwordLink = false, otpPrimary = false}) {
   const national = nationalMobile(phone);
-  return `<form id="login-form" class="stack" data-auth-step="phone">${steps(t, 'phone', otpPrimary)}<p>${otpPrimary?t('Use your WhatsApp number.'):t('Use the phone number registered with Nia.', 'निया में दर्ज फोन नंबर डालें।')}</p><label>${t('Mobile number', 'मोबाइल नंबर')}<span class="phone-field"><span class="phone-prefix" aria-hidden="true">+91</span><input name="phone" type="tel" autocomplete="tel-national" inputmode="numeric" pattern="[6-9][0-9]{9}" minlength="10" maxlength="10" placeholder="${t('10-digit mobile number', '10 अंकों का मोबाइल नंबर')}" value="${esc(national)}" required></span></label>${fieldError()}<button class="primary" type="submit">${otpPrimary ? t('Send WhatsApp code') : t('Send code', 'कोड भेजें')}</button>${passwordLink ? `<button type="button" class="quiet" data-action="password-login">${t('Already have a password? Log in', 'पासवर्ड पहले से है? लॉग इन करें')}</button>` : ''}<button type="button" data-action="recovery">${t('Number changed? Get help', 'नंबर बदल गया? मदद लें')}</button></form>`;
+  return `<form id="login-form" class="stack" data-auth-step="phone"><p class="auth-intro">${t('NiaSave brings living, work and everyday essentials together.','नियासेव रहने की जगह, काम और रोज़मर्रा का सामान एक साथ लाता है।')}</p>${steps(t, 'phone', otpPrimary)}<p class="auth-instruction">${otpPrimary?t('Use your WhatsApp number.'):t('Use the phone number registered with Nia.', 'निया में दर्ज फोन नंबर डालें।')}</p><label>${t('Mobile number', 'मोबाइल नंबर')}<span class="phone-field"><span class="phone-prefix" aria-hidden="true">+91</span><input name="phone" type="tel" autocomplete="tel-national" inputmode="numeric" pattern="[6-9][0-9]{9}" minlength="10" maxlength="10" placeholder="${t('10-digit mobile number', '10 अंकों का मोबाइल नंबर')}" value="${esc(national)}" required></span></label>${fieldError()}<button class="primary" type="submit">${otpPrimary ? t('Send WhatsApp code') : t('Send code', 'कोड भेजें')}</button>${passwordLink ? `<button type="button" class="quiet" data-action="password-login">${t('Already have a password? Log in', 'पासवर्ड पहले से है? लॉग इन करें')}</button>` : ''}<button type="button" class="auth-text-link" data-action="recovery">${t('Number changed? Get help', 'नंबर बदल गया? मदद लें')}</button></form>`;
 }
 
 export function verifyFormMarkup({t, esc, phone = '', otpPrimary = false}) {
   const shown = e164In(phone) || phone;
-  return `<form id="verify-form" class="stack" data-auth-step="code">${steps(t, 'code', otpPrimary)}<p>${otpPrimary?t('Enter the code sent to your WhatsApp number.'):t('If this number is registered with Nia, a code will arrive on WhatsApp.', 'यदि यह नंबर निया में पंजीकृत है, तो WhatsApp पर कोड आएगा।')}</p>${shown ? `<p class="auth-phone">${esc(shown)}</p>` : ''}<label>${t('Verification code', 'पुष्टि कोड')}<input name="code" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{4,8}" maxlength="8" required></label>${fieldError()}<button class="primary" type="submit">${t('Verify & continue', 'पुष्टि करके आगे बढ़ें')}</button><button type="button" data-action="login">${t('Use another number / resend', 'दूसरा नंबर / फिर भेजें')}</button></form>`;
+  return `<form id="verify-form" class="stack" data-auth-step="code"><p class="auth-intro">${t('NiaSave brings living, work and everyday essentials together.','नियासेव रहने की जगह, काम और रोज़मर्रा का सामान एक साथ लाता है।')}</p>${steps(t, 'code', otpPrimary)}<p>${otpPrimary?t('Enter the code sent to your WhatsApp number.'):t('If this number is registered with Nia, a code will arrive on WhatsApp.', 'यदि यह नंबर निया में पंजीकृत है, तो WhatsApp पर कोड आएगा।')}</p>${shown ? `<div class="auth-number-row"><p class="auth-phone">${esc(shown)}</p><button type="button" class="auth-text-link" data-action="login">${t('Change','बदलें')}</button></div>` : ''}<label>${t('Verification code', 'पुष्टि कोड')}<input name="code" aria-describedby="code-help" placeholder="${t('WhatsApp code','WhatsApp कोड')}" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{4,8}" maxlength="8" required></label><p id="code-help" class="auth-hint">${t('Enter the 4 to 8 digit code from WhatsApp.','WhatsApp में आया 4 से 8 अंकों का कोड डालें।')}</p>${fieldError()}<button class="primary" type="submit">${t('Verify & continue', 'पुष्टि करके आगे बढ़ें')}</button><button type="button" class="auth-text-link" data-action="login">${t('Resend code','कोड फिर भेजें')}</button></form>`;
 }
 
 export function setPasswordFormMarkup({t, optional = false}) {

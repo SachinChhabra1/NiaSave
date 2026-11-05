@@ -1,6 +1,11 @@
 import memberUpdates from './member-updates/kn.js';
 // Member-interface translation draft; native-speaker review is required before pilot launch.
 export default {
+  "Phone": "ಫೋನ್",
+  "Change": "ಬದಲಿಸಿ",
+  "Resend code": "ಕೋಡ್ ಮತ್ತೆ ಕಳುಹಿಸಿ",
+  "NiaSave brings living, work and everyday essentials together.": "NiaSave ವಾಸದ ಸ್ಥಳ, ಕೆಲಸ ಮತ್ತು ದಿನನಿತ್ಯದ ಅಗತ್ಯಗಳನ್ನು ಒಟ್ಟಿಗೆ ತರುತ್ತದೆ.",
+  "WhatsApp code": "WhatsApp ಕೋಡ್",
   "Your Nia setup link is ready. Confirm this is your phone, then use its screen lock.": "ನಿಮ್ಮ Nia ಸೆಟಪ್ ಲಿಂಕ್ ಸಿದ್ಧವಾಗಿದೆ. ಇದು ನಿಮ್ಮ ಫೋನ್ ಎಂದು ದೃಢಪಡಿಸಿ, ನಂತರ ಅದರ ಸ್ಕ್ರೀನ್ ಲಾಕ್ ಬಳಸಿ.",
   "Ask your Nia team for a setup link after they verify your membership. Open it on your own phone within 10 minutes. No code to type.": "ಸದಸ್ಯತ್ವ ಪರಿಶೀಲನೆಯ ನಂತರ ನಿಮ್ಮ Nia ತಂಡದಿಂದ ಸೆಟಪ್ ಲಿಂಕ್ ಪಡೆಯಿರಿ. ಅದನ್ನು 10 ನಿಮಿಷಗಳೊಳಗೆ ನಿಮ್ಮ ಸ್ವಂತ ಫೋನ್‌ನಲ್ಲಿ ತೆರೆಯಿರಿ. ಕೋಡ್ ಟೈಪ್ ಮಾಡುವ ಅಗತ್ಯವಿಲ್ಲ.",
 

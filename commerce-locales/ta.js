@@ -1,6 +1,11 @@
 import memberUpdates from './member-updates/ta.js';
 // Member-interface translation draft; native-speaker review is required before pilot launch.
 export default {
+  "Phone": "தொலைபேசி",
+  "Change": "மாற்று",
+  "Resend code": "குறியீட்டை மீண்டும் அனுப்பு",
+  "NiaSave brings living, work and everyday essentials together.": "NiaSave தங்குமிடம், வேலை மற்றும் அன்றாடத் தேவைகளை ஒன்றாகக் கொண்டுவருகிறது.",
+  "WhatsApp code": "WhatsApp குறியீடு",
   "Use your WhatsApp number.": "உங்கள் WhatsApp எண்ணைப் பயன்படுத்தவும்.",
   "Enter the code sent to your WhatsApp number.": "உங்கள் WhatsApp எண்ணிற்கு அனுப்பிய குறியீட்டை உள்ளிடவும்.",
   "This account can shop. Other services need separate member approval.": "இந்தக் கணக்கில் பொருட்கள் வாங்கலாம். மற்ற சேவைகளுக்குத் தனி உறுப்பினர் ஒப்புதல் தேவை.",

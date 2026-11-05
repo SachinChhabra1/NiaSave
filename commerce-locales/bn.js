@@ -1,6 +1,11 @@
 import memberUpdates from './member-updates/bn.js';
 // Bangla draft: Mesha strings are translated; remaining keys stay English until native-speaker review.
 export default {
+  "Phone": "ফোন",
+  "Change": "বদলান",
+  "Resend code": "আবার কোড পাঠান",
+  "NiaSave brings living, work and everyday essentials together.": "NiaSave থাকার জায়গা, কাজ এবং দৈনন্দিন প্রয়োজনীয় জিনিস একসঙ্গে আনে।",
+  "WhatsApp code": "WhatsApp কোড",
   "Use your WhatsApp number.": "আপনার WhatsApp নম্বর দিন।",
   "Enter the code sent to your WhatsApp number.": "আপনার WhatsApp নম্বরে পাঠানো কোড লিখুন।",
   "This account can shop. Other services need separate member approval.": "এই অ্যাকাউন্ট থেকে কেনাকাটা করা যাবে। অন্য পরিষেবার জন্য আলাদা সদস্য অনুমোদন প্রয়োজন।",

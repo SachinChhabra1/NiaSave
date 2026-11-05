@@ -88,7 +88,7 @@ async function journey(page, mode) {
   await page.locator('#sign-label').click();
   const login = page.locator('[data-action="login"]');
   if (await login.count()) await login.first().click();
-  if (mode !== 'signed-in') await expect(page.locator('#dialog')).toBeVisible();
+  if (mode !== 'signed-in') await expect(page.locator('#account-auth [data-auth-step], #dialog[open]')).toBeVisible();
   return sortRequests(seen);
 }
 

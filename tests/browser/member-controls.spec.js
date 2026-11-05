@@ -118,7 +118,7 @@ for (const width of [390, 1280]) {
     await page.goto('/#account');
     const account = page.getByRole('main');
     await expect(account).toContainText('Your account');
-    await account.getByRole('button', {name: 'Log in', exact: true}).click();
+    await expect(account.locator('[data-auth-step=phone]')).toBeVisible();
     await page.getByRole('button', {name: 'Already have a password? Log in', exact: true}).click();
 
     const form = page.locator('#login-form');

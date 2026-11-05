@@ -52,7 +52,7 @@ for (const width of [320, 390, 760, 761, 960, 1280, 1440]) {
     await nav.getByRole('button', { name: 'Earn', exact: true }).click();
     await expect(page.locator('#content h1')).toHaveText('Earn');
     await page.locator('#sign-label').click();
-    await expect(page.locator('#content h1')).toHaveText('Your account');
+    await expect(page.locator('#content h1')).toHaveText('A place to stay, work nearby, and essentials for less.');
     await nav.getByRole('button', { name: 'Send', exact: true }).click();
     await expect(page.locator('#content')).toContainText('Sending money has not started');
     await page.locator('#content').getByRole('button', { name: 'Log in', exact: true }).first().click();
@@ -117,7 +117,7 @@ for (const width of [390, 1280]) {
 
     await page.goto('/#account');
     const account = page.getByRole('main');
-    await expect(account).toContainText('Your account');
+    await expect(account).toContainText('A place to stay, work nearby, and essentials for less.');
     await expect(account.locator('[data-auth-step=phone]')).toBeVisible();
     await page.getByRole('button', {name: 'Already have a password? Log in', exact: true}).click();
 

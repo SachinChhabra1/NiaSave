@@ -52,12 +52,12 @@ test('member login handoff, sticky language, browser history and direct member e
   await page.addInitScript(() => localStorage.setItem('nia-language', JSON.stringify('en')));
   await page.goto('/');
   await page.getByRole('link', {name: 'Member login', exact: true}).click();
-  await expect(page.locator('#content h1')).toHaveText('Your account');
+  await expect(page.locator('#content h1')).toHaveText('A place to stay, work nearby, and essentials for less.');
   await expect(page).toHaveURL(/\/#account$/);
   await page.goBack();
   await expect(page.locator('.hero h1')).toBeVisible();
   await page.goForward();
-  await expect(page.locator('#content h1')).toHaveText('Your account');
+  await expect(page.locator('#content h1')).toHaveText('A place to stay, work nearby, and essentials for less.');
   await page.goto('/commerce.html#send');
   await expect(page.locator('#content')).toContainText('Sending money has not started');
 });

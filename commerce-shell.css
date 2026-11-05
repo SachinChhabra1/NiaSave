@@ -1146,3 +1146,181 @@ body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))):has(
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))):has(.member-shell) :is(.notice,.shell-offline-banner):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { background: var(--entry-wash); color: var(--entry-ink); border-color: var(--entry-line); }
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))):has(.member-shell) .header:has(#sign-label:is([aria-label="Account"],[aria-label="खाता"],[aria-label="Owner view"],[aria-label="संचालक दृश्य"])):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { --nia-blue: var(--entry-blue); }
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .family-photo-camera:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { color: var(--entry-blue); }
+
+/* PR #176: phone/code entry cards follow the v0 entry reference. */
+body.mesha-dark :is(#dialog, #content .account-card):has([data-auth-step="phone"], [data-auth-step="code"]) {
+  box-sizing: border-box;
+  width: min(480px, 100%);
+  padding: 32px;
+  border: 1px solid var(--entry-line);
+  border-radius: var(--entry-radius-card);
+  background: var(--entry-surface);
+  color: var(--entry-ink);
+}
+body.mesha-dark #content:has(.account-card.member-entry) {
+  padding-top: 24px;
+}
+body.mesha-dark #content .account-card.member-entry {
+  margin-inline: auto;
+  scroll-margin-top: 120px;
+}
+body.mesha-dark :is(#dialog, #content .account-card) :is([data-auth-step="phone"], [data-auth-step="code"]) {
+  min-width: 0;
+  gap: 20px;
+}
+body.mesha-dark :is(#dialog, #content .account-card) :is([data-auth-step="phone"], [data-auth-step="code"]) .auth-steps {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 4px 0 0;
+  padding: 0 0 24px;
+  border-bottom: 1px solid var(--entry-line);
+  list-style: none;
+}
+body.mesha-dark :is(#dialog, #content .account-card) :is([data-auth-step="phone"], [data-auth-step="code"]) .auth-steps li {
+  flex: 0 1 auto;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0;
+  border: 0;
+  color: var(--entry-muted);
+  font-size: 12px;
+  line-height: 1.3;
+  font-weight: 700;
+  white-space: nowrap;
+}
+body.mesha-dark :is(#dialog, #content .account-card) :is([data-auth-step="phone"], [data-auth-step="code"]) .auth-step-number {
+  box-sizing: border-box;
+  position: relative;
+  flex: 0 0 22px;
+  width: 22px;
+  height: 22px;
+  border: 1.5px solid var(--entry-line);
+  color: var(--entry-muted);
+  font-size: 11px;
+}
+body.mesha-dark :is(#dialog, #content .account-card) :is([data-auth-step="phone"], [data-auth-step="code"]) .auth-steps li[aria-current="step"] {
+  color: var(--entry-blue);
+}
+body.mesha-dark :is(#dialog, #content .account-card) :is([data-auth-step="phone"], [data-auth-step="code"]) .auth-steps :is(li[aria-current="step"], li:has(~ li[aria-current="step"])) .auth-step-number {
+  background: var(--entry-blue);
+  border-color: var(--entry-blue);
+  color: var(--entry-surface);
+}
+/* Completed steps precede aria-current; the existing numbers are aria-hidden. */
+body.mesha-dark :is(#dialog, #content .account-card) [data-auth-step="code"] .auth-steps li:has(~ li[aria-current="step"]) .auth-step-number {
+  font-size: 0;
+}
+body.mesha-dark :is(#dialog, #content .account-card) [data-auth-step="code"] .auth-steps li:has(~ li[aria-current="step"]) .auth-step-number::after {
+  content: '';
+  width: 9px;
+  height: 5px;
+  border-left: 2px solid var(--entry-surface);
+  border-bottom: 2px solid var(--entry-surface);
+  transform: translateY(-1px) rotate(-45deg);
+}
+body.mesha-dark :is(#dialog, #content .account-card) :is([data-auth-step="phone"], [data-auth-step="code"]) label {
+  gap: 9px;
+  color: var(--entry-ink);
+  font-size: 13px;
+}
+body.mesha-dark :is(#dialog, #content .account-card) :is([data-auth-step="phone"], [data-auth-step="code"]) input {
+  box-sizing: border-box;
+  height: 56px;
+  min-height: 56px;
+  padding: 0 14px;
+  border-color: var(--entry-input);
+  border-radius: var(--entry-radius-control);
+  background: var(--entry-surface);
+  color: var(--entry-ink);
+  font-size: 16px !important;
+}
+body.mesha-dark :is(#dialog, #content .account-card) :is([data-auth-step="phone"], [data-auth-step="code"]) input::placeholder {
+  color: var(--entry-muted);
+  font-size: 16px;
+  letter-spacing: 0;
+}
+body.mesha-dark :is(#dialog, #content .account-card) :is([data-auth-step="phone"], [data-auth-step="code"]) .phone-field {
+  border-color: var(--entry-input);
+  border-radius: var(--entry-radius-control);
+  background: var(--entry-surface);
+}
+body.mesha-dark :is(#dialog, #content .account-card) [data-auth-step="phone"] .phone-field input { height: 54px; min-height: 54px; border: 0; }
+body.mesha-dark :is(#dialog, #content .account-card) [data-auth-step="phone"] .phone-prefix {
+  align-self: stretch;
+  min-width: 54px;
+  padding: 0 12px;
+  border-color: var(--entry-line);
+  background: var(--entry-wash);
+  color: var(--entry-ink);
+  font-size: 16px !important;
+  font-weight: 700;
+}
+body.mesha-dark :is(#dialog, #content .account-card) :is([data-auth-step="phone"], [data-auth-step="code"]) button.primary {
+  height: 56px;
+  min-height: 56px;
+  padding: 0 16px;
+  border-color: var(--entry-blue);
+  border-radius: var(--entry-radius-control);
+  background: var(--entry-blue);
+  color: var(--entry-surface);
+  font-weight: 800;
+}
+body.mesha-dark :is(#dialog, #content .account-card) :is([data-auth-step="phone"], [data-auth-step="code"]) button.primary:hover:not(:disabled) { background: var(--entry-blue-hover); }
+body.mesha-dark :is(#dialog, #content .account-card) :is([data-auth-step="phone"], [data-auth-step="code"]) :is(button, input):focus-visible,
+body.mesha-dark :is(#dialog, #content .account-card) [data-auth-step="phone"] .phone-field:focus-within {
+  outline: 3px solid var(--entry-blue);
+  outline-offset: 3px;
+}
+body.mesha-dark :is(#dialog, #content .account-card) [data-auth-step="phone"] .phone-field input:focus-visible { outline: none; }
+@media (max-width: 600px) {
+  body.mesha-dark :is(#dialog, #content .account-card):has([data-auth-step="phone"], [data-auth-step="code"]) { padding: 24px 20px; }
+  body.mesha-dark :is(#dialog, #content .account-card) :is([data-auth-step="phone"], [data-auth-step="code"]) .auth-steps { gap: 3px; }
+  body.mesha-dark :is(#dialog, #content .account-card) :is([data-auth-step="phone"], [data-auth-step="code"]) .auth-steps li { gap: 3px; letter-spacing: -.3px; }
+}
+@media (max-width: 359px) {
+  body.mesha-dark :is(#dialog, #content .account-card) :is([data-auth-step="phone"], [data-auth-step="code"]) .auth-steps li:not([aria-current="step"]) > span:last-child {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+}
+/* Override the legacy member column's forced 16px type on compact steps. */
+body.mesha-dark :is(#dialog, .member-shell #content .account-card) [data-auth-step] .auth-steps :is(li, li > span:last-child) {
+  font-size: 12px !important;
+}
+body.mesha-dark :is(#dialog, .member-shell #content .account-card) [data-auth-step] .auth-steps .auth-step-number {
+  font-size: 11px !important;
+}
+body.mesha-dark :is(#dialog, .member-shell #content .account-card) [data-auth-step] .auth-steps li:has(~ [aria-current="step"]) .auth-step-number {
+  font-size: 0 !important;
+}
+body.mesha-dark :is(#dialog, #content .account-card) :is([data-auth-step="phone"], [data-auth-step="code"]) .auth-steps li,
+body.mesha-dark :is(#dialog, #content .account-card) :is([data-auth-step="phone"], [data-auth-step="code"]) .auth-steps li > span:last-child {
+  font-size: 12px !important;
+  overflow-wrap: normal;
+  word-break: normal;
+  white-space: nowrap;
+}
+body.mesha-dark :is(#dialog, #content .account-card) :is([data-auth-step="phone"], [data-auth-step="code"]) .auth-step-number { font-size: 11px !important; }
+body.mesha-dark :is(#dialog, #content .account-card) [data-auth-step="code"] .auth-steps li:has(~ li[aria-current="step"]) .auth-step-number { font-size: 0 !important; }
+
+body.mesha-dark .member-shell #content:has(.account-card.member-entry) {
+  padding: 24px 12px 112px;
+  background: var(--entry-paper);
+}
+body.mesha-dark #content .account-page:has(.member-entry) {
+  padding: 0;
+  margin: 0;
+  scroll-margin-top: 120px;
+}
+body.mesha-dark :is(#dialog, #content .account-card) [data-auth-step] .auth-steps li > span {
+  white-space: nowrap;
+  overflow-wrap: normal;
+  word-break: normal;
+}

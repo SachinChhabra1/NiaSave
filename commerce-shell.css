@@ -824,8 +824,11 @@ body.mesha-dark .member-shell #content .account-card.panel { border-radius: 6px;
 body.mesha-dark .member-shell #content .account-card button { box-shadow: none; }
 
 /* Central forms, origin/main 54d7a80: calm/v0-theme.css, kit.css and
-   theatre/form-phone.css. Scoped to member pages and the local ops view. */
-body:has(.member-shell), body:has(#commerce-ops#commerce-ops) {
+   theatre/form-phone.css. Scoped to member pages and the local ops view.
+   Entry cards and dialogs retain origin/main. Pause inherited theme overrides
+   while a dialog is open; zero-specificity exclusions protect their contents. */
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))):has(.member-shell):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)),
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))):has(#commerce-ops#commerce-ops):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
   --central-page: #ffffff;
   --central-card: #ffffff;
   --central-hover: #f4f7fa;
@@ -856,230 +859,188 @@ body:has(.member-shell), body:has(#commerce-ops#commerce-ops) {
   font-family: var(--nia-v2-font-sans);
   color-scheme: light;
 }
-body :is(.member-shell, #dialog#dialog, #commerce-ops#commerce-ops),
-body :is(.member-shell, #dialog#dialog, #commerce-ops#commerce-ops) * { box-sizing: border-box; }
-body.mesha-dark .member-shell,
-body.mesha-dark .member-shell #content#content,
-body .member-shell #content#content {
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) :is(.member-shell, #commerce-ops#commerce-ops):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)),
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) :is(.member-shell, #commerce-ops#commerce-ops) *:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { box-sizing: border-box; }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark .member-shell:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)),
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark .member-shell #content#content:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)),
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) .member-shell #content#content:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
   width: 100%; max-width: 960px; margin-inline: auto;
   background: var(--central-page); color: var(--central-ink);
 }
-body.mesha-dark .member-shell #content#content { padding: 24px 12px 112px; }
-body.mesha-dark #content#content :is(.page, .store-screen, .save-shop-canvas, .home-dashboard) {
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark .member-shell #content#content:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { padding: 24px 12px 112px; }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content :is(.page, .store-screen, .save-shop-canvas, .home-dashboard):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
   width: 100%; max-width: none; min-width: 0; margin: 0; padding: 0;
   background: var(--central-page); color: var(--central-ink);
   font-family: var(--nia-v2-font-sans);
 }
-body.mesha-dark #content#content :is(.store-head, .service-intro, .home-title) {
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content :is(.store-head, .service-intro, .home-title):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
   padding: 0; margin: 0 0 24px; background: transparent; color: var(--central-ink);
 }
-body :is(#content#content, #dialog#dialog, #commerce-ops#commerce-ops) :is(h1,h2,h3) {
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) :is(#content#content, #commerce-ops#commerce-ops) :is(h1,h2,h3):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
   color: var(--central-ink); font-family: var(--nia-v2-font-sans);
   font-weight: 600; text-transform: none; letter-spacing: -.02em;
   line-height: 1.25; overflow-wrap: anywhere;
 }
-body.mesha-dark #content#content h1 { font-size: 28px; margin: 0 0 12px; }
-body :is(#content#content, #dialog#dialog, #commerce-ops#commerce-ops) :is(h2,h3) { font-size: 20px; }
-body :is(#content#content, #dialog#dialog, #commerce-ops#commerce-ops) :is(p,li,small,label,legend) {
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content h1:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { font-size: 28px; margin: 0 0 12px; }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) :is(#content#content, #commerce-ops#commerce-ops) :is(h2,h3):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { font-size: 20px; }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) :is(#content#content, #commerce-ops#commerce-ops) :is(p,li,small,label,legend):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
   line-height: 1.5; overflow-wrap: anywhere;
 }
-body.mesha-dark #content#content :is(.panel, .order, .picture-state, .service-panel,
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content :is(.panel, .order, .picture-state, .service-panel,
   .home-savings, .home-attention-card, .home-talk, .shop-item, .shop-category,
-  .mesha-bag, .books-month, .receipt, .earn-how, .send-example, .nest-card),
-body #commerce-ops#commerce-ops :is(.panel, .order) {
+  .mesha-bag, .books-month, .receipt, .earn-how, .send-example, .nest-card):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)),
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) #commerce-ops#commerce-ops :is(.panel, .order):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
   min-width: 0; padding: 20px; border: 1px solid var(--central-border);
   border-radius: 8px; background: var(--central-card); color: var(--central-ink);
   box-shadow: none;
 }
-body.mesha-dark #content#content :is(.panel, .order, .service-panel, .books-transfer) { margin-block: 0 16px; }
-body :is(#content#content, #dialog#dialog, #commerce-ops#commerce-ops) .stack { gap: 16px; }
-body.mesha-dark #content#content :is(.muted, .eyebrow, .mesha-kicker, .pack, .shop-rank-note,
-  .shop-unit-note, .mesha-bag-note, .home-tile-line, .home-savings-kicker) { color: var(--central-muted); }
-body :is(#content#content, #dialog#dialog, #commerce-ops#commerce-ops) :is(.info, .pillar-state, .pause-note, .money-status) {
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content :is(.panel, .order, .service-panel, .books-transfer):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { margin-block: 0 16px; }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) :is(#content#content, #commerce-ops#commerce-ops) .stack:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { gap: 16px; }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content :is(.muted, .eyebrow, .mesha-kicker, .pack, .shop-rank-note,
+  .shop-unit-note, .mesha-bag-note, .home-tile-line, .home-savings-kicker):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { color: var(--central-muted); }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) :is(#content#content, #commerce-ops#commerce-ops) :is(.info, .pillar-state, .pause-note, .money-status):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
   padding: 12px 16px; border: 1px solid var(--central-border);
   border-radius: 8px; background: var(--central-raised); color: var(--central-ink);
   font-size: 14px; line-height: 1.5; box-shadow: none;
 }
-body :is(#content#content, #dialog#dialog, #commerce-ops#commerce-ops) :is(.badge, .money-honesty-chip) {
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) :is(#content#content, #commerce-ops#commerce-ops) :is(.badge, .money-honesty-chip):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
   background: var(--central-raised); border-color: var(--central-border);
   color: var(--central-deep); white-space: normal;
 }
-body :is(#content#content, #dialog#dialog, #commerce-ops#commerce-ops) form { min-width: 0; max-width: 640px; }
-body :is(#content#content, #dialog#dialog, #commerce-ops#commerce-ops) label {
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) :is(#content#content, #commerce-ops#commerce-ops) form:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { min-width: 0; max-width: 640px; }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) :is(#content#content, #commerce-ops#commerce-ops) label:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
   display: grid; gap: 8px; min-width: 0; color: var(--central-ink);
   font-size: 14px; font-weight: 400;
 }
-body :is(#content#content, #dialog#dialog, #commerce-ops#commerce-ops) :is(input,select,textarea):not([type="checkbox"],[type="radio"],[type="hidden"]) {
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) :is(#content#content, #commerce-ops#commerce-ops) :is(input,select,textarea):not([type="checkbox"],[type="radio"],[type="hidden"]):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
   width: 100%; min-width: 0; min-height: 48px; padding: 10px 12px;
   border: 1px solid var(--central-border); border-radius: 12px;
   background: var(--central-card); color: var(--central-ink);
   font: 400 16px/1.5 var(--nia-v2-font-sans); box-shadow: none;
 }
-body :is(#content#content, #dialog#dialog, #commerce-ops#commerce-ops) textarea { min-height: 112px; resize: vertical; }
-body :is(#content#content, #dialog#dialog, #commerce-ops#commerce-ops) input::placeholder { color: var(--central-muted); opacity: 1; }
-body :is(#content#content, #dialog#dialog, #commerce-ops#commerce-ops) label:has(> input:is([type="checkbox"],[type="radio"])) {
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) :is(#content#content, #commerce-ops#commerce-ops) textarea:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { min-height: 112px; resize: vertical; }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) :is(#content#content, #commerce-ops#commerce-ops) input:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *))::placeholder { color: var(--central-muted); opacity: 1; }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) :is(#content#content, #commerce-ops#commerce-ops) label:has(> input:is([type="checkbox"],[type="radio"])):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
   display: flex; align-items: flex-start; gap: 12px; min-height: 44px;
 }
-body :is(#content#content, #dialog#dialog, #commerce-ops#commerce-ops) input:is([type="checkbox"],[type="radio"]) {
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) :is(#content#content, #commerce-ops#commerce-ops) input:is([type="checkbox"],[type="radio"]):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
   width: 24px; height: 24px; min-height: 24px; flex: none; margin: 0;
   accent-color: var(--central-accent);
 }
-body :is(#content#content, #dialog#dialog, #commerce-ops#commerce-ops) fieldset {
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) :is(#content#content, #commerce-ops#commerce-ops) fieldset:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
   min-width: 0; padding: 16px; border: 1px solid var(--central-border); border-radius: 8px;
 }
-body :is(#content#content, #dialog#dialog, #commerce-ops#commerce-ops) button {
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) :is(#content#content, #commerce-ops#commerce-ops) button:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
   min-height: 44px; max-width: 100%; padding: 8px 16px;
   border: 1px solid var(--central-border); border-radius: 8px;
   background: var(--central-card); color: var(--central-accent);
   font: 600 14px/1.4 var(--nia-v2-font-sans); box-shadow: none;
   text-transform: none; letter-spacing: normal; white-space: normal;
 }
-body :is(#content#content, #dialog#dialog, #commerce-ops#commerce-ops) button:is(.primary,.add,.kit-save,.home-next-action,.mesha-pill-solid),
-body #commerce-ops#commerce-ops button[type="submit"] {
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) :is(#content#content, #commerce-ops#commerce-ops) button:is(.primary,.add,.kit-save,.home-next-action,.mesha-pill-solid):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)),
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) #commerce-ops#commerce-ops button[type="submit"]:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
   background: var(--central-accent); border-color: var(--central-accent); color: var(--central-card);
 }
-body :is(#content#content, #dialog#dialog, #commerce-ops#commerce-ops) button:hover:not(:disabled) { background: var(--central-hover); }
-body :is(#content#content, #dialog#dialog, #commerce-ops#commerce-ops) button.primary:hover:not(:disabled) {
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) :is(#content#content, #commerce-ops#commerce-ops) button:hover:not(:disabled):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { background: var(--central-hover); }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) :is(#content#content, #commerce-ops#commerce-ops) button.primary:hover:not(:disabled):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
   background: var(--central-deep); border-color: var(--central-deep); color: var(--central-card);
 }
-body :is(#content#content, #dialog#dialog, #commerce-ops#commerce-ops) button:disabled { opacity: .5; cursor: not-allowed; }
-body :is(#content#content, #dialog#dialog, #commerce-ops#commerce-ops) a { color: var(--central-accent); }
-body :is(#content#content, #dialog#dialog, #commerce-ops#commerce-ops) :is(button,a,input,select,textarea,summary):focus-visible {
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) :is(#content#content, #commerce-ops#commerce-ops) button:disabled:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { opacity: .5; cursor: not-allowed; }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) :is(#content#content, #commerce-ops#commerce-ops) a:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { color: var(--central-accent); }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) :is(#content#content, #commerce-ops#commerce-ops) :is(button,a,input,select,textarea,summary):focus-visible:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
   outline: 2px solid var(--central-accent); outline-offset: 2px;
 }
-body :is(#content#content, #dialog#dialog, #commerce-ops#commerce-ops) :is(.error-inline, #form-error):not(:empty) {
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) :is(#content#content, #commerce-ops#commerce-ops) :is(.error-inline, #form-error):not(:empty):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
   padding: 12px; border: 1px solid var(--central-danger); border-radius: 8px;
   background: var(--central-card); color: var(--central-danger); line-height: 1.5;
 }
-body.mesha-dark #dialog#dialog,
-body.mesha-dark #dialog#dialog:has(:is([data-auth-step], [data-action="entry-retry"])) {
-  width: calc(100% - 24px); max-width: 640px; max-height: calc(100dvh - 24px);
-  margin: auto; padding: 24px 20px; border: 1px solid var(--central-border);
-  border-radius: 8px; background: var(--central-card); color: var(--central-ink);
-  box-shadow: none;
-}
-body.mesha-dark #dialog#dialog::backdrop { background: rgb(19 40 59 / .35); }
-body.mesha-dark #dialog#dialog .dialog-head { padding: 0 0 20px; border-color: var(--central-border); }
-body.mesha-dark #dialog#dialog .dialog-head h2 { color: var(--central-ink); font-family: var(--nia-v2-font-sans); }
-body.mesha-dark #dialog#dialog #dialog#dialog-body { padding: 0; color: var(--central-ink); }
-body.mesha-dark :is(#dialog#dialog, .account-card) [data-auth-step] :is(p,label,.auth-phone) { color: var(--central-ink); }
-body.mesha-dark :is(#dialog#dialog, .account-card) [data-auth-step] .auth-steps li { color: var(--central-muted); }
-body.mesha-dark :is(#dialog#dialog, .account-card) [data-auth-step] .auth-step-number {
-  border-color: var(--central-border); background: var(--central-card); color: var(--central-muted);
-}
-body.mesha-dark :is(#dialog#dialog, .account-card) [data-auth-step] [aria-current="step"] { color: var(--central-accent); }
-body.mesha-dark :is(#dialog#dialog, .account-card) [data-auth-step] [aria-current="step"] .auth-step-number {
-  background: var(--central-accent); border-color: var(--central-accent); color: var(--central-card);
-}
-body.mesha-dark :is(#dialog#dialog, .account-card) [data-auth-step] .phone-field {
-  border-color: var(--central-border); border-radius: 12px; background: var(--central-card);
-}
-body.mesha-dark :is(#dialog#dialog, .account-card) [data-auth-step] .phone-field input { border: 0; background: transparent; }
-body.mesha-dark :is(#dialog#dialog, .account-card) [data-auth-step] .phone-prefix {
-  background: var(--central-raised); border-color: var(--central-border); color: var(--central-muted);
-}
-body.mesha-dark :is(#dialog#dialog, .account-card) [data-auth-step] button.primary {
-  background: var(--central-accent); border-color: var(--central-accent); color: var(--central-card);
-}
-body.mesha-dark :is(#dialog#dialog, .account-card) [data-auth-step] :is(.quiet,.auth-text-link) { color: var(--central-accent); }
-body.mesha-dark #content#content .account-page { max-width: 640px; margin-inline: auto; }
-body.mesha-dark #content#content .member-entry h2 { font-family: var(--nia-v2-font-sans); color: var(--central-ink); }
-body.mesha-dark #content#content :is(.home-tile, .family-photo-card) {
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .account-page:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { max-width: 640px; margin-inline: auto; }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content :is(.home-tile, .family-photo-card):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
   border: 1px solid var(--central-border); border-radius: 8px;
   background: var(--central-card); color: var(--central-ink); box-shadow: none;
 }
-body.mesha-dark #content#content .home-tile { padding: 0; text-align: left; }
-body.mesha-dark #content#content :is(.home-tile-copy,.home-savings-track) { background: var(--central-raised); }
-body.mesha-dark #content#content :is(.shop-category-grid,.shop-item-grid,.nest-grid,.service-grid) {
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .home-tile:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { padding: 0; text-align: left; }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content :is(.home-tile-copy,.home-savings-track):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { background: var(--central-raised); }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content :is(.shop-category-grid,.shop-item-grid,.nest-grid,.service-grid):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
   display: grid; grid-template-columns: minmax(0,1fr); gap: 16px;
 }
-body.mesha-dark #content#content .shop-category { text-align: left; }
-body.mesha-dark #content#content .shop-category-photo { border-radius: 8px; background: var(--central-raised); }
-body.mesha-dark #content#content .shop-category strong { color: var(--central-ink); }
-body.mesha-dark #content#content .shop-category small { color: var(--central-muted); }
-body.mesha-dark #content#content :is(.store-task-photo,.shop-item-photo) { border-radius: 8px; overflow: hidden; }
-body.mesha-dark #content#content .row { gap: 12px; flex-wrap: wrap; }
-body.mesha-dark #content#content .account-actions button { border-color: var(--central-border); }
-body.mesha-dark #content#content .footer { color: var(--central-muted); border-color: var(--central-border); }
-body .less-nav button[aria-current="page"] { background: var(--central-raised); }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .shop-category:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { text-align: left; }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .shop-category-photo:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { border-radius: 8px; background: var(--central-raised); }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .shop-category strong:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { color: var(--central-ink); }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .shop-category small:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { color: var(--central-muted); }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content :is(.store-task-photo,.shop-item-photo):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { border-radius: 8px; overflow: hidden; }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .row:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { gap: 12px; flex-wrap: wrap; }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .account-actions button:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { border-color: var(--central-border); }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .footer:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { color: var(--central-muted); border-color: var(--central-border); }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) .less-nav button[aria-current="page"]:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { background: var(--central-raised); }
 @media (min-width: 761px) {
-  body.mesha-dark .member-shell #content#content { padding: 32px 24px 120px; }
-  body.mesha-dark #content#content :is(.shop-category-grid,.shop-item-grid,.nest-grid,.service-grid) {
+  body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark .member-shell #content#content:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { padding: 32px 24px 120px; }
+  body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content :is(.shop-category-grid,.shop-item-grid,.nest-grid,.service-grid):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
     grid-template-columns: repeat(2,minmax(0,1fr));
   }
-  body.mesha-dark #content#content h1 { font-size: 32px; }
+  body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content h1:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { font-size: 32px; }
 }
 @media (max-width: 480px) {
-  body.mesha-dark #content#content h1 { font-size: 24px; }
-  body.mesha-dark #content#content :is(.panel,.order,.picture-state,.shop-category,.shop-item) { padding: 16px; }
-  body #commerce-ops#commerce-ops { padding: 20px 12px 80px; }
+  body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content h1:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { font-size: 24px; }
+  body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content :is(.panel,.order,.picture-state,.shop-category,.shop-item):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { padding: 16px; }
+  body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) #commerce-ops#commerce-ops:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { padding: 20px 12px 80px; }
 }
 /* Product choices stay compact; form fields keep a single reading column. */
-body.mesha-dark #content#content .shop-category-grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; }
-body.mesha-dark #content#content .shop-category { padding: 0; }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .shop-category-grid:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .shop-category:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { padding: 0; }
 @media (min-width: 761px) {
-  body.mesha-dark .member-shell, body.mesha-dark .member-shell #content#content { max-width: 440px; }
-  body.mesha-dark .member-shell #content#content { padding: 24px 12px 112px; }
-  body.mesha-dark #content#content :is(.nest-grid,.service-grid,.shop-item-grid) { grid-template-columns: minmax(0,1fr); }
+  body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark .member-shell:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)),
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark .member-shell #content#content:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { max-width: 440px; }
+  body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark .member-shell #content#content:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { padding: 24px 12px 112px; }
+  body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content :is(.nest-grid,.service-grid,.shop-item-grid):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { grid-template-columns: minmax(0,1fr); }
 }
 /* These pages inherit several older ID-based themes. The repeated ID above
    deliberately gives the current form recipe precedence without !important. */
-body:has(.member-shell) .header.header :is(button,.call-nia,.mesha-chip) {
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))):has(.member-shell) .header.header :is(button,.call-nia,.mesha-chip):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
   min-height: 44px; border: 1px solid var(--central-border); border-radius: 8px;
   background: var(--central-card); color: var(--central-accent); box-shadow: none;
   font-family: var(--nia-v2-font-sans);
 }
-body:has(.member-shell) .header.header .call-nia {
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))):has(.member-shell) .header.header .call-nia:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
   background: var(--central-accent); color: var(--central-card); border-color: var(--central-accent);
 }
-body:has(.member-shell) .header.header { box-shadow: none; }
-body.mesha-dark #content#content .home-savings :is(h2,p),
-body.mesha-dark #content#content .home-tile :is(strong,.home-tile-line) { color: var(--central-ink); }
-body.mesha-dark #content#content .home-savings .home-next-action {
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))):has(.member-shell) .header.header:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { box-shadow: none; }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .home-savings :is(h2,p):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)),
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .home-tile :is(strong,.home-tile-line):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { color: var(--central-ink); }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .home-savings .home-next-action:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
   background: var(--central-accent); color: var(--central-card); border-radius: 8px; min-height: 44px;
 }
-body.mesha-dark #content#content .home-savings-track { border-color: var(--central-border); }
-body.mesha-dark #content#content .home-tile::after { color: var(--central-accent); }
-body.mesha-dark #content#content .home-price-chip {
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .home-savings-track:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { border-color: var(--central-border); }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .home-tile:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *))::after { color: var(--central-accent); }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .home-price-chip:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
   background: var(--central-raised); color: var(--central-deep); border-color: var(--central-border);
 }
-body.mesha-dark #content#content .home-talk .home-call {
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .home-talk .home-call:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
   background: var(--central-accent); color: var(--central-card); border-color: var(--central-accent);
 }
-body.mesha-dark #content#content .home-talk-mark { background: var(--central-raised); color: var(--central-accent); }
-body.mesha-dark #content#content :is(.store-live,.store-earn,.store-send) { background: var(--central-page); }
-body.mesha-dark #content#content .plan-inputs { display: grid; grid-template-columns: minmax(0,1fr); gap: 16px; }
-body:has(.member-shell) #dialog#dialog .plan-inputs { display: grid; grid-template-columns: minmax(0,1fr); gap: 16px; }
-body:has(.member-shell) #dialog#dialog .auth-sheet-brand { color: var(--central-ink); font-family: var(--nia-v2-font-sans); }
-body:has(.member-shell) #dialog#dialog .auth-sheet-brand span { color: var(--central-accent); }
-body:has(.member-shell) .mesha-lang { background: var(--central-page); color: var(--central-ink); }
-body:has(.member-shell) .mesha-lang-sheet {
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .home-talk-mark:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { background: var(--central-raised); color: var(--central-accent); }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content :is(.store-live,.store-earn,.store-send):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { background: var(--central-page); }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .plan-inputs:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { display: grid; grid-template-columns: minmax(0,1fr); gap: 16px; }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))):has(.member-shell) .mesha-lang:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { background: var(--central-page); color: var(--central-ink); }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))):has(.member-shell) .mesha-lang-sheet:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
   background: var(--central-card); color: var(--central-ink); border-color: var(--central-border); border-radius: 8px;
 }
-body:has(.member-shell) .mesha-lang :is(h1,h2,.mesha-wordmark) { font-family: var(--nia-v2-font-sans); color: var(--central-ink); }
-body:has(.member-shell) header.header .header-tools .call-nia {
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))):has(.member-shell) .mesha-lang :is(h1,h2,.mesha-wordmark):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { font-family: var(--nia-v2-font-sans); color: var(--central-ink); }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))):has(.member-shell) header.header .header-tools .call-nia:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
   background: var(--central-accent)!important; border-radius: 8px!important;
 }
-body:has(.member-shell) header.header .header-tools .signin,
-body:has(.member-shell) header.header .header-tools .language-toggle { border-radius: 8px!important; }
-body.mesha-dark #content#content .home-tile-name::after { color: var(--central-accent); }
-body.mesha-dark #content#content .home-tile-price { background: var(--central-raised); color: var(--central-deep); }
-body.mesha-dark #content#content .store-live .nest-grid:empty { padding: 0; margin: 0; }
-body.mesha-dark :is(#dialog#dialog,.account-card) [data-auth-step] .phone-prefix {
-  flex: none; min-width: 60px; padding-inline: 12px; white-space: nowrap; font-size: 16px!important;
-}
-body.mesha-dark :is(#dialog#dialog,.account-card) [data-auth-step] input { font-size: 16px!important; }
-body.mesha-dark :is(#dialog#dialog,.account-card) [data-auth-step] .phone-field:focus-within {
-  outline: 2px solid var(--central-accent); outline-offset: 2px;
-}
-body.mesha-dark :is(#dialog#dialog,.account-card) [data-auth-step] .auth-steps li { border-color: var(--central-border); }
-body.mesha-dark .less-nav button[aria-current="page"] { background: var(--central-raised); color: var(--central-accent); }
-body.mesha-dark #content#content .store-screen .store-head { padding: 0!important; }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))):has(.member-shell) header.header .header-tools .signin:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)),
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))):has(.member-shell) header.header .header-tools .language-toggle:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { border-radius: 8px!important; }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .home-tile-name:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *))::after { color: var(--central-accent); }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .home-tile-price:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { background: var(--central-raised); color: var(--central-deep); }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .store-live .nest-grid:empty:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { padding: 0; margin: 0; }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark .less-nav button[aria-current="page"]:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { background: var(--central-raised); color: var(--central-accent); }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .store-screen .store-head:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { padding: 0!important; }
 /* Leave a clear break before the service footer on short/error Live screens. */
-body.mesha-dark #content#content .store-live .footer { margin-top: 48px; }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .store-live .footer:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { margin-top: 48px; }
 /* Optional legacy forms and insurance use the same card recipe. */
-body.mesha-dark #content#content :is(.save-collect-card,.send-plan-card,.service-grid > .store-nest) {
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content :is(.save-collect-card,.send-plan-card,.service-grid > .store-nest):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
   min-width: 0; padding: 20px; border: 1px solid var(--central-border);
   border-radius: 8px; background: var(--central-card); color: var(--central-ink); box-shadow: none;
 }
-body.mesha-dark #content#content #send-plan-form { display: grid; gap: 16px; }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content #send-plan-form:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { display: grid; gap: 16px; }

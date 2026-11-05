@@ -896,39 +896,53 @@ body.mesha-dark #content .account-entry-links button { font-size: 14px !importan
 body.mesha-dark .member-shell #content .account-card.panel { border-radius: 6px; box-shadow: none; }
 body.mesha-dark .member-shell #content .account-card button { box-shadow: none; }
 
-/* Central forms, origin/main 54d7a80: calm/v0-theme.css, kit.css and
-   theatre/form-phone.css. Scoped to member pages and the local ops view.
-   Entry cards and dialogs retain origin/main. Pause inherited theme overrides
-   while a dialog is open; zero-specificity exclusions protect their contents. */
+/* Signed-in inside pages use the shipped login paper/ink/blue system.
+   Entry tokens follow the v0 inside-page reference. Legacy theme variables map
+   here so real member and ops content keeps its behavior and labels.
+   Entry cards and dialogs retain their existing CSS byte for byte. */
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))):has(.member-shell):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)),
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))):has(#commerce-ops#commerce-ops):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
-  --central-page: #ffffff;
-  --central-card: #ffffff;
-  --central-hover: #f4f7fa;
-  --central-raised: #eef3f7;
-  --central-border: #dbe3ea;
-  --central-ink: #13283b;
-  --central-muted: #51616f;
-  --central-accent: #2c5880;
-  --central-deep: #1c3f5c;
-  --central-danger: #b42318;
-  --central-success: #1d7348;
-  --central-warning: #9a5b00;
-  --nia-v2-color-canvas: var(--central-page);
-  --nia-v2-color-surface: var(--central-card);
-  --nia-v2-color-line: var(--central-border);
-  --nia-v2-color-ink: var(--central-ink);
-  --nia-v2-color-muted: var(--central-muted);
-  --nia-v2-color-primary: var(--central-accent);
-  --nia-v2-color-live: var(--central-accent);
-  --nia-v2-color-shop: var(--central-success);
-  --nia-v2-color-reserved: var(--central-accent);
+  --entry-paper: #faf9f5;
+  --entry-surface: #ffffff;
+  --entry-ink: #172934;
+  --entry-muted: #53616a;
+  --entry-blue: #0758d6;
+  --entry-blue-hover: #0648af;
+  --entry-line: #dedfd9;
+  --entry-wash: #eaf0f8;
+  --entry-input: #87949d;
+  --entry-error-border: #ae3f2d;
+  --entry-error-bg: #fff0eb;
+  --entry-error-text: #8b2d20;
+  --entry-success: #36734c;
+  --entry-warning: #9a5b00;
+  --entry-radius-card: 6px;
+  --entry-radius-control: 4px;
+  --nia-canvas: var(--entry-paper);
+  --nia-band: var(--entry-paper);
+  --bg: var(--entry-paper);
+  --surface: var(--entry-surface);
+  --raised: var(--entry-wash);
+  --fg: var(--entry-ink);
+  --muted: var(--entry-muted);
+  --accent: var(--entry-blue);
+  --line: var(--entry-line);
+  --ring: var(--entry-blue);
+  --nia-v2-color-canvas: var(--entry-paper);
+  --nia-v2-color-surface: var(--entry-surface);
+  --nia-v2-color-line: var(--entry-line);
+  --nia-v2-color-ink: var(--entry-ink);
+  --nia-v2-color-muted: var(--entry-muted);
+  --nia-v2-color-primary: var(--entry-blue);
+  --nia-v2-color-live: var(--entry-blue);
+  --nia-v2-color-shop: var(--entry-blue);
+  --nia-v2-color-reserved: var(--entry-blue);
   --nia-v2-font-sans: 'IBM Plex Sans', system-ui, sans-serif;
-  --nia-v2-radius-card: 8px;
-  --nia-v2-radius-button: 8px;
-  --nia-blue: var(--central-accent);
-  background: var(--central-page);
-  color: var(--central-ink);
+  --nia-v2-radius-card: var(--entry-radius-card);
+  --nia-v2-radius-button: var(--entry-radius-control);
+  --nia-blue: var(--entry-blue);
+  background: var(--entry-paper);
+  color: var(--entry-ink);
   font-family: var(--nia-v2-font-sans);
   color-scheme: light;
 }
@@ -937,20 +951,20 @@ body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) :is(
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark .member-shell:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)),
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark .member-shell #content#content:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)),
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) .member-shell #content#content:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
-  width: 100%; max-width: 960px; margin-inline: auto;
-  background: var(--central-page); color: var(--central-ink);
+  width: 100%; max-width: 440px; margin-inline: auto;
+  background: var(--entry-paper); color: var(--entry-ink);
 }
-body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark .member-shell #content#content:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { padding: 24px 12px 112px; }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark .member-shell #content#content:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { padding: 44px 18px 112px; }
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content :is(.page, .store-screen, .save-shop-canvas, .home-dashboard):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
   width: 100%; max-width: none; min-width: 0; margin: 0; padding: 0;
-  background: var(--central-page); color: var(--central-ink);
+  background: var(--entry-paper); color: var(--entry-ink);
   font-family: var(--nia-v2-font-sans);
 }
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content :is(.store-head, .service-intro, .home-title):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
-  padding: 0; margin: 0 0 24px; background: transparent; color: var(--central-ink);
+  padding: 0; margin: 0 0 24px; background: transparent; color: var(--entry-ink);
 }
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) :is(#content#content, #commerce-ops#commerce-ops) :is(h1,h2,h3):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
-  color: var(--central-ink); font-family: var(--nia-v2-font-sans);
+  color: var(--entry-ink); font-family: var(--nia-v2-font-sans);
   font-weight: 600; text-transform: none; letter-spacing: -.02em;
   line-height: 1.25; overflow-wrap: anywhere;
 }
@@ -963,91 +977,92 @@ body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesh
   .home-savings, .home-attention-card, .home-talk, .shop-item, .shop-category,
   .mesha-bag, .books-month, .receipt, .earn-how, .send-example, .nest-card):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)),
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) #commerce-ops#commerce-ops :is(.panel, .order):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
-  min-width: 0; padding: 20px; border: 1px solid var(--central-border);
-  border-radius: 8px; background: var(--central-card); color: var(--central-ink);
+  min-width: 0; padding: 20px; border: 1px solid var(--entry-line);
+  border-radius: var(--entry-radius-card); background: var(--entry-surface); color: var(--entry-ink);
   box-shadow: none;
 }
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content :is(.panel, .order, .service-panel, .books-transfer):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { margin-block: 0 16px; }
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) :is(#content#content, #commerce-ops#commerce-ops) .stack:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { gap: 16px; }
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content :is(.muted, .eyebrow, .mesha-kicker, .pack, .shop-rank-note,
-  .shop-unit-note, .mesha-bag-note, .home-tile-line, .home-savings-kicker):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { color: var(--central-muted); }
+  .shop-unit-note, .mesha-bag-note, .home-tile-line, .home-savings-kicker):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { color: var(--entry-muted); }
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) :is(#content#content, #commerce-ops#commerce-ops) :is(.info, .pillar-state, .pause-note, .money-status):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
-  padding: 12px 16px; border: 1px solid var(--central-border);
-  border-radius: 8px; background: var(--central-raised); color: var(--central-ink);
+  padding: 12px 16px; border: 1px solid var(--entry-line);
+  border-radius: var(--entry-radius-card); background: var(--entry-wash); color: var(--entry-ink);
   font-size: 14px; line-height: 1.5; box-shadow: none;
 }
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) :is(#content#content, #commerce-ops#commerce-ops) :is(.badge, .money-honesty-chip):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
-  background: var(--central-raised); border-color: var(--central-border);
-  color: var(--central-deep); white-space: normal;
+  background: var(--entry-wash); border-color: var(--entry-line);
+  color: var(--entry-blue-hover); white-space: normal;
 }
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) :is(#content#content, #commerce-ops#commerce-ops) form:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { min-width: 0; max-width: 640px; }
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) :is(#content#content, #commerce-ops#commerce-ops) label:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
-  display: grid; gap: 8px; min-width: 0; color: var(--central-ink);
+  display: grid; gap: 8px; min-width: 0; color: var(--entry-ink);
   font-size: 14px; font-weight: 400;
 }
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) :is(#content#content, #commerce-ops#commerce-ops) :is(input,select,textarea):not([type="checkbox"],[type="radio"],[type="hidden"]):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
-  width: 100%; min-width: 0; min-height: 48px; padding: 10px 12px;
-  border: 1px solid var(--central-border); border-radius: 12px;
-  background: var(--central-card); color: var(--central-ink);
+  width: 100%; min-width: 0; min-height: 52px; padding: 14px;
+  border: 1px solid var(--entry-input); border-radius: var(--entry-radius-control);
+  background: var(--entry-surface); color: var(--entry-ink);
   font: 400 16px/1.5 var(--nia-v2-font-sans); box-shadow: none;
 }
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) :is(#content#content, #commerce-ops#commerce-ops) textarea:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { min-height: 112px; resize: vertical; }
-body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) :is(#content#content, #commerce-ops#commerce-ops) input:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *))::placeholder { color: var(--central-muted); opacity: 1; }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) :is(#content#content, #commerce-ops#commerce-ops) input:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *))::placeholder { color: var(--entry-muted); opacity: 1; }
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) :is(#content#content, #commerce-ops#commerce-ops) label:has(> input:is([type="checkbox"],[type="radio"])):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
   display: flex; align-items: flex-start; gap: 12px; min-height: 44px;
 }
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) :is(#content#content, #commerce-ops#commerce-ops) input:is([type="checkbox"],[type="radio"]):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
   width: 24px; height: 24px; min-height: 24px; flex: none; margin: 0;
-  accent-color: var(--central-accent);
+  accent-color: var(--entry-blue);
 }
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) :is(#content#content, #commerce-ops#commerce-ops) fieldset:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
-  min-width: 0; padding: 16px; border: 1px solid var(--central-border); border-radius: 8px;
+  min-width: 0; padding: 16px; border: 1px solid var(--entry-line); border-radius: var(--entry-radius-card);
 }
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) :is(#content#content, #commerce-ops#commerce-ops) button:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
   min-height: 44px; max-width: 100%; padding: 8px 16px;
-  border: 1px solid var(--central-border); border-radius: 8px;
-  background: var(--central-card); color: var(--central-accent);
+  border: 1px solid var(--entry-line); border-radius: var(--entry-radius-card);
+  background: var(--entry-surface); color: var(--entry-blue);
   font: 600 14px/1.4 var(--nia-v2-font-sans); box-shadow: none;
   text-transform: none; letter-spacing: normal; white-space: normal;
 }
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) :is(#content#content, #commerce-ops#commerce-ops) button:is(.primary,.add,.kit-save,.home-next-action,.mesha-pill-solid):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)),
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) #commerce-ops#commerce-ops button[type="submit"]:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
-  background: var(--central-accent); border-color: var(--central-accent); color: var(--central-card);
+  min-height: 56px; border-radius: var(--entry-radius-control);
+  background: var(--entry-blue); border-color: var(--entry-blue); color: var(--entry-surface);
 }
-body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) :is(#content#content, #commerce-ops#commerce-ops) button:hover:not(:disabled):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { background: var(--central-hover); }
-body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) :is(#content#content, #commerce-ops#commerce-ops) button.primary:hover:not(:disabled):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
-  background: var(--central-deep); border-color: var(--central-deep); color: var(--central-card);
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) :is(#content#content, #commerce-ops#commerce-ops) button:hover:not(:disabled):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { background: var(--entry-wash); }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) :is(#content#content, #commerce-ops#commerce-ops) button:is(.primary,.add,.kit-save,.home-next-action,.mesha-pill-solid,[type="submit"]):hover:not(:disabled):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
+  background: var(--entry-blue-hover); border-color: var(--entry-blue-hover); color: var(--entry-surface);
 }
-body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) :is(#content#content, #commerce-ops#commerce-ops) button:disabled:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { opacity: .5; cursor: not-allowed; }
-body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) :is(#content#content, #commerce-ops#commerce-ops) a:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { color: var(--central-accent); }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) :is(#content#content, #commerce-ops#commerce-ops) button:disabled:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { opacity: 1; background: var(--entry-wash); border-color: var(--entry-input); color: var(--entry-muted); cursor: not-allowed; }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) :is(#content#content, #commerce-ops#commerce-ops) a:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { color: var(--entry-blue); }
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) :is(#content#content, #commerce-ops#commerce-ops) :is(button,a,input,select,textarea,summary):focus-visible:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
-  outline: 2px solid var(--central-accent); outline-offset: 2px;
+  outline: 3px solid var(--entry-blue); outline-offset: 3px;
 }
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) :is(#content#content, #commerce-ops#commerce-ops) :is(.error-inline, #form-error):not(:empty):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
-  padding: 12px; border: 1px solid var(--central-danger); border-radius: 8px;
-  background: var(--central-card); color: var(--central-danger); line-height: 1.5;
+  padding: 12px; border: 1px solid var(--entry-error-border); border-radius: var(--entry-radius-card);
+  background: var(--entry-error-bg); color: var(--entry-error-text); line-height: 1.5;
 }
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .account-page:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { max-width: 640px; margin-inline: auto; }
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content :is(.home-tile, .family-photo-card):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
-  border: 1px solid var(--central-border); border-radius: 8px;
-  background: var(--central-card); color: var(--central-ink); box-shadow: none;
+  border: 1px solid var(--entry-line); border-radius: var(--entry-radius-card);
+  background: var(--entry-surface); color: var(--entry-ink); box-shadow: none;
 }
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .home-tile:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { padding: 0; text-align: left; }
-body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content :is(.home-tile-copy,.home-savings-track):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { background: var(--central-raised); }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content :is(.home-tile-copy,.home-savings-track):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { background: var(--entry-wash); }
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content :is(.shop-category-grid,.shop-item-grid,.nest-grid,.service-grid):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
   display: grid; grid-template-columns: minmax(0,1fr); gap: 16px;
 }
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .shop-category:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { text-align: left; }
-body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .shop-category-photo:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { border-radius: 8px; background: var(--central-raised); }
-body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .shop-category strong:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { color: var(--central-ink); }
-body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .shop-category small:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { color: var(--central-muted); }
-body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content :is(.store-task-photo,.shop-item-photo):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { border-radius: 8px; overflow: hidden; }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .shop-category-photo:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { border-radius: var(--entry-radius-card); background: var(--entry-wash); }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .shop-category strong:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { color: var(--entry-ink); }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .shop-category small:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { color: var(--entry-muted); }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content :is(.store-task-photo,.shop-item-photo):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { border-radius: var(--entry-radius-card); overflow: hidden; }
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .row:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { gap: 12px; flex-wrap: wrap; }
-body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .account-actions button:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { border-color: var(--central-border); }
-body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .footer:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { color: var(--central-muted); border-color: var(--central-border); }
-body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) .less-nav button[aria-current="page"]:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { background: var(--central-raised); }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .account-actions button:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { border-color: var(--entry-line); }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .footer:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { color: var(--entry-muted); border-color: var(--entry-line); }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) .less-nav button[aria-current="page"]:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { background: var(--entry-wash); }
 @media (min-width: 761px) {
-  body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark .member-shell #content#content:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { padding: 32px 24px 120px; }
+  body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark .member-shell #content#content:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { padding: 44px 18px 112px; }
   body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content :is(.shop-category-grid,.shop-item-grid,.nest-grid,.service-grid):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
     grid-template-columns: repeat(2,minmax(0,1fr));
   }
@@ -1064,56 +1079,70 @@ body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesh
 @media (min-width: 761px) {
   body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark .member-shell:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)),
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark .member-shell #content#content:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { max-width: 440px; }
-  body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark .member-shell #content#content:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { padding: 24px 12px 112px; }
+  body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark .member-shell #content#content:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { padding: 44px 18px 112px; }
   body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content :is(.nest-grid,.service-grid,.shop-item-grid):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { grid-template-columns: minmax(0,1fr); }
 }
 /* These pages inherit several older ID-based themes. The repeated ID above
    deliberately gives the current form recipe precedence without !important. */
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))):has(.member-shell) .header.header :is(button,.call-nia,.mesha-chip):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
-  min-height: 44px; border: 1px solid var(--central-border); border-radius: 8px;
-  background: var(--central-card); color: var(--central-accent); box-shadow: none;
+  min-height: 44px; border: 1px solid var(--entry-line); border-radius: var(--entry-radius-card);
+  background: var(--entry-surface); color: var(--entry-blue); box-shadow: none;
   font-family: var(--nia-v2-font-sans);
 }
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))):has(.member-shell) .header.header .call-nia:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
-  background: var(--central-accent); color: var(--central-card); border-color: var(--central-accent);
+  background: var(--entry-blue); color: var(--entry-surface); border-color: var(--entry-blue);
 }
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))):has(.member-shell) .header.header:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { box-shadow: none; }
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .home-savings :is(h2,p):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)),
-body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .home-tile :is(strong,.home-tile-line):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { color: var(--central-ink); }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .home-tile :is(strong,.home-tile-line):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { color: var(--entry-ink); }
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .home-savings .home-next-action:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
-  background: var(--central-accent); color: var(--central-card); border-radius: 8px; min-height: 44px;
+  background: var(--entry-blue); color: var(--entry-surface); border-radius: var(--entry-radius-control); min-height: 56px;
 }
-body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .home-savings-track:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { border-color: var(--central-border); }
-body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .home-tile:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *))::after { color: var(--central-accent); }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .home-savings-track:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { border-color: var(--entry-line); }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .home-tile:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *))::after { color: var(--entry-blue); }
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .home-price-chip:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
-  background: var(--central-raised); color: var(--central-deep); border-color: var(--central-border);
+  background: var(--entry-wash); color: var(--entry-blue-hover); border-color: var(--entry-line);
 }
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .home-talk .home-call:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
-  background: var(--central-accent); color: var(--central-card); border-color: var(--central-accent);
+  background: var(--entry-blue); color: var(--entry-surface); border-color: var(--entry-blue);
 }
-body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .home-talk-mark:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { background: var(--central-raised); color: var(--central-accent); }
-body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content :is(.store-live,.store-earn,.store-send):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { background: var(--central-page); }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .home-talk-mark:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { background: var(--entry-wash); color: var(--entry-blue); }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content :is(.store-live,.store-earn,.store-send):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { background: var(--entry-paper); }
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .plan-inputs:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { display: grid; grid-template-columns: minmax(0,1fr); gap: 16px; }
-body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))):has(.member-shell) .mesha-lang:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { background: var(--central-page); color: var(--central-ink); }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))):has(.member-shell) .mesha-lang:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { background: var(--entry-paper); color: var(--entry-ink); }
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))):has(.member-shell) .mesha-lang-sheet:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
-  background: var(--central-card); color: var(--central-ink); border-color: var(--central-border); border-radius: 8px;
+  background: var(--entry-surface); color: var(--entry-ink); border-color: var(--entry-line); border-radius: var(--entry-radius-card);
 }
-body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))):has(.member-shell) .mesha-lang :is(h1,h2,.mesha-wordmark):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { font-family: var(--nia-v2-font-sans); color: var(--central-ink); }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))):has(.member-shell) .mesha-lang :is(h1,h2,.mesha-wordmark):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { font-family: var(--nia-v2-font-sans); color: var(--entry-ink); }
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))):has(.member-shell) header.header .header-tools .call-nia:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
-  background: var(--central-accent)!important; border-radius: 8px!important;
+  background: var(--entry-blue)!important; border-radius: var(--entry-radius-card)!important;
 }
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))):has(.member-shell) header.header .header-tools .signin:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)),
-body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))):has(.member-shell) header.header .header-tools .language-toggle:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { border-radius: 8px!important; }
-body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .home-tile-name:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *))::after { color: var(--central-accent); }
-body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .home-tile-price:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { background: var(--central-raised); color: var(--central-deep); }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))):has(.member-shell) header.header .header-tools .language-toggle:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { border-radius: var(--entry-radius-card)!important; }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .home-tile-name:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *))::after { color: var(--entry-blue); }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .home-tile-price:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { background: var(--entry-wash); color: var(--entry-blue-hover); }
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .store-live .nest-grid:empty:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { padding: 0; margin: 0; }
-body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark .less-nav button[aria-current="page"]:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { background: var(--central-raised); color: var(--central-accent); }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark .less-nav button[aria-current="page"]:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { background: var(--entry-wash); color: var(--entry-blue); }
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .store-screen .store-head:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { padding: 0!important; }
 /* Leave a clear break before the service footer on short/error Live screens. */
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .store-live .footer:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { margin-top: 48px; }
 /* Optional legacy forms and insurance use the same card recipe. */
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content :is(.save-collect-card,.send-plan-card,.service-grid > .store-nest):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) {
-  min-width: 0; padding: 20px; border: 1px solid var(--central-border);
-  border-radius: 8px; background: var(--central-card); color: var(--central-ink); box-shadow: none;
+  min-width: 0; padding: 20px; border: 1px solid var(--entry-line);
+  border-radius: var(--entry-radius-card); background: var(--entry-surface); color: var(--entry-ink); box-shadow: none;
 }
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content #send-plan-form:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { display: grid; gap: 16px; }
+
+/* Adapt the v0 page hierarchy to the existing compact member shell. */
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content h1:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { font-family: Newsreader, Georgia, serif; font-weight: 500; font-size: 38px; line-height: 1.08; letter-spacing: -.04em; margin-bottom: 24px; }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .home-savings:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { background: var(--entry-wash); border-color: var(--entry-line); margin: 16px 0; padding: 20px; }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content :is(.home-savings, .send-plan-card, .mesha-bag) h2:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { font-family: Newsreader, Georgia, serif; font-weight: 500; font-size: 28px; }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content :is(.home-tile-copy, .home-tile-label):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { background: var(--entry-surface); }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))) :is(#content#content, #commerce-ops#commerce-ops) button:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { border-radius: var(--entry-radius-control); }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content button.quiet:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { background: transparent; border-color: transparent; color: var(--entry-blue); text-decoration: underline; text-underline-offset: 4px; }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))):has(.member-shell) header.header .header-tools :is(.signin,.language-toggle,.call-nia):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { border-radius: var(--entry-radius-control)!important; }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))):has(.member-shell) .header :is(button,a):focus-visible:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { outline: 3px solid var(--entry-blue); outline-offset: 3px; }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))):has(.member-shell) .less-nav button:focus-visible:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { outline: 3px solid var(--entry-blue); outline-offset: 3px; }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))):has(.member-shell) :is(.notice,.shell-offline-banner):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { background: var(--entry-wash); color: var(--entry-ink); border-color: var(--entry-line); }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))):has(.member-shell) .header:has(#sign-label:is([aria-label="Account"],[aria-label="खाता"],[aria-label="Owner view"],[aria-label="संचालक दृश्य"])):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { --nia-blue: var(--entry-blue); }
+body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .family-photo-camera:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { color: var(--entry-blue); }

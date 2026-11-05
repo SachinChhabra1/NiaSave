@@ -822,3 +822,264 @@ body.mesha-dark #content .account-entry-links button { font-size: 14px !importan
 
 body.mesha-dark .member-shell #content .account-card.panel { border-radius: 6px; box-shadow: none; }
 body.mesha-dark .member-shell #content .account-card button { box-shadow: none; }
+
+/* Central forms, origin/main 54d7a80: calm/v0-theme.css, kit.css and
+   theatre/form-phone.css. Scoped to member pages and the local ops view. */
+body:has(.member-shell), body:has(#commerce-ops#commerce-ops) {
+  --central-page: #ffffff;
+  --central-card: #ffffff;
+  --central-hover: #f4f7fa;
+  --central-raised: #eef3f7;
+  --central-border: #dbe3ea;
+  --central-ink: #13283b;
+  --central-muted: #51616f;
+  --central-accent: #2c5880;
+  --central-deep: #1c3f5c;
+  --central-danger: #b42318;
+  --central-success: #1d7348;
+  --central-warning: #9a5b00;
+  --nia-v2-color-canvas: var(--central-page);
+  --nia-v2-color-surface: var(--central-card);
+  --nia-v2-color-line: var(--central-border);
+  --nia-v2-color-ink: var(--central-ink);
+  --nia-v2-color-muted: var(--central-muted);
+  --nia-v2-color-primary: var(--central-accent);
+  --nia-v2-color-live: var(--central-accent);
+  --nia-v2-color-shop: var(--central-success);
+  --nia-v2-color-reserved: var(--central-accent);
+  --nia-v2-font-sans: 'IBM Plex Sans', system-ui, sans-serif;
+  --nia-v2-radius-card: 8px;
+  --nia-v2-radius-button: 8px;
+  --nia-blue: var(--central-accent);
+  background: var(--central-page);
+  color: var(--central-ink);
+  font-family: var(--nia-v2-font-sans);
+  color-scheme: light;
+}
+body :is(.member-shell, #dialog#dialog, #commerce-ops#commerce-ops),
+body :is(.member-shell, #dialog#dialog, #commerce-ops#commerce-ops) * { box-sizing: border-box; }
+body.mesha-dark .member-shell,
+body.mesha-dark .member-shell #content#content,
+body .member-shell #content#content {
+  width: 100%; max-width: 960px; margin-inline: auto;
+  background: var(--central-page); color: var(--central-ink);
+}
+body.mesha-dark .member-shell #content#content { padding: 24px 12px 112px; }
+body.mesha-dark #content#content :is(.page, .store-screen, .save-shop-canvas, .home-dashboard) {
+  width: 100%; max-width: none; min-width: 0; margin: 0; padding: 0;
+  background: var(--central-page); color: var(--central-ink);
+  font-family: var(--nia-v2-font-sans);
+}
+body.mesha-dark #content#content :is(.store-head, .service-intro, .home-title) {
+  padding: 0; margin: 0 0 24px; background: transparent; color: var(--central-ink);
+}
+body :is(#content#content, #dialog#dialog, #commerce-ops#commerce-ops) :is(h1,h2,h3) {
+  color: var(--central-ink); font-family: var(--nia-v2-font-sans);
+  font-weight: 600; text-transform: none; letter-spacing: -.02em;
+  line-height: 1.25; overflow-wrap: anywhere;
+}
+body.mesha-dark #content#content h1 { font-size: 28px; margin: 0 0 12px; }
+body :is(#content#content, #dialog#dialog, #commerce-ops#commerce-ops) :is(h2,h3) { font-size: 20px; }
+body :is(#content#content, #dialog#dialog, #commerce-ops#commerce-ops) :is(p,li,small,label,legend) {
+  line-height: 1.5; overflow-wrap: anywhere;
+}
+body.mesha-dark #content#content :is(.panel, .order, .picture-state, .service-panel,
+  .home-savings, .home-attention-card, .home-talk, .shop-item, .shop-category,
+  .mesha-bag, .books-month, .receipt, .earn-how, .send-example, .nest-card),
+body #commerce-ops#commerce-ops :is(.panel, .order) {
+  min-width: 0; padding: 20px; border: 1px solid var(--central-border);
+  border-radius: 8px; background: var(--central-card); color: var(--central-ink);
+  box-shadow: none;
+}
+body.mesha-dark #content#content :is(.panel, .order, .service-panel, .books-transfer) { margin-block: 0 16px; }
+body :is(#content#content, #dialog#dialog, #commerce-ops#commerce-ops) .stack { gap: 16px; }
+body.mesha-dark #content#content :is(.muted, .eyebrow, .mesha-kicker, .pack, .shop-rank-note,
+  .shop-unit-note, .mesha-bag-note, .home-tile-line, .home-savings-kicker) { color: var(--central-muted); }
+body :is(#content#content, #dialog#dialog, #commerce-ops#commerce-ops) :is(.info, .pillar-state, .pause-note, .money-status) {
+  padding: 12px 16px; border: 1px solid var(--central-border);
+  border-radius: 8px; background: var(--central-raised); color: var(--central-ink);
+  font-size: 14px; line-height: 1.5; box-shadow: none;
+}
+body :is(#content#content, #dialog#dialog, #commerce-ops#commerce-ops) :is(.badge, .money-honesty-chip) {
+  background: var(--central-raised); border-color: var(--central-border);
+  color: var(--central-deep); white-space: normal;
+}
+body :is(#content#content, #dialog#dialog, #commerce-ops#commerce-ops) form { min-width: 0; max-width: 640px; }
+body :is(#content#content, #dialog#dialog, #commerce-ops#commerce-ops) label {
+  display: grid; gap: 8px; min-width: 0; color: var(--central-ink);
+  font-size: 14px; font-weight: 400;
+}
+body :is(#content#content, #dialog#dialog, #commerce-ops#commerce-ops) :is(input,select,textarea):not([type="checkbox"],[type="radio"],[type="hidden"]) {
+  width: 100%; min-width: 0; min-height: 48px; padding: 10px 12px;
+  border: 1px solid var(--central-border); border-radius: 12px;
+  background: var(--central-card); color: var(--central-ink);
+  font: 400 16px/1.5 var(--nia-v2-font-sans); box-shadow: none;
+}
+body :is(#content#content, #dialog#dialog, #commerce-ops#commerce-ops) textarea { min-height: 112px; resize: vertical; }
+body :is(#content#content, #dialog#dialog, #commerce-ops#commerce-ops) input::placeholder { color: var(--central-muted); opacity: 1; }
+body :is(#content#content, #dialog#dialog, #commerce-ops#commerce-ops) label:has(> input:is([type="checkbox"],[type="radio"])) {
+  display: flex; align-items: flex-start; gap: 12px; min-height: 44px;
+}
+body :is(#content#content, #dialog#dialog, #commerce-ops#commerce-ops) input:is([type="checkbox"],[type="radio"]) {
+  width: 24px; height: 24px; min-height: 24px; flex: none; margin: 0;
+  accent-color: var(--central-accent);
+}
+body :is(#content#content, #dialog#dialog, #commerce-ops#commerce-ops) fieldset {
+  min-width: 0; padding: 16px; border: 1px solid var(--central-border); border-radius: 8px;
+}
+body :is(#content#content, #dialog#dialog, #commerce-ops#commerce-ops) button {
+  min-height: 44px; max-width: 100%; padding: 8px 16px;
+  border: 1px solid var(--central-border); border-radius: 8px;
+  background: var(--central-card); color: var(--central-accent);
+  font: 600 14px/1.4 var(--nia-v2-font-sans); box-shadow: none;
+  text-transform: none; letter-spacing: normal; white-space: normal;
+}
+body :is(#content#content, #dialog#dialog, #commerce-ops#commerce-ops) button:is(.primary,.add,.kit-save,.home-next-action,.mesha-pill-solid),
+body #commerce-ops#commerce-ops button[type="submit"] {
+  background: var(--central-accent); border-color: var(--central-accent); color: var(--central-card);
+}
+body :is(#content#content, #dialog#dialog, #commerce-ops#commerce-ops) button:hover:not(:disabled) { background: var(--central-hover); }
+body :is(#content#content, #dialog#dialog, #commerce-ops#commerce-ops) button.primary:hover:not(:disabled) {
+  background: var(--central-deep); border-color: var(--central-deep); color: var(--central-card);
+}
+body :is(#content#content, #dialog#dialog, #commerce-ops#commerce-ops) button:disabled { opacity: .5; cursor: not-allowed; }
+body :is(#content#content, #dialog#dialog, #commerce-ops#commerce-ops) a { color: var(--central-accent); }
+body :is(#content#content, #dialog#dialog, #commerce-ops#commerce-ops) :is(button,a,input,select,textarea,summary):focus-visible {
+  outline: 2px solid var(--central-accent); outline-offset: 2px;
+}
+body :is(#content#content, #dialog#dialog, #commerce-ops#commerce-ops) :is(.error-inline, #form-error):not(:empty) {
+  padding: 12px; border: 1px solid var(--central-danger); border-radius: 8px;
+  background: var(--central-card); color: var(--central-danger); line-height: 1.5;
+}
+body.mesha-dark #dialog#dialog,
+body.mesha-dark #dialog#dialog:has(:is([data-auth-step], [data-action="entry-retry"])) {
+  width: calc(100% - 24px); max-width: 640px; max-height: calc(100dvh - 24px);
+  margin: auto; padding: 24px 20px; border: 1px solid var(--central-border);
+  border-radius: 8px; background: var(--central-card); color: var(--central-ink);
+  box-shadow: none;
+}
+body.mesha-dark #dialog#dialog::backdrop { background: rgb(19 40 59 / .35); }
+body.mesha-dark #dialog#dialog .dialog-head { padding: 0 0 20px; border-color: var(--central-border); }
+body.mesha-dark #dialog#dialog .dialog-head h2 { color: var(--central-ink); font-family: var(--nia-v2-font-sans); }
+body.mesha-dark #dialog#dialog #dialog#dialog-body { padding: 0; color: var(--central-ink); }
+body.mesha-dark :is(#dialog#dialog, .account-card) [data-auth-step] :is(p,label,.auth-phone) { color: var(--central-ink); }
+body.mesha-dark :is(#dialog#dialog, .account-card) [data-auth-step] .auth-steps li { color: var(--central-muted); }
+body.mesha-dark :is(#dialog#dialog, .account-card) [data-auth-step] .auth-step-number {
+  border-color: var(--central-border); background: var(--central-card); color: var(--central-muted);
+}
+body.mesha-dark :is(#dialog#dialog, .account-card) [data-auth-step] [aria-current="step"] { color: var(--central-accent); }
+body.mesha-dark :is(#dialog#dialog, .account-card) [data-auth-step] [aria-current="step"] .auth-step-number {
+  background: var(--central-accent); border-color: var(--central-accent); color: var(--central-card);
+}
+body.mesha-dark :is(#dialog#dialog, .account-card) [data-auth-step] .phone-field {
+  border-color: var(--central-border); border-radius: 12px; background: var(--central-card);
+}
+body.mesha-dark :is(#dialog#dialog, .account-card) [data-auth-step] .phone-field input { border: 0; background: transparent; }
+body.mesha-dark :is(#dialog#dialog, .account-card) [data-auth-step] .phone-prefix {
+  background: var(--central-raised); border-color: var(--central-border); color: var(--central-muted);
+}
+body.mesha-dark :is(#dialog#dialog, .account-card) [data-auth-step] button.primary {
+  background: var(--central-accent); border-color: var(--central-accent); color: var(--central-card);
+}
+body.mesha-dark :is(#dialog#dialog, .account-card) [data-auth-step] :is(.quiet,.auth-text-link) { color: var(--central-accent); }
+body.mesha-dark #content#content .account-page { max-width: 640px; margin-inline: auto; }
+body.mesha-dark #content#content .member-entry h2 { font-family: var(--nia-v2-font-sans); color: var(--central-ink); }
+body.mesha-dark #content#content :is(.home-tile, .family-photo-card) {
+  border: 1px solid var(--central-border); border-radius: 8px;
+  background: var(--central-card); color: var(--central-ink); box-shadow: none;
+}
+body.mesha-dark #content#content .home-tile { padding: 0; text-align: left; }
+body.mesha-dark #content#content :is(.home-tile-copy,.home-savings-track) { background: var(--central-raised); }
+body.mesha-dark #content#content :is(.shop-category-grid,.shop-item-grid,.nest-grid,.service-grid) {
+  display: grid; grid-template-columns: minmax(0,1fr); gap: 16px;
+}
+body.mesha-dark #content#content .shop-category { text-align: left; }
+body.mesha-dark #content#content .shop-category-photo { border-radius: 8px; background: var(--central-raised); }
+body.mesha-dark #content#content .shop-category strong { color: var(--central-ink); }
+body.mesha-dark #content#content .shop-category small { color: var(--central-muted); }
+body.mesha-dark #content#content :is(.store-task-photo,.shop-item-photo) { border-radius: 8px; overflow: hidden; }
+body.mesha-dark #content#content .row { gap: 12px; flex-wrap: wrap; }
+body.mesha-dark #content#content .account-actions button { border-color: var(--central-border); }
+body.mesha-dark #content#content .footer { color: var(--central-muted); border-color: var(--central-border); }
+body .less-nav button[aria-current="page"] { background: var(--central-raised); }
+@media (min-width: 761px) {
+  body.mesha-dark .member-shell #content#content { padding: 32px 24px 120px; }
+  body.mesha-dark #content#content :is(.shop-category-grid,.shop-item-grid,.nest-grid,.service-grid) {
+    grid-template-columns: repeat(2,minmax(0,1fr));
+  }
+  body.mesha-dark #content#content h1 { font-size: 32px; }
+}
+@media (max-width: 480px) {
+  body.mesha-dark #content#content h1 { font-size: 24px; }
+  body.mesha-dark #content#content :is(.panel,.order,.picture-state,.shop-category,.shop-item) { padding: 16px; }
+  body #commerce-ops#commerce-ops { padding: 20px 12px 80px; }
+}
+/* Product choices stay compact; form fields keep a single reading column. */
+body.mesha-dark #content#content .shop-category-grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; }
+body.mesha-dark #content#content .shop-category { padding: 0; }
+@media (min-width: 761px) {
+  body.mesha-dark .member-shell, body.mesha-dark .member-shell #content#content { max-width: 440px; }
+  body.mesha-dark .member-shell #content#content { padding: 24px 12px 112px; }
+  body.mesha-dark #content#content :is(.nest-grid,.service-grid,.shop-item-grid) { grid-template-columns: minmax(0,1fr); }
+}
+/* These pages inherit several older ID-based themes. The repeated ID above
+   deliberately gives the current form recipe precedence without !important. */
+body:has(.member-shell) .header.header :is(button,.call-nia,.mesha-chip) {
+  min-height: 44px; border: 1px solid var(--central-border); border-radius: 8px;
+  background: var(--central-card); color: var(--central-accent); box-shadow: none;
+  font-family: var(--nia-v2-font-sans);
+}
+body:has(.member-shell) .header.header .call-nia {
+  background: var(--central-accent); color: var(--central-card); border-color: var(--central-accent);
+}
+body:has(.member-shell) .header.header { box-shadow: none; }
+body.mesha-dark #content#content .home-savings :is(h2,p),
+body.mesha-dark #content#content .home-tile :is(strong,.home-tile-line) { color: var(--central-ink); }
+body.mesha-dark #content#content .home-savings .home-next-action {
+  background: var(--central-accent); color: var(--central-card); border-radius: 8px; min-height: 44px;
+}
+body.mesha-dark #content#content .home-savings-track { border-color: var(--central-border); }
+body.mesha-dark #content#content .home-tile::after { color: var(--central-accent); }
+body.mesha-dark #content#content .home-price-chip {
+  background: var(--central-raised); color: var(--central-deep); border-color: var(--central-border);
+}
+body.mesha-dark #content#content .home-talk .home-call {
+  background: var(--central-accent); color: var(--central-card); border-color: var(--central-accent);
+}
+body.mesha-dark #content#content .home-talk-mark { background: var(--central-raised); color: var(--central-accent); }
+body.mesha-dark #content#content :is(.store-live,.store-earn,.store-send) { background: var(--central-page); }
+body.mesha-dark #content#content .plan-inputs { display: grid; grid-template-columns: minmax(0,1fr); gap: 16px; }
+body:has(.member-shell) #dialog#dialog .plan-inputs { display: grid; grid-template-columns: minmax(0,1fr); gap: 16px; }
+body:has(.member-shell) #dialog#dialog .auth-sheet-brand { color: var(--central-ink); font-family: var(--nia-v2-font-sans); }
+body:has(.member-shell) #dialog#dialog .auth-sheet-brand span { color: var(--central-accent); }
+body:has(.member-shell) .mesha-lang { background: var(--central-page); color: var(--central-ink); }
+body:has(.member-shell) .mesha-lang-sheet {
+  background: var(--central-card); color: var(--central-ink); border-color: var(--central-border); border-radius: 8px;
+}
+body:has(.member-shell) .mesha-lang :is(h1,h2,.mesha-wordmark) { font-family: var(--nia-v2-font-sans); color: var(--central-ink); }
+body:has(.member-shell) header.header .header-tools .call-nia {
+  background: var(--central-accent)!important; border-radius: 8px!important;
+}
+body:has(.member-shell) header.header .header-tools .signin,
+body:has(.member-shell) header.header .header-tools .language-toggle { border-radius: 8px!important; }
+body.mesha-dark #content#content .home-tile-name::after { color: var(--central-accent); }
+body.mesha-dark #content#content .home-tile-price { background: var(--central-raised); color: var(--central-deep); }
+body.mesha-dark #content#content .store-live .nest-grid:empty { padding: 0; margin: 0; }
+body.mesha-dark :is(#dialog#dialog,.account-card) [data-auth-step] .phone-prefix {
+  flex: none; min-width: 60px; padding-inline: 12px; white-space: nowrap; font-size: 16px!important;
+}
+body.mesha-dark :is(#dialog#dialog,.account-card) [data-auth-step] input { font-size: 16px!important; }
+body.mesha-dark :is(#dialog#dialog,.account-card) [data-auth-step] .phone-field:focus-within {
+  outline: 2px solid var(--central-accent); outline-offset: 2px;
+}
+body.mesha-dark :is(#dialog#dialog,.account-card) [data-auth-step] .auth-steps li { border-color: var(--central-border); }
+body.mesha-dark .less-nav button[aria-current="page"] { background: var(--central-raised); color: var(--central-accent); }
+body.mesha-dark #content#content .store-screen .store-head { padding: 0!important; }
+/* Leave a clear break before the service footer on short/error Live screens. */
+body.mesha-dark #content#content .store-live .footer { margin-top: 48px; }
+/* Optional legacy forms and insurance use the same card recipe. */
+body.mesha-dark #content#content :is(.save-collect-card,.send-plan-card,.service-grid > .store-nest) {
+  min-width: 0; padding: 20px; border: 1px solid var(--central-border);
+  border-radius: 8px; background: var(--central-card); color: var(--central-ink); box-shadow: none;
+}
+body.mesha-dark #content#content #send-plan-form { display: grid; gap: 16px; }

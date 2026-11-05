@@ -416,15 +416,92 @@ body.mesha-dark #content .earn-how-steps li{grid-template-columns:96px minmax(0,
 body.mesha-dark #content .earn-how-steps img{height:100%;min-height:112px;aspect-ratio:auto}
 body.mesha-dark #content .earn-how-caption{gap:8px;padding:12px;align-items:center}
 body.mesha-dark #content .earn-how-num{background:#0069ed;width:24px;height:24px}
-body.mesha-dark .member-shell #content .family-photo-empty{background:#f5f5f7;border-color:#d1d1d6;color:#50525b}
-body.mesha-dark .member-shell #content .family-photo-empty .family-photo-empty-word{color:#50525b}
-body.mesha-dark #content .family-photo-note{color:#50525b}
-body.mesha-dark #dialog{border:1px solid #dedee3;border-radius:16px;color:#171719;box-shadow:0 16px 64px #0003}
-body.mesha-dark #dialog::backdrop{background:#17171980}
-body.mesha-dark #dialog :is(h1,h2,h3){color:#171719;letter-spacing:-.025em}
-body.mesha-dark #dialog :is(input,select){border:1px solid #d1d1d6;border-radius:8px;background:#fff;color:#171719}
-body.mesha-dark #dialog :is(.info,.notice){background:#f5f5f7;border-color:#dedee3;color:#50525b;border-radius:10px}
-body.mesha-dark #dialog .primary{border-radius:10px}
+body.mesha-dark .member-shell #content .family-photo-empty{background:var(--entry-wash);border-color:var(--entry-line);color:var(--entry-muted)}
+body.mesha-dark .member-shell #content .family-photo-empty .family-photo-empty-word{color:var(--entry-ink)}
+body.mesha-dark #content .family-photo-note{color:var(--entry-muted)}
+/* Shared entry palette for every popup; auth keeps its dedicated layout below. */
+:root {
+  --entry-paper: #faf9f5;
+  --entry-surface: #ffffff;
+  --entry-ink: #172934;
+  --entry-muted: #53616a;
+  --entry-blue: #0758d6;
+  --entry-blue-hover: #0648af;
+  --entry-line: #dedfd9;
+  --entry-wash: #eaf0f8;
+  --entry-input: #87949d;
+  --entry-error-border: #ae3f2d;
+  --entry-error-bg: #fff0eb;
+  --entry-error-text: #8b2d20;
+  --entry-radius-card: 6px;
+  --entry-radius-control: 4px;
+}
+body:has(#dialog[open]) { overflow: hidden; }
+body:is(.mesha-dark, body) #dialog[open] {
+  --fg: var(--entry-ink);
+  --muted: var(--entry-muted);
+  --accent: var(--entry-blue);
+  --line: var(--entry-line);
+  --surface: var(--entry-surface);
+  --raised: var(--entry-wash);
+  border: 1px solid var(--entry-line);
+  border-radius: var(--entry-radius-card);
+  background: var(--entry-paper);
+  color: var(--entry-ink);
+  box-shadow: 0 24px 96px #17293433;
+  padding: 28px;
+  max-height: calc(100dvh - 48px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+body:is(.mesha-dark, body) #dialog[open]::backdrop { background: #172934a6; }
+body:is(.mesha-dark, body) #dialog[open] :is(h1,h2,h3,label,legend,.dialog-head h2) { color: var(--entry-ink); }
+body:is(.mesha-dark, body) #dialog[open] :is(p,small,.muted) { color: var(--entry-muted); }
+body:is(.mesha-dark, body) #dialog[open] label { gap: 8px; font-weight: 600; }
+body:is(.mesha-dark, body) #dialog[open] :is(input,select,textarea,.phone-field) {
+  border: 1px solid var(--entry-input);
+  border-radius: var(--entry-radius-control);
+  background: var(--entry-surface);
+  color: var(--entry-ink);
+}
+body:is(.mesha-dark, body) #dialog[open] input::placeholder, body:is(.mesha-dark, body) #dialog[open] textarea::placeholder { color: var(--entry-muted); opacity: 1; }
+body:is(.mesha-dark, body) #dialog[open] :is(input[type="checkbox"],input[type="radio"]) { accent-color: var(--entry-blue); }
+body:is(.mesha-dark, body) #dialog[open] .phone-prefix { background: var(--entry-surface); color: var(--entry-ink); border-color: var(--entry-line); }
+body:is(.mesha-dark, body) #dialog[open] button {
+  border-color: var(--entry-line);
+  border-radius: var(--entry-radius-control);
+  background: var(--entry-surface);
+  color: var(--entry-ink);
+  box-shadow: none;
+}
+body:is(.mesha-dark, body) #dialog[open] button:hover:not(:disabled) { background: var(--entry-wash); }
+body:is(.mesha-dark, body) #dialog[open] :is(button.primary,.mesha-pill-solid) {
+  min-height: 56px;
+  background: var(--entry-blue);
+  border-color: var(--entry-blue);
+  color: var(--entry-surface);
+}
+body:is(.mesha-dark, body) #dialog[open] :is(button.primary,.mesha-pill-solid):hover:not(:disabled) { background: var(--entry-blue-hover); border-color: var(--entry-blue-hover); }
+body:is(.mesha-dark, body) #dialog[open] :is(a,button.quiet) { color: var(--entry-blue); }
+body:is(.mesha-dark, body) #dialog[open] .icon-button { color: var(--entry-muted); background: transparent; }
+body:is(.mesha-dark, body) #dialog[open] :is(.info,.notice,[role="status"],.pause-note) {
+  background: var(--entry-wash);
+  border-color: var(--entry-line);
+  color: var(--entry-muted);
+  border-radius: var(--entry-radius-control);
+}
+body:is(.mesha-dark, body) #dialog[open] :is(.panel,.order,.receipt,.fulfillment-toggle) { border-color: var(--entry-line); border-radius: var(--entry-radius-card); }
+body:is(.mesha-dark, body) #dialog[open] :is(.error-inline,#form-error,.notice.error):not(:empty) {
+  padding: 14px 16px;
+  border: 1px solid var(--entry-error-border);
+  border-radius: var(--entry-radius-control);
+  background: var(--entry-error-bg);
+  color: var(--entry-error-text);
+}
+body:is(.mesha-dark, body) #dialog[open] :is(button,a,input,select,textarea,[role="button"],summary):focus-visible {
+  outline: 3px solid var(--entry-blue);
+  outline-offset: 3px;
+}
 body.mesha-dark .member-shell #content > .info{background:#f5f5f7;border-color:#dedee3;color:#50525b}
 body.mesha-dark :is(button,a,input,select,summary):focus-visible{outline:3px solid #0069ed;outline-offset:3px}
 
@@ -459,10 +536,6 @@ body.mesha-lang-open .mesha-lang-sheet h1{font-family:Georgia,'Times New Roman',
 body:has(#dialog[open] [data-auth-step]),
 body:has(#dialog[open] [data-action="entry-retry"]) { overflow: hidden; }
 body.mesha-dark #dialog:has(:is([data-auth-step], [data-action="entry-retry"])) {
-  --entry-ink: #172934;
-  --entry-muted: #53616a;
-  --entry-blue: #0758d6;
-  --entry-line: #dedfd9;
   width: 560px;
   max-width: calc(100vw - 48px);
   max-height: calc(100vh - 48px);
@@ -747,7 +820,7 @@ body.mesha-dark :is(#dialog, .account-card) [data-auth-step] input[type="checkbo
     margin: 0;
     padding: max(20px, env(safe-area-inset-top)) 24px max(24px, env(safe-area-inset-bottom));
     border: 0;
-    border-radius: 0;
+    border-radius: var(--entry-radius-card);
     box-shadow: none;
   }
   body.mesha-dark #dialog:has([data-auth-step]) .dialog-head { gap: 28px 16px; }
@@ -1073,3 +1146,169 @@ body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))):has(
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))):has(.member-shell) :is(.notice,.shell-offline-banner):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { background: var(--entry-wash); color: var(--entry-ink); border-color: var(--entry-line); }
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))):has(.member-shell) .header:has(#sign-label:is([aria-label="Account"],[aria-label="खाता"],[aria-label="Owner view"],[aria-label="संचालक दृश्य"])):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { --nia-blue: var(--entry-blue); }
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .family-photo-camera:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { color: var(--entry-blue); }
+
+/* PR #176: phone/code entry cards follow the v0 entry reference. */
+body.mesha-dark :is(#dialog, #content .account-card):has([data-auth-step="phone"], [data-auth-step="code"]) {
+  box-sizing: border-box;
+  width: min(480px, 100%);
+  padding: 32px;
+  border: 1px solid var(--entry-line);
+  border-radius: var(--entry-radius-card);
+  background: var(--entry-surface);
+  color: var(--entry-ink);
+}
+body.mesha-dark #content:has(.account-card.member-entry) {
+  padding-top: 24px;
+}
+body.mesha-dark #content .account-card.member-entry {
+  margin-inline: auto;
+  scroll-margin-top: 120px;
+}
+body.mesha-dark :is(#dialog, #content .account-card) :is([data-auth-step="phone"], [data-auth-step="code"]) {
+  min-width: 0;
+  gap: 20px;
+}
+body.mesha-dark :is(#dialog, #content .account-card) :is([data-auth-step="phone"], [data-auth-step="code"]) .auth-steps {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 4px 0 0;
+  padding: 0 0 24px;
+  border-bottom: 1px solid var(--entry-line);
+  list-style: none;
+}
+body.mesha-dark :is(#dialog, #content .account-card) :is([data-auth-step="phone"], [data-auth-step="code"]) .auth-steps li {
+  flex: 0 1 auto;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0;
+  border: 0;
+  color: var(--entry-muted);
+  font-size: 14px;
+  line-height: 1.3;
+  font-weight: 700;
+  white-space: nowrap;
+}
+body.mesha-dark :is(#dialog, #content .account-card) :is([data-auth-step="phone"], [data-auth-step="code"]) .auth-step-number {
+  box-sizing: border-box;
+  position: relative;
+  flex: 0 0 22px;
+  width: 22px;
+  height: 22px;
+  border: 1.5px solid var(--entry-line);
+  color: var(--entry-muted);
+  font-size: 14px;
+}
+body.mesha-dark :is(#dialog, #content .account-card) :is([data-auth-step="phone"], [data-auth-step="code"]) .auth-steps li[aria-current="step"] {
+  color: var(--entry-blue);
+}
+body.mesha-dark :is(#dialog, #content .account-card) :is([data-auth-step="phone"], [data-auth-step="code"]) .auth-steps :is(li[aria-current="step"], li:has(~ li[aria-current="step"])) .auth-step-number {
+  background: var(--entry-blue);
+  border-color: var(--entry-blue);
+  color: var(--entry-surface);
+}
+body.mesha-dark :is(#dialog, #content .account-card) :is([data-auth-step="phone"], [data-auth-step="code"]) label {
+  gap: 9px;
+  color: var(--entry-ink);
+  font-size: 13px;
+}
+body.mesha-dark :is(#dialog, #content .account-card) :is([data-auth-step="phone"], [data-auth-step="code"]) input {
+  box-sizing: border-box;
+  height: 56px;
+  min-height: 56px;
+  padding: 0 14px;
+  border-color: var(--entry-input);
+  border-radius: var(--entry-radius-control);
+  background: var(--entry-surface);
+  color: var(--entry-ink);
+  font-size: 16px !important;
+}
+body.mesha-dark :is(#dialog, #content .account-card) :is([data-auth-step="phone"], [data-auth-step="code"]) input::placeholder {
+  color: var(--entry-muted);
+  font-size: 16px;
+  letter-spacing: 0;
+}
+body.mesha-dark :is(#dialog, #content .account-card) :is([data-auth-step="phone"], [data-auth-step="code"]) .phone-field {
+  border-color: var(--entry-input);
+  border-radius: var(--entry-radius-control);
+  background: var(--entry-surface);
+}
+body.mesha-dark :is(#dialog, #content .account-card) [data-auth-step="phone"] .phone-field input { height: 54px; min-height: 54px; border: 0; }
+body.mesha-dark :is(#dialog, #content .account-card) [data-auth-step="phone"] .phone-prefix {
+  align-self: stretch;
+  min-width: 54px;
+  padding: 0 12px;
+  border-color: var(--entry-line);
+  background: var(--entry-wash);
+  color: var(--entry-ink);
+  font-size: 16px !important;
+  font-weight: 700;
+}
+body.mesha-dark :is(#dialog, #content .account-card) :is([data-auth-step="phone"], [data-auth-step="code"]) button.primary {
+  height: 56px;
+  min-height: 56px;
+  padding: 0 16px;
+  border-color: var(--entry-blue);
+  border-radius: var(--entry-radius-control);
+  background: var(--entry-blue);
+  color: var(--entry-surface);
+  font-weight: 800;
+}
+body.mesha-dark :is(#dialog, #content .account-card) :is([data-auth-step="phone"], [data-auth-step="code"]) button.primary:hover:not(:disabled) { background: var(--entry-blue-hover); }
+body.mesha-dark :is(#dialog, #content .account-card) :is([data-auth-step="phone"], [data-auth-step="code"]) :is(button, input):focus-visible,
+body.mesha-dark :is(#dialog, #content .account-card) [data-auth-step="phone"] .phone-field:focus-within {
+  outline: 3px solid var(--entry-blue);
+  outline-offset: 3px;
+}
+body.mesha-dark :is(#dialog, #content .account-card) [data-auth-step="phone"] .phone-field input:focus-visible { outline: none; }
+@media (max-width: 600px) {
+  body.mesha-dark :is(#dialog, #content .account-card):has([data-auth-step="phone"], [data-auth-step="code"]) { padding: 24px 20px; }
+  body.mesha-dark :is(#dialog, #content .account-card) :is([data-auth-step="phone"], [data-auth-step="code"]) .auth-steps { gap: 3px; }
+  body.mesha-dark :is(#dialog, #content .account-card) :is([data-auth-step="phone"], [data-auth-step="code"]) .auth-steps li { gap: 3px; letter-spacing: -.3px; }
+}
+@media (max-width: 760px) {
+  body.mesha-dark :is(#dialog, #content .account-card) :is([data-auth-step="phone"], [data-auth-step="code"]) .auth-steps li:not([aria-current="step"]) > span:last-child {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    padding: 0;
+    margin: -1px;
+    border: 0;
+    clip: rect(0, 0, 0, 0);
+    clip-path: inset(50%);
+  }
+}
+/* Keep step labels and numbers on the 14px product type scale. */
+body.mesha-dark :is(#dialog, .member-shell #content .account-card) [data-auth-step] .auth-steps :is(li, li > span:last-child) {
+  font-size: 14px !important;
+}
+body.mesha-dark :is(#dialog, .member-shell #content .account-card) [data-auth-step] .auth-steps .auth-step-number {
+  font-size: 14px !important;
+}
+body.mesha-dark :is(#dialog, #content .account-card) :is([data-auth-step="phone"], [data-auth-step="code"]) .auth-steps li,
+body.mesha-dark :is(#dialog, #content .account-card) :is([data-auth-step="phone"], [data-auth-step="code"]) .auth-steps li > span:last-child {
+  font-size: 14px !important;
+  overflow-wrap: normal;
+  word-break: normal;
+  white-space: nowrap;
+}
+body.mesha-dark :is(#dialog, #content .account-card) :is([data-auth-step="phone"], [data-auth-step="code"]) .auth-step-number { font-size: 14px !important; }
+
+body.mesha-dark .member-shell #content:has(.account-card.member-entry) {
+  padding: 24px 12px 112px;
+  background: var(--entry-paper);
+}
+body.mesha-dark #content .account-page:has(.member-entry) {
+  padding: 0;
+  margin: 0;
+  scroll-margin-top: 120px;
+}
+body.mesha-dark :is(#dialog, #content .account-card) [data-auth-step] .auth-steps li > span {
+  white-space: nowrap;
+  overflow-wrap: normal;
+  word-break: normal;
+}

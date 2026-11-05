@@ -822,3 +822,106 @@ body.mesha-dark #content .account-entry-links button { font-size: 14px !importan
 
 body.mesha-dark .member-shell #content .account-card.panel { border-radius: 6px; box-shadow: none; }
 body.mesha-dark .member-shell #content .account-card button { box-shadow: none; }
+
+/* Approved service overview and the shared member login card. */
+body.mesha-dark:has(#content > .login-services-page) { background: #f6f5f1; }
+body.mesha-dark #content:has(.login-services-page) { max-width: 1440px; width: 100%; margin-inline: auto; }
+body.mesha-dark .login-services-page { max-width: none; padding: 20px 16px 28px; color: #172934; font-family: var(--nia-v2-font-sans); }
+.login-services { display: grid; gap: 14px; }
+body.mesha-dark .login-services header h1 { margin: 0 0 10px; font-family: Georgia, serif; font-size: 30px; font-weight: 400; line-height: 1.15; letter-spacing: 0; color: #172934; }
+.login-services header p { margin: 0; color: #53616a; font-size: 15px; }
+.login-services-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; }
+.login-service-card { overflow: hidden; border: 1px solid #dedfd9; border-radius: 14px; background: var(--nia-v2-color-surface, #fff); }
+.login-service-card img, .login-service-icon { display: block; width: 100%; height: 110px; object-fit: cover; }
+.login-service-icon { display: grid; place-items: center; background: #e8f0fd; color: #0758d6; font-size: 40px; }
+.login-service-copy { padding: 8px 10px 10px; }
+.login-service-copy > span { font-size: 10px; font-weight: 700; letter-spacing: .06em; color: #0758d6; }
+body.mesha-dark .login-service-copy h2 { margin: 0; color: #172934; font: 700 15px/1.4 var(--nia-v2-font-sans); }
+.login-service-copy p { margin: 2px 0 0; color: #53616a; font-size: 12.5px; line-height: 1.4; }
+body.mesha-dark .login-services .member-entry { margin: 0; padding: 20px; border-radius: 18px; background: #fff; gap: 12px; box-shadow: 0 6px 24px #0000000f; min-width: 0; }
+body.mesha-dark .login-services .member-entry h2 { font-size: 22px; }
+body.mesha-dark :is(.member-entry,#dialog) [data-auth-step] { gap: 12px; }
+body.mesha-dark :is(.member-entry,#dialog) [data-auth-step] .auth-intro { display: none; }
+body.mesha-dark :is(.member-entry,#dialog) [data-auth-step] .auth-steps { margin: 0; gap: 14px; }
+body.mesha-dark :is(.member-entry,#dialog) [data-auth-step] .auth-step-number { width: 22px; height: 22px; min-width: 22px; font-size: 12px; }
+body.mesha-dark :is(.member-entry,#dialog) [data-auth-step] input { border-radius: 10px; min-height: 46px; padding: 12px; }
+body.mesha-dark :is(.member-entry,#dialog) [data-auth-step] .phone-field { border-radius: 10px; }
+body.mesha-dark :is(.member-entry,#dialog) [data-auth-step] button.primary { min-height: 48px; border-radius: 12px; padding: 12px; }
+body.mesha-dark :is(.member-entry,#dialog) .account-entry-links { gap: 18px; padding-top: 8px; margin-top: 8px; }
+body.mesha-dark :is(.member-entry,#dialog) .account-entry-links button { border: 0; background: transparent; color: #53616a; font-size: 12.5px; padding: 8px 0; min-height: 44px; }
+body.mesha-dark #dialog:has([data-auth-step]) { width: 420px; padding: 24px; border-radius: 18px; background: #fff; }
+body.mesha-dark #dialog:has([data-auth-step]) .dialog-head { gap: 8px; margin-bottom: 12px; }
+body.mesha-dark #dialog:has([data-auth-step]) .auth-sheet-brand { display: none; }
+@media(min-width:1000px) {
+  body.mesha-dark .login-services-page { padding: 24px 40px 48px; }
+  .login-services { grid-template-columns: minmax(0,1fr) 420px; column-gap: 40px; align-items: start; }
+  .login-services > header,.login-services-grid { grid-column: 1; }
+  body.mesha-dark .login-services header h1 { font-size: 46px; }
+  .login-services-grid { grid-template-columns: repeat(4,minmax(0,1fr)); gap: 14px; }
+  .login-service-card img,.login-service-icon { height: 170px; }
+  body.mesha-dark .login-services .member-entry { grid-column: 2; grid-row: 1/span 3; position: sticky; top: 20px; }
+}
+@media(max-width:999px) {
+  body.mesha-dark #dialog:has([data-auth-step]) { inset: auto 0 0; margin: 0; width: 100%; max-width: 100%; height: auto; max-height: 90dvh; border-radius: 20px 20px 0 0; padding: 20px 20px max(20px,env(safe-area-inset-bottom)); }
+}
+/* Override the shell's global type floors within this compact overview. */
+body.mesha-dark .member-shell #content .login-services header h1 { font-size: 30px !important; }
+body.mesha-dark .member-shell #content .login-service-copy h2 { font-size: 15px !important; }
+body.mesha-dark .member-shell #content .login-service-copy p { font-size: 12.5px !important; }
+body.mesha-dark .member-shell #content .login-service-copy > span { font-size: 10px !important; }
+body.mesha-dark .member-shell #content .login-service-icon { font-size: 40px !important; }
+body.mesha-dark .member-shell #content .login-services .member-entry h2 { font-size: 22px !important; }
+body.mesha-dark :is(#content .member-entry,#dialog) [data-auth-step] input,
+body.mesha-dark :is(#content .member-entry,#dialog) [data-auth-step] .phone-prefix { font-size: 16px !important; }
+body.mesha-dark :is(#content .member-entry,#dialog) [data-auth-step] .auth-step-number { font-size: 14px !important; }
+body.mesha-dark :is(#content .member-entry,#dialog) [data-auth-step] .auth-steps li { font-size: 14px !important; }
+@media(min-width:1000px) { body.mesha-dark .member-shell #content .login-services header h1 { font-size: 46px !important; } }
+/* The overview scrolls as a document, with room for both desktop columns. */
+body.mesha-dark:has(#content > .login-services-page) { height: auto; overflow: auto; }
+body.mesha-dark:has(#content > .login-services-page) .member-shell { max-width: 1440px; height: auto; overflow: visible; background: transparent; }
+body.mesha-dark .member-shell #content:has(.login-services-page) { height: auto; max-height: none; overflow: visible; max-width: 1440px; flex: none; padding-bottom: 90px; }
+body.mesha-dark:has(#content > .login-services-page) .header { max-width: 1440px !important; }
+body.mesha-dark .member-shell #content .login-services header h1 { font-family: Georgia,serif; font-weight: 400; }
+body.mesha-dark .member-shell #content .login-services .account-card { border-radius: 18px; }
+body.mesha-dark :is(#content .member-entry,#dialog) [data-auth-step] .auth-steps { display: flex; justify-content: flex-start; border: 0; padding: 0; }
+body.mesha-dark :is(#content .member-entry,#dialog) [data-auth-step] .auth-steps li { flex: none; border: 0; padding: 0; }
+body.mesha-dark #dialog:has([data-auth-step]) .dialog-head { grid-template-columns: minmax(0,1fr) 44px; }
+body.mesha-dark #dialog:has([data-auth-step]) .dialog-head h2 { grid-column: 1; grid-row: 1; }
+body.mesha-dark #dialog:has([data-auth-step]) .dialog-head button { grid-column: 2; grid-row: 1; }
+@media(min-width:1000px) {
+  body.mesha-dark:has(#content > .login-services-page) .header { grid-template-columns: auto 1fr auto; padding-inline: 40px; }
+  body.mesha-dark:has(#content > .login-services-page) .header .header-tools { display: flex; gap: 16px; align-items: center; grid-column: 3; }
+  body.mesha-dark:has(#content > .login-services-page) .header .header-actions { display: flex; gap: 10px; }
+  body.mesha-dark:has(#content > .login-services-page) .shell-heading { grid-column: 2; grid-row: 1; justify-content: center; }
+  body.mesha-dark:has(#content > .login-services-page) .less-nav { left: 50%; }
+}
+/* A presentation layer keeps the same services visible behind the auth sheet. */
+#auth-services-backdrop { display: none; }
+body:has(#dialog[open] [data-auth-step]) #auth-services-backdrop { display: block; position: fixed; inset: 0; z-index: 50; overflow: hidden; background: #f6f5f1; }
+.auth-services-brand { display: flex; align-items: center; gap: 10px; padding: 18px 40px; color: #0758d6; font: 700 20px var(--nia-v2-font-sans); }
+#auth-services-backdrop .login-services { grid-template-columns: 1fr; }
+#auth-services-backdrop .login-services-page { max-width: 1440px; margin: auto; }
+#auth-services-backdrop .login-services header h1 { font-size: 46px; }
+#auth-services-backdrop .login-service-copy h2 { font-size: 15px; }
+#auth-services-backdrop .footer { display: none; }
+@media(max-width:999px) {
+  .auth-services-brand { padding: 14px 16px; }
+  #auth-services-backdrop .login-services header h1 { font-size: 30px; }
+}
+
+body:has(#dialog[open] [data-auth-step]) { height: 100dvh; overflow: hidden; }
+body.mesha-dark #content .member-entry .entry-language { display: none; }
+/* Keep the overview header compact; help remains beside Owner access. */
+body.mesha-dark:has(#content > .login-services-page) .header .shell-heading,
+body.mesha-dark:has(#content > .login-services-page) .header #sign-label,
+body.mesha-dark:has(#content > .login-services-page) .header .call-nia { display: none; }
+body.mesha-dark:has(#content > .login-services-page) .header .header-actions { display: flex; }
+body.mesha-dark:has(#content > .login-services-page) .header { min-height: 72px; }
+/* Background copy follows the member shell's readable 14/16/24 type scale. */
+#auth-services-backdrop .auth-services-brand { font-size: 24px; }
+#auth-services-backdrop .login-services header p { font-size: 16px; }
+#auth-services-backdrop .login-service-copy h2 { font-size: 16px; }
+#auth-services-backdrop .login-service-copy p,
+#auth-services-backdrop .login-service-copy > span { font-size: 14px; }
+#auth-services-backdrop .login-service-icon { font-size: 24px; }
+@media(max-width:999px) { #auth-services-backdrop .login-services header h1 { font-size: 24px; } }

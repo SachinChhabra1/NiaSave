@@ -96,10 +96,7 @@ async function visibleFacts(page) {
       if (style.clip && style.clip !== 'auto') continue;
       const rect = el.getBoundingClientRect();
       if (rect.width < 2 || rect.height < 2) continue;
-      // Entry step labels use the compact v0 scale; body text keeps its guard.
-      const entryStep = !!el.closest(':is(#dialog, .account-card) [data-auth-step] .auth-steps');
-      const stepDot = entryStep && el.classList.contains('auth-step-number');
-      facts.push({text, size: parseFloat(style.fontSize), entryStep, stepDot});
+      facts.push({text, size: parseFloat(style.fontSize)});
     }
     return facts;
   });
@@ -214,9 +211,9 @@ for (const width of [360, 390]) {
           const seen = new Set();
           for (const fact of facts) {
             sizes.add(Math.round(fact.size));
-            if (!(fact.entryStep ? [fact.stepDot ? 11 : 12] : [14, 16, 24]).includes(Math.round(fact.size))) oddType.push(Math.round(fact.size) + 'px ' + fact.text.slice(0, 70));
+            if (![14, 16, 24].includes(Math.round(fact.size))) oddType.push(Math.round(fact.size) + 'px ' + fact.text.slice(0, 70));
             if (violationKind(fact.text) && !copyCovers(fact.text, baseline.entries, name)) banned.push(file + ': ' + fact.text);
-            if (fact.size < (fact.entryStep ? (fact.stepDot ? 11 : 12) : 14)) {
+            if (fact.size < 14) {
               const key = file + '\0' + fact.text;
               if (!seen.has(key)) {
                 seen.add(key);
@@ -238,9 +235,9 @@ for (const width of [360, 390]) {
             const openFacts = await visibleFacts(page);
             for (const fact of openFacts) {
               sizes.add(Math.round(fact.size));
-            if (!(fact.entryStep ? [fact.stepDot ? 11 : 12] : [14, 16, 24]).includes(Math.round(fact.size))) oddType.push(Math.round(fact.size) + 'px ' + fact.text.slice(0, 70));
+            if (![14, 16, 24].includes(Math.round(fact.size))) oddType.push(Math.round(fact.size) + 'px ' + fact.text.slice(0, 70));
               if (violationKind(fact.text) && !copyCovers(fact.text, baseline.entries, name)) banned.push(openFile + ': ' + fact.text);
-              if (fact.size < (fact.entryStep ? (fact.stepDot ? 11 : 12) : 14)) {
+              if (fact.size < 14) {
                 const key = openFile + '\0' + fact.text;
                 if (!seen.has(key)) {
                   seen.add(key);
@@ -263,9 +260,9 @@ for (const width of [360, 390]) {
             const openFile = file + '/login';
             for (const fact of await visibleFacts(page)) {
               sizes.add(Math.round(fact.size));
-            if (!(fact.entryStep ? [fact.stepDot ? 11 : 12] : [14, 16, 24]).includes(Math.round(fact.size))) oddType.push(Math.round(fact.size) + 'px ' + fact.text.slice(0, 70));
+            if (![14, 16, 24].includes(Math.round(fact.size))) oddType.push(Math.round(fact.size) + 'px ' + fact.text.slice(0, 70));
               if (violationKind(fact.text) && !copyCovers(fact.text, baseline.entries, name)) banned.push(openFile + ': ' + fact.text);
-              if (fact.size < (fact.entryStep ? (fact.stepDot ? 11 : 12) : 14)) fonts.push({kind: 'font', file: openFile, screen: name, string: fact.text, size: fact.size});
+              if (fact.size < 14) fonts.push({kind: 'font', file: openFile, screen: name, string: fact.text, size: fact.size});
             }
             for (const label of await visibleDates(page)) dates.push({kind: 'date', file: openFile, screen: name, string: label});
             await page.locator('#dialog [data-action="close"]').click();
@@ -278,9 +275,9 @@ for (const width of [360, 390]) {
               const openFile = file + '/books-add';
               for (const fact of await visibleFacts(page)) {
                 sizes.add(Math.round(fact.size));
-            if (!(fact.entryStep ? [fact.stepDot ? 11 : 12] : [14, 16, 24]).includes(Math.round(fact.size))) oddType.push(Math.round(fact.size) + 'px ' + fact.text.slice(0, 70));
+            if (![14, 16, 24].includes(Math.round(fact.size))) oddType.push(Math.round(fact.size) + 'px ' + fact.text.slice(0, 70));
                 if (violationKind(fact.text) && !copyCovers(fact.text, baseline.entries, name)) banned.push(openFile + ': ' + fact.text);
-                if (fact.size < (fact.entryStep ? (fact.stepDot ? 11 : 12) : 14)) fonts.push({kind: 'font', file: openFile, screen: name, string: fact.text, size: fact.size});
+                if (fact.size < 14) fonts.push({kind: 'font', file: openFile, screen: name, string: fact.text, size: fact.size});
               }
               for (const label of await visibleDates(page)) dates.push({kind: 'date', file: openFile, screen: name, string: label});
               const dialogText = await page.locator('#dialog').innerText();

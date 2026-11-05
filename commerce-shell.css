@@ -416,15 +416,92 @@ body.mesha-dark #content .earn-how-steps li{grid-template-columns:96px minmax(0,
 body.mesha-dark #content .earn-how-steps img{height:100%;min-height:112px;aspect-ratio:auto}
 body.mesha-dark #content .earn-how-caption{gap:8px;padding:12px;align-items:center}
 body.mesha-dark #content .earn-how-num{background:#0069ed;width:24px;height:24px}
-body.mesha-dark .member-shell #content .family-photo-empty{background:#f5f5f7;border-color:#d1d1d6;color:#50525b}
-body.mesha-dark .member-shell #content .family-photo-empty .family-photo-empty-word{color:#50525b}
-body.mesha-dark #content .family-photo-note{color:#50525b}
-body.mesha-dark #dialog{border:1px solid #dedee3;border-radius:16px;color:#171719;box-shadow:0 16px 64px #0003}
-body.mesha-dark #dialog::backdrop{background:#17171980}
-body.mesha-dark #dialog :is(h1,h2,h3){color:#171719;letter-spacing:-.025em}
-body.mesha-dark #dialog :is(input,select){border:1px solid #d1d1d6;border-radius:8px;background:#fff;color:#171719}
-body.mesha-dark #dialog :is(.info,.notice){background:#f5f5f7;border-color:#dedee3;color:#50525b;border-radius:10px}
-body.mesha-dark #dialog .primary{border-radius:10px}
+body.mesha-dark .member-shell #content .family-photo-empty{background:var(--entry-wash);border-color:var(--entry-line);color:var(--entry-muted)}
+body.mesha-dark .member-shell #content .family-photo-empty .family-photo-empty-word{color:var(--entry-ink)}
+body.mesha-dark #content .family-photo-note{color:var(--entry-muted)}
+/* Shared entry palette for every popup; auth keeps its dedicated layout below. */
+:root {
+  --entry-paper: #faf9f5;
+  --entry-surface: #ffffff;
+  --entry-ink: #172934;
+  --entry-muted: #53616a;
+  --entry-blue: #0758d6;
+  --entry-blue-hover: #0648af;
+  --entry-line: #dedfd9;
+  --entry-wash: #eaf0f8;
+  --entry-input: #87949d;
+  --entry-error-border: #ae3f2d;
+  --entry-error-bg: #fff0eb;
+  --entry-error-text: #8b2d20;
+  --entry-radius-card: 6px;
+  --entry-radius-control: 4px;
+}
+body:has(#dialog[open]) { overflow: hidden; }
+body:is(.mesha-dark, body) #dialog[open] {
+  --fg: var(--entry-ink);
+  --muted: var(--entry-muted);
+  --accent: var(--entry-blue);
+  --line: var(--entry-line);
+  --surface: var(--entry-surface);
+  --raised: var(--entry-wash);
+  border: 1px solid var(--entry-line);
+  border-radius: var(--entry-radius-card);
+  background: var(--entry-paper);
+  color: var(--entry-ink);
+  box-shadow: 0 24px 96px #17293433;
+  padding: 28px;
+  max-height: calc(100dvh - 48px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+body:is(.mesha-dark, body) #dialog[open]::backdrop { background: #172934a6; }
+body:is(.mesha-dark, body) #dialog[open] :is(h1,h2,h3,label,legend,.dialog-head h2) { color: var(--entry-ink); }
+body:is(.mesha-dark, body) #dialog[open] :is(p,small,.muted) { color: var(--entry-muted); }
+body:is(.mesha-dark, body) #dialog[open] label { gap: 8px; font-weight: 600; }
+body:is(.mesha-dark, body) #dialog[open] :is(input,select,textarea,.phone-field) {
+  border: 1px solid var(--entry-input);
+  border-radius: var(--entry-radius-control);
+  background: var(--entry-surface);
+  color: var(--entry-ink);
+}
+body:is(.mesha-dark, body) #dialog[open] input::placeholder, body:is(.mesha-dark, body) #dialog[open] textarea::placeholder { color: var(--entry-muted); opacity: 1; }
+body:is(.mesha-dark, body) #dialog[open] :is(input[type="checkbox"],input[type="radio"]) { accent-color: var(--entry-blue); }
+body:is(.mesha-dark, body) #dialog[open] .phone-prefix { background: var(--entry-surface); color: var(--entry-ink); border-color: var(--entry-line); }
+body:is(.mesha-dark, body) #dialog[open] button {
+  border-color: var(--entry-line);
+  border-radius: var(--entry-radius-control);
+  background: var(--entry-surface);
+  color: var(--entry-ink);
+  box-shadow: none;
+}
+body:is(.mesha-dark, body) #dialog[open] button:hover:not(:disabled) { background: var(--entry-wash); }
+body:is(.mesha-dark, body) #dialog[open] :is(button.primary,.mesha-pill-solid) {
+  min-height: 56px;
+  background: var(--entry-blue);
+  border-color: var(--entry-blue);
+  color: var(--entry-surface);
+}
+body:is(.mesha-dark, body) #dialog[open] :is(button.primary,.mesha-pill-solid):hover:not(:disabled) { background: var(--entry-blue-hover); border-color: var(--entry-blue-hover); }
+body:is(.mesha-dark, body) #dialog[open] :is(a,button.quiet) { color: var(--entry-blue); }
+body:is(.mesha-dark, body) #dialog[open] .icon-button { color: var(--entry-muted); background: transparent; }
+body:is(.mesha-dark, body) #dialog[open] :is(.info,.notice,[role="status"],.pause-note) {
+  background: var(--entry-wash);
+  border-color: var(--entry-line);
+  color: var(--entry-muted);
+  border-radius: var(--entry-radius-control);
+}
+body:is(.mesha-dark, body) #dialog[open] :is(.panel,.order,.receipt,.fulfillment-toggle) { border-color: var(--entry-line); border-radius: var(--entry-radius-card); }
+body:is(.mesha-dark, body) #dialog[open] :is(.error-inline,#form-error,.notice.error):not(:empty) {
+  padding: 14px 16px;
+  border: 1px solid var(--entry-error-border);
+  border-radius: var(--entry-radius-control);
+  background: var(--entry-error-bg);
+  color: var(--entry-error-text);
+}
+body:is(.mesha-dark, body) #dialog[open] :is(button,a,input,select,textarea,[role="button"],summary):focus-visible {
+  outline: 3px solid var(--entry-blue);
+  outline-offset: 3px;
+}
 body.mesha-dark .member-shell #content > .info{background:#f5f5f7;border-color:#dedee3;color:#50525b}
 body.mesha-dark :is(button,a,input,select,summary):focus-visible{outline:3px solid #0069ed;outline-offset:3px}
 
@@ -459,10 +536,6 @@ body.mesha-lang-open .mesha-lang-sheet h1{font-family:Georgia,'Times New Roman',
 body:has(#dialog[open] [data-auth-step]),
 body:has(#dialog[open] [data-action="entry-retry"]) { overflow: hidden; }
 body.mesha-dark #dialog:has(:is([data-auth-step], [data-action="entry-retry"])) {
-  --entry-ink: #172934;
-  --entry-muted: #53616a;
-  --entry-blue: #0758d6;
-  --entry-line: #dedfd9;
   width: 560px;
   max-width: calc(100vw - 48px);
   max-height: calc(100vh - 48px);
@@ -747,7 +820,7 @@ body.mesha-dark :is(#dialog, .account-card) [data-auth-step] input[type="checkbo
     margin: 0;
     padding: max(20px, env(safe-area-inset-top)) 24px max(24px, env(safe-area-inset-bottom));
     border: 0;
-    border-radius: 0;
+    border-radius: var(--entry-radius-card);
     box-shadow: none;
   }
   body.mesha-dark #dialog:has([data-auth-step]) .dialog-head { gap: 28px 16px; }

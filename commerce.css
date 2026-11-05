@@ -643,9 +643,9 @@ body.mesha-dark .member-shell #content .home-tile img{
 body.mesha-dark .member-shell #content .home-tile-send img{object-position:center top}
 body.mesha-dark .member-shell #content .family-photo-card{
   margin:0 16px 12px;
-  background:#fff;
-  border:1px solid #E4E9F0;
-  border-radius:16px;
+  background:var(--entry-surface);
+  border:1px solid var(--entry-line);
+  border-radius:var(--entry-radius-card);
   overflow:hidden;
 }
 body.mesha-dark .member-shell #content .family-photo-picture{display:block;width:100%}
@@ -674,24 +674,24 @@ body.mesha-dark .member-shell #content .family-photo-empty{
   box-sizing:border-box;
   width:100%;
   padding:8px;
-  background:#EEF3F8;
-  border:1.5px dashed #6A8CAE;
+  background:var(--entry-wash);
+  border:1.5px dashed var(--entry-line);
   text-align:center;
 }
 body.mesha-dark .member-shell #content .home-tile .family-photo-empty{height:118px}
 body.mesha-dark .member-shell #content .family-photo-card .family-photo-empty{aspect-ratio:4/3}
-body.mesha-dark .member-shell #content .family-photo-camera{width:32px;height:32px;color:#2C5880;flex:none}
+body.mesha-dark .member-shell #content .family-photo-camera{width:32px;height:32px;color:var(--entry-blue);flex:none}
 body.mesha-dark .member-shell #content .family-photo-empty .family-photo-empty-word{
   font-size:14px!important;
   font-weight:600;
   line-height:1.3;
-  color:#1C3F5C;
+  color:var(--entry-ink);
 }
 body.mesha-dark .member-shell #content .family-photo-copy{padding:12px}
-body.mesha-dark .member-shell #content .family-photo-copy h2{margin:0 0 8px;line-height:1.2;color:#101828}
-body.mesha-dark .member-shell #content .family-photo-stay{margin:0;line-height:1.4;color:#1C3F5C}
+body.mesha-dark .member-shell #content .family-photo-copy h2{margin:0 0 8px;line-height:1.2;color:var(--entry-ink)}
+body.mesha-dark .member-shell #content .family-photo-stay{margin:0;line-height:1.4;color:var(--entry-muted)}
 body.mesha-dark .member-shell #content .family-photo-actions + .family-photo-stay{margin-top:8px}
-body.mesha-dark .member-shell #content .family-photo-error{margin:8px 0 0;line-height:1.4;color:#1C3F5C}
+body.mesha-dark .member-shell #content .family-photo-error{margin:8px 0 0;line-height:1.4;color:var(--entry-error-text)}
 body.mesha-dark .member-shell #content .family-photo-actions{display:flex;flex-wrap:wrap;gap:8px}
 body.mesha-dark .member-shell #content .family-photo-change,
 body.mesha-dark .member-shell #content .family-photo-remove{
@@ -702,14 +702,14 @@ body.mesha-dark .member-shell #content .family-photo-remove{
   min-height:48px;
   margin:0;
   padding:10px 16px;
-  border:1px solid #E4E9F0;
-  border-radius:8px;
-  background:#fff;
-  color:#1C3F5C;
+  border:1px solid var(--entry-line);
+  border-radius:var(--entry-radius-control);
+  background:var(--entry-surface);
+  color:var(--entry-muted);
   cursor:pointer;
   position:relative;
 }
-body.mesha-dark .member-shell #content .family-photo-change .icon{width:20px;height:20px;flex:none;color:#2C5880}
+body.mesha-dark .member-shell #content .family-photo-change .icon{width:20px;height:20px;flex:none;color:var(--entry-blue)}
 body.mesha-dark .member-shell #content .home-tile-copy{
   display:flex;
   flex-direction:column;
@@ -835,3 +835,16 @@ body.mesha-dark .member-shell #content .home-savings p.home-savings-value{color:
 /* The shared shell fixes body text at 16px; this is the home’s display value. */
 body.mesha-dark .member-shell #content .home-savings p.home-savings-value{font-size:24px!important}
 body.mesha-dark .member-shell #content .home-savings .home-next-action{margin-top:4px;margin-bottom:16px}
+
+/* Keep the family card on entry tokens above the inherited member theme. */
+body.mesha-dark .member-shell #content#content .family-photo-card {
+  background: var(--entry-surface);
+  border-color: var(--entry-line);
+  border-radius: var(--entry-radius-card);
+  color: var(--entry-ink);
+}
+body.mesha-dark .member-shell #content .family-photo-actions button { color: var(--entry-blue); }
+body.mesha-dark .member-shell #content :is(.family-photo-pick,.family-photo-change,.family-photo-remove):focus-visible {
+  outline: 3px solid var(--entry-blue);
+  outline-offset: 3px;
+}

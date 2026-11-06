@@ -1073,3 +1073,11 @@ body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))):has(
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))):has(.member-shell) :is(.notice,.shell-offline-banner):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { background: var(--entry-wash); color: var(--entry-ink); border-color: var(--entry-line); }
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))):has(.member-shell) .header:has(#sign-label:is([aria-label="Account"],[aria-label="खाता"],[aria-label="Owner view"],[aria-label="संचालक दृश्य"])):where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { --nia-blue: var(--entry-blue); }
 body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesha-dark #content#content .family-photo-camera:where(:not(.member-entry):not(.member-entry *):not(#dialog):not(#dialog *):not([data-auth-step]):not([data-auth-step] *)) { color: var(--entry-blue); }
+
+/* Keep the existing Home money-plan action clear of the rail on narrow phones. */
+@media(max-width:360px){
+  body.mesha-dark #content#content .home-savings p.home-savings-value{margin-block:4px}
+}
+
+/* Bag steppers use the light member palette, including their legacy white spans. */
+.member-shell .mesha-bag-copy .stepper span{color:var(--entry-ink)}

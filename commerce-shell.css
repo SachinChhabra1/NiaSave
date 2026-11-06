@@ -1089,3 +1089,25 @@ body.mesha-dark:has(.account-card.member-entry) .account-call-nia svg { display:
 body.mesha-dark:has(.account-card.member-entry) .member-shell { display:flex;flex-direction:column; }
 body.mesha-dark:has(.account-card.member-entry) .member-shell #content#content { box-sizing:border-box;min-height:calc(100svh - 64px);order:0; }
 body.mesha-dark:has(.account-card.member-entry) #less-nav { position:static;transform:none;order:2;width:100%;margin:0; }
+
+/* Compact member chrome; the phone-entry treatment above remains separate. */
+body.mesha-dark:not(:has(.account-card.member-entry)) header.header.header {
+  display:flex;flex-wrap:nowrap;gap:8px;min-height:60px;padding:8px 12px;
+}
+body.mesha-dark:not(:has(.account-card.member-entry)) header.header .brand { gap:4px;flex:1; }
+body.mesha-dark:not(:has(.account-card.member-entry)) header.header .brand-logo { width:28px;height:28px; }
+body.mesha-dark:not(:has(.account-card.member-entry)) header.header .brand-wordmark { display:none; }
+body.mesha-dark:not(:has(.account-card.member-entry)) header.header .brand-strapline { display:block;max-width:142px;font-size:14px;line-height:1.2; }
+body.mesha-dark:not(:has(.account-card.member-entry)) header.header .header-tools,
+body.mesha-dark:not(:has(.account-card.member-entry)) header.header .header-actions { display:flex;gap:6px;align-items:center;margin:0; }
+body.mesha-dark:not(:has(.account-card.member-entry)) header.header #sign-label { padding:0 8px;min-height:44px; }
+body.mesha-dark:not(:has(.account-card.member-entry)) header.header .call-nia { width:44px;flex:none;min-height:44px;padding:8px;font-size:14px;gap:4px; }
+body.mesha-dark:not(:has(.account-card.member-entry)) header.header #header-language button { display:grid;place-items:center;width:44px;height:44px;min-height:44px;padding:10px; }
+body.mesha-dark:not(:has(.account-card.member-entry)) header.header #header-language button span { display:none; }
+body.mesha-dark:not(:has(.account-card.member-entry)) header.header .shell-heading {
+  position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;
+}
+.home-dashboard > .pause-note { margin:0;padding:8px 12px; }
+body.mesha-dark:not(:has(.account-card.member-entry)) header.header .call-nia span { position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap; }
+/* The shorter header leaves room for the Live footer actions above the rail. */
+body.mesha-dark #content#content .store-live .footer { margin-top:0!important;padding-top:0; }

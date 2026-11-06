@@ -171,7 +171,11 @@ function applyCommitmentGate(root=document){
   const copy=shopCopy!==undefined?shopCopy:page==='send'?(account?null:'This is for money you send home.'):(saveCommitmentReady()||shoppingOpen)?(['live','earn'].includes(page)||category==='insurance'?OTHER_COMMITMENTS_PAUSED_COPY:!account&&shoppingOpen?'Log in to see goods near you and reserve them.':null):PILOT_CLOSED_COPY;
   const previous=target?.querySelector('[data-pilot-paused]');
   if(previous)previous.remove();
-  if(target&&copy)target.prepend(pauseNote(copy));
+  if(target&&copy){
+    const note=pauseNote(copy);
+    const title=page==='home'?target.querySelector('.home-title'):null;
+    if(title)title.after(note);else target.prepend(note);
+  }
 }
 function pauseNote(copy){
   const full=t(copy);
@@ -521,8 +525,8 @@ function earnView(){if(owner.active)return ownerEarnMarkup(earnData,earnError,{e
   const taskAction=signedOut?`<button type="button" class="primary mesha-pill mesha-pill-solid" data-action="login">${t('Log in','लॉग इन')}</button>`:`<button type="button" class="mesha-pill mesha-pill-ghost" data-action="earn">${t('See jobs','नौकरियाँ देखें')}</button>`;
   return `<section class="store-screen store-earn"><header class="store-head store-task"><h1>${t('Earn')}</h1><p>${t('Jobs near where you stay')}</p>${taskAction}</header><figure class="store-task-photo"><img src="/assets/earn.jpg" alt="" width="800" height="498"></figure>
   ${earnErrorPanel()}
-  <p class="pillar-state" data-state="${projectionState}" role="status">${esc(projectionCopy[projectionState])}</p>
-  ${signedOut?'':`<div class="earn-layout">${mapMarkup(mapped?displayModel:{status:projectionState==='stale'?'stale':'unavailable',jobs:[]},t,icon)}<section class="stack earn-results" aria-label="${t('Open jobs','खुली नौकरियाँ')}"><div><div class="eyebrow">WALK2WORK</div><h2>${t('Jobs near where you stay')}</h2><p>${mapped?t('Closest locations first','सबसे पास की जगहें पहले'):t('Verified workplace locations will help you compare your journey.','काम की जगहों की पुष्टि से आपको आने-जाने की दूरी समझने में मदद मिलेगी।')}</p></div>
+  ${projectionState==='ready'?'':`<p class="pillar-state" data-state="${projectionState}" role="status">${esc(projectionCopy[projectionState])}</p>`}
+  ${signedOut?'':`<div class="earn-layout">${mapMarkup(mapped?displayModel:{status:projectionState==='stale'?'stale':'unavailable',jobs:[]},t,icon)}<section class="stack earn-results" aria-label="${t('Open jobs','खुली नौकरियाँ')}"><div><div class="eyebrow">WALK2WORK</div><h2>${t('Open jobs','खुली नौकरियाँ')}</h2><p>${mapped?t('Closest locations first','सबसे पास की जगहें पहले'):t('Verified workplace locations will help you compare your journey.','काम की जगहों की पुष्टि से आपको आने-जाने की दूरी समझने में मदद मिलेगी।')}</p></div>
   ${earnPending?`${moneyStatusMarkup({status:'requested',offlineQueued:!navigator.onLine,kind:'earn'},{t,esc})}<button data-action="earn-retry">${t('Retry application safely','फॉर्म सुरक्षित रूप से फिर भेजें')}</button>`:''}
   ${visible.length?visible.map((j,index)=>`<article class="panel stack earn-job" id="earn-job-${esc(j.id)}" tabindex="-1"><div class="row"><h3>${mapped?`<span class="earn-job-number">${index+1}</span>`:''}${esc(t(j.title))}</h3>${j.preview?`<span class="badge">${t('Preview')}</span>`:''}</div><p>${esc(j.employer)} · ${esc(j.city)}</p>${mapped?`<span class="earn-distance">${j.distanceKm.toFixed(1)} km · ${t('straight-line distance','सीधी रेखा में दूरी')}</span><p>${j.openPositions} ${t('open positions','खाली पद')}</p>`:''}<div class="earn-compare-cost">${mapJobDetails(j,index,model.studio,t)}</div><details class="earn-job-details"><summary>${t('Shift, requirements & apply')}</summary><p>${esc(t(j.shift))}</p><p>${esc(t(j.requirements))}</p>${jobTerms(j)?`<p>${esc(jobTerms(j))}</p>`:''}<small>${t('Apply before','इस समय से पहले फॉर्म करें')}: ${esc(date(j.closesAt))}</small><button class="primary" data-action="earn-apply" data-id="${esc(j.id)}" ${applications.some(a=>a.job.id===j.id)||!navigator.onLine?'disabled':''}>${applications.some(a=>a.job.id===j.id)?t('Application received','आपका फॉर्म हमें मिल गया।'):t('Apply for this job','इस नौकरी के लिए फॉर्म करें')}</button></details></article>`).join(''):`<div class="picture-state" data-state="empty">${icon('earn')}<p>${mapped?t('No jobs open right now','अभी कोई नौकरी खुली नहीं है'):t('Open jobs are being connected','खुली नौकरियाँ जोड़ी जा रही हैं')}</p></div>`}
   </section></div><section class="stack service-panel">${earnHistory()}</section>`}${footer()}</section>`;

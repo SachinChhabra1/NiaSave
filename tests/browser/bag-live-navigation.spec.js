@@ -64,6 +64,25 @@ test('the filled-bag entry opens its panel without losing quantities or the Shop
   await expect(page.locator('.bag-page')).toBeFocused();
   await expect(page.locator('.bag-page')).toContainText('Example rice pack');
   await expect(page.locator('.bag-page .stepper > span')).toHaveText('1');
+  // Check rendered glyphs and labels against their actual painted background.
+  for(const selector of ['.stepper > span','.stepper button > span']){
+    for(const text of await page.locator(`.bag-page ${selector}`).all()){
+      await expect(text).toBeVisible();
+      const contrast=await text.evaluate(el=>{
+        const rgb=value=>value.match(/[\d.]+/g).map(Number);
+        const luminance=channels=>channels.slice(0,3).map(c=>{c/=255;return c<=.04045?c/12.92:((c+.055)/1.055)**2.4;}).reduce((v,c,i)=>v+c*[.2126,.7152,.0722][i],0);
+        let parent=el,bg;
+        while(parent){bg=rgb(getComputedStyle(parent).backgroundColor);if(bg.length===3||bg[3]===1)break;parent=parent.parentElement;}
+        const a=luminance(rgb(getComputedStyle(el).color)),b=luminance(bg);
+        return (Math.max(a,b)+.05)/(Math.min(a,b)+.05);
+      });
+      expect(contrast,await text.textContent()).toBeGreaterThanOrEqual(4.5);
+    }
+  }
+  await page.locator('.bag-page').getByRole('button',{name:'Add one Example rice pack',exact:true}).click();
+  await expect(page.locator('.bag-page .stepper > span')).toHaveText('2');
+  await page.locator('.bag-page').getByRole('button',{name:'Remove one Example rice pack',exact:true}).click();
+  await expect(page.locator('.bag-page .stepper > span')).toHaveText('1');
   await page.locator('.bag-page [data-action="close-bag"]').click();
   await expect(page.locator('.shop-catalogue [data-action="close-aisle"]')).toBeVisible();
   await expect(page.locator('.shop-bag-inline .stepper > span')).toHaveText('1');

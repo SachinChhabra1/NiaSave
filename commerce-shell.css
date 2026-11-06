@@ -1078,3 +1078,6 @@ body:where(:not(:has(.account-card.member-entry)):not(:has(#dialog[open]))).mesh
 @media(max-width:360px){
   body.mesha-dark #content#content .home-savings p.home-savings-value{margin-block:4px}
 }
+
+/* Bag steppers use the light member palette, including their legacy white spans. */
+.member-shell .mesha-bag-copy .stepper span{color:var(--entry-ink)}
